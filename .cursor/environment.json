@@ -1,0 +1,4 @@
+{
+  "name": "Jayden — Smart Solutions Excel sync",
+  "install": "node -e \"const major = Number(process.versions.node.split('.')[0]); if (major < 18) { console.error('Node >= 18 is required (global fetch)'); process.exit(1); } console.log('Node', process.version, 'ready; global fetch:', typeof fetch);\""
+}
