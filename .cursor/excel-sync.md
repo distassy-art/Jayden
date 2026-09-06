@@ -40,6 +40,7 @@ Known station IDs:
 | 42439 | Lamb |
 | 42642 | La Mesa |
 | 42674 | Tustin |
+| extramile | ExtraMile |
 
 ## Publish to the live site
 
@@ -70,7 +71,26 @@ If `books-parse` returns empty `months` for a Monthly Summary that still has a *
 python3 scripts/extract-fuel-summary-months.py <file.xlsx> <storeId> <storeName> | node scripts/publish-books.mjs --file /dev/stdin
 ```
 
-Skip ExtraMile when the workbook is still the `#00000` / Store Name template. Skip `_Archived` (Laguna, Arco GG).
+Skip ExtraMile **Daily.xlsx** / **Monthly.xlsx** when they are still the `#00000` / Store Name templates. Skip `_Archived` (Laguna, Arco GG).
+
+ExtraMile’s live book is the operational workbook `Extramile.xlsx` (month sheets `JULY26`, `AUG26`, …). The Worker `books-parse` path does not read that layout. Extract and save with:
+
+```
+python3 scripts/extract-extramile-book.py <Extramile.xlsx> | node scripts/publish-books.mjs --file /dev/stdin
+```
+
+The extractor drops empty placeholder days (unfilled Oct–Dec sheets) so those months are not treated as closed.
+
+## ExtraMile copy from Hotmail OneDrive (every 3 days)
+
+Source: **`distassy@hotmail.com` personal OneDrive** (`onedrive.live.com`).  
+Destination: Smart Solutions `Documents/Clients/ExtraMile`.
+
+Keep the Cursor **OneDrive** connector on Smart Solutions (`minamorcos@smartsolutionsai26.onmicrosoft.com`). Do **not** switch it to Hotmail for the whole job (that drops the destination). Do **not** use Outlook if it is `sales@evbuzzapp.com` (EV Buzz). Gmail (`distassy@gmail.com`) is not the ExtraMile book source.
+
+Copy `Extramile.xlsx` (and any newer ExtraMile Daily/Monthly that actually have rows) onto Smart Solutions, then extract/publish as above, then run the rest of the client Excel sync.
+
+If Hotmail OneDrive is not signed in (Chrome at `https://onedrive.live.com` as `distassy@hotmail.com`), stop the ExtraMile copy. Do not use EV Buzz. Leave a note and continue the Smart Solutions client sync if that is also due.
 
 ## If OneDrive MCP is the wrong tenant
 
