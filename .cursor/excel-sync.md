@@ -1,6 +1,8 @@
 # Client Excel → smartsolutionsai.us
 
-Do **not** use Gmail. Source files are on **Smart Solutions OneDrive**. The live site is **https://smartsolutionsai.us** (Cloudflare Worker `smartsolutions-site`, KV `ss-books`).
+Source files are on **Smart Solutions OneDrive**. The live site is **https://smartsolutionsai.us** (Cloudflare Worker `smartsolutions-site`, KV `ss-books`).
+
+Never use EV Buzz (`sales@evbuzzapp.com`, evbuzzapp.com, charging-station files). That tenant is a different business.
 
 ## Schedule
 
@@ -62,4 +64,4 @@ Skip Store Services workbooks. Merge is additive by date/month; do not wipe othe
 
 ## If OneDrive MCP is the wrong tenant
 
-The Cursor OneDrive connector must be signed in as **Smart Solutions** (`MinaMorcos@smartsolutionsai26.onmicrosoft.com`), not EV Buzz (`sales@evbuzzapp.com`). The EV Buzz tenant has no SharePoint license and cannot list these files.
+The Cursor OneDrive connector must be signed in as **Smart Solutions** (`minamorcos@smartsolutionsai26.onmicrosoft.com`). If it is signed into EV Buzz, stop. Do not list, search, or publish from that account.
