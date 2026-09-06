@@ -1,8 +1,10 @@
 # Client Excel → smartsolutionsai.us
 
-Source files are on **Smart Solutions OneDrive**. The live site is **https://smartsolutionsai.us** (Cloudflare Worker `smartsolutions-site`, KV `ss-books`).
+**Always stay on Smart Solutions.** Use EV Buzz only if the user explicitly says to.
 
-Never use EV Buzz (`sales@evbuzzapp.com`, evbuzzapp.com, charging-station files). That tenant is a different business.
+- OneDrive: `minamorcos@smartsolutionsai26.onmicrosoft.com` (`Documents/Clients`)
+- Live site: **https://smartsolutionsai.us** (Cloudflare Worker `smartsolutions-site`, KV `ss-books`)
+- EV Buzz / `sales@evbuzzapp.com` / charging stations: off-limits unless the user says to go there.
 
 ## Schedule
 
