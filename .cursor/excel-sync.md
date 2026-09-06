@@ -64,6 +64,14 @@ POST https://smartsolutionsai.us/.netlify/functions/books-save
 
 Skip Store Services workbooks. Merge is additive by date/month; do not wipe other stations.
 
+If `books-parse` returns empty `months` for a Monthly Summary that still has a **Fuel Summary** sheet with Excel serial dates (Westminster 42021, San Diego 42048), extract and save with:
+
+```
+python3 scripts/extract-fuel-summary-months.py <file.xlsx> <storeId> <storeName> | node scripts/publish-books.mjs --file /dev/stdin
+```
+
+Skip ExtraMile when the workbook is still the `#00000` / Store Name template. Skip `_Archived` (Laguna, Arco GG).
+
 ## If OneDrive MCP is the wrong tenant
 
 The Cursor OneDrive connector must be signed in as **Smart Solutions** (`minamorcos@smartsolutionsai26.onmicrosoft.com`). If it is signed into EV Buzz, stop. Do not list, search, or publish from that account.
