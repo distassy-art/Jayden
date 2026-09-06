@@ -83,12 +83,16 @@ The extractor drops empty placeholder days (unfilled Oct–Dec sheets) so those 
 
 ## ExtraMile copy from Hotmail OneDrive (every 3 days)
 
-Source: **`distassy@hotmail.com` personal OneDrive** (`onedrive.live.com`).  
-Destination: Smart Solutions `Documents/Clients/ExtraMile`.
+Do this **in order**. Do not update the website until ExtraMile OneDrive is replaced.
+
+1. **Source:** `distassy@hotmail.com` personal OneDrive (`https://onedrive.live.com`). The live book is **`Extramile.xlsx`** at the Hotmail drive root (same filename every time).
+2. **Replace, do not add a copy:** overwrite the existing Smart Solutions file with the same name:
+   - `Documents/Clients/ExtraMile/Extramile.xlsx` (item id `01RVKKZLXN3PT7Z3V5G5EYKEYGZ2NLOYFS`)
+   - also overwrite `Documents/Extramile.xlsx` if that same-name file is still at the Documents root (`01RVKKZLQPPAXVXYZTPNDIZX4UQ2RJKACQ`)
+   Use OneDrive `create_or_update_file` with the existing `itemId` (or the same path). Never upload `Extramile (1).xlsx` or a dated filename.
+3. **Then** publish to https://smartsolutionsai.us with `extract-extramile-book.py` → `publish-books.mjs`. Then run the rest of the client Excel sync if that is also due.
 
 Keep the Cursor **OneDrive** connector on Smart Solutions (`minamorcos@smartsolutionsai26.onmicrosoft.com`). Do **not** switch it to Hotmail for the whole job (that drops the destination). Do **not** use Outlook if it is `sales@evbuzzapp.com` (EV Buzz). Gmail (`distassy@gmail.com`) is not the ExtraMile book source.
-
-Copy `Extramile.xlsx` (and any newer ExtraMile Daily/Monthly that actually have rows) onto Smart Solutions, then extract/publish as above, then run the rest of the client Excel sync.
 
 If Hotmail OneDrive is not signed in (Chrome at `https://onedrive.live.com` as `distassy@hotmail.com`), stop the ExtraMile copy. Do not use EV Buzz. Leave a note and continue the Smart Solutions client sync if that is also due.
 
