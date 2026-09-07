@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin | Smart Solutions AI</title>
+<link rel="icon" href="logo-mark.png" type="image/png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0f2744">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Smart Solutions AI">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="app.css?v=h38">
+<link rel="stylesheet" href="helper.css">
+<style>
+.adm-seg{display:inline-flex;flex-wrap:wrap;gap:4px;padding:3px;background:#eef2f7;border-radius:10px;margin:0 0 12px}
+.adm-seg button{border:0;background:transparent;padding:7px 12px;border-radius:8px;font-size:13px;font-weight:650;color:var(--mut);cursor:pointer}
+.adm-seg button.on{background:#fff;color:var(--navy);box-shadow:0 1px 2px rgba(15,39,68,.12)}
+.adm-filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:0 0 12px}
+.adm-filters select{padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:14px;min-width:160px}
+.adm-sum{display:flex;flex-wrap:wrap;gap:14px;margin:0 0 10px;font-size:14px}
+.adm-sum b{color:var(--navy)}
+.pr-pdf{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:8px;background:var(--navy);color:#fff!important;text-decoration:none;font-size:12px;font-weight:650}
+.pr-pdf.ghost{background:#fff;color:var(--navy)!important;border:1px solid var(--line)}
+.adm-books{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:8px}
+.adm-book{border:1px solid var(--line);border-radius:12px;padding:14px;background:#fff}
+.adm-book h3{margin:0 0 6px;font-size:15px;color:var(--navy)}
+.adm-book .meta{font-size:12px;color:var(--mut);line-height:1.45;margin-bottom:10px}
+.adm-preview{display:none}
+.adm-preview.on{display:flex;flex-direction:column;position:fixed;inset:0;z-index:9999;background:#0f2744;margin:0;border:0;border-radius:0}
+.adm-preview iframe{flex:1;width:100%;height:auto;border:0;background:#525659}
+.adm-preview .bar{flex:0 0 auto;position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 12px;padding-top:max(10px, env(safe-area-inset-top));background:#0f2744;border-bottom:1px solid rgba(255,255,255,.15);font-size:13px;color:#fff}
+.adm-preview .bar #admPreviewTitle{color:#fff;font-weight:650;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:55vw}
+.adm-preview .bar .pr-pdf{background:#fff;color:#0f2744!important}
+.adm-preview .bar .print-btn{background:#1e4a7a;color:#fff;border-color:#1e4a7a}
+.bill-badge{display:inline-block;padding:3px 8px;border-radius:999px;font-size:12px;font-weight:700}
+.bill-badge.unpaid{background:#fff4e5;color:#9a5b00}
+.bill-badge.paid{background:#e6f7ed;color:#0d6b35}
+
+</style>
+</head>
+<body data-page="tickets">
+<div class="print-brand" aria-hidden="true"><img src="logo-mark.png" alt=""><img class="print-wordmark" src="ss-logo-navy-v3.png" alt="Smart Solutions AI"><span>Smart Solutions AI</span></div>
+<div class="print-wm" aria-hidden="true"></div>
+<div class="app s2k">
+  <aside class="side">
+    <a class="brand" href="overview.html"><img src="ss-logo-navy-v3.png" alt="Smart Solutions AI"></a>
+    <nav>
+      <div class="file-label">Filing steps</div>
+      <ol class="file-steps">
+        <li data-step="daily"><a href="daily.html"><span class="n">1</span><span class="t">Daily</span></a></li>
+        <li data-step="weekly"><a href="weekly.html"><span class="n">2</span><span class="t">Weekly</span></a></li>
+        <li data-step="monthly"><a href="monthly.html"><span class="n">3</span><span class="t">Monthly</span></a></li>
+        <li data-step="yearly"><a href="yearly.html"><span class="n">4</span><span class="t">Yearly</span></a></li>
+      </ol>
+      <a class="nav-admin on" href="tickets.html">Admin</a>
+      <details class="file-more">
+        <summary>More</summary>
+        <a href="overview.html">Cover</a>
+        <a href="fuel.html">Fuel</a>
+        <a href="purchases.html">Purchases</a>
+        <a href="departments.html">Departments</a>
+        <a href="profit.html">Profit</a>
+        <a href="stations.html">Stations</a>
+        <a href="rankings.html">Rankings</a>
+        <a href="profile.html">Profile</a>
+        <a href="billing.html">Billing</a>
+        <a href="pnl.html">P&amp;L</a>
+        <a href="vendor-calendar.html">Vendor calendar</a>
+        <a href="statistics.html">Statistics</a>
+        <a href="ask.html">Ask our team</a>
+      </details>
+    </nav>
+    <div class="out"><a href="index.html">Log out</a><a href="index.html">Public site</a></div>
+  </aside>
+  <header class="topbar">
+    <div class="tb-title">Admin</div>
+    <div class="tb-icons"></div>
+  </header>
+  <main class="main">
+    <img class="watermark" src="logo-mark.png" alt="">
+    <div id="view">
+      <h1>Admin</h1>
+      <p class="lead">S2K invoices, vendor orders, and pricing across all clients. Pending day approvals and manager tickets stay below.</p>
+
+      
+      <div class="card" id="vendorCalendarCard">
+        <h2>Vendor delivery calendar</h2>
+        <p class="fine">All-client delivery dates through Dec 31, 2026 (Harbor / Coke / Pepsi / Core-Mark). ExtraMile excluded.</p>
+        <p style="margin:10px 0 0">
+          <a class="pr-pdf" href="vendor-calendar.html">Open vendor calendar</a>
+          <a class="pr-pdf ghost" href="/vendor-calendar" style="margin-left:6px"> /vendor-calendar</a>
+        </p>
+      </div>
+
+      <div class="card" id="statisticsCard">
+        <h2>Statistics</h2>
+        <p class="fine">Whole-year vendor averages by client (year spend ÷ months with invoices) from S2K Non-Fuel invoices.</p>
+        <p style="margin:10px 0 0">
+          <a class="pr-pdf" href="statistics.html">Open statistics</a>
+          <a class="pr-pdf ghost" href="/statistics" style="margin-left:6px"> /statistics</a>
+        </p>
+      </div>
+
+<div class="card" id="s2kInvoicesCard">
+        <h2>S2K invoices</h2>
+        <p class="fine">Entered in S2K vs Missing in S2K (from audit export). Filter by store.</p>
+        <div class="adm-sum" id="s2kSummary"></div>
+        <div class="adm-seg" id="s2kToggle" role="tablist">
+          <button type="button" class="on" data-s2k-mode="entered">Entered</button>
+          <button type="button" data-s2k-mode="missing">Missing</button>
+        </div>
+        <div class="adm-filters">
+          <label class="fine">Month
+            <select id="s2kMonthFilter"><option value="">All months</option></select>
+          </label>
+          <label class="fine">Store
+            <select id="s2kStoreFilter"><option value="">All stores</option></select>
+          </label>
+        </div>
+        <div id="s2kInvoicesBody"><p class="fine">Loading…</p></div>
+      </div>
+
+      <div class="card" id="vendorOrdersCard">
+        <h2>Orders</h2>
+        <p class="fine">All-client AI sends. Difference = Actual − AI when the invoice is logged.</p>
+        <div class="adm-sum" id="ordersSummary"></div>
+        <div class="adm-filters">
+          <label class="fine">Month
+            <select id="ordersMonthFilter"><option value="">All months</option></select>
+          </label>
+          <label class="fine">Store
+            <select id="ordersStoreFilter"><option value="">All stores</option></select>
+          </label>
+          <label class="fine">Vendor
+            <select id="ordersVendorFilter"><option value="">All vendors</option></select>
+          </label>
+        </div>
+        <div id="vendorOrdersBody"><p class="fine">Loading…</p></div>
+      </div>
+
+
+      <div class="card" id="billingCard">
+        <h2>Billing &amp; Accounting</h2>
+        <p class="fine">Client invoices (PDF view / print / email). Mark Paid / Unpaid. Smart Solutions AI books: Income, Expenses, Net.</p>
+        <div class="adm-sum" id="acctSummary"></div>
+        <div class="adm-filters">
+          <label class="fine">Month
+            <select id="billingMonthFilter"><option value="">All months</option></select>
+          </label>
+          <label class="fine">Client
+            <select id="billingClientFilter"><option value="">All clients</option></select>
+          </label>
+          <label class="fine">Status
+            <select id="billingStatusFilter">
+              <option value="">All</option>
+              <option value="unpaid">Unpaid</option>
+              <option value="paid">Paid</option>
+            </select>
+          </label>
+        </div>
+        <div class="adm-sum" id="billingSummary"></div>
+        <h3 style="margin:12px 0 8px;font-size:15px;color:var(--navy)">Client invoices</h3>
+        <div id="billingBody"><p class="fine">Loading…</p></div>
+        <h3 style="margin:18px 0 8px;font-size:15px;color:var(--navy)">Expenses</h3>
+        <form id="expenseForm" class="adm-filters" style="align-items:flex-end;margin-bottom:10px">
+          <label class="fine">Date <input type="date" id="expDate" required style="padding:8px 10px;border:1px solid var(--line);border-radius:8px"></label>
+          <label class="fine">Category <input type="text" id="expCategory" maxlength="80" placeholder="Software, Travel…" style="padding:8px 10px;border:1px solid var(--line);border-radius:8px;min-width:140px"></label>
+          <label class="fine">Payee <input type="text" id="expPayee" maxlength="120" style="padding:8px 10px;border:1px solid var(--line);border-radius:8px;min-width:140px"></label>
+          <label class="fine">Amount <input type="number" id="expAmount" step="0.01" required style="padding:8px 10px;border:1px solid var(--line);border-radius:8px;width:110px"></label>
+          <label class="fine">Notes <input type="text" id="expNotes" maxlength="500" style="padding:8px 10px;border:1px solid var(--line);border-radius:8px;min-width:160px"></label>
+          <button type="submit" class="print-btn" style="width:auto;display:inline-block;padding:8px 12px;min-height:0">Add expense</button>
+        </form>
+        <div id="expensesBody"><p class="fine">No expenses yet.</p></div>
+      </div>
+
+<div class="card" id="pricingCard">
+        <h2>Pricing</h2>
+        <p class="fine">Price-change PDFs by store, plus master pricebooks (Competitive / Moderate / Aggressive).</p>
+        <div class="adm-seg" id="pricingTabs" role="tablist">
+          <button type="button" class="on" data-pr-tab="all">All stores</button>
+          <button type="button" data-pr-tab="store">By store</button>
+          <button type="button" data-pr-tab="vendor">By vendor</button>
+          <button type="button" data-pr-tab="master">Master pricebooks</button>
+        </div>
+        <div class="adm-filters" id="pricingStoreWrap">
+          <label class="fine">Month
+            <select id="pricingMonthFilter"><option value="">All months</option></select>
+          </label>
+          <label class="fine">Store
+            <select id="pricingStoreFilter"><option value="">All stores</option></select>
+          </label>
+        </div>
+        <div id="pricingBody"><p class="fine">Loading…</p></div>
+        <div class="adm-preview" id="admPreview">
+          <div class="bar"><span id="admPreviewTitle">PDF</span>
+            <span>
+              <a class="pr-pdf" id="admPreviewDl" href="#" download target="_blank" rel="noopener">Download</a>
+              <button type="button" class="print-btn ghost" id="admPreviewClose" style="width:auto;display:inline-block;padding:6px 10px;min-height:0;margin-left:6px">← Back</button>
+            </span>
+          </div>
+          <iframe id="admPreviewFrame" title="PDF preview"></iframe>
+        </div>
+      </div>
+
+      <div class="card" id="approvalsCard">
+        <h2>Approvals</h2>
+        <div id="approvalsBody">
+          <p class="fine">No day is waiting for approval.</p>
+        </div>
+      </div>
+      <h2>Open tickets</h2>
+      <div id="openTicketsBody">
+        <div class="card thread">
+          <p class="fine">No open tickets.</p>
+          <div class="ask-form" style="margin-top:10px">
+            <textarea class="reply-text" placeholder="Reply to this manager"></textarea>
+            <button type="button" class="t-reply">Reply</button>
+            <button type="button" class="print-btn ghost t-close">Close ticket</button>
+          </div>
+        </div>
+      </div>
+      <details id="closedWrap" class="closed-tickets">
+        <summary>Closed</summary>
+        <div id="closedTicketsBody"></div>
+      </details>
+    </div>
+    <div class="foot">
+      <img src="ss-logo-light-v3.png" alt="Smart Solutions AI">
+      <span>Controlling your store got easier with AI.</span>
+    </div>
+  </main>
+</div>
+<script src="app.js?v=w45"></script>
+<script src="tickets.js?v=a28"></script>
+<script src="helper.js"></script>
+<script src="pwa.js"></script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v31edd6df95cf4e85bb4c19e7a9bdbcba1788362987495" integrity="sha512-iIg7k2xntmwu6/uSb5tpc/hySgZc4eoL31yB29W6tJFo2akwjPWcEqnCEdJvGexCL0KEQwVYv5BlowfhVz26hg==" data-cf-beacon='{"version":"2024.11.0","token":"8d7364e8fcab465aa125a216fa65a193","r":1,"spa":2}' crossorigin="anonymous"></script>
+</body>
+</html>
