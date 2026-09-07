@@ -1,0 +1,63 @@
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+  included_files = ["netlify/functions/data/**", "data/billing.json"]
+
+[[redirects]]
+  from = "/admin"
+  to = "/tickets.html"
+  status = 200
+
+[[redirects]]
+  from = "/admin.html"
+  to = "/tickets.html"
+  status = 302
+
+[[redirects]]
+  from = "/tickets"
+  to = "/tickets.html"
+  status = 200
+
+[[redirects]]
+  from = "/vendor-orders"
+  to = "/mgr-vendor-orders.html"
+  status = 302
+
+[[redirects]]
+  from = "/vendor-orders.html"
+  to = "/mgr-vendor-orders.html"
+  status = 302
+
+[[redirects]]
+  from = "/mgr-vendor-orders"
+  to = "/mgr-vendor-orders.html"
+  status = 200
+
+[[redirects]]
+  from = "/mgr-pricing"
+  to = "/mgr-pricing.html"
+  status = 200
+
+[[redirects]]
+  from = "/mgr-s2k-invoices"
+  to = "/mgr-s2k-invoices.html"
+  status = 200
+
+
+[[redirects]]
+  from = "/billing"
+  to = "/billing.html"
+  status = 200
+
+[[redirects]]
+  from = "/statistics"
+  to = "/statistics.html"
+  status = 200
+
+[[redirects]]
+  from = "/vendor-calendar"
+  to = "/vendor-calendar.html"
+  status = 200
