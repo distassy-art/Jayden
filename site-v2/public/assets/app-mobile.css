@@ -167,6 +167,16 @@
 .app-btn-row { display: flex; gap: 10px; }
 .app-btn-row .app-btn { width: auto; flex: 1; }
 
+/* Launch button for the separate time-clock app. Made to look like opening a
+   different tool, not just another page inside the dashboard. */
+.app-btn.tc-launch {
+  background: linear-gradient(180deg, var(--navy-600), var(--navy-700, #0b2b4a));
+  border-color: transparent;
+  color: #fff;
+  font-size: 15.5px;
+}
+.app-btn.tc-launch .ico { color: var(--cyan-300); }
+
 /* Clock ----------------------------------------------------------------- */
 .clock-face {
   text-align: center;
@@ -272,6 +282,44 @@
 }
 .app-nav a .ico { width: 22px; height: 22px; }
 .app-nav a.is-active { color: var(--cyan-500); }
+
+/* With the time clock added there are six tabs; tighten so they still fit a
+   narrow phone without wrapping. */
+.app-nav a { padding-left: 2px; padding-right: 2px; font-size: 10px; }
+.app-nav a .ico { width: 20px; height: 20px; }
+
+/* -----------------------------------------------------------------------
+   Time clock — a focused, standalone mode
+   -----------------------------------------------------------------------
+   Tapping Timeclock switches the whole app into this. It drops the bottom
+   nav and takes a distinct header, so it reads as a separate tool rather
+   than another page of the dashboard. An explicit Exit returns to the
+   manager's dashboard.
+   ----------------------------------------------------------------------- */
+.appview.is-timeclock { max-width: 620px; }
+.app-top-clock {
+  background: linear-gradient(120deg, #0f766e, #0891b2);
+}
+.app-top-clock h1 { flex: 1; }
+.app-clock-badge {
+  width: 34px; height: 34px;
+  border-radius: 10px;
+  display: inline-grid; place-items: center;
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+}
+.app-clock-badge .ico { width: 20px; height: 20px; }
+.app-top-clock .app-exit {
+  width: auto;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.16);
+  border: 0;
+  color: #fff;
+  font-size: 13px;
+  border-radius: 10px;
+}
+.app-top-clock .app-exit .ico { width: 16px; height: 16px; }
+.app-body-clock { background: color-mix(in srgb, var(--bg) 92%, #0891b2 8%); }
 
 .app-empty {
   text-align: center;

@@ -87,7 +87,7 @@ const ROUTES = [
   { path: "/app/clock", title: "My clock", app: true, hidden: true, appTab: true, icon: "clock", render: renderAppClock, bind: bindAppClock, roles: ["admin", "owner", "manager"] },
   { path: "/app/team", title: "Team", app: true, hidden: true, appTab: true, icon: "owners", render: renderAppTeam, bind: bindAppTeam, roles: ["admin", "owner", "manager"] },
   { path: "/app/tasks", title: "Tasks", app: true, hidden: true, appTab: true, icon: "check", render: renderAppTasks, bind: bindAppTasks, roles: ["admin", "owner", "manager"] },
-  { path: "/app/timeclock", title: "Time clock", app: true, hidden: true, icon: "pricing", render: renderAppTimeclock, bind: bindAppTimeclock, roles: ["admin", "owner", "manager"] },
+  { path: "/app/timeclock", title: "Time clock", app: true, appMode: "timeclock", hidden: true, icon: "pricing", render: renderAppTimeclock, bind: bindAppTimeclock, roles: ["admin", "owner", "manager"] },
   { path: "/app/me", title: "Employee", app: true, hidden: true, render: renderAppMe, bind: bindAppMe },
 ];
 
@@ -408,6 +408,7 @@ function appNavMarkup(route) {
     { path: "/app/clock", title: "Clock", ico: "clock" },
     { path: "/app/team", title: "Team", ico: "owners" },
     { path: "/app/tasks", title: "Tasks", ico: "check" },
+    { path: "/app/timeclock", title: "Timeclock", ico: "pricing" },
   ];
   return `<nav class="app-nav no-print">${tabs.map((t) => `<a href="#${t.path}"
     class="${route.path === t.path ? "is-active" : ""}">${icon(t.ico)}<span>${esc(t.title)}</span></a>`).join("")}</nav>`;
@@ -585,7 +586,18 @@ function render(options = {}) {
     }
   }
 
-  app.innerHTML = route.app
+  const focusedClock = Boolean(route.app && route.appMode === "timeclock");
+  app.innerHTML = focusedClock
+    ? `<div class="appview is-timeclock">
+        <header class="app-top app-top-clock">
+          <span class="app-clock-badge no-print" aria-hidden="true">${icon("clock")}</span>
+          <h1>Time clock</h1>
+          <button class="app-icon-btn no-print" id="appPrint" title="Print or save as PDF" aria-label="Print">${icon("printer")}</button>
+          <a class="app-btn ghost app-exit no-print" href="#/app" title="Back to dashboard">${icon("close")}<span>Exit</span></a>
+        </header>
+        <main class="app-body app-body-clock" id="content">${body}</main>
+      </div>`
+    : route.app
     ? `<div class="appview">
         <header class="app-top">
           <img class="app-mark" src="assets/logo-wordmark-dark.png" alt="Smart Solutions AI">
@@ -607,6 +619,7 @@ function render(options = {}) {
     </div>`;
 
   document.body.classList.toggle("is-appview", Boolean(route.app));
+  document.body.classList.toggle("is-timeclock", focusedClock);
 
   state.currentRoute = route;
   state.currentScope = scope;

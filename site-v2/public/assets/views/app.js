@@ -147,10 +147,11 @@ export function renderAppHome(ctx) {
             ${tile("My clock", "clock", "#/app/clock")}
             ${tile("Team", "owners", "#/app/team")}
             ${tile("Tasks", "check", "#/app/tasks")}
-            ${tile("Time clock", "pricing", "#/app/timeclock")}
           </div>
         </div>
       </div>
+      <a class="app-btn tc-launch" href="#/app/timeclock">${icon("clock")}
+        <span>Open time clock${store ? ` · ${esc(store.name)}` : ""}</span></a>
       <a class="app-btn ghost" href="#/app/me">${icon("logout")} Hand to an employee</a>`;
   }
 
@@ -804,7 +805,8 @@ function tsFromDayTime(dateYmd, hhmm) {
 export function renderAppTimeclock(ctx) {
   const store = primaryStore(ctx);
   if (!store) return heading("Time clock") + emptyRow("No store.");
-  return heading("Time clock", store.name) + `<div id="tc-body">${loadingRow()}</div>`;
+  return heading(store.name, "Employee time clock — edit punches, see paid hours")
+    + `<div id="tc-body">${loadingRow()}</div>`;
 }
 
 export async function bindAppTimeclock(root, ctx) {
