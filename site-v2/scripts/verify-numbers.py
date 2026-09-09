@@ -187,6 +187,123 @@ def main(figures_path, overlay_path):
                       f"$/gal {key}: console used an unweighted average of store margins")
     print(f"  ok    4 measures over 12 months, plus weighted fuel margin\n")
 
+    # --- owners --------------------------------------------------------------
+    print("Owner groups")
+    owners = json.load(open(overlay_path.replace("overlay.json", "data/owners.json")))
+    house = {"smartsolutionsai", "admin"}
+    mine_owners = {}
+    for account in owners["accounts"]:
+        email = str(account.get("email", "")).lower()
+        if email.split("@")[0] in house:
+            continue
+        key = account.get("client") or email
+        mine_owners.setdefault(key, set()).update(str(s) for s in account.get("stores", []))
+
+    # Only stores that actually appear in the books can be rolled up.
+    mine_owners = {k: (v & set(months)) for k, v in mine_owners.items()}
+    mine_owners = {k: v for k, v in mine_owners.items() if v}
+
+    console_owners = {o["client"]: o for o in figures["owners"]}
+    check(sorted(mine_owners) == sorted(console_owners),
+          f"client set differs: recomputed {sorted(mine_owners)}, console {sorted(console_owners)}")
+
+    # Every store belongs to exactly one client, or the roll-ups double count.
+    assigned = [s for ids in mine_owners.values() for s in ids]
+    check(len(assigned) == len(set(assigned)),
+          "a store is filed under more than one client")
+    check(set(assigned) == set(months),
+          f"stores filed under no client: {sorted(set(months) - set(assigned))}")
+
+    for client, ids in mine_owners.items():
+        got = console_owners.get(client)
+        if not got:
+            continue
+        check(sorted(ids) == sorted(got["stores"]),
+              f"{client} store list: recomputed {sorted(ids)}, console {sorted(got['stores'])}")
+        for label, keys in (("ytd", ytd), ("prior", prior_ytd)):
+            recomputed = total(keys, sorted(ids))
+            for metric in METRICS:
+                check(close(recomputed[metric], got[label][metric]),
+                      f"{client} {label} {metric}: recomputed {recomputed[metric]}, "
+                      f"console {got[label][metric]}")
+
+    # The clients must add back up to the portfolio.
+    for metric in METRICS:
+        summed = sum(o["ytd"][metric] or 0 for o in figures["owners"])
+        check(close(summed, figures["portfolio"]["ytd"][metric] or 0),
+              f"{metric}: clients sum to {summed}, portfolio shows "
+              f"{figures['portfolio']['ytd'][metric]}")
+    print(f"  ok    {len(mine_owners)} clients partition {len(assigned)} stores "
+          f"and reconcile to the portfolio\n")
+
+    # --- day grain -----------------------------------------------------------
+    print("Day grain")
+    DAY_METRICS = ["gas_vol", "gas_profit", "sales", "purchases", "store_profit", "total_profit"]
+
+    # Rebuild the per-date roll-up straight from the raw day records. The feed
+    # calls the purchases column `purch`, which is exactly the kind of rename a
+    # port silently drops.
+    by_date = defaultdict(lambda: defaultdict(float))
+    day_count = defaultdict(int)
+    for sid, s in stations.items():
+        for day in (s.get("days") or []):
+            iso = str(day.get("date") or "")
+            if not iso:
+                continue
+            day_count[iso] += 1
+            row = by_date[iso]
+            row["gas_vol"] += day.get("gas_vol") or 0
+            row["gas_profit"] += day.get("gas_profit") or 0
+            row["sales"] += day.get("sales") or 0
+            row["purchases"] += day.get("purch") or 0
+            row["store_profit"] += day.get("store_profit") or 0
+            row["total_profit"] += day.get("total_profit") or 0
+
+    def bucket_key(iso, period):
+        if period == "day":
+            return iso
+        if period == "month":
+            return iso[:7]
+        if period == "year":
+            return iso[:4]
+        date = __import__("datetime").date.fromisoformat(iso)
+        return (date - __import__("datetime").timedelta(days=date.weekday())).isoformat()
+
+    for period in ("day", "week", "month", "year"):
+        buckets = defaultdict(lambda: defaultdict(float))
+        counts = defaultdict(int)
+        for iso, row in by_date.items():
+            key = bucket_key(iso, period)
+            counts[key] += day_count[iso]
+            for metric in DAY_METRICS:
+                buckets[key][metric] += row[metric]
+
+        console_rows = {r["key"]: r for r in figures["days"][period]}
+        check(sorted(buckets) == sorted(console_rows),
+              f"{period} buckets differ: recomputed {len(buckets)}, console {len(console_rows)}")
+
+        for key, row in buckets.items():
+            got = console_rows.get(key)
+            if not got:
+                continue
+            check(counts[key] == got["days"],
+                  f"{period} {key} store-days: recomputed {counts[key]}, console {got['days']}")
+            for metric in DAY_METRICS:
+                check(close(row[metric], got[metric]),
+                      f"{period} {key} {metric}: recomputed {row[metric]}, console {got[metric]}")
+            expected = (row["store_profit"] / row["sales"]) if row["sales"] else None
+            check(close(expected, got["margin"], tol=1e-9),
+                  f"{period} {key} margin: recomputed {expected}, console {got['margin']}")
+
+    # Every grain has to reconcile to the same totals, or the period control is
+    # showing four different answers to the same question.
+    for metric in DAY_METRICS:
+        totals = {p: sum(r[metric] or 0 for r in figures["days"][p])
+                  for p in ("day", "week", "month", "year")}
+        check(all(close(totals["day"], v) for v in totals.values()),
+              f"{metric} does not reconcile across grains: {totals}")
+    print(f"  ok    {len(by_date)} dates across 4 grains, all reconciling\n")
+
     # --- departments ---------------------------------------------------------
     print("Departments")
     rollup = defaultdict(lambda: {"sales": 0.0, "purchases": 0.0, "profit": 0.0, "stores": 0})

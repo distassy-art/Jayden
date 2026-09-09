@@ -373,7 +373,10 @@ export function sumDays(rows) {
     ? totals.store_profit / totals.sales : null;
   totals.gas_margin = isNum(totals.gas_vol) && totals.gas_vol !== 0
     ? totals.gas_profit / totals.gas_vol : null;
-  totals.days = rows.length;
+  // Store-days, not calendar days: a week where fifteen of seventeen stores
+  // filed is not the same as one where all of them did.
+  totals.days = rows.reduce((sum, row) => sum + (row.stores || 1), 0);
+  totals.dates = rows.length;
   return totals;
 }
 

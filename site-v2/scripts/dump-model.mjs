@@ -6,7 +6,10 @@
  *   node scripts/dump-model.mjs > /tmp/console-figures.json
  */
 
-import { buildModel, departmentRollup, marginSeries, scopeTotals, yearSeries } from "../public/assets/analytics.js";
+import {
+  buildModel, departmentRollup, marginSeries, scopeDays, scopeTotals, sumDays, yearSeries,
+} from "../public/assets/analytics.js";
+import { buildOwners, bucketDays } from "../public/assets/scope.js";
 
 const BASE = process.env.CHECK_BASE || "http://localhost:8787";
 
@@ -14,7 +17,12 @@ const overlay = await fetch(`${BASE}/api/books-overlay`, {
   headers: { "x-ss-email": "smartsolutionsai", "x-ss-role": "owner" },
 }).then((r) => r.json());
 
+const ownersFeed = await fetch(`${BASE}/api/data/owners.json`, {
+  headers: { "x-ss-email": "smartsolutionsai", "x-ss-role": "owner" },
+}).then((r) => r.json()).catch(() => null);
+
 const model = buildModel(overlay);
+model.owners = buildOwners(ownersFeed?.accounts || [], model);
 const year = Number(model.currentYear);
 const prior = year - 1;
 
@@ -50,6 +58,33 @@ process.stdout.write(JSON.stringify({
     purchases: yearSeries(model, year, "purchases"),
     gasMargin: marginSeries(model, year),
   },
+
+  owners: model.owners.map((owner) => ({
+    id: owner.id,
+    client: owner.client,
+    stores: owner.stationIds.slice().sort(),
+    ytd: pick(scopeTotals(model, year, owner.stationIds)),
+    prior: pick(scopeTotals(model, prior, owner.stationIds)),
+  })),
+
+  // Day grain, at each bucket the daily page offers.
+  days: Object.fromEntries(["day", "week", "month", "year"].map((period) => [
+    period,
+    bucketDays(scopeDays(model), period).map(([key, rows]) => {
+      const totals = sumDays(rows);
+      return {
+        key,
+        days: totals.days,
+        gas_vol: totals.gas_vol ?? null,
+        gas_profit: totals.gas_profit ?? null,
+        sales: totals.sales ?? null,
+        purchases: totals.purchases ?? null,
+        store_profit: totals.store_profit ?? null,
+        total_profit: totals.total_profit ?? null,
+        margin: totals.margin ?? null,
+      };
+    }),
+  ])),
 
   departments: departmentRollup(model).map((row) => ({
     name: row.name,
