@@ -48,6 +48,13 @@ const METRICS = [
     unit: "What the fuel sold for",
     format: moneyShort,
     full: money,
+    /*
+     * This feed lags the others and covers fewer stores, so last year has to
+     * be taken over the same stores and months. Left to the ordinary path it
+     * would put thirteen stores against sixteen and report a fall that is
+     * really a difference in who filed.
+     */
+    paired: true,
   },
   {
     group: "Fuel",
@@ -143,13 +150,33 @@ function measure(metric, v, ids) {
     return isNum(totals[metric.key]);
   });
 
-  return {
+  const common = {
     values: v.series(metric.key, ids),
     prior: v.priorSeries(metric.key, ids),
-    now: v.totals(ids)[metric.key],
-    before: v.priorTotals(ids)[metric.key],
     months: months.length,
     ofMonths: v.keys.length,
+  };
+
+  if (metric.paired) {
+    const now = v.revenue(ids);
+    const before = now ? v.priorRevenue(now) : null;
+    return {
+      ...common,
+      now: now ? now.sales : null,
+      // Withheld rather than approximated when the two spans do not match.
+      before: before && before.keys.length === now.keys.length
+        && before.stores === now.stores
+        ? before.sales
+        : null,
+      stores: now ? now.stores : null,
+      ofStores: now ? now.ofStores : null,
+    };
+  }
+
+  return {
+    ...common,
+    now: v.totals(ids)[metric.key],
+    before: v.priorTotals(ids)[metric.key],
   };
 }
 
@@ -187,13 +214,17 @@ function card(metric, m, v) {
       <div class="trend-figure">
         <div>
           <div class="trend-value">${esc(format(m.now))}</div>
-          <div class="trend-foot">${badge}<span class="muted">from
-            ${esc(format(m.before))} in ${esc(v.beforeLabel)}</span></div>
+          <div class="trend-foot">${isNum(m.before)
+    ? `${badge}<span class="muted">from ${esc(format(m.before))}
+       in ${esc(v.beforeLabel)}</span>`
+    : `<span class="muted">Nothing comparable in ${esc(v.beforeLabel)}</span>`}</div>
         </div>
       </div>
       ${short ? `<p class="tiny muted" style="margin:-8px 0 12px">
         Reported for ${esc(num(m.months))} of ${esc(num(m.ofMonths))} months in
-        this period, so the total is for those months only.</p>` : ""}
+        this period${isNum(m.stores) && m.stores < m.ofStores
+    ? ` by ${esc(num(m.stores))} of ${esc(num(m.ofStores))} stores` : ""},
+        so the total is for those only.</p>` : ""}
       ${barChart(v.labels, [
     { name: String(v.nowLabel), values: m.values, color: CYAN },
     { name: String(v.beforeLabel), values: m.prior, color: NAVY },

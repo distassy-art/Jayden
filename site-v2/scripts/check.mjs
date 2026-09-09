@@ -35,7 +35,9 @@ import { renderVendors } from "../public/assets/views/vendors.js";
 import { renderTrends } from "../public/assets/views/trends.js";
 import { renderLeaks } from "../public/assets/views/leaks.js";
 import { PUBLIC_ROUTES, renderLogin } from "../public/assets/views/site.js";
-import { isNum, money, pct } from "../public/assets/ui.js";
+import { isNum, money, moneyShort, pct } from "../public/assets/ui.js";
+
+const moneyShortText = (value) => moneyShort(value);
 
 // The trends wall prints margins to one decimal place.
 const pctText = (ratio) => pct(ratio, { digits: 1 });
@@ -498,6 +500,25 @@ async function main() {
   const headline = money(ytdTotals.total_profit);
   assert(wall.includes(headline),
     `trends: total profit headline is not ${headline}`);
+
+  /*
+   * The fuel revenue card must compare like with like. Its prior figure is the
+   * one over the same stores, never the larger all-stores total, and the card
+   * must admit that it covers fewer months than the picker names.
+   */
+  if (rev && !rev.complete) {
+    const priorAll = fuelRevenue(model, priorYearKeys(rev.keys), null);
+    const priorSame = fuelRevenue(model, priorYearKeys(rev.keys), rev.storeIds);
+    if (priorAll && priorSame && priorAll.sales !== priorSame.sales) {
+      assert(!wall.includes(moneyShortText(priorAll.sales)),
+        `trends: fuel revenue compares against ${moneyShortText(priorAll.sales)}, `
+        + `the all-stores total, instead of ${moneyShortText(priorSame.sales)}`);
+    }
+    assert(/Reported for \d+ of \d+ months/.test(wall),
+      "trends: fuel revenue covers part of the period and the card does not say so");
+    process.stdout.write(`  ok    fuel revenue card is marked short and compares `
+      + `against ${moneyShortText(priorSame.sales)} over the same stores\n`);
+  }
   process.stdout.write(`  ok    ${expected.length} metrics, ${charts} charts, `
     + `total profit reads ${headline}\n`);
 

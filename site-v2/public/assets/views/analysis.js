@@ -115,6 +115,16 @@ export function view(model, scope) {
     // Any ratio month by month, for pages that chart more than fuel margin.
     ratio: (top, bottom, ids) => ratioOver(model, chartKeys, top, bottom, ids),
     priorRatio: (top, bottom, ids) => ratioOver(model, chartPriorKeys, top, bottom, ids),
+    /*
+     * Fuel revenue, over the store-months that report it. `priorRevenue` takes
+     * the result of the first and matches it — same stores, same calendar
+     * months a year back — because this feed covers fewer stores than the rest
+     * and an unmatched comparison reads as a fall in sales.
+     */
+    revenue: (ids) => fuelRevenue(model, tf.keys, ids && ids.length ? ids : null),
+    priorRevenue: (now) => (now
+      ? fuelRevenue(model, priorYearKeys(now.keys), now.storeIds)
+      : null),
   };
 }
 
