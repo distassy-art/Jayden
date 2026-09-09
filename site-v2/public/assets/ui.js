@@ -196,6 +196,7 @@ const ICON_PATHS = {
   pricing: '<path d="M3 12V4h8l9 9-8 8-9-9zM7.5 7.5v.01"/>',
   printer: '<path d="M6 9V3h12v6M6 18H4a2 2 0 01-2-2v-4a2 2 0 012-2h16a2 2 0 012 2v4a2 2 0 01-2 2h-2M6 14h12v7H6z"/>',
   mail: '<path d="M3 5h18v14H3zM3 6l9 7 9-7"/>',
+  pin: '<path d="M12 21s-7-6.3-7-11a7 7 0 1114 0c0 4.7-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/>',
 };
 
 /** Inline SVG icon. Returns markup (already safe) for template interpolation. */

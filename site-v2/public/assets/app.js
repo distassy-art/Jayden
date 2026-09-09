@@ -31,6 +31,13 @@ import { bindCalendar, renderCalendar, renderSchedule } from "./views/planning.j
 import { bindVendors, renderVendors } from "./views/vendors.js";
 import { bindTrends, renderTrends } from "./views/trends.js";
 import { bindLeaks, renderLeaks } from "./views/leaks.js";
+import {
+  appRole, ensureGeofence,
+  bindAppClock, bindAppMe, bindAppSchedule, bindAppTasks, bindAppTeam,
+  renderAppClock, renderAppHome, renderAppMe, renderAppSchedule, renderAppTasks,
+  renderAppTeam,
+} from "./views/app.js";
+import { activeEmployeeId } from "./appstore.js";
 import { PUBLIC_ROUTES, renderLogin } from "./views/site.js";
 
 /* -------------------------------------------------------------------------
@@ -42,7 +49,7 @@ import { PUBLIC_ROUTES, renderLogin } from "./views/site.js";
    ------------------------------------------------------------------------- */
 
 const ROUTES = [
-  { path: "/", title: "Command centre", icon: "dashboard", group: "Overview", render: renderDashboard },
+  { path: "/", title: "Command centre", icon: "dashboard", group: "Overview", render: renderDashboard, bind: bindDashboardExtras },
   { path: "/owners", title: "Owners", icon: "owners", group: "Overview", render: renderOwners, bind: bindOwners, roles: ["admin"] },
   // A manager holds one store, so a store list is a list of one.
   { path: "/stores", title: "Stores", icon: "stores", group: "Overview", render: renderStores, bind: bindStores, roles: ["admin", "owner"] },
@@ -69,6 +76,18 @@ const ROUTES = [
   { path: "/billing", title: "Billing", icon: "billing", group: "Business", render: renderBilling, bind: bindBilling, roles: ["admin", "owner"] },
   { path: "/tickets", title: "Tickets", icon: "inbox", group: "Business", render: renderTickets },
   { path: "/health", title: "Data health", icon: "health", group: "Business", render: renderHealth, roles: ["admin"] },
+
+  /*
+   * The phone app. A separate, mobile shell (see `render`) rather than a page
+   * inside the console, so `app: true` marks these off. They stay out of the
+   * desktop rail (`hidden`); the "Phone app" rail link is the way in.
+   */
+  { path: "/app", title: "Phone app", icon: "clock", app: true, hidden: true, render: renderAppHome },
+  { path: "/app/schedule", title: "Schedule", app: true, hidden: true, appTab: true, icon: "calendar", render: renderAppSchedule, bind: bindAppSchedule, roles: ["admin", "owner", "manager"] },
+  { path: "/app/clock", title: "My clock", app: true, hidden: true, appTab: true, icon: "clock", render: renderAppClock, bind: bindAppClock, roles: ["admin", "owner", "manager"] },
+  { path: "/app/team", title: "Team", app: true, hidden: true, appTab: true, icon: "owners", render: renderAppTeam, bind: bindAppTeam, roles: ["admin", "owner", "manager"] },
+  { path: "/app/tasks", title: "Tasks", app: true, hidden: true, appTab: true, icon: "check", render: renderAppTasks, bind: bindAppTasks, roles: ["admin", "owner", "manager"] },
+  { path: "/app/me", title: "Employee", app: true, hidden: true, render: renderAppMe, bind: bindAppMe },
 ];
 
 /** The role name used for route visibility. */
@@ -80,6 +99,12 @@ function roleOf(user) {
 
 function allowed(route, user) {
   return !route.roles || route.roles.includes(roleOf(user));
+}
+
+/* The manager's dashboard carries the same team schedule the phone app does.
+   Everyone else's dashboard has nothing extra to wire. */
+function bindDashboardExtras(root, ctx) {
+  if (appRole(ctx.user) === "manager") bindAppSchedule(root, ctx);
 }
 
 /** Match a hash path against the route table, extracting `:params`. */
@@ -259,7 +284,12 @@ function railMarkup(activePath, scope) {
         srcset="assets/logo-wordmark-dark.png 1x, assets/logo-wordmark-dark@2x.png 2x"
         alt="Smart Solutions AI" width="158"></a>
     </div>
-    <div class="rail-scroll">${body}</div>
+    <div class="rail-scroll">${body}
+      <div class="rail-group">
+        <div class="rail-label">On your phone</div>
+        <a class="rail-link" href="#/app">${icon("clock")}<span>Phone app</span></a>
+      </div>
+    </div>
     <div class="rail-foot">
       <div class="rail-user">
         <span class="avatar">${esc(initials(user.client || user.email))}</span>
@@ -364,6 +394,26 @@ function emailReport() {
     `Generated ${new Date().toLocaleString()}`,
   ].join("\n");
   window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
+
+/* The phone app's bottom tab bar. Only the manager, who holds the crew tools,
+   gets tabs; admins and owners get the numbers and nothing to fiddle with, and
+   employee mode carries its own controls, so both show no bar. */
+function appNavMarkup(route) {
+  if (appRole(state.user) !== "manager" || route.path === "/app/me") return "";
+  const tabs = [
+    { path: "/app", title: "Home", ico: "dashboard" },
+    { path: "/app/schedule", title: "Schedule", ico: "calendar" },
+    { path: "/app/clock", title: "Clock", ico: "clock" },
+    { path: "/app/team", title: "Team", ico: "owners" },
+    { path: "/app/tasks", title: "Tasks", ico: "check" },
+  ];
+  return `<nav class="app-nav no-print">${tabs.map((t) => `<a href="#${t.path}"
+    class="${route.path === t.path ? "is-active" : ""}">${icon(t.ico)}<span>${esc(t.title)}</span></a>`).join("")}</nav>`;
+}
+
+function wireAppChrome() {
+  document.getElementById("appPrint")?.addEventListener("click", printReport);
 }
 
 function topbarMarkup(route, params) {
@@ -511,7 +561,10 @@ function render(options = {}) {
   if (!allowed(route, state.user)) route = ROUTES[0];
 
   const scope = state.model ? resolveScope(state.model, query) : null;
-  const ctx = { ...state, query, params, pathname, scope, navigate, refresh };
+  const ctx = {
+    ...state, query, params, pathname, scope, navigate, refresh,
+    rerender: () => render({ preserveScroll: true }),
+  };
 
   let body;
   if (state.loading && !state.data) body = loadingMarkup();
@@ -531,8 +584,19 @@ function render(options = {}) {
     }
   }
 
-  app.innerHTML = `
-    <div class="shell">
+  app.innerHTML = route.app
+    ? `<div class="appview">
+        <header class="app-top">
+          <img class="app-mark" src="assets/logo-wordmark-dark.png" alt="Smart Solutions AI">
+          <h1>${esc(reportTitle(route, params))}</h1>
+          <span class="app-role no-print">${esc(appRole(state.user))}</span>
+          <button class="app-icon-btn no-print" id="appPrint" title="Print or save as PDF" aria-label="Print">${icon("printer")}</button>
+          <a class="app-icon-btn no-print" href="#/" title="Full console" aria-label="Full console">${icon("external")}</a>
+        </header>
+        <main class="app-body" id="content">${body}</main>
+        ${appNavMarkup(route)}
+      </div>`
+    : `<div class="shell">
       <aside class="rail no-print" id="rail">${railMarkup(route.path, scope)}</aside>
       <div>
         <header class="topbar">${topbarMarkup(route, params)}</header>
@@ -541,16 +605,26 @@ function render(options = {}) {
       <div class="print-doc-foot" aria-hidden="true">smartsolutionsai.us · Confidential management report</div>
     </div>`;
 
+  document.body.classList.toggle("is-appview", Boolean(route.app));
+
   state.currentRoute = route;
   state.currentScope = scope;
   state.currentParams = params;
   wireChrome();
+  if (route.app) wireAppChrome();
   if (route.bind && state.data) {
     try {
       route.bind(document.getElementById("content"), ctx);
     } catch (failure) {
       console.error(failure);
     }
+  }
+
+  // Keep the location watch alive for whoever is clocked in on this device,
+  // whatever screen is showing, so leaving the store still clocks them out.
+  if (route.app && state.data) {
+    ensureGeofence(activeEmployeeId(), () => render({ preserveScroll: true }))
+      .catch((err) => console.error(err));
   }
 
   if (options.keepFocus) {

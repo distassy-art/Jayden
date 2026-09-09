@@ -11,6 +11,8 @@ import { inScope, invoiceStores } from "../scope.js";
 import {
   currentStores, partitionByPeriod, rollupDeptBudget, rollupWeeks,
 } from "../current.js";
+import { isAdmin } from "../data.js";
+import { renderTeamSchedule } from "./app.js";
 
 const SEVERITY_TONE = { high: "neg", medium: "warn", low: "info" };
 
@@ -241,6 +243,7 @@ export function renderDashboard(ctx) {
         </div>
       </div>
     </section>
+    ${ctx.user && !isAdmin(ctx.user) && ctx.user.role === "manager" ? renderTeamSchedule(ctx) : ""}
   `;
 }
 
