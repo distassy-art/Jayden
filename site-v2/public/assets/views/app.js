@@ -23,15 +23,20 @@ import {
 import { portfolioTotals } from "../analytics.js";
 import { isAdmin } from "../data.js";
 import {
-  BREAK_KINDS, DEFAULT_RADIUS_FT, activeEmployeeId, addEmployee, addShift, addTask,
-  clockIn, clockOut, endBreak, getEmployee, getPlace, listEmployees, listPunches,
-  listShifts, listTasks, openPunch, removeEmployee, removeShift, removeTask,
-  setActiveEmployee, setPlace, startBreak, today, toggleTask, updateShift,
+  BREAK_KINDS, DEFAULT_RADIUS_FT, activeEmployeeId, addEmployee, addPunch, addShift,
+  addTask, clockIn, clockOut, endBreak, getEmployee, getPlace, listEmployees,
+  listPunches, listShifts, listTasks, markReminder, openPunch, removeEmployee,
+  removePunch, removeShift, removeTask, setActiveEmployee, setPlace, startBreak,
+  today, toggleTask, updateEmployee, updatePunch, updateShift,
 } from "../appstore.js";
 import {
   distanceFt, distanceLabel, geoSupported, getPosition, notify, notifyPermission,
   requestNotify, watchGeofence,
 } from "../geo.js";
+import {
+  addDays, computeTimesheet, datesInRange, payPeriodOf, payPeriodShift,
+} from "../pay.js";
+import { downloadExcel } from "../exporter.js";
 
 /* -------------------------------------------------------------------------
    Roles and the store in hand
@@ -142,6 +147,7 @@ export function renderAppHome(ctx) {
             ${tile("My clock", "clock", "#/app/clock")}
             ${tile("Team", "owners", "#/app/team")}
             ${tile("Tasks", "check", "#/app/tasks")}
+            ${tile("Time clock", "pricing", "#/app/timeclock")}
           </div>
         </div>
       </div>
@@ -191,6 +197,10 @@ function emptyRow(text) {
    ------------------------------------------------------------------------- */
 
 let editingShift = null;
+let mePeriodAnchor = today();
+let tcPeriodAnchor = today();
+let tcEmployeeId = "";
+let tcDate = today();
 
 export function renderAppSchedule(ctx) {
   const store = primaryStore(ctx);
@@ -322,43 +332,113 @@ function wireSchedule(body, store, employees, draw, ctx) {
    ------------------------------------------------------------------------- */
 
 let tick = null;
-let geoMonitor = { punchId: null, stop: null };
+let geoMonitor = { punchId: null, stop: null, timer: null };
 
 function clearTick() {
   if (tick) { clearInterval(tick); tick = null; }
 }
 
+function teardownMonitor() {
+  if (geoMonitor.stop) geoMonitor.stop();
+  if (geoMonitor.timer) clearInterval(geoMonitor.timer);
+  geoMonitor = { punchId: null, stop: null, timer: null };
+}
+
 /*
- * A single running geofence for whoever is clocked in on this device. It keeps
+ * When each California break comes due, measured from the clock, the way the
+ * stores already run it: the first paid rest an hour and a half in, the unpaid
+ * meal before the end of the fifth hour (three and a half hours in), and the
+ * second paid rest an hour and a half after the meal ends. `rest2` stays null
+ * until the meal is taken, since it hangs off the meal's end.
+ */
+function reminderTimes(punch) {
+  const start = punch.clockIn;
+  const meal = (punch.breaks || []).find((b) => b.type === "meal");
+  const mealEnd = meal && meal.end ? meal.end : 0;
+  return {
+    rest1: start + 1.5 * 3600000,
+    meal: start + 3.5 * 3600000,
+    rest2: mealEnd ? mealEnd + 1.5 * 3600000 : 0,
+  };
+}
+
+const REMINDER_COPY = {
+  rest1: ["Time for a 10-minute rest break", "Paid 10-minute rest break. (California)"],
+  meal: ["Time for your 30-minute meal break", "Unpaid meal — start it before the end of your 5th hour. (California)"],
+  rest2: ["Time for your second 10-minute rest break", "Paid 10-minute rest break. (California)"],
+  clockout: ["Your shift has ended", "Time to clock out."],
+};
+
+/*
+ * Fire any break or clock-out reminder that has come due, once each. Reads the
+ * punch fresh so it sees breaks taken since the timer started, skips a reminder
+ * whose break is already taken, and records every one it fires so it never
+ * nags twice — the flag lives on the punch, so it survives a reload too.
+ */
+async function checkBreakReminders(employeeId) {
+  const punch = await openPunch(employeeId);
+  if (!punch) return;
+  const now = Date.now();
+  const times = reminderTimes(punch);
+  const done = punch.reminded || {};
+
+  for (const key of ["rest1", "meal", "rest2"]) {
+    if (done[key]) continue;
+    const taken = (punch.breaks || []).some((b) => b.type === key);
+    if (taken) { await markReminder(punch.id, key); continue; }
+    if (times[key] && now >= times[key]) {
+      notify(...REMINDER_COPY[key]);
+      await markReminder(punch.id, key);
+    }
+  }
+
+  if (!done.clockout) {
+    const shift = (await listShifts({ employeeId, from: punch.date, to: punch.date }))
+      .find((s) => s.date === punch.date);
+    if (shift && shift.end) {
+      const endTs = new Date(`${punch.date}T${shift.end}:00`).getTime();
+      if (Number.isFinite(endTs) && now >= endTs) {
+        notify(...REMINDER_COPY.clockout);
+        await markReminder(punch.id, "clockout");
+      }
+    }
+  }
+}
+
+/*
+ * A single running monitor for whoever is clocked in on this device. It keeps
  * running across screens, so an employee who wanders off is clocked out even if
- * they are not looking at the clock. Called on every app render; it starts,
- * leaves alone, or tears down the watch to match the open punch.
+ * they are not looking at the clock, and the break reminders fire wherever they
+ * are in the app. Called on every app render; it starts, leaves alone, or tears
+ * down to match the open punch. The break-reminder timer runs regardless; the
+ * geofence watch only when the store has a clock-in spot set.
  */
 export async function ensureGeofence(employeeId, rerender) {
   const punch = employeeId ? await openPunch(employeeId) : null;
-  if (!punch) {
-    if (geoMonitor.stop) geoMonitor.stop();
-    geoMonitor = { punchId: null, stop: null };
-    return;
-  }
+  if (!punch) { teardownMonitor(); return; }
   if (geoMonitor.punchId === punch.id) return;
-  if (geoMonitor.stop) geoMonitor.stop();
+  teardownMonitor();
+  geoMonitor.punchId = punch.id;
+
+  const runReminders = () => checkBreakReminders(employeeId).catch(() => {});
+  geoMonitor.timer = setInterval(runReminders, 20000);
+  runReminders();
+
   const place = await getPlace(punch.storeId);
-  if (!place || !geoSupported()) { geoMonitor = { punchId: null, stop: null }; return; }
-  const stop = watchGeofence(
-    { lat: place.lat, lng: place.lng },
-    place.radiusFt || DEFAULT_RADIUS_FT,
-    {
-      onExit: async () => {
-        await clockOut(punch.id, { auto: true });
-        notify("Clocked out automatically", "You left the store area, so the clock stopped.");
-        if (geoMonitor.stop) geoMonitor.stop();
-        geoMonitor = { punchId: null, stop: null };
-        rerender?.();
+  if (place && geoSupported()) {
+    geoMonitor.stop = watchGeofence(
+      { lat: place.lat, lng: place.lng },
+      place.radiusFt || DEFAULT_RADIUS_FT,
+      {
+        onExit: async () => {
+          await clockOut(punch.id, { auto: true });
+          notify("Clocked out automatically", "You left the store area, so the clock stopped.");
+          teardownMonitor();
+          rerender?.();
+        },
       },
-    },
-  );
-  geoMonitor = { punchId: punch.id, stop };
+    );
+  }
 }
 
 function clockCard(punch, place) {
@@ -402,19 +482,19 @@ function clockCard(punch, place) {
    employees, and for anyone once a location is set. */
 function bindClock(root, { employeeId, storeId, rerender }) {
   clearTick();
-  const paint = () => {
-    const el = root.querySelector("#clock-elapsed");
-    if (!el) { clearTick(); return; }
-    // Re-read the open punch time from the DOM's data isn't needed; recompute.
-  };
-
+  let ticks = 0;
   const refresh = async () => {
     const punch = await openPunch(employeeId);
     const el = root.querySelector("#clock-elapsed");
-    if (el && punch) el.textContent = hms(Date.now() - punch.clockIn);
+    if (!el) { clearTick(); return; }
+    if (punch) el.textContent = hms(Date.now() - punch.clockIn);
+    // A backup to the persistent monitor, so reminders fire while this screen
+    // is open even for a manager clocking under their own name.
+    ticks += 1;
+    if (punch && ticks % 20 === 0) checkBreakReminders(employeeId).catch(() => {});
   };
   tick = setInterval(refresh, 1000);
-  paint();
+  refresh();
 
   root.querySelector("#clock-in")?.addEventListener("click", async () => {
     const btn = root.querySelector("#clock-in");
@@ -559,14 +639,16 @@ function rosterCard(employees) {
         <div class="app-avatar">${esc(initials(e.name))}</div>
         <div class="grow">
           <div class="r-title">${esc(e.name)}</div>
-          <div class="r-sub">${e.phone ? esc(e.phone) : "No phone"} · PIN ${e.pin ? "set" : "none"}</div>
+          <div class="r-sub">${e.username ? `@${esc(e.username)}` : "no username"}${e.rate ? ` · ${esc(money(e.rate))}/hr` : ""} · PIN ${e.pin ? "set" : "none"}</div>
         </div>
         <button class="app-icon-btn" data-remove="${esc(e.id)}" style="background:var(--neg-bg);color:var(--neg-fg)">${icon("close")}</button>
       </div>`).join("")
     : emptyRow("No one on the team yet");
   return `<div class="app-card"><div class="app-card-head"><h3>Team</h3>
     <span class="hint">${num(employees.length)}</span></div>
-    <div class="app-card-body flush">${rows}</div></div>`;
+    <div class="app-card-body flush">${rows}</div>
+    ${employees.length ? `<div class="app-card-body"><button class="app-btn" id="tm-logins">${icon("printer")} Download logins (Excel)</button></div>` : ""}
+  </div>`;
 }
 
 function addEmployeeCard() {
@@ -575,7 +657,11 @@ function addEmployeeCard() {
       <label class="app-field"><span>Name</span><input class="app-input" id="te-name" placeholder="Full name"></label>
       <div class="app-grid-2">
         <label class="app-field"><span>Phone (optional)</span><input class="app-input" id="te-phone" inputmode="tel" placeholder="(000) 000-0000"></label>
-        <label class="app-field"><span>Clock-in PIN</span><input class="app-input" id="te-pin" inputmode="numeric" maxlength="6" placeholder="4 digits"></label>
+        <label class="app-field"><span>Pay rate $/hr</span><input class="app-input" id="te-rate" inputmode="decimal" placeholder="e.g. 18.00"></label>
+      </div>
+      <div class="app-grid-2">
+        <label class="app-field"><span>Username</span><input class="app-input" id="te-user" placeholder="auto from name"></label>
+        <label class="app-field"><span>Password / PIN</span><input class="app-input" id="te-pin" inputmode="numeric" maxlength="12" placeholder="4-digit PIN"></label>
       </div>
       <button class="app-btn primary" id="te-add">${icon("owners")} Add to team</button>
     </div></div>`;
@@ -604,10 +690,21 @@ function wireTeam(body, store, draw) {
     const name = body.querySelector("#te-name").value.trim();
     const phone = body.querySelector("#te-phone").value.trim();
     const pin = body.querySelector("#te-pin").value.trim();
+    const username = body.querySelector("#te-user").value.trim();
+    const rate = body.querySelector("#te-rate").value.trim();
     if (!name) { toast("Enter a name", "warn"); return; }
-    await addEmployee({ name, storeId: store.id, phone, pin });
-    toast("Added to team", "ok");
+    const row = await addEmployee({ name, storeId: store.id, phone, pin, username, rate });
+    toast(`Added — username @${row.username}`, "ok");
     draw();
+  });
+  body.querySelector("#tm-logins")?.addEventListener("click", async () => {
+    const roster = (await listEmployees(store.id)).filter((e) => !String(e.pin).startsWith("mgr:"));
+    if (!roster.length) { toast("No team to export", "warn"); return; }
+    const headers = ["Name", "Username", "Password / PIN", "Phone", "Pay rate $/hr"];
+    const rows = roster.map((e) => [e.name, e.username || "", e.password || e.pin || "", e.phone || "", e.rate ?? ""]);
+    downloadExcel(`team-logins-${store.name.replace(/[^a-z0-9]+/gi, "-").toLowerCase()}`,
+      { name: "Logins", headers, rows });
+    toast("Logins downloaded", "ok");
   });
   body.querySelectorAll("[data-remove]").forEach((btn) => btn.addEventListener("click", async () => {
     await removeEmployee(btn.dataset.remove);
@@ -689,6 +786,150 @@ function wireTasks(body, store, draw) {
 }
 
 /* -------------------------------------------------------------------------
+   Manager: time-clock editor (manager only — the employee clock has no edit)
+   ------------------------------------------------------------------------- */
+
+function timeHHMM(ms) {
+  if (!ms) return "";
+  const d = new Date(ms);
+  return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+}
+
+function tsFromDayTime(dateYmd, hhmm) {
+  if (!hhmm) return null;
+  const t = new Date(`${dateYmd}T${hhmm}:00`).getTime();
+  return Number.isFinite(t) ? t : null;
+}
+
+export function renderAppTimeclock(ctx) {
+  const store = primaryStore(ctx);
+  if (!store) return heading("Time clock") + emptyRow("No store.");
+  return heading("Time clock", store.name) + `<div id="tc-body">${loadingRow()}</div>`;
+}
+
+export async function bindAppTimeclock(root, ctx) {
+  const store = primaryStore(ctx);
+  if (!store) return;
+  const body = root.querySelector("#tc-body");
+  const draw = async () => {
+    const roster = (await listEmployees(store.id)).filter((e) => !String(e.pin).startsWith("mgr:"));
+    if (!roster.length) {
+      body.innerHTML = `<div class="app-card"><div class="app-card-body">${emptyRow("Add someone to the team first.")}
+        <a class="app-btn" href="#/app/team">${icon("owners")} Go to Team</a></div></div>`;
+      return;
+    }
+    if (!tcEmployeeId || !roster.some((e) => e.id === tcEmployeeId)) tcEmployeeId = roster[0].id;
+    const employee = roster.find((e) => e.id === tcEmployeeId);
+    const punches = await listPunches({ employeeId: employee.id });
+    const dayPunches = punches.filter((p) => p.date === tcDate)
+      .sort((a, b) => a.clockIn - b.clockIn);
+    const period = payPeriodOf(tcPeriodAnchor);
+    body.innerHTML = tcPickerCard(roster, employee)
+      + tcDayCard(dayPunches)
+      + timesheetCard(punches, period, employee, "tc-ts", { title: "Paid hours" });
+    wireTimeclock(body, { store, employee, draw });
+    wireTimesheet(body, {
+      idPrefix: "tc-ts",
+      employee,
+      punches,
+      getAnchor: () => tcPeriodAnchor,
+      setAnchor: (v) => { tcPeriodAnchor = v; },
+      redraw: draw,
+    });
+  };
+  await draw();
+}
+
+function tcPickerCard(roster, employee) {
+  const options = roster.map((e) => `<option value="${esc(e.id)}"${e.id === employee.id ? " selected" : ""}>${esc(e.name)}</option>`).join("");
+  return `<div class="app-card">
+    <div class="app-card-body">
+      <label class="app-field"><span>Employee</span>
+        <select class="app-select" id="tc-emp">${options}</select></label>
+      <label class="app-field"><span>Day</span>
+        <input class="app-input" type="date" id="tc-date" value="${esc(tcDate)}"></label>
+    </div>
+  </div>`;
+}
+
+function tcDayCard(dayPunches) {
+  const rows = dayPunches.map((p) => {
+    const meal = (p.breaks || []).find((b) => b.type === "meal");
+    const tag = p.manual ? "manual" : p.edited ? "edited" : p.auto ? "auto-out" : "";
+    return `<div class="app-card" data-punch="${esc(p.id)}">
+      <div class="app-card-head"><h3>${esc(clockTime(p.clockIn))}${p.clockOut ? ` – ${esc(clockTime(p.clockOut))}` : " · open"}</h3>
+        ${tag ? `<span class="hint">${tag}</span>` : ""}</div>
+      <div class="app-card-body">
+        <div class="app-grid-2">
+          <label class="app-field"><span>Clock in</span><input class="app-input" type="time" data-f="in" value="${esc(timeHHMM(p.clockIn))}"></label>
+          <label class="app-field"><span>Clock out</span><input class="app-input" type="time" data-f="out" value="${esc(p.clockOut ? timeHHMM(p.clockOut) : "")}"></label>
+        </div>
+        <div class="app-grid-2">
+          <label class="app-field"><span>Meal start</span><input class="app-input" type="time" data-f="mealin" value="${esc(meal && meal.start ? timeHHMM(meal.start) : "")}"></label>
+          <label class="app-field"><span>Meal end</span><input class="app-input" type="time" data-f="mealout" value="${esc(meal && meal.end ? timeHHMM(meal.end) : "")}"></label>
+        </div>
+        <div class="app-grid-2">
+          <button class="app-btn" data-save="${esc(p.id)}">Save</button>
+          <button class="app-btn danger" data-del="${esc(p.id)}">Delete</button>
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+  const add = `<div class="app-card"><div class="app-card-head"><h3>Add an entry</h3></div>
+    <div class="app-card-body">
+      <div class="app-grid-2">
+        <label class="app-field"><span>Clock in</span><input class="app-input" type="time" id="tc-add-in" value="08:00"></label>
+        <label class="app-field"><span>Clock out</span><input class="app-input" type="time" id="tc-add-out" value="16:00"></label>
+      </div>
+      <button class="app-btn primary" id="tc-add">${icon("clock")} Add entry</button>
+    </div></div>`;
+  return `<div class="section-heading" style="margin-top:6px">${esc(dayName(tcDate))}</div>`
+    + (rows || `<div class="app-card"><div class="app-card-body">${emptyRow("No entries on this day")}</div></div>`)
+    + add;
+}
+
+function wireTimeclock(body, { store, employee, draw }) {
+  body.querySelector("#tc-emp")?.addEventListener("change", (e) => {
+    tcEmployeeId = e.target.value;
+    draw();
+  });
+  body.querySelector("#tc-date")?.addEventListener("change", (e) => {
+    tcDate = e.target.value || today();
+    draw();
+  });
+  body.querySelectorAll("[data-save]").forEach((btn) => btn.addEventListener("click", async () => {
+    const card = btn.closest("[data-punch]");
+    const punchId = btn.dataset.save;
+    const get = (f) => card.querySelector(`[data-f="${f}"]`).value;
+    const clockIn = tsFromDayTime(tcDate, get("in"));
+    if (!clockIn) { toast("A clock-in time is required", "warn"); return; }
+    const clockOut = tsFromDayTime(tcDate, get("out"));
+    if (clockOut && clockOut <= clockIn) { toast("Clock-out must be after clock-in", "warn"); return; }
+    const mealIn = tsFromDayTime(tcDate, get("mealin"));
+    const mealOut = tsFromDayTime(tcDate, get("mealout"));
+    const breaks = [];
+    if (mealIn) breaks.push({ type: "meal", start: mealIn, end: mealOut || null });
+    await updatePunch(punchId, { clockIn, clockOut, breaks }, employee.name);
+    toast("Time corrected", "ok");
+    draw();
+  }));
+  body.querySelectorAll("[data-del]").forEach((btn) => btn.addEventListener("click", async () => {
+    await removePunch(btn.dataset.del);
+    toast("Entry removed");
+    draw();
+  }));
+  body.querySelector("#tc-add")?.addEventListener("click", async () => {
+    const clockIn = tsFromDayTime(tcDate, body.querySelector("#tc-add-in").value);
+    const clockOut = tsFromDayTime(tcDate, body.querySelector("#tc-add-out").value);
+    if (!clockIn) { toast("A clock-in time is required", "warn"); return; }
+    if (clockOut && clockOut <= clockIn) { toast("Clock-out must be after clock-in", "warn"); return; }
+    await addPunch({ employeeId: employee.id, storeId: store.id, date: tcDate, clockIn, clockOut }, employee.name);
+    toast("Entry added", "ok");
+    draw();
+  });
+}
+
+/* -------------------------------------------------------------------------
    Employee mode
    ------------------------------------------------------------------------- */
 
@@ -706,20 +947,31 @@ export async function bindAppMe(root, ctx) {
       wirePicker(body, draw);
       return;
     }
-    const [punch, shifts, tasks, place] = await Promise.all([
+    const [punch, shifts, tasks, place, punches] = await Promise.all([
       openPunch(employee.id),
       listShifts({ employeeId: employee.id, from: today() }),
       listTasks({ storeId: employee.storeId, employeeId: employee.id }),
       getPlace(employee.storeId),
+      listPunches({ employeeId: employee.id }),
     ]);
+    const period = payPeriodOf(mePeriodAnchor);
     body.innerHTML = `
       <div class="app-greet"><h2>${esc(greeting())}, ${esc(employee.name.split(" ")[0])}</h2>
         <p>${esc(shiftLine(shifts))}</p></div>
       ${clockCard(punch, place)}
       ${meTasks(tasks)}
       ${meSchedule(shifts)}
+      ${timesheetCard(punches, period, employee, "me-ts", { title: "My paid hours" })}
       <button class="app-btn ghost" id="me-signout">${icon("logout")} Not you? Sign out</button>`;
     bindClock(body, { employeeId: employee.id, storeId: employee.storeId, rerender: draw });
+    wireTimesheet(body, {
+      idPrefix: "me-ts",
+      employee,
+      punches,
+      getAnchor: () => mePeriodAnchor,
+      setAnchor: (v) => { mePeriodAnchor = v; },
+      redraw: draw,
+    });
     body.querySelectorAll("[data-toggle]").forEach((el) => el.addEventListener("click", async () => {
       const list = await listTasks({ storeId: employee.storeId, employeeId: employee.id });
       const t = list.find((x) => x.id === el.dataset.toggle);
@@ -792,6 +1044,84 @@ function meSchedule(shifts) {
   </div>`).join("");
   return `<div class="app-card"><div class="app-card-head"><h3>Your week</h3></div>
     <div class="app-card-body flush">${rows}</div></div>`;
+}
+
+/* -------------------------------------------------------------------------
+   Timesheets (paid hours by pay period) and Excel export
+   ------------------------------------------------------------------------- */
+
+function fmtH(n) {
+  return `${Math.round((Number(n) || 0) * 100) / 100} h`;
+}
+
+function periodLabel(period) {
+  const fmt = (ymd) => new Date(`${ymd}T00:00:00`)
+    .toLocaleDateString([], { month: "short", day: "numeric" });
+  return `${fmt(period.start)} – ${fmt(period.end)}`;
+}
+
+/*
+ * One employee's paid hours for a half-month pay period: regular, the two
+ * California overtime tiers, and the total, with a day-by-day breakdown and the
+ * seventh-day marker. `idPrefix` namespaces the period and export controls so
+ * the same card can appear in employee mode and in the manager's timeclock.
+ */
+function timesheetCard(punches, period, employee, idPrefix, { title = "Timesheet" } = {}) {
+  const ts = computeTimesheet(punches, period.start, period.end, { rate: employee?.rate ?? null });
+  const rows = ts.days.length
+    ? ts.days.map((d) => `<div class="app-row">
+        <div class="grow">
+          <div class="r-title">${esc(dayName(d.date))}${d.seventh ? " · 7th day" : ""}</div>
+          <div class="r-sub">${fmtH(d.regular)} reg${d.overtime ? ` · ${fmtH(d.overtime)} OT` : ""}${d.doubleTime ? ` · ${fmtH(d.doubleTime)} 2×` : ""}</div>
+        </div>
+        <div class="r-value">${fmtH(d.total)}</div>
+      </div>`).join("")
+    : emptyRow("No hours this period");
+  return `<div class="app-card">
+    <div class="app-card-head"><h3>${esc(title)}</h3><span class="hint">${esc(periodLabel(period))}</span></div>
+    <div class="app-card-body">
+      <div class="app-figures">
+        ${figure("Regular", fmtH(ts.regular), "First 8 h/day")}
+        ${figure("Overtime 1.5×", fmtH(ts.overtime), "8–12 h/day")}
+        ${figure("Double 2×", fmtH(ts.doubleTime), "Past 12 h")}
+        ${figure("Paid hours", fmtH(ts.total), "Meal unpaid, rests paid")}
+      </div>
+      ${ts.pay != null ? `<div class="geo-note ok" style="margin-top:10px">${icon("billing")} Estimated pay ${esc(money(ts.pay))} at ${esc(money(employee.rate))}/hr</div>` : ""}
+      <div class="app-grid-2" style="margin-top:10px">
+        <button class="app-btn ghost" id="${idPrefix}-prev">${icon("chevron")} Previous</button>
+        <button class="app-btn ghost" id="${idPrefix}-next">Next ${icon("chevron")}</button>
+      </div>
+      <button class="app-btn" id="${idPrefix}-xls" style="margin-top:10px">${icon("printer")} Download timesheet (Excel)</button>
+    </div>
+    <div class="app-card-body flush">${rows}</div>
+  </div>`;
+}
+
+function timesheetExcel(employee, ts) {
+  const rows = ts.days.map((d) => [d.date, d.regular, d.overtime, d.doubleTime, d.total]);
+  rows.push(["Total", ts.regular, ts.overtime, ts.doubleTime, ts.total]);
+  const headers = ["Date", "Regular", "OT 1.5×", "DT 2×", "Paid hours"];
+  const who = employee.username || employee.name || "employee";
+  downloadExcel(`timesheet-${who}-${ts.start}`, { name: "Timesheet", headers, rows });
+}
+
+/* Wire a timesheet card's period buttons and Excel export.
+   `setAnchor` persists the chosen period; `redraw` repaints. */
+function wireTimesheet(root, { idPrefix, employee, punches, getAnchor, setAnchor, redraw }) {
+  root.querySelector(`#${idPrefix}-prev`)?.addEventListener("click", () => {
+    setAnchor(payPeriodShift(getAnchor(), -1).start);
+    redraw();
+  });
+  root.querySelector(`#${idPrefix}-next`)?.addEventListener("click", () => {
+    setAnchor(payPeriodShift(getAnchor(), 1).start);
+    redraw();
+  });
+  root.querySelector(`#${idPrefix}-xls`)?.addEventListener("click", () => {
+    const period = payPeriodOf(getAnchor());
+    const ts = computeTimesheet(punches, period.start, period.end, { rate: employee?.rate ?? null });
+    timesheetExcel(employee, ts);
+    toast("Timesheet downloaded", "ok");
+  });
 }
 
 /* -------------------------------------------------------------------------

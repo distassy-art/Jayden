@@ -33,9 +33,9 @@ import { bindTrends, renderTrends } from "./views/trends.js";
 import { bindLeaks, renderLeaks } from "./views/leaks.js";
 import {
   appRole, ensureGeofence,
-  bindAppClock, bindAppMe, bindAppSchedule, bindAppTasks, bindAppTeam,
+  bindAppClock, bindAppMe, bindAppSchedule, bindAppTasks, bindAppTeam, bindAppTimeclock,
   renderAppClock, renderAppHome, renderAppMe, renderAppSchedule, renderAppTasks,
-  renderAppTeam,
+  renderAppTeam, renderAppTimeclock,
 } from "./views/app.js";
 import { activeEmployeeId } from "./appstore.js";
 import { PUBLIC_ROUTES, renderLogin } from "./views/site.js";
@@ -87,6 +87,7 @@ const ROUTES = [
   { path: "/app/clock", title: "My clock", app: true, hidden: true, appTab: true, icon: "clock", render: renderAppClock, bind: bindAppClock, roles: ["admin", "owner", "manager"] },
   { path: "/app/team", title: "Team", app: true, hidden: true, appTab: true, icon: "owners", render: renderAppTeam, bind: bindAppTeam, roles: ["admin", "owner", "manager"] },
   { path: "/app/tasks", title: "Tasks", app: true, hidden: true, appTab: true, icon: "check", render: renderAppTasks, bind: bindAppTasks, roles: ["admin", "owner", "manager"] },
+  { path: "/app/timeclock", title: "Time clock", app: true, hidden: true, icon: "pricing", render: renderAppTimeclock, bind: bindAppTimeclock, roles: ["admin", "owner", "manager"] },
   { path: "/app/me", title: "Employee", app: true, hidden: true, render: renderAppMe, bind: bindAppMe },
 ];
 
