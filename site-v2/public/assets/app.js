@@ -9,8 +9,10 @@
 import { icon, initials, esc, timeAgo, toast, monthLabel } from "./ui.js";
 import { buildModel } from "./analytics.js";
 import { invalidate, isAdmin, loadWorkspace, session, signIn } from "./data.js";
+import { buildOwners, resolveScope, withScope } from "./scope.js";
 import { renderDashboard } from "./views/dashboard.js";
 import { bindStores, renderStore, renderStores } from "./views/stores.js";
+import { bindOwners, renderOwner, renderOwners } from "./views/owners.js";
 import {
   bindInvoices, bindOrders, renderInvoices, renderOrders, renderPricing,
 } from "./views/operations.js";
@@ -21,27 +23,53 @@ import {
   bindDepartments, bindRankings, bindScope, renderDepartments, renderFuel,
   renderProfit, renderPurchases, renderRankings,
 } from "./views/analysis.js";
+import { bindDaily, bindPnl, renderDaily, renderPnl } from "./views/periods.js";
+import { bindCalendar, renderCalendar, renderSchedule } from "./views/planning.js";
 
 /* -------------------------------------------------------------------------
    Routes
+   -------------------------------------------------------------------------
+   `roles` lists who may reach a page; omitting it means everyone signed in.
+   Nothing is hidden behind a "more" disclosure — if a role can open a page, it
+   is in that role's rail.
    ------------------------------------------------------------------------- */
 
 const ROUTES = [
   { path: "/", title: "Command centre", icon: "dashboard", group: "Overview", render: renderDashboard },
+  { path: "/owners", title: "Owners", icon: "owners", group: "Overview", render: renderOwners, bind: bindOwners, roles: ["admin"] },
   { path: "/stores", title: "Stores", icon: "stores", group: "Overview", render: renderStores, bind: bindStores },
+  { path: "/owner/:id", title: "Owner", hidden: true, render: renderOwner, bind: bindOwners, roles: ["admin"] },
   { path: "/store/:id", title: "Store", hidden: true, render: renderStore },
-  { path: "/profit", title: "Profit", icon: "health", group: "Analysis", render: renderProfit, bind: bindScope },
-  { path: "/fuel", title: "Fuel", icon: "fuel", group: "Analysis", render: renderFuel, bind: bindScope },
-  { path: "/purchases", title: "Purchases", icon: "orders", group: "Analysis", render: renderPurchases, bind: bindScope },
-  { path: "/departments", title: "Departments", icon: "departments", group: "Analysis", render: renderDepartments, bind: bindDepartments },
-  { path: "/rankings", title: "Rankings", icon: "rankings", group: "Analysis", render: renderRankings, bind: bindRankings },
+
+  { path: "/profit", title: "Profit", icon: "profit", group: "Performance", render: renderProfit, bind: bindScope },
+  { path: "/fuel", title: "Fuel", icon: "fuel", group: "Performance", render: renderFuel, bind: bindScope },
+  { path: "/purchases", title: "Purchases", icon: "orders", group: "Performance", render: renderPurchases, bind: bindScope },
+  { path: "/departments", title: "Departments", icon: "departments", group: "Performance", render: renderDepartments, bind: bindDepartments },
+  { path: "/rankings", title: "Rankings", icon: "rankings", group: "Performance", render: renderRankings, bind: bindRankings, roles: ["admin", "owner"] },
+  { path: "/pnl", title: "Profit and loss", icon: "pnl", group: "Performance", render: renderPnl, bind: bindPnl },
+
+  { path: "/daily", title: "Daily close", icon: "calendar", group: "Operations", render: renderDaily, bind: bindDaily },
   { path: "/invoices", title: "S2K invoices", icon: "invoice", group: "Operations", render: renderInvoices, bind: bindInvoices },
   { path: "/orders", title: "Vendor orders", icon: "orders", group: "Operations", render: renderOrders, bind: bindOrders },
-  { path: "/pricing", title: "Pricing", icon: "billing", group: "Operations", render: renderPricing },
-  { path: "/billing", title: "Billing", icon: "billing", group: "Business", render: renderBilling, bind: bindBilling },
+  { path: "/calendar", title: "Delivery calendar", icon: "calendar", group: "Operations", render: renderCalendar, bind: bindCalendar },
+  { path: "/pricing", title: "Pricing", icon: "pricing", group: "Operations", render: renderPricing },
+  { path: "/schedule", title: "Schedule", icon: "clock", group: "Operations", render: renderSchedule },
+
+  { path: "/billing", title: "Billing", icon: "billing", group: "Business", render: renderBilling, bind: bindBilling, roles: ["admin", "owner"] },
   { path: "/tickets", title: "Tickets", icon: "inbox", group: "Business", render: renderTickets },
-  { path: "/health", title: "Data health", icon: "health", group: "Business", render: renderHealth },
+  { path: "/health", title: "Data health", icon: "health", group: "Business", render: renderHealth, roles: ["admin"] },
 ];
+
+/** The role name used for route visibility. */
+function roleOf(user) {
+  if (!user) return "none";
+  if (isAdmin(user)) return "admin";
+  return user.role === "manager" ? "manager" : "owner";
+}
+
+function allowed(route, user) {
+  return !route.roles || route.roles.includes(roleOf(user));
+}
 
 /** Match a hash path against the route table, extracting `:params`. */
 function matchRoute(pathname) {
@@ -185,9 +213,11 @@ function signOut() {
    Chrome
    ------------------------------------------------------------------------- */
 
-function railMarkup(activePath) {
+const ROLE_LABEL = { admin: "Administrator", owner: "Owner", manager: "Store manager" };
+
+function railMarkup(activePath, scope) {
   const groups = new Map();
-  ROUTES.filter((route) => !route.hidden).forEach((route) => {
+  ROUTES.filter((route) => !route.hidden && allowed(route, state.user)).forEach((route) => {
     if (!groups.has(route.group)) groups.set(route.group, []);
     groups.get(route.group).push(route);
   });
@@ -199,9 +229,13 @@ function railMarkup(activePath) {
       <div class="rail-label">${esc(group)}</div>
       ${routes.map((route) => {
         const active = route.path === activePath
-          || (route.path === "/stores" && activePath.startsWith("/store"));
+          || (route.path === "/stores" && activePath.startsWith("/store"))
+          || (route.path === "/owners" && activePath.startsWith("/owner/"));
         const count = counts[route.path];
-        return `<a class="rail-link${active ? " is-active" : ""}" href="#${esc(route.path)}">
+        // Carrying the scope means picking a client once holds as you move
+        // between profit, fuel and purchases.
+        const href = scope ? withScope(route.path, scope) : `#${route.path}`;
+        return `<a class="rail-link${active ? " is-active" : ""}" href="${esc(href)}">
           ${icon(route.icon)}<span>${esc(route.title)}</span>
           ${count ? `<span class="count${count.alert ? " alert" : ""}">${esc(count.value)}</span>` : ""}
         </a>`;
@@ -221,7 +255,7 @@ function railMarkup(activePath) {
         <span class="avatar">${esc(initials(user.client || user.email))}</span>
         <span class="who">
           <b class="truncate">${esc(user.client || user.email || "")}</b>
-          <span>${esc(isAdmin(user) ? "Administrator" : user.role === "manager" ? "Store manager" : "Owner")}</span>
+          <span>${esc(ROLE_LABEL[roleOf(user)] || "Signed in")}</span>
         </span>
       </div>
       <button class="btn btn-ghost btn-sm" id="signOut" style="width:100%;justify-content:flex-start;margin-top:4px">
@@ -267,8 +301,17 @@ function topbarMarkup(route, params) {
    ------------------------------------------------------------------------- */
 
 function paletteEntries() {
-  const entries = ROUTES.filter((route) => !route.hidden)
+  const entries = ROUTES.filter((route) => !route.hidden && allowed(route, state.user))
     .map((route) => ({ label: route.title, kind: route.group, href: `#${route.path}`, icon: route.icon }));
+
+  (state.model?.owners || []).forEach((owner) => {
+    entries.push({
+      label: `${owner.client} · ${owner.stations.length} stores`,
+      kind: "Owner",
+      href: `#/owner/${owner.id}`,
+      icon: "owners",
+    });
+  });
 
   (state.model?.stations || []).forEach((station) => {
     entries.push({
@@ -374,9 +417,12 @@ function render(options = {}) {
 
   const { pathname, query } = parseHash();
   const matched = matchRoute(pathname) || { route: ROUTES[0], params: {} };
-  const { route, params } = matched;
+  let { route } = matched;
+  const { params } = matched;
+  if (!allowed(route, state.user)) route = ROUTES[0];
 
-  const ctx = { ...state, query, params, navigate, refresh };
+  const scope = state.model ? resolveScope(state.model, query) : null;
+  const ctx = { ...state, query, params, pathname, scope, navigate, refresh };
 
   let body;
   if (state.loading && !state.data) body = loadingMarkup();
@@ -398,7 +444,7 @@ function render(options = {}) {
 
   app.innerHTML = `
     <div class="shell">
-      <aside class="rail" id="rail">${railMarkup(route.path)}</aside>
+      <aside class="rail" id="rail">${railMarkup(route.path, scope)}</aside>
       <div>
         <header class="topbar">${topbarMarkup(route, params)}</header>
         <main class="content" id="content">${body}</main>
@@ -455,6 +501,18 @@ function wireChrome() {
    Loading
    ------------------------------------------------------------------------- */
 
+/*
+ * Stores the signed-in account may see. The upstream feed already filters by
+ * `x-ss-email`, but a client's figures are the one thing that must not leak if
+ * that ever changes, so the console narrows the model as well.
+ */
+function visibleStores() {
+  const user = state.user;
+  if (!user || isAdmin(user)) return null;
+  const ids = (user.stores || []).map(String).filter(Boolean);
+  return ids.length ? ids : null;
+}
+
 async function refresh(force = false) {
   if (force) invalidate();
   state.loading = true;
@@ -465,7 +523,10 @@ async function refresh(force = false) {
     const data = await loadWorkspace({ maxAge: force ? 0 : 120000 });
     if (!data.overlay) throw new Error(data.errors.overlay || "The books feed is unavailable.");
     state.data = data;
-    state.model = buildModel(data.overlay);
+
+    const model = buildModel(data.overlay, { stores: visibleStores() });
+    model.owners = buildOwners(data.owners?.accounts || [], model);
+    state.model = model;
     if (force) toast("Data reloaded");
   } catch (failure) {
     state.loadError = failure.message || "Something went wrong.";

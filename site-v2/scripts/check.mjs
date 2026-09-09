@@ -11,13 +11,17 @@
  */
 
 import { buildModel } from "../public/assets/analytics.js";
+import { buildOwners, resolveScope } from "../public/assets/scope.js";
 import { renderDashboard } from "../public/assets/views/dashboard.js";
 import { renderStore, renderStores } from "../public/assets/views/stores.js";
+import { renderOwner, renderOwners } from "../public/assets/views/owners.js";
 import { renderInvoices, renderOrders, renderPricing } from "../public/assets/views/operations.js";
 import { renderBilling, renderHealth, renderTickets } from "../public/assets/views/finance.js";
 import {
   renderDepartments, renderFuel, renderProfit, renderPurchases, renderRankings,
 } from "../public/assets/views/analysis.js";
+import { renderDaily, renderPnl } from "../public/assets/views/periods.js";
+import { renderCalendar, renderSchedule } from "../public/assets/views/planning.js";
 
 const args = process.argv.slice(2);
 const baseFlag = args.indexOf("--base");
@@ -71,7 +75,7 @@ function inspect(name, markup) {
 async function main() {
   process.stdout.write(`Checking against ${BASE}\n\n`);
 
-  const [overlay, billing, tickets, days, s2k, orders, pricing] = await Promise.all([
+  const [overlay, billing, tickets, days, s2k, orders, pricing, owners] = await Promise.all([
     get("/api/books-overlay"),
     get("/api/billing").catch(() => null),
     get("/api/mgr-tickets").catch(() => null),
@@ -79,10 +83,12 @@ async function main() {
     get("/api/data/s2k-invoices.json").catch(() => null),
     get("/api/data/vendor-orders.json").catch(() => null),
     get("/api/data/pricing.json").catch(() => null),
+    get("/api/data/owners.json").catch(() => null),
   ]);
 
-  const data = { overlay, billing, tickets, days, s2k, orders, pricing, errors: {} };
+  const data = { overlay, billing, tickets, days, s2k, orders, pricing, owners, errors: {} };
   const model = buildModel(overlay);
+  model.owners = buildOwners(owners?.accounts || [], model);
 
   process.stdout.write("Model\n");
   assert(model.stations.length > 0, "model: no stations parsed");
@@ -104,16 +110,34 @@ async function main() {
   process.stdout.write(`  ok    ${model.stations.length} stations, latest ${model.latestMonth} `
     + `(${filed} filed), ${model.closedMonths.length} closed months, ${model.ytdKeys.length} YTD\n\n`);
 
-  const ctx = (query = "", params = {}) => ({
-    model,
-    data,
-    query: new URLSearchParams(query),
-    params,
-    navigate() {},
-  });
+  // Ownership has to partition the portfolio: a store filed under no client, or
+  // under two, would silently drop out of or double-count in every roll-up.
+  process.stdout.write("\nOwnership\n");
+  assert(model.owners.length > 0, "owners: no client groups derived");
+  const owned = model.owners.flatMap((owner) => owner.stationIds);
+  const duplicated = owned.filter((id, i) => owned.indexOf(id) !== i);
+  assert(duplicated.length === 0, `owners: ${duplicated.join(", ")} belong to more than one client`);
+  const orphans = model.stations.map((s) => s.id).filter((id) => !owned.includes(id));
+  assert(orphans.length === 0, `owners: ${orphans.join(", ")} belong to no client`);
+  process.stdout.write(`  ok    ${model.owners.length} clients covering ${owned.length} stores `
+    + `(${model.owners.map((o) => `${o.client} ${o.stations.length}`).join(", ")})\n`);
 
-  process.stdout.write("Views\n");
+  const ctx = (query = "", params = {}) => {
+    const search = new URLSearchParams(query);
+    return {
+      model,
+      data,
+      query: search,
+      params,
+      pathname: "/",
+      scope: resolveScope(model, search),
+      navigate() {},
+    };
+  };
+
+  process.stdout.write("\nViews\n");
   inspect("dashboard", renderDashboard(ctx()));
+  inspect("owners", renderOwners(ctx()));
   inspect("stores", renderStores(ctx()));
   inspect("stores?period=ytd", renderStores(ctx("period=ytd")));
   inspect("stores?sort=margin&dir=asc", renderStores(ctx("sort=margin&dir=asc")));
@@ -134,6 +158,25 @@ async function main() {
   inspect("billing?status=unpaid", renderBilling(ctx("status=unpaid")));
   inspect("tickets", renderTickets(ctx()));
   inspect("health", renderHealth(ctx()));
+  inspect("pnl", renderPnl(ctx()));
+  inspect("calendar", renderCalendar(ctx()));
+  inspect("schedule", renderSchedule(ctx()));
+
+  // Every grain of the daily page, since each buckets the day feed differently.
+  for (const period of ["day", "week", "month", "year"]) {
+    inspect(`daily?period=${period}`, renderDaily(ctx(`period=${period}`)));
+  }
+
+  process.stdout.write("\nOwner detail (every client)\n");
+  for (const owner of model.owners) {
+    inspect(`owner/${owner.id}`, renderOwner(ctx("", { id: owner.id })));
+    inspect(`profit scoped to ${owner.id}`, renderProfit(ctx(`owner=${owner.id}`)));
+    inspect(`pnl scoped to ${owner.id}`, renderPnl(ctx(`owner=${owner.id}`)));
+    inspect(`daily scoped to ${owner.id}`, renderDaily(ctx(`owner=${owner.id}&period=week`)));
+    inspect(`calendar scoped to ${owner.id}`, renderCalendar(ctx(`owner=${owner.id}`)));
+    inspect(`schedule scoped to ${owner.id}`, renderSchedule(ctx(`owner=${owner.id}`)));
+  }
+  inspect("owner/unknown", renderOwner(ctx("", { id: "no-such-client" })));
 
   process.stdout.write("\nStore detail (every station)\n");
   for (const station of model.stations) {
@@ -149,20 +192,37 @@ async function main() {
     inspect(`fuel ${station.id}`, renderFuel(ctx(scoped)));
     inspect(`purchases ${station.id}`, renderPurchases(ctx(scoped)));
     inspect(`departments ${station.id}`, renderDepartments(ctx(scoped)));
+    inspect(`pnl ${station.id}`, renderPnl(ctx(scoped)));
+    inspect(`daily ${station.id}`, renderDaily(ctx(scoped)));
+    inspect(`schedule ${station.id}`, renderSchedule(ctx(scoped)));
   }
 
   process.stdout.write("\nDegraded feeds\n");
   const bare = {
     overlay,
-    billing: null, tickets: null, days: null, s2k: null, orders: null, pricing: null,
-    errors: { billing: "boom", s2k: "boom", orders: "boom", pricing: "boom" },
+    billing: null, tickets: null, days: null, s2k: null, orders: null, pricing: null, owners: null,
+    errors: { billing: "boom", s2k: "boom", orders: "boom", pricing: "boom", owners: "boom" },
   };
-  const bareCtx = { model, data: bare, query: new URLSearchParams(), params: {}, navigate() {} };
+  const bareModel = buildModel(overlay);
+  bareModel.owners = [];
+  const bareCtx = {
+    model: bareModel,
+    data: bare,
+    query: new URLSearchParams(),
+    params: {},
+    pathname: "/",
+    scope: resolveScope(bareModel, new URLSearchParams(), { owners: [] }),
+    navigate() {},
+  };
   inspect("dashboard (no side feeds)", renderDashboard(bareCtx));
+  inspect("owners (directory down)", renderOwners(bareCtx));
   inspect("invoices (feed down)", renderInvoices(bareCtx));
   inspect("orders (feed down)", renderOrders(bareCtx));
   inspect("billing (feed down)", renderBilling(bareCtx));
   inspect("health (feeds down)", renderHealth(bareCtx));
+  inspect("calendar (feed down)", renderCalendar(bareCtx));
+  inspect("schedule (feed down)", renderSchedule(bareCtx));
+  inspect("pnl (bare)", renderPnl(bareCtx));
 
   process.stdout.write(`\n${checks - failures}/${checks} checks passed\n`);
   if (failures) {

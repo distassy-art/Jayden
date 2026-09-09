@@ -96,6 +96,7 @@ const PAIRINGS = [
   ["neg-fg", "neg-bg", 4.5, "negative badge"],
   ["warn-fg", "warn-bg", 4.5, "warning badge"],
   ["info-fg", "info-bg", 4.5, "info badge"],
+  ["accent-ink", "accent-soft", 4.5, "active trail step and calendar chip"],
   // WCAG 1.4.11: a control has to be distinguishable from its surroundings.
   ["field-border", "surface", 3.0, "input and button borders on a card"],
   ["field-border", "bg", 3.0, "input and button borders on the page"],

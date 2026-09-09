@@ -237,6 +237,7 @@ export const fetchS2kInvoices = resource("/api/data/s2k-invoices.json");
 export const fetchVendorOrders = resource("/api/data/vendor-orders.json");
 export const fetchPricing = resource("/api/data/pricing.json");
 export const fetchAdminStores = resource("/api/data/admin-stores.json");
+export const fetchOwners = resource("/api/data/owners.json");
 
 /**
  * Load everything the console needs in one pass.
@@ -252,6 +253,7 @@ export async function loadWorkspace(options) {
     s2k: fetchS2kInvoices,
     orders: fetchVendorOrders,
     pricing: fetchPricing,
+    owners: fetchOwners,
   };
 
   const names = Object.keys(sources);

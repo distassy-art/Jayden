@@ -94,10 +94,15 @@ export function priorYearKeys(keys) {
 
 /**
  * Build the workspace model every view reads from.
+ *
+ * `stores` narrows the model to a list of station ids, so a client owner's
+ * console cannot roll up another client's figures even if the feed returns them.
  */
-export function buildModel(overlay) {
+export function buildModel(overlay, { stores = null } = {}) {
   const raw = overlay?.overlay?.stations || {};
+  const only = stores ? new Set(stores.map(String)) : null;
   const stations = Object.entries(raw)
+    .filter(([id]) => !only || only.has(String(id)))
     .map(([id, value]) => normaliseStation(id, value))
     .sort((a, b) => a.name.localeCompare(b.name));
 
@@ -305,6 +310,71 @@ export function departmentRollup(model, stationIds = null) {
 export function departmentPeriods(model, stationIds = null) {
   const station = scopeOf(model, stationIds).find((s) => s.departments.length);
   return station ? station.deptPeriods : { y2025: "2025", y2026: "2026" };
+}
+
+/* -------------------------------------------------------------------------
+   Day grain
+   -------------------------------------------------------------------------
+   Day records use their own field names — `purch` rather than `purchases`, and
+   `margin` rather than `store_margin` — so they are normalised here once
+   instead of in each view.
+   ------------------------------------------------------------------------- */
+
+const DAY_METRICS = ["gas_vol", "gas_profit", "sales", "purchases", "store_profit", "total_profit"];
+
+function normaliseDay(day) {
+  return {
+    date: String(day.date),
+    gas_vol: isNum(day.gas_vol) ? Number(day.gas_vol) : null,
+    gas_profit: isNum(day.gas_profit) ? Number(day.gas_profit) : null,
+    sales: isNum(day.sales) ? Number(day.sales) : null,
+    purchases: isNum(day.purch) ? Number(day.purch) : (isNum(day.purchases) ? Number(day.purchases) : null),
+    store_profit: isNum(day.store_profit) ? Number(day.store_profit) : null,
+    total_profit: isNum(day.total_profit) ? Number(day.total_profit) : null,
+  };
+}
+
+/** Every day in scope, summed across stores, one row per calendar date. */
+export function scopeDays(model, stationIds = null) {
+  const byDate = new Map();
+
+  scopeOf(model, stationIds).forEach((station) => {
+    station.days.forEach((raw) => {
+      const day = normaliseDay(raw);
+      if (!byDate.has(day.date)) byDate.set(day.date, { date: day.date, stores: 0 });
+      const row = byDate.get(day.date);
+      row.stores += 1;
+      DAY_METRICS.forEach((key) => {
+        if (isNum(day[key])) row[key] = (row[key] || 0) + day[key];
+      });
+    });
+  });
+
+  return [...byDate.values()]
+    .map((row) => ({
+      ...row,
+      // Recomputed from the summed dollars; averaging each store's own margin
+      // would weight a quiet site the same as the busiest one.
+      margin: isNum(row.sales) && row.sales !== 0 ? row.store_profit / row.sales : null,
+      gas_margin: isNum(row.gas_vol) && row.gas_vol !== 0 ? row.gas_profit / row.gas_vol : null,
+    }))
+    .sort((a, b) => a.date.localeCompare(b.date));
+}
+
+/** Sum a set of day rows, recomputing the ratios afterwards. */
+export function sumDays(rows) {
+  const totals = {};
+  rows.forEach((row) => {
+    DAY_METRICS.forEach((key) => {
+      if (isNum(row[key])) totals[key] = (totals[key] || 0) + Number(row[key]);
+    });
+  });
+  totals.margin = isNum(totals.sales) && totals.sales !== 0
+    ? totals.store_profit / totals.sales : null;
+  totals.gas_margin = isNum(totals.gas_vol) && totals.gas_vol !== 0
+    ? totals.gas_profit / totals.gas_vol : null;
+  totals.days = rows.length;
+  return totals;
 }
 
 /**
