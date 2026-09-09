@@ -57,7 +57,8 @@ def real_month(entry):
                          "fuel_profit", "total_profit"))
 
 
-def main(figures_path, overlay_path, owners_path, monthly_path=None, open_days_path=None):
+def main(figures_path, overlay_path, owners_path, monthly_path=None, open_days_path=None,
+         depts_path=None):
     figures = json.load(open(figures_path))
     stations = json.load(open(overlay_path))["overlay"]["stations"]
 
@@ -411,10 +412,41 @@ def main(figures_path, overlay_path, owners_path, monthly_path=None, open_days_p
           f"{seen_kinds['month']} monthly), months sum to their year\n")
 
     # --- departments ---------------------------------------------------------
+    # Departments come from the reconciled depts.json, not the older snapshot
+    # bundled in the overlay. That snapshot covered fewer stores on mixed
+    # Jan–Jul/YTD spans and put the all-stores margins near double the truth.
+    # When the feed is supplied it wins; the overlay is only a fallback.
     print("Departments")
     rollup = defaultdict(lambda: {"sales": 0.0, "purchases": 0.0, "profit": 0.0, "stores": 0})
-    for sid, s in stations.items():
-        for dept in ((s.get("depts") or {}).get("departments") or []):
+    if depts_path:
+        dept_feed = json.load(open(depts_path))
+        dept_stations = [(st.get("id"), st.get("departments") or [])
+                         for st in (dept_feed.get("stations") or [])]
+
+        # The feed ships its own verified all-stores beer margin. Recompute it
+        # from the raw rows and hold the reconstruction to it before trusting
+        # anything else the department view shows.
+        verified = dept_feed.get("verified_all_stores_beer_margin")
+        if is_number(verified):
+            bsales = bprofit = 0.0
+            for _sid, depts in dept_stations:
+                for dept in depts:
+                    if str(dept.get("name") or "").strip().upper() != "BEER":
+                        continue
+                    y = dept.get("y2026") or {}
+                    if is_number(y.get("sales")):
+                        bsales += y["sales"]
+                    if is_number(y.get("profit")):
+                        bprofit += y["profit"]
+            recomputed = (bprofit / bsales) if bsales else None
+            check(close(recomputed, verified, tol=5e-3),
+                  f"all-stores beer margin: recomputed {recomputed}, feed says {verified}")
+    else:
+        dept_stations = [(sid, (s.get("depts") or {}).get("departments") or [])
+                         for sid, s in stations.items()]
+
+    for _sid, depts in dept_stations:
+        for dept in depts:
             name = str(dept.get("name") or "").strip()
             if not name:
                 continue
@@ -451,4 +483,4 @@ def main(figures_path, overlay_path, owners_path, monthly_path=None, open_days_p
 
 
 if __name__ == "__main__":
-    sys.exit(main(*sys.argv[1:6]))
+    sys.exit(main(*sys.argv[1:7]))

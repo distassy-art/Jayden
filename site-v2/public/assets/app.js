@@ -288,21 +288,99 @@ function attentionCounts() {
   return out;
 }
 
-function topbarMarkup(route, params) {
-  const title = route.path === "/store/:id"
+/* -------------------------------------------------------------------------
+   Print & email
+   -------------------------------------------------------------------------
+   Every report can be printed, saved as a PDF (through the browser's own
+   "Save as PDF" printer), or emailed. Printing is driven entirely by the
+   print stylesheet: the rail, the top bar and every control drop away, a
+   document header with the logo, scope and timestamp is revealed, and the
+   cards are flattened to ink on white. Email opens the reader's own mail
+   client with the report named and a deep link back to this exact view. */
+
+function reportTitle(route, params) {
+  return route.path === "/store/:id"
     ? state.model?.byId.get(String(params.id))?.name || "Store"
     : route.title;
+}
+
+/* The scope and period behind the figures, as short phrases for the print
+   header and the email. Kept identical between the two so a printed copy and
+   an emailed link describe the same thing. */
+function reportMeta(scope) {
+  const parts = [];
+  if (scope?.label) parts.push(scope.label);
+  if (scope?.timeframe?.label) parts.push(scope.timeframe.label);
+  if (state.model?.latestMonth) parts.push(`Books through ${monthLabel(state.model.latestMonth)}`);
+  return parts;
+}
+
+/* Shown only when printing. A running footer is added in CSS. */
+function printDocHead(route, scope, params) {
+  const title = reportTitle(route, params);
+  const meta = reportMeta(scope);
+  const stamp = new Date().toLocaleString(undefined, { dateStyle: "long", timeStyle: "short" });
+  const who = state.user?.email || state.user?.name || "";
+  return `<div class="print-doc-head" aria-hidden="true">
+    <img class="print-logo" src="assets/logo-wordmark-light.png" alt="Smart Solutions AI">
+    <div class="print-doc-title">
+      <h1>${esc(title)}</h1>
+      ${meta.length ? `<div class="print-doc-meta">${meta.map(esc).join(" &middot; ")}</div>` : ""}
+    </div>
+    <div class="print-doc-stamp">
+      <div>Generated ${esc(stamp)}</div>
+      ${who ? `<div>${esc(who)}</div>` : ""}
+    </div>
+  </div>`;
+}
+
+/* Name the print job so "Save as PDF" offers a sensible file name, then hand
+   off to the browser's print dialog and restore the tab title afterwards. */
+function printReport() {
+  const title = reportTitle(state.currentRoute, state.currentParams);
+  const meta = reportMeta(state.currentScope);
+  const previous = document.title;
+  document.title = ["Smart Solutions", title, ...meta].join(" — ");
+  const restore = () => { document.title = previous; };
+  window.addEventListener("afterprint", restore, { once: true });
+  // Safari never fires afterprint if the dialog is cancelled; restore anyway.
+  setTimeout(restore, 60000);
+  window.print();
+}
+
+function emailReport() {
+  const title = reportTitle(state.currentRoute, state.currentParams);
+  const scope = state.currentScope;
+  const meta = reportMeta(scope).join(" · ");
+  const subject = `Smart Solutions — ${title}${scope?.label ? ` (${scope.label})` : ""}`;
+  const body = [
+    meta ? `${title} — ${meta}` : title,
+    "",
+    "Open the live report:",
+    location.href,
+    "",
+    "For a PDF, open the report and use Print, then choose “Save as PDF”.",
+    "",
+    `Generated ${new Date().toLocaleString()}`,
+  ].join("\n");
+  window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
+
+function topbarMarkup(route, params) {
+  const title = reportTitle(route, params);
 
   return `
-    <button class="btn btn-icon btn-ghost rail-toggle" id="railToggle" aria-label="Open navigation">${icon("menu")}</button>
+    <button class="btn btn-icon btn-ghost rail-toggle no-print" id="railToggle" aria-label="Open navigation">${icon("menu")}</button>
     <h1>${esc(title)}</h1>
     ${state.model?.latestMonth ? `<span class="sub">Books through ${esc(monthLabel(state.model.latestMonth))}</span>` : ""}
     <span class="topbar-spacer"></span>
-    <button class="btn btn-sm" id="paletteOpen" aria-label="Search">
+    <button class="btn btn-sm no-print" id="paletteOpen" aria-label="Search">
       ${icon("search")}<span class="palette-hint">Search</span><kbd>${navigator.platform.includes("Mac") ? "⌘" : "Ctrl"}K</kbd>
     </button>
-    <button class="btn btn-icon btn-sm" id="refresh" title="Reload data" aria-label="Reload data">${icon("refresh")}</button>
-    <button class="btn btn-icon btn-sm" id="themeToggle" title="Switch theme" aria-label="Switch theme">
+    <button class="btn btn-icon btn-sm no-print" id="printReport" title="Print or save as PDF" aria-label="Print or save as PDF">${icon("printer")}</button>
+    <button class="btn btn-icon btn-sm no-print" id="emailReport" title="Email this report" aria-label="Email this report">${icon("mail")}</button>
+    <button class="btn btn-icon btn-sm no-print" id="refresh" title="Reload data" aria-label="Reload data">${icon("refresh")}</button>
+    <button class="btn btn-icon btn-sm no-print" id="themeToggle" title="Switch theme" aria-label="Switch theme">
       ${icon(activeTheme() === "dark" ? "sun" : "moon")}</button>`;
 }
 
@@ -455,13 +533,17 @@ function render(options = {}) {
 
   app.innerHTML = `
     <div class="shell">
-      <aside class="rail" id="rail">${railMarkup(route.path, scope)}</aside>
+      <aside class="rail no-print" id="rail">${railMarkup(route.path, scope)}</aside>
       <div>
         <header class="topbar">${topbarMarkup(route, params)}</header>
-        <main class="content" id="content">${body}</main>
+        <main class="content" id="content">${state.model ? printDocHead(route, scope, params) : ""}${body}</main>
       </div>
+      <div class="print-doc-foot" aria-hidden="true">smartsolutionsai.us · Confidential management report</div>
     </div>`;
 
+  state.currentRoute = route;
+  state.currentScope = scope;
+  state.currentParams = params;
   wireChrome();
   if (route.bind && state.data) {
     try {
@@ -488,6 +570,8 @@ function wireChrome() {
   document.getElementById("signOut")?.addEventListener("click", signOut);
   document.getElementById("themeToggle")?.addEventListener("click", toggleTheme);
   document.getElementById("paletteOpen")?.addEventListener("click", openPalette);
+  document.getElementById("printReport")?.addEventListener("click", printReport);
+  document.getElementById("emailReport")?.addEventListener("click", emailReport);
   document.getElementById("refresh")?.addEventListener("click", () => refresh(true));
   document.getElementById("retryLoad")?.addEventListener("click", () => refresh(true));
 
