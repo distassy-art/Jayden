@@ -1,0 +1,288 @@
+/*
+ * Phone app — a separate, deliberately smaller face on the same data.
+ *
+ * The console is dense and built for a desk. The app is built for a thumb: one
+ * column, big targets, the few numbers that matter, and the crew tools
+ * (schedule, clock, tasks) that have no place on the desktop reports. It shares
+ * the design tokens in base.css, so light and dark, colour and type all match.
+ */
+
+.appview {
+  min-height: 100dvh;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+/* Top bar ---------------------------------------------------------------- */
+.app-top {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px calc(12px + env(safe-area-inset-top));
+  padding-top: max(12px, env(safe-area-inset-top));
+  background: var(--rail-bg);
+  color: #fff;
+}
+.app-top .app-mark { height: 26px; width: auto; }
+.app-top h1 { font-size: 16px; margin: 0; font-weight: 650; flex: 1; }
+.app-top .app-role {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--cyan-300);
+  font-weight: 650;
+}
+.app-icon-btn {
+  appearance: none;
+  border: 0;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: inline-grid;
+  place-items: center;
+  cursor: pointer;
+}
+.app-icon-btn:active { transform: scale(0.96); }
+
+/* Scrolling body -------------------------------------------------------- */
+.app-body {
+  flex: 1;
+  padding: 16px 16px 96px;
+  overflow-y: auto;
+}
+.app-body > * + * { margin-top: 14px; }
+
+.app-greet { margin: 2px 0 4px; }
+.app-greet h2 { margin: 0; font-size: 20px; letter-spacing: -0.02em; }
+.app-greet p { margin: 4px 0 0; color: var(--text-2); font-size: 13px; }
+
+/* The four big numbers -------------------------------------------------- */
+.app-figures {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.app-figure {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+}
+.app-figure .lab {
+  font-size: 12px;
+  color: var(--text-3);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.app-figure .val {
+  font-size: 24px;
+  font-weight: 720;
+  letter-spacing: -0.02em;
+  margin-top: 8px;
+  font-variant-numeric: tabular-nums;
+}
+.app-figure .sub { font-size: 12px; color: var(--text-2); margin-top: 4px; }
+.app-figure.span-2 { grid-column: 1 / -1; }
+
+/* Generic app card ------------------------------------------------------ */
+.app-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.app-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+}
+.app-card-head h3 { margin: 0; font-size: 15px; }
+.app-card-head .hint { font-size: 12px; color: var(--text-3); }
+.app-card-body { padding: 14px 16px; }
+.app-card-body.flush { padding: 0; }
+
+/* List rows ------------------------------------------------------------- */
+.app-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+}
+.app-row:last-child { border-bottom: 0; }
+.app-row .grow { flex: 1; min-width: 0; }
+.app-row .r-title { font-weight: 600; font-size: 14px; }
+.app-row .r-sub { font-size: 12.5px; color: var(--text-2); margin-top: 2px; }
+.app-row .r-value { font-weight: 680; font-variant-numeric: tabular-nums; }
+
+.app-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 13px;
+  flex: none;
+}
+
+/* Buttons --------------------------------------------------------------- */
+.app-btn {
+  appearance: none;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 12px;
+  padding: 13px 16px;
+  font-size: 15px;
+  font-weight: 620;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+.app-btn:active { transform: scale(0.99); }
+.app-btn.primary { background: var(--cyan-500); border-color: var(--cyan-500); color: #04201e; }
+.app-btn.danger { background: var(--neg-line); border-color: var(--neg-line); color: #fff; }
+.app-btn.ghost { background: transparent; }
+.app-btn[disabled] { opacity: 0.5; cursor: not-allowed; }
+.app-btn-row { display: flex; gap: 10px; }
+.app-btn-row .app-btn { width: auto; flex: 1; }
+
+/* Clock ----------------------------------------------------------------- */
+.clock-face {
+  text-align: center;
+  padding: 22px 16px;
+}
+.clock-state {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+.clock-state.on { color: var(--pos-fg); }
+.clock-state.brk { color: var(--warn-fg); }
+.clock-elapsed {
+  font-size: 44px;
+  font-weight: 730;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  margin: 6px 0 2px;
+}
+.clock-since { font-size: 13px; color: var(--text-2); }
+
+.geo-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  margin-top: 12px;
+}
+.geo-note.ok { background: var(--pos-bg); color: var(--pos-fg); }
+.geo-note.warn { background: var(--warn-bg); color: var(--warn-fg); }
+.geo-note.off { background: var(--neg-bg); color: var(--neg-fg); }
+
+.break-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+.break-chip {
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  padding: 10px 8px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--surface);
+  cursor: pointer;
+}
+.break-chip small { display: block; color: var(--text-3); font-weight: 500; margin-top: 2px; }
+.break-chip.used { opacity: 0.5; }
+.break-chip.active { background: var(--warn-bg); border-color: var(--warn-line); color: var(--warn-fg); }
+
+/* Task check ------------------------------------------------------------ */
+.task-check {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  border: 2px solid var(--line-strong);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  flex: none;
+  color: transparent;
+}
+.task-check.done { background: var(--pos-line); border-color: var(--pos-line); color: #fff; }
+.app-row.is-done .r-title { text-decoration: line-through; color: var(--text-3); }
+
+/* Inline form fields ---------------------------------------------------- */
+.app-field { display: block; margin-bottom: 12px; }
+.app-field > span { display: block; font-size: 12.5px; font-weight: 600; color: var(--text-2); margin-bottom: 6px; }
+.app-input, .app-select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--field-border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 15px;
+  font-family: inherit;
+}
+.app-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+/* Bottom tab nav -------------------------------------------------------- */
+.app-nav {
+  position: sticky;
+  bottom: 0;
+  z-index: 20;
+  display: flex;
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.app-nav a {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 9px 4px 8px;
+  color: var(--text-3);
+  text-decoration: none;
+  font-size: 10.5px;
+  font-weight: 600;
+}
+.app-nav a .ico { width: 22px; height: 22px; }
+.app-nav a.is-active { color: var(--cyan-500); }
+
+.app-empty {
+  text-align: center;
+  color: var(--text-3);
+  padding: 28px 16px;
+  font-size: 13.5px;
+}
+
+/* On paper the app collapses to the same clean report style as the console. */
+@media print {
+  .app-top, .app-nav { display: none !important; }
+  .appview { max-width: none; }
+  .app-body { padding: 0; }
+}

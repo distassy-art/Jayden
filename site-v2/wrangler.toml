@@ -74,7 +74,13 @@ pattern = "www.smartsolutionsai.us/new/*"
 zone_name = "smartsolutionsai.us"
 
 [env.live.vars]
-PREVIEW_ACCESS_SHA256 = "ba67702aadfdd4112766515c7b462430d90e57de539dbb0399106e6fe4ce6457"
+# No passphrase gate on the permanent site. The old site at smartsolutionsai.us
+# is protected by its login and nothing else, and /new is meant to feel the
+# same: one sign-in, the same username and password. The role-based login is
+# the real gate — no data feed answers without it — so an extra phrase in front
+# only added a second password to fumble. Set a hash here (or
+# `wrangler secret put PREVIEW_ACCESS_SHA256`) to turn the gate back on.
+PREVIEW_ACCESS_SHA256 = ""
 MOUNT_PATH = "/new"
 
 [env.live.assets]
