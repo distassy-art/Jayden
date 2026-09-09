@@ -302,42 +302,6 @@ export function renderHome() {
     </section>
 
     <section class="site-section">
-      <h2 class="section-title">What it costs</h2>
-      <p class="section-sub">The model is built so that the largest part of what you pay only
-        exists if your profit went up. We are not selling you software by the seat.</p>
-      <div class="price-grid">
-        <article class="price-card is-lead">
-          <span class="price-tag">Performance</span>
-          <div class="price-figure">5%</div>
-          <p class="price-of">of the increase in store profit, measured against the same month a
-            year earlier.</p>
-          <p class="price-note">If profit does not rise, this line is zero. It is the reason we
-            care about your buying at all.</p>
-        </article>
-        <article class="price-card">
-          <span class="price-tag">One time</span>
-          <div class="price-figure">$750</div>
-          <p class="price-of">per store, to set up.</p>
-          <p class="price-note">Covers the invoice scanner and rebuilding your history back
-            through the prior year, so the first month already has something to compare against.</p>
-        </article>
-        <article class="price-card">
-          <span class="price-tag">As used</span>
-          <div class="price-figure">Per service</div>
-          <p class="price-of">only for the work you switch on.</p>
-          <ul class="price-list">
-            <li><b>Invoice entry</b><span>10¢ a line</span></li>
-            <li><b>Ordering</b><span>1% of order value</span></li>
-            <li><b>Scheduling</b><span>$25 a month</span></li>
-            <li><b>Tasks</b><span>$25 a month</span></li>
-          </ul>
-        </article>
-      </div>
-      <p class="price-fine">Every charge appears on an itemised monthly statement inside the
-        console, with the invoice behind it. Nothing is charged that you cannot open and read.</p>
-    </section>
-
-    <section class="site-section">
       <div class="site-split">
         <div class="prose">
           <h2>What does not change</h2>
