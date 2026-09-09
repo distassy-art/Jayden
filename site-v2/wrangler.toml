@@ -13,7 +13,7 @@ workers_dev = true
 # SHA-256 of the preview access phrase. Only the hash lives here; the phrase
 # itself is shared out of band. Remove this line to open the preview up, or
 # override it with `wrangler secret put PREVIEW_ACCESS_SHA256`.
-PREVIEW_ACCESS_SHA256 = "0ad5951af7a34935abff5f0f958135473f5fa73006338e279d445b572615fae7"
+PREVIEW_ACCESS_SHA256 = "ba67702aadfdd4112766515c7b462430d90e57de539dbb0399106e6fe4ce6457"
 
 # Where the console is served from. Empty means the root of whatever hostname
 # points at this worker, which is right for the workers.dev URL. Set it to
