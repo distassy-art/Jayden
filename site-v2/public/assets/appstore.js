@@ -259,6 +259,33 @@ export async function markReminder(punchId, key) {
 }
 
 /*
+ * Phone-off tracking. While the app is open and someone is on the clock, a
+ * heartbeat stamps `lastSeen` on the open punch. When the phone is backgrounded,
+ * the app is closed, or the device is powering off, `recordPhoneOff` stamps the
+ * moment it went dark and keeps a short history. A phone that loses power can't
+ * run either, so `lastSeen` is the closest we have to when it died — which is
+ * exactly what the manager needs to set the clock-out to.
+ */
+export async function touchPunch(employeeId) {
+  const state = read();
+  const p = state.punches.find((x) => x.employeeId === employeeId && !x.clockOut);
+  if (!p) return null;
+  state.punches = state.punches.map((x) => (x.id === p.id ? { ...x, lastSeen: Date.now() } : x));
+  write(state);
+  return p.id;
+}
+
+export async function recordPhoneOff(employeeId, at = Date.now()) {
+  const state = read();
+  const p = state.punches.find((x) => x.employeeId === employeeId && !x.clockOut);
+  if (!p) return null;
+  state.punches = state.punches.map((x) => (x.id === p.id
+    ? { ...x, lastSeen: at, offEvents: [...(x.offEvents || []), { at }].slice(-20) } : x));
+  write(state);
+  return p.id;
+}
+
+/*
  * Manager corrections. Only a manager reaches these (the employee clock has no
  * edit affordance); every touched punch is flagged `edited` with who and when
  * so a correction is never silent.

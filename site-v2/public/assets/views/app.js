@@ -25,9 +25,9 @@ import { isAdmin } from "../data.js";
 import {
   BREAK_KINDS, DEFAULT_RADIUS_FT, activeEmployeeId, addEmployee, addPunch, addShift,
   addTask, clockIn, clockOut, endBreak, getEmployee, getPlace, listEmployees,
-  listPunches, listShifts, listTasks, markReminder, openPunch, removeEmployee,
+  listPunches, listShifts, listTasks, markReminder, openPunch, recordPhoneOff, removeEmployee,
   removePunch, removeShift, removeTask, setActiveEmployee, setPlace, startBreak,
-  today, toggleTask, updateEmployee, updatePunch, updateShift,
+  today, toggleTask, touchPunch, updateEmployee, updatePunch, updateShift,
 } from "../appstore.js";
 import {
   distanceFt, distanceLabel, geoSupported, getPosition, notify, notifyPermission,
@@ -334,7 +334,8 @@ function wireSchedule(body, store, employees, draw, ctx) {
    ------------------------------------------------------------------------- */
 
 let tick = null;
-let geoMonitor = { punchId: null, stop: null, timer: null };
+let geoMonitor = { punchId: null, employeeId: null, stop: null, timer: null };
+let lifecycleInstalled = false;
 
 function clearTick() {
   if (tick) { clearInterval(tick); tick = null; }
@@ -343,7 +344,24 @@ function clearTick() {
 function teardownMonitor() {
   if (geoMonitor.stop) geoMonitor.stop();
   if (geoMonitor.timer) clearInterval(geoMonitor.timer);
-  geoMonitor = { punchId: null, stop: null, timer: null };
+  geoMonitor = { punchId: null, employeeId: null, stop: null, timer: null };
+}
+
+/*
+ * Stamp when the device goes dark. The browser can't run code the instant a
+ * phone loses power, but it does fire these as the app is backgrounded or
+ * closed, and the heartbeat's `lastSeen` covers a hard power-off. Installed once;
+ * it reads whoever the monitor currently has on the clock.
+ */
+function installLifecycle() {
+  if (lifecycleInstalled || typeof document === "undefined") return;
+  lifecycleInstalled = true;
+  const stamp = () => {
+    if (geoMonitor.employeeId) recordPhoneOff(geoMonitor.employeeId).catch(() => {});
+  };
+  document.addEventListener("visibilitychange", () => { if (document.hidden) stamp(); });
+  window.addEventListener("pagehide", stamp);
+  window.addEventListener("beforeunload", stamp);
 }
 
 /*
@@ -420,11 +438,18 @@ export async function ensureGeofence(employeeId, rerender) {
   if (!punch) { teardownMonitor(); return; }
   if (geoMonitor.punchId === punch.id) return;
   teardownMonitor();
+  installLifecycle();
   geoMonitor.punchId = punch.id;
+  geoMonitor.employeeId = employeeId;
 
-  const runReminders = () => checkBreakReminders(employeeId).catch(() => {});
-  geoMonitor.timer = setInterval(runReminders, 20000);
-  runReminders();
+  // A heartbeat marks the device alive and fires the break reminders. If the
+  // phone dies, the last beat is the closest we have to when it went dark.
+  const beat = () => {
+    touchPunch(employeeId).catch(() => {});
+    checkBreakReminders(employeeId).catch(() => {});
+  };
+  geoMonitor.timer = setInterval(beat, 15000);
+  beat();
 
   const place = await getPlace(punch.storeId);
   if (place && geoSupported()) {
@@ -733,7 +758,8 @@ export async function bindAppTasks(root, ctx) {
     const [tasks, employees] = await Promise.all([
       listTasks({ storeId: store.id }), listEmployees(store.id),
     ]);
-    body.innerHTML = taskForm(employees) + taskList(tasks, employees);
+    const ranked = rankCrew(employees, tasks);
+    body.innerHTML = taskForm(employees) + taskList(tasks, employees) + bonusBoard(ranked);
     wireTasks(body, store, draw);
   };
   await draw();
@@ -746,7 +772,13 @@ function taskForm(employees) {
   return `<div class="app-card"><div class="app-card-head"><h3>Add a task</h3></div>
     <div class="app-card-body">
       <label class="app-field"><span>Task</span><input class="app-input" id="tk-title" placeholder="Restock cooler, count register…"></label>
-      <label class="app-field"><span>For</span><select class="app-select" id="tk-emp">${options}</select></label>
+      <label class="app-field"><span>Note (optional)</span><input class="app-input" id="tk-note" placeholder="Aisle, count, details…"></label>
+      <div class="app-grid-2">
+        <label class="app-field"><span>For</span><select class="app-select" id="tk-emp">${options}</select></label>
+        <label class="app-field"><span>Date</span><input class="app-input" type="date" id="tk-date" value="${esc(today())}"></label>
+      </div>
+      <label class="app-check"><input type="checkbox" id="tk-photo">
+        <span>${icon("camera")} Require a photo to complete</span></label>
       <button class="app-btn primary" id="tk-add">${icon("check")} Add task</button>
     </div></div>`;
 }
@@ -754,14 +786,24 @@ function taskForm(employees) {
 function taskList(tasks, employees) {
   const byId = new Map(employees.map((e) => [e.id, e.name]));
   if (!tasks.length) return `<div class="app-card"><div class="app-card-body">${emptyRow("No tasks yet")}</div></div>`;
-  const rows = tasks.map((t) => `<div class="app-row${t.done ? " is-done" : ""}">
-    <div class="task-check${t.done ? " done" : ""}" data-toggle="${esc(t.id)}">${t.done ? icon("check") : ""}</div>
-    <div class="grow">
-      <div class="r-title">${esc(t.title)}</div>
-      <div class="r-sub">${t.employeeId ? esc(byId.get(t.employeeId) || "Assigned") : "Anyone on shift"}</div>
-    </div>
-    <button class="app-icon-btn" data-remove="${esc(t.id)}" style="background:var(--surface-3);color:var(--text-3)">${icon("close")}</button>
-  </div>`).join("");
+  const rows = tasks.map((t) => {
+    const who = t.employeeId ? (byId.get(t.employeeId) || "Assigned") : "Anyone on shift";
+    const when = t.date ? dayName(t.date) : "";
+    const doneLine = t.done && t.doneBy ? ` · done by ${esc(byId.get(t.doneBy) || "staff")}` : "";
+    const cam = t.requirePhoto ? `<span class="task-cam" title="Photo required">${icon("camera")}</span>` : "";
+    const proof = t.done && t.photo
+      ? `<img class="task-proof" src="${esc(t.photo)}" alt="Proof" data-photo="${esc(t.photo)}">`
+      : "";
+    return `<div class="app-row task-row${t.done ? " is-done" : ""}">
+      <div class="task-check${t.done ? " done" : ""}" data-toggle="${esc(t.id)}">${t.done ? icon("check") : ""}</div>
+      <div class="grow">
+        <div class="r-title">${esc(t.title)}${cam}</div>
+        <div class="r-sub">${esc(who)}${when ? ` · ${esc(when)}` : ""}${doneLine}</div>
+      </div>
+      ${proof}
+      <button class="app-icon-btn" data-remove="${esc(t.id)}" style="background:var(--surface-3);color:var(--text-3)">${icon("close")}</button>
+    </div>`;
+  }).join("");
   return `<div class="app-card"><div class="app-card-head"><h3>Open &amp; done</h3></div>
     <div class="app-card-body flush">${rows}</div></div>`;
 }
@@ -769,9 +811,12 @@ function taskList(tasks, employees) {
 function wireTasks(body, store, draw) {
   body.querySelector("#tk-add")?.addEventListener("click", async () => {
     const title = body.querySelector("#tk-title").value.trim();
+    const note = body.querySelector("#tk-note").value.trim();
     const employeeId = body.querySelector("#tk-emp").value || null;
+    const date = body.querySelector("#tk-date").value || today();
+    const requirePhoto = body.querySelector("#tk-photo").checked;
     if (!title) { toast("Enter a task", "warn"); return; }
-    await addTask({ storeId: store.id, employeeId, title });
+    await addTask({ storeId: store.id, employeeId, title, note, date, requirePhoto });
     toast("Task added", "ok");
     draw();
   });
@@ -780,6 +825,9 @@ function wireTasks(body, store, draw) {
     const t = tasks.find((x) => x.id === el.dataset.toggle);
     await toggleTask(el.dataset.toggle, !(t && t.done));
     draw();
+  }));
+  body.querySelectorAll("[data-photo]").forEach((el) => el.addEventListener("click", () => {
+    showPhoto(el.dataset.photo);
   }));
   body.querySelectorAll("[data-remove]").forEach((btn) => btn.addEventListener("click", async () => {
     await removeTask(btn.dataset.remove);
@@ -855,10 +903,26 @@ function tcPickerCard(roster, employee) {
   </div>`;
 }
 
+/* For an open punch that stopped reporting, the last time the device was known
+   alive — from an explicit background/close event, else the heartbeat. This is
+   the moment a phone that died went dark, and the offered clock-out time. */
+function phoneOffNote(punch) {
+  if (punch.clockOut) return "";
+  const events = punch.offEvents || [];
+  const off = events.length ? events[events.length - 1].at : punch.lastSeen;
+  if (!off) return "";
+  const hhmm = timeHHMM(off);
+  return `<div class="geo-note warn" style="margin:8px 0">${icon("alert")}
+    Phone last on at <b>${esc(clockTime(off))}</b> — still no clock-out.
+    <button class="app-btn" data-lastout="${esc(hhmm)}" style="margin-top:8px">
+      Set clock-out to ${esc(clockTime(off))}</button></div>`;
+}
+
 function tcDayCard(dayPunches) {
   const rows = dayPunches.map((p) => {
     const meal = (p.breaks || []).find((b) => b.type === "meal");
-    const tag = p.manual ? "manual" : p.edited ? "edited" : p.auto ? "auto-out" : "";
+    let tag = p.manual ? "manual" : p.edited ? "edited" : p.auto ? "auto-out" : "";
+    if (p.offEvents && p.offEvents.length) tag = tag ? `${tag} · phone-off` : "phone-off";
     return `<div class="app-card" data-punch="${esc(p.id)}">
       <div class="app-card-head"><h3>${esc(clockTime(p.clockIn))}${p.clockOut ? ` – ${esc(clockTime(p.clockOut))}` : " · open"}</h3>
         ${tag ? `<span class="hint">${tag}</span>` : ""}</div>
@@ -871,6 +935,7 @@ function tcDayCard(dayPunches) {
           <label class="app-field"><span>Meal start</span><input class="app-input" type="time" data-f="mealin" value="${esc(meal && meal.start ? timeHHMM(meal.start) : "")}"></label>
           <label class="app-field"><span>Meal end</span><input class="app-input" type="time" data-f="mealout" value="${esc(meal && meal.end ? timeHHMM(meal.end) : "")}"></label>
         </div>
+        ${phoneOffNote(p)}
         <div class="app-grid-2">
           <button class="app-btn" data-save="${esc(p.id)}">Save</button>
           <button class="app-btn danger" data-del="${esc(p.id)}">Delete</button>
@@ -921,6 +986,12 @@ function wireTimeclock(body, { store, employee, draw }) {
     toast("Entry removed");
     draw();
   }));
+  body.querySelectorAll("[data-lastout]").forEach((btn) => btn.addEventListener("click", () => {
+    const card = btn.closest("[data-punch]");
+    const out = card?.querySelector('[data-f="out"]');
+    if (out) { out.value = btn.dataset.lastout; out.focus(); }
+    toast("Clock-out filled — review, then Save", "ok");
+  }));
   body.querySelector("#tc-add")?.addEventListener("click", async () => {
     const clockIn = tsFromDayTime(tcDate, body.querySelector("#tc-add-in").value);
     const clockOut = tsFromDayTime(tcDate, body.querySelector("#tc-add-out").value);
@@ -930,6 +1001,89 @@ function wireTimeclock(body, { store, employee, draw }) {
     toast("Entry added", "ok");
     draw();
   });
+}
+
+/* -------------------------------------------------------------------------
+   Task scores and the bonus leaderboard
+   -------------------------------------------------------------------------
+   A person's score is simply how much of the work assigned to them they have
+   marked done — over all time for the chip by their name, or within a week or
+   pay period for the scorecard. Shared "anyone on shift" tasks don't count
+   toward one person's score; only what was assigned to them does.
+*/
+
+function taskScore(tasks) {
+  const total = tasks.length;
+  const done = tasks.filter((t) => t.done).length;
+  return { done, total, pct: total ? Math.round((done / total) * 100) : null };
+}
+
+function assignedTo(tasks, employeeId) {
+  return tasks.filter((t) => t.employeeId === employeeId);
+}
+
+function inDateRange(task, from, to) {
+  const d = task.date || "";
+  return (!from || d >= from) && (!to || d <= to);
+}
+
+function scoreChip(pct, extra = "") {
+  if (pct == null) return "";
+  const tone = pct >= 85 ? "hi" : pct >= 60 ? "mid" : "lo";
+  return `<span class="score-chip ${tone}"${extra ? ` title="${esc(extra)}"` : ""}>${esc(pct)}%</span>`;
+}
+
+/* The week (Mon–Sun) and the pay period, each as paid hours and the share of
+   assigned tasks completed. This is the card the employee gets at week's end
+   and each pay period. */
+function scoreCard(employee, punches, tasks) {
+  const wkStart = weekStartMonday(today());
+  const wkEnd = addDays(wkStart, 6);
+  const wkHours = computeTimesheet(punches, wkStart, wkEnd, {}).total;
+  const wk = taskScore(assignedTo(tasks, employee.id).filter((t) => inDateRange(t, wkStart, wkEnd)));
+
+  const period = payPeriodOf(today());
+  const pHours = computeTimesheet(punches, period.start, period.end, {}).total;
+  const pd = taskScore(assignedTo(tasks, employee.id).filter((t) => inDateRange(t, period.start, period.end)));
+
+  const foot = (s) => (s.pct == null ? "No tasks set" : `${s.pct}% of ${s.total} task${s.total === 1 ? "" : "s"} done`);
+  return `<div class="app-card">
+    <div class="app-card-head"><h3>Your scorecard</h3><span class="hint">Hours &amp; tasks</span></div>
+    <div class="app-card-body">
+      <div class="app-figures">
+        ${figure("This week", fmtH(wkHours), foot(wk))}
+        ${figure("This pay period", fmtH(pHours), foot(pd))}
+      </div>
+    </div>
+  </div>`;
+}
+
+/* Crew ranked by all-time task score. Shared by the manager's Tasks screen and
+   the employee's own view, where their row is highlighted. */
+function rankCrew(roster, tasks) {
+  return roster
+    .filter((e) => !String(e.pin).startsWith("mgr:"))
+    .map((e) => ({ e, ...taskScore(assignedTo(tasks, e.id)) }))
+    .filter((r) => r.total > 0)
+    .sort((a, b) => (b.pct - a.pct) || (b.done - a.done) || a.e.name.localeCompare(b.e.name));
+}
+
+function bonusBoard(ranked, highlightId = null) {
+  if (!ranked.length) {
+    return `<div class="app-card"><div class="app-card-head"><h3>Bonus leaderboard</h3>
+      <span class="hint">By tasks completed</span></div>
+      <div class="app-card-body">${emptyRow("No tasks assigned yet — the board fills as work gets done.")}</div></div>`;
+  }
+  const rows = ranked.map((r, i) => `<div class="app-row bonus-row${r.e.id === highlightId ? " is-me" : ""}">
+    <div class="bonus-rank r${i < 3 ? i + 1 : 0}">${i + 1}</div>
+    <div class="app-avatar">${esc(initials(r.e.name))}</div>
+    <div class="grow"><div class="r-title">${esc(r.e.name)}</div>
+      <div class="r-sub">${esc(num(r.done))} of ${esc(num(r.total))} tasks done</div></div>
+    ${scoreChip(r.pct)}
+  </div>`).join("");
+  return `<div class="app-card"><div class="app-card-head"><h3>Bonus leaderboard</h3>
+    <span class="hint">Top tasks completed</span></div>
+    <div class="app-card-body flush">${rows}</div></div>`;
 }
 
 /* -------------------------------------------------------------------------
@@ -950,19 +1104,29 @@ export async function bindAppMe(root, ctx) {
       wirePicker(body, draw);
       return;
     }
-    const [punch, shifts, tasks, place, punches] = await Promise.all([
+    const [punch, shifts, storeTasks, roster, place, punches] = await Promise.all([
       openPunch(employee.id),
       listShifts({ employeeId: employee.id, from: today() }),
-      listTasks({ storeId: employee.storeId, employeeId: employee.id }),
+      listTasks({ storeId: employee.storeId }),
+      listEmployees(employee.storeId),
       getPlace(employee.storeId),
       listPunches({ employeeId: employee.id }),
     ]);
     const period = payPeriodOf(mePeriodAnchor);
+    const overall = taskScore(assignedTo(storeTasks, employee.id));
+    const ranked = rankCrew(roster, storeTasks);
+    // Their own work plus the store's shared tasks: what's still open, and
+    // whatever was closed out today so a tick is visible.
+    const mine = storeTasks.filter((t) => t.employeeId === employee.id || !t.employeeId);
+    const todays = mine.filter((t) => !t.done || t.date === today());
+
     body.innerHTML = `
-      <div class="app-greet"><h2>${esc(greeting())}, ${esc(employee.name.split(" ")[0])}</h2>
+      <div class="app-greet"><h2>${esc(greeting())}, ${esc(employee.name.split(" ")[0])}${scoreChip(overall.pct, "Your task score")}</h2>
         <p>${esc(shiftLine(shifts))}</p></div>
       ${clockCard(punch, place)}
-      ${meTasks(tasks)}
+      ${meTasks(todays)}
+      ${scoreCard(employee, punches, storeTasks)}
+      ${bonusBoard(ranked, employee.id)}
       ${meSchedule(shifts)}
       ${timesheetCard(punches, period, employee, "me-ts", { title: "My paid hours" })}
       <button class="app-btn ghost" id="me-signout">${icon("logout")} Not you? Sign out</button>`;
@@ -975,12 +1139,7 @@ export async function bindAppMe(root, ctx) {
       setAnchor: (v) => { mePeriodAnchor = v; },
       redraw: draw,
     });
-    body.querySelectorAll("[data-toggle]").forEach((el) => el.addEventListener("click", async () => {
-      const list = await listTasks({ storeId: employee.storeId, employeeId: employee.id });
-      const t = list.find((x) => x.id === el.dataset.toggle);
-      await toggleTask(el.dataset.toggle, !(t && t.done));
-      draw();
-    }));
+    wireTaskCompletion(body, { storeId: employee.storeId, by: employee.id, draw });
     body.querySelector("#me-signout")?.addEventListener("click", async () => {
       await setActiveEmployee(null);
       draw();
@@ -988,6 +1147,38 @@ export async function bindAppMe(root, ctx) {
     await ensureGeofence(employee.id, draw);
   };
   await draw();
+}
+
+/*
+ * Completing a task from the employee's list. A task that requires proof only
+ * closes with a photo taken now — capturePhoto uses the live camera (or a
+ * camera-only file input), so an old picture can't be attached. Tapping a done
+ * task reopens it, which clears the photo so the next completion is fresh.
+ */
+function wireTaskCompletion(root, { storeId, by, draw }) {
+  root.querySelectorAll("[data-toggle]").forEach((el) => el.addEventListener("click", async () => {
+    const list = await listTasks({ storeId });
+    const task = list.find((x) => x.id === el.dataset.toggle);
+    if (!task) return;
+    if (task.done) { await toggleTask(task.id, false); draw(); return; }
+    if (task.requirePhoto) {
+      let photo = null;
+      try {
+        photo = await capturePhoto();
+      } catch (err) {
+        toast(err.message || "This task needs a photo", "warn");
+        return;
+      }
+      if (!photo) return;
+      await toggleTask(task.id, true, { photo, by });
+    } else {
+      await toggleTask(task.id, true, { by });
+    }
+    draw();
+  }));
+  root.querySelectorAll("[data-photo]").forEach((el) => el.addEventListener("click", () => {
+    showPhoto(el.dataset.photo);
+  }));
 }
 
 function shiftLine(shifts) {
@@ -1027,15 +1218,38 @@ function wirePicker(body, draw) {
 }
 
 function meTasks(tasks) {
+  if (!tasks.length) return "";
   const open = tasks.filter((t) => !t.done);
-  if (!open.length && !tasks.length) return "";
-  const rows = tasks.map((t) => `<div class="app-row${t.done ? " is-done" : ""}">
-    <div class="task-check${t.done ? " done" : ""}" data-toggle="${esc(t.id)}">${t.done ? icon("check") : ""}</div>
-    <div class="grow"><div class="r-title">${esc(t.title)}</div></div>
-  </div>`).join("");
+  const rows = tasks.map((t) => {
+    const proof = t.done && t.photo
+      ? `<img class="task-proof" src="${esc(t.photo)}" alt="Proof" data-photo="${esc(t.photo)}">`
+      : "";
+    const cam = t.requirePhoto && !t.done
+      ? `<span class="task-cam" title="Photo required">${icon("camera")}</span>`
+      : "";
+    return `<div class="app-row task-row${t.done ? " is-done" : ""}">
+      <div class="task-check${t.done ? " done" : ""}" data-toggle="${esc(t.id)}">${t.done ? icon("check") : ""}</div>
+      <div class="grow">
+        <div class="r-title">${esc(t.title)}${cam}</div>
+        ${t.note ? `<div class="r-sub">${esc(t.note)}</div>` : ""}
+      </div>
+      ${proof}
+    </div>`;
+  }).join("");
   return `<div class="app-card"><div class="app-card-head"><h3>Your tasks</h3>
     <span class="hint">${num(open.length)} open</span></div>
     <div class="app-card-body flush">${rows}</div></div>`;
+}
+
+/* A tapped proof photo, shown full-size over the app until dismissed. */
+function showPhoto(src) {
+  if (!src) return;
+  const back = document.createElement("div");
+  back.className = "photo-view";
+  back.innerHTML = `<img src="${esc(src)}" alt="Task photo"><button class="photo-close" aria-label="Close">${icon("close")}</button>`;
+  const close = () => back.remove();
+  back.addEventListener("click", close);
+  document.body.appendChild(back);
 }
 
 function meSchedule(shifts) {

@@ -152,6 +152,52 @@ await bindOk("employee mode: picker then timesheet", async () => {
   if (!/Paid hours/.test(r.textContent)) throw new Error("no paid-hours figure");
 });
 
+await bindOk("employee: task completes with credit; photo task is gated; score + board show", async () => {
+  await store.setActiveEmployee(emp.id);
+  const t1 = await store.addTask({ storeId, employeeId: emp.id, title: "Count register" });
+  const t2 = await store.addTask({ storeId, employeeId: emp.id, title: "Photo the cooler", requirePhoto: true });
+  let c = ctx(); let r = mount(A.renderAppMe(c)); await A.bindAppMe(r, c); await tick();
+  if (!r.querySelector(".task-cam")) throw new Error("photo-required task has no camera indicator");
+  const toggle = r.querySelector(`[data-toggle="${t1.id}"]`);
+  if (!toggle) throw new Error("assigned task not listed");
+  toggle.click(); await tick(); await tick();
+  const done = (await store.listTasks({ storeId })).find((x) => x.id === t1.id);
+  if (!done.done) throw new Error("task not marked done");
+  if (done.doneBy !== emp.id) throw new Error("completion not credited to the employee");
+  const stillOpen = (await store.listTasks({ storeId })).find((x) => x.id === t2.id);
+  if (stillOpen.done) throw new Error("photo task must not complete without a photo");
+  c = ctx(); r = mount(A.renderAppMe(c)); await A.bindAppMe(r, c); await tick();
+  if (!r.querySelector(".score-chip")) throw new Error("no score chip by the name");
+  if (!/Your scorecard/.test(r.textContent)) throw new Error("no week/pay-period scorecard");
+  if (!/Bonus leaderboard/.test(r.textContent)) throw new Error("no bonus leaderboard");
+});
+
+await bindOk("manager tasks: form has date + photo toggle; board renders", async () => {
+  const c = ctx(); const r = mount(A.renderAppTasks(c)); await A.bindAppTasks(r, c); await tick();
+  if (!r.querySelector("#tk-date")) throw new Error("no task date field");
+  if (!r.querySelector("#tk-photo")) throw new Error("no requires-photo toggle");
+  if (!/Bonus leaderboard/.test(r.textContent)) throw new Error("no bonus board on manager tasks");
+});
+
+await bindOk("phone-off: stamped on the open punch and shown to the manager", async () => {
+  const e2 = await store.addEmployee({ name: "Sam Poe", storeId, pin: "2222" });
+  await store.clockIn(e2.id, storeId);
+  await store.touchPunch(e2.id);
+  await store.recordPhoneOff(e2.id, Date.now());
+  const p = await store.openPunch(e2.id);
+  if (!p.offEvents || !p.offEvents.length) throw new Error("phone-off event not recorded");
+  if (!p.lastSeen) throw new Error("heartbeat lastSeen not stamped");
+  const c = ctx(); const r = mount(A.renderAppTimeclock(c)); await A.bindAppTimeclock(r, c); await tick();
+  const sel = r.querySelector("#tc-emp");
+  sel.value = e2.id; sel.dispatchEvent(new window.Event("change")); await tick();
+  if (!/Phone last on/.test(r.textContent)) throw new Error("manager doesn't see the phone-off time");
+  const fill = r.querySelector("[data-lastout]");
+  if (!fill) throw new Error("no set-clock-out-to-last-on button");
+  fill.click();
+  const out = r.querySelector('[data-punch] [data-f="out"]');
+  if (!out || !out.value) throw new Error("clock-out was not filled from the phone-off time");
+});
+
 /* ---- payroll (approve-to-print) and profiles ---- */
 const P = await import("../public/assets/views/payroll.js");
 const PR = await import("../public/assets/views/profile.js");
