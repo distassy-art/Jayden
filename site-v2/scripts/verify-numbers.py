@@ -19,7 +19,7 @@ import sys
 from collections import defaultdict
 
 METRICS = ["total_profit", "fuel_profit", "gas_profit", "store_profit",
-           "sales", "purchases", "gas_vol"]
+           "sales", "purchases", "gas_vol", "gas_sales"]
 
 # Cent-level agreement; these are dollar figures summed over many rows.
 TOLERANCE = 0.01
@@ -57,13 +57,29 @@ def real_month(entry):
                          "fuel_profit", "total_profit"))
 
 
-def main(figures_path, overlay_path, owners_path):
+def main(figures_path, overlay_path, owners_path, monthly_path=None, open_days_path=None):
     figures = json.load(open(figures_path))
     stations = json.load(open(overlay_path))["overlay"]["stations"]
 
     # Rebuild the month map with the same "is it real" rule, derived here.
     months = {sid: {k: v for k, v in (s.get("months") or {}).items() if real_month(v)}
               for sid, s in stations.items()}
+
+    # Fuel revenue comes from a separate feed and is folded into the same month
+    # entries by the console. Fold it in here too, independently, so the
+    # gas_sales totals are checked rather than skipped.
+    revenue = {}
+    if monthly_path:
+        for station in (json.load(open(monthly_path)).get("stations") or []):
+            sid = str(station.get("id"))
+            for key, entry in (station.get("months") or {}).items():
+                value = (entry or {}).get("gas_sales")
+                if is_number(value):
+                    revenue.setdefault(sid, {})[key] = float(value)
+        for sid, by_month in revenue.items():
+            for key, value in by_month.items():
+                if sid in months and key in months[sid]:
+                    months[sid][key] = {**months[sid][key], "gas_sales": value}
 
     print("Station set")
     check(sorted(months) == sorted(figures["stationIds"]),
@@ -245,11 +261,27 @@ def main(figures_path, overlay_path, owners_path):
     # Rebuild the per-date roll-up straight from the raw day records. The feed
     # calls the purchases column `purch`, which is exactly the kind of rename a
     # port silently drops.
+    # The overlay's day records stop at the last closed month for all but one
+    # store, so the console merges the open month in from its own feed. Merge
+    # it here the same way — overlay wins on a shared date, being the
+    # reconciled copy — or the recomputed totals describe a shorter year than
+    # the one on screen.
+    open_days = {}
+    if open_days_path:
+        for station in (json.load(open(open_days_path)).get("stations") or []):
+            sid = str(station.get("id"))
+            for day in (station.get("days") or []):
+                if day.get("date"):
+                    open_days.setdefault(sid, {})[str(day["date"])] = day
+
     by_date = defaultdict(lambda: defaultdict(float))
     day_count = defaultdict(int)
     for sid, s in stations.items():
+        merged = dict(open_days.get(str(sid), {}))
         for day in (s.get("days") or []):
-            iso = str(day.get("date") or "")
+            if day.get("date"):
+                merged[str(day["date"])] = day
+        for iso, day in merged.items():
             if not iso:
                 continue
             day_count[iso] += 1
@@ -419,4 +451,4 @@ def main(figures_path, overlay_path, owners_path):
 
 
 if __name__ == "__main__":
-    sys.exit(main(sys.argv[1], sys.argv[2], sys.argv[3]))
+    sys.exit(main(*sys.argv[1:6]))

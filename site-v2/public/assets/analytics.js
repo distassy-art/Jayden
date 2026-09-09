@@ -16,17 +16,61 @@ function isRealMonth(entry) {
     .some((key) => isNum(entry[key]) && Number(entry[key]) !== 0);
 }
 
+/**
+ * Fuel revenue, as station id -> month key -> dollars.
+ *
+ * The feed is a list of stations rather than the overlay's map, and it reports
+ * some months the overlay rejects as empty, so only the field itself is taken.
+ */
+function indexRevenue(monthly) {
+  const out = new Map();
+  (monthly?.stations || []).forEach((station) => {
+    const months = {};
+    Object.entries(station?.months || {}).forEach(([key, value]) => {
+      if (isNum(value?.gas_sales)) months[key] = Number(value.gas_sales);
+    });
+    if (Object.keys(months).length) out.set(String(station.id), months);
+  });
+  return out;
+}
+
+/** The open month's day records, as station id -> rows. */
+function indexOpenDays(feed) {
+  const out = new Map();
+  (feed?.stations || []).forEach((station) => {
+    const days = (station?.days || []).filter((day) => day?.date);
+    if (days.length) out.set(String(station.id), days);
+  });
+  return out;
+}
+
 /** Normalise one station into a shape the views can rely on. */
-function normaliseStation(id, raw) {
+function normaliseStation(id, raw, { revenue = null, extraDays = null } = {}) {
   const months = {};
   Object.entries(raw?.months || {}).forEach(([key, value]) => {
-    if (isRealMonth(value)) months[key] = value;
+    if (!isRealMonth(value)) return;
+    // Fuel revenue lives in its own feed; fold it in so every month entry is
+    // one object regardless of which upstream file each field came from.
+    const gasSales = revenue?.[key];
+    months[key] = isNum(gasSales) ? { ...value, gas_sales: Number(gasSales) } : value;
   });
 
   const monthKeys = Object.keys(months).sort();
-  const days = (raw?.days || [])
-    .filter((day) => day && day.date)
-    .slice()
+
+  /*
+   * The overlay's day records stop at the last closed month for every store
+   * but one, so the open month has to be merged in from its own feed. A date
+   * already present wins, on the grounds that the overlay is the reconciled
+   * copy and the open-month file is still being written to.
+   */
+  const byDate = new Map();
+  (extraDays || []).forEach((day) => {
+    if (day?.date) byDate.set(String(day.date), day);
+  });
+  (raw?.days || []).forEach((day) => {
+    if (day?.date) byDate.set(String(day.date), day);
+  });
+  const days = [...byDate.values()]
     .sort((a, b) => String(a.date).localeCompare(String(b.date)));
 
   return {
@@ -50,6 +94,14 @@ function normaliseStation(id, raw) {
 const METRICS = [
   "gas_vol", "gas_profit", "fuel_profit", "sales", "purchases",
   "store_profit", "total_profit",
+  /*
+   * What fuel sold for, as opposed to what it earned. It arrives from a
+   * separate feed rather than the overlay, and at most sites it dwarfs store
+   * sales — Placentia turns over about $844k of fuel against $93k of shop
+   * goods. Without it "sales" means shop sales alone, which reads as though
+   * these were small businesses.
+   */
+  "gas_sales",
 ];
 
 function addInto(target, source) {
@@ -106,12 +158,19 @@ export function priorYearKeys(keys) {
  * `stores` narrows the model to a list of station ids, so a client owner's
  * console cannot roll up another client's figures even if the feed returns them.
  */
-export function buildModel(overlay, { stores = null } = {}) {
+export function buildModel(overlay, { stores = null, monthly = null, openDays = null } = {}) {
   const raw = overlay?.overlay?.stations || {};
   const only = stores ? new Set(stores.map(String)) : null;
+
+  const revenue = indexRevenue(monthly);
+  const extraDays = indexOpenDays(openDays);
+
   const stations = Object.entries(raw)
     .filter(([id]) => !only || only.has(String(id)))
-    .map(([id, value]) => normaliseStation(id, value))
+    .map(([id, value]) => normaliseStation(id, value, {
+      revenue: revenue.get(String(id)) || null,
+      extraDays: extraDays.get(String(id)) || null,
+    }))
     .sort((a, b) => a.name.localeCompare(b.name));
 
   // Every month any station reports, newest last.

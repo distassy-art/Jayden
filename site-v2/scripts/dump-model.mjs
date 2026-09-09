@@ -22,12 +22,25 @@ const ownersFeed = await fetch(`${BASE}/api/data/owners.json`, {
   headers: { "x-ss-email": "smartsolutionsai", "x-ss-role": "owner" },
 }).then((r) => r.json()).catch(() => null);
 
-const model = buildModel(overlay);
+/*
+ * The model has to be built exactly as the browser builds it, extra feeds and
+ * all. Dumping a plainer model would leave the verifier checking arithmetic
+ * the console never performs.
+ */
+const side = async (path) => fetch(`${BASE}${path}`, {
+  headers: { "x-ss-email": "smartsolutionsai", "x-ss-role": "owner" },
+}).then((r) => r.json()).catch(() => null);
+
+const monthly = await side("/api/data/monthly.json");
+const openDays = await side("/api/data/daily-open.json");
+
+const model = buildModel(overlay, { monthly, openDays });
 model.owners = buildOwners(ownersFeed?.accounts || [], model);
 const year = Number(model.currentYear);
 const prior = year - 1;
 
-const METRICS = ["total_profit", "fuel_profit", "gas_profit", "store_profit", "sales", "purchases", "gas_vol"];
+const METRICS = ["total_profit", "fuel_profit", "gas_profit", "store_profit",
+  "sales", "purchases", "gas_vol", "gas_sales"];
 
 const pick = (totals) => Object.fromEntries(
   METRICS.map((key) => [key, totals[key] ?? null])

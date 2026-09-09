@@ -9,7 +9,7 @@
     "check": "node scripts/contrast.mjs && node scripts/check.mjs && npm run --silent check:numbers",
     "check:contrast": "node scripts/contrast.mjs",
     "check:views": "node scripts/check.mjs",
-    "check:numbers": "node scripts/dump-model.mjs > /tmp/ss-model.json && curl -sf http://localhost:8787/api/books-overlay -o /tmp/ss-overlay.json && curl -sf http://localhost:8787/api/data/owners.json -o /tmp/ss-owners.json && python3 scripts/verify-numbers.py /tmp/ss-model.json /tmp/ss-overlay.json /tmp/ss-owners.json && node scripts/dump-buy.mjs > /tmp/ss-buy.json && curl -sf http://localhost:8787/api/data/manager.json -o /tmp/ss-manager.json && python3 scripts/verify-buy.py /tmp/ss-buy.json /tmp/ss-manager.json",
+    "check:numbers": "node scripts/dump-model.mjs > /tmp/ss-model.json && curl -sf http://localhost:8787/api/books-overlay -o /tmp/ss-overlay.json && curl -sf http://localhost:8787/api/data/owners.json -o /tmp/ss-owners.json && curl -sf http://localhost:8787/api/data/monthly.json -o /tmp/ss-monthly.json && curl -sf http://localhost:8787/api/data/daily-open.json -o /tmp/ss-open-days.json && python3 scripts/verify-numbers.py /tmp/ss-model.json /tmp/ss-overlay.json /tmp/ss-owners.json /tmp/ss-monthly.json /tmp/ss-open-days.json && node scripts/dump-buy.mjs > /tmp/ss-buy.json && curl -sf http://localhost:8787/api/data/manager.json -o /tmp/ss-manager.json && python3 scripts/verify-buy.py /tmp/ss-buy.json /tmp/ss-manager.json",
     "logos": "python3 scripts/build-logos.py",
     "deploy": "wrangler deploy"
   },

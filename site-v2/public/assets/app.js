@@ -528,7 +528,11 @@ async function refresh(force = false) {
     if (!data.overlay) throw new Error(data.errors.overlay || "The books feed is unavailable.");
     state.data = data;
 
-    const model = buildModel(data.overlay, { stores: visibleStores() });
+    const model = buildModel(data.overlay, {
+      stores: visibleStores(),
+      monthly: data.monthly,
+      openDays: data.openDays,
+    });
     model.owners = buildOwners(data.owners?.accounts || [], model);
     state.model = model;
     // The open month comes from a separate feed; the console still works

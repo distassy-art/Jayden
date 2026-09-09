@@ -111,6 +111,34 @@ function view(model, scope) {
   };
 }
 
+/*
+ * What fuel sold for, rather than what it earned.
+ *
+ * Fuel revenue arrives from its own feed and is missing for the earliest and
+ * newest months, so the row is dropped entirely rather than shown with gaps —
+ * a cost of goods computed from a half-reported revenue would be nonsense.
+ */
+function revenueRow(now, before) {
+  if (!isNum(now.gas_sales) || !Number(now.gas_sales)) return "";
+
+  const cost = isNum(now.gas_profit) ? now.gas_sales - now.gas_profit : null;
+  const take = isNum(now.gas_profit) ? now.gas_profit / now.gas_sales : null;
+  const priorTake = isNum(before.gas_sales) && Number(before.gas_sales) && isNum(before.gas_profit)
+    ? before.gas_profit / before.gas_sales
+    : null;
+  const perGal = isNum(now.gas_vol) && Number(now.gas_vol) ? now.gas_sales / now.gas_vol : null;
+
+  return `<div class="grid cols-4" style="margin-bottom:16px">
+    ${yoyKpi("Fuel revenue", money(now.gas_sales), now.gas_sales, before.gas_sales)}
+    ${kpi("Cost of the fuel", money(cost),
+      `<span class="muted">What was paid for it before margin</span>`)}
+    ${kpi("Kept from revenue", pct(take),
+      `${deltaBadge(isNum(take) && isNum(priorTake) ? (take - priorTake) * 100 : null, { suffix: " pts" })}
+       <span>from ${esc(pct(priorTake))}</span>`)}
+    ${kpi("Sold at", perGallon(perGal), `<span class="muted">Average pump price per gallon</span>`)}
+  </div>`;
+}
+
 /** How the selected timeframe reads in a sentence, under the scope bar. */
 function coverage(v) {
   if (v.tf.kind === "month") {
@@ -306,6 +334,8 @@ export function renderFuel(ctx) {
           ? (margin6[latestIndex] - margin5[latestIndex]) * 100 : null, { digits: 1, suffix: "¢" })}
          <span>vs same month last year</span>`)}
     </div>
+
+    ${revenueRow(ytd, prior)}
 
     <div class="grid split" style="margin-bottom:16px">
       <section class="card">

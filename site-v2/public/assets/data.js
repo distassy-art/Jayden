@@ -254,6 +254,11 @@ export const fetchPricing = resource("/api/data/pricing.json");
 export const fetchAdminStores = resource("/api/data/admin-stores.json");
 export const fetchOwners = resource("/api/data/owners.json");
 export const fetchManager = resource("/api/data/manager.json");
+// Fuel revenue, purchases by vendor, and the open month's days — none of which
+// the overlay carries. See the worker's endpoint map for why each is needed.
+export const fetchMonthly = resource("/api/data/monthly.json");
+export const fetchVendorSpend = resource("/api/data/vendor-spend.json");
+export const fetchOpenDays = resource("/api/data/daily-open.json");
 
 /**
  * Load everything the console needs in one pass.
@@ -271,6 +276,9 @@ export async function loadWorkspace(options) {
     pricing: fetchPricing,
     owners: fetchOwners,
     manager: fetchManager,
+    monthly: fetchMonthly,
+    vendorSpend: fetchVendorSpend,
+    openDays: fetchOpenDays,
   };
 
   const names = Object.keys(sources);

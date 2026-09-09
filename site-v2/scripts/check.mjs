@@ -83,7 +83,8 @@ function inspect(name, markup) {
 async function main() {
   process.stdout.write(`Checking against ${BASE}\n\n`);
 
-  const [overlay, billing, tickets, days, s2k, orders, pricing, owners, manager] = await Promise.all([
+  const [overlay, billing, tickets, days, s2k, orders, pricing, owners, manager,
+    monthly, vendorSpend, openDays] = await Promise.all([
     get("/api/books-overlay"),
     get("/api/billing").catch(() => null),
     get("/api/mgr-tickets").catch(() => null),
@@ -93,10 +94,16 @@ async function main() {
     get("/api/data/pricing.json").catch(() => null),
     get("/api/data/owners.json").catch(() => null),
     get("/api/data/manager.json").catch(() => null),
+    get("/api/data/monthly.json").catch(() => null),
+    get("/api/data/vendor-spend.json").catch(() => null),
+    get("/api/data/daily-open.json").catch(() => null),
   ]);
 
-  const data = { overlay, billing, tickets, days, s2k, orders, pricing, owners, manager, errors: {} };
-  const model = buildModel(overlay);
+  const data = {
+    overlay, billing, tickets, days, s2k, orders, pricing, owners, manager,
+    monthly, vendorSpend, openDays, errors: {},
+  };
+  const model = buildModel(overlay, { monthly, openDays });
   model.owners = buildOwners(owners?.accounts || [], model);
   const current = buildCurrent(manager);
 
