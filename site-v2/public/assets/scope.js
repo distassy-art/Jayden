@@ -361,30 +361,36 @@ export function bindScopeBar(root, ctx) {
     ctx.navigate(`#${ctx.pathname}${qs ? `?${qs}` : ""}`);
   };
 
+  /*
+   * Resets are written explicitly ("" for all stores, "ytd" for the timeframe)
+   * rather than by dropping the param. `resolveScope` falls back to the last
+   * remembered scope whenever a dimension is absent, so a deleted param reads as
+   * "keep what you had" and the reset appears to do nothing — which is why
+   * switching back to "to date" or "All stores" looked broken. An empty value is
+   * present in the URL, so it wins over the remembered one. `period` already
+   * works this way; these now match it.
+   */
   bar.querySelector("#ownerPick")?.addEventListener("change", (event) => go((params) => {
-    params.delete("store");
-    if (event.target.value) params.set("owner", event.target.value);
-    else params.delete("owner");
+    params.set("store", "");
+    params.set("owner", event.target.value);
   }));
 
   bar.querySelector("#storePick")?.addEventListener("change", (event) => go((params) => {
-    if (event.target.value) params.set("store", event.target.value);
-    else params.delete("store");
+    params.set("store", event.target.value);
   }));
 
   bar.querySelector("[data-scope-all]")?.addEventListener("click", () => go((params) => {
-    params.delete("store");
-    params.delete("owner");
+    params.set("store", "");
+    params.set("owner", "");
   }));
 
   bar.querySelector("[data-scope-owner]")?.addEventListener("click", (event) => go((params) => {
-    params.delete("store");
+    params.set("store", "");
     params.set("owner", event.currentTarget.dataset.scopeOwner);
   }));
 
   bar.querySelector("#timePick")?.addEventListener("change", (event) => go((params) => {
-    if (event.target.value && event.target.value !== "ytd") params.set("t", event.target.value);
-    else params.delete("t");
+    params.set("t", event.target.value || "ytd");
   }));
 
   bar.querySelectorAll("[data-period-set]").forEach((button) => {
