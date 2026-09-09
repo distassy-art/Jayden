@@ -70,14 +70,27 @@ export async function getEmployee(employeeId) {
   return read().employees.find((e) => e.id === employeeId) || null;
 }
 
-export async function addEmployee({ name, storeId, pin = "", phone = "" }) {
+function slugUsername(name) {
+  const base = String(name || "").toLowerCase().replace(/[^a-z0-9]+/g, "").slice(0, 14);
+  return base || `emp${Math.random().toString(36).slice(2, 6)}`;
+}
+
+export async function addEmployee({
+  name, storeId, pin = "", phone = "", username = "", password = "", rate = null,
+}) {
   const state = read();
+  const taken = new Set(state.employees.map((e) => e.username).filter(Boolean));
+  let user = String(username || "").trim().toLowerCase() || slugUsername(name);
+  while (taken.has(user)) user = `${slugUsername(name)}${Math.floor(Math.random() * 90 + 10)}`;
   const row = {
     id: id("emp"),
     name: String(name || "").trim(),
     storeId: String(storeId || ""),
+    username: user,
+    password: String(password || pin || "").trim(),
     pin: String(pin || "").trim(),
     phone: String(phone || "").trim(),
+    rate: rate == null || rate === "" ? null : Number(rate),
     active: true,
     createdAt: Date.now(),
   };
@@ -144,8 +157,8 @@ export async function removeShift(shiftId) {
 */
 
 export const BREAK_KINDS = [
-  { type: "meal", label: "Meal break", minutes: 30, paid: false },
   { type: "rest1", label: "Rest break 1", minutes: 10, paid: true },
+  { type: "meal", label: "Meal break", minutes: 30, paid: false },
   { type: "rest2", label: "Rest break 2", minutes: 10, paid: true },
 ];
 
@@ -174,6 +187,7 @@ export async function clockIn(employeeId, storeId, coords = null) {
     clockInAt: coords || null,
     clockOut: null,
     breaks: [],
+    reminded: {},
     auto: false,
   };
   state.punches = [...state.punches, row];
@@ -207,6 +221,57 @@ export async function endBreak(punchId) {
     if (p.id !== punchId) return p;
     return { ...p, breaks: p.breaks.map((b) => (b.end ? b : { ...b, end: Date.now() })) };
   });
+  write(state);
+}
+
+/** Record that a break/clock-out reminder has fired, so it fires only once. */
+export async function markReminder(punchId, key) {
+  const state = read();
+  state.punches = state.punches.map((p) => (p.id === punchId
+    ? { ...p, reminded: { ...(p.reminded || {}), [key]: Date.now() } } : p));
+  write(state);
+}
+
+/*
+ * Manager corrections. Only a manager reaches these (the employee clock has no
+ * edit affordance); every touched punch is flagged `edited` with who and when
+ * so a correction is never silent.
+ */
+export async function updatePunch(punchId, patch, by = "manager") {
+  const state = read();
+  state.punches = state.punches.map((p) => (p.id === punchId
+    ? { ...p, ...patch, edited: { at: Date.now(), by } } : p));
+  write(state);
+  return state.punches.find((p) => p.id === punchId) || null;
+}
+
+export async function addPunch({
+  employeeId, storeId, date, clockIn, clockOut = null, breaks = [], by = "manager",
+}) {
+  const state = read();
+  const row = {
+    id: id("punch"),
+    employeeId,
+    storeId: String(storeId || ""),
+    date: date || today(),
+    clockIn,
+    clockInAt: null,
+    clockOut,
+    clockOutAt: null,
+    breaks,
+    reminded: {},
+    auto: false,
+    manual: true,
+    edited: { at: Date.now(), by },
+  };
+  state.punches = [...state.punches, row];
+  write(state);
+  return row;
+}
+
+export async function removePunch(punchId) {
+  const state = read();
+  state.punches = state.punches.filter((p) => p.id !== punchId);
   write(state);
 }
 
