@@ -188,6 +188,7 @@ const ICON_PATHS = {
   fuel: '<path d="M4 21V5a2 2 0 012-2h6a2 2 0 012 2v16M3 21h12M6 9h6M14 8l3 2.5V17a2 2 0 004 0V9l-3-3"/>',
   departments: '<path d="M3 4h7v7H3zM14 4h7v7h-7zM3 15h7v5H3zM14 15h7v5h-7z"/>',
   rankings: '<path d="M4 20V11M10 20V4M16 20v-6M22 20H2"/>',
+  chart: '<path d="M3 3v18h18M7 15l3.5-4 3 2.5L20 7"/><circle cx="7" cy="15" r="1.1"/><circle cx="20" cy="7" r="1.1"/>',
   external: '<path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/>',
   owners: '<path d="M16 20v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 10a4 4 0 100-8 4 4 0 000 8M22 20v-2a4 4 0 00-3-3.9M16 2.1a4 4 0 010 7.8"/>',
   profit: '<path d="M3 17l6-6 4 4 8-8M21 7h-5M21 7v5"/>',

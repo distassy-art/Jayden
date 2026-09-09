@@ -31,7 +31,12 @@ import { renderBudget } from "../public/assets/views/budget.js";
 import { renderCalendar, renderSchedule } from "../public/assets/views/planning.js";
 import { buildVendors } from "../public/assets/vendors.js";
 import { renderVendors } from "../public/assets/views/vendors.js";
+import { renderTrends } from "../public/assets/views/trends.js";
 import { PUBLIC_ROUTES, renderLogin } from "../public/assets/views/site.js";
+import { money, pct } from "../public/assets/ui.js";
+
+// The trends wall prints margins to one decimal place.
+const pctText = (ratio) => pct(ratio, { digits: 1 });
 
 const args = process.argv.slice(2);
 const baseFlag = args.indexOf("--base");
@@ -268,6 +273,7 @@ async function main() {
   const timed = [
     ["profit", renderProfit], ["fuel", renderFuel],
     ["purchases", renderPurchases], ["rankings", renderRankings],
+    ["trends", renderTrends],
   ];
   const options = timeframes(model);
   let rendered = 0;
@@ -325,6 +331,41 @@ async function main() {
     process.stdout.write(`  ok    ${fullYear.id} covers 12 months, compared with `
       + `${tf.priorKeys.length} from ${Number(fullYear.id) - 1}\n`);
   }
+  /*
+   * The trends wall exists to put every measure on screen at once, so "it
+   * rendered" is not enough — a metric silently dropped would still leave a
+   * tidy page. Each expected title must appear, each must bring a chart, and
+   * the headline figure must be the same total the Profit page prints, or the
+   * two pages disagree about the same months.
+   */
+  process.stdout.write("\nTrends wall\n");
+  const wall = renderTrends(ctx());
+  const expected = ["Fuel volume", "Fuel revenue", "Fuel margin", "Fuel profit",
+    "Store sales", "Purchases", "Store margin", "Store profit", "Total profit"];
+  const missingMetric = expected.filter((title) => !wall.includes(`<h3>${title}</h3>`));
+  assert(missingMetric.length === 0, `trends: missing ${missingMetric.join(", ")}`);
+
+  const charts = (wall.match(/class="chart"/g) || []).length;
+  assert(charts >= expected.length,
+    `trends: ${expected.length} metrics but only ${charts} charts drawn`);
+
+  const ytdTotals = portfolioTotals(model, model.ytdKeys, null);
+  const headline = money(ytdTotals.total_profit);
+  assert(wall.includes(headline),
+    `trends: total profit headline is not ${headline}`);
+  process.stdout.write(`  ok    ${expected.length} metrics, ${charts} charts, `
+    + `total profit reads ${headline}\n`);
+
+  /*
+   * Margins are divided out of summed dollars, not averaged across stores. An
+   * averaged store margin lands a couple of points away from the real one, so
+   * the page's figure is compared with the ratio recomputed here.
+   */
+  const trueMargin = ytdTotals.store_profit / ytdTotals.sales;
+  assert(wall.includes(pctText(trueMargin)),
+    `trends: store margin is not ${pctText(trueMargin)} — likely averaged per store`);
+  process.stdout.write(`  ok    store margin ${pctText(trueMargin)} recomputed from totals\n`);
+
   inspect("rankings?metric=gas_margin&period=month", renderRankings(ctx("metric=gas_margin&period=month")));
   inspect("invoices (missing)", renderInvoices(ctx("tab=missing")));
   inspect("invoices (entered)", renderInvoices(ctx("tab=entered")));
@@ -338,6 +379,7 @@ async function main() {
   inspect("calendar", renderCalendar(ctx()));
   inspect("schedule", renderSchedule(ctx()));
   inspect("buy", renderBudget(ctx()));
+  inspect("trends", renderTrends(ctx()));
   inspect("vendors", renderVendors(ctx()));
   for (const key of (data.vendors?.keys || [])) {
     inspect(`vendors?m=${key}`, renderVendors(ctx(`m=${key}`)));
@@ -373,6 +415,7 @@ async function main() {
     ["profit", renderProfit], ["fuel", renderFuel], ["purchases", renderPurchases],
     ["departments", renderDepartments], ["rankings", renderRankings],
     ["daily", renderDaily], ["buy", renderBudget], ["vendors", renderVendors],
+    ["trends", renderTrends],
   ];
   for (const owner of model.owners) {
     const outside = model.stations

@@ -405,6 +405,43 @@ img { max-width: 100%; display: block; }
 .stack { display: flex; flex-direction: column; gap: 16px; }
 .row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 
+/* Trends ------------------------------------------------------------------
+   A wall of one-metric charts. Each card leads with the period figure so the
+   grid can be read straight down without stopping to interpret nine axes. */
+
+.section-heading {
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin: 26px 0 12px;
+}
+.section-heading:first-of-type { margin-top: 4px; }
+
+.trend-grid { margin-bottom: 4px; }
+
+.trend-figure {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.trend-value {
+  font-size: 26px;
+  font-weight: 680;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.trend-foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+  font-size: 12.5px;
+}
+
 /* Buttons ---------------------------------------------------------------- */
 
 .btn {

@@ -13,7 +13,8 @@ import {
 } from "../ui.js";
 import {
   MONTH_ABBR, departmentPeriods, departmentRollup, marginOver, monthSeries,
-  portfolioTotals, resolveTimeframe, scopeOf, scopeTotals, trailingMonths,
+  portfolioTotals, ratioOver, resolveTimeframe, scopeOf, scopeTotals,
+  trailingMonths,
 } from "../analytics.js";
 import { bindScopeBar, scopeBar } from "../scope.js";
 
@@ -32,7 +33,7 @@ const AMBER = "var(--warn-line)";
  * `stationIds` is null for the whole portfolio; the roll-ups take an empty
  * array to mean the same thing.
  */
-const scopeIds = (scope) => scope.stationIds || [];
+export const scopeIds = (scope) => scope.stationIds || [];
 
 /** Wire the scope bar; every analysis page uses it. */
 export const bindScope = bindScopeBar;
@@ -66,7 +67,7 @@ function yoyKpi(label, value, current, prior, { higherIsBetter = true, format = 
    than as a bar on its own.
    ------------------------------------------------------------------------- */
 
-function view(model, scope) {
+export function view(model, scope) {
   const tf = scope.timeframe || resolveTimeframe(model, "ytd");
 
   const chartKeys = tf.kind === "month"
@@ -108,6 +109,9 @@ function view(model, scope) {
     priorSeries: (metric, ids) => monthSeries(model, chartPriorKeys, metric, ids),
     margin: (ids) => marginOver(model, chartKeys, ids),
     priorMargin: (ids) => marginOver(model, chartPriorKeys, ids),
+    // Any ratio month by month, for pages that chart more than fuel margin.
+    ratio: (top, bottom, ids) => ratioOver(model, chartKeys, top, bottom, ids),
+    priorRatio: (top, bottom, ids) => ratioOver(model, chartPriorKeys, top, bottom, ids),
   };
 }
 
@@ -160,7 +164,7 @@ function coverage(v) {
  * get no picker, because offering one that changed nothing would be worse than
  * offering none.
  */
-function head(title, blurb, model, scope, v) {
+export function head(title, blurb, model, scope, v) {
   return `<div class="page-head">
       <h2>${esc(title)}</h2>
       <p>${blurb}</p>
@@ -749,6 +753,3 @@ export function bindRankings(root, ctx) {
     });
   }
 }
-
-/* Exported so the router can attach the scope picker to the simpler pages. */
-export { scopeIds };

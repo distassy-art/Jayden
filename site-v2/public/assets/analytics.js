@@ -405,15 +405,24 @@ export function trailingMonths(model, endKey, count = 12) {
 }
 
 /**
- * Fuel margin over an explicit list of months, recomputed from summed dollars
- * and gallons rather than averaging each store's own cents-per-gallon.
+ * A ratio month by month, recomputed from summed dollars rather than averaged.
+ *
+ * Averaging each store's own margin weights a site that sold $2,000 the same
+ * as one that sold $200,000, so the portfolio line drifts away from the
+ * portfolio figure printed beside it. Summing both halves first and dividing
+ * once keeps the two agreeing.
  */
-export function marginOver(model, keys, stationIds = null) {
-  const profit = monthSeries(model, keys, "gas_profit", stationIds);
-  const volume = monthSeries(model, keys, "gas_vol", stationIds);
-  return profit.map((value, i) => (isNum(value) && isNum(volume[i]) && Number(volume[i]) !== 0
-    ? Number(value) / Number(volume[i])
+export function ratioOver(model, keys, numerator, denominator, stationIds = null) {
+  const top = monthSeries(model, keys, numerator, stationIds);
+  const bottom = monthSeries(model, keys, denominator, stationIds);
+  return top.map((value, i) => (isNum(value) && isNum(bottom[i]) && Number(bottom[i]) !== 0
+    ? Number(value) / Number(bottom[i])
     : null));
+}
+
+/** Fuel margin — dollars of fuel profit per gallon sold. */
+export function marginOver(model, keys, stationIds = null) {
+  return ratioOver(model, keys, "gas_profit", "gas_vol", stationIds);
 }
 
 /**

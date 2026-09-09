@@ -29,6 +29,7 @@ import { bindDaily, renderDaily } from "./views/periods.js";
 import { bindBudget, renderBudget } from "./views/budget.js";
 import { bindCalendar, renderCalendar, renderSchedule } from "./views/planning.js";
 import { bindVendors, renderVendors } from "./views/vendors.js";
+import { bindTrends, renderTrends } from "./views/trends.js";
 import { PUBLIC_ROUTES, renderLogin } from "./views/site.js";
 
 /* -------------------------------------------------------------------------
@@ -47,6 +48,7 @@ const ROUTES = [
   { path: "/owner/:id", title: "Owner", hidden: true, render: renderOwner, bind: bindOwners, roles: ["admin"] },
   { path: "/store/:id", title: "Store", hidden: true, render: renderStore },
 
+  { path: "/trends", title: "Trends", icon: "chart", group: "Performance", render: renderTrends, bind: bindTrends },
   { path: "/profit", title: "Profit", icon: "profit", group: "Performance", render: renderProfit, bind: bindScope },
   { path: "/fuel", title: "Fuel", icon: "fuel", group: "Performance", render: renderFuel, bind: bindScope },
   { path: "/purchases", title: "Purchases", icon: "orders", group: "Performance", render: renderPurchases, bind: bindScope },
