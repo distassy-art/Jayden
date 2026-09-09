@@ -16,6 +16,7 @@ Usage:
 Env / files:
   OD_COOKIES=/tmp/od_cookies.json
   CLIENT_LOGINS=/tmp/s2k/creds/Client-logins.xlsx
+    (authoritative source for ALL client OneDrive/Google usernames + passwords)
   scripts/invoice_scan_clients.json
 """
 from __future__ import annotations
@@ -187,6 +188,7 @@ def upload_bytes(folder_rel: str, name: str, data: bytes) -> None:
 
 
 def move_rename(server_rel: str, new_rel: str) -> None:
+    """Rename/move a file. Prefer moveto; fall back to copy-upload + delete."""
     dig = digest()
     url = (
         BASE
@@ -194,27 +196,99 @@ def move_rename(server_rel: str, new_rel: str) -> None:
         + f"/moveto(newurl='{urllib.parse.quote(new_rel, safe='/')}',flags=1)"
     )
     code, body = req(url, method="POST", data=b"", headers={"X-RequestDigest": dig})
-    if code not in (200, 204):
-        raise RuntimeError(f"move {code} {server_rel} -> {new_rel} {body[:200]}")
+    if code in (200, 204):
+        return
+    # Fallback: download → upload as new name → delete original (handles locked/odd paths)
+    data = download_bytes(server_rel)
+    folder, name = new_rel.rsplit("/", 1)
+    upload_bytes(folder, name, data)
+    dig = digest()
+    del_url = (
+        BASE
+        + f"/_api/web/GetFileByServerRelativeUrl('{urllib.parse.quote(server_rel, safe='/')}')"
+    )
+    code2, body2 = req(
+        del_url,
+        method="POST",
+        data=b"",
+        headers={
+            "X-RequestDigest": dig,
+            "IF-MATCH": "*",
+            "X-HTTP-Method": "DELETE",
+        },
+    )
+    if code2 not in (200, 204):
+        raise RuntimeError(
+            f"move failed {code} then delete {code2}: {server_rel} -> {new_rel} "
+            f"{body[:120]} | {body2[:120]}"
+        )
 
 
-def load_passwords() -> dict[str, dict]:
-    out: dict[str, dict] = {}
+def load_client_logins() -> dict[str, dict]:
+    """Load ALL OneDrive/Google usernames+passwords from Client-logins.xlsx.
+
+    Sheet \"Client logins\" columns: Client name | Username | Password | Station
+    Indexed by client name, station id, and username (lowercase).
+    """
+    by_key: dict[str, dict] = {}
     if not CREDS_XLSX.exists() or openpyxl is None:
-        return out
+        return by_key
     wb = openpyxl.load_workbook(CREDS_XLSX, data_only=True)
     sheet = "Client logins" if "Client logins" in wb.sheetnames else wb.sheetnames[0]
     ws = wb[sheet]
     for row in ws.iter_rows(min_row=2, values_only=True):
         vals = list(row) + [None] * 4
-        name, user, pw = vals[0], vals[1], vals[2]
+        name, user, pw, station = vals[0], vals[1], vals[2], vals[3]
         if not name or not user:
             continue
-        out[str(name).strip()] = {
+        entry = {
+            "client_name": str(name).strip(),
             "username": str(user).strip(),
             "password": str(pw).strip() if pw else "",
+            "station": str(station).strip() if station not in (None, "") else "",
         }
-    return out
+        # Skip S2K meta accounts used for reporting tools, not station drives
+        low = entry["client_name"].lower()
+        if low.startswith("s2k "):
+            continue
+        by_key[entry["client_name"]] = entry
+        by_key[entry["client_name"].lower()] = entry
+        if entry["station"]:
+            by_key[entry["station"]] = entry
+        by_key[entry["username"].lower()] = entry
+    return by_key
+
+
+def load_passwords() -> dict[str, dict]:
+    """Backward-compatible wrapper around load_client_logins()."""
+    return load_client_logins()
+
+
+def resolve_client_credentials(client: dict, logins: dict[str, dict]) -> dict:
+    """Merge Client-logins.xlsx into a client row (xlsx wins for user/password)."""
+    keys = [
+        client.get("password_key"),
+        client.get("name"),
+        str(client.get("station") or ""),
+        (client.get("username") or "").lower(),
+    ]
+    cred = {}
+    for k in keys:
+        if not k:
+            continue
+        cred = logins.get(str(k)) or logins.get(str(k).lower()) or {}
+        if cred:
+            break
+    merged = dict(client)
+    if cred:
+        merged["username"] = cred.get("username") or merged.get("username")
+        merged["_password"] = cred.get("password") or ""
+        merged["_cred_source"] = "Client-logins.xlsx"
+        merged["_cred_name"] = cred.get("client_name")
+    else:
+        merged["_password"] = ""
+        merged["_cred_source"] = None
+    return merged
 
 
 def ocr_pdf(path: Path, max_pages: int = 2) -> str:
@@ -421,64 +495,198 @@ def ocr_rename_client(
     return results
 
 
+def _ms_find_username_field(driver, wait):
+    from selenium.webdriver.common.by import By
+    from selenium.webdriver.support import expected_conditions as EC
+
+    # New Microsoft login UI uses #usernameEntry; classic uses name=loginfmt
+    for by, sel in (
+        (By.ID, "usernameEntry"),
+        (By.NAME, "loginfmt"),
+        (By.CSS_SELECTOR, "input[type='email']"),
+        (By.CSS_SELECTOR, "input[name='loginfmt']"),
+    ):
+        try:
+            return wait.until(EC.presence_of_element_located((by, sel)))
+        except Exception:
+            continue
+    raise RuntimeError("username field not found")
+
+
+def _ms_find_password_field(driver, wait):
+    from selenium.webdriver.common.by import By
+    from selenium.webdriver.support import expected_conditions as EC
+
+    for by, sel in (
+        (By.NAME, "passwd"),
+        (By.ID, "passwordEntry"),
+        (By.CSS_SELECTOR, "input[type='password']"),
+    ):
+        try:
+            return wait.until(EC.presence_of_element_located((by, sel)))
+        except Exception:
+            continue
+    raise RuntimeError("password field not found")
+
+
+def _ms_click_next(driver):
+    from selenium.webdriver.common.by import By
+
+    for sel in (
+        (By.ID, "idSIButton9"),
+        (By.CSS_SELECTOR, "input[type='submit']"),
+        (By.CSS_SELECTOR, "button[type='submit']"),
+        (By.CSS_SELECTOR, "button[data-testid='primaryButton']"),
+    ):
+        try:
+            el = driver.find_element(*sel)
+            if el.is_displayed():
+                el.click()
+                return True
+        except Exception:
+            continue
+    return False
+
+
+def _ms_page_blocked(page: str, url: str) -> str | None:
+    p = (page or "").lower()
+    u = (url or "").lower()
+    if "proof-confirmation" in p or "proof-confirmation-email" in p:
+        return "proof_blocked"
+    if any(
+        x in p
+        for x in (
+            "help us protect your account",
+            "verify your identity",
+            "approve sign in",
+            "authenticator",
+            "enter code",
+            "two-step",
+            "two step",
+            "security code",
+        )
+    ):
+        return "mfa_blocked"
+    if "account.live.com/identity" in u or "account.live.com/proofs" in u:
+        return "proof_blocked"
+    return None
+
+
 def pull_client_onedrive_outlook(client: dict, password: str, dry_run: bool = False) -> dict:
+    """Sign into client personal OneDrive using Client-logins username/password."""
     try:
         from selenium import webdriver
         from selenium.webdriver.chrome.options import Options
-        from selenium.webdriver.common.by import By
-        from selenium.webdriver.support import expected_conditions as EC
-        from selenium.webdriver.support.ui import WebDriverWait
     except ImportError:
         return {"client": client["name"], "status": "skip", "reason": "selenium missing"}
 
     user = client.get("username")
     if not user or not password:
-        return {"client": client["name"], "status": "skip", "reason": "no credentials"}
+        return {
+            "client": client["name"],
+            "status": "skip",
+            "reason": "no credentials in Client-logins.xlsx",
+        }
 
     opts = Options()
     opts.add_argument("--headless=new")
     opts.add_argument("--no-sandbox")
     opts.add_argument("--disable-dev-shm-usage")
     opts.add_argument("--window-size=1400,900")
+    opts.add_argument(
+        "--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+        "(KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+    )
     driver = webdriver.Chrome(options=opts)
-    wait = WebDriverWait(driver, 25)
-    out: dict = {"client": client["name"], "username": user, "errors": []}
+    from selenium.webdriver.support.ui import WebDriverWait
+
+    wait = WebDriverWait(driver, 30)
+    cookie_dir = Path("/tmp/s2k/client_od_cookies")
+    cookie_dir.mkdir(parents=True, exist_ok=True)
+    cookie_file = cookie_dir / f"{re.sub(r'[^a-zA-Z0-9]+', '_', user.lower())}.json"
+    out: dict = {
+        "client": client["name"],
+        "username": user,
+        "cred_source": client.get("_cred_source") or "Client-logins.xlsx",
+        "errors": [],
+    }
     try:
         driver.get("https://login.live.com/")
-        wait.until(EC.presence_of_element_located((By.NAME, "loginfmt"))).send_keys(user)
-        driver.find_element(By.ID, "idSIButton9").click()
         time.sleep(1.5)
-        pw_el = wait.until(EC.presence_of_element_located((By.NAME, "passwd")))
+        user_el = _ms_find_username_field(driver, wait)
+        user_el.clear()
+        user_el.send_keys(user)
+        _ms_click_next(driver)
+        time.sleep(2.5)
+
+        blocked = _ms_page_blocked(driver.page_source, driver.current_url)
+        if blocked:
+            out["status"] = blocked
+            out["url"] = driver.current_url
+            out["note"] = (
+                "Microsoft identity proof/MFA blocked unattended login. "
+                "Share station Scans with MinaMorcos@Smartsolutionsai26, "
+                "or complete one interactive sign-in and save cookies."
+            )
+            return out
+
+        try:
+            pw_el = _ms_find_password_field(driver, wait)
+        except Exception:
+            blocked = _ms_page_blocked(driver.page_source, driver.current_url)
+            out["status"] = blocked or "login_failed_no_password_field"
+            out["url"] = driver.current_url
+            out["note"] = "Password step not reached; check Client-logins username or MFA."
+            return out
+
         pw_el.clear()
         pw_el.send_keys(password)
-        driver.find_element(By.ID, "idSIButton9").click()
-        time.sleep(3)
-        page = driver.page_source.lower()
-        if any(x in page for x in ("approve", "identity", "two-step", "authenticator", "verify")):
-            out["status"] = "mfa_blocked"
+        _ms_click_next(driver)
+        time.sleep(3.5)
+
+        blocked = _ms_page_blocked(driver.page_source, driver.current_url)
+        if blocked:
+            out["status"] = blocked
             out["url"] = driver.current_url
             return out
+
+        # Stay signed in?
         try:
-            driver.find_element(By.ID, "idSIButton9").click()
+            _ms_click_next(driver)
             time.sleep(2)
         except Exception:
             pass
+
         driver.get("https://onedrive.live.com/?v=files")
-        time.sleep(5)
-        if "login" in driver.current_url and "onedrive" not in driver.current_url:
+        time.sleep(6)
+        url = driver.current_url
+        if "login" in url.lower() and "onedrive" not in url.lower():
             out["status"] = "login_failed"
-            out["url"] = driver.current_url
+            out["url"] = url
             return out
-        out["status"] = "session_ok_share_required"
-        out["url"] = driver.current_url
+
+        # Persist cookies for reuse (avoids some MFA prompts on next run)
+        try:
+            cookie_file.write_text(json.dumps(driver.get_cookies(), indent=2))
+            out["cookies_saved"] = str(cookie_file)
+        except Exception as e:
+            out["errors"].append(f"cookie_save: {e}")
+
+        out["status"] = "session_ok"
+        out["url"] = url
         out["note"] = (
-            "Prefer sharing each station Scans folder with Mina; unattended crawl is unreliable."
+            "Logged in with Client-logins.xlsx. Prefer sharing each station Scans "
+            "folder with Mina for reliable unattended copy; headless file crawl is best-effort."
         )
         if dry_run:
             out["status"] = "dry_run_session"
     except Exception as e:
         out["status"] = "error"
         out["errors"].append(str(e)[:400])
+        try:
+            out["url"] = driver.current_url
+        except Exception:
+            pass
     finally:
         try:
             driver.quit()
@@ -490,14 +698,19 @@ def pull_client_onedrive_outlook(client: dict, password: str, dry_run: bool = Fa
 def pull_client_google(client: dict, password: str, dry_run: bool = False) -> dict:
     user = client.get("username")
     if not user or not password:
-        return {"client": client["name"], "status": "skip", "reason": "no credentials"}
+        return {
+            "client": client["name"],
+            "status": "skip",
+            "reason": "no credentials in Client-logins.xlsx",
+        }
     return {
         "client": client["name"],
         "status": "google_requires_interactive",
         "username": user,
+        "cred_source": client.get("_cred_source") or "Client-logins.xlsx",
         "note": (
             "Google blocks headless password login. Share the station Drive Scans folder "
-            "with Mina, or use an App Password + Drive API."
+            "with Mina, or use an App Password + Drive API. Password is loaded from Client-logins."
         ),
     }
 
@@ -505,8 +718,10 @@ def pull_client_google(client: dict, password: str, dry_run: bool = False) -> di
 def run(pull_clients: bool, dry_run: bool, only: str | None, month: str | None) -> int:
     cfg = load_config()
     aliases = {k.lower(): v for k, v in (cfg.get("vendor_aliases") or {}).items()}
-    passwords = load_passwords()
-    clients = list(cfg.get("clients") or [])
+    logins = load_client_logins()
+    clients = [
+        resolve_client_credentials(c, logins) for c in (cfg.get("clients") or [])
+    ]
     if only:
         clients = [
             c
@@ -517,6 +732,8 @@ def run(pull_clients: bool, dry_run: bool, only: str | None, month: str | None) 
     report = {
         "started": datetime.now(PT).isoformat(),
         "month": month or month_folder_name(),
+        "client_logins_path": str(CREDS_XLSX),
+        "client_logins_loaded": len({v["client_name"] for v in logins.values() if "client_name" in v}),
         "ocr": [],
         "pull": [],
     }
@@ -528,9 +745,7 @@ def run(pull_clients: bool, dry_run: bool, only: str | None, month: str | None) 
 
     if pull_clients:
         for client in clients:
-            key = client.get("password_key") or client["name"]
-            cred = passwords.get(key) or passwords.get(client["name"]) or {}
-            pw = cred.get("password", "")
+            pw = client.get("_password") or ""
             drive = (client.get("drive") or "onedrive").lower()
             if drive == "google":
                 result = pull_client_google(client, pw, dry_run=dry_run)
@@ -545,6 +760,9 @@ def run(pull_clients: bool, dry_run: bool, only: str | None, month: str | None) 
     renamed = sum(1 for r in report["ocr"] if r.get("status") == "renamed")
     errors = sum(1 for r in report["ocr"] if r.get("status") == "error")
     print(f"OCR renamed={renamed} errors={errors}")
+    if pull_clients:
+        for p in report["pull"]:
+            print(f"  pull {p.get('client')}: {p.get('status')} ({p.get('username')})")
     return 0 if errors == 0 else 1
 
 
@@ -556,7 +774,27 @@ def main() -> None:
     ap.add_argument("--month", help='Override month folder, e.g. "2026-09 September"')
     ap.add_argument("--audit", action="store_true", help="After rename, stage Copilot audit pack and append Audit.xlsx")
     ap.add_argument("--as-of", help="Audit as-of YYYY-MM-DD (default: today PT)")
+    ap.add_argument(
+        "--list-creds",
+        action="store_true",
+        help="Print Client-logins.xlsx mapping for each configured client (no passwords)",
+    )
     args = ap.parse_args()
+    if args.list_creds:
+        cfg = load_config()
+        logins = load_client_logins()
+        print(f"Client-logins: {CREDS_XLSX} ({'ok' if CREDS_XLSX.exists() else 'MISSING'})")
+        names = sorted({v["client_name"] for v in logins.values() if "client_name" in v})
+        print(f"Rows loaded: {len(names)} -> {', '.join(names)}")
+        for c in cfg.get("clients") or []:
+            m = resolve_client_credentials(c, logins)
+            print(
+                f"  {m['name']:28} station={str(m.get('station') or '-'):6} "
+                f"user={m.get('username') or '-':40} "
+                f"pw={'yes' if m.get('_password') else 'NO':3} "
+                f"src={m.get('_cred_name') or 'MISSING'}"
+            )
+        sys.exit(0)
     rc = run(
             pull_clients=args.pull_clients,
             dry_run=args.dry_run,

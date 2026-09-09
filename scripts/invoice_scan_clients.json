@@ -2,7 +2,7 @@
   "destination_root": "Clients",
   "scans_subfolder": "Scans",
   "naming": "Vendor DDMM",
-  "comment": "Existing Scans use day-then-month (e.g. Coca Cola 0409.pdf = Sep 4). User phrasing \"vendor mmdd\" maps to this warehouse DDMM convention. Raw ScanYYYY-MM-DD_*.pdf dumps are OCR-renamed. Client OneDrive/Google pull is best-effort (MFA often blocks); prefer shared Scans folders. Runs daily 8:00 PM America/Los_Angeles. scans_layout: scans_then_month = Clients/.../Scans/YYYY-MM Month; month_then_scans = Clients/.../YYYY-MM Month/Scans.",
+  "comment": "Existing Scans use day-then-month (e.g. Coca Cola 0409.pdf = Sep 4). User phrasing \"vendor mmdd\" maps to this warehouse DDMM convention. Raw ScanYYYY-MM-DD_*.pdf dumps are OCR-renamed. ALL OneDrive/Google usernames+passwords come from Client-logins.xlsx sheet \"Client logins\" (runtime override of username/password_key). Client pull is best-effort (MS proof/MFA often blocks); prefer shared Scans folders with Mina. Runs daily 8:00 PM America/Los_Angeles. scans_layout: scans_then_month = Clients/.../Scans/YYYY-MM Month; month_then_scans = Clients/.../YYYY-MM Month/Scans.",
   "vendor_aliases": {
     "coca cola": "Coca Cola",
     "coca-cola": "Coca Cola",
@@ -206,6 +206,15 @@
       "username": "arcotustin@outlook.com",
       "password_key": "Tustin",
       "scans_layout": "scans_then_month"
+    },
+    {
+      "name": "Extra Mile",
+      "station": null,
+      "dest": "Clients/ExtraMile",
+      "drive": "onedrive",
+      "username": "extramile@outlook.com",
+      "password_key": "Extra Mile",
+      "scans_layout": "month_then_scans"
     }
   ]
 }
