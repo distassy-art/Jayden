@@ -88,8 +88,10 @@ export function renderInvoices(ctx) {
   return `
     <div class="page-head">
       <h2>S2K invoices</h2>
-      <p>Invoices logged against a store, checked against what actually reached S2K.
-      Anything in <b>Missing</b> is cost that has not landed in the books yet.</p>
+      <p>An audit of vendor invoices: every purchase or expense a store recorded on its
+      monthly sheet, checked against what was actually keyed into S2K (the back-office
+      books). <b>Missing</b> means it's on a store sheet but not yet entered in S2K, so that
+      cost isn't in the books yet; <b>Entered</b> is confirmed present.</p>
     </div>
 
     <div class="grid cols-3" style="margin-bottom:16px">

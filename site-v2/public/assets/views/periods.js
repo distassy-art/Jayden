@@ -93,17 +93,17 @@ function rollupTable(model, rows, ids) {
 
   return `<section class="card" style="margin-bottom:16px">
     <div class="card-head">
-      <h3>How the same numbers roll up</h3>
-      <span class="hint">One day, its week, its month, and the year</span>
+      <h3>The latest day in context</h3>
+      <span class="hint">The most recent posted day, and the week, month and year it falls in</span>
     </div>
     <div class="table-wrap"><table class="table">
       <thead><tr><th></th>${heads}</tr></thead>
       <tbody>${body}</tbody>
     </table></div>
     <div class="card-foot tiny muted">
-      The first three columns come from the daily book — posted days only, ${esc(filed)}.
+      Day, week and month are added up from posted daily sheets (${esc(filed)}).
       Year to date comes from the closed monthly books, which reach back further
-      than the daily book does.
+      than the daily sheets do. A “store-day” is one store's numbers for one day.
     </div>
   </section>`;
 }
@@ -142,6 +142,9 @@ export function renderDaily(ctx) {
   const grain = scope.period === "day" ? "day"
     : scope.period === "week" ? "week"
     : scope.period === "month" ? "month" : "year";
+  const title = scope.period === "day" ? "Daily close"
+    : scope.period === "week" ? "Weekly totals"
+    : scope.period === "month" ? "Monthly totals" : "Yearly totals";
 
   // Enough bars to read; a two-month window at day grain is 62 of them.
   const window = series.slice(-(scope.period === "day" ? 31 : scope.period === "week" ? 16 : 12));
@@ -171,9 +174,10 @@ export function renderDaily(ctx) {
 
   return `
     <div class="page-head">
-      <h2>Daily close</h2>
-      <p>What sold, what was bought, and what it left behind for <b>${esc(scope.label)}</b>,
-        by ${esc(grain)}. Covering ${esc(covered)}.</p>
+      <h2>${esc(title)}</h2>
+      <p>What sold, what was bought, and what it left behind for <b>${esc(scope.label)}</b>.
+        Use the <b>Period</b> buttons above to switch between day, week, month and year.
+        Showing ${esc(covered)}.</p>
     </div>
     ${bar}
 

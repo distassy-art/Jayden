@@ -146,8 +146,8 @@ export function resolveScope(model, query, { owners = model.owners || [] } = {})
     ? ownerOf(owners, station.id)
     : (owners.find((o) => o.id === ownerId) || null);
 
-  const periodId = query.get("period") || saved.period || "month";
-  const period = PERIODS.some((p) => p.id === periodId) ? periodId : "month";
+  const periodId = query.get("period") || saved.period || "day";
+  const period = PERIODS.some((p) => p.id === periodId) ? periodId : "day";
 
   // Which months the performance pages are looking at. Unlike `period`, which
   // buckets the day feed, this selects from the monthly history.
@@ -187,7 +187,7 @@ export function withScope(href, scope) {
   else params.delete("store");
   if (scope.owner && !scope.station) params.set("owner", scope.owner.id);
   else if (!scope.station) params.delete("owner");
-  if (scope.period && scope.period !== "month") params.set("period", scope.period);
+  if (scope.period && scope.period !== "day") params.set("period", scope.period);
   else params.delete("period");
   if (scope.timeframe && scope.timeframe.id !== "ytd") params.set("t", scope.timeframe.id);
   else params.delete("t");

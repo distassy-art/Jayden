@@ -423,7 +423,7 @@ async function main() {
 
   // And the page has to print those figures, not merely compute them.
   const dailyPage = renderDaily(ctx("period=day"));
-  assert(dailyPage.includes("How the same numbers roll up"),
+  assert(dailyPage.includes("The latest day in context"),
     "daily: the rollup table is missing");
   assert(dailyPage.includes(money(theYear.total_profit)),
     `daily: rollup does not print the year total ${money(theYear.total_profit)}`);
