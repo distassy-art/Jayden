@@ -12,6 +12,7 @@ import { readFile, stat } from "node:fs/promises";
 import { createServer } from "node:http";
 import { dirname, extname, join, normalize, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { billingForStore, stationForEmail } from "../worker/billing-scope.js";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const PUBLIC = join(ROOT, "public");
@@ -181,6 +182,29 @@ const server = createServer(async (req, res) => {
   if (path.startsWith("/api/")) {
     if (req.method !== "GET" && req.method !== "HEAD") {
       sendJson(res, 405, { ok: false, error: "read_only" });
+      return;
+    }
+    // A manager's own store bill: mirrors the worker's server-side scoping so a
+    // manager sees only their store's invoices, never the rest of the portfolio.
+    if (path === "/api/billing-mine") {
+      const email = req.headers["x-ss-email"] || "";
+      const role = req.headers["x-ss-role"] || "";
+      if (role !== "manager" || !email) { sendJson(res, 200, { ok: true, applicable: false }); return; }
+      try {
+        const fwd = { accept: "application/json" };
+        for (const name of ["x-ss-email", "x-ss-role"]) {
+          if (req.headers[name]) fwd[name] = req.headers[name];
+        }
+        const [billing, logins] = await Promise.all([
+          fetch(`${UPSTREAM}/data/billing.json`, { headers: fwd }).then((r) => r.json()),
+          fetch(`${UPSTREAM}/data/logins.json`, { headers: fwd }).then((r) => r.json()),
+        ]);
+        const station = stationForEmail(logins, email);
+        if (!station) { sendJson(res, 200, { ok: true, applicable: false }); return; }
+        sendJson(res, 200, billingForStore(billing, station));
+      } catch (failure) {
+        sendJson(res, 502, { ok: false, error: "upstream_unreachable", detail: String(failure) });
+      }
       return;
     }
     const upstreamPath = resolveUpstream(path);

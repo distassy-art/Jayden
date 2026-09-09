@@ -17,6 +17,8 @@
 
 const UPSTREAM = "https://smartsolutionsai.us";
 
+import { billingForStore, stationForEmail } from "./billing-scope.js";
+
 /** Read endpoints, mapped from the console's `/api/...` path to the origin's. */
 const ENDPOINTS = new Map([
   ["/api/books-overlay", "/.netlify/functions/books-overlay"],
@@ -266,6 +268,42 @@ async function redact(response, upstreamPath) {
   return cleaned === null ? null : JSON.stringify(cleaned);
 }
 
+/**
+ * A manager's own store bill.
+ *
+ * The upstream `/billing` refuses managers, and the static feed carries every
+ * client, so this fetches the static feed plus the logins directory, maps the
+ * caller to their store, and returns only that store's slice. Non-managers get
+ * an inert "not applicable" body rather than an error, so the console can call
+ * it unconditionally.
+ */
+async function myBilling(request) {
+  const email = request.headers.get("x-ss-email") || "";
+  const role = request.headers.get("x-ss-role") || "";
+  if (role !== "manager" || !email) return json({ ok: true, applicable: false });
+
+  const forward = new Headers({ accept: "application/json" });
+  FORWARD_HEADERS.forEach((name) => {
+    const value = request.headers.get(name);
+    if (value) forward.set(name, value);
+  });
+
+  let billing;
+  let logins;
+  try {
+    [billing, logins] = await Promise.all([
+      fetch(`${UPSTREAM}/data/billing.json`, { headers: forward, cf: { cacheTtl: 60 } }).then((r) => r.json()),
+      fetch(`${UPSTREAM}/data/logins.json`, { headers: forward, cf: { cacheTtl: 300 } }).then((r) => r.json()),
+    ]);
+  } catch (failure) {
+    return json({ ok: false, error: "upstream_unreachable", detail: String(failure) }, 502);
+  }
+
+  const station = stationForEmail(logins, email);
+  if (!station) return json({ ok: true, applicable: false });
+  return json(billingForStore(billing, station));
+}
+
 /** Deny indexing and tighten the browser's own guardrails. */
 function harden(response) {
   const headers = new Headers(response.headers);
@@ -321,6 +359,12 @@ export default {
     }
 
     if (path.startsWith("/api/")) {
+      if (path === "/api/billing-mine") {
+        if (request.method !== "GET" && request.method !== "HEAD") {
+          return harden(json({ ok: false, error: "read_only" }, 405));
+        }
+        return harden(await myBilling(request));
+      }
       return harden(await proxy(request, path));
     }
 

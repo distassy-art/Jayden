@@ -246,6 +246,10 @@ const resource = (path) => (options) => getJson(path, options);
 
 export const fetchOverlay = resource("/api/books-overlay");
 export const fetchBilling = resource("/api/billing");
+// A manager's own store bill. The upstream billing endpoint refuses managers
+// and the static feed carries every client, so the worker scopes it to the
+// caller's store server-side; this is the only billing a manager may load.
+export const fetchMyBilling = resource("/api/billing-mine");
 export const fetchTickets = resource("/api/mgr-tickets");
 export const fetchPendingDays = resource("/api/mgr-days");
 export const fetchS2kInvoices = resource("/api/data/s2k-invoices.json");
@@ -269,9 +273,11 @@ export const fetchDepts = resource("/api/data/depts.json");
  * whole dashboard — each view renders its own missing-data notice instead.
  */
 export async function loadWorkspace(options) {
+  const user = session.read();
+  const manager = user && !isAdmin(user) && user.role === "manager";
+
   const sources = {
     overlay: fetchOverlay,
-    billing: fetchBilling,
     tickets: fetchTickets,
     days: fetchPendingDays,
     s2k: fetchS2kInvoices,
@@ -284,6 +290,12 @@ export async function loadWorkspace(options) {
     openDays: fetchOpenDays,
     depts: fetchDepts,
   };
+
+  // A manager cannot read the company billing feed — the upstream returns 403,
+  // which would otherwise surface as a scary "feed did not load" notice. They
+  // get their own store's scoped bill instead; everyone else gets the full feed.
+  if (manager) sources.myBilling = fetchMyBilling;
+  else sources.billing = fetchBilling;
 
   const names = Object.keys(sources);
   const results = await Promise.allSettled(names.map((name) => sources[name](options)));
