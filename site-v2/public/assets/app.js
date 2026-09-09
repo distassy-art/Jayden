@@ -23,7 +23,7 @@ import {
   bindDepartments, bindRankings, bindScope, renderDepartments, renderFuel,
   renderProfit, renderPurchases, renderRankings,
 } from "./views/analysis.js";
-import { bindDaily, bindPnl, renderDaily, renderPnl } from "./views/periods.js";
+import { bindDaily, renderDaily } from "./views/periods.js";
 import { bindCalendar, renderCalendar, renderSchedule } from "./views/planning.js";
 import { PUBLIC_ROUTES, renderLogin } from "./views/site.js";
 
@@ -48,7 +48,6 @@ const ROUTES = [
   { path: "/purchases", title: "Purchases", icon: "orders", group: "Performance", render: renderPurchases, bind: bindScope },
   { path: "/departments", title: "Departments", icon: "departments", group: "Performance", render: renderDepartments, bind: bindDepartments },
   { path: "/rankings", title: "Rankings", icon: "rankings", group: "Performance", render: renderRankings, bind: bindRankings, roles: ["admin", "owner"] },
-  { path: "/pnl", title: "Profit and loss", icon: "pnl", group: "Performance", render: renderPnl, bind: bindPnl },
 
   { path: "/daily", title: "Daily close", icon: "calendar", group: "Operations", render: renderDaily, bind: bindDaily },
   { path: "/invoices", title: "S2K invoices", icon: "invoice", group: "Operations", render: renderInvoices, bind: bindInvoices },

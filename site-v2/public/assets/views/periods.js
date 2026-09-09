@@ -1,5 +1,5 @@
 /*
- * Daily close, and the profit and loss statement.
+ * Daily close: one report at four grains.
  *
  * The old site had four separate pages — Daily, Weekly, Monthly, Yearly —
  * showing the same report at four grains, numbered like filing steps. Here the
@@ -9,11 +9,9 @@
 
 import {
   barChart, change, dateLabel, deltaBadge, downloadCsv, emptyState, esc, icon,
-  isNum, lineChart, money, moneyShort, monthLabel, num, pct, perGallon,
+  lineChart, money, monthLabel, num, pct, perGallon,
 } from "../ui.js";
-import {
-  MONTH_ABBR, scopeDays, scopeTotals, sumDays, yearSeries,
-} from "../analytics.js";
+import { scopeDays, sumDays } from "../analytics.js";
 import {
   bindScopeBar, bucketDays, periodLabel, scopeBar,
 } from "../scope.js";
@@ -162,168 +160,6 @@ export function bindDaily(root, ctx) {
       series.map((row) => [row.key, row.days, row.gas_vol ?? "", row.gas_profit ?? "",
         row.gas_margin ?? "", row.sales ?? "", row.purchases ?? "", row.store_profit ?? "",
         row.margin ?? "", row.total_profit ?? ""]));
-  };
-  bindScopeBar(root, ctx);
-}
-
-/* -------------------------------------------------------------------------
-   Profit and loss
-   ------------------------------------------------------------------------- */
-
-/** One statement line. `derived` rows are subtotals and are styled apart. */
-function line(label, values, { indent = false, derived = false, note = "", format = money, negIsBad = true } = {}) {
-  return { label, values, indent, derived, note, format, negIsBad };
-}
-
-export function renderPnl(ctx) {
-  const { model, scope } = ctx;
-  const year = Number(model.currentYear);
-  const before = year - 1;
-
-  const ytd = scopeTotals(model, year, scope.stationIds);
-  const prior = scopeTotals(model, before, scope.stationIds);
-
-  const fuel = yearSeries(model, year, "fuel_profit", scope.stationIds);
-  const sales = yearSeries(model, year, "sales", scope.stationIds);
-  const purchases = yearSeries(model, year, "purchases", scope.stationIds);
-  const storeProfit = yearSeries(model, year, "store_profit", scope.stationIds);
-  const total = yearSeries(model, year, "total_profit", scope.stationIds);
-
-  const at = (series, i) => (isNum(series[i]) ? Number(series[i]) : null);
-
-  /*
-   * The feed reports fuel as profit already net of cost, so the statement runs
-   * the store side gross-to-net and brings fuel in as a single earned line
-   * rather than inventing a fuel revenue figure that is not in the data.
-   */
-  const rows = [
-    line("Store sales", sales, { note: "Merchandise rung up inside the store" }),
-    line("Cost of goods bought", purchases, { indent: true, note: "Purchases logged against the store" }),
-    line("Store profit", storeProfit, { derived: true, note: "Sales less what was bought" }),
-    line("Fuel profit", fuel, { note: "Reported net of fuel cost" }),
-    line("Total profit", total, { derived: true, note: "Store plus fuel" }),
-  ];
-
-  const ytdOf = (label) => ({
-    "Store sales": ytd.sales,
-    "Cost of goods bought": ytd.purchases,
-    "Store profit": ytd.store_profit,
-    "Fuel profit": ytd.fuel_profit,
-    "Total profit": ytd.total_profit,
-  }[label]);
-
-  const priorOf = (label) => ({
-    "Store sales": prior.sales,
-    "Cost of goods bought": prior.purchases,
-    "Store profit": prior.store_profit,
-    "Fuel profit": prior.fuel_profit,
-    "Total profit": prior.total_profit,
-  }[label]);
-
-  const months = MONTH_ABBR.map((label, i) => ({ label, i }))
-    .filter(({ i }) => isNum(total[i]) || isNum(sales[i]));
-
-  const body = rows.map((row) => `<tr class="${row.derived ? "pnl-derived" : ""}">
-    <th scope="row" class="${row.indent ? "pnl-indent" : ""}">
-      ${esc(row.label)}<span class="cell-sub">${esc(row.note)}</span>
-    </th>
-    ${months.map(({ i }) => `<td class="num">${esc(row.format(at(row.values, i)))}</td>`).join("")}
-    <td class="num strong pnl-total">${esc(row.format(ytdOf(row.label)))}</td>
-    <td class="num muted">${esc(row.format(priorOf(row.label)))}</td>
-    <td class="num">${deltaBadge(change(ytdOf(row.label), priorOf(row.label)),
-      { higherIsBetter: row.label !== "Cost of goods bought" })}</td>
-  </tr>`).join("");
-
-  const marginRow = `<tr class="pnl-ratio">
-    <th scope="row">Store margin<span class="cell-sub">Store profit as a share of sales</span></th>
-    ${months.map(({ i }) => `<td class="num">${esc(pct(isNum(sales[i]) && sales[i]
-      ? storeProfit[i] / sales[i] : null))}</td>`).join("")}
-    <td class="num strong pnl-total">${esc(pct(ytd.store_margin))}</td>
-    <td class="num muted">${esc(pct(prior.store_margin))}</td>
-    <td class="num">${deltaBadge(isNum(ytd.store_margin) && isNum(prior.store_margin)
-      ? (ytd.store_margin - prior.store_margin) * 100 : null, { suffix: " pts" })}</td>
-  </tr>
-  <tr class="pnl-ratio">
-    <th scope="row">Buy ratio<span class="cell-sub">Bought as a share of sold — the number to hold down</span></th>
-    ${months.map(({ i }) => `<td class="num">${esc(pct(isNum(sales[i]) && sales[i]
-      ? purchases[i] / sales[i] : null))}</td>`).join("")}
-    <td class="num strong pnl-total">${esc(pct(ytd.sales ? ytd.purchases / ytd.sales : null))}</td>
-    <td class="num muted">${esc(pct(prior.sales ? prior.purchases / prior.sales : null))}</td>
-    <td class="num">${deltaBadge(ytd.sales && prior.sales
-      ? ((ytd.purchases / ytd.sales) - (prior.purchases / prior.sales)) * 100 : null,
-      { higherIsBetter: false, suffix: " pts" })}</td>
-  </tr>`;
-
-  return `
-    <div class="page-head">
-      <h2>Profit and loss</h2>
-      <p>The statement for <b>${esc(scope.label)}</b>, month by month, with the year to date
-        against the same months last year. Fuel is reported net of its cost, so it enters as one
-        earned line rather than as revenue and cost.</p>
-    </div>
-    ${scopeBar(model, scope, { period: false })}
-
-    <div class="grid cols-4" style="margin-bottom:16px">
-      <div class="stat">
-        <div class="stat-label">Total profit</div>
-        <div class="stat-value">${esc(money(ytd.total_profit))}</div>
-        <div class="stat-foot">${deltaBadge(change(ytd.total_profit, prior.total_profit))}
-          <span>from ${esc(moneyShort(prior.total_profit))}</span></div>
-      </div>
-      <div class="stat">
-        <div class="stat-label">Store sales</div>
-        <div class="stat-value">${esc(money(ytd.sales))}</div>
-        <div class="stat-foot">${deltaBadge(change(ytd.sales, prior.sales))}
-          <span>${esc(pct(ytd.store_margin))} kept as profit</span></div>
-      </div>
-      <div class="stat">
-        <div class="stat-label">Bought</div>
-        <div class="stat-value">${esc(money(ytd.purchases))}</div>
-        <div class="stat-foot">${deltaBadge(change(ytd.purchases, prior.purchases), { higherIsBetter: false })}
-          <span>${esc(pct(ytd.sales ? ytd.purchases / ytd.sales : null))} of sales</span></div>
-      </div>
-      <div class="stat">
-        <div class="stat-label">Fuel profit</div>
-        <div class="stat-value">${esc(money(ytd.fuel_profit))}</div>
-        <div class="stat-foot">${deltaBadge(change(ytd.fuel_profit, prior.fuel_profit))}
-          <span>${esc(perGallon(ytd.gas_margin))} on ${esc(num(ytd.gas_vol))} gal</span></div>
-      </div>
-    </div>
-
-    <section class="card">
-      <div class="card-head">
-        <h3>${esc(year)} statement</h3>
-        <span class="hint">Closed months through ${esc(monthLabel(model.latestMonth, true))}</span>
-      </div>
-      <div class="table-wrap"><table class="table table-pnl">
-        <thead><tr>
-          <th>Line</th>
-          ${months.map(({ label }) => `<th class="num">${esc(label)}</th>`).join("")}
-          <th class="num pnl-total">${esc(year)} YTD</th>
-          <th class="num">${esc(before)} YTD</th>
-          <th class="num">Change</th>
-        </tr></thead>
-        <tbody>${body || `<tr><td colspan="4">${emptyState("No closed months")}</td></tr>`}</tbody>
-        <tfoot>${marginRow}</tfoot>
-      </table></div>
-    </section>`;
-}
-
-export function bindPnl(root, ctx) {
-  ctx.csv = () => {
-    const { model, scope } = ctx;
-    const year = Number(model.currentYear);
-    const pull = (metric) => yearSeries(model, year, metric, scope.stationIds);
-    const series = {
-      "Store sales": pull("sales"),
-      "Cost of goods bought": pull("purchases"),
-      "Store profit": pull("store_profit"),
-      "Fuel profit": pull("fuel_profit"),
-      "Total profit": pull("total_profit"),
-    };
-    downloadCsv(`pnl-${year}-${scope.station?.id || scope.owner?.id || "all"}.csv`,
-      ["Line", ...MONTH_ABBR],
-      Object.entries(series).map(([label, values]) => [label, ...values.map((v) => v ?? "")]));
   };
   bindScopeBar(root, ctx);
 }

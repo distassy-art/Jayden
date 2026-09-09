@@ -20,7 +20,7 @@ import { renderBilling, renderHealth, renderTickets } from "../public/assets/vie
 import {
   renderDepartments, renderFuel, renderProfit, renderPurchases, renderRankings,
 } from "../public/assets/views/analysis.js";
-import { renderDaily, renderPnl } from "../public/assets/views/periods.js";
+import { renderDaily } from "../public/assets/views/periods.js";
 import { renderCalendar, renderSchedule } from "../public/assets/views/planning.js";
 import { PUBLIC_ROUTES, renderLogin } from "../public/assets/views/site.js";
 
@@ -168,7 +168,6 @@ async function main() {
   inspect("billing?status=unpaid", renderBilling(ctx("status=unpaid")));
   inspect("tickets", renderTickets(ctx()));
   inspect("health", renderHealth(ctx()));
-  inspect("pnl", renderPnl(ctx()));
   inspect("calendar", renderCalendar(ctx()));
   inspect("schedule", renderSchedule(ctx()));
 
@@ -181,7 +180,6 @@ async function main() {
   for (const owner of model.owners) {
     inspect(`owner/${owner.id}`, renderOwner(ctx("", { id: owner.id })));
     inspect(`profit scoped to ${owner.id}`, renderProfit(ctx(`owner=${owner.id}`)));
-    inspect(`pnl scoped to ${owner.id}`, renderPnl(ctx(`owner=${owner.id}`)));
     inspect(`daily scoped to ${owner.id}`, renderDaily(ctx(`owner=${owner.id}&period=week`)));
     inspect(`calendar scoped to ${owner.id}`, renderCalendar(ctx(`owner=${owner.id}`)));
     inspect(`schedule scoped to ${owner.id}`, renderSchedule(ctx(`owner=${owner.id}`)));
@@ -202,7 +200,6 @@ async function main() {
     inspect(`fuel ${station.id}`, renderFuel(ctx(scoped)));
     inspect(`purchases ${station.id}`, renderPurchases(ctx(scoped)));
     inspect(`departments ${station.id}`, renderDepartments(ctx(scoped)));
-    inspect(`pnl ${station.id}`, renderPnl(ctx(scoped)));
     inspect(`daily ${station.id}`, renderDaily(ctx(scoped)));
     inspect(`schedule ${station.id}`, renderSchedule(ctx(scoped)));
   }
@@ -256,7 +253,6 @@ async function main() {
   inspect("manager fuel", renderFuel(mgrCtx()));
   inspect("manager purchases", renderPurchases(mgrCtx()));
   inspect("manager departments", renderDepartments(mgrCtx()));
-  inspect("manager pnl", renderPnl(mgrCtx()));
   inspect("manager daily", renderDaily(mgrCtx()));
   inspect("manager calendar", renderCalendar(mgrCtx()));
   inspect("manager schedule", renderSchedule(mgrCtx()));
@@ -289,7 +285,6 @@ async function main() {
   inspect("health (feeds down)", renderHealth(bareCtx));
   inspect("calendar (feed down)", renderCalendar(bareCtx));
   inspect("schedule (feed down)", renderSchedule(bareCtx));
-  inspect("pnl (bare)", renderPnl(bareCtx));
 
   process.stdout.write(`\n${checks - failures}/${checks} checks passed\n`);
   if (failures) {

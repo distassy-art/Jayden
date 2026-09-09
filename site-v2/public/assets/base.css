@@ -1143,38 +1143,6 @@ button.trail-step:hover { background: var(--surface-3); color: var(--text); }
 .warn-box b { display: block; margin-bottom: 2px; }
 
 /* --------------------------------------------------------------------------
-   Profit and loss statement
-   -------------------------------------------------------------------------- */
-
-.table-pnl th[scope="row"] {
-  text-align: left;
-  font-weight: 600;
-  white-space: nowrap;
-  position: sticky;
-  left: 0;
-  background: var(--surface);
-  z-index: 1;
-}
-
-.table-pnl .pnl-indent { padding-left: 30px; font-weight: 500; }
-
-.table-pnl .pnl-derived td,
-.table-pnl .pnl-derived th {
-  font-weight: 700;
-  background: var(--surface-2);
-  border-top: 1px solid var(--line-strong);
-}
-
-.table-pnl .pnl-total { border-left: 2px solid var(--line-strong); }
-
-.table-pnl .pnl-ratio th,
-.table-pnl .pnl-ratio td {
-  font-size: 12.5px;
-  color: var(--text-2);
-  background: var(--surface-2);
-}
-
-/* --------------------------------------------------------------------------
    Delivery calendar
    -------------------------------------------------------------------------- */
 
@@ -1369,7 +1337,6 @@ button.trail-step:hover { background: var(--surface-3); color: var(--text); }
   .grid.cols-4 { grid-template-columns: minmax(0, 1fr); }
   .topbar .sub { display: none; }
   .stat-value { font-size: 22px; }
-  .table-pnl th[scope="row"] { position: static; }
 }
 
 @media print {

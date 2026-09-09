@@ -204,7 +204,6 @@ export function renderOwner(ctx) {
       ${scoped("/fuel", "Fuel", "fuel")}
       ${scoped("/purchases", "Purchases", "orders")}
       ${scoped("/departments", "Departments", "departments")}
-      ${scoped("/pnl", "Profit and loss", "pnl")}
       <span class="spacer"></span>
       <button class="btn btn-sm" data-owner-csv="${esc(owner.id)}">${icon("download")}CSV</button>
     </div>

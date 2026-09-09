@@ -238,6 +238,7 @@ export const fetchVendorOrders = resource("/api/data/vendor-orders.json");
 export const fetchPricing = resource("/api/data/pricing.json");
 export const fetchAdminStores = resource("/api/data/admin-stores.json");
 export const fetchOwners = resource("/api/data/owners.json");
+export const fetchManager = resource("/api/data/manager.json");
 
 /**
  * Load everything the console needs in one pass.
@@ -254,6 +255,7 @@ export async function loadWorkspace(options) {
     orders: fetchVendorOrders,
     pricing: fetchPricing,
     owners: fetchOwners,
+    manager: fetchManager,
   };
 
   const names = Object.keys(sources);

@@ -26,6 +26,7 @@ const ENDPOINTS = new Map([
   ["/api/data/vendor-orders.json", "/data/vendor-orders.json"],
   ["/api/data/billing.json", "/data/billing.json"],
   ["/api/data/pricing.json", "/data/pricing.json"],
+  ["/api/data/manager.json", "/data/manager.json"],
 ]);
 
 /** Binary assets (invoice and pricing PDFs) served straight through. */

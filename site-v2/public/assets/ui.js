@@ -191,7 +191,6 @@ const ICON_PATHS = {
   external: '<path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/>',
   owners: '<path d="M16 20v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 10a4 4 0 100-8 4 4 0 000 8M22 20v-2a4 4 0 00-3-3.9M16 2.1a4 4 0 010 7.8"/>',
   profit: '<path d="M3 17l6-6 4 4 8-8M21 7h-5M21 7v5"/>',
-  pnl: '<path d="M5 3h14v18H5zM9 8h6M9 12h6M9 16h3"/>',
   calendar: '<path d="M4 5h16v16H4zM4 10h16M9 3v4M15 3v4"/>',
   pricing: '<path d="M3 12V4h8l9 9-8 8-9-9zM7.5 7.5v.01"/>',
 };

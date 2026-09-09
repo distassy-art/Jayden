@@ -37,7 +37,7 @@ function footer() {
     <div class="site-foot-inner">
       <div>
         <img src="/assets/logo-wordmark-light.png" alt="Smart Solutions AI" width="164">
-        <p>Controlling your store got easier with AI.</p>
+        <p>An AI store manager for fuel and convenience sites.</p>
       </div>
       <nav>
         <b>Site</b>
@@ -73,104 +73,309 @@ function page(active, body, { wide = false } = {}) {
 
 /* -------------------------------------------------------------------------
    Home
+   -------------------------------------------------------------------------
+   One long page, because an owner who has never heard of us needs the whole
+   model in one read: what the thing is, what it does each day, why buying is
+   the lever, what it costs, and what it does not touch.
    ------------------------------------------------------------------------- */
 
-const PILLARS = [
+/** The job description. This is the heart of the pitch, so it leads. */
+const DUTIES = [
   {
     icon: "calendar",
-    title: "See the day, every day",
-    body: "Sales, purchases, waste and loss for every store, closed daily rather than "
-      + "discovered in a month-end statement.",
+    title: "Closes the day",
+    body: "Every night it takes the register, the fuel system and the invoices and finishes the "
+      + "day: gallons, fuel profit, store sales, what was bought, what was kept. By the time the "
+      + "month ends, the month is already done.",
+  },
+  {
+    icon: "pricing",
+    title: "Sets the buy",
+    body: "It gives every department a purchase budget worked out from that department's own "
+      + "sales, then tracks what is left. Your manager stops guessing what an order should be "
+      + "and starts working to a number.",
   },
   {
     icon: "orders",
-    title: "Buy to what sold",
-    body: "Orders are drafted from the last two weeks of movement, not from habit. "
-      + "The buy follows the sale instead of leading it.",
+    title: "Drafts the order",
+    body: "When a vendor is due, it builds the order from what actually moved since the last "
+      + "delivery — not from the salesman's suggestion sheet. You approve it, change it or "
+      + "reject it. Nothing is sent behind you.",
+  },
+  {
+    icon: "departments",
+    title: "Watches every department",
+    body: "Beer, cigarettes, energy, packaged beverages, food. Each one carries a target margin, "
+      + "and each one is checked against it. A department that quietly turns negative gets "
+      + "named, in the week it happens.",
+  },
+  {
+    icon: "alert",
+    title: "Writes the weekly alert",
+    body: "A short note to the store, in plain English: where the margin sits against target, "
+      + "purchases against the paced budget, and where the month is heading versus the same "
+      + "month last year.",
   },
   {
     icon: "profit",
-    title: "Keep more of the sale",
-    body: "When buying stops outrunning sales, margin recovers on its own. "
-      + "That gap is the whole business.",
+    title: "Reports to you",
+    body: "One console for everything you own. Start at all your stores, drop into one, and "
+      + "compare any month against the same month last year on fuel, sales, buying and profit.",
   },
 ];
 
-const STEPS = [
-  ["Connect", "Your registers, fuel and invoices feed in. Nothing changes about how you run the store."],
-  ["Close the day", "Every store's day is reconciled and filed, so the month is already finished when it ends."],
-  ["Draft the order", "We build each vendor order from what actually moved, and send it for your review."],
-  ["Hold the buy", "Purchases are checked against sales, department by department. Drift gets flagged, not buried."],
+/** Day / week / month / year — the operating rhythm. */
+const RHYTHM = [
+  ["Every day", "The day is closed and filed for every store. Gallons and fuel profit on one "
+    + "side, store sales and purchases on the other."],
+  ["Every week", "Each store gets a purchase ceiling for the week and a written alert saying "
+    + "whether it came in under or over, and by how much."],
+  ["Every month", "The month is closed and set against the same month a year ago — sales, "
+    + "buying, store profit, fuel profit, cents per gallon."],
+  ["Every year", "Department by department, this year against last, so you can see which "
+    + "categories actually earned their shelf."],
+];
+
+/** Illustrative only — real client figures never appear on a public page. */
+const BUDGET_DEMO = [
+  ["Beer", 3817, 11810],
+  ["Cigarettes", 6240, 10882],
+  ["Energy drinks", 1534, 8107],
+  ["Packaged beverages", 4980, 9455],
+  ["Snacks and candy", 2110, 6320],
+];
+
+const dollars = (n) => `$${Math.round(n).toLocaleString("en-US")}`;
+
+const ROLES = [
+  ["Owner", "owners", "Everything you own, at any depth: the whole portfolio, one owner group, "
+    + "or a single site. Billing and month-end sit here too."],
+  ["Store manager", "stores", "Their store only. The week's purchase ceiling, what is left in "
+    + "each department, the orders waiting to go out, and the day to file."],
+  ["Employee", "clock", "Schedule, clock in and out, breaks and tasks. No financial figures of "
+    + "any kind."],
+  ["Our office", "health", "We do the filing and the invoice entry, so we can see across the "
+    + "clients we keep books for. No client can ever see another."],
+];
+
+const FAQ = [
+  ["Do I have to change my POS or my vendors?",
+    "No. It reads what your register and fuel system already produce, and you keep the same "
+    + "vendors and the same reps. The only piece of hardware involved is a scanner for invoices."],
+  ["Does it order without asking me?",
+    "No. It drafts. Every order waits for a person to approve it, and you can change any line "
+    + "before it goes."],
+  ["What if I only have one store?",
+    "That is the common case, and it is the case that benefits most — a single site rarely "
+    + "justifies a full-time general manager, which is exactly the gap this fills."],
+  ["How far back do you go when you start?",
+    "We rebuild your history through the prior year during setup, so you have a real "
+    + "year-over-year comparison from the first month rather than waiting twelve months for one."],
+  ["Who can see my numbers?",
+    "You, whoever you give access to, and our office. Clients are partitioned from each other. "
+    + "Where a figure is inferred rather than reported, the console labels it instead of "
+    + "presenting it as fact."],
 ];
 
 export function renderHome() {
+  const budgetRows = BUDGET_DEMO.map(([name, spent, budget]) => {
+    const left = budget - spent;
+    const pctUsed = Math.round((spent / budget) * 100);
+    return `<tr>
+      <th scope="row">${esc(name)}</th>
+      <td class="num">${esc(dollars(spent))}</td>
+      <td class="num">${esc(dollars(budget))}</td>
+      <td>
+        <span class="demo-track"><span class="demo-fill" style="width:${pctUsed}%"></span></span>
+      </td>
+      <td class="num demo-left">${esc(dollars(left))}</td>
+    </tr>`;
+  }).join("");
+
   return page("/", `
     <section class="hero">
       <div class="hero-copy">
-        <span class="eyebrow">Fuel and convenience retail</span>
-        <h1>Better profit by<br><span class="hero-accent">controlling the buy.</span></h1>
-        <p class="hero-lead">We show owners the day — what sold, what was bought, what walked out.
-          Then we hold the buy to what sold, so more of the sale stays as profit.</p>
+        <span class="eyebrow">For fuel and convenience retailers</span>
+        <h1>An AI store manager<br>for <span class="hero-accent">every site you own.</span></h1>
+        <p class="hero-lead">It closes the books every day, holds each department's buying to what
+          that department actually sold, drafts the vendor orders, and tells you every week where
+          the profit went. One of them per store, for a fraction of one salary.</p>
         <div class="hero-actions">
-          <a class="btn btn-accent btn-lg" href="#/login">Log in</a>
-          <a class="btn btn-lg" href="#/how">See how it works ${icon("chevron")}</a>
+          <a class="btn btn-accent btn-lg" href="#/contact">Talk to us</a>
+          <a class="btn btn-lg" href="#/login">Client log in ${icon("chevron")}</a>
         </div>
       </div>
       <div class="hero-art" aria-hidden="true">
         <div class="hero-card">
-          <div class="hero-card-head"><span class="dot pos"></span>Store profit, this month</div>
+          <div class="hero-card-head"><span class="dot pos"></span>Store profit, month by month</div>
           <div class="hero-bars">
             ${[42, 55, 48, 63, 71, 66, 78, 86].map((h, i) => `<span style="height:${h}%;opacity:${0.45 + i * 0.07}"></span>`).join("")}
           </div>
-          <div class="hero-card-foot"><b>Buying held</b><span>margin up as sales grew</span></div>
+          <div class="hero-card-foot"><b>Buying held</b><span>margin rose as sales grew</span></div>
         </div>
         <div class="hero-card hero-card-2">
-          <div class="hero-card-head"><span class="dot warn"></span>Needs attention</div>
+          <div class="hero-card-head"><span class="dot warn"></span>This week at your stores</div>
           <ul>
-            <li><b>3</b> invoices never reached S2K</li>
-            <li><b>1</b> store buying ahead of sales</li>
-            <li><b>2</b> manager questions waiting</li>
+            <li><b>Beer</b> bought past its budget</li>
+            <li><b>2</b> orders drafted, waiting on you</li>
+            <li><b>3</b> invoices never reached the books</li>
           </ul>
         </div>
       </div>
     </section>
 
     <section class="site-section">
-      <div class="pillars">
-        ${PILLARS.map((pillar) => `<article class="pillar">
-          <span class="pillar-icon">${icon(pillar.icon)}</span>
-          <h3>${esc(pillar.title)}</h3>
-          <p>${esc(pillar.body)}</p>
+      <h2 class="section-title">What it actually does</h2>
+      <p class="section-sub">A good store manager does about six things well. Most sites cannot
+        justify one at every location, and the one you have is busy running the shift. These are
+        the six, done every day, at every store, without being reminded.</p>
+      <div class="pillars pillars-6">
+        ${DUTIES.map((duty) => `<article class="pillar">
+          <span class="pillar-icon">${icon(duty.icon)}</span>
+          <h3>${esc(duty.title)}</h3>
+          <p>${esc(duty.body)}</p>
         </article>`).join("")}
       </div>
     </section>
 
     <section class="site-section site-band">
       <div class="band-inner">
-        <h2>The number that decides the month</h2>
-        <p>Purchases as a share of sales. When it drifts up two points, store profit falls with it —
-          and it usually drifts quietly, one order at a time, in one department.
-          Every page in the console is built to surface that early.</p>
-        <a class="btn btn-accent" href="#/how">How we hold it ${icon("chevron")}</a>
+        <span class="eyebrow">The whole idea in one number</span>
+        <h2>Purchases as a share of sales</h2>
+        <p>Fuel margin is set by the street; you can do very little about it. The store is where
+          the profit is made or lost, and inside the store there is really only one number you
+          control: what you paid for the goods, against what they sold for.</p>
+        <p>It moves quietly. Nobody decides to overbuy. It happens one order at a time, in one
+          department, because the rep came on Tuesday and the order got written the way it always
+          gets written. Four points of drift at a store selling $70,000 a month inside the shop
+          costs about <b>$2,800 of profit a month</b> — near enough $34,000 a year, on sales that
+          never changed.</p>
+        <p>An owner usually finds out at month end, three weeks late, as one number with no name
+          on it. The point of an AI store manager is to catch it in the week it starts, and to
+          say which department did it.</p>
       </div>
     </section>
 
     <section class="site-section">
-      <h2 class="section-title">How it works</h2>
-      <ol class="steps">
-        ${STEPS.map(([title, body], i) => `<li>
+      <h2 class="section-title">How it holds the buy</h2>
+      <p class="section-sub">Every department gets a monthly purchase budget worked back from its
+        own sales and target margin. As invoices land, the budget draws down, and what is left is
+        stated in dollars — so an order is written against a number instead of a feeling.</p>
+      <div class="demo-card">
+        <div class="demo-head">
+          <b>Department budget</b>
+          <span>Illustration · your figures replace these</span>
+        </div>
+        <table class="demo-table">
+          <thead><tr>
+            <th>Department</th><th class="num">Bought</th><th class="num">Budget</th>
+            <th>Used</th><th class="num">Left to spend</th>
+          </tr></thead>
+          <tbody>${budgetRows}</tbody>
+        </table>
+        <div class="demo-foot">${icon("check")} The manager sees this before writing the order.
+          You see it, and the week's alert, without asking anyone.</div>
+      </div>
+    </section>
+
+    <section class="site-section">
+      <h2 class="section-title">The rhythm</h2>
+      <ol class="steps steps-lg">
+        ${RHYTHM.map(([title, body], i) => `<li>
           <span class="step-n">${i + 1}</span>
           <div><b>${esc(title)}</b><p>${esc(body)}</p></div>
         </li>`).join("")}
       </ol>
     </section>
 
+    <section class="site-section site-band">
+      <div class="band-inner band-wide">
+        <h2>Everyone gets their own view</h2>
+        <p>One log-in. What you see is decided by who you are, and nothing leaks across it.</p>
+        <div class="role-grid">
+          ${ROLES.map(([title, ico, body]) => `<article class="role">
+            <span class="role-icon">${icon(ico)}</span>
+            <div><b>${esc(title)}</b><p>${esc(body)}</p></div>
+          </article>`).join("")}
+        </div>
+      </div>
+    </section>
+
+    <section class="site-section">
+      <h2 class="section-title">What it costs</h2>
+      <p class="section-sub">The model is built so that the largest part of what you pay only
+        exists if your profit went up. We are not selling you software by the seat.</p>
+      <div class="price-grid">
+        <article class="price-card is-lead">
+          <span class="price-tag">Performance</span>
+          <div class="price-figure">5%</div>
+          <p class="price-of">of the increase in store profit, measured against the same month a
+            year earlier.</p>
+          <p class="price-note">If profit does not rise, this line is zero. It is the reason we
+            care about your buying at all.</p>
+        </article>
+        <article class="price-card">
+          <span class="price-tag">One time</span>
+          <div class="price-figure">$750</div>
+          <p class="price-of">per store, to set up.</p>
+          <p class="price-note">Covers the invoice scanner and rebuilding your history back
+            through the prior year, so the first month already has something to compare against.</p>
+        </article>
+        <article class="price-card">
+          <span class="price-tag">As used</span>
+          <div class="price-figure">Per service</div>
+          <p class="price-of">only for the work you switch on.</p>
+          <ul class="price-list">
+            <li><b>Invoice entry</b><span>10¢ a line</span></li>
+            <li><b>Ordering</b><span>1% of order value</span></li>
+            <li><b>Scheduling</b><span>$25 a month</span></li>
+            <li><b>Tasks</b><span>$25 a month</span></li>
+          </ul>
+        </article>
+      </div>
+      <p class="price-fine">Every charge appears on an itemised monthly statement inside the
+        console, with the invoice behind it. Nothing is charged that you cannot open and read.</p>
+    </section>
+
+    <section class="site-section">
+      <div class="site-split">
+        <div class="prose">
+          <h2>What does not change</h2>
+          <p>This sits on top of how you already run the store. It does not ask you to move to a
+            new register, retrain your staff, or drop the vendors and reps you have relationships
+            with.</p>
+          <ul>
+            <li>Keep your POS and your fuel system.</li>
+            <li>Keep your vendors, your reps and your delivery days.</li>
+            <li>Keep your people — this replaces the paperwork, not the person behind the counter.</li>
+            <li>No order is ever sent without someone approving it.</li>
+          </ul>
+          <h2>Common questions</h2>
+          ${FAQ.map(([q, a]) => `<details class="faq">
+            <summary>${esc(q)}</summary>
+            <p>${esc(a)}</p>
+          </details>`).join("")}
+        </div>
+        <aside class="side-card">
+          <h3>See it on your own numbers</h3>
+          <p>Send us one month of your figures. We will close it, rebuild the year before it, and
+            show you what your buy ratio looks like — before you commit to anything.</p>
+          <a class="btn btn-accent" style="width:100%;justify-content:center" href="#/contact">Talk to us</a>
+          <hr>
+          <h3>Already a client?</h3>
+          <p>Owners, store managers and our own team all sign in at the same place.</p>
+          <a class="btn" style="width:100%;justify-content:center" href="#/login">Log in</a>
+        </aside>
+      </div>
+    </section>
+
     <section class="site-cta">
       <div>
-        <h2>Already a client?</h2>
-        <p>Owners, managers and our own team all sign in here with the same details as before.</p>
+        <h2>Put one in every store</h2>
+        <p>Tell us how many sites you run and who you order from. We will come back with what your
+          buying looks like against comparable stores.</p>
       </div>
-      <a class="btn btn-accent btn-lg" href="#/login">Log in</a>
+      <a class="btn btn-accent btn-lg" href="#/contact">Talk to us</a>
     </section>`);
 }
 
@@ -182,40 +387,78 @@ export function renderAbout() {
   return page("/about", `
     <div class="site-head">
       <h1>About us</h1>
-      <p class="site-lead">Smart Solutions AI keeps the books for fuel and convenience operators,
-        and uses them to control the one cost most stores never get on top of: the buy.</p>
+      <p class="site-lead">We build an AI store manager for fuel and convenience sites — one that
+        keeps the books, holds the buying to what sold, and reports to the owner every week.</p>
     </div>
     <div class="prose">
-      <h2>What we actually do</h2>
-      <p>We close every store's day, file the month, and reconcile invoices against what was
-        ordered and what arrived. That is bookkeeping, and it is the part nobody wants to do.</p>
-      <p>The reason we do it is what it makes possible. Once the day is closed accurately you can
-        see purchases against sales at department level, which is the only place overbuying is
-        visible before it turns into dead stock and a bad month.</p>
+      <h2>Where this came from</h2>
+      <p>Station owners kept describing the same problem to us. Sales were fine. Fuel was fine.
+        Store profit was not, and nobody could say precisely why until the month was over and it
+        was too late to do anything about it.</p>
+      <p>Every time we went looking, the answer was in the buying — and it was never one dramatic
+        mistake. It was a few hundred dollars a week in one department, ordered the way it had
+        always been ordered, for months.</p>
 
-      <h2>Why buying, and not sales</h2>
-      <p>Most retail advice is about selling more. In a convenience store with fuel out front, the
-        faster lever is usually the buy. A store can grow sales all year and still lose store
-        profit if purchases grow faster — and that is common, because ordering is a habit built
-        around a salesman's visit rather than around what moved.</p>
-      <p>We draft each vendor order from the last two weeks of actual movement and send it for
-        review. The owner still decides. The order just stops being a guess.</p>
+      <h2>Why an AI manager, and not a report</h2>
+      <p>The industry does not have a shortage of reports. It has a shortage of somebody with the
+        time to read them on the day they matter and to act on them before the next order goes
+        out. That is a job, not a document.</p>
+      <p>So we built the job. It closes the day, sets and tracks a purchase budget for every
+        department, drafts each vendor order from what actually moved, and writes the store a
+        short weekly note about where the margin sits. A district manager doing this properly
+        across a handful of sites is a salary most single-site owners cannot justify. This is the
+        same work, at every store, at a fraction of it.</p>
+
+      <h2>What we are not</h2>
+      <p>We are not a POS company and we are not trying to replace your register or your vendors.
+        We do not send an order without a person approving it, and we do not make decisions about
+        your store on your behalf. The AI does the watching and the arithmetic; you keep the
+        judgement.</p>
 
       <h2>How we handle your figures</h2>
-      <p>Each client sees their own stores and nothing else. Our team can see across clients
-        because we do the filing; no client can. Where a delivery day or a figure is inferred
-        rather than reported, the console says so rather than presenting it as fact.</p>
+      <p>Each client sees their own stores and nothing else. Our office can see across the clients
+        we keep books for, because doing the filing requires it; no client can. Where a delivery
+        day or a figure is inferred rather than reported, the console labels it rather than
+        presenting it as fact.</p>
+
+      <h2>How we get paid</h2>
+      <p>Mostly out of the improvement. There is a setup fee per store and small per-use charges
+        for invoice entry, ordering, scheduling and tasks, but the main line is a share of the
+        increase in your store profit against the same month a year earlier. If it does not go up,
+        that line is zero. We would rather be judged on that than on a subscription.</p>
     </div>`);
 }
+
+/** Getting started, from the first conversation to the first held month. */
+const ONBOARDING = [
+  ["We take your history",
+    "You send us what you already have — register exports, fuel reports, and a year or so of "
+    + "invoices. We rebuild the prior year so your very first month has something honest to be "
+    + "measured against."],
+  ["We set the budgets",
+    "Each department gets a target margin and a monthly purchase budget worked back from its own "
+    + "sales. We go through these with you before anything is switched on; they are your numbers, "
+    + "not a template."],
+  ["The scanner goes in",
+    "Invoices get scanned at the store and entered against the right department, so the budget "
+    + "draws down as goods actually arrive rather than at month end."],
+  ["The first month runs",
+    "The day closes nightly. Your manager sees what is left to spend before writing each order. "
+    + "You get the weekly alert. Nothing about the shift changes."],
+  ["You start comparing",
+    "From the second month, every figure carries last year beside it, and the buy ratio becomes "
+    + "something you can steer instead of something you discover."],
+];
 
 export function renderHow() {
   return page("/how", `
     <div class="site-head">
       <h1>How it works</h1>
-      <p class="site-lead">Four things happen every week. None of them change how you run the store.</p>
+      <p class="site-lead">What happens between the first conversation and the first month where
+        the buying is actually under control.</p>
     </div>
     <ol class="steps steps-lg">
-      ${STEPS.map(([title, body], i) => `<li>
+      ${ONBOARDING.map(([title, body], i) => `<li>
         <span class="step-n">${i + 1}</span>
         <div><b>${esc(title)}</b><p>${esc(body)}</p></div>
       </li>`).join("")}
@@ -223,22 +466,30 @@ export function renderHow() {
     <div class="prose">
       <h2>What you get to look at</h2>
       <p>A console organised the way the questions actually come up. Start at all your stores,
-        narrow to one, and every page — profit, fuel, purchases, departments — follows you down
-        without being asked twice.</p>
+        narrow to one owner group or one site, and every page — profit, fuel, purchases,
+        departments — follows you down without being asked twice.</p>
       <ul>
         <li><b>Command centre.</b> What needs attention today, worst first, each item linking to
           the page that resolves it.</li>
         <li><b>Daily close.</b> The day, the week, the month or the year, from the same figures.</li>
         <li><b>Purchases.</b> Bought against sold, by month and by department.</li>
+        <li><b>Departments.</b> Each category against its target margin, this year and last.</li>
         <li><b>Fuel.</b> Gallons and cents per gallon, weighted properly across stores.</li>
-        <li><b>Profit and loss.</b> The statement, month by month, against last year.</li>
         <li><b>Delivery calendar.</b> When each vendor is due, and which of those days we are
           confident about.</li>
+        <li><b>Billing.</b> Every charge itemised, with the invoice behind it.</li>
       </ul>
+
+      <h2>Where the figures come from</h2>
+      <p>Nothing here is typed in twice. The day comes from your register and fuel system, the
+        purchases come from scanned invoices, and the departments come from your own category
+        structure. Where something has to be inferred — a delivery day we have worked out from a
+        pattern rather than been told — the console says so on the page instead of quietly
+        presenting it as fact.</p>
     </div>
     <div class="site-cta">
       <div><h2>Want to see it on your own numbers?</h2>
-        <p>We will file one month for you and show you the difference.</p></div>
+        <p>We will close one month for you and show you the difference.</p></div>
       <a class="btn btn-accent btn-lg" href="#/contact">Talk to us</a>
     </div>`);
 }
