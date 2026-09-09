@@ -9,6 +9,7 @@
 import { icon, initials, esc, timeAgo, toast, monthLabel } from "./ui.js";
 import { buildModel } from "./analytics.js";
 import { buildCurrent } from "./current.js";
+import { buildVendors } from "./vendors.js";
 import { invalidate, isAdmin, loadWorkspace, session, signIn } from "./data.js";
 import { buildOwners, resolveScope, withScope } from "./scope.js";
 import { renderDashboard } from "./views/dashboard.js";
@@ -27,6 +28,7 @@ import {
 import { bindDaily, renderDaily } from "./views/periods.js";
 import { bindBudget, renderBudget } from "./views/budget.js";
 import { bindCalendar, renderCalendar, renderSchedule } from "./views/planning.js";
+import { bindVendors, renderVendors } from "./views/vendors.js";
 import { PUBLIC_ROUTES, renderLogin } from "./views/site.js";
 
 /* -------------------------------------------------------------------------
@@ -55,6 +57,7 @@ const ROUTES = [
   { path: "/daily", title: "Daily close", icon: "calendar", group: "Operations", render: renderDaily, bind: bindDaily },
   { path: "/invoices", title: "S2K invoices", icon: "invoice", group: "Operations", render: renderInvoices, bind: bindInvoices },
   { path: "/orders", title: "Vendor orders", icon: "orders", group: "Operations", render: renderOrders, bind: bindOrders },
+  { path: "/vendors", title: "Vendors", icon: "orders", group: "Operations", render: renderVendors, bind: bindVendors },
   { path: "/calendar", title: "Delivery calendar", icon: "calendar", group: "Operations", render: renderCalendar, bind: bindCalendar },
   { path: "/pricing", title: "Pricing", icon: "pricing", group: "Operations", render: renderPricing },
   { path: "/schedule", title: "Schedule", icon: "clock", group: "Operations", render: renderSchedule },
@@ -538,6 +541,9 @@ async function refresh(force = false) {
     // The open month comes from a separate feed; the console still works
     // without it, so a failure here only blanks the pages that need it.
     state.current = buildCurrent(data.manager, { stores: visibleStores() });
+    // Same for vendor spend: it narrows to the stores this account may see, so
+    // it is built here rather than in the view.
+    data.vendors = buildVendors(data.vendorSpend, { stores: visibleStores() });
     if (force) toast("Data reloaded");
   } catch (failure) {
     state.loadError = failure.message || "Something went wrong.";

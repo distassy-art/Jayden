@@ -29,6 +29,8 @@ import {
 import { renderDaily } from "../public/assets/views/periods.js";
 import { renderBudget } from "../public/assets/views/budget.js";
 import { renderCalendar, renderSchedule } from "../public/assets/views/planning.js";
+import { buildVendors } from "../public/assets/vendors.js";
+import { renderVendors } from "../public/assets/views/vendors.js";
 import { PUBLIC_ROUTES, renderLogin } from "../public/assets/views/site.js";
 
 const args = process.argv.slice(2);
@@ -106,6 +108,7 @@ async function main() {
   const model = buildModel(overlay, { monthly, openDays });
   model.owners = buildOwners(owners?.accounts || [], model);
   const current = buildCurrent(manager);
+  data.vendors = buildVendors(vendorSpend);
 
   process.stdout.write("Model\n");
   assert(model.stations.length > 0, "model: no stations parsed");
@@ -335,6 +338,10 @@ async function main() {
   inspect("calendar", renderCalendar(ctx()));
   inspect("schedule", renderSchedule(ctx()));
   inspect("buy", renderBudget(ctx()));
+  inspect("vendors", renderVendors(ctx()));
+  for (const key of (data.vendors?.keys || [])) {
+    inspect(`vendors?m=${key}`, renderVendors(ctx(`m=${key}`)));
+  }
 
   // Every grain of the daily page, since each buckets the day feed differently.
   for (const period of ["day", "week", "month", "year"]) {
@@ -347,6 +354,7 @@ async function main() {
     inspect(`profit scoped to ${owner.id}`, renderProfit(ctx(`owner=${owner.id}`)));
     inspect(`daily scoped to ${owner.id}`, renderDaily(ctx(`owner=${owner.id}&period=week`)));
     inspect(`calendar scoped to ${owner.id}`, renderCalendar(ctx(`owner=${owner.id}`)));
+    inspect(`vendors scoped to ${owner.id}`, renderVendors(ctx(`owner=${owner.id}`)));
     inspect(`buy scoped to ${owner.id}`, renderBudget(ctx(`owner=${owner.id}`)));
     inspect(`schedule scoped to ${owner.id}`, renderSchedule(ctx(`owner=${owner.id}`)));
   }
@@ -364,7 +372,7 @@ async function main() {
   const scopedViews = [
     ["profit", renderProfit], ["fuel", renderFuel], ["purchases", renderPurchases],
     ["departments", renderDepartments], ["rankings", renderRankings],
-    ["daily", renderDaily], ["buy", renderBudget],
+    ["daily", renderDaily], ["buy", renderBudget], ["vendors", renderVendors],
   ];
   for (const owner of model.owners) {
     const outside = model.stations
