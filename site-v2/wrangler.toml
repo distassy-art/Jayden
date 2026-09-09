@@ -62,6 +62,17 @@ zone_name = "smartsolutionsai.us"
 pattern = "smartsolutionsai.us/new/*"
 zone_name = "smartsolutionsai.us"
 
+# www answers on its own, with no redirect to the bare domain, so a route that
+# covered only the bare domain would leave www.smartsolutionsai.us/new a 404
+# for anyone who types the address the way it appears on the old site.
+[[env.live.routes]]
+pattern = "www.smartsolutionsai.us/new"
+zone_name = "smartsolutionsai.us"
+
+[[env.live.routes]]
+pattern = "www.smartsolutionsai.us/new/*"
+zone_name = "smartsolutionsai.us"
+
 [env.live.vars]
 PREVIEW_ACCESS_SHA256 = "ba67702aadfdd4112766515c7b462430d90e57de539dbb0399106e6fe4ce6457"
 MOUNT_PATH = "/new"

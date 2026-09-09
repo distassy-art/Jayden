@@ -172,11 +172,41 @@ CLOUDFLARE_API_TOKEN=... npx wrangler deploy --env live
 The two designs then run side by side: the existing site keeps serving the
 whole domain, and only `/new` reaches this worker. Nothing about
 `smartsolutions-site` is modified, redeployed or reconfigured — the change is
-two added routes, `/new` and `/new/*`.
+four added routes.
 
-Matching those two patterns rather than the single `/new*` is deliberate:
-the latter would also capture `/newsletter` and anything else beginning with
-those letters, quietly taking paths away from the existing site.
+Those four are `/new` and `/new/*` on **both** `smartsolutionsai.us` and
+`www.smartsolutionsai.us`. The `www` host answers on its own today rather than
+redirecting to the bare domain, so covering only the bare domain would leave
+`www.smartsolutionsai.us/new` a 404 for anyone who types the address the way it
+appears elsewhere.
+
+Matching a bare path plus a subtree, rather than the single pattern `/new*`, is
+also deliberate: the latter would capture `/newsletter` and anything else
+beginning with those three letters, quietly taking paths away from the existing
+site.
+
+Cloudflare resolves overlapping routes most-specific-first, so `/new/...`
+reaches this worker while every other path continues to the worker that serves
+it today.
+
+### Proving both are up
+
+Adding a route to a live zone is the one step here that can affect something a
+customer is already using, so it is checked rather than assumed:
+
+```bash
+node scripts/verify-live.mjs          # both hostnames
+```
+
+It probes a spread of the existing site — the front page, the customer login,
+owner and manager pages, the extensionless `/admin` route, a data file, a
+Netlify function — then the `new`-prefixed neighbours that must *not* be
+captured, then the console at `/new`.
+
+Run it **before** deploying to record the baseline. Every old-site line should
+read `ok` both times; only the `/new` lines should change from `FAIL` to `ok`.
+An old-site path that changes between the two runs is exactly the regression
+the script exists to catch.
 
 To take it down again, leaving the old site serving as before:
 
