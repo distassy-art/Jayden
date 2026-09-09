@@ -37,7 +37,7 @@ be issued or maintained.
 | **Profit / Fuel / Purchases / Departments / Rankings** | The performance questions, each at whatever scope is active. |
 | **Leaks** | Which stores buy heaviest against what they sell, and which departments are thinnest. |
 | **The buy** | What can this month still spend, by department and by week — the only page about a month you can change. |
-| **Daily close** | The same figures by day, week, month or year, and how one day rolls into the year. |
+| **Daily sales** | The same figures by day, week, month or year, and how one day rolls into the year. |
 | **S2K invoices** | Which invoices never reached S2K, and how much cost is unaccounted for? |
 | **Vendor orders** | What was ordered, what arrived, and what is still unreconciled. |
 | **Vendors** | Which suppliers the buying actually went to, with invoice counts and dates. |

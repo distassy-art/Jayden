@@ -435,7 +435,7 @@ export function renderHow() {
       <ul>
         <li><b>Command centre.</b> What needs attention today, worst first, each item linking to
           the page that resolves it.</li>
-        <li><b>Daily close.</b> The day, the week, the month or the year, from the same figures.</li>
+        <li><b>Daily sales.</b> The day, the week, the month or the year, from the same figures.</li>
         <li><b>Purchases.</b> Bought against sold, by month and by department.</li>
         <li><b>Departments.</b> Each category against its target margin, this year and last.</li>
         <li><b>Fuel.</b> Gallons and cents per gallon, weighted properly across stores.</li>

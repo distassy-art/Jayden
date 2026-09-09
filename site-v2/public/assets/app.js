@@ -71,7 +71,7 @@ const ROUTES = [
   { path: "/rankings", title: "Rankings", icon: "rankings", group: "Performance", render: renderRankings, bind: bindRankings, roles: ["admin", "owner"] },
 
   { path: "/buy", title: "The buy", icon: "pricing", group: "Operations", render: renderBudget, bind: bindBudget },
-  { path: "/daily", title: "Daily close", icon: "calendar", group: "Operations", render: renderDaily, bind: bindDaily },
+  { path: "/daily", title: "Daily sales", icon: "calendar", group: "Operations", render: renderDaily, bind: bindDaily },
   { path: "/invoices", title: "S2K invoices", icon: "invoice", group: "Operations", render: renderInvoices, bind: bindInvoices },
   { path: "/pricing", title: "Pricing", icon: "pricing", group: "Operations", render: renderPricing },
 

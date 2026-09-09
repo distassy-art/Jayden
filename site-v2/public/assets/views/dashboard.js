@@ -87,7 +87,7 @@ function currentMonthSection(ctx) {
       <h3>This month so far</h3>
       <span class="hint">${esc(label)}${through ? ` · through ${esc(through)}` : ""}${mtd.stores > 1 ? ` · ${esc(num(mtd.stores))} stores filed` : ""}</span>
       <span class="spacer"></span>
-      <a class="btn btn-sm btn-ghost" href="#/daily">Daily close ${icon("chevron")}</a>
+      <a class="btn btn-sm btn-ghost" href="#/daily">Daily sales ${icon("chevron")}</a>
     </div>
     <div class="card-body">
       <div class="grid cols-4">

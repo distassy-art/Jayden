@@ -1,10 +1,11 @@
 /*
- * Daily close: one report at four grains.
+ * Daily sales: one report at four grains.
  *
- * The old site had four separate pages — Daily, Weekly, Monthly, Yearly —
- * showing the same report at four grains, numbered like filing steps. Here the
- * grain is a control, so one page answers all four and can also be scoped to a
- * client or a single store.
+ * Every store files a sales sheet at the close of each day. This page adds those
+ * sheets up and shows them by day, week, month or year — the grain is a control,
+ * so one page answers all four and can also be scoped to a client or a single
+ * store. (It is not a cash-register close-out; it is the sales-and-profit summary
+ * the old site split across four pages: Daily, Weekly, Monthly, Yearly.)
  */
 
 import {
@@ -60,10 +61,10 @@ function rollupTable(model, rows, ids) {
 
   const columns = [
     { head: "Latest day", sub: day ? periodLabel(day.key, "day") : "—", totals: day },
-    { head: "That week", sub: week ? periodLabel(week.key, "week") : "—", totals: week },
-    { head: "That month", sub: month ? periodLabel(month.key, "month") : "—", totals: month },
+    { head: "Its week", sub: week ? periodLabel(week.key, "week") : "—", totals: week },
+    { head: "Its month", sub: month ? periodLabel(month.key, "month") : "—", totals: month },
     {
-      head: "Year to date",
+      head: "Year so far",
       sub: `${monthLabel(model.ytdKeys[0], true)} – ${monthLabel(model.ytdKeys[model.ytdKeys.length - 1], true)}`,
       totals: year,
       book: true,
@@ -93,17 +94,22 @@ function rollupTable(model, rows, ids) {
 
   return `<section class="card" style="margin-bottom:16px">
     <div class="card-head">
-      <h3>The latest day in context</h3>
-      <span class="hint">The most recent posted day, and the week, month and year it falls in</span>
+      <h3>Your latest day, rolled up</h3>
+      <span class="hint">The same six numbers zoomed out from a day to the year</span>
+    </div>
+    <div class="card-body" style="padding-bottom:0">
+      <p class="muted" style="margin:0 0 12px">Read left to right to zoom out: your most recent
+        posted day, the week and the month that day falls in, and the year so far.</p>
     </div>
     <div class="table-wrap"><table class="table">
       <thead><tr><th></th>${heads}</tr></thead>
       <tbody>${body}</tbody>
     </table></div>
     <div class="card-foot tiny muted">
-      Day, week and month are added up from posted daily sheets (${esc(filed)}).
-      Year to date comes from the closed monthly books, which reach back further
-      than the daily sheets do. A “store-day” is one store's numbers for one day.
+      Day, week and month are added up from the posted daily sheets (${esc(filed)}).
+      The year comes from the closed monthly books, which reach back further than the
+      daily sheets do. A “store-day” is one store's sheet for one day, so with several
+      stores in view a single date can be several store-days.
     </div>
   </section>`;
 }
@@ -120,8 +126,9 @@ export function renderDaily(ctx) {
 
   if (!rows.length) {
     return `<div class="page-head">
-        <h2>Daily close</h2>
-        <p>What sold, what was bought, and what it left behind, for <b>${esc(scope.label)}</b>.</p>
+        <h2>Daily sales</h2>
+        <p>The end-of-day sales sheet each store files — what sold, what was bought, and the
+          profit left over — for <b>${esc(scope.label)}</b>.</p>
       </div>${bar}
       <section class="card"><div class="card-body">
         ${emptyState("No day-level figures for this scope",
@@ -142,7 +149,7 @@ export function renderDaily(ctx) {
   const grain = scope.period === "day" ? "day"
     : scope.period === "week" ? "week"
     : scope.period === "month" ? "month" : "year";
-  const title = scope.period === "day" ? "Daily close"
+  const title = scope.period === "day" ? "Daily sales"
     : scope.period === "week" ? "Weekly totals"
     : scope.period === "month" ? "Monthly totals" : "Yearly totals";
 
@@ -175,9 +182,10 @@ export function renderDaily(ctx) {
   return `
     <div class="page-head">
       <h2>${esc(title)}</h2>
-      <p>What sold, what was bought, and what it left behind for <b>${esc(scope.label)}</b>.
-        Use the <b>Period</b> buttons above to switch between day, week, month and year.
-        Showing ${esc(covered)}.</p>
+      <p>Every store files a sales sheet at the close of each day — gallons pumped, what the
+        store sold, what it bought, and the profit left over. This page adds those sheets up for
+        <b>${esc(scope.label)}</b>, one row per ${esc(grain)}. Use the <b>Period</b> buttons above
+        to switch between day, week, month and year. Showing ${esc(covered)}.</p>
     </div>
     ${bar}
 
@@ -222,9 +230,10 @@ export function renderDaily(ctx) {
       <div class="table-wrap"><table class="table">
         <thead><tr>
           <th>${esc(grain.charAt(0).toUpperCase() + grain.slice(1))}</th>
-          <th class="num">Store-days</th><th class="num">Gallons</th><th class="num">Fuel profit</th>
+          <th class="num" title="One store's sheet for one day">Store-days</th>
+          <th class="num">Gallons</th><th class="num">Fuel profit</th>
           <th class="num">$/gal</th><th class="num">Sales</th><th class="num">Bought</th>
-          <th class="num">Store profit</th><th class="num">Margin</th><th class="num">Total</th>
+          <th class="num">Store profit</th><th class="num">Margin</th><th class="num">Total profit</th>
         </tr></thead>
         <tbody>${table}</tbody>
         <tfoot><tr>
