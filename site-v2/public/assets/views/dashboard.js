@@ -8,7 +8,9 @@ import {
   attentionItems, portfolioSeries, portfolioTotals, stationScorecards,
 } from "../analytics.js";
 import { inScope, invoiceStores } from "../scope.js";
-import { currentStores, rollupDeptBudget, rollupWeeks } from "../current.js";
+import {
+  currentStores, partitionByPeriod, rollupDeptBudget, rollupWeeks,
+} from "../current.js";
 
 const SEVERITY_TONE = { high: "neg", medium: "warn", low: "info" };
 
@@ -92,8 +94,11 @@ export function renderDashboard(ctx) {
   // The feeds arrive whole; the attention list must only rank work for stores
   // this account can see, or a manager is told about another client's invoices.
   // The open month is already limited to stores the account holds; the scope
-  // narrows it again to whatever the user is looking at.
-  const buyStores = current ? currentStores(current, ctx.scope) : [];
+  // narrows it again to whatever the user is looking at, and stores still
+  // sitting on last month are left out so their figures cannot be added in.
+  const buyStores = current
+    ? partitionByPeriod(currentStores(current, ctx.scope)).filed
+    : [];
   const attention = attentionItems(model, {
     ...data,
     buy: buyStores.length ? {

@@ -10,8 +10,8 @@ import {
   deltaBadge, downloadCsv, emptyState, esc, icon, isNum, money, num, pct,
 } from "../ui.js";
 import {
-  currentStores, rollupDepartments, rollupDeptBudget, rollupLastYear, rollupMtd,
-  rollupProjection, rollupWeeks,
+  currentStores, partitionByPeriod, rollupDepartments, rollupDeptBudget,
+  rollupLastYear, rollupMtd, rollupProjection, rollupWeeks,
 } from "../current.js";
 import { bindScopeBar, scopeBar } from "../scope.js";
 
@@ -24,9 +24,9 @@ function usedTone(used) {
 }
 
 function meter(used) {
-  const tone = usedTone(used);
-  const width = Math.max(0, Math.min(1, Number(used) || 0)) * 100;
-  return `<span class="meter meter-${tone || "pos"}" role="img"
+  if (!isNum(used)) return "";
+  const width = Math.max(0, Math.min(1, Number(used))) * 100;
+  return `<span class="meter meter-${usedTone(used)}" role="img"
       aria-label="${esc(pct(used, { digits: 0 }))} of budget used">
     <span style="width:${width.toFixed(1)}%"></span>
   </span>`;
@@ -57,9 +57,32 @@ export function renderBudget(ctx) {
     return head(missing(scope.label, "open month", "The manager feed is unavailable."));
   }
 
-  const stores = currentStores(current, scope);
-  if (!stores.length) {
+  const inScope = currentStores(current, scope);
+  if (!inScope.length) {
     return head(missing(scope.label, "stores in this scope", ""));
+  }
+
+  /*
+   * Only stores that have filed into the open month are summed. A store still
+   * sitting on August reports a full month's trading, which would swamp stores
+   * that have filed a week of September and make every total meaningless.
+   */
+  const { filed: stores, behind } = partitionByPeriod(inScope);
+
+  const behindNote = behind.length ? `<div class="warn-box" style="margin-bottom:16px">
+    ${icon("alert")}<div>
+      <b>${esc(num(behind.length))} of ${esc(num(inScope.length))}
+        store${inScope.length === 1 ? "" : "s"} ${behind.length === 1 ? "has" : "have"}
+        filed nothing for ${esc(current.label.replace(/ month to date$/i, ""))}.</b>
+      <div>${esc(behind.map((store) => `${store.name} (last filed ${store.month || "—"})`).join(", "))}
+        — left out of everything below, because their last month cannot be added
+        to this one.</div>
+    </div>
+  </div>` : "";
+
+  if (!stores.length) {
+    return head(behindNote + missing(scope.label, "figures for the open month",
+      "No store in this scope has filed into the current month yet."));
   }
 
   const mtd = rollupMtd(stores);
@@ -70,29 +93,42 @@ export function renderBudget(ctx) {
   const departments = rollupDepartments(stores);
 
   const estimated = stores.filter((store) => store.estimates.budget);
-  const idle = stores.filter((store) => store.estimates.noOperatingDays);
 
   /* ---- headline ---------------------------------------------------------- */
 
   const spent = budget.reduce((sum, row) => sum + row.spent, 0);
   const allowed = budget.reduce((sum, row) => sum + (row.budget || 0), 0);
-  const left = allowed - spent;
-  const used = allowed ? spent / allowed : null;
+  // Most of the headline is portfolio-wide, but headroom only means anything
+  // for stores that actually carry a budget. Saying how many stops the two
+  // figures being read as covering the same set of stores.
+  const budgeted = stores.filter((store) =>
+    store.deptBudget.some((row) => Number(row.budget) > 0)).length;
+  const coverage = budgeted < stores.length
+    ? `across ${num(budgeted)} of ${num(stores.length)} stores`
+    : "";
+  // No budget at all is a different thing from a budget with nothing left, and
+  // showing "$0" for both would read as the alarming one.
+  const hasBudget = allowed > 0;
+  const left = hasBudget ? allowed - spent : null;
+  const used = hasBudget ? spent / allowed : null;
 
   const liveWeek = weeks.filter((row) => row.started).slice(-1)[0] || null;
 
   const stats = `<div class="grid cols-4" style="margin-bottom:16px">
     <div class="stat">
       <div class="stat-label">Left to spend this month</div>
-      <div class="stat-value${left < 0 ? " neg-text" : ""}" style="font-size:23px">${esc(money(left))}</div>
+      <div class="stat-value${isNum(left) && left < 0 ? " neg-text" : ""}" style="font-size:23px">
+        ${esc(hasBudget ? money(left) : "—")}</div>
       <div class="stat-foot">
-        <span>${esc(money(spent))} of ${esc(money(allowed))} used</span>
+        <span>${hasBudget
+          ? `${esc(money(spent))} of ${esc(money(allowed))} used`
+          : `no budget loaded · ${esc(money(spent))} bought`}</span>
       </div>
     </div>
     <div class="stat">
-      <div class="stat-label">Budget used</div>
+      <div class="stat-label">Budget used${coverage ? ` ${esc(coverage)}` : ""}</div>
       <div class="stat-value" style="font-size:23px">${esc(pct(used, { digits: 0 }))}</div>
-      <div class="stat-foot">${meter(used)}</div>
+      <div class="stat-foot">${meter(used) || "<span>not budgeted</span>"}</div>
     </div>
     <div class="stat">
       <div class="stat-label">This week against its ceiling</div>
@@ -118,10 +154,11 @@ export function renderBudget(ctx) {
       ${scope.stationIds && scope.stationIds.length > 1 && row.stores > 1
         ? `<div class="cell-sub">${esc(num(row.stores))} stores</div>` : ""}</td>
     <td class="num">${esc(money(row.spent))}</td>
-    <td class="num muted">${esc(money(row.budget))}</td>
+    <td class="num muted">${row.budget ? esc(money(row.budget)) : "—"}</td>
     <td style="min-width:120px">${meter(row.used)}</td>
     <td class="num">${esc(pct(row.used, { digits: 0 }))}</td>
-    <td class="num strong${row.left < 0 ? " neg-text" : ""}">${esc(money(row.left))}</td>
+    <td class="num strong${isNum(row.left) && row.left < 0 ? " neg-text" : ""}">
+      ${row.budget ? esc(money(row.left)) : '<span class="muted">not budgeted</span>'}</td>
   </tr>`).join("");
 
   const budgetCard = budget.length ? `<section class="card">
@@ -142,10 +179,11 @@ export function renderBudget(ctx) {
       <tfoot><tr>
         <th scope="row">All departments</th>
         <td class="num strong">${esc(money(spent))}</td>
-        <td class="num">${esc(money(allowed))}</td>
+        <td class="num">${esc(hasBudget ? money(allowed) : "—")}</td>
         <td>${meter(used)}</td>
         <td class="num">${esc(pct(used, { digits: 0 }))}</td>
-        <td class="num strong${left < 0 ? " neg-text" : ""}">${esc(money(left))}</td>
+        <td class="num strong${isNum(left) && left < 0 ? " neg-text" : ""}">
+          ${esc(hasBudget ? money(left) : "—")}</td>
       </tr></tfoot>
     </table></div>
     ${estimated.length ? `<div class="card-foot">
@@ -164,8 +202,7 @@ export function renderBudget(ctx) {
   const weekRows = weeks.map((row) => {
     const state = !row.started ? "upcoming" : row.over > 0 ? "over" : "under";
     return `<tr${state === "upcoming" ? ' class="is-quiet"' : ""}>
-      <td class="strong">${esc(row.label)}
-        ${row.mixedWeeks ? '<div class="cell-sub">stores cut this week on different days</div>' : ""}</td>
+      <td class="strong">${esc(row.label)}</td>
       <td class="num muted">${esc(money(row.maximum))}</td>
       <td class="num">${row.started ? esc(money(row.actual)) : "—"}</td>
       <td>${row.started ? meter(row.maximum ? row.actual / row.maximum : null) : ""}</td>
@@ -174,10 +211,17 @@ export function renderBudget(ctx) {
     </tr>`;
   }).join("");
 
+  // Not every store carries weekly ceilings, so the totals here can cover fewer
+  // stores than the department budget above. Say so rather than let the two be
+  // read as the same population.
+  const ceilinged = Math.max(0, ...weeks.map((week) => week.stores));
+  const mixedWeeks = weeks.some((week) => week.mixedWeeks);
   const weekCard = weeks.length ? `<section class="card">
     <div class="card-head">
       <h3>The month, week by week</h3>
-      <span class="hint">A ceiling per week, so the month cannot be spent in its first ten days</span>
+      <span class="hint">${ceilinged < stores.length
+        ? `${esc(num(ceilinged))} of ${esc(num(stores.length))} stores carry a weekly ceiling`
+        : "A ceiling per week, so the month cannot be spent in its first ten days"}</span>
     </div>
     <div class="table-wrap"><table class="table">
       <thead><tr>
@@ -189,6 +233,11 @@ export function renderBudget(ctx) {
       </tr></thead>
       <tbody>${weekRows}</tbody>
     </table></div>
+    ${mixedWeeks ? `<div class="card-foot"><div class="warn-box">${icon("alert")}
+      <div><b>Stores do not all cut the week on the same day.</b>
+        These rows are summed by position in the month, so a week's total can span
+        two slightly different date ranges. Open a single store for its own dates.</div>
+    </div></div>` : ""}
   </section>` : "";
 
   /* ---- departments against target ---------------------------------------- */
@@ -196,10 +245,11 @@ export function renderBudget(ctx) {
   const offTarget = departments.filter((row) => isNum(row.short) && row.short < 0);
 
   const deptRows = departments.map((row) => `<tr>
-    <td class="strong">${esc(row.name)}</td>
+    <td class="strong">${esc(row.name)}
+      ${row.reported ? "" : '<div class="cell-sub">no profit reported</div>'}</td>
     <td class="num">${esc(money(row.sales))}</td>
     <td class="num">${esc(money(row.purchases))}</td>
-    <td class="num${Number(row.profit) < 0 ? " neg-text strong" : ""}">${esc(money(row.profit))}</td>
+    <td class="num${isNum(row.profit) && row.profit < 0 ? " neg-text strong" : ""}">${esc(money(row.profit))}</td>
     <td class="num">${esc(pct(row.margin))}</td>
     <td class="num muted">${esc(pct(row.target))}</td>
     <td class="num">${isNum(row.short)
@@ -230,10 +280,18 @@ export function renderBudget(ctx) {
 
   /* ---- where the month is heading ---------------------------------------- */
 
+  // Stores are not all filed to the same day, so say the range rather than
+  // implying every store has reached the longest run.
+  const dayRuns = stores.map((store) => store.mtd?.days).filter(isNum);
+  const shortest = dayRuns.length ? Math.min(...dayRuns) : null;
+  const filedLabel = isNum(shortest) && shortest !== mtd?.days
+    ? `${num(shortest)}–${num(mtd.days)}`
+    : num(mtd?.days);
+
   const paceCard = mtd && projection ? `<section class="card">
     <div class="card-head">
       <h3>Where the month is heading</h3>
-      <span class="hint">${esc(num(mtd.days))} of ${esc(num(projection.daysInMonth))} days filed</span>
+      <span class="hint">${esc(filedLabel)} of ${esc(num(projection.daysInMonth))} days filed</span>
     </div>
     <div class="table-wrap"><table class="table">
       <thead><tr>
@@ -276,32 +334,45 @@ export function renderBudget(ctx) {
 
   /* ---- store breakdown --------------------------------------------------- */
 
+  /*
+   * Two different populations sit side by side here, so they are separated
+   * rather than blended: sold, bought and the ratio between them cover the
+   * whole store, while the budget and its headroom cover only the departments
+   * that carry one. Putting budgeted spend under a column called "bought"
+   * next to a whole-store ratio made the two look like they should divide.
+   */
   const perStore = stores.length > 1 ? `<section class="card">
     <div class="card-head"><h3>By store</h3>
       <span class="hint">Least headroom first</span></div>
     <div class="table-wrap"><table class="table">
-      <thead><tr>
-        <th>Store</th>
-        <th class="num">Bought</th>
-        <th class="num">Budget</th>
-        <th class="num">Left</th>
-        <th class="num">Sold</th>
-        <th class="num">Bought / sold</th>
-      </tr></thead>
+      <thead>
+        <tr>
+          <th rowspan="2">Store</th>
+          <th class="num" colspan="3">The whole store</th>
+          <th class="num" colspan="2">Budgeted departments</th>
+        </tr>
+        <tr>
+          <th class="num">Sold</th>
+          <th class="num">Bought</th>
+          <th class="num">Bought / sold</th>
+          <th class="num">Budget</th>
+          <th class="num">Left to spend</th>
+        </tr>
+      </thead>
       <tbody>${stores.map((store) => {
-        const rows = store.deptBudget;
-        const s = rows.reduce((sum, row) => sum + row.spent, 0);
-        const b = rows.reduce((sum, row) => sum + (row.budget || 0), 0);
-        return { store, spent: s, budget: b, left: b ? b - s : null };
-      }).sort((a, b) => (a.left ?? Infinity) - (b.left ?? Infinity)).map(({ store, spent: s, budget: b, left: l }) => `<tr>
+        const spentHere = store.deptBudget.reduce((sum, row) => sum + row.spent, 0);
+        const allowedHere = store.deptBudget.reduce((sum, row) => sum + (row.budget || 0), 0);
+        return { store, budget: allowedHere, left: allowedHere ? allowedHere - spentHere : null };
+      }).sort((a, b) => (a.left ?? Infinity) - (b.left ?? Infinity))
+        .map(({ store, budget: b, left: l }) => `<tr>
         <td class="strong"><a href="#/store/${esc(store.id)}">${esc(store.name)}</a>
-          <div class="cell-sub">${esc(store.id)}${store.estimates.noOperatingDays
-            ? " · no days filed this month" : ""}</div></td>
-        <td class="num">${esc(money(s))}</td>
-        <td class="num muted">${b ? esc(money(b)) : "—"}</td>
-        <td class="num strong${isNum(l) && l < 0 ? " neg-text" : ""}">${isNum(l) ? esc(money(l)) : "—"}</td>
+          <div class="cell-sub">${esc(store.id)} · ${esc(num(store.mtd?.days))} days filed</div></td>
         <td class="num">${esc(money(store.mtd?.sales))}</td>
+        <td class="num">${esc(money(store.mtd?.purchases))}</td>
         <td class="num">${esc(pct(store.mtd?.buy_ratio))}</td>
+        <td class="num muted">${b ? esc(money(b)) : "—"}</td>
+        <td class="num strong${isNum(l) && l < 0 ? " neg-text" : ""}">
+          ${isNum(l) ? esc(money(l)) : '<span class="muted">not budgeted</span>'}</td>
       </tr>`).join("")}</tbody>
     </table></div>
   </section>` : "";
@@ -321,14 +392,8 @@ export function renderBudget(ctx) {
     </div>
   </section>` : "";
 
-  const idleNote = idle.length ? `<div class="warn-box" style="margin-bottom:16px">${icon("alert")}
-    <div><b>${esc(num(idle.length))} ${idle.length === 1 ? "store has" : "stores have"} filed no
-      operating days this month.</b> Their figures come from the last daily file we hold, so the
-      budget headroom shown for them is stale.</div>
-  </div>` : "";
-
   return head(`
-    ${idleNote}
+    ${behindNote}
     ${stats}
     ${budgetCard}
     ${weekCard}

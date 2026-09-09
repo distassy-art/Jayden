@@ -90,6 +90,18 @@ def main():
                 check(close(row["left"], src["month_budget"] - (src.get("purchases_mtd") or 0)),
                       f"{store['id']} {row['name']}: headroom does not subtract")
 
+        # No total or blank row may survive into a per-store department list.
+        for row in store["departments"]:
+            check(not TOTAL_ROW.match(row["name"]),
+                  f"{store['id']}: a total row survived into the department list")
+        raw_trading = [d for d in (raw.get("departments") or [])
+                       if not TOTAL_ROW.match(d.get("name") or "")
+                       and any(num(d.get(k)) not in (None, 0) for k in
+                               ("sales", "purchases", "profit", "margin", "target_margin"))]
+        check(len(raw_trading) == len(store["departments"]),
+              f"{store['id']}: {len(store['departments'])} departments, "
+              f"the feed has {len(raw_trading)} that actually report anything")
+
         # Weekly ceilings.
         weeks = raw.get("weekly_budget") or []
         check(len(weeks) == len(store["weeks"]),
@@ -119,10 +131,44 @@ def main():
 
     print(f"  ok    {len(console['stores'])} stores reconciled line by line\n")
 
+    # ---- which stores may be summed at all --------------------------------
+    #
+    # A store that has filed nothing since August still reports an `mtd` block
+    # — for August, sometimes a *complete* August. Adding that to stores which
+    # have filed a week of September produces a total belonging to no month,
+    # dominated by whichever store is furthest behind. The open month is taken
+    # from the feed's own as-of date, and only stores inside it are summed.
+    print("Open-month membership")
+    open_month = (feed.get("as_of") or "")[:7]
+    check(bool(open_month), "feed carries no as_of date to anchor the open month")
+
+    expected_filed, expected_behind = [], []
+    for raw in feed["stations"]:
+        through = ((raw.get("mtd") or {}).get("through") or "")[:7]
+        (expected_filed if through and through == open_month else expected_behind).append(str(raw["id"]))
+
+    got_behind = sorted(s["id"] for s in console["behind"])
+    check(got_behind == sorted(expected_behind),
+          f"behind stores: console says {got_behind}, the dates say {sorted(expected_behind)}")
+    check(console["month"] == open_month,
+          f"open month: console says {console['month']}, as_of says {open_month}")
+    for store in console["stores"]:
+        want = bool(store["month"] and store["month"] == open_month)
+        check(store["onPeriod"] == want,
+              f"{store['id']}: onPeriod {store['onPeriod']} but filed through {store['month']}")
+
+    print(f"  ok    {len(expected_filed)} stores in {open_month}, "
+          f"{len(expected_behind)} still on an earlier month "
+          f"({', '.join(expected_behind) or 'none'})\n")
+
+    summed = {s["id"] for s in console["stores"] if s["onPeriod"]}
+
     # ---- roll-ups --------------------------------------------------------
     print("Roll-ups")
     totals = defaultdict(float)
     for raw in feed["stations"]:
+        if str(raw["id"]) not in summed:
+            continue
         for key in SUMMABLE:
             if num((raw.get("mtd") or {}).get(key)) is not None:
                 totals[key] += raw["mtd"][key]
@@ -136,12 +182,15 @@ def main():
           "rollup: buy ratio was averaged rather than recomputed")
 
     # Days must be a span, not a sum.
-    longest = max((s.get("mtd") or {}).get("days") or 0 for s in feed["stations"])
+    longest = max(((s.get("mtd") or {}).get("days") or 0)
+                  for s in feed["stations"] if str(s["id"]) in summed)
     check(console["rollup"]["mtd"]["days"] == longest,
           f"rollup: {console['rollup']['mtd']['days']} days, longest run is {longest}")
 
     budget = defaultdict(lambda: [0.0, 0.0])
     for raw in feed["stations"]:
+        if str(raw["id"]) not in summed:
+            continue
         for item in ((raw.get("dept_budget") or {}).get("items") or []):
             if TOTAL_ROW.match(item.get("name", "")):
                 continue
@@ -157,6 +206,8 @@ def main():
 
     weeks = defaultdict(lambda: [0.0, 0.0])
     for raw in feed["stations"]:
+        if str(raw["id"]) not in summed:
+            continue
         for i, week in enumerate(raw.get("weekly_budget") or []):
             weeks[i][0] += week.get("maximum") or 0
             weeks[i][1] += week.get("actual") or 0
@@ -168,19 +219,54 @@ def main():
         check(close(row["actual"], actual), f"rollup week {row['index'] + 1}: spend mismatch")
 
     # Blended department targets are weighted by sales, not averaged flat.
-    weighted = defaultdict(lambda: [0.0, 0.0, 0.0, 0.0])
+    #
+    # The same two exclusions are applied here from scratch: a "TOTAL" line
+    # double-counts, and some sheets carry a reconciliation block ("Metric",
+    # "Receipt Amount", "Difference") that parses in with every figure empty.
+    # Deriving them independently means the console cannot quietly drop a real
+    # department, or quietly keep an artefact, without this disagreeing.
+    def trading(dept):
+        if TOTAL_ROW.match(dept.get("name") or ""):
+            return False
+        return any(num(dept.get(k)) not in (None, 0)
+                   for k in ("sales", "purchases", "profit", "margin", "target_margin"))
+
+    weighted = defaultdict(lambda: [0.0, 0.0, 0.0, 0.0, 0])
     for raw in feed["stations"]:
+        if str(raw["id"]) not in summed:
+            continue
         for dept in (raw.get("departments") or []):
+            if not trading(dept):
+                continue
             slot = weighted[dept["name"]]
             slot[0] += dept.get("sales") or 0
             slot[1] += dept.get("profit") or 0
             if num(dept.get("target_margin")) is not None and num(dept.get("sales")) is not None:
                 slot[2] += dept["target_margin"] * dept["sales"]
                 slot[3] += dept["sales"]
+            if num(dept.get("profit")) is not None:
+                slot[4] += 1
+    check(len(weighted) == len(console["rollup"]["departments"]),
+          f"rollup: {len(console['rollup']['departments'])} traded departments, "
+          f"the feed has {len(weighted)} once totals and blank rows are dropped "
+          f"({sorted(set(weighted) ^ {r['name'] for r in console['rollup']['departments']})})")
+
     for row in console["rollup"]["departments"]:
-        sales, profit, tw, ts = weighted[row["name"]]
+        sales, profit, tw, ts, reported = weighted[row["name"]]
         check(close(row["sales"], sales), f"rollup dept {row['name']}: sales mismatch")
-        check(close(row["profit"], profit), f"rollup dept {row['name']}: profit mismatch")
+
+        # A department nobody reported profit for must come back unknown, not
+        # zero — otherwise it shows a 0% margin and ranks as a failing category.
+        if reported:
+            check(close(row["profit"], profit), f"rollup dept {row['name']}: profit mismatch")
+            check(close(row["margin"], profit / sales, 1e-6) if sales else row["margin"] is None,
+                  f"rollup dept {row['name']}: margin does not divide out")
+        else:
+            check(row["profit"] is None,
+                  f"rollup dept {row['name']}: unreported profit came back as {row['profit']}")
+            check(row["margin"] is None and row["short"] is None,
+                  f"rollup dept {row['name']}: judged against target with no profit reported")
+
         if ts:
             check(close(row["target"], tw / ts, 1e-6),
                   f"rollup dept {row['name']}: target was averaged flat, not weighted by sales")

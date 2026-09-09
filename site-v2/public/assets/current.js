@@ -18,8 +18,21 @@
 
 import { isNum } from "./ui.js";
 
-/** Rows in the department budget that are totals rather than departments. */
+/** Rows that are a total rather than a department; summing them double-counts. */
 const TOTAL_ROW = /^total\b/i;
+
+/**
+ * Not every row in the department list is a department.
+ * Some stores' sheets carry a reconciliation block — "Metric", "Receipt
+ * Amount", "Difference" — that parses into the same array with every figure
+ * empty. Rather than keep a denylist of labels that will rot, drop any row that
+ * reports nothing at all.
+ */
+function isTradingRow(row) {
+  if (!row?.name || TOTAL_ROW.test(row.name)) return false;
+  return ["sales", "purchases", "profit", "margin", "target_margin"]
+    .some((key) => isNum(row[key]) && Number(row[key]) !== 0);
+}
 
 const SUMMABLE = [
   "sales", "purchases", "store_profit", "gas_vol", "gas_profit", "total_profit",
@@ -44,6 +57,12 @@ function withRatios(totals) {
     out.total_profit = Number(out.gas_profit || 0) + Number(out.store_profit || 0);
   }
   return out;
+}
+
+/** The `YYYY-MM` a date string falls in. */
+function monthOf(date) {
+  const match = /^(\d{4}-\d{2})/.exec(String(date || ""));
+  return match ? match[1] : null;
 }
 
 /** Days in the calendar month that a `YYYY-MM-DD` string falls in. */
@@ -111,7 +130,7 @@ function normaliseDeptBudget(block) {
 }
 
 function normaliseDepartments(rows) {
-  return (rows || []).map((row) => {
+  return (rows || []).filter(isTradingRow).map((row) => {
     const margin = numOrNull(row.margin);
     const target = numOrNull(row.target_margin);
     return {
@@ -126,14 +145,24 @@ function normaliseDepartments(rows) {
   });
 }
 
-function normaliseStore(raw) {
+function normaliseStore(raw, openMonth) {
   const mtd = raw?.mtd || null;
   const gaps = raw?.gaps || [];
+  const month = monthOf(mtd?.through);
 
   return {
     id: String(raw.id),
     name: raw.name || String(raw.id),
     group: raw.group || "",
+    month,
+    /*
+     * Whether this store's figures belong to the month everyone else is in.
+     * A store that has filed nothing since August still reports an `mtd` block
+     * — for August. Summing it with September's stores mixes two months into
+     * one total, and a store that filed a *whole* month drowns out stores that
+     * have filed a week.
+     */
+    onPeriod: Boolean(month && openMonth && month === openMonth),
     mtd: mtd ? withRatios({
       days: Number(mtd.days || 0),
       through: mtd.through || null,
@@ -174,18 +203,35 @@ export function buildCurrent(feed, { stores = null } = {}) {
   if (!feed?.stations) return null;
   const only = stores ? new Set(stores.map(String)) : null;
 
+  // The feed's own as-of date defines the open month, so a store that has not
+  // filed into it can be recognised however far behind it is.
+  const openMonth = monthOf(feed.as_of)
+    || monthOf([...feed.stations].map((row) => row?.mtd?.through).filter(Boolean).sort().pop());
+
   const list = feed.stations
     .filter((row) => row?.id && (!only || only.has(String(row.id))))
-    .map(normaliseStore)
+    .map((row) => normaliseStore(row, openMonth))
     .sort((a, b) => a.name.localeCompare(b.name));
 
   return {
     asOf: feed.as_of || null,
+    month: openMonth,
     label: feed.period?.label || "Month to date",
     lastClosedMonth: feed.period?.last_closed_month || "",
     note: feed.period?.note || "",
     stores: list,
     byId: new Map(list.map((store) => [store.id, store])),
+  };
+}
+
+/**
+ * Split a list into the stores that have filed into the open month and those
+ * that have not. Nothing should be summed across the two.
+ */
+export function partitionByPeriod(stores) {
+  return {
+    filed: stores.filter((store) => store.onPeriod),
+    behind: stores.filter((store) => !store.onPeriod),
   };
 }
 
@@ -266,10 +312,12 @@ export function rollupWeeks(stores) {
   return [...byIndex.values()]
     .sort((a, b) => a.index - b.index)
     .map((bucket) => {
+      // Where stores disagree, the label most of them use is far more useful
+      // than a generic "Week 3"; the disagreement is reported separately.
       const labels = [...bucket.labels.entries()].sort((a, b) => b[1] - a[1]);
       return {
         index: bucket.index,
-        label: labels.length === 1 ? labels[0][0] : `Week ${bucket.index + 1}`,
+        label: labels[0]?.[0] || `Week ${bucket.index + 1}`,
         mixedWeeks: labels.length > 1,
         stores: bucket.stores,
         maximum: bucket.maximum,
@@ -287,13 +335,13 @@ export function rollupDeptBudget(stores) {
   stores.forEach((store) => {
     store.deptBudget.forEach((row) => {
       if (!byName.has(row.name)) {
-        byName.set(row.name, { name: row.name, spent: 0, budget: 0, stores: 0, estimated: false });
+        byName.set(row.name, { name: row.name, spent: 0, budget: 0, stores: 0, derived: 0 });
       }
       const bucket = byName.get(row.name);
       bucket.spent += row.spent || 0;
       if (isNum(row.budget)) bucket.budget += Number(row.budget);
       bucket.stores += 1;
-      if (store.estimates.budget) bucket.estimated = true;
+      if (store.estimates.budget) bucket.derived += 1;
     });
   });
 
@@ -302,6 +350,10 @@ export function rollupDeptBudget(stores) {
       ...row,
       left: row.budget ? row.budget - row.spent : null,
       used: row.budget ? row.spent / row.budget : null,
+      // Only worth flagging a line when the whole of it was worked out. Most
+      // stores' budgets are derived, so flagging any contribution would put the
+      // same badge on every row and mean nothing.
+      estimated: row.derived > 0 && row.derived === row.stores,
     }))
     .sort((a, b) => (b.used ?? -1) - (a.used ?? -1));
 }
@@ -315,13 +367,16 @@ export function rollupDepartments(stores) {
       if (!byName.has(row.name)) {
         byName.set(row.name, {
           name: row.name, sales: 0, purchases: 0, profit: 0, stores: 0,
-          targetWeight: 0, targetSales: 0,
+          targetWeight: 0, targetSales: 0, reported: 0,
         });
       }
       const bucket = byName.get(row.name);
       bucket.sales += row.sales || 0;
       bucket.purchases += row.purchases || 0;
       bucket.profit += row.profit || 0;
+      // A department nobody reported profit for is unknown, not break-even.
+      // Treating the two alike invents a 0% margin and ranks it as a failure.
+      if (isNum(row.profit)) bucket.reported += 1;
       bucket.stores += 1;
       // A blended target has to be weighted by sales, or a tiny store's target
       // counts as much as a large one's.
@@ -334,18 +389,21 @@ export function rollupDepartments(stores) {
 
   return [...byName.values()]
     .map((row) => {
-      const margin = row.sales ? row.profit / row.sales : null;
+      const known = row.reported > 0;
+      const margin = known && row.sales ? row.profit / row.sales : null;
       const target = row.targetSales ? row.targetWeight / row.targetSales : null;
       return {
         name: row.name,
         sales: row.sales,
         purchases: row.purchases,
-        profit: row.profit,
+        profit: known ? row.profit : null,
         stores: row.stores,
+        reported: row.reported,
         margin,
         target,
         short: isNum(margin) && isNum(target) ? margin - target : null,
       };
     })
+    // Departments we cannot judge sort last rather than looking like failures.
     .sort((a, b) => (a.short ?? Infinity) - (b.short ?? Infinity));
 }

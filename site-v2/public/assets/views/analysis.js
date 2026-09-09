@@ -46,7 +46,7 @@ function scopePicker(model, query, path) {
 }
 
 function scopeLabel(model, ids) {
-  if (!ids.length) return `all ${model.stations.length} stores`;
+  if (!ids.length) return `all ${model.stations.length} store${model.stations.length === 1 ? "" : "s"}`;
   return model.byId.get(ids[0])?.name || ids[0];
 }
 

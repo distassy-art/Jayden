@@ -9,8 +9,8 @@
  */
 
 import {
-  buildCurrent, rollupDepartments, rollupDeptBudget, rollupLastYear, rollupMtd,
-  rollupProjection, rollupWeeks,
+  buildCurrent, partitionByPeriod, rollupDepartments, rollupDeptBudget,
+  rollupLastYear, rollupMtd, rollupProjection, rollupWeeks,
 } from "../public/assets/current.js";
 
 const args = process.argv.slice(2);
@@ -23,12 +23,16 @@ const response = await fetch(`${BASE}/api/data/manager.json`, {
 if (!response.ok) throw new Error(`manager.json -> ${response.status}`);
 
 const current = buildCurrent(await response.json());
-const stores = current.stores;
+// The roll-ups cover only stores that filed into the open month, which is what
+// every page sums; the verifier derives the same split from the raw dates.
+const { filed: stores, behind } = partitionByPeriod(current.stores);
 
 process.stdout.write(JSON.stringify({
   asOf: current.asOf,
+  month: current.month,
   label: current.label,
-  stores: stores.map((store) => ({
+  behind: behind.map((store) => ({ id: store.id, month: store.month })),
+  stores: current.stores.map((store) => ({
     id: store.id,
     name: store.name,
     mtd: store.mtd,
@@ -38,6 +42,8 @@ process.stdout.write(JSON.stringify({
     deptBudget: store.deptBudget,
     departments: store.departments,
     gaps: store.gaps,
+    month: store.month,
+    onPeriod: store.onPeriod,
   })),
   rollup: {
     mtd: rollupMtd(stores),

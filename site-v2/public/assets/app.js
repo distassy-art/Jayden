@@ -309,7 +309,7 @@ function paletteEntries() {
 
   (state.model?.owners || []).forEach((owner) => {
     entries.push({
-      label: `${owner.client} · ${owner.stations.length} stores`,
+      label: `${owner.client} · ${owner.stations.length} store${owner.stations.length === 1 ? "" : "s"}`,
       kind: "Owner",
       href: `#/owner/${owner.id}`,
       icon: "owners",

@@ -155,10 +155,15 @@ export function resolveScope(model, query, { owners = model.owners || [] } = {})
   };
   scope.label = station ? station.name
     : owner ? owner.client
-    : `All ${model.stations.length} stores`;
+    : `All ${storeCount(model.stations.length)}`;
 
   remember(scope);
   return scope;
+}
+
+/** "1 store", "13 stores" — a client with one site is not "1 stores". */
+function storeCount(n) {
+  return `${n} store${n === 1 ? "" : "s"}`;
 }
 
 /** Rewrite a hash link so it keeps the current scope and period. */
@@ -252,7 +257,7 @@ export function scopeBar(model, scope, { period = true, csv = true } = {}) {
   }
 
   const ownerOptions = owners
-    .map((owner) => option(owner.id, `${owner.client} · ${owner.stations.length} stores`,
+    .map((owner) => option(owner.id, `${owner.client} · ${storeCount(owner.stations.length)}`,
       scope.owner?.id === owner.id))
     .join("");
 
@@ -284,13 +289,13 @@ export function scopeBar(model, scope, { period = true, csv = true } = {}) {
       <div class="field field-inline">
         <label for="ownerPick">Owner</label>
         <select class="select" id="ownerPick">
-          ${option("", `All ${model.stations.length} stores`, !scope.owner)}${ownerOptions}
+          ${option("", `All ${storeCount(model.stations.length)}`, !scope.owner)}${ownerOptions}
         </select>
       </div>
       <div class="field field-inline">
         <label for="storePick">Store</label>
         <select class="select" id="storePick">
-          ${option("", scope.owner ? `All ${scope.owner.stations.length} stores` : "All stores", !scope.station)}${storeOptions}
+          ${option("", scope.owner ? `All ${storeCount(scope.owner.stations.length)}` : "All stores", !scope.station)}${storeOptions}
         </select>
       </div>
       ${period ? `<div class="field field-inline">

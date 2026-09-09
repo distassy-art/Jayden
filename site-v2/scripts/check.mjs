@@ -13,7 +13,8 @@
 import { buildModel } from "../public/assets/analytics.js";
 import { buildOwners, resolveScope } from "../public/assets/scope.js";
 import {
-  buildCurrent, currentStores, rollupDeptBudget, rollupMtd, rollupWeeks,
+  buildCurrent, currentStores, partitionByPeriod, rollupDeptBudget, rollupMtd,
+  rollupWeeks,
 } from "../public/assets/current.js";
 import { renderDashboard } from "../public/assets/views/dashboard.js";
 import { renderStore, renderStores } from "../public/assets/views/stores.js";
@@ -167,8 +168,20 @@ async function main() {
       }
     }
 
+    /*
+     * Nothing may be summed across two months. A store that has filed nothing
+     * since August still reports a full August in `mtd`, and adding that to
+     * stores which have filed a week of September gives a total belonging to
+     * no month at all.
+     */
+    const split = partitionByPeriod(current.stores);
+    assert(split.filed.every((store) => store.month === current.month),
+      "open month: a store outside the open month was counted as filed");
+    assert(split.behind.every((store) => store.month !== current.month),
+      "open month: a store inside the open month was counted as behind");
+
     // Roll-ups have to reconcile to the parts they were summed from.
-    const all = currentStores(current, { stationIds: null });
+    const all = partitionByPeriod(currentStores(current, { stationIds: null })).filed;
     const rolled = rollupMtd(all);
     if (rolled) {
       const bySales = all.reduce((sum, store) => sum + (store.mtd?.sales || 0), 0);
@@ -191,8 +204,9 @@ async function main() {
     assert(weeks.every((week, i) => week.index === i),
       "open month: weekly ceilings came back out of order");
 
-    process.stdout.write(`  ok    ${current.stores.length} stores through ${current.asOf}, `
-      + `${rolledBudget.length} departments budgeted, ${weeks.length} weeks\n`);
+    process.stdout.write(`  ok    ${split.filed.length} stores in ${current.month} through `
+      + `${current.asOf} (${split.behind.length} behind), ${rolledBudget.length} departments `
+      + `budgeted, ${weeks.length} weeks\n`);
   }
 
   const ctx = (query = "", params = {}) => {
