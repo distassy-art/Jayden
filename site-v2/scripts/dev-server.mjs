@@ -45,6 +45,11 @@ const ENDPOINTS = new Map([
   ["/api/data/billing.json", "/data/billing.json"],
   ["/api/data/pricing.json", "/data/pricing.json"],
   ["/api/data/manager.json", "/data/manager.json"],
+  // Fuel revenue, purchases by vendor, and the open month's days. See the
+  // worker's copy of this map for why each is needed.
+  ["/api/data/monthly.json", "/data/monthly.json"],
+  ["/api/data/vendor-spend.json", "/data/vendor_dly_spend_2026.json"],
+  ["/api/data/daily-open.json", "/data/daily_september.json"],
 ]);
 
 const ASSET_PREFIX = "/api/asset/";
@@ -71,6 +76,27 @@ function resolveUpstream(pathname) {
     if (ASSET_ALLOWED.test(candidate)) return candidate;
   }
   return null;
+}
+
+/*
+ * Mirrors the worker's redaction. The billing feed carries the company's own
+ * bank routing and account numbers; nothing in the console reads them, so they
+ * are dropped rather than proxied to the browser.
+ */
+function redact(upstreamPath, buffer) {
+  if (upstreamPath !== "/data/billing.json") return buffer;
+  try {
+    const body = JSON.parse(buffer.toString("utf8"));
+    if (!body?.payment) return buffer;
+    const payment = { ...body.payment };
+    let hit = false;
+    for (const field of ["routing", "account", "accountNumber", "iban", "swift"]) {
+      if (field in payment) { delete payment[field]; hit = true; }
+    }
+    return hit ? Buffer.from(JSON.stringify({ ...body, payment })) : buffer;
+  } catch {
+    return buffer;
+  }
 }
 
 function sendJson(res, status, body) {
@@ -167,7 +193,7 @@ const server = createServer(async (req, res) => {
         if (req.headers[name]) headers[name] = req.headers[name];
       }
       const upstream = await fetch(`${UPSTREAM}${upstreamPath}`, { headers });
-      const buffer = Buffer.from(await upstream.arrayBuffer());
+      const buffer = redact(upstreamPath, Buffer.from(await upstream.arrayBuffer()));
       res.writeHead(upstream.status, {
         "content-type": upstream.headers.get("content-type") || "application/octet-stream",
         "cache-control": "no-store",

@@ -32,6 +32,26 @@ const ENDPOINTS = new Map([
   ["/api/data/billing.json", "/data/billing.json"],
   ["/api/data/pricing.json", "/data/pricing.json"],
   ["/api/data/manager.json", "/data/manager.json"],
+
+  /*
+   * Three feeds the overlay does not carry.
+   *
+   * `monthly.json` is the only source of `gas_sales` — fuel revenue. Without it
+   * the console can describe fuel as gallons and cents per gallon but cannot
+   * say what fuel actually sold for, which at most sites is the large majority
+   * of the money through the door.
+   *
+   * `vendor-spend.json` breaks purchases down by who they were bought from.
+   * The overlay gives one purchases total per store per month, so an owner can
+   * see buying rise without seeing which vendor caused it.
+   *
+   * `daily-open.json` carries the current month's days. The overlay's own day
+   * records stop at the end of the last closed month for every store but one,
+   * which leaves the daily page blank for the month still being traded.
+   */
+  ["/api/data/monthly.json", "/data/monthly.json"],
+  ["/api/data/vendor-spend.json", "/data/vendor_dly_spend_2026.json"],
+  ["/api/data/daily-open.json", "/data/daily_september.json"],
 ]);
 
 /** Binary assets (invoice and pricing PDFs) served straight through. */
@@ -197,7 +217,45 @@ async function proxy(request, pathname) {
   out.set("cache-control", "no-store");
   out.set("x-preview-source", `${UPSTREAM}${upstreamPath}`);
 
+  const scrubbed = await redact(response, upstreamPath);
+  if (scrubbed !== null) return new Response(scrubbed, { status: response.status, headers: out });
+
   return new Response(response.body, { status: response.status, headers: out });
+}
+
+/*
+ * Secrets the console has no use for.
+ *
+ * The billing feed carries the company's own bank routing and account numbers.
+ * Nothing in the console reads them, but proxying the file verbatim would hand
+ * them to any browser that got past the gate, so they are removed on the way
+ * through. Returns null when there is nothing to change.
+ */
+const REDACTED = {
+  "/data/billing.json": (body) => {
+    if (!body?.payment) return null;
+    const payment = { ...body.payment };
+    let hit = false;
+    for (const field of ["routing", "account", "accountNumber", "iban", "swift"]) {
+      if (field in payment) { delete payment[field]; hit = true; }
+    }
+    return hit ? { ...body, payment } : null;
+  },
+};
+
+async function redact(response, upstreamPath) {
+  const rule = REDACTED[upstreamPath];
+  if (!rule || !response.ok) return null;
+  if (!/application\/json/i.test(response.headers.get("content-type") || "")) return null;
+
+  let body;
+  try {
+    body = await response.clone().json();
+  } catch {
+    return null;
+  }
+  const cleaned = rule(body);
+  return cleaned === null ? null : JSON.stringify(cleaned);
 }
 
 /** Deny indexing and tighten the browser's own guardrails. */
