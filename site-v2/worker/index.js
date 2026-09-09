@@ -371,6 +371,21 @@ export default {
     const assetRequest = new Request(new URL(path + url.search, url), request);
     const asset = await env.ASSETS.fetch(assetRequest);
 
+    // The assets binding normalises some paths by redirecting — an unencoded
+    // "@" in `logo-wordmark-dark@2x.png` becomes "%40", say. It builds that
+    // Location from the mount-less URL it was handed, so under /new the
+    // browser gets sent to /assets/..., off the console and onto the old site,
+    // which 404s. Put the prefix back.
+    if (mount && asset.status >= 300 && asset.status < 400) {
+      const location = asset.headers.get("location");
+      const target = location && new URL(location, url);
+      if (target && target.origin === url.origin && !target.pathname.startsWith(`${mount}/`)) {
+        const headers = new Headers(asset.headers);
+        headers.set("location", `${mount}${target.pathname}${target.search}${target.hash}`);
+        return harden(new Response(null, { status: asset.status, headers }));
+      }
+    }
+
     // Single-page app: unknown paths fall back to the shell so deep links work.
     if (asset.status === 404 && request.method === "GET" && !path.includes(".")) {
       const shell = await env.ASSETS.fetch(new Request(new URL("/index.html", url), request));
