@@ -1,0 +1,16 @@
+{
+  "name": "smartsolutions-admin-preview",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Preview admin console for smartsolutionsai.us — reads live data, writes nothing.",
+  "scripts": {
+    "dev": "node scripts/dev-server.mjs",
+    "check": "node scripts/check.mjs",
+    "logos": "python3 scripts/build-logos.py",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.28.1"
+  }
+}

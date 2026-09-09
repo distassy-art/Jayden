@@ -1,0 +1,15 @@
+{
+  "name": "Smart Solutions AI — Admin console",
+  "short_name": "SSAI Admin",
+  "description": "Portfolio profit, store performance, invoices and data health.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0b2545",
+  "theme_color": "#0b2545",
+  "icons": [
+    { "src": "/assets/favicon-32.png", "sizes": "32x32", "type": "image/png" },
+    { "src": "/assets/logo-mark.png", "sizes": "180x180", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/apple-touch-icon.png", "sizes": "180x180", "type": "image/png", "purpose": "maskable" }
+  ]
+}

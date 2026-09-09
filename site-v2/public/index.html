@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Admin console · Smart Solutions AI</title>
+<meta name="description" content="Smart Solutions AI admin console — portfolio profit, store performance, invoices and data health.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0b2545">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="/assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SSAI Admin">
+<link rel="preload" as="image" href="/assets/logo-wordmark-dark.png">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/auth.css">
+<script>
+  // Apply the stored theme before first paint so the console never flashes light.
+  try {
+    var stored = localStorage.getItem("ssv2_theme");
+    var theme = stored === "light" || stored === "dark"
+      ? stored
+      : (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    document.documentElement.dataset.theme = theme;
+  } catch (e) {}
+</script>
+</head>
+<body>
+<div id="app">
+  <div class="boot">
+    <img src="/assets/logo-mark.png" alt="Smart Solutions AI" width="56" height="56">
+    <div class="boot-bar"><span></span></div>
+  </div>
+</div>
+
+<noscript>
+  <div style="padding:40px;font-family:system-ui,sans-serif;max-width:38rem;margin:0 auto">
+    <h1 style="font-size:20px">JavaScript is required</h1>
+    <p>The admin console renders its tables and charts in the browser. Enable JavaScript and reload.</p>
+  </div>
+</noscript>
+
+<script type="module" src="/assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+#:schema node_modules/wrangler/config-schema.json
+# Preview deployment for the admin console.
+#
+# This is a NEW, separate worker. It never touches `smartsolutions-site`, which
+# keeps serving smartsolutionsai.us exactly as before.
+
+name = "smartsolutions-admin-preview"
+main = "worker/index.js"
+compatibility_date = "2026-09-01"
+workers_dev = true
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+# The worker runs first so /api/* is proxied before the static handler answers.
+run_worker_first = ["/api/*"]
+not_found_handling = "single-page-application"
+
+[observability]
+enabled = true

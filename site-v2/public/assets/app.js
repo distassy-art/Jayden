@@ -1,0 +1,493 @@
+/*
+ * Admin console shell: routing, chrome, sign-in and the command palette.
+ *
+ * Views are pure `render(ctx) -> html` functions plus an optional `bind` that
+ * attaches listeners once the markup is live. Data is loaded once per session
+ * and shared across views, so moving between pages is instant.
+ */
+
+import { icon, initials, esc, timeAgo, toast, monthLabel } from "./ui.js";
+import { buildModel } from "./analytics.js";
+import { invalidate, isAdmin, loadWorkspace, session, signIn } from "./data.js";
+import { renderDashboard } from "./views/dashboard.js";
+import { bindStores, renderStore, renderStores } from "./views/stores.js";
+import {
+  bindInvoices, bindOrders, renderInvoices, renderOrders, renderPricing,
+} from "./views/operations.js";
+import {
+  bindBilling, renderBilling, renderHealth, renderTickets,
+} from "./views/finance.js";
+
+/* -------------------------------------------------------------------------
+   Routes
+   ------------------------------------------------------------------------- */
+
+const ROUTES = [
+  { path: "/", title: "Command centre", icon: "dashboard", group: "Overview", render: renderDashboard },
+  { path: "/stores", title: "Stores", icon: "stores", group: "Overview", render: renderStores, bind: bindStores },
+  { path: "/store/:id", title: "Store", hidden: true, render: renderStore },
+  { path: "/invoices", title: "S2K invoices", icon: "invoice", group: "Operations", render: renderInvoices, bind: bindInvoices },
+  { path: "/orders", title: "Vendor orders", icon: "orders", group: "Operations", render: renderOrders, bind: bindOrders },
+  { path: "/pricing", title: "Pricing", icon: "billing", group: "Operations", render: renderPricing },
+  { path: "/billing", title: "Billing", icon: "billing", group: "Business", render: renderBilling, bind: bindBilling },
+  { path: "/tickets", title: "Tickets", icon: "inbox", group: "Business", render: renderTickets },
+  { path: "/health", title: "Data health", icon: "health", group: "Business", render: renderHealth },
+];
+
+/** Match a hash path against the route table, extracting `:params`. */
+function matchRoute(pathname) {
+  for (const route of ROUTES) {
+    const routeParts = route.path.split("/").filter(Boolean);
+    const pathParts = pathname.split("/").filter(Boolean);
+    if (routeParts.length !== pathParts.length) continue;
+
+    const params = {};
+    const matched = routeParts.every((part, i) => {
+      if (part.startsWith(":")) { params[part.slice(1)] = decodeURIComponent(pathParts[i]); return true; }
+      return part === pathParts[i];
+    });
+    if (matched) return { route, params };
+  }
+  return null;
+}
+
+function parseHash() {
+  const hash = location.hash.replace(/^#/, "") || "/";
+  const [pathname, search = ""] = hash.split("?");
+  return { pathname: pathname || "/", query: new URLSearchParams(search) };
+}
+
+/* -------------------------------------------------------------------------
+   Application state
+   ------------------------------------------------------------------------- */
+
+const state = {
+  user: null,
+  data: null,
+  model: null,
+  loading: false,
+  loadError: null,
+};
+
+const app = document.getElementById("app");
+
+function navigate(hash, options = {}) {
+  const target = hash.startsWith("#") ? hash : `#${hash}`;
+  if (location.hash === target) render(options);
+  else location.hash = target;
+}
+
+/* -------------------------------------------------------------------------
+   Theme
+   ------------------------------------------------------------------------- */
+
+const THEME_KEY = "ssv2_theme";
+
+function activeTheme() {
+  const stored = localStorage.getItem(THEME_KEY);
+  if (stored === "light" || stored === "dark") return stored;
+  return matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
+function applyTheme(theme) {
+  document.documentElement.dataset.theme = theme;
+  document.querySelector('meta[name="theme-color"]')
+    ?.setAttribute("content", theme === "dark" ? "#060f1d" : "#0b2545");
+}
+
+function toggleTheme() {
+  const next = activeTheme() === "dark" ? "light" : "dark";
+  localStorage.setItem(THEME_KEY, next);
+  applyTheme(next);
+  render();
+}
+
+applyTheme(activeTheme());
+
+/* -------------------------------------------------------------------------
+   Sign in
+   ------------------------------------------------------------------------- */
+
+function renderSignIn(message = "") {
+  document.body.classList.add("is-auth");
+  app.innerHTML = `
+    <div class="auth">
+      <div class="auth-panel">
+        <img class="auth-logo" src="/assets/logo-wordmark-light.png" alt="Smart Solutions AI" width="230">
+        <h1>Admin console</h1>
+        <p class="auth-sub">Sign in with your Smart Solutions username and password — the same ones you use on the live site.</p>
+        <form id="signInForm" novalidate>
+          <div class="field">
+            <label for="email">Username</label>
+            <input class="input" id="email" name="username" autocomplete="username"
+              autocapitalize="none" spellcheck="false" required>
+          </div>
+          <div class="field" style="margin-top:12px">
+            <label for="password">Password</label>
+            <input class="input" id="password" name="password" type="password"
+              autocomplete="current-password" required>
+          </div>
+          <div class="auth-error" id="authError" role="alert">${esc(message)}</div>
+          <button class="btn btn-accent auth-submit" type="submit" id="signInBtn">Sign in</button>
+        </form>
+        <p class="auth-note">${icon("alert")} This is a preview build. It reads live data but cannot change anything.</p>
+      </div>
+      <aside class="auth-art" aria-hidden="true">
+        <img src="/assets/logo-mark.png" alt="" width="120">
+        <blockquote>Better profit by controlling the buy.</blockquote>
+        <p>Every store, every day — what sold, what was bought, and what it left behind.</p>
+      </aside>
+    </div>`;
+
+  const form = document.getElementById("signInForm");
+  const error = document.getElementById("authError");
+  const button = document.getElementById("signInBtn");
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    error.textContent = "";
+    button.disabled = true;
+    button.textContent = "Checking…";
+    try {
+      state.user = await signIn(form.username.value, form.password.value);
+      document.body.classList.remove("is-auth");
+      await boot();
+    } catch (failure) {
+      error.textContent = failure.message || "Could not sign in.";
+      button.disabled = false;
+      button.textContent = "Sign in";
+      form.password.select();
+    }
+  });
+
+  document.getElementById("email").focus();
+}
+
+function signOut() {
+  session.clear();
+  state.user = null;
+  state.data = null;
+  state.model = null;
+  location.hash = "#/";
+  renderSignIn("You have been signed out.");
+}
+
+/* -------------------------------------------------------------------------
+   Chrome
+   ------------------------------------------------------------------------- */
+
+function railMarkup(activePath) {
+  const groups = new Map();
+  ROUTES.filter((route) => !route.hidden).forEach((route) => {
+    if (!groups.has(route.group)) groups.set(route.group, []);
+    groups.get(route.group).push(route);
+  });
+
+  const counts = attentionCounts();
+
+  const body = [...groups.entries()].map(([group, routes]) => `
+    <div class="rail-group">
+      <div class="rail-label">${esc(group)}</div>
+      ${routes.map((route) => {
+        const active = route.path === activePath
+          || (route.path === "/stores" && activePath.startsWith("/store"));
+        const count = counts[route.path];
+        return `<a class="rail-link${active ? " is-active" : ""}" href="#${esc(route.path)}">
+          ${icon(route.icon)}<span>${esc(route.title)}</span>
+          ${count ? `<span class="count${count.alert ? " alert" : ""}">${esc(count.value)}</span>` : ""}
+        </a>`;
+      }).join("")}
+    </div>`).join("");
+
+  const user = state.user || {};
+  return `
+    <div class="rail-brand">
+      <a href="#/"><img src="/assets/logo-wordmark-dark.png"
+        srcset="/assets/logo-wordmark-dark.png 1x, /assets/logo-wordmark-dark@2x.png 2x"
+        alt="Smart Solutions AI" width="158"></a>
+    </div>
+    <div class="rail-scroll">${body}</div>
+    <div class="rail-foot">
+      <div class="rail-user">
+        <span class="avatar">${esc(initials(user.client || user.email))}</span>
+        <span class="who">
+          <b class="truncate">${esc(user.client || user.email || "")}</b>
+          <span>${esc(isAdmin(user) ? "Administrator" : user.role === "manager" ? "Store manager" : "Owner")}</span>
+        </span>
+      </div>
+      <button class="btn btn-ghost btn-sm" id="signOut" style="width:100%;justify-content:flex-start;margin-top:4px">
+        ${icon("logout")}Sign out</button>
+    </div>`;
+}
+
+/** Small counters shown against rail entries. */
+function attentionCounts() {
+  const data = state.data;
+  if (!data) return {};
+  const out = {};
+  const missing = data.s2k?.missing?.length || 0;
+  if (missing) out["/invoices"] = { value: missing, alert: true };
+  const unpaid = (data.billing?.invoices || []).filter((i) => String(i.status || "").toLowerCase() !== "paid").length;
+  if (unpaid) out["/billing"] = { value: unpaid, alert: false };
+  const open = (data.tickets?.tickets || []).filter((t) => String(t.status || "open").toLowerCase() !== "closed").length;
+  const pending = data.days?.items?.length || 0;
+  if (open + pending) out["/tickets"] = { value: open + pending, alert: open > 0 };
+  return out;
+}
+
+function topbarMarkup(route, params) {
+  const title = route.path === "/store/:id"
+    ? state.model?.byId.get(String(params.id))?.name || "Store"
+    : route.title;
+
+  return `
+    <button class="btn btn-icon btn-ghost rail-toggle" id="railToggle" aria-label="Open navigation">${icon("menu")}</button>
+    <h1>${esc(title)}</h1>
+    ${state.model?.latestMonth ? `<span class="sub">Books through ${esc(monthLabel(state.model.latestMonth))}</span>` : ""}
+    <span class="topbar-spacer"></span>
+    <button class="btn btn-sm" id="paletteOpen" aria-label="Search">
+      ${icon("search")}<span class="palette-hint">Search</span><kbd>${navigator.platform.includes("Mac") ? "⌘" : "Ctrl"}K</kbd>
+    </button>
+    <button class="btn btn-icon btn-sm" id="refresh" title="Reload data" aria-label="Reload data">${icon("refresh")}</button>
+    <button class="btn btn-icon btn-sm" id="themeToggle" title="Switch theme" aria-label="Switch theme">
+      ${icon(activeTheme() === "dark" ? "sun" : "moon")}</button>`;
+}
+
+/* -------------------------------------------------------------------------
+   Command palette
+   ------------------------------------------------------------------------- */
+
+function paletteEntries() {
+  const entries = ROUTES.filter((route) => !route.hidden)
+    .map((route) => ({ label: route.title, kind: route.group, href: `#${route.path}`, icon: route.icon }));
+
+  (state.model?.stations || []).forEach((station) => {
+    entries.push({
+      label: `${station.name} (${station.id})`,
+      kind: "Store",
+      href: `#/store/${station.id}`,
+      icon: "stores",
+    });
+  });
+  return entries;
+}
+
+function openPalette() {
+  if (document.querySelector(".palette-backdrop")) return;
+
+  const entries = paletteEntries();
+  const backdrop = document.createElement("div");
+  backdrop.className = "palette-backdrop";
+  backdrop.innerHTML = `<div class="palette" role="dialog" aria-modal="true" aria-label="Search">
+      <input type="text" placeholder="Jump to a page or a store…" aria-label="Search" autocomplete="off">
+      <div class="palette-list"></div>
+    </div>`;
+  document.body.appendChild(backdrop);
+
+  const input = backdrop.querySelector("input");
+  const list = backdrop.querySelector(".palette-list");
+  let cursor = 0;
+  let visible = entries;
+
+  function paint() {
+    const term = input.value.trim().toLowerCase();
+    visible = term
+      ? entries.filter((entry) => entry.label.toLowerCase().includes(term)
+        || entry.kind.toLowerCase().includes(term))
+      : entries;
+    cursor = Math.min(cursor, Math.max(visible.length - 1, 0));
+
+    list.innerHTML = visible.length
+      ? visible.map((entry, i) => `<div class="palette-item${i === cursor ? " is-active" : ""}" data-index="${i}">
+          ${icon(entry.icon)}<span>${esc(entry.label)}</span><span class="kind">${esc(entry.kind)}</span>
+        </div>`).join("")
+      : `<div class="palette-group">No matches</div>`;
+
+    list.querySelector(".is-active")?.scrollIntoView({ block: "nearest" });
+  }
+
+  function close() {
+    backdrop.remove();
+    document.removeEventListener("keydown", onKey, true);
+  }
+
+  function choose(index) {
+    const entry = visible[index];
+    if (!entry) return;
+    close();
+    navigate(entry.href);
+  }
+
+  function onKey(event) {
+    if (event.key === "Escape") { event.preventDefault(); close(); }
+    else if (event.key === "ArrowDown") { event.preventDefault(); cursor = Math.min(cursor + 1, visible.length - 1); paint(); }
+    else if (event.key === "ArrowUp") { event.preventDefault(); cursor = Math.max(cursor - 1, 0); paint(); }
+    else if (event.key === "Enter") { event.preventDefault(); choose(cursor); }
+  }
+
+  input.addEventListener("input", () => { cursor = 0; paint(); });
+  list.addEventListener("click", (event) => {
+    const item = event.target.closest("[data-index]");
+    if (item) choose(Number(item.dataset.index));
+  });
+  backdrop.addEventListener("mousedown", (event) => {
+    if (event.target === backdrop) close();
+  });
+  document.addEventListener("keydown", onKey, true);
+
+  paint();
+  input.focus();
+}
+
+/* -------------------------------------------------------------------------
+   Render
+   ------------------------------------------------------------------------- */
+
+function loadingMarkup() {
+  return `<div class="page-head">
+      <div class="skeleton" style="height:24px;width:220px"></div>
+      <div class="skeleton" style="height:14px;width:420px;margin-top:10px"></div>
+    </div>
+    <div class="grid cols-4" style="margin-bottom:16px">
+      ${Array.from({ length: 4 }, () => `<div class="stat">
+        <div class="skeleton" style="height:11px;width:80px"></div>
+        <div class="skeleton" style="height:26px;width:120px;margin-top:10px"></div>
+        <div class="skeleton" style="height:12px;width:100px;margin-top:14px"></div>
+      </div>`).join("")}
+    </div>
+    <div class="card"><div class="card-body">
+      <div class="skeleton" style="height:240px;width:100%"></div>
+    </div></div>`;
+}
+
+function render(options = {}) {
+  if (!state.user) { renderSignIn(); return; }
+
+  const { pathname, query } = parseHash();
+  const matched = matchRoute(pathname) || { route: ROUTES[0], params: {} };
+  const { route, params } = matched;
+
+  const ctx = { ...state, query, params, navigate, refresh };
+
+  let body;
+  if (state.loading && !state.data) body = loadingMarkup();
+  else if (state.loadError) {
+    body = `<div class="page-head"><h2>Could not load the console</h2></div>
+      <div class="error-box">${icon("alert")}<div><b>${esc(state.loadError)}</b>
+        <div>The upstream site may be unreachable, or this account may not have access.</div>
+        <button class="btn btn-sm" id="retryLoad" style="margin-top:10px">${icon("refresh")}Try again</button>
+      </div></div>`;
+  } else {
+    try {
+      body = route.render(ctx);
+    } catch (failure) {
+      console.error(failure);
+      body = `<div class="error-box">${icon("alert")}<div><b>This page could not be drawn</b>
+        <div>${esc(failure.message || String(failure))}</div></div></div>`;
+    }
+  }
+
+  app.innerHTML = `
+    <div class="shell">
+      <aside class="rail" id="rail">${railMarkup(route.path)}</aside>
+      <div>
+        <header class="topbar">${topbarMarkup(route, params)}</header>
+        <main class="content" id="content">${body}</main>
+      </div>
+    </div>`;
+
+  wireChrome();
+  if (route.bind && state.data) {
+    try {
+      route.bind(document.getElementById("content"), ctx);
+    } catch (failure) {
+      console.error(failure);
+    }
+  }
+
+  if (options.keepFocus) {
+    const field = document.querySelector(options.keepFocus);
+    if (field) {
+      field.focus();
+      const length = field.value.length;
+      field.setSelectionRange(length, length);
+    }
+  } else if (!options.preserveScroll) {
+    document.getElementById("content")?.scrollTo?.(0, 0);
+    window.scrollTo(0, 0);
+  }
+}
+
+function wireChrome() {
+  document.getElementById("signOut")?.addEventListener("click", signOut);
+  document.getElementById("themeToggle")?.addEventListener("click", toggleTheme);
+  document.getElementById("paletteOpen")?.addEventListener("click", openPalette);
+  document.getElementById("refresh")?.addEventListener("click", () => refresh(true));
+  document.getElementById("retryLoad")?.addEventListener("click", () => refresh(true));
+
+  const rail = document.getElementById("rail");
+  document.getElementById("railToggle")?.addEventListener("click", () => {
+    rail.classList.add("is-open");
+    const scrim = document.createElement("div");
+    scrim.className = "rail-scrim";
+    scrim.addEventListener("click", () => { rail.classList.remove("is-open"); scrim.remove(); });
+    document.body.appendChild(scrim);
+  });
+
+  // Whole-row navigation for tables and bar lists.
+  document.getElementById("content")?.addEventListener("click", (event) => {
+    const target = event.target.closest("[data-href]");
+    if (!target || event.target.closest("a,button")) return;
+    navigate(target.dataset.href);
+  });
+}
+
+/* -------------------------------------------------------------------------
+   Loading
+   ------------------------------------------------------------------------- */
+
+async function refresh(force = false) {
+  if (force) invalidate();
+  state.loading = true;
+  state.loadError = null;
+  render({ preserveScroll: true });
+
+  try {
+    const data = await loadWorkspace({ maxAge: force ? 0 : 120000 });
+    if (!data.overlay) throw new Error(data.errors.overlay || "The books feed is unavailable.");
+    state.data = data;
+    state.model = buildModel(data.overlay);
+    if (force) toast("Data reloaded");
+  } catch (failure) {
+    state.loadError = failure.message || "Something went wrong.";
+  } finally {
+    state.loading = false;
+    render({ preserveScroll: true });
+  }
+}
+
+async function boot() {
+  state.user = session.read();
+  if (!state.user) { renderSignIn(); return; }
+  document.body.classList.remove("is-auth");
+  await refresh();
+}
+
+/* -------------------------------------------------------------------------
+   Wiring
+   ------------------------------------------------------------------------- */
+
+window.addEventListener("hashchange", () => render());
+
+document.addEventListener("keydown", (event) => {
+  if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+    event.preventDefault();
+    if (state.user) openPalette();
+  }
+});
+
+boot().catch((failure) => {
+  console.error(failure);
+  state.loadError = failure.message || "Startup failed.";
+  render();
+});
