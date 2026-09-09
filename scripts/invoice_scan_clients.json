@@ -2,7 +2,7 @@
   "destination_root": "Clients",
   "scans_subfolder": "Scans",
   "naming": "Vendor DDMM",
-  "comment": "Existing Scans use day-then-month (e.g. Coca Cola 0409.pdf = Sep 4). User phrasing \"vendor mmdd\" maps to this warehouse DDMM convention. Raw ScanYYYY-MM-DD_*.pdf dumps are OCR-renamed. ALL OneDrive/Google usernames+passwords come from Client-logins.xlsx sheet \"Client logins\" (runtime override of username/password_key). Client pull is best-effort (MS proof/MFA often blocks); prefer shared Scans folders with Mina. Runs daily 8:00 PM America/Los_Angeles. scans_layout: scans_then_month = Clients/.../Scans/YYYY-MM Month; month_then_scans = Clients/.../YYYY-MM Month/Scans.",
+  "comment": "Existing Scans use day-then-month (e.g. Coca Cola 0409.pdf = Sep 4). User phrasing \"vendor mmdd\" maps to this warehouse DDMM convention. Raw ScanYYYY-MM-DD_*.pdf dumps are OCR-renamed. ALL usernames+passwords come from Client-logins.xlsx sheet \"Client logins\". Drive split: Arco Placentia + Westminster = Google Drive (gmail); all other stations = personal Outlook OneDrive. Client pull is best-effort (MS identity-proof and Google headless blocks are common); prefer sharing each station Scans folder with MinaMorcos@Smartsolutionsai26. Runs daily 8:00 PM America/Los_Angeles. scans_layout: scans_then_month = Clients/.../Scans/YYYY-MM Month; month_then_scans = Clients/.../YYYY-MM Month/Scans.",
   "vendor_aliases": {
     "coca cola": "Coca Cola",
     "coca-cola": "Coca Cola",

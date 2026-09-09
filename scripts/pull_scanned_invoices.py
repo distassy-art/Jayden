@@ -623,10 +623,12 @@ def pull_client_onedrive_outlook(client: dict, password: str, dry_run: bool = Fa
         if blocked:
             out["status"] = blocked
             out["url"] = driver.current_url
+            out["drive"] = "onedrive"
             out["note"] = (
-                "Microsoft identity proof/MFA blocked unattended login. "
+                "Microsoft identity proof/MFA blocked unattended Outlook OneDrive login. "
                 "Share station Scans with MinaMorcos@Smartsolutionsai26, "
-                "or complete one interactive sign-in and save cookies."
+                "or complete one interactive sign-in and save cookies. "
+                "(Placentia + Westminster are Google Drive — use Drive share instead.)"
             )
             return out
 
@@ -696,21 +698,31 @@ def pull_client_onedrive_outlook(client: dict, password: str, dry_run: bool = Fa
 
 
 def pull_client_google(client: dict, password: str, dry_run: bool = False) -> dict:
+    """Placentia + Westminster use Google Drive (not OneDrive).
+
+    Headless Google password login is blocked (WebLite / bot challenges).
+    Unattended path: share the station Drive Scans folder with
+    MinaMorcos@Smartsolutionsai26, then copy via Drive API / shared link.
+    """
     user = client.get("username")
     if not user or not password:
         return {
             "client": client["name"],
             "status": "skip",
+            "drive": "google",
             "reason": "no credentials in Client-logins.xlsx",
         }
     return {
         "client": client["name"],
-        "status": "google_requires_interactive",
+        "status": "google_share_required",
+        "drive": "google",
         "username": user,
         "cred_source": client.get("_cred_source") or "Client-logins.xlsx",
         "note": (
-            "Google blocks headless password login. Share the station Drive Scans folder "
-            "with Mina, or use an App Password + Drive API. Password is loaded from Client-logins."
+            "Placentia/Westminster are Google Drive. Google blocks headless password login. "
+            "Share the station Drive Scans folder with MinaMorcos@Smartsolutionsai26 "
+            "(Viewer+download), or provide a Google App Password for Drive API. "
+            "Password is already loaded from Client-logins."
         ),
     }
 
