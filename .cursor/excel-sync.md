@@ -71,6 +71,14 @@ If `books-parse` returns empty `months` for a Monthly Summary that still has a *
 python3 scripts/extract-fuel-summary-months.py <file.xlsx> <storeId> <storeName> | node scripts/publish-books.mjs --file /dev/stdin
 ```
 
+If `books-parse` reports `thru` in the current month but `patch.daily` still ends on the previous month, the date cells are `DATE()` formulas with empty cached values (common on September+ sheets). Extract those days and **overwrite the same dates** in `patch.daily` (do not skip dates that already have sales-only rows):
+
+```
+python3 scripts/extract-daily-month-sheets.py <Daily.xlsx> --min-month 2026-09
+```
+
+San Diego Daily values live on `* Calculations` sheets. Brookhurst Daily values live on `* Source` sheets. The extractor reads both. Skip empty placeholder months (Paradise September was still all zeros).
+
 Skip ExtraMile **Daily.xlsx** / **Monthly.xlsx** when they are still the `#00000` / Store Name templates. Skip `_Archived` (Laguna, Arco GG).
 
 ExtraMile’s live book is the operational workbook `Extramile.xlsx` (month sheets `JULY26`, `AUG26`, …). The Worker `books-parse` path does not read that layout. Extract and save with:
