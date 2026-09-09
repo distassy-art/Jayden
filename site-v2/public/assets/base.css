@@ -1059,6 +1059,17 @@ button.trail-step:hover { background: var(--surface-3); color: var(--text); }
 .field-inline .select { min-width: 190px; }
 .scope-picks .spacer { flex: 1; }
 
+.scopebar.is-slim { padding: 10px 14px; }
+
+.scope-single {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13.5px;
+  font-weight: 650;
+}
+.scope-single .ico { width: 16px; height: 16px; color: var(--text-3); }
+
 /* --------------------------------------------------------------------------
    Table extras
    -------------------------------------------------------------------------- */

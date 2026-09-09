@@ -7,6 +7,7 @@ import {
 import {
   attentionItems, portfolioSeries, portfolioTotals, stationScorecards,
 } from "../analytics.js";
+import { inScope, invoiceStores } from "../scope.js";
 
 const SEVERITY_TONE = { high: "neg", medium: "warn", low: "info" };
 
@@ -87,7 +88,36 @@ export function renderDashboard(ctx) {
     }),
   ].join("");
 
-  const attention = attentionItems(model, data);
+  // The feeds arrive whole; the attention list must only rank work for stores
+  // this account can see, or a manager is told about another client's invoices.
+  const attention = attentionItems(model, {
+    ...data,
+    s2k: data.s2k && {
+      ...data.s2k,
+      missing: inScope(model, ctx.scope, data.s2k.missing),
+      entered: inScope(model, ctx.scope, data.s2k.entered),
+    },
+    billing: data.billing && {
+      ...data.billing,
+      invoices: inScope(model, ctx.scope, data.billing.invoices, invoiceStores),
+    },
+    orders: data.orders && {
+      ...data.orders,
+      sends: inScope(model, ctx.scope, data.orders.sends),
+    },
+    pricing: data.pricing && {
+      ...data.pricing,
+      days: inScope(model, ctx.scope, data.pricing.days),
+    },
+    tickets: data.tickets && {
+      ...data.tickets,
+      tickets: inScope(model, ctx.scope, data.tickets.tickets, (row) => row.store ?? row.station_id),
+    },
+    days: data.days && {
+      ...data.days,
+      items: inScope(model, ctx.scope, data.days.items, (row) => row.store ?? row.station_id),
+    },
+  });
   const attentionBody = attention.length
     ? `<div class="attn-list">${attention.map(attentionRow).join("")}</div>`
     : emptyState("Nothing needs attention", "No missing invoices, unpaid bills, open tickets or unclosed months.", "check");

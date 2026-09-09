@@ -207,6 +207,63 @@ async function main() {
     inspect(`schedule ${station.id}`, renderSchedule(ctx(scoped)));
   }
 
+  // A store manager's console is the same code against a one-station model.
+  // Every "biggest / smallest / rank" path has a different shape at n=1, which
+  // is exactly where a portfolio-shaped assumption breaks.
+  process.stdout.write("\nStore manager (single-store model)\n");
+  const single = model.stations[0].id;
+  const mgrModel = buildModel(overlay, { stores: [single] });
+  mgrModel.owners = buildOwners(owners?.accounts || [], mgrModel);
+  const mgrCtx = (query = "", params = {}) => {
+    const search = new URLSearchParams(query);
+    return {
+      model: mgrModel,
+      data,
+      query: search,
+      params,
+      pathname: "/",
+      scope: resolveScope(mgrModel, search),
+      navigate() {},
+    };
+  };
+  assert(mgrModel.stations.length === 1,
+    `manager model: ${mgrModel.stations.length} stations, expected 1`);
+
+  /*
+   * The side feeds arrive whole, covering every client. A manager's pages must
+   * not mention a store they do not hold — this is the check that caught the
+   * invoice list rendering all seventeen stores' rows.
+   */
+  const otherIds = model.stations.map((s) => s.id).filter((id) => id !== single);
+  const leakScan = [
+    ["invoices", renderInvoices(mgrCtx())],
+    ["orders", renderOrders(mgrCtx())],
+    ["pricing", renderPricing(mgrCtx())],
+    ["billing", renderBilling(mgrCtx())],
+    ["dashboard", renderDashboard(mgrCtx())],
+    ["schedule", renderSchedule(mgrCtx())],
+    ["calendar", renderCalendar(mgrCtx())],
+  ];
+  for (const [name, markup] of leakScan) {
+    const leaked = otherIds.filter((id) => markup.includes(id));
+    assert(leaked.length === 0,
+      `manager ${name}: shows stores the account does not hold (${leaked.join(", ")})`);
+  }
+  process.stdout.write(`  ok    no other store appears on a manager's pages (${otherIds.length} checked)\n`);
+  inspect("manager dashboard", renderDashboard(mgrCtx()));
+  inspect("manager store", renderStore(mgrCtx("", { id: single })));
+  inspect("manager profit", renderProfit(mgrCtx()));
+  inspect("manager fuel", renderFuel(mgrCtx()));
+  inspect("manager purchases", renderPurchases(mgrCtx()));
+  inspect("manager departments", renderDepartments(mgrCtx()));
+  inspect("manager pnl", renderPnl(mgrCtx()));
+  inspect("manager daily", renderDaily(mgrCtx()));
+  inspect("manager calendar", renderCalendar(mgrCtx()));
+  inspect("manager schedule", renderSchedule(mgrCtx()));
+  inspect("manager invoices", renderInvoices(mgrCtx()));
+  inspect("manager orders", renderOrders(mgrCtx()));
+  inspect("manager tickets", renderTickets(mgrCtx()));
+
   process.stdout.write("\nDegraded feeds\n");
   const bare = {
     overlay,

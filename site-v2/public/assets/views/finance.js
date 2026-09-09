@@ -5,6 +5,7 @@ import {
   monthLabel, num, timeAgo,
 } from "../ui.js";
 import { dataHealth } from "../analytics.js";
+import { inScope, invoiceStores } from "../scope.js";
 
 function amountOf(invoice) {
   const candidates = [invoice.total, invoice.amount, invoice.grandTotal];
@@ -30,7 +31,9 @@ export function renderBilling(ctx) {
       <div>${esc(data.errors?.billing || "The billing feed did not load.")}</div></div></div>`;
   }
 
-  const invoices = billing.invoices || [];
+  // An invoice covers a whole client, so it is matched on the stores named in
+  // its line items rather than on a single store field.
+  const invoices = inScope(ctx.model, ctx.scope, billing.invoices, invoiceStores);
   const expenses = billing.expenses || [];
 
   const month = query.get("month") || "";
@@ -150,7 +153,7 @@ export function bindBilling(root, ctx) {
   const csv = root.querySelector("[data-csv]");
   if (csv) {
     csv.addEventListener("click", () => {
-      const invoices = ctx.data.billing?.invoices || [];
+      const invoices = inScope(ctx.model, ctx.scope, ctx.data.billing?.invoices, invoiceStores);
       downloadCsv("client-invoices.csv",
         ["Date", "Client", "Month", "Description", "Amount", "Status"],
         invoices.map((invoice) => [invoice.date, invoice.client, invoice.month,
@@ -165,8 +168,10 @@ export function bindBilling(root, ctx) {
 
 export function renderTickets(ctx) {
   const { data } = ctx;
-  const tickets = data.tickets?.tickets || [];
-  const pending = data.days?.items || [];
+  const tickets = inScope(ctx.model, ctx.scope, data.tickets?.tickets,
+    (row) => row.store ?? row.station_id);
+  const pending = inScope(ctx.model, ctx.scope, data.days?.items,
+    (row) => row.store ?? row.station_id);
 
   const open = tickets.filter((t) => String(t.status || "open").toLowerCase() !== "closed");
   const closed = tickets.filter((t) => String(t.status || "").toLowerCase() === "closed");

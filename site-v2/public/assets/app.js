@@ -38,7 +38,8 @@ import { PUBLIC_ROUTES, renderLogin } from "./views/site.js";
 const ROUTES = [
   { path: "/", title: "Command centre", icon: "dashboard", group: "Overview", render: renderDashboard },
   { path: "/owners", title: "Owners", icon: "owners", group: "Overview", render: renderOwners, bind: bindOwners, roles: ["admin"] },
-  { path: "/stores", title: "Stores", icon: "stores", group: "Overview", render: renderStores, bind: bindStores },
+  // A manager holds one store, so a store list is a list of one.
+  { path: "/stores", title: "Stores", icon: "stores", group: "Overview", render: renderStores, bind: bindStores, roles: ["admin", "owner"] },
   { path: "/owner/:id", title: "Owner", hidden: true, render: renderOwner, bind: bindOwners, roles: ["admin"] },
   { path: "/store/:id", title: "Store", hidden: true, render: renderStore },
 

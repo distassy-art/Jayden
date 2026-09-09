@@ -176,6 +176,46 @@ export function withScope(href, scope) {
 }
 
 /* -------------------------------------------------------------------------
+   Filtering the side feeds
+   -------------------------------------------------------------------------
+   The invoice, order, pricing and billing feeds arrive whole. They have to be
+   narrowed twice: to the stores the signed-in account may see at all, and then
+   to whatever the scope control is pointing at. Skipping the first would show a
+   store manager another client's invoices.
+   ------------------------------------------------------------------------- */
+
+/** Store ids currently in view: the scope if one is set, else all visible. */
+export function scopedStoreIds(model, scope) {
+  return new Set(scope?.stationIds || model.stations.map((station) => station.id));
+}
+
+/**
+ * Keep the rows belonging to stores in view.
+ *
+ * `storeOf` may return one id or several — a billing invoice covers a whole
+ * client and carries its stores on its line items.
+ */
+export function inScope(model, scope, rows, storeOf = (row) => row.store) {
+  const allowed = scopedStoreIds(model, scope);
+  return (rows || []).filter((row) => {
+    const ids = storeOf(row);
+    const list = (Array.isArray(ids) ? ids : [ids])
+      .map((id) => (id == null ? "" : String(id)))
+      .filter(Boolean);
+    // A row with no store on it cannot be attributed, so it is only shown when
+    // nothing is being narrowed. Hiding it outright would lose real work.
+    if (!list.length) return allowed.size === model.stations.length;
+    return list.some((id) => allowed.has(id));
+  });
+}
+
+/** The stores named on a billing invoice's line items. */
+export function invoiceStores(invoice) {
+  const ids = (invoice?.lines || []).map((line) => line?.store).filter(Boolean);
+  return ids.length ? [...new Set(ids.map(String))] : [];
+}
+
+/* -------------------------------------------------------------------------
    The control
    ------------------------------------------------------------------------- */
 
@@ -190,6 +230,26 @@ function option(value, label, selected) {
  */
 export function scopeBar(model, scope, { period = true, csv = true } = {}) {
   const owners = scope.owners || [];
+
+  /*
+   * A store manager holds one store. Showing them an owner picker and a store
+   * picker with a single entry is noise, so the bar collapses to the period
+   * control — and disappears entirely when the page has no period either.
+   */
+  if (model.stations.length < 2) {
+    if (!period && !csv) return "";
+    return `<div class="scopebar is-slim" data-scopebar>
+      <div class="scope-picks">
+        <span class="scope-single">${icon("stores")}${esc(model.stations[0]?.name || "No store")}</span>
+        ${period ? `<div class="segmented" data-period>
+          ${PERIODS.map((p) => `<button class="${p.id === scope.period ? "is-active" : ""}"
+            data-period-set="${esc(p.id)}">${esc(p.label)}</button>`).join("")}
+        </div>` : ""}
+        <span class="spacer"></span>
+        ${csv ? `<button class="btn btn-sm" data-csv>${icon("download")}CSV</button>` : ""}
+      </div>
+    </div>`;
+  }
 
   const ownerOptions = owners
     .map((owner) => option(owner.id, `${owner.client} · ${owner.stations.length} stores`,

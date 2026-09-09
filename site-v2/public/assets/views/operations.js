@@ -4,6 +4,7 @@ import {
   dateLabel, deltaBadge, downloadCsv, emptyState, esc, icon, isNum, money,
   monthLabel, num, timeAgo,
 } from "../ui.js";
+import { inScope } from "../scope.js";
 
 /** Options for a <select>, with `all` first. */
 function options(values, selected, allLabel) {
@@ -41,7 +42,11 @@ export function renderInvoices(ctx) {
   }
 
   const tab = query.get("tab") === "entered" ? "entered" : "missing";
-  const rows = (tab === "entered" ? s2k.entered : s2k.missing) || [];
+  // Narrowed to the stores in view before anything is counted, so the totals
+  // and the tab badges agree with the table underneath them.
+  const entered = inScope(ctx.model, ctx.scope, s2k.entered);
+  const missing = inScope(ctx.model, ctx.scope, s2k.missing);
+  const rows = tab === "entered" ? entered : missing;
 
   const month = query.get("month") || "";
   const store = query.get("store") || "";
@@ -52,7 +57,7 @@ export function renderInvoices(ctx) {
     && (!vendor || String(row.vendor) === vendor));
 
   const total = filtered.reduce((sum, row) => sum + (Number(row.amount) || 0), 0);
-  const missingTotal = (s2k.missing || []).reduce((sum, row) => sum + (Number(row.amount) || 0), 0);
+  const missingTotal = missing.reduce((sum, row) => sum + (Number(row.amount) || 0), 0);
 
   const months = uniqueSorted(rows, monthOf).map((key) => ({ id: key, label: monthLabel(key) }));
   const stores = uniqueSorted(rows, (row) => String(row.store || ""))
@@ -87,7 +92,7 @@ export function renderInvoices(ctx) {
     </div>
 
     <div class="grid cols-3" style="margin-bottom:16px">
-      ${miniStat("Missing from S2K", num((s2k.missing || []).length), money(missingTotal), "neg")}
+      ${miniStat("Missing from S2K", num(missing.length), money(missingTotal), "neg")}
       ${miniStat("Entered in S2K", num((s2k.entered || []).length), "Confirmed against the audit export", "pos")}
       ${miniStat("Audit refreshed", s2k.updatedAt ? timeAgo(s2k.updatedAt) : "—", s2k.updatedAt ? dateLabel(s2k.updatedAt) : "")}
     </div>
@@ -95,7 +100,7 @@ export function renderInvoices(ctx) {
     <section class="card">
       <div class="card-head">
         <div class="segmented" data-tabs>
-          <button class="${tab === "missing" ? "is-active" : ""}" data-tab="missing">Missing (${esc((s2k.missing || []).length)})</button>
+          <button class="${tab === "missing" ? "is-active" : ""}" data-tab="missing">Missing (${esc(missing.length)})</button>
           <button class="${tab === "entered" ? "is-active" : ""}" data-tab="entered">Entered (${esc((s2k.entered || []).length)})</button>
         </div>
         <span class="spacer"></span>
@@ -119,7 +124,7 @@ export function bindInvoices(root, ctx) {
   if (csv) {
     csv.addEventListener("click", () => {
       const tab = ctx.query.get("tab") === "entered" ? "entered" : "missing";
-      const rows = (ctx.data.s2k?.[tab]) || [];
+      const rows = inScope(ctx.model, ctx.scope, ctx.data.s2k?.[tab]);
       downloadCsv(`s2k-${tab}.csv`,
         ["Date", "Store", "Client", "Vendor", "Invoice", "Amount", "Status"],
         rows.map((row) => [row.date, row.store, row.client, row.vendor,
@@ -140,8 +145,8 @@ export function renderOrders(ctx) {
   }
 
   const tab = query.get("tab") === "schedule" ? "schedule" : "sends";
-  const sends = orders.sends || [];
-  const schedules = orders.schedules || [];
+  const sends = inScope(ctx.model, ctx.scope, orders.sends);
+  const schedules = inScope(ctx.model, ctx.scope, orders.schedules);
 
   if (tab === "schedule") {
     const cards = schedules.map((entry) => `<section class="card">
@@ -263,7 +268,7 @@ export function bindOrders(root, ctx) {
   const csv = root.querySelector("[data-csv]");
   if (csv) {
     csv.addEventListener("click", () => {
-      const sends = ctx.data.orders?.sends || [];
+      const sends = inScope(ctx.model, ctx.scope, ctx.data.orders?.sends);
       downloadCsv("vendor-orders.csv",
         ["Sent", "Vendor", "To", "AI amount", "Actual", "Size", "Status", "Attachment"],
         sends.map((send) => [send.dateSent, vendorOf(send), send.emailTo, send.aiAmount,
@@ -283,7 +288,8 @@ export function renderPricing(ctx) {
     return notice("Pricing unavailable", data.errors?.pricing || "The pricing feed did not load.");
   }
 
-  const days = (pricing.days || []).slice().sort((a, b) => String(b.date).localeCompare(String(a.date)));
+  const days = inScope(ctx.model, ctx.scope, pricing.days)
+    .slice().sort((a, b) => String(b.date).localeCompare(String(a.date)));
 
   const rows = days.map((day) => `<tr>
     <td class="nowrap">${esc(dateLabel(day.date))}</td>
