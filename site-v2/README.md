@@ -66,6 +66,24 @@ fails if anything starts to. Judging a first draft of the Leaks page that way
 produced 276 loss-making days costing $652,000 across a portfolio that earned
 $14m.
 
+### And one about fuel revenue
+
+`monthly.json` carries what fuel *sold for*, which the overlay does not. It
+lags the other feeds: thirteen of seventeen stores through June, one store in
+July, none in August.
+
+So every figure in the Fuel page's revenue block — revenue, cost of the fuel,
+the share kept, the price per gallon — is totalled over the store-months that
+report revenue, with the profit and gallons taken from exactly those same
+store-months, and the card says which months and how many stores it covers.
+Year-on-year uses the same stores rather than whoever reported.
+
+Both matter. Pairing a year-to-date fuel profit with a six-month revenue put
+the share kept at 19% against a true 10%. Comparing thirteen stores against
+sixteen put last year at $55.7m against a like-for-like $48.4m, which reversed
+the direction of the change in several months. `check.mjs` recomputes all of it
+from the overlay.
+
 The **Needs attention** feed on the command centre ranks departments over
 budget, weeks bought past their ceiling, missing invoices, unpaid bills, open
 tickets and stores losing money inside the shop — worst first, each linking to
