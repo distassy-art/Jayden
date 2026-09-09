@@ -73,11 +73,15 @@ const ROUTES = [
   { path: "/buy", title: "The buy", icon: "pricing", group: "Operations", render: renderBudget, bind: bindBudget },
   { path: "/daily", title: "Daily close", icon: "calendar", group: "Operations", render: renderDaily, bind: bindDaily },
   { path: "/invoices", title: "S2K invoices", icon: "invoice", group: "Operations", render: renderInvoices, bind: bindInvoices },
-  { path: "/orders", title: "Vendor orders", icon: "orders", group: "Operations", render: renderOrders, bind: bindOrders },
-  { path: "/vendors", title: "Vendors", icon: "orders", group: "Operations", render: renderVendors, bind: bindVendors },
-  { path: "/calendar", title: "Delivery calendar", icon: "calendar", group: "Operations", render: renderCalendar, bind: bindCalendar },
   { path: "/pricing", title: "Pricing", icon: "pricing", group: "Operations", render: renderPricing },
-  { path: "/schedule", title: "Schedule", icon: "clock", group: "Operations", render: renderSchedule },
+
+  // The vendor relationship: who supplies each store, when orders go out and when
+  // trucks arrive. "Ordering schedule" is the vendor timetable — not staff hours,
+  // which live in the phone app — so it belongs here, not under Operations.
+  { path: "/orders", title: "Vendor orders", icon: "orders", group: "Vendors", render: renderOrders, bind: bindOrders },
+  { path: "/vendors", title: "Vendor directory", icon: "owners", group: "Vendors", render: renderVendors, bind: bindVendors },
+  { path: "/schedule", title: "Ordering schedule", icon: "orders", group: "Vendors", render: renderSchedule },
+  { path: "/calendar", title: "Delivery calendar", icon: "calendar", group: "Vendors", render: renderCalendar, bind: bindCalendar },
 
   { path: "/billing", title: "Billing", icon: "billing", group: "Business", render: renderBilling, bind: bindBilling, roles: ["admin", "owner"] },
   { path: "/payroll", title: "Payroll", icon: "clock", group: "Business", render: renderPayroll, bind: bindPayroll, roles: ["admin", "accountant"] },
