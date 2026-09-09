@@ -187,6 +187,15 @@ command prints a claim URL that moves the worker into a real account and makes
 it permanent. Temporary deployments also sit behind a Cloudflare bot check,
 which asks visitors to tick a box on first load; claiming removes it.
 
+Unclaimed, the whole account is reclaimed when it expires, and the hostname
+stops resolving rather than returning an error — a link that worked earlier
+will look to a browser like the site is down. Re-running the command brings the
+console back, but on a *new* hostname, because each temporary account gets its
+own random subdomain. Any link shared beforehand is dead for good.
+
+So a temporary deploy is only worth it for a look in the next hour. For a link
+that keeps working, claim it, or deploy into a real account with a token.
+
 ## Layout
 
 ```
