@@ -105,6 +105,74 @@ function currentMonthSection(ctx) {
   </section>`;
 }
 
+/* The running month, its straight-line month-end estimate, and both against the
+   same month last year — the three reads the manager asked to lead with. The
+   year-over-year column is only drawn when last year's *whole* month is on file
+   for the stores in scope, so a part-month is never compared to a full one. */
+function monthEstimateSection(ctx) {
+  const { current } = ctx;
+  if (!current) return "";
+  const filed = partitionByPeriod(currentStores(current, ctx.scope)).filed;
+  const mtd = rollupMtd(filed);
+  if (!mtd) return "";
+
+  const projection = rollupProjection(filed);
+  const lastYear = rollupLastYear(filed);
+  const label = current.label || monthLabel(current.month);
+  const through = mtd.through ? dateLabel(mtd.through) : "";
+  const canYoY = Boolean(lastYear && lastYear.wholeMonth);
+
+  const metrics = [
+    ["Store sales", "sales", true],
+    ["Purchases", "purchases", false],
+    ["Store profit", "store_profit", true],
+    ["Fuel profit", "gas_profit", true],
+    ["Total profit", "total_profit", true],
+  ];
+  const neg = (v) => (Number(v) < 0 ? " neg-text" : "");
+  const rows = metrics.map(([name, key, higherIsBetter]) => {
+    const cur = mtd[key];
+    const est = projection ? projection[key] : null;
+    const ly = lastYear ? lastYear[key] : null;
+    const delta = canYoY && isNum(est) && isNum(ly) ? change(est, ly) : null;
+    return `<tr>
+      <td class="strong">${esc(name)}</td>
+      <td class="num${neg(cur)}">${esc(money(cur))}</td>
+      <td class="num strong${neg(est)}">${isNum(est) ? esc(money(est)) : "—"}</td>
+      <td class="num">${isNum(ly) ? esc(money(ly)) : "—"}</td>
+      <td class="num">${delta != null ? deltaBadge(delta, { higherIsBetter }) : `<span class="muted">—</span>`}</td>
+    </tr>`;
+  }).join("");
+
+  const pace = projection
+    ? `Estimated at this month's pace — ${esc(num(mtd.days))} of ${esc(num(projection.daysInMonth))} days filed`
+    : "The month is essentially complete, so the month-to-date is the month";
+  const yoyNote = canYoY
+    ? `The last-year column and change compare against ${esc(lastYear.label)}, the whole month.`
+    : (lastYear
+      ? "Last year's full month isn't on file for every store in view, so the change is left out."
+      : "No year-ago figures were reported for this store.");
+
+  return `<section class="card" style="margin-bottom:16px">
+    <div class="card-head">
+      <h3>This month &amp; month-end estimate</h3>
+      <span class="hint">${esc(label)}${through ? ` · through ${esc(through)}` : ""}</span>
+      <span class="spacer"></span>
+      <a class="btn btn-sm btn-ghost" href="#/trends">Trends ${icon("chevron")}</a>
+    </div>
+    <div class="table-wrap"><table class="table">
+      <thead><tr>
+        <th>Measure</th><th class="num">Month to date</th>
+        <th class="num">Est. month end</th>
+        <th class="num">${esc(canYoY ? lastYear.label : "Last year")}</th>
+        <th class="num">Est. vs last year</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div>
+    <div class="card-body"><p class="muted tiny" style="margin:0">${pace}. ${yoyNote}</p></div>
+  </section>`;
+}
+
 /** Day-by-day sales, purchases and profit for the running month, newest first. */
 function dailyNumbersSection(ctx) {
   const { model, current } = ctx;
@@ -261,6 +329,7 @@ function renderManagerDashboard(ctx) {
 
   return `${head}
     ${currentMonthSection(ctx)}
+    ${monthEstimateSection(ctx)}
     ${managerAlert(store)}
     ${dailyNumbersSection(ctx)}
     ${managerWeeksCard(store)}
