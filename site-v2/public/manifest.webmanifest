@@ -1,10 +1,11 @@
 {
-  "name": "Smart Solutions AI — Admin console",
-  "short_name": "SSAI Admin",
-  "description": "Portfolio profit, store performance, invoices and data health.",
-  "start_url": "./",
+  "name": "Smart Solutions AI",
+  "short_name": "Smart Solutions",
+  "description": "Store numbers, schedule, time clock and tasks for managers and crew.",
+  "start_url": "./#/app",
   "scope": "./",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#0b2545",
   "theme_color": "#0b2545",
   "icons": [
@@ -14,14 +15,20 @@
       "type": "image/png"
     },
     {
-      "src": "assets/logo-mark.png",
-      "sizes": "180x180",
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "assets/apple-touch-icon.png",
-      "sizes": "180x180",
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon-maskable-512.png",
+      "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     }

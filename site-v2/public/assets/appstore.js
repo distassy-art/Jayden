@@ -20,18 +20,44 @@ const BLANK = {
   punches: [],
   tasks: [],
   places: {},
+  // Payroll people who are not tied to one store: they read the whole group's
+  // time clock. Seeded once with a default login so payroll can get in.
+  accountants: [],
+  // Profiles for everyone — site logins and on-device people alike — keyed by a
+  // stable string (see profileKey). Photo, name, date of birth, address.
+  profiles: {},
+  // A manager's sign-off that a pay-period timesheet is ready to print.
+  approvals: [],
   device: { employeeId: null },
 };
 
 let cache = null;
 
+function defaultAccountant() {
+  return {
+    id: "acct_default",
+    username: "accountant",
+    password: "payroll",
+    name: "Payroll Accountant",
+    active: true,
+    createdAt: Date.now(),
+  };
+}
+
 function read() {
   if (cache) return cache;
+  let stored = null;
   try {
-    const stored = JSON.parse(localStorage.getItem(KEY) || "null");
-    cache = { ...structuredClone(BLANK), ...(stored || {}) };
+    stored = JSON.parse(localStorage.getItem(KEY) || "null");
   } catch {
-    cache = structuredClone(BLANK);
+    stored = null;
+  }
+  cache = { ...structuredClone(BLANK), ...(stored || {}) };
+  // Seed the default payroll accountant the very first time only, and persist
+  // it so the (synchronous) console sign-in can find it on the next load.
+  if (!stored || !Array.isArray(stored.accountants)) {
+    cache.accountants = [defaultAccountant()];
+    try { localStorage.setItem(KEY, JSON.stringify(cache)); } catch { /* ignore */ }
   }
   return cache;
 }
@@ -279,14 +305,18 @@ export async function removePunch(punchId) {
    Tasks
    ------------------------------------------------------------------------- */
 
-export async function listTasks({ storeId = null, employeeId = null } = {}) {
+export async function listTasks({ storeId = null, employeeId = null, from = null, to = null } = {}) {
   return read().tasks
     .filter((t) => (storeId ? String(t.storeId) === String(storeId) : true))
     .filter((t) => (employeeId ? (t.employeeId === employeeId || !t.employeeId) : true))
+    .filter((t) => (from ? (t.date || "") >= from : true))
+    .filter((t) => (to ? (t.date || "") <= to : true))
     .sort((a, b) => Number(a.done) - Number(b.done) || (b.createdAt || 0) - (a.createdAt || 0));
 }
 
-export async function addTask({ storeId, employeeId = null, title, note = "" }) {
+export async function addTask({
+  storeId, employeeId = null, title, note = "", date = today(), requirePhoto = false,
+}) {
   const state = read();
   const row = {
     id: id("task"),
@@ -294,8 +324,12 @@ export async function addTask({ storeId, employeeId = null, title, note = "" }) 
     employeeId,
     title: String(title || "").trim(),
     note,
+    date: date || today(),
+    requirePhoto: Boolean(requirePhoto),
     done: false,
     doneAt: null,
+    doneBy: null,
+    photo: null,
     createdAt: Date.now(),
   };
   state.tasks = [...state.tasks, row];
@@ -303,16 +337,143 @@ export async function addTask({ storeId, employeeId = null, title, note = "" }) 
   return row;
 }
 
-export async function toggleTask(taskId, done) {
+/*
+ * Mark a task done or open. A task that requires proof carries the photo taken
+ * when it was completed; reopening it clears the photo and who did it, so the
+ * next completion has to take a fresh one.
+ */
+export async function toggleTask(taskId, done, { photo = null, by = null } = {}) {
   const state = read();
-  state.tasks = state.tasks.map((t) => (t.id === taskId
-    ? { ...t, done, doneAt: done ? Date.now() : null } : t));
+  state.tasks = state.tasks.map((t) => {
+    if (t.id !== taskId) return t;
+    if (done) {
+      return { ...t, done: true, doneAt: Date.now(), doneBy: by || t.doneBy || null, photo: photo ?? t.photo ?? null };
+    }
+    return { ...t, done: false, doneAt: null, doneBy: null, photo: null };
+  });
   write(state);
 }
 
 export async function removeTask(taskId) {
   const state = read();
   state.tasks = state.tasks.filter((t) => t.id !== taskId);
+  write(state);
+}
+
+/* -------------------------------------------------------------------------
+   Accountants (payroll — not tied to any one store)
+   -------------------------------------------------------------------------
+   An accountant reads the whole group's time clock to run payroll. They are
+   kept apart from employees (who belong to a store) and from the site logins
+   (which live upstream). `getAccountantByUsername` is synchronous so the
+   console sign-in can check it without awaiting.
+*/
+
+export async function listAccountants() {
+  return read().accountants.filter((a) => a.active !== false);
+}
+
+export function getAccountantByUsername(username) {
+  const u = String(username || "").trim().toLowerCase();
+  if (!u) return null;
+  return read().accountants.find((a) => a.active !== false
+    && String(a.username || "").toLowerCase() === u) || null;
+}
+
+export async function addAccountant({ username, password, name = "" }) {
+  const state = read();
+  const u = String(username || "").trim().toLowerCase();
+  if (!u) throw new Error("A username is required.");
+  if (state.accountants.some((a) => String(a.username).toLowerCase() === u)) {
+    throw new Error("That username is taken.");
+  }
+  const row = {
+    id: id("acct"),
+    username: u,
+    password: String(password || "").trim(),
+    name: String(name || "").trim(),
+    active: true,
+    createdAt: Date.now(),
+  };
+  state.accountants = [...state.accountants, row];
+  write(state);
+  return row;
+}
+
+export async function updateAccountant(acctId, patch) {
+  const state = read();
+  state.accountants = state.accountants.map((a) => (a.id === acctId ? { ...a, ...patch } : a));
+  write(state);
+  return state.accountants.find((a) => a.id === acctId) || null;
+}
+
+/* -------------------------------------------------------------------------
+   Profiles (everyone: photo, first and last name, date of birth, address)
+   -------------------------------------------------------------------------
+   Keyed by a stable string the caller owns (see profileKey in profile.js): an
+   employee id, an accountant id, or a site login's email. The username is not
+   stored here — it can never change — only the parts a person may edit.
+*/
+
+export function getProfile(key) {
+  return read().profiles[String(key)] || null;
+}
+
+export async function setProfile(key, patch) {
+  const state = read();
+  const k = String(key);
+  state.profiles = {
+    ...state.profiles,
+    [k]: { ...(state.profiles[k] || {}), ...patch, updatedAt: Date.now() },
+  };
+  write(state);
+  return state.profiles[k];
+}
+
+/* -------------------------------------------------------------------------
+   Timesheet approvals (a manager signs a pay period off before it prints)
+   -------------------------------------------------------------------------
+   Payroll may only print an approved timesheet. An approval is one employee,
+   one pay period, who signed it and when, and a snapshot of the totals as they
+   stood — so a later edit to the punches is visible as a mismatch rather than
+   silently changing an already-approved sheet.
+*/
+
+function approvalKey(employeeId, start, end) {
+  return `${employeeId}|${start}|${end}`;
+}
+
+export async function getApproval(employeeId, start, end) {
+  const key = approvalKey(employeeId, start, end);
+  return read().approvals.find((a) => a.key === key) || null;
+}
+
+export async function listApprovals({ storeId = null } = {}) {
+  return read().approvals.filter((a) => (storeId ? String(a.storeId) === String(storeId) : true));
+}
+
+export async function approveTimesheet({ employeeId, storeId, start, end, by, totals = null }) {
+  const state = read();
+  const key = approvalKey(employeeId, start, end);
+  const row = {
+    key,
+    employeeId,
+    storeId: String(storeId || ""),
+    start,
+    end,
+    by: String(by || "manager"),
+    at: Date.now(),
+    totals,
+  };
+  state.approvals = [...state.approvals.filter((a) => a.key !== key), row];
+  write(state);
+  return row;
+}
+
+export async function revokeApproval(employeeId, start, end) {
+  const state = read();
+  const key = approvalKey(employeeId, start, end);
+  state.approvals = state.approvals.filter((a) => a.key !== key);
   write(state);
 }
 

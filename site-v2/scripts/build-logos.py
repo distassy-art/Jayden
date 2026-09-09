@@ -98,6 +98,21 @@ def main():
     icon.paste(mark, (0, 0), mark)
     save(icon, "apple-touch-icon.png", 180)
 
+    # Home-screen (PWA) icons. Android's install prompt needs a 192 and a 512,
+    # and a maskable variant with safe padding so a circular/rounded mask never
+    # clips the mark. All opaque navy so no launcher composites them on black.
+    def home_icon(size, pad_ratio=0.0):
+        canvas = Image.new("RGB", (size, size), NAVY)
+        inner = round(size * (1 - pad_ratio * 2))
+        placed = mark.resize((inner, inner), Image.LANCZOS)
+        offset = (size - inner) // 2
+        canvas.paste(placed, (offset, offset), placed)
+        return canvas
+
+    save(home_icon(192), "icon-192.png", 192)
+    save(home_icon(512), "icon-512.png", 512)
+    save(home_icon(512, pad_ratio=0.16), "icon-maskable-512.png", 512)
+
 
 if __name__ == "__main__":
     main()

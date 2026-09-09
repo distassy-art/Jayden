@@ -34,6 +34,8 @@ import { buildVendors } from "../public/assets/vendors.js";
 import { renderVendors } from "../public/assets/views/vendors.js";
 import { renderTrends } from "../public/assets/views/trends.js";
 import { renderLeaks } from "../public/assets/views/leaks.js";
+import { renderPayroll } from "../public/assets/views/payroll.js";
+import { renderProfile } from "../public/assets/views/profile.js";
 import { PUBLIC_ROUTES, renderLogin } from "../public/assets/views/site.js";
 import { isNum, money, moneyShort, pct } from "../public/assets/ui.js";
 
@@ -741,6 +743,36 @@ async function main() {
   inspect("manager invoices", renderInvoices(mgrCtx()));
   inspect("manager orders", renderOrders(mgrCtx()));
   inspect("manager tickets", renderTickets(mgrCtx()));
+
+  /*
+   * Payroll and profiles.
+   * The accountant's console is timesheets only, so it must render with no
+   * financial feeds and never name the credentials export (admin-only). Profiles
+   * render for every console role.
+   */
+  process.stdout.write("\nPayroll and profiles\n");
+  const adminUser = { role: "owner", email: "smartsolutionsai", client: "Smart Solutions AI", stores: [] };
+  const acctUser = {
+    role: "accountant", email: "accountant", client: "Payroll Accountant", stores: [], accountantId: "acct_default",
+  };
+  const withUser = (user, query = "") => ({ ...ctx(query), user });
+
+  const acctPage = renderPayroll(withUser(acctUser));
+  inspect("payroll (accountant)", acctPage);
+  assert(!acctPage.includes("Download logins"),
+    "payroll: the accountant must not see the credentials export");
+  assert(/id="pay-roster"/.test(acctPage),
+    "payroll: the accountant page is missing the per-employee totals container");
+
+  const adminPage = renderPayroll(withUser(adminUser));
+  inspect("payroll (admin)", adminPage);
+  assert(adminPage.includes("Download logins"),
+    "payroll: the admin should see the credentials export");
+
+  inspect("profile (admin)", renderProfile(withUser(adminUser)));
+  inspect("profile (manager)", renderProfile(mgrCtx()));
+  inspect("profile (accountant)", renderProfile(withUser(acctUser)));
+  process.stdout.write("  ok    payroll and profile pages render for admin, accountant and manager\n");
 
   process.stdout.write("\nDegraded feeds\n");
   const bare = {

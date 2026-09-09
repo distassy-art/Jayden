@@ -10,7 +10,7 @@ import { icon, initials, esc, timeAgo, toast, monthLabel } from "./ui.js";
 import { buildModel } from "./analytics.js";
 import { buildCurrent } from "./current.js";
 import { buildVendors } from "./vendors.js";
-import { invalidate, isAdmin, loadWorkspace, session, signIn } from "./data.js";
+import { invalidate, isAccountant, isAdmin, loadWorkspace, session, signIn } from "./data.js";
 import { buildOwners, resolveScope, withScope } from "./scope.js";
 import { renderDashboard } from "./views/dashboard.js";
 import { bindStores, renderStore, renderStores } from "./views/stores.js";
@@ -31,6 +31,12 @@ import { bindCalendar, renderCalendar, renderSchedule } from "./views/planning.j
 import { bindVendors, renderVendors } from "./views/vendors.js";
 import { bindTrends, renderTrends } from "./views/trends.js";
 import { bindLeaks, renderLeaks } from "./views/leaks.js";
+import {
+  bindManagerPayroll, bindPayroll, renderPayroll,
+} from "./views/payroll.js";
+import {
+  bindAppProfile, bindProfile, renderAppProfile, renderProfile,
+} from "./views/profile.js";
 import {
   appRole, ensureGeofence,
   bindAppClock, bindAppMe, bindAppSchedule, bindAppTasks, bindAppTeam, bindAppTimeclock,
@@ -74,8 +80,13 @@ const ROUTES = [
   { path: "/schedule", title: "Schedule", icon: "clock", group: "Operations", render: renderSchedule },
 
   { path: "/billing", title: "Billing", icon: "billing", group: "Business", render: renderBilling, bind: bindBilling, roles: ["admin", "owner"] },
+  { path: "/payroll", title: "Payroll", icon: "clock", group: "Business", render: renderPayroll, bind: bindPayroll, roles: ["admin", "accountant"] },
   { path: "/tickets", title: "Tickets", icon: "inbox", group: "Business", render: renderTickets },
   { path: "/health", title: "Data health", icon: "health", group: "Business", render: renderHealth, roles: ["admin"] },
+
+  // Everyone's own profile — photo, name, date of birth, address. Not in the
+  // rail groups; it hangs off the account block at the foot of the rail.
+  { path: "/profile", title: "Profile", icon: "owners", hidden: true, render: renderProfile, bind: bindProfile, roles: ["admin", "owner", "manager", "accountant"] },
 
   /*
    * The phone app. A separate, mobile shell (see `render`) rather than a page
@@ -88,6 +99,7 @@ const ROUTES = [
   { path: "/app/team", title: "Team", app: true, hidden: true, appTab: true, icon: "owners", render: renderAppTeam, bind: bindAppTeam, roles: ["admin", "owner", "manager"] },
   { path: "/app/tasks", title: "Tasks", app: true, hidden: true, appTab: true, icon: "check", render: renderAppTasks, bind: bindAppTasks, roles: ["admin", "owner", "manager"] },
   { path: "/app/timeclock", title: "Time clock", app: true, appMode: "timeclock", hidden: true, icon: "pricing", render: renderAppTimeclock, bind: bindAppTimeclock, roles: ["admin", "owner", "manager"] },
+  { path: "/app/profile", title: "Profile", app: true, hidden: true, render: renderAppProfile, bind: bindAppProfile },
   { path: "/app/me", title: "Employee", app: true, hidden: true, render: renderAppMe, bind: bindAppMe },
 ];
 
@@ -95,17 +107,25 @@ const ROUTES = [
 function roleOf(user) {
   if (!user) return "none";
   if (isAdmin(user)) return "admin";
+  if (isAccountant(user)) return "accountant";
   return user.role === "manager" ? "manager" : "owner";
 }
 
+/* The accountant is deliberately narrow: they see payroll timesheets and their
+   own profile, nothing else. Every other role uses the route's own `roles`. */
 function allowed(route, user) {
-  return !route.roles || route.roles.includes(roleOf(user));
+  const role = roleOf(user);
+  if (role === "accountant") return (route.roles || []).includes("accountant");
+  return !route.roles || route.roles.includes(role);
 }
 
-/* The manager's dashboard carries the same team schedule the phone app does.
-   Everyone else's dashboard has nothing extra to wire. */
+/* The manager's dashboard carries the same team schedule the phone app does,
+   plus a payroll book to approve and print timesheets. */
 function bindDashboardExtras(root, ctx) {
-  if (appRole(ctx.user) === "manager") bindAppSchedule(root, ctx);
+  if (appRole(ctx.user) === "manager") {
+    bindAppSchedule(root, ctx);
+    bindManagerPayroll(root, ctx);
+  }
 }
 
 /** Match a hash path against the route table, extracting `:params`. */
@@ -233,6 +253,7 @@ function wirePublic() {
   document.getElementById("siteBurger")?.addEventListener("click", () => {
     document.querySelector(".site-nav")?.classList.toggle("is-open");
   });
+  wireInstall(document);
 }
 
 function signOut() {
@@ -249,7 +270,7 @@ function signOut() {
    Chrome
    ------------------------------------------------------------------------- */
 
-const ROLE_LABEL = { admin: "Administrator", owner: "Owner", manager: "Store manager" };
+const ROLE_LABEL = { admin: "Administrator", owner: "Owner", manager: "Store manager", accountant: "Payroll accountant" };
 
 function railMarkup(activePath, scope) {
   const groups = new Map();
@@ -286,19 +307,19 @@ function railMarkup(activePath, scope) {
         alt="Smart Solutions AI" width="158"></a>
     </div>
     <div class="rail-scroll">${body}
-      <div class="rail-group">
+      ${roleOf(state.user) === "accountant" ? "" : `<div class="rail-group">
         <div class="rail-label">On your phone</div>
         <a class="rail-link" href="#/app">${icon("clock")}<span>Phone app</span></a>
-      </div>
+      </div>`}
     </div>
     <div class="rail-foot">
-      <div class="rail-user">
+      <a class="rail-user" href="#/profile" title="Your profile">
         <span class="avatar">${esc(initials(user.client || user.email))}</span>
         <span class="who">
           <b class="truncate">${esc(user.client || user.email || "")}</b>
           <span>${esc(ROLE_LABEL[roleOf(user)] || "Signed in")}</span>
         </span>
-      </div>
+      </a>
       <button class="btn btn-ghost btn-sm" id="signOut" style="width:100%;justify-content:flex-start;margin-top:4px">
         ${icon("logout")}Sign out</button>
     </div>`;
@@ -560,7 +581,12 @@ function render(options = {}) {
   const matched = matchRoute(pathname) || { route: ROUTES[0], params: {} };
   let { route } = matched;
   const { params } = matched;
-  if (!allowed(route, state.user)) route = ROUTES[0];
+  if (!allowed(route, state.user)) {
+    // The accountant's home is payroll, not the portfolio command centre.
+    route = roleOf(state.user) === "accountant"
+      ? ROUTES.find((entry) => entry.path === "/payroll")
+      : ROUTES[0];
+  }
 
   const scope = state.model ? resolveScope(state.model, query) : null;
   const ctx = {
@@ -590,8 +616,8 @@ function render(options = {}) {
   app.innerHTML = focusedClock
     ? `<div class="appview is-timeclock">
         <header class="app-top app-top-clock">
-          <span class="app-clock-badge no-print" aria-hidden="true">${icon("clock")}</span>
-          <h1>Time clock</h1>
+          <img class="app-mark" src="assets/logo-wordmark-dark.png" alt="Smart Solutions AI">
+          <h1 class="app-clock-title">${icon("clock")}<span>Time clock</span></h1>
           <button class="app-icon-btn no-print" id="appPrint" title="Print or save as PDF" aria-label="Print">${icon("printer")}</button>
           <a class="app-btn ghost app-exit no-print" href="#/app" title="Back to dashboard">${icon("close")}<span>Exit</span></a>
         </header>
@@ -604,6 +630,7 @@ function render(options = {}) {
           <h1>${esc(reportTitle(route, params))}</h1>
           <span class="app-role no-print">${esc(appRole(state.user))}</span>
           <button class="app-icon-btn no-print" id="appPrint" title="Print or save as PDF" aria-label="Print">${icon("printer")}</button>
+          <a class="app-icon-btn no-print" href="#/app/profile" title="Your profile" aria-label="Profile">${icon("owners")}</a>
           <a class="app-icon-btn no-print" href="#/" title="Full console" aria-label="Full console">${icon("external")}</a>
         </header>
         <main class="app-body" id="content">${body}</main>
@@ -654,6 +681,55 @@ function render(options = {}) {
   }
 }
 
+/* -------------------------------------------------------------------------
+   Install (PWA)
+   -------------------------------------------------------------------------
+   The whole console is a home-screen app. A service worker precaches the shell
+   so the browser offers "Install", and the crew — who live in the phone app —
+   can add it like any other app straight from the website. iOS has no install
+   API, so there the button points at the Add-to-Home-Screen steps instead.
+   ------------------------------------------------------------------------- */
+
+let deferredInstall = null;
+
+function initPWA() {
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("sw.js").catch(() => { /* offline install is best-effort */ });
+    });
+  }
+  window.addEventListener("beforeinstallprompt", (event) => {
+    event.preventDefault();
+    deferredInstall = event;
+    document.body.classList.add("can-install");
+  });
+  window.addEventListener("appinstalled", () => {
+    deferredInstall = null;
+    document.body.classList.remove("can-install");
+    toast("App installed", "ok");
+  });
+}
+
+async function promptInstall() {
+  if (deferredInstall) {
+    deferredInstall.prompt();
+    try { await deferredInstall.userChoice; } catch { /* dismissed */ }
+    deferredInstall = null;
+    document.body.classList.remove("can-install");
+    return;
+  }
+  if (!state.user) { navigate("/get-app"); return; }
+  toast("Open your browser menu and choose Add to Home Screen", "");
+}
+
+function wireInstall(root) {
+  (root || document).querySelectorAll("[data-install]").forEach((el) => {
+    if (el.dataset.installWired) return;
+    el.dataset.installWired = "1";
+    el.addEventListener("click", (event) => { event.preventDefault(); promptInstall(); });
+  });
+}
+
 function wireChrome() {
   document.getElementById("signOut")?.addEventListener("click", signOut);
   document.getElementById("themeToggle")?.addEventListener("click", toggleTheme);
@@ -678,6 +754,8 @@ function wireChrome() {
     if (!target || event.target.closest("a,button")) return;
     navigate(target.dataset.href);
   });
+
+  wireInstall(document);
 }
 
 /* -------------------------------------------------------------------------
@@ -742,6 +820,8 @@ async function boot() {
    ------------------------------------------------------------------------- */
 
 window.addEventListener("hashchange", () => render());
+
+initPWA();
 
 document.addEventListener("keydown", (event) => {
   if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {

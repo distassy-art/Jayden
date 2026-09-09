@@ -14,6 +14,7 @@ import {
 } from "../current.js";
 import { apiUrl, isAdmin } from "../data.js";
 import { renderTeamSchedule } from "./app.js";
+import { renderManagerPayrollCard } from "./payroll.js";
 
 const SEVERITY_TONE = { high: "neg", medium: "warn", low: "info" };
 
@@ -176,11 +177,21 @@ function monthEstimateSection(ctx) {
 /** Day-by-day sales, purchases and profit for the running month, newest first. */
 function dailyNumbersSection(ctx) {
   const { model, current } = ctx;
-  const month = current?.month;
-  const rows = scopeDays(model, ctx.scope.stationIds)
-    .filter((row) => !month || row.date.slice(0, 7) === month)
+  const all = scopeDays(model, ctx.scope.stationIds)
     .sort((a, b) => b.date.localeCompare(a.date));
-  if (!rows.length) return "";
+  if (!all.length) return "";
+
+  // Prefer the open month. If the stores in scope haven't filed a single day of
+  // it yet (a store still closing out last month), fall back to the most recent
+  // month they did file, and say so, rather than showing an empty table.
+  let month = current?.month || null;
+  let rows = month ? all.filter((row) => row.date.slice(0, 7) === month) : all;
+  let behind = false;
+  if (!rows.length) {
+    month = all[0].date.slice(0, 7);
+    rows = all.filter((row) => row.date.slice(0, 7) === month);
+    behind = true;
+  }
 
   const many = (ctx.scope.count || model.stations.length) > 1;
   const body = rows.map((row) => `<tr>
@@ -194,11 +205,14 @@ function dailyNumbersSection(ctx) {
   </tr>`).join("");
 
   const totals = sumDays(rows);
+  const hint = behind
+    ? `${monthLabel(month)} · the current month isn't filed for this store yet`
+    : `${current?.label || monthLabel(month)} · newest first`;
 
   return `<section class="card" style="margin-bottom:16px">
     <div class="card-head">
       <h3>Daily sales &amp; purchases</h3>
-      <span class="hint">${esc(current?.label || monthLabel(month))} · newest first</span>
+      <span class="hint">${esc(hint)}</span>
     </div>
     <div class="table-wrap"><table class="table">
       <thead><tr>
@@ -208,7 +222,7 @@ function dailyNumbersSection(ctx) {
       </tr></thead>
       <tbody>${body}</tbody>
       <tfoot><tr>
-        <td>Month to date</td>${many ? `<td class="num muted">${esc(num(totals.days))}</td>` : ""}
+        <td>${esc(behind ? monthLabel(month, true) : "Month to date")}</td>${many ? `<td class="num muted">${esc(num(totals.days))}</td>` : ""}
         <td class="num">${esc(num(totals.gas_vol))}</td>
         <td class="num">${esc(money(totals.sales))}</td>
         <td class="num">${esc(money(totals.purchases))}</td>
@@ -334,7 +348,8 @@ function renderManagerDashboard(ctx) {
     ${dailyNumbersSection(ctx)}
     ${managerWeeksCard(store)}
     ${managerBillingCard(ctx.data)}
-    ${renderTeamSchedule(ctx)}`;
+    ${renderTeamSchedule(ctx)}
+    ${renderManagerPayrollCard(ctx)}`;
 }
 
 export function renderDashboard(ctx) {

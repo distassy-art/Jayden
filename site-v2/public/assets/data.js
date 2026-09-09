@@ -14,6 +14,8 @@
    either mount with no configuration.
    ------------------------------------------------------------------------- */
 
+import { getAccountantByUsername } from "./appstore.js";
+
 export const MOUNT = new URL(import.meta.url).pathname.replace(/\/assets\/[^/]*$/, "");
 
 /** Prefix an internal `/api/...` path with the mount point. */
@@ -108,6 +110,11 @@ export function isAdmin(user = session.read()) {
   return name === "smartsolutionsai" || name === "admin";
 }
 
+/** True for a payroll accountant — a timesheets-only, on-device login. */
+export function isAccountant(user = session.read()) {
+  return Boolean(user) && user.role === "accountant";
+}
+
 /**
  * Verify credentials against the production account lists.
  * Resolves to a session object, or throws with a user-facing message.
@@ -115,6 +122,26 @@ export function isAdmin(user = session.read()) {
 export async function signIn(email, password) {
   const typed = String(email || "").trim().toLowerCase();
   if (!typed || !password) throw new Error("Enter a username and a password.");
+
+  // A payroll accountant is a local, on-device login (see appstore): they hold
+  // no upstream account and are checked first. Their console is timesheets only.
+  const accountant = getAccountantByUsername(typed);
+  if (accountant) {
+    if (String(password) !== String(accountant.password)) {
+      throw new Error("Wrong username or password.");
+    }
+    const user = {
+      email: accountant.username,
+      role: "accountant",
+      client: accountant.name || "Payroll Accountant",
+      stores: [],
+      accountantId: accountant.id,
+      signedInAt: Date.now(),
+    };
+    session.write(user);
+    return user;
+  }
+
   if (!crypto?.subtle) {
     throw new Error("This browser blocks secure hashing. Open the console over HTTPS.");
   }

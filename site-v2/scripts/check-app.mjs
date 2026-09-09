@@ -152,5 +152,64 @@ await bindOk("employee mode: picker then timesheet", async () => {
   if (!/Paid hours/.test(r.textContent)) throw new Error("no paid-hours figure");
 });
 
+/* ---- payroll (approve-to-print) and profiles ---- */
+const P = await import("../public/assets/views/payroll.js");
+const PR = await import("../public/assets/views/profile.js");
+const period = payPeriodOf(store.today());
+
+await bindOk("payroll: manager approves, then print unlocks", async () => {
+  const c = ctx();
+  c.current = { stores: [{ id: storeId, name: "Test store" }] };
+  const r = mount(P.renderManagerPayrollCard(c));
+  await P.bindManagerPayroll(r, c); await tick();
+  const sel = r.querySelector('[data-pay="emp"]');
+  if (!sel) throw new Error("no employee picker");
+  sel.value = emp.id; sel.dispatchEvent(new window.Event("change")); await tick(); await tick();
+  const printBtn = r.querySelector('[data-pay="print"]');
+  if (!printBtn || !printBtn.disabled) throw new Error("print must be disabled before approval");
+  const approve = r.querySelector('[data-pay="approve"]');
+  if (!approve) throw new Error("manager should be able to approve");
+  approve.click(); await tick(); await tick();
+  const appr = await store.getApproval(emp.id, period.start, period.end);
+  if (!appr) throw new Error("approval was not recorded");
+  if (r.querySelector('[data-pay="print"]').disabled) throw new Error("print should unlock after approval");
+});
+
+await bindOk("payroll: accountant reads totals, cannot approve", async () => {
+  const c = { ...ctx(), user: { role: "accountant", email: "accountant", accountantId: "acct_default", stores: [] } };
+  const r = mount(P.renderPayroll(c));
+  await P.bindPayroll(r, c); await tick(); await tick();
+  if (!/Period totals/.test(r.textContent)) throw new Error("no per-employee totals roster");
+  if (r.querySelector('[data-pay="approve"]')) throw new Error("accountant must not be able to approve");
+  if (/Download logins/.test(r.textContent)) throw new Error("accountant must not see the credentials export");
+});
+
+await bindOk("profile: accountant saves fields and changes password", async () => {
+  const c = { ...ctx(), user: { role: "accountant", email: "accountant", accountantId: "acct_default", stores: [] } };
+  const r = mount(PR.renderProfile(c)); await PR.bindProfile(r, c); await tick();
+  r.querySelector("#prof-first").value = "Pat";
+  r.querySelector("#prof-last").value = "Kim";
+  r.querySelector('[data-prof="save"]').click(); await tick();
+  const prof = store.getProfile("acct:acct_default");
+  if (!prof || prof.firstName !== "Pat") throw new Error("profile fields not saved");
+  if (r.querySelector("#prof-first").readOnly) throw new Error("name should be editable");
+  const userField = [...r.querySelectorAll("input")].find((i) => i.value === "accountant");
+  if (!userField || !userField.disabled) throw new Error("username must be read-only");
+  r.querySelector("#prof-pw1").value = "newpass"; r.querySelector("#prof-pw2").value = "newpass";
+  r.querySelector('[data-prof="password"]').click(); await tick();
+  const acct = (await store.listAccountants()).find((a) => a.id === "acct_default");
+  if (!acct || acct.password !== "newpass") throw new Error("password not changed");
+});
+
+await bindOk("profile: employee changes their PIN", async () => {
+  await store.setActiveEmployee(emp.id);
+  const c = ctx();
+  const r = mount(PR.renderAppProfile(c)); await PR.bindAppProfile(r, c); await tick();
+  r.querySelector("#prof-pw1").value = "9999"; r.querySelector("#prof-pw2").value = "9999";
+  r.querySelector('[data-prof="password"]').click(); await tick();
+  const e = await store.getEmployee(emp.id);
+  if (e.pin !== "9999") throw new Error("PIN not changed");
+});
+
 process.stdout.write(`\n${pass} passed, ${fail} failed\n`);
 process.exit(fail ? 1 : 0);
