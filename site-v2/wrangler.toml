@@ -16,17 +16,8 @@ workers_dev = true
 PREVIEW_ACCESS_SHA256 = "ba67702aadfdd4112766515c7b462430d90e57de539dbb0399106e6fe4ce6457"
 
 # Where the console is served from. Empty means the root of whatever hostname
-# points at this worker, which is right for the workers.dev URL. Set it to
-# "/new" together with the route below to serve from smartsolutionsai.us/new.
+# points at this worker, which is right for a workers.dev URL.
 MOUNT_PATH = ""
-
-# To put the console on smartsolutionsai.us/new, set MOUNT_PATH = "/new" above
-# and uncomment this. It adds a route to the zone; it does not modify, redeploy
-# or reconfigure `smartsolutions-site`, which keeps serving every other path.
-#
-# [[routes]]
-# pattern = "smartsolutionsai.us/new*"
-# zone_name = "smartsolutionsai.us"
 
 [assets]
 directory = "./public"
@@ -38,4 +29,47 @@ binding = "ASSETS"
 run_worker_first = true
 
 [observability]
+enabled = true
+
+# --------------------------------------------------------------------------
+# smartsolutionsai.us/new
+# --------------------------------------------------------------------------
+# `npx wrangler deploy --env live` serves the console from the real domain.
+#
+# The two designs run side by side. This adds routes to the zone; it does not
+# modify, redeploy or reconfigure `smartsolutions-site`, which keeps serving
+# every other path on the domain exactly as it does today. Only requests at
+# /new reach this worker.
+#
+# The pair of patterns is deliberate. A single "/new*" would also swallow
+# /newsletter and anything else merely starting with those three letters, so
+# the bare path and the subtree are matched separately instead. The worker
+# redirects /new to /new/ so both land in the same place.
+#
+# `vars` and `assets` are not inherited by a named environment, so both are
+# repeated below rather than picked up from above. The only deliberate
+# difference is MOUNT_PATH.
+
+[env.live]
+name = "smartsolutions-admin"
+workers_dev = false
+
+[[env.live.routes]]
+pattern = "smartsolutionsai.us/new"
+zone_name = "smartsolutionsai.us"
+
+[[env.live.routes]]
+pattern = "smartsolutionsai.us/new/*"
+zone_name = "smartsolutionsai.us"
+
+[env.live.vars]
+PREVIEW_ACCESS_SHA256 = "ba67702aadfdd4112766515c7b462430d90e57de539dbb0399106e6fe4ce6457"
+MOUNT_PATH = "/new"
+
+[env.live.assets]
+directory = "./public"
+binding = "ASSETS"
+run_worker_first = true
+
+[env.live.observability]
 enabled = true

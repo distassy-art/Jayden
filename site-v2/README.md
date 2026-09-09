@@ -157,24 +157,41 @@ gate — appropriate only if the worker already sits behind Cloudflare Access.
 
 ## Deploy
 
-### Into your own Cloudflare account
-
-Requires an API token with **Workers Scripts: Edit**. This creates a *new*
+Both deploy targets require an API token with **Workers Scripts: Edit** (and,
+for the domain, **Workers Routes: Edit**). Either way this creates a *new*
 worker and leaves `smartsolutions-site` alone.
+
+### Beside the current site, on smartsolutionsai.us/new
 
 ```bash
 cd site-v2
 npm install
+CLOUDFLARE_API_TOKEN=... npx wrangler deploy --env live
+```
+
+The two designs then run side by side: the existing site keeps serving the
+whole domain, and only `/new` reaches this worker. Nothing about
+`smartsolutions-site` is modified, redeployed or reconfigured — the change is
+two added routes, `/new` and `/new/*`.
+
+Matching those two patterns rather than the single `/new*` is deliberate:
+the latter would also capture `/newsletter` and anything else beginning with
+those letters, quietly taking paths away from the existing site.
+
+To take it down again, leaving the old site serving as before:
+
+```bash
+CLOUDFLARE_API_TOKEN=... npx wrangler delete --env live
+```
+
+### On a workers.dev URL
+
+```bash
 CLOUDFLARE_API_TOKEN=... npx wrangler deploy
 ```
 
-Publishes to `https://smartsolutions-admin-preview.<your-subdomain>.workers.dev`.
-
-To remove it:
-
-```bash
-CLOUDFLARE_API_TOKEN=... npx wrangler delete smartsolutions-admin-preview
-```
+Publishes to `https://smartsolutions-admin-preview.<your-subdomain>.workers.dev`
+and touches no routes on the domain at all.
 
 ### Throwaway deploy, no credentials
 
