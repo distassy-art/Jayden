@@ -9,12 +9,20 @@ main = "worker/index.js"
 compatibility_date = "2026-09-01"
 workers_dev = true
 
+[vars]
+# SHA-256 of the preview access phrase. Only the hash lives here; the phrase
+# itself is shared out of band. Remove this line to open the preview up, or
+# override it with `wrangler secret put PREVIEW_ACCESS_SHA256`.
+PREVIEW_ACCESS_SHA256 = "0ad5951af7a34935abff5f0f958135473f5fa73006338e279d445b572615fae7"
+
 [assets]
 directory = "./public"
 binding = "ASSETS"
-# The worker runs first so /api/* is proxied before the static handler answers.
-run_worker_first = ["/api/*"]
-not_found_handling = "single-page-application"
+# Every request goes through the worker, which then falls back to env.ASSETS.
+# Scoping this to /api/* would let static paths skip the worker altogether, and
+# with them the preview access gate — the shell would load for anyone with the
+# URL while only its data calls stayed locked.
+run_worker_first = true
 
 [observability]
 enabled = true

@@ -6,6 +6,7 @@
  *   node scripts/dev-server.mjs [--port 8787]
  */
 
+import { createHash } from "node:crypto";
 import { createReadStream } from "node:fs";
 import { stat } from "node:fs/promises";
 import { createServer } from "node:http";
@@ -19,6 +20,10 @@ const UPSTREAM = "https://smartsolutionsai.us";
 const args = process.argv.slice(2);
 const portFlag = args.indexOf("--port");
 const PORT = Number(portFlag !== -1 ? args[portFlag + 1] : process.env.PORT || 8787);
+
+// The deployed worker gates access with a passphrase. Locally that only gets in
+// the way, so it stays off unless PREVIEW_ACCESS_SHA256 is exported.
+const ACCESS_HASH = process.env.PREVIEW_ACCESS_SHA256 || "";
 
 const ENDPOINTS = new Map([
   ["/api/books-overlay", "/.netlify/functions/books-overlay"],
@@ -84,6 +89,29 @@ const server = createServer(async (req, res) => {
   if (url.pathname === "/healthz") {
     sendJson(res, 200, { ok: true, service: "smartsolutions-admin-preview-dev", upstream: UPSTREAM });
     return;
+  }
+
+  if (ACCESS_HASH) {
+    if (url.pathname === "/__access") {
+      const supplied = createHash("sha256").update(url.searchParams.get("key") || "").digest("hex");
+      if (supplied !== ACCESS_HASH) {
+        res.writeHead(401, { "content-type": "text/plain" });
+        res.end("That phrase was not recognised.");
+        return;
+      }
+      res.writeHead(302, {
+        location: "/",
+        "set-cookie": `ssv2_access=${ACCESS_HASH}; Path=/; HttpOnly; SameSite=Lax; Max-Age=604800`,
+      });
+      res.end();
+      return;
+    }
+    const cookie = /(?:^|;\s*)ssv2_access=([^;]+)/.exec(req.headers.cookie || "")?.[1] || "";
+    if (url.pathname !== "/assets/logo-mark.png" && cookie !== ACCESS_HASH) {
+      res.writeHead(401, { "content-type": "text/plain", "cache-control": "no-store" });
+      res.end("Preview locked. Visit /__access?key=<phrase>");
+      return;
+    }
   }
 
   if (url.pathname.startsWith("/api/")) {

@@ -85,10 +85,28 @@ npm run check          # renders every view against live data and asserts the ou
 This exercises all views, every store's detail page, and the degraded-feed
 paths, checking for `undefined` / `NaN` leaks and unbalanced markup.
 
-## Deploy the preview
+## Access gate
 
-Requires a Cloudflare API token with **Workers Scripts: Edit** on the account
-that owns `smartsolutions-site`.
+`workers.dev` URLs are reachable by anyone who has them, and these pages show
+real client financials, so the worker holds visitors at a passphrase before
+anything else loads.
+
+Only the SHA-256 of the phrase is stored, in `PREVIEW_ACCESS_SHA256` in
+`wrangler.toml`. To change it:
+
+```bash
+node -e 'console.log(require("crypto").createHash("sha256").update(process.argv[1]).digest("hex"))' "your new phrase"
+```
+
+Put the result in `wrangler.toml` and redeploy. Remove the variable to drop the
+gate — appropriate only if the worker already sits behind Cloudflare Access.
+
+## Deploy
+
+### Into your own Cloudflare account
+
+Requires an API token with **Workers Scripts: Edit**. This creates a *new*
+worker and leaves `smartsolutions-site` alone.
 
 ```bash
 cd site-v2
@@ -96,20 +114,24 @@ npm install
 CLOUDFLARE_API_TOKEN=... npx wrangler deploy
 ```
 
-That publishes to `https://smartsolutions-admin-preview.<subdomain>.workers.dev`.
-`smartsolutionsai.us` continues to serve the current site, unchanged.
+Publishes to `https://smartsolutions-admin-preview.<your-subdomain>.workers.dev`.
 
-To take it down again:
+To remove it:
 
 ```bash
 CLOUDFLARE_API_TOKEN=... npx wrangler delete smartsolutions-admin-preview
 ```
 
-### Before sharing the URL
+### Throwaway deploy, no credentials
 
-`workers.dev` URLs are public to anyone who has them, and this console shows
-real financial data. The pages are marked `noindex`, but put Cloudflare Access
-in front of the worker (or keep the URL private) before circulating it.
+```bash
+npx wrangler deploy --temporary
+```
+
+Publishes to a temporary Cloudflare account that expires in about an hour. The
+command prints a claim URL that moves the worker into a real account and makes
+it permanent. Temporary deployments also sit behind a Cloudflare bot check,
+which asks visitors to tick a box on first load; claiming removes it.
 
 ## Layout
 
