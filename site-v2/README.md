@@ -33,21 +33,38 @@ be issued or maintained.
 | **Owners** | How is each client doing across the stores they hold? |
 | **Stores** | How is every store doing, sortable by any figure, month or year-to-date? |
 | **Store detail** | Full history for one store: profit trend, buying against selling, departments, recent days. |
+| **Trends** | Every measure that moves profit, one chart each, against the same months last year. |
 | **Profit / Fuel / Purchases / Departments / Rankings** | The performance questions, each at whatever scope is active. |
+| **Leaks** | Which stores buy heaviest against what they sell, and which departments are thinnest. |
 | **The buy** | What can this month still spend, by department and by week — the only page about a month you can change. |
-| **Daily close** | The same figures by day, week, month or year. |
+| **Daily close** | The same figures by day, week, month or year, and how one day rolls into the year. |
 | **S2K invoices** | Which invoices never reached S2K, and how much cost is unaccounted for? |
 | **Vendor orders** | What was ordered, what arrived, and what is still unreconciled. |
+| **Vendors** | Which suppliers the buying actually went to, with invoice counts and dates. |
 | **Delivery calendar / Schedule** | When each vendor is due, and how confident we are about it. |
 | **Pricing** | Which price-change sheets have been published. |
 | **Billing** | What has been billed, collected, and is still outstanding. |
 | **Tickets** | Manager questions and days waiting for approval. |
 | **Data health** | Which stores have not closed the month, where the day gaps are, which feeds are stale. |
 
-Everything hangs off two controls that persist across pages: a **scope** (all
-stores → one owner → one store) and, where it applies, a **period** (day, week,
-month, year). The old site had a separate page per grain; here the grain is a
+Everything hangs off controls that persist across pages: a **scope** (all
+stores → one owner → one store), a **period** (day, week, month, year) on the
+day feed, and a **timeframe** on the performance pages — year to date, any
+finished year, or any single month, always against the same span a year
+earlier. The old site had a separate page per grain; here the grain is a
 control, so the figures cannot disagree between pages.
+
+### One caution about "store profit"
+
+In these books a store's profit is its sales minus what it bought in. Over a
+month that is a fair figure. Over a single day it is not: a store taking a
+$19,000 delivery on a Tuesday posts a $14,000 "loss" that Tuesday and earns it
+back as the stock sells. The identity holds on 1,057 of 1,090 store-days.
+
+Nothing in the console flags a single day's profit as a loss, and `check.mjs`
+fails if anything starts to. Judging a first draft of the Leaks page that way
+produced 276 loss-making days costing $652,000 across a portfolio that earned
+$14m.
 
 The **Needs attention** feed on the command centre ranks departments over
 budget, weeks bought past their ceiling, missing invoices, unpaid bills, open
