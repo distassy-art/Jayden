@@ -2,16 +2,17 @@
 
 import {
   barList, change, deltaBadge, emptyState, esc, icon, isNum, lineChart,
-  money, moneyShort, monthLabel, pct, sparkline, timeAgo,
+  money, moneyShort, monthLabel, num, dateLabel, pct, perGallon, sparkline, timeAgo,
 } from "../ui.js";
 import {
-  attentionItems, portfolioSeries, portfolioTotals, stationScorecards,
+  attentionItems, portfolioSeries, portfolioTotals, scopeDays, stationScorecards, sumDays,
 } from "../analytics.js";
 import { inScope, invoiceStores } from "../scope.js";
 import {
-  currentStores, partitionByPeriod, rollupDeptBudget, rollupWeeks,
+  currentStores, partitionByPeriod, rollupDeptBudget, rollupLastYear,
+  rollupMtd, rollupProjection, rollupWeeks,
 } from "../current.js";
-import { isAdmin } from "../data.js";
+import { apiUrl, isAdmin } from "../data.js";
 import { renderTeamSchedule } from "./app.js";
 
 const SEVERITY_TONE = { high: "neg", medium: "warn", low: "info" };
@@ -42,14 +43,245 @@ function attentionRow(item) {
   </a>`;
 }
 
+/* -------------------------------------------------------------------------
+   This month so far, and the days behind it
+   -------------------------------------------------------------------------
+   The command centre used to open on the last *closed* month, which on the 8th
+   of a new month is five weeks stale. These two sections put the running month
+   up front: the month-to-date totals for whatever is in scope, and the day-by-
+   day sales and purchases that make them up — the table the old manager
+   dashboard led with.
+   ------------------------------------------------------------------------- */
+
+/** Month-to-date totals for the filed stores in scope, with a pace projection. */
+function currentMonthSection(ctx) {
+  const { current } = ctx;
+  if (!current) return "";
+  const filed = partitionByPeriod(currentStores(current, ctx.scope)).filed;
+  const mtd = rollupMtd(filed);
+  if (!mtd) return "";
+
+  const projection = rollupProjection(filed);
+  const lastYear = rollupLastYear(filed);
+  const through = mtd.through ? dateLabel(mtd.through) : "";
+  const label = current.label || monthLabel(current.month);
+
+  const stat = (labelText, value, foot, tone = "") => `<div class="stat">
+    <div class="stat-label">${esc(labelText)}</div>
+    <div class="stat-value${tone}" style="font-size:22px">${esc(value)}</div>
+    <div class="stat-foot">${foot}</div>
+  </div>`;
+
+  // A part-month total against last year's whole month is meaningless, so the
+  // year-over-year read is only ever put on the pace projection, and labelled.
+  const paced = projection && lastYear && lastYear.wholeMonth;
+  const pace = paced
+    ? `<div class="stat-foot">${deltaBadge(change(projection.total_profit, lastYear.total_profit))}
+       <span>on pace for ${esc(moneyShort(projection.total_profit))} vs
+       ${esc(moneyShort(lastYear.total_profit))} in ${esc(lastYear.label)}</span></div>`
+    : `<div class="stat-foot"><span class="muted">Straight-line pace needs a full month last year to compare</span></div>`;
+
+  return `<section class="card" style="margin-bottom:16px">
+    <div class="card-head">
+      <h3>This month so far</h3>
+      <span class="hint">${esc(label)}${through ? ` · through ${esc(through)}` : ""}${mtd.stores > 1 ? ` · ${esc(num(mtd.stores))} stores filed` : ""}</span>
+      <span class="spacer"></span>
+      <a class="btn btn-sm btn-ghost" href="#/daily">Daily close ${icon("chevron")}</a>
+    </div>
+    <div class="card-body">
+      <div class="grid cols-4">
+        ${stat("Store sales", money(mtd.sales), `<span class="muted">Merchandise, month to date</span>`)}
+        ${stat("Purchases", money(mtd.purchases),
+          `<span class="muted">${esc(pct(mtd.sales ? mtd.purchases / mtd.sales : null))} of sales</span>`)}
+        ${stat("Store profit", money(mtd.store_profit),
+          `<span class="muted">${esc(pct(mtd.margin))} margin</span>`,
+          Number(mtd.store_profit) < 0 ? " neg-text" : "")}
+        ${stat("Total profit", money(mtd.total_profit),
+          `<span class="muted">${esc(money(mtd.gas_profit))} fuel · ${esc(money(mtd.store_profit))} store</span>`,
+          Number(mtd.total_profit) < 0 ? " neg-text" : "")}
+      </div>
+      ${pace}
+    </div>
+  </section>`;
+}
+
+/** Day-by-day sales, purchases and profit for the running month, newest first. */
+function dailyNumbersSection(ctx) {
+  const { model, current } = ctx;
+  const month = current?.month;
+  const rows = scopeDays(model, ctx.scope.stationIds)
+    .filter((row) => !month || row.date.slice(0, 7) === month)
+    .sort((a, b) => b.date.localeCompare(a.date));
+  if (!rows.length) return "";
+
+  const many = (ctx.scope.count || model.stations.length) > 1;
+  const body = rows.map((row) => `<tr>
+    <td class="strong">${esc(dateLabel(row.date))}</td>
+    ${many ? `<td class="num muted">${esc(num(row.stores))}</td>` : ""}
+    <td class="num">${esc(num(row.gas_vol))}</td>
+    <td class="num">${esc(money(row.sales))}</td>
+    <td class="num">${esc(money(row.purchases))}</td>
+    <td class="num${Number(row.store_profit) < 0 ? " neg-text" : ""}">${esc(money(row.store_profit))}</td>
+    <td class="num strong">${esc(money(row.total_profit))}</td>
+  </tr>`).join("");
+
+  const totals = sumDays(rows);
+
+  return `<section class="card" style="margin-bottom:16px">
+    <div class="card-head">
+      <h3>Daily sales &amp; purchases</h3>
+      <span class="hint">${esc(current?.label || monthLabel(month))} · newest first</span>
+    </div>
+    <div class="table-wrap"><table class="table">
+      <thead><tr>
+        <th>Day</th>${many ? `<th class="num">Stores</th>` : ""}
+        <th class="num">Gallons</th><th class="num">Sales</th><th class="num">Purchases</th>
+        <th class="num">Store profit</th><th class="num">Total profit</th>
+      </tr></thead>
+      <tbody>${body}</tbody>
+      <tfoot><tr>
+        <td>Month to date</td>${many ? `<td class="num muted">${esc(num(totals.days))}</td>` : ""}
+        <td class="num">${esc(num(totals.gas_vol))}</td>
+        <td class="num">${esc(money(totals.sales))}</td>
+        <td class="num">${esc(money(totals.purchases))}</td>
+        <td class="num">${esc(money(totals.store_profit))}</td>
+        <td class="num strong">${esc(money(totals.total_profit))}</td>
+      </tr></tfoot>
+    </table></div>
+  </section>`;
+}
+
+/* -------------------------------------------------------------------------
+   The manager's own dashboard
+   -------------------------------------------------------------------------
+   A manager holds one store and lives in the running month, not the closed
+   books an owner reads. Their command centre is that store: the month to date,
+   the daily sales and purchases, this week's buying ceiling, the bill for the
+   month, and the same team schedule the phone app carries.
+   ------------------------------------------------------------------------- */
+
+function managerAlert(store) {
+  if (!store?.alert || !store.alert.notes.length) return "";
+  return `<section class="card" style="margin-bottom:16px">
+    <div class="card-head"><h3>${esc(store.alert.heading || "Weekly alert")}</h3>
+      <span class="hint">${esc(store.alert.storeLine || "")}</span></div>
+    <div class="card-body"><ul class="plain-list">
+      ${store.alert.notes.map((note) => `<li>${esc(note)}</li>`).join("")}
+    </ul></div>
+  </section>`;
+}
+
+function managerWeeksCard(store) {
+  const weeks = (store?.weeks || []).filter((week) => isNum(week.maximum));
+  if (!weeks.length) return "";
+  const rows = weeks.map((week) => {
+    const over = isNum(week.over) ? week.over : null;
+    const tone = over != null && over > 0 ? " neg-text" : "";
+    return `<tr>
+      <td class="strong">${esc(week.label)}</td>
+      <td class="num">${esc(money(week.maximum))}</td>
+      <td class="num">${esc(week.started ? money(week.actual) : "—")}</td>
+      <td class="num${tone}">${week.started && isNum(week.over)
+        ? esc((week.over > 0 ? "+" : "") + money(week.over)) : "—"}</td>
+    </tr>`;
+  }).join("");
+  return `<section class="card" style="margin-bottom:16px">
+    <div class="card-head"><h3>This month's buying budget</h3>
+      <span class="hint">Weekly purchase ceilings</span></div>
+    <div class="table-wrap"><table class="table">
+      <thead><tr><th>Week</th><th class="num">Budget</th><th class="num">Spent</th><th class="num">Over / under</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div>
+  </section>`;
+}
+
+/** The manager's own store bill, scoped server-side to their store only. */
+function managerBillingCard(data) {
+  const billing = data.myBilling;
+  if (!billing || !billing.applicable) return "";
+  const invoices = billing.invoices || [];
+
+  const statusBadge = (status) => {
+    const paid = String(status || "").toLowerCase() === "paid";
+    return `<span class="badge ${paid ? "pos" : "warn"}">${esc(paid ? "Paid" : "Unpaid")}</span>`;
+  };
+
+  const list = invoices.length
+    ? invoices.map((invoice) => `<tr>
+        <td class="strong">${esc(monthLabel(invoice.month))}</td>
+        <td>${esc(invoice.description || invoice.kind || "Service")}</td>
+        <td class="num strong">${esc(money(invoice.total))}</td>
+        <td>${statusBadge(invoice.status)}</td>
+        <td>${invoice.pdf ? `<a class="btn btn-sm btn-ghost" href="${esc(apiAsset(invoice.pdf))}" target="_blank" rel="noopener">${icon("invoice")}PDF</a>` : ""}</td>
+      </tr>`).join("")
+    : `<tr><td colspan="5">${emptyState("No invoices yet", "Nothing has been billed to this store.")}</td></tr>`;
+
+  return `<section class="card" style="margin-bottom:16px">
+    <div class="card-head">
+      <h3>Your bill</h3>
+      <span class="hint">What Smart Solutions has billed this store</span>
+    </div>
+    <div class="card-body">
+      <div class="grid cols-2" style="margin-bottom:12px">
+        <div class="stat">
+          <div class="stat-label">Outstanding</div>
+          <div class="stat-value${billing.unpaidTotal > 0 ? " neg-text" : ""}" style="font-size:22px">${esc(money(billing.unpaidTotal))}</div>
+          <div class="stat-foot"><span class="muted">Unpaid across ${esc(num(invoices.filter((i) => String(i.status || "").toLowerCase() !== "paid").length))} invoice(s)</span></div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Billed in total</div>
+          <div class="stat-value" style="font-size:22px">${esc(money(billing.total))}</div>
+          <div class="stat-foot"><span class="muted">${esc(num(invoices.length))} invoice(s) on file</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="table-wrap"><table class="table">
+      <thead><tr><th>Month</th><th>What for</th><th class="num">Amount</th><th>Status</th><th></th></tr></thead>
+      <tbody>${list}</tbody>
+    </table></div>
+  </section>`;
+}
+
+/** Turn an upstream `/data/...` pdf path into a console asset URL. */
+function apiAsset(path) {
+  const clean = String(path || "");
+  return apiUrl(`/api/asset${clean.startsWith("/") ? "" : "/"}${clean}`);
+}
+
+function renderManagerDashboard(ctx) {
+  const { model, current } = ctx;
+  const store = current?.stores?.[0] || null;
+  const name = store?.name || model.stations[0]?.name || "Your store";
+
+  const head = `<div class="page-head">
+    <h2>${esc(name)}</h2>
+    <p>Where your store stands in <b>${esc(current?.label || "the current month")}</b>.
+      ${current?.lastClosedMonth ? `Last closed month was ${esc(current.lastClosedMonth)}.` : ""}</p>
+  </div>`;
+
+  return `${head}
+    ${currentMonthSection(ctx)}
+    ${managerAlert(store)}
+    ${dailyNumbersSection(ctx)}
+    ${managerWeeksCard(store)}
+    ${managerBillingCard(ctx.data)}
+    ${renderTeamSchedule(ctx)}`;
+}
+
 export function renderDashboard(ctx) {
   const { model, data, current } = ctx;
-  const { latestMonth, previousMonth, yearAgoMonth, ytdKeys, priorYtdKeys } = model;
 
   if (!model.stations.length) {
     return emptyState("No store data available", "The books feed returned no stations.", "health");
   }
 
+  // A manager gets a store-focused command centre; owners and admins get the
+  // portfolio one below.
+  if (ctx.user && !isAdmin(ctx.user) && ctx.user.role === "manager") {
+    return renderManagerDashboard(ctx);
+  }
+
+  const { latestMonth, previousMonth, yearAgoMonth, ytdKeys, priorYtdKeys } = model;
   const month = portfolioTotals(model, latestMonth ? [latestMonth] : []);
   const prevMonth = portfolioTotals(model, previousMonth ? [previousMonth] : []);
   const yearAgo = portfolioTotals(model, yearAgoMonth ? [yearAgoMonth] : []);
@@ -181,7 +413,8 @@ export function renderDashboard(ctx) {
   return `
     <div class="page-head">
       <h2>Command centre</h2>
-      <p>Portfolio position for <b>${esc(monthLabel(latestMonth))}</b>, the newest month most stores have closed.
+      <p>${current?.label ? `<b>${esc(current.label)}</b> up top, then the ` : "The "}portfolio position for
+      <b>${esc(monthLabel(latestMonth))}</b>, the newest month most stores have closed.
       ${model.updatedAt ? `Books last published ${esc(timeAgo(model.updatedAt))}.` : ""}</p>
     </div>
 
@@ -190,6 +423,8 @@ export function renderDashboard(ctx) {
         <div>${esc(feedNotes.map(([name, message]) => `${name}: ${message}`).join(" · "))}</div>
         <div class="tiny" style="margin-top:4px">Everything else on this page is still accurate.</div>
       </div></div>` : ""}
+
+    ${currentMonthSection(ctx)}
 
     <div class="grid cols-4" style="margin-bottom:16px">${cards}</div>
 
@@ -213,6 +448,8 @@ export function renderDashboard(ctx) {
         <div class="card-body flush">${attentionBody}</div>
       </section>
     </div>
+
+    ${dailyNumbersSection(ctx)}
 
     <div class="grid cols-3">
       <section class="card">
@@ -243,7 +480,6 @@ export function renderDashboard(ctx) {
         </div>
       </div>
     </section>
-    ${ctx.user && !isAdmin(ctx.user) && ctx.user.role === "manager" ? renderTeamSchedule(ctx) : ""}
   `;
 }
 

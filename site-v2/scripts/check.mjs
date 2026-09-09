@@ -672,11 +672,29 @@ async function main() {
   const mgrModel = buildModel(overlay, { stores: [single], monthly, openDays, depts });
   mgrModel.owners = buildOwners(owners?.accounts || [], mgrModel);
   const mgrCurrent = buildCurrent(manager, { stores: [single] });
+  // A synthetic scoped bill, shaped like /api/billing-mine, so the manager
+  // dashboard's billing card is exercised (and checked for leaks).
+  const mgrData = {
+    ...data,
+    billing: null,
+    myBilling: {
+      ok: true, applicable: true, store: single, month: current?.month || null,
+      rate: 750, updatedAt: null,
+      invoices: [{
+        id: `inv_${single}_demo`, month: current?.month || "2026-09", date: "2026-09-05",
+        kind: "s2k_per_line", description: "September 2026 S2K invoicing", status: "unpaid",
+        total: 15.1, pdf: null, lines: [],
+      }],
+      total: 15.1, unpaidTotal: 15.1,
+    },
+  };
+  const mgrUser = { role: "manager", email: "arcodb", client: "Arco DB", stores: [single] };
   const mgrCtx = (query = "", params = {}) => {
     const search = new URLSearchParams(query);
     return {
+      user: mgrUser,
       model: mgrModel,
-      data,
+      data: mgrData,
       query: search,
       params,
       pathname: "/",
