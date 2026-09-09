@@ -12,6 +12,9 @@
 
 import { buildModel } from "../public/assets/analytics.js";
 import { buildOwners, resolveScope } from "../public/assets/scope.js";
+import {
+  buildCurrent, currentStores, rollupDeptBudget, rollupMtd, rollupWeeks,
+} from "../public/assets/current.js";
 import { renderDashboard } from "../public/assets/views/dashboard.js";
 import { renderStore, renderStores } from "../public/assets/views/stores.js";
 import { renderOwner, renderOwners } from "../public/assets/views/owners.js";
@@ -21,6 +24,7 @@ import {
   renderDepartments, renderFuel, renderProfit, renderPurchases, renderRankings,
 } from "../public/assets/views/analysis.js";
 import { renderDaily } from "../public/assets/views/periods.js";
+import { renderBudget } from "../public/assets/views/budget.js";
 import { renderCalendar, renderSchedule } from "../public/assets/views/planning.js";
 import { PUBLIC_ROUTES, renderLogin } from "../public/assets/views/site.js";
 
@@ -76,7 +80,7 @@ function inspect(name, markup) {
 async function main() {
   process.stdout.write(`Checking against ${BASE}\n\n`);
 
-  const [overlay, billing, tickets, days, s2k, orders, pricing, owners] = await Promise.all([
+  const [overlay, billing, tickets, days, s2k, orders, pricing, owners, manager] = await Promise.all([
     get("/api/books-overlay"),
     get("/api/billing").catch(() => null),
     get("/api/mgr-tickets").catch(() => null),
@@ -85,11 +89,13 @@ async function main() {
     get("/api/data/vendor-orders.json").catch(() => null),
     get("/api/data/pricing.json").catch(() => null),
     get("/api/data/owners.json").catch(() => null),
+    get("/api/data/manager.json").catch(() => null),
   ]);
 
-  const data = { overlay, billing, tickets, days, s2k, orders, pricing, owners, errors: {} };
+  const data = { overlay, billing, tickets, days, s2k, orders, pricing, owners, manager, errors: {} };
   const model = buildModel(overlay);
   model.owners = buildOwners(owners?.accounts || [], model);
+  const current = buildCurrent(manager);
 
   process.stdout.write("Model\n");
   assert(model.stations.length > 0, "model: no stations parsed");
@@ -123,6 +129,72 @@ async function main() {
   process.stdout.write(`  ok    ${model.owners.length} clients covering ${owned.length} stores `
     + `(${model.owners.map((o) => `${o.client} ${o.stations.length}`).join(", ")})\n`);
 
+  /*
+   * The open month.
+   * A part-month next to last year's whole month is the easiest wrong number to
+   * publish, so the shape of that comparison is asserted rather than trusted.
+   */
+  if (current) {
+    process.stdout.write("\nOpen month\n");
+    assert(current.stores.length > 0, "open month: no stores in the manager feed");
+
+    const known = new Set(model.stations.map((station) => station.id));
+    const strangers = current.stores.map((store) => store.id).filter((id) => !known.has(id));
+    assert(strangers.length === 0,
+      `open month: ${strangers.join(", ")} are not in the books overlay`);
+
+    for (const store of current.stores) {
+      // A "Total" row left in the department budget double-counts every line.
+      const totals = store.deptBudget.filter((row) => /^total/i.test(row.name));
+      assert(totals.length === 0,
+        `open month ${store.id}: a total row survived into the department budget`);
+
+      if (store.mtd && store.projection) {
+        assert(store.projection.days === store.mtd.days,
+          `open month ${store.id}: projection is built off a different day count`);
+        assert(store.projection.days < store.projection.daysInMonth,
+          `open month ${store.id}: projected a month that is already complete`);
+        assert(Number(store.projection.sales) >= Number(store.mtd.sales || 0) - 0.01,
+          `open month ${store.id}: pace lands below what is already filed`);
+      }
+
+      for (const row of store.deptBudget) {
+        if (!Number.isFinite(row.budget)) continue;
+        const left = row.budget - row.spent;
+        assert(Math.abs(left - row.left) < 0.02,
+          `open month ${store.id} ${row.name}: headroom ${row.left} does not equal `
+          + `${row.budget} - ${row.spent}`);
+      }
+    }
+
+    // Roll-ups have to reconcile to the parts they were summed from.
+    const all = currentStores(current, { stationIds: null });
+    const rolled = rollupMtd(all);
+    if (rolled) {
+      const bySales = all.reduce((sum, store) => sum + (store.mtd?.sales || 0), 0);
+      assert(Math.abs(rolled.sales - bySales) < 0.02,
+        `open month: rolled sales ${rolled.sales} does not equal the ${all.length} parts ${bySales}`);
+      assert(rolled.days <= 31, `open month: ${rolled.days} days summed rather than taken as a span`);
+      const ratio = rolled.sales ? rolled.purchases / rolled.sales : null;
+      assert(Math.abs(ratio - rolled.buy_ratio) < 1e-9,
+        "open month: the buy ratio was averaged rather than recomputed");
+    }
+
+    const rolledBudget = rollupDeptBudget(all);
+    const partsSpent = all.reduce((sum, store) =>
+      sum + store.deptBudget.reduce((inner, row) => inner + row.spent, 0), 0);
+    const rolledSpent = rolledBudget.reduce((sum, row) => sum + row.spent, 0);
+    assert(Math.abs(rolledSpent - partsSpent) < 0.02,
+      `open month: rolled spend ${rolledSpent} does not equal the parts ${partsSpent}`);
+
+    const weeks = rollupWeeks(all);
+    assert(weeks.every((week, i) => week.index === i),
+      "open month: weekly ceilings came back out of order");
+
+    process.stdout.write(`  ok    ${current.stores.length} stores through ${current.asOf}, `
+      + `${rolledBudget.length} departments budgeted, ${weeks.length} weeks\n`);
+  }
+
   const ctx = (query = "", params = {}) => {
     const search = new URLSearchParams(query);
     return {
@@ -132,6 +204,7 @@ async function main() {
       params,
       pathname: "/",
       scope: resolveScope(model, search),
+      current,
       navigate() {},
     };
   };
@@ -170,6 +243,7 @@ async function main() {
   inspect("health", renderHealth(ctx()));
   inspect("calendar", renderCalendar(ctx()));
   inspect("schedule", renderSchedule(ctx()));
+  inspect("buy", renderBudget(ctx()));
 
   // Every grain of the daily page, since each buckets the day feed differently.
   for (const period of ["day", "week", "month", "year"]) {
@@ -182,6 +256,7 @@ async function main() {
     inspect(`profit scoped to ${owner.id}`, renderProfit(ctx(`owner=${owner.id}`)));
     inspect(`daily scoped to ${owner.id}`, renderDaily(ctx(`owner=${owner.id}&period=week`)));
     inspect(`calendar scoped to ${owner.id}`, renderCalendar(ctx(`owner=${owner.id}`)));
+    inspect(`buy scoped to ${owner.id}`, renderBudget(ctx(`owner=${owner.id}`)));
     inspect(`schedule scoped to ${owner.id}`, renderSchedule(ctx(`owner=${owner.id}`)));
   }
   inspect("owner/unknown", renderOwner(ctx("", { id: "no-such-client" })));
@@ -211,6 +286,7 @@ async function main() {
   const single = model.stations[0].id;
   const mgrModel = buildModel(overlay, { stores: [single] });
   mgrModel.owners = buildOwners(owners?.accounts || [], mgrModel);
+  const mgrCurrent = buildCurrent(manager, { stores: [single] });
   const mgrCtx = (query = "", params = {}) => {
     const search = new URLSearchParams(query);
     return {
@@ -220,6 +296,7 @@ async function main() {
       params,
       pathname: "/",
       scope: resolveScope(mgrModel, search),
+      current: mgrCurrent,
       navigate() {},
     };
   };
@@ -240,6 +317,7 @@ async function main() {
     ["dashboard", renderDashboard(mgrCtx())],
     ["schedule", renderSchedule(mgrCtx())],
     ["calendar", renderCalendar(mgrCtx())],
+    ["buy", renderBudget(mgrCtx())],
   ];
   for (const [name, markup] of leakScan) {
     const leaked = otherIds.filter((id) => markup.includes(id));
@@ -256,6 +334,7 @@ async function main() {
   inspect("manager daily", renderDaily(mgrCtx()));
   inspect("manager calendar", renderCalendar(mgrCtx()));
   inspect("manager schedule", renderSchedule(mgrCtx()));
+  inspect("manager buy", renderBudget(mgrCtx()));
   inspect("manager invoices", renderInvoices(mgrCtx()));
   inspect("manager orders", renderOrders(mgrCtx()));
   inspect("manager tickets", renderTickets(mgrCtx()));
@@ -285,6 +364,7 @@ async function main() {
   inspect("health (feeds down)", renderHealth(bareCtx));
   inspect("calendar (feed down)", renderCalendar(bareCtx));
   inspect("schedule (feed down)", renderSchedule(bareCtx));
+  inspect("buy (open month down)", renderBudget(bareCtx));
 
   process.stdout.write(`\n${checks - failures}/${checks} checks passed\n`);
   if (failures) {

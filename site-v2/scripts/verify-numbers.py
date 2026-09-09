@@ -7,8 +7,10 @@ This deliberately does not import any of the console's code. It re-derives the
 rules from scratch so that a mistake in the JavaScript aggregation shows up as a
 mismatch rather than being reproduced identically on both sides.
 
-    node scripts/dump-model.mjs > /tmp/console-figures.json
-    python3 scripts/verify-numbers.py /tmp/console-figures.json /tmp/live/overlay.json
+    node scripts/dump-model.mjs > /tmp/figures.json
+    curl -s http://localhost:8787/api/books-overlay > /tmp/overlay.json
+    curl -s http://localhost:8787/api/data/owners.json > /tmp/owners.json
+    python3 scripts/verify-numbers.py /tmp/figures.json /tmp/overlay.json /tmp/owners.json
 """
 
 import json
@@ -55,7 +57,7 @@ def real_month(entry):
                          "fuel_profit", "total_profit"))
 
 
-def main(figures_path, overlay_path):
+def main(figures_path, overlay_path, owners_path):
     figures = json.load(open(figures_path))
     stations = json.load(open(overlay_path))["overlay"]["stations"]
 
@@ -189,7 +191,7 @@ def main(figures_path, overlay_path):
 
     # --- owners --------------------------------------------------------------
     print("Owner groups")
-    owners = json.load(open(overlay_path.replace("overlay.json", "data/owners.json")))
+    owners = json.load(open(owners_path))
     house = {"smartsolutionsai", "admin"}
     mine_owners = {}
     for account in owners["accounts"]:
@@ -345,4 +347,4 @@ def main(figures_path, overlay_path):
 
 
 if __name__ == "__main__":
-    sys.exit(main(sys.argv[1], sys.argv[2]))
+    sys.exit(main(sys.argv[1], sys.argv[2], sys.argv[3]))

@@ -8,6 +8,7 @@
 
 import { icon, initials, esc, timeAgo, toast, monthLabel } from "./ui.js";
 import { buildModel } from "./analytics.js";
+import { buildCurrent } from "./current.js";
 import { invalidate, isAdmin, loadWorkspace, session, signIn } from "./data.js";
 import { buildOwners, resolveScope, withScope } from "./scope.js";
 import { renderDashboard } from "./views/dashboard.js";
@@ -24,6 +25,7 @@ import {
   renderProfit, renderPurchases, renderRankings,
 } from "./views/analysis.js";
 import { bindDaily, renderDaily } from "./views/periods.js";
+import { bindBudget, renderBudget } from "./views/budget.js";
 import { bindCalendar, renderCalendar, renderSchedule } from "./views/planning.js";
 import { PUBLIC_ROUTES, renderLogin } from "./views/site.js";
 
@@ -49,6 +51,7 @@ const ROUTES = [
   { path: "/departments", title: "Departments", icon: "departments", group: "Performance", render: renderDepartments, bind: bindDepartments },
   { path: "/rankings", title: "Rankings", icon: "rankings", group: "Performance", render: renderRankings, bind: bindRankings, roles: ["admin", "owner"] },
 
+  { path: "/buy", title: "The buy", icon: "pricing", group: "Operations", render: renderBudget, bind: bindBudget },
   { path: "/daily", title: "Daily close", icon: "calendar", group: "Operations", render: renderDaily, bind: bindDaily },
   { path: "/invoices", title: "S2K invoices", icon: "invoice", group: "Operations", render: renderInvoices, bind: bindInvoices },
   { path: "/orders", title: "Vendor orders", icon: "orders", group: "Operations", render: renderOrders, bind: bindOrders },
@@ -103,6 +106,7 @@ const state = {
   user: null,
   data: null,
   model: null,
+  current: null,
   loading: false,
   loadError: null,
 };
@@ -203,6 +207,7 @@ function signOut() {
   state.user = null;
   state.data = null;
   state.model = null;
+  state.current = null;
   location.hash = "#/";
   renderPublic("You have been signed out.");
 }
@@ -526,6 +531,9 @@ async function refresh(force = false) {
     const model = buildModel(data.overlay, { stores: visibleStores() });
     model.owners = buildOwners(data.owners?.accounts || [], model);
     state.model = model;
+    // The open month comes from a separate feed; the console still works
+    // without it, so a failure here only blanks the pages that need it.
+    state.current = buildCurrent(data.manager, { stores: visibleStores() });
     if (force) toast("Data reloaded");
   } catch (failure) {
     state.loadError = failure.message || "Something went wrong.";

@@ -200,6 +200,7 @@ export function renderOwner(ctx) {
     </div>
 
     <div class="analysis-bar" style="margin-bottom:16px">
+      ${scoped("/buy", "The buy", "pricing")}
       ${scoped("/profit", "Profit", "profit")}
       ${scoped("/fuel", "Fuel", "fuel")}
       ${scoped("/purchases", "Purchases", "orders")}

@@ -1282,6 +1282,43 @@ button.trail-step:hover { background: var(--surface-3); color: var(--text); }
 }
 
 /* --------------------------------------------------------------------------
+   Budget meter
+   --------------------------------------------------------------------------
+   How much of a purchase budget is gone. The colour is the signal, so the fill
+   also thickens as it passes the point where the shape alone would be enough —
+   nothing here relies on colour by itself.
+   -------------------------------------------------------------------------- */
+
+.meter {
+  display: block;
+  width: 100%;
+  min-width: 72px;
+  height: 9px;
+  border-radius: 99px;
+  background: var(--surface-3);
+  overflow: hidden;
+}
+
+.meter > span {
+  display: block;
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.5s var(--ease);
+}
+
+.meter-pos > span { background: var(--pos-line); }
+.meter-warn > span { background: var(--warn-line); }
+.meter-neg > span {
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--neg-line) 0 5px,
+    color-mix(in srgb, var(--neg-line) 68%, #000) 5px 10px);
+}
+
+/* A week that has not started yet sits back rather than reading as "under". */
+tr.is-quiet > td { color: var(--text-3); }
+
+/* --------------------------------------------------------------------------
    Responsive
    -------------------------------------------------------------------------- */
 
