@@ -497,8 +497,12 @@ async function main() {
   process.stdout.write("\nLeaks\n");
   // Per store, not summed across them: a date where one store reported sales
   // and another did not breaks the identity in the aggregate without any store
-  // having broken it.
+  // having broken it. Scoped to closed months, too: the open month's daily feed
+  // reports true store profit (a real margin), not the sales-minus-purchases
+  // proxy the closed daily book uses, and it is the closed book the leaks page
+  // reasons over.
   const priced = storeDays(model, null)
+    .filter((row) => row.date.slice(0, 7) <= model.latestMonth)
     .filter((row) => isNum(row.sales) && isNum(row.purchases) && isNum(row.store_profit));
   const identity = priced.filter((row) =>
     Math.abs(row.store_profit - (row.sales - row.purchases)) < 1).length;
@@ -506,7 +510,7 @@ async function main() {
     `daily store profit is no longer sales minus purchases (${identity}/${priced.length})`
     + " — the leaks page assumes it is");
   process.stdout.write(`  ok    daily profit is sales minus purchases on `
-    + `${identity}/${priced.length} dates, so a delivery day is not a loss\n`);
+    + `${identity}/${priced.length} closed-month dates, so a delivery day is not a loss\n`);
 
   const leaks = renderLeaks(ctx());
   const singleDayLoss = priced.filter((row) => row.store_profit < 0).length;
