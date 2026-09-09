@@ -420,7 +420,55 @@ const SEVERITY_RANK = { high: 0, medium: 1, low: 2 };
  */
 export function attentionItems(model, extras = {}) {
   const items = [];
-  const { s2k, billing, tickets, days, pricing, orders } = extras;
+  const { s2k, billing, tickets, days, pricing, orders, buy } = extras;
+
+  /*
+   * Overspending in the open month.
+   * This outranks everything else on the page because it is the only entry
+   * that is still preventable — the rest describe money already spent.
+   */
+  const blown = (buy?.departments || []).filter((row) => isNum(row.left) && row.left < 0);
+  if (blown.length) {
+    const over = blown.reduce((sum, row) => sum + Math.abs(row.left), 0);
+    items.push({
+      severity: "high",
+      kind: "The buy",
+      title: `${blown.length} department${blown.length === 1 ? "" : "s"} past the month's budget`,
+      detail: `${blown.slice(0, 3).map((row) => row.name).join(", ")}`
+        + `${blown.length > 3 ? ` and ${blown.length - 3} more` : ""}`
+        + " — every further order deepens it.",
+      value: over,
+      href: "#/buy",
+      action: "Open the buy",
+    });
+  }
+
+  const tight = (buy?.departments || [])
+    .filter((row) => isNum(row.used) && row.used >= 0.9 && row.used <= 1);
+  if (tight.length && !blown.length) {
+    items.push({
+      severity: "medium",
+      kind: "The buy",
+      title: `${tight.length} department${tight.length === 1 ? "" : "s"} nearly out of budget`,
+      detail: `${tight.slice(0, 3).map((row) => row.name).join(", ")} — over 90% spent.`,
+      value: tight.reduce((sum, row) => sum + (row.left || 0), 0),
+      href: "#/buy",
+      action: "Open the buy",
+    });
+  }
+
+  const overWeek = (buy?.weeks || []).filter((week) => week.started && week.over > 0);
+  if (overWeek.length) {
+    items.push({
+      severity: overWeek.length > 1 ? "high" : "medium",
+      kind: "The buy",
+      title: `${overWeek.length} week${overWeek.length === 1 ? "" : "s"} bought past the ceiling`,
+      detail: overWeek.map((week) => week.label).join(", "),
+      value: overWeek.reduce((sum, week) => sum + week.over, 0),
+      href: "#/buy",
+      action: "Open the buy",
+    });
+  }
 
   // Money sitting outside S2K.
   const missing = s2k?.missing || [];

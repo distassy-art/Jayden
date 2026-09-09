@@ -8,6 +8,7 @@ import {
   attentionItems, portfolioSeries, portfolioTotals, stationScorecards,
 } from "../analytics.js";
 import { inScope, invoiceStores } from "../scope.js";
+import { currentStores, rollupDeptBudget, rollupWeeks } from "../current.js";
 
 const SEVERITY_TONE = { high: "neg", medium: "warn", low: "info" };
 
@@ -38,7 +39,7 @@ function attentionRow(item) {
 }
 
 export function renderDashboard(ctx) {
-  const { model, data } = ctx;
+  const { model, data, current } = ctx;
   const { latestMonth, previousMonth, yearAgoMonth, ytdKeys, priorYtdKeys } = model;
 
   if (!model.stations.length) {
@@ -90,8 +91,15 @@ export function renderDashboard(ctx) {
 
   // The feeds arrive whole; the attention list must only rank work for stores
   // this account can see, or a manager is told about another client's invoices.
+  // The open month is already limited to stores the account holds; the scope
+  // narrows it again to whatever the user is looking at.
+  const buyStores = current ? currentStores(current, ctx.scope) : [];
   const attention = attentionItems(model, {
     ...data,
+    buy: buyStores.length ? {
+      departments: rollupDeptBudget(buyStores),
+      weeks: rollupWeeks(buyStores),
+    } : null,
     s2k: data.s2k && {
       ...data.s2k,
       missing: inScope(model, ctx.scope, data.s2k.missing),
@@ -120,7 +128,8 @@ export function renderDashboard(ctx) {
   });
   const attentionBody = attention.length
     ? `<div class="attn-list">${attention.map(attentionRow).join("")}</div>`
-    : emptyState("Nothing needs attention", "No missing invoices, unpaid bills, open tickets or unclosed months.", "check");
+    : emptyState("Nothing needs attention",
+      "Nothing over budget, no missing invoices, no unpaid bills, no open tickets.", "check");
 
   // Profit trend for the portfolio.
   const trendKeys = model.closedMonths.slice(-18);

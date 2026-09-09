@@ -27,24 +27,39 @@ be issued or maintained.
 
 ## What it does
 
-Built around what an administrator needs first:
-
 | Page | What it answers |
 | --- | --- |
-| **Command centre** | Where does the portfolio stand this month, and what needs attention today? |
+| **Command centre** | Where does the portfolio stand, and what needs attention today? |
+| **Owners** | How is each client doing across the stores they hold? |
 | **Stores** | How is every store doing, sortable by any figure, month or year-to-date? |
 | **Store detail** | Full history for one store: profit trend, buying against selling, departments, recent days. |
+| **Profit / Fuel / Purchases / Departments / Rankings** | The performance questions, each at whatever scope is active. |
+| **The buy** | What can this month still spend, by department and by week — the only page about a month you can change. |
+| **Daily close** | The same figures by day, week, month or year. |
 | **S2K invoices** | Which invoices never reached S2K, and how much cost is unaccounted for? |
-| **Vendor orders** | What did the assistant order, what actually arrived, and what is still unreconciled? |
+| **Vendor orders** | What was ordered, what arrived, and what is still unreconciled. |
+| **Delivery calendar / Schedule** | When each vendor is due, and how confident we are about it. |
 | **Pricing** | Which price-change sheets have been published. |
 | **Billing** | What has been billed, collected, and is still outstanding. |
 | **Tickets** | Manager questions and days waiting for approval. |
 | **Data health** | Which stores have not closed the month, where the day gaps are, which feeds are stale. |
 
-The **Needs attention** feed on the command centre is the core of the redesign:
-it ranks missing invoices, unpaid bills, open tickets, unclosed months and
-stores losing money inside the store, worst first, each linking straight to the
-page that resolves it.
+Everything hangs off two controls that persist across pages: a **scope** (all
+stores → one owner → one store) and, where it applies, a **period** (day, week,
+month, year). The old site had a separate page per grain; here the grain is a
+control, so the figures cannot disagree between pages.
+
+The **Needs attention** feed on the command centre ranks departments over
+budget, weeks bought past their ceiling, missing invoices, unpaid bills, open
+tickets and stores losing money inside the shop — worst first, each linking to
+the page that resolves it. Budget items lead because they are the only entries
+that are still preventable.
+
+### Roles
+
+Routes and data are both filtered by account. A store manager's console is the
+same code against a one-store model, and no other store's figures reach the
+markup — `check.mjs` asserts that on every page a manager can open.
 
 ## Design
 
@@ -79,11 +94,29 @@ The dev server mirrors the worker exactly, including the read-only proxy.
 ## Check it
 
 ```bash
-npm run check          # renders every view against live data and asserts the output
+npm run dev            # in one terminal — the checks read through it
+npm run check          # in another
 ```
 
-This exercises all views, every store's detail page, and the degraded-feed
-paths, checking for `undefined` / `NaN` leaks and unbalanced markup.
+Three suites run in sequence:
+
+| Suite | What it does |
+| --- | --- |
+| `scripts/contrast.mjs` | Audits every design-token pairing against WCAG AA, in both themes. |
+| `scripts/check.mjs` | Renders every view against live data, at every scope, plus the single-store and dead-feed paths. Catches `undefined` / `NaN` leaks, unbalanced markup, and any store appearing on a manager's page. |
+| `verify-numbers.py`, `verify-buy.py` | Recompute the console's figures from the raw feeds **in Python**, independently of the JavaScript that produced them. |
+
+The Python verifiers are the important ones. The console derives its roll-ups
+in `analytics.js` and `current.js`; the verifiers do the same arithmetic from
+the untouched payloads, so an error has to be made twice, in two languages, to
+survive. They currently reconcile about 1,900 figures — year-to-date and
+monthly series, per-owner partitioning, the day grain at four resolutions,
+departments, and every line of the open month.
+
+They also assert the shape of the comparisons, not just the totals: that a
+part-month is never held against a whole one, that ratios are recomputed from
+summed parts rather than averaged, that blended department targets are weighted
+by sales, and that a "days" figure is a span rather than a sum.
 
 ## Access gate
 
@@ -143,13 +176,21 @@ site-v2/
     assets/
       app.js             Router, chrome, sign-in, command palette
       data.js            Auth and fetching
-      analytics.js       Roll-ups, comparisons, attention feed, data health
+      analytics.js       Closed-month roll-ups, comparisons, attention feed
+      current.js         The open month: budgets, pace, weekly ceilings
+      scope.js           Scope and period, and the bar that drives them
       ui.js              Formatting, icons, SVG charts
       base.css           Design tokens and components
+      site.css           The public site
       views/             One module per page
   scripts/
     dev-server.mjs       Local mirror of the worker
     check.mjs            Renders every view against live data
+    contrast.mjs         WCAG audit of the design tokens
+    dump-model.mjs       Closed-month figures as JSON, for the verifier
+    dump-buy.mjs         Open-month figures as JSON, for the verifier
+    verify-numbers.py    Recomputes the closed months from the raw feed
+    verify-buy.py        Recomputes the open month from the raw feed
     build-logos.py       Rebuilds the logo assets from brand-src/
   brand-src/             Original logo artwork, unmodified
 ```
