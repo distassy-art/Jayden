@@ -12,8 +12,8 @@ import {
   isNum, lineChart, money, moneyShort, monthLabel, num, pct, perGallon,
 } from "../ui.js";
 import {
-  MONTH_ABBR, departmentPeriods, departmentRollup, marginSeries, scopeOf,
-  scopeTotals, yearSeries,
+  MONTH_ABBR, departmentPeriods, departmentRollup, marginOver, monthSeries,
+  portfolioTotals, resolveTimeframe, scopeOf, scopeTotals, trailingMonths,
 } from "../analytics.js";
 import { bindScopeBar, scopeBar } from "../scope.js";
 
@@ -51,19 +51,95 @@ function yoyKpi(label, value, current, prior, { higherIsBetter = true, format = 
     isNum(current) && Number(current) < 0 ? "neg" : "");
 }
 
-/** Head shared by every analysis page. */
-function head(title, blurb, model, scope) {
+/* -------------------------------------------------------------------------
+   The selected timeframe
+   -------------------------------------------------------------------------
+   These pages were pinned to the running year, so two full years of monthly
+   figures had no way of being reached. `view` turns whatever the "Showing"
+   picker holds into the four things every page here needs: totals, the same
+   totals a year earlier, a month-by-month series, and the labels to put on
+   them.
+
+   The chart axis follows the selection. Asking for a year plots that year's
+   months against the year before. Asking for a single month plots the twelve
+   months up to and including it, so one month is still read in context rather
+   than as a bar on its own.
+   ------------------------------------------------------------------------- */
+
+function view(model, scope) {
+  const tf = scope.timeframe || resolveTimeframe(model, "ytd");
+
+  const chartKeys = tf.kind === "month"
+    ? trailingMonths(model, tf.id, 12)
+    : tf.keys;
+  const priorOf = (key) => `${Number(key.slice(0, 4)) - 1}-${key.slice(5)}`;
+  const chartPriorKeys = chartKeys.map(priorOf);
+
+  // Within one year the month alone is unambiguous. A trailing window crosses
+  // a new year, so those labels carry it.
+  const labels = chartKeys.map((key) => (tf.kind === "month"
+    ? `${MONTH_ABBR[Number(key.slice(5, 7)) - 1]} ${key.slice(2, 4)}`
+    : MONTH_ABBR[Number(key.slice(5, 7)) - 1]));
+
+  return {
+    tf,
+    keys: tf.keys,
+    priorKeys: tf.priorKeys,
+    chartKeys,
+    labels,
+    // "2026", "2025", "Aug 2026" — short enough for a column heading.
+    nowLabel: tf.kind === "month" ? tf.label : tf.year,
+    beforeLabel: tf.kind === "month"
+      ? tf.priorLabel
+      : String(Number(tf.year) - 1),
+    totals: (ids) => portfolioTotals(model, tf.keys, ids && ids.length ? ids : null),
+    priorTotals: (ids) => portfolioTotals(model, tf.priorKeys, ids && ids.length ? ids : null),
+    /*
+     * A month-by-month table shows the charted window, not the selection, so
+     * its footer has to sum that window too. Summing the selection under twelve
+     * rows of a trailing year would put a one-month total beneath them.
+     */
+    chartTotals: (ids) => portfolioTotals(model, chartKeys, ids && ids.length ? ids : null),
+    chartPriorTotals: (ids) => portfolioTotals(model, chartPriorKeys, ids && ids.length ? ids : null),
+    tableLabel: tf.kind === "month" ? "Last 12 months" : tf.label,
+    // Which charted row is the selected month, so the table can mark it.
+    selected: tf.kind === "month" ? chartKeys.indexOf(tf.id) : -1,
+    series: (metric, ids) => monthSeries(model, chartKeys, metric, ids),
+    priorSeries: (metric, ids) => monthSeries(model, chartPriorKeys, metric, ids),
+    margin: (ids) => marginOver(model, chartKeys, ids),
+    priorMargin: (ids) => marginOver(model, chartPriorKeys, ids),
+  };
+}
+
+/** How the selected timeframe reads in a sentence, under the scope bar. */
+function coverage(v) {
+  if (v.tf.kind === "month") {
+    return `${esc(v.tf.label)}, against ${esc(v.tf.priorLabel)}.`;
+  }
+  if (v.tf.kind === "year") {
+    return `All twelve months of ${esc(v.tf.year)}`
+      + `${v.priorKeys.length ? `, against ${esc(v.tf.priorLabel)}` : ", with no prior year to compare"}.`;
+  }
+  return `Closed months, ${esc(v.tf.year)} through `
+    + `${esc(monthLabel(v.keys[v.keys.length - 1], true))}, against the same months last year.`;
+}
+
+/*
+ * Head shared by every analysis page.
+ *
+ * `v` is null on pages whose data cannot be re-sliced by month — the department
+ * feed reports its own fixed periods rather than a monthly history. Those pages
+ * get no picker, because offering one that changed nothing would be worse than
+ * offering none.
+ */
+function head(title, blurb, model, scope, v) {
   return `<div class="page-head">
       <h2>${esc(title)}</h2>
       <p>${blurb}</p>
     </div>
-    ${scopeBar(model, scope, { period: false })}
-    <p class="tiny muted" style="margin:-6px 0 16px">Closed months, ${esc(model.currentYear)}
-      through ${esc(monthLabel(model.latestMonth, true))}, against the same months last year.</p>`;
+    ${scopeBar(model, scope, { period: false, time: Boolean(v) })}
+    ${v ? `<p class="tiny muted" style="margin:-6px 0 16px">${coverage(v)}</p>` : ""}`;
 }
-
-const thisYear = (model) => Number(model.currentYear);
-const lastYear = (model) => Number(model.currentYear) - 1;
 
 /* -------------------------------------------------------------------------
    Profit
@@ -72,26 +148,29 @@ const lastYear = (model) => Number(model.currentYear) - 1;
 export function renderProfit(ctx) {
   const { model, scope } = ctx;
   const ids = scopeIds(scope);
-  const now = thisYear(model);
-  const before = lastYear(model);
+  const v = view(model, scope);
+  const now = v.nowLabel;
+  const before = v.beforeLabel;
 
-  const ytd = scopeTotals(model, now, ids);
-  const prior = scopeTotals(model, before, ids);
+  const ytd = v.totals(ids);
+  const prior = v.priorTotals(ids);
+  const shown = v.chartTotals(ids);
+  const shownPrior = v.chartPriorTotals(ids);
 
-  const total6 = yearSeries(model, now, "total_profit", ids);
-  const total5 = yearSeries(model, before, "total_profit", ids);
-  const fuel6 = yearSeries(model, now, "fuel_profit", ids);
-  const store6 = yearSeries(model, now, "store_profit", ids);
+  const total6 = v.series("total_profit", ids);
+  const total5 = v.priorSeries("total_profit", ids);
+  const fuel6 = v.series("fuel_profit", ids);
+  const store6 = v.series("store_profit", ids);
 
-  const filed = MONTH_ABBR
+  const filed = v.labels
     .map((label, i) => ({ label, value: total6[i] }))
     .filter((row) => isNum(row.value));
   const strongest = filed.slice().sort((a, b) => b.value - a.value)[0];
   const weakest = filed.slice().sort((a, b) => a.value - b.value)[0];
 
-  const mix = MONTH_ABBR.map((label, i) => {
+  const mix = v.labels.map((label, i) => {
     if (!isNum(total6[i]) && !isNum(total5[i])) return "";
-    return `<tr>
+    return `<tr${i === v.selected ? ' class="is-marked"' : ""}>
       <td class="strong">${esc(label)}</td>
       <td class="num">${esc(money(fuel6[i]))}</td>
       <td class="num${Number(store6[i]) < 0 ? " neg-text" : ""}">${esc(money(store6[i]))}</td>
@@ -114,7 +193,7 @@ export function renderProfit(ctx) {
 
   return `${head("Profit", `Fuel against store against total for <b>${esc(scope.label)}</b>.
       Fuel can carry a month while the store quietly loses money, so the split matters as much as the total.`,
-    model, scope)}
+    model, scope, v)}
 
     <div class="grid cols-4" style="margin-bottom:16px">
       ${yoyKpi("Total profit", money(ytd.total_profit), ytd.total_profit, prior.total_profit)}
@@ -127,7 +206,7 @@ export function renderProfit(ctx) {
 
     <section class="card" style="margin-bottom:16px">
       <div class="card-head"><h3>Total profit by month</h3><span class="hint">${esc(now)} against ${esc(before)}</span></div>
-      <div class="card-body">${barChart(MONTH_ABBR, [
+      <div class="card-body">${barChart(v.labels, [
         { name: String(now), color: CYAN, values: total6 },
         { name: String(before), color: NAVY, values: total5 },
       ])}</div>
@@ -136,13 +215,13 @@ export function renderProfit(ctx) {
     <div class="grid split" style="margin-bottom:16px">
       <section class="card">
         <div class="card-head"><h3>Where the profit comes from</h3><span class="hint">Month by month</span></div>
-        <div class="card-body">${lineChart(MONTH_ABBR, [
+        <div class="card-body">${lineChart(v.labels, [
           { name: "Fuel profit", color: CYAN, values: fuel6 },
           { name: "Store profit", color: NAVY, values: store6 },
         ], { height: 240 })}</div>
       </section>
       <section class="card">
-        <div class="card-head"><h3>Profit mix</h3><span class="hint">Year to date</span></div>
+        <div class="card-head"><h3>Profit mix</h3><span class="hint">${esc(v.tf.label)}</span></div>
         <div class="card-body">${split || emptyState("No profit recorded")}</div>
       </section>
     </div>
@@ -154,12 +233,12 @@ export function renderProfit(ctx) {
           <th class="num">Total ${esc(now)}</th><th class="num">Total ${esc(before)}</th><th class="num">Change</th></tr></thead>
         <tbody>${mix || `<tr><td colspan="6">${emptyState("No closed months")}</td></tr>`}</tbody>
         <tfoot><tr>
-          <td>Year to date</td>
-          <td class="num">${esc(money(ytd.fuel_profit))}</td>
-          <td class="num">${esc(money(ytd.store_profit))}</td>
-          <td class="num">${esc(money(ytd.total_profit))}</td>
-          <td class="num">${esc(money(prior.total_profit))}</td>
-          <td class="num">${deltaBadge(change(ytd.total_profit, prior.total_profit))}</td>
+          <td>${esc(v.tableLabel)}</td>
+          <td class="num">${esc(money(shown.fuel_profit))}</td>
+          <td class="num">${esc(money(shown.store_profit))}</td>
+          <td class="num">${esc(money(shown.total_profit))}</td>
+          <td class="num">${esc(money(shownPrior.total_profit))}</td>
+          <td class="num">${deltaBadge(change(shown.total_profit, shownPrior.total_profit))}</td>
         </tr></tfoot>
       </table></div>
     </section>`;
@@ -172,25 +251,28 @@ export function renderProfit(ctx) {
 export function renderFuel(ctx) {
   const { model, scope } = ctx;
   const ids = scopeIds(scope);
-  const now = thisYear(model);
-  const before = lastYear(model);
+  const v = view(model, scope);
+  const now = v.nowLabel;
+  const before = v.beforeLabel;
 
-  const ytd = scopeTotals(model, now, ids);
-  const prior = scopeTotals(model, before, ids);
+  const ytd = v.totals(ids);
+  const prior = v.priorTotals(ids);
+  const shown = v.chartTotals(ids);
+  const shownPrior = v.chartPriorTotals(ids);
 
-  const vol6 = yearSeries(model, now, "gas_vol", ids);
-  const vol5 = yearSeries(model, before, "gas_vol", ids);
-  const profit6 = yearSeries(model, now, "gas_profit", ids);
-  const profit5 = yearSeries(model, before, "gas_profit", ids);
-  const margin6 = marginSeries(model, now, ids);
-  const margin5 = marginSeries(model, before, ids);
+  const vol6 = v.series("gas_vol", ids);
+  const vol5 = v.priorSeries("gas_vol", ids);
+  const profit6 = v.series("gas_profit", ids);
+  const profit5 = v.priorSeries("gas_profit", ids);
+  const margin6 = v.margin(ids);
+  const margin5 = v.priorMargin(ids);
 
   const cpg = (totals) => (totals.gas_vol ? totals.gas_profit / totals.gas_vol : null);
   const latestIndex = margin6.reduce((last, value, i) => (isNum(value) ? i : last), -1);
 
-  const rows = MONTH_ABBR.map((label, i) => {
+  const rows = v.labels.map((label, i) => {
     if (!isNum(vol6[i]) && !isNum(vol5[i])) return "";
-    return `<tr>
+    return `<tr${i === v.selected ? ' class="is-marked"' : ""}>
       <td class="strong">${esc(label)}</td>
       <td class="num">${esc(num(vol6[i]))}</td>
       <td class="num muted">${esc(num(vol5[i]))}</td>
@@ -204,14 +286,14 @@ export function renderFuel(ctx) {
   }).join("");
 
   const byStore = !ids.length ? scopeOf(model, null).map((station) => {
-    const s6 = scopeTotals(model, now, [station.id]);
-    const s5 = scopeTotals(model, before, [station.id]);
+    const s6 = v.totals([station.id]);
+    const s5 = v.priorTotals([station.id]);
     return { station, s6, s5, cpg: cpg(s6) };
   }).filter((row) => isNum(row.s6.gas_vol))
     .sort((a, b) => Number(b.s6.gas_profit) - Number(a.s6.gas_profit)) : [];
 
   return `${head("Fuel", `Gallons, cents per gallon and fuel profit for <b>${esc(scope.label)}</b>.
-      Margin is dollars earned per gallon sold, not a percentage.`, model, scope)}
+      Margin is dollars earned per gallon sold, not a percentage.`, model, scope, v)}
 
     <div class="grid cols-4" style="margin-bottom:16px">
       ${yoyKpi("Gallons", num(ytd.gas_vol), ytd.gas_vol, prior.gas_vol, { format: num })}
@@ -219,7 +301,7 @@ export function renderFuel(ctx) {
       ${kpi("Margin per gallon", perGallon(cpg(ytd)),
         `${deltaBadge(isNum(cpg(ytd)) && isNum(cpg(prior)) ? (cpg(ytd) - cpg(prior)) * 100 : null, { digits: 1, suffix: "¢" })}
          <span>from ${esc(perGallon(cpg(prior)))}</span>`)}
-      ${kpi(`${latestIndex >= 0 ? MONTH_ABBR[latestIndex] : "Latest"} margin`, perGallon(margin6[latestIndex]),
+      ${kpi(`${latestIndex >= 0 ? v.labels[latestIndex] : "Latest"} margin`, perGallon(margin6[latestIndex]),
         `${deltaBadge(latestIndex >= 0 && isNum(margin6[latestIndex]) && isNum(margin5[latestIndex])
           ? (margin6[latestIndex] - margin5[latestIndex]) * 100 : null, { digits: 1, suffix: "¢" })}
          <span>vs same month last year</span>`)}
@@ -228,14 +310,14 @@ export function renderFuel(ctx) {
     <div class="grid split" style="margin-bottom:16px">
       <section class="card">
         <div class="card-head"><h3>Gallons sold</h3><span class="hint">${esc(now)} against ${esc(before)}</span></div>
-        <div class="card-body">${barChart(MONTH_ABBR, [
+        <div class="card-body">${barChart(v.labels, [
           { name: String(now), color: CYAN, values: vol6 },
           { name: String(before), color: NAVY, values: vol5 },
-        ], { height: 240, valueFormat: (v) => `${Math.round(v / 1000)}K` })}</div>
+        ], { height: 240, valueFormat: (n) => `${Math.round(n / 1000)}K` })}</div>
       </section>
       <section class="card">
         <div class="card-head"><h3>Margin per gallon</h3><span class="hint">Dollars per gallon</span></div>
-        <div class="card-body">${lineChart(MONTH_ABBR, [
+        <div class="card-body">${lineChart(v.labels, [
           { name: String(now), color: CYAN, values: margin6 },
           { name: String(before), color: NAVY, values: margin5 },
         ], { height: 240, valueFormat: perGallon })}</div>
@@ -249,10 +331,10 @@ export function renderFuel(ctx) {
           <th class="num">Profit ${esc(now)}</th><th class="num">Profit ${esc(before)}</th>
           <th class="num">$/gal ${esc(now)}</th><th class="num">$/gal ${esc(before)}</th><th class="num">Change</th></tr></thead>
         <tbody>${rows || `<tr><td colspan="8">${emptyState("No fuel figures")}</td></tr>`}</tbody>
-        <tfoot><tr><td>Year to date</td>
-          <td class="num">${esc(num(ytd.gas_vol))}</td><td class="num">${esc(num(prior.gas_vol))}</td>
-          <td class="num">${esc(money(ytd.gas_profit))}</td><td class="num">${esc(money(prior.gas_profit))}</td>
-          <td class="num">${esc(perGallon(cpg(ytd)))}</td><td class="num">${esc(perGallon(cpg(prior)))}</td><td></td>
+        <tfoot><tr><td>${esc(v.tableLabel)}</td>
+          <td class="num">${esc(num(shown.gas_vol))}</td><td class="num">${esc(num(shownPrior.gas_vol))}</td>
+          <td class="num">${esc(money(shown.gas_profit))}</td><td class="num">${esc(money(shownPrior.gas_profit))}</td>
+          <td class="num">${esc(perGallon(cpg(shown)))}</td><td class="num">${esc(perGallon(cpg(shownPrior)))}</td><td></td>
         </tr></tfoot>
       </table></div>
     </section>
@@ -282,28 +364,30 @@ export function renderFuel(ctx) {
 export function renderPurchases(ctx) {
   const { model, scope } = ctx;
   const ids = scopeIds(scope);
-  const now = thisYear(model);
-  const before = lastYear(model);
+  const v = view(model, scope);
+  const before = v.beforeLabel;
 
-  const ytd = scopeTotals(model, now, ids);
-  const prior = scopeTotals(model, before, ids);
+  const ytd = v.totals(ids);
+  const prior = v.priorTotals(ids);
+  const shown = v.chartTotals(ids);
+  const shownPrior = v.chartPriorTotals(ids);
 
-  const sales6 = yearSeries(model, now, "sales", ids);
-  const purch6 = yearSeries(model, now, "purchases", ids);
-  const sales5 = yearSeries(model, before, "sales", ids);
-  const purch5 = yearSeries(model, before, "purchases", ids);
-  const store6 = yearSeries(model, now, "store_profit", ids);
+  const sales6 = v.series("sales", ids);
+  const purch6 = v.series("purchases", ids);
+  const sales5 = v.priorSeries("sales", ids);
+  const purch5 = v.priorSeries("purchases", ids);
+  const store6 = v.series("store_profit", ids);
 
   const buyRatio = (totals) => (totals.sales ? totals.purchases / totals.sales : null);
   const ratio6 = buyRatio(ytd);
   const ratio5 = buyRatio(prior);
 
-  const rows = MONTH_ABBR.map((label, i) => {
+  const rows = v.labels.map((label, i) => {
     if (!isNum(sales6[i]) && !isNum(sales5[i])) return "";
     const m6 = isNum(sales6[i]) && sales6[i] ? store6[i] / sales6[i] : null;
     const r6 = isNum(sales6[i]) && sales6[i] ? purch6[i] / sales6[i] : null;
     const r5 = isNum(sales5[i]) && sales5[i] ? purch5[i] / sales5[i] : null;
-    return `<tr>
+    return `<tr${i === v.selected ? ' class="is-marked"' : ""}>
       <td class="strong">${esc(label)}</td>
       <td class="num">${esc(money(sales6[i]))}</td>
       <td class="num">${esc(money(purch6[i]))}</td>
@@ -314,7 +398,7 @@ export function renderPurchases(ctx) {
     </tr>`;
   }).join("");
 
-  const overBuying = MONTH_ABBR
+  const overBuying = v.labels
     .map((label, i) => {
       const r6 = isNum(sales6[i]) && sales6[i] ? purch6[i] / sales6[i] : null;
       const r5 = isNum(sales5[i]) && sales5[i] ? purch5[i] / sales5[i] : null;
@@ -324,7 +408,7 @@ export function renderPurchases(ctx) {
 
   return `${head("Purchases", `What was bought against what was sold for <b>${esc(scope.label)}</b>.
       When buying climbs faster than sales, store profit falls — that is the whole buying-control story.`,
-    model, scope)}
+    model, scope, v)}
 
     <div class="grid cols-4" style="margin-bottom:16px">
       ${yoyKpi("Purchases", money(ytd.purchases), ytd.purchases, prior.purchases, { higherIsBetter: false })}
@@ -342,7 +426,7 @@ export function renderPurchases(ctx) {
         <h3>Sales against purchases</h3>
         <span class="hint">The gap between the two bars is store profit</span>
       </div>
-      <div class="card-body">${barChart(MONTH_ABBR, [
+      <div class="card-body">${barChart(v.labels, [
         { name: "Store sales", color: NAVY, values: sales6 },
         { name: "Purchases", color: AMBER, values: purch6 },
       ])}</div>
@@ -355,13 +439,13 @@ export function renderPurchases(ctx) {
           <th class="num">Buy ratio</th><th class="num">Buy ratio ${esc(before)}</th>
           <th class="num">Store profit</th><th class="num">Margin</th></tr></thead>
         <tbody>${rows || `<tr><td colspan="7">${emptyState("No purchase figures")}</td></tr>`}</tbody>
-        <tfoot><tr><td>Year to date</td>
-          <td class="num">${esc(money(ytd.sales))}</td>
-          <td class="num">${esc(money(ytd.purchases))}</td>
-          <td class="num">${esc(pct(ratio6))}</td>
-          <td class="num">${esc(pct(ratio5))}</td>
-          <td class="num">${esc(money(ytd.store_profit))}</td>
-          <td class="num">${esc(pct(ytd.store_margin))}</td>
+        <tfoot><tr><td>${esc(v.tableLabel)}</td>
+          <td class="num">${esc(money(shown.sales))}</td>
+          <td class="num">${esc(money(shown.purchases))}</td>
+          <td class="num">${esc(pct(buyRatio(shown)))}</td>
+          <td class="num">${esc(pct(buyRatio(shownPrior)))}</td>
+          <td class="num">${esc(money(shown.store_profit))}</td>
+          <td class="num">${esc(pct(shown.store_margin))}</td>
         </tr></tfoot>
       </table></div>
     </section>`;
@@ -378,7 +462,7 @@ export function renderDepartments(ctx) {
   const periods = departmentPeriods(model, ids);
 
   if (!rows.length) {
-    return `${head("Departments", "Department performance across the portfolio.", model, scope)}
+    return `${head("Departments", "Department performance across the portfolio.", model, scope, null)}
       <section class="card"><div class="card-body">
         ${emptyState("No department data for this scope", "Department breakdowns are only published for some stores.")}
       </div></section>`;
@@ -426,7 +510,7 @@ export function renderDepartments(ctx) {
 
   return `${head("Departments", `How each department earns for <b>${esc(scope.label)}</b>.
       <b>${esc(periods.y2026)}</b> against <b>${esc(periods.y2025)}</b> — these periods are different lengths,
-      so compare the margins rather than the dollar totals.`, model, scope)}
+      so compare the margins rather than the dollar totals.`, model, scope, null)}
 
     <div class="grid cols-4" style="margin-bottom:16px">
       ${kpi("Departments tracked", num(rows.length),
@@ -521,10 +605,13 @@ export function renderRankings(ctx) {
   const { model, query, scope } = ctx;
   const metricKey = query.get("metric") || "total_profit";
   const metric = RANK_METRICS.find((m) => m.key === metricKey) || RANK_METRICS[0];
-  const period = query.get("period") === "month" ? "month" : "ytd";
 
-  const now = thisYear(model);
-  const before = lastYear(model);
+  /*
+   * This page used to carry its own two-way period toggle — year to date or the
+   * latest month — which was a second, weaker copy of the timeframe picker and
+   * could not reach any other month. It now reads the shared one.
+   */
+  const v = view(model, scope);
 
   /*
    * Ranking one store against itself says nothing, so picking a single store
@@ -535,12 +622,8 @@ export function renderRankings(ctx) {
   const marked = scope.station?.id || "";
 
   const rows = field.map((station) => {
-    const current = period === "month"
-      ? station.months[model.latestMonth] || {}
-      : scopeTotals(model, now, [station.id]);
-    const prior = period === "month"
-      ? station.months[model.yearAgoMonth] || {}
-      : scopeTotals(model, before, [station.id]);
+    const current = v.totals([station.id]);
+    const prior = v.priorTotals([station.id]);
     return {
       station,
       value: isNum(current[metric.key]) ? Number(current[metric.key]) : null,
@@ -553,20 +636,13 @@ export function renderRankings(ctx) {
   const worst = rows[rows.length - 1];
   const middle = rows.length ? rows[Math.floor(rows.length / 2)] : null;
 
-  const periodLabel = period === "month" ? monthLabel(model.latestMonth) : `${now} year to date`;
+  const periodLabel = v.tf.label;
 
   const metricTabs = RANK_METRICS.map((m) => {
     const params = new URLSearchParams(query);
     params.set("metric", m.key);
     return `<button class="${m.key === metricKey ? "is-active" : ""}"
       data-sort-href="#/rankings?${esc(params.toString())}">${esc(m.label)}</button>`;
-  }).join("");
-
-  const periodTabs = ["ytd", "month"].map((value) => {
-    const params = new URLSearchParams(query);
-    params.set("period", value);
-    return `<button class="${value === period ? "is-active" : ""}"
-      data-sort-href="#/rankings?${esc(params.toString())}">${value === "ytd" ? "Year to date" : esc(monthLabel(model.latestMonth, true))}</button>`;
   }).join("");
 
   return `
@@ -577,13 +653,7 @@ export function renderRankings(ctx) {
       Ranking on margin rather than dollars is what surfaces a small store running well and a big one running badly.</p>
     </div>
 
-    ${scopeBar(model, scope, { period: false, csv: false })}
-
-    <div class="analysis-bar">
-      <div class="segmented" data-rank>${periodTabs}</div>
-      <span class="spacer"></span>
-      <button class="btn btn-sm" data-csv>${icon("download")}CSV</button>
-    </div>
+    ${scopeBar(model, scope, { period: false, time: true })}
 
     <div class="rank-metrics segmented" data-rank>${metricTabs}</div>
 
@@ -637,10 +707,11 @@ export function bindRankings(root, ctx) {
   if (csv) {
     csv.addEventListener("click", () => {
       const { model } = ctx;
-      downloadCsv(`rankings-${model.currentYear}.csv`,
+      const v = view(model, ctx.scope);
+      downloadCsv(`rankings-${v.tf.id}.csv`,
         ["Store", "Name", "Total profit", "Fuel profit", "Store profit", "Sales", "Purchases", "Gallons", "Store margin", "$/gal"],
         model.stations.map((station) => {
-          const t = scopeTotals(model, Number(model.currentYear), [station.id]);
+          const t = v.totals([station.id]);
           return [station.id, station.name, t.total_profit ?? "", t.fuel_profit ?? "",
             t.store_profit ?? "", t.sales ?? "", t.purchases ?? "", t.gas_vol ?? "",
             t.store_margin ?? "", t.gas_margin ?? ""];

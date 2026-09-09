@@ -306,6 +306,78 @@ def main(figures_path, overlay_path, owners_path):
               f"{metric} does not reconcile across grains: {totals}")
     print(f"  ok    {len(by_date)} dates across 4 grains, all reconciling\n")
 
+    # --- timeframes ----------------------------------------------------------
+    # The "Showing" picker lets a page open one month or one finished year.
+    # Both the months a timeframe claims to cover and the totals over them are
+    # re-derived here, so a month that quietly sums its whole year, or a year
+    # compared against the wrong year, fails rather than merely looking odd.
+    print("Timeframes")
+    all_months = sorted({m for sid in months for m in months[sid]})
+    seen_kinds = defaultdict(int)
+
+    for tf in figures.get("timeframes", []):
+        tid, kind = tf["id"], tf["kind"]
+        seen_kinds[kind] += 1
+
+        if kind == "month":
+            expect = [tid]
+        elif kind == "year":
+            expect = [m for m in closed if m.startswith(f"{tid}-")]
+        else:
+            expect = list(ytd)
+
+        check(tf["keys"] == expect,
+              f"timeframe {tid}: covers {tf['keys']}, recomputed {expect}")
+
+        # A month is one month. A finished year is its twelve.
+        if kind == "month":
+            check(len(tf["keys"]) == 1,
+                  f"timeframe {tid}: {len(tf['keys'])} months for a single-month selection")
+        if kind == "year":
+            check(len(tf["keys"]) == 12,
+                  f"timeframe {tid}: {len(tf['keys'])} months for a full year")
+
+        # Each comparison month is the same month one year earlier, and is
+        # dropped rather than invented when that month was never reported.
+        expect_prior = [f"{int(k[:4]) - 1}{k[4:]}" for k in expect]
+        expect_prior = [k for k in expect_prior if k in all_months]
+        check(tf["priorKeys"] == expect_prior,
+              f"timeframe {tid}: compares against {tf['priorKeys']}, recomputed {expect_prior}")
+        check(all(int(k[:4]) == int(c[:4]) - 1 and k[4:] == c[4:]
+                  for k, c in zip(tf["priorKeys"], tf["keys"][:len(tf["priorKeys"])])),
+              f"timeframe {tid}: comparison months are not the same months a year earlier")
+
+        mine = total(expect)
+        for metric in METRICS:
+            check(close(mine[metric], tf["totals"][metric]),
+                  f"timeframe {tid} {metric}: recomputed {mine[metric]}, "
+                  f"console {tf['totals'][metric]}")
+
+        mine_prior = total(expect_prior)
+        for metric in METRICS:
+            check(close(mine_prior[metric], tf["priorTotals"][metric]),
+                  f"timeframe {tid} prior {metric}: recomputed {mine_prior[metric]}, "
+                  f"console {tf['priorTotals'][metric]}")
+
+    # The months of a year must add back up to that year, or the picker is
+    # showing two different portfolios depending on which entry is chosen.
+    by_id = {tf["id"]: tf for tf in figures.get("timeframes", [])}
+    for tf in figures.get("timeframes", []):
+        if tf["kind"] != "year":
+            continue
+        parts = [by_id[k] for k in tf["keys"] if k in by_id]
+        if len(parts) != len(tf["keys"]):
+            continue
+        for metric in METRICS:
+            summed = sum(p["totals"][metric] or 0 for p in parts)
+            check(close(summed, tf["totals"][metric] or 0),
+                  f"timeframe {tf['id']} {metric}: months sum to {summed}, "
+                  f"year reports {tf['totals'][metric]}")
+
+    print(f"  ok    {len(figures.get('timeframes', []))} timeframes "
+          f"({seen_kinds['ytd']} to-date, {seen_kinds['year']} full-year, "
+          f"{seen_kinds['month']} monthly), months sum to their year\n")
+
     # --- departments ---------------------------------------------------------
     print("Departments")
     rollup = defaultdict(lambda: {"sales": 0.0, "purchases": 0.0, "profit": 0.0, "stores": 0})

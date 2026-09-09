@@ -69,8 +69,16 @@ function withRatios(totals) {
     ? Number(out.gas_profit || out.fuel_profit || 0) / Number(out.gas_vol)
     : null;
   if (!isNum(out.fuel_profit) && isNum(out.gas_profit)) out.fuel_profit = out.gas_profit;
+  /*
+   * Only add the halves together when at least one of them was reported.
+   * Without that guard an empty set of months totals to a confident zero, and
+   * a year with no year before it reads as having collapsed from $0 rather
+   * than as having nothing to compare against.
+   */
   if (!isNum(out.total_profit)) {
-    out.total_profit = Number(out.fuel_profit || 0) + Number(out.store_profit || 0);
+    out.total_profit = isNum(out.fuel_profit) || isNum(out.store_profit)
+      ? Number(out.fuel_profit || 0) + Number(out.store_profit || 0)
+      : null;
   }
   return out;
 }
@@ -210,6 +218,143 @@ export function scopeOf(model, stationIds) {
  */
 export function comparableMonths(model) {
   return model.ytdKeys.map((key) => key.slice(5));
+}
+
+/* -------------------------------------------------------------------------
+   Timeframes
+   -------------------------------------------------------------------------
+   Which months a page is looking at, and which months it holds them against.
+
+   The console used to answer one question only — this year so far against the
+   same months last year — because the performance pages hard-coded the current
+   year. Two full years of monthly figures were sitting in the overlay with no
+   way to reach them: no way to open a single month, and no way to see 2025 as
+   a finished year. A timeframe is that missing selection.
+
+   Every timeframe carries its own comparison set rather than leaving each page
+   to work one out, which is what kept the part-year-against-whole-year bug
+   alive the first time.
+   ------------------------------------------------------------------------- */
+
+/** Same month, previous year. */
+function priorMonthKey(key) {
+  return `${Number(key.slice(0, 4)) - 1}-${key.slice(5)}`;
+}
+
+/**
+ * The timeframes a model can offer, newest first: year to date, then each
+ * finished year, then every closed month.
+ */
+export function timeframes(model) {
+  const years = [...new Set(model.closedMonths.map((key) => key.slice(0, 4)))].sort().reverse();
+  const options = [{ id: "ytd", label: `${model.currentYear} to date`, group: "Year" }];
+
+  years.forEach((year) => {
+    // The running year is already offered as "to date". Listing it again as a
+    // full year would invite comparing eight months against twelve.
+    if (year === model.currentYear) return;
+    options.push({ id: year, label: `Full year ${year}`, group: "Year" });
+  });
+
+  model.closedMonths.slice().reverse().forEach((key) => {
+    options.push({ id: key, label: monthName(key), group: "Month" });
+  });
+
+  return options;
+}
+
+/** Jan 2026 style, without pulling in the ui module. */
+function monthName(key) {
+  const index = Number(key.slice(5, 7)) - 1;
+  return `${MONTH_FULL[index] || key} ${key.slice(0, 4)}`;
+}
+
+const MONTH_FULL = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December",
+];
+
+/**
+ * Turn a timeframe id into the months it covers and the months it is measured
+ * against. Anything unrecognised falls back to year to date.
+ */
+export function resolveTimeframe(model, id) {
+  const wanted = String(id || "ytd");
+
+  if (/^\d{4}-\d{2}$/.test(wanted) && model.closedMonths.includes(wanted)) {
+    const prior = priorMonthKey(wanted);
+    return {
+      id: wanted,
+      kind: "month",
+      year: wanted.slice(0, 4),
+      label: monthName(wanted),
+      keys: [wanted],
+      priorKeys: model.allMonths.includes(prior) ? [prior] : [],
+      priorLabel: monthName(prior),
+    };
+  }
+
+  if (/^\d{4}$/.test(wanted) && wanted !== model.currentYear) {
+    const keys = model.closedMonths.filter((key) => key.startsWith(`${wanted}-`));
+    if (keys.length) {
+      const priorKeys = keys.map(priorMonthKey).filter((key) => model.allMonths.includes(key));
+      return {
+        id: wanted,
+        kind: "year",
+        year: wanted,
+        label: `Full year ${wanted}`,
+        keys,
+        priorKeys,
+        priorLabel: `Full year ${Number(wanted) - 1}`,
+      };
+    }
+  }
+
+  return {
+    id: "ytd",
+    kind: "ytd",
+    year: model.currentYear,
+    label: `${model.currentYear} to date`,
+    keys: model.ytdKeys,
+    priorKeys: model.priorYtdKeys,
+    priorLabel: `${Number(model.currentYear) - 1} to date`,
+  };
+}
+
+/**
+ * A metric across an explicit list of months, summed over the scope.
+ *
+ * Months nothing was reported for stay null, so a chart breaks its line rather
+ * than plotting a zero that reads as a collapse.
+ */
+export function monthSeries(model, keys, metric, stationIds = null) {
+  const scope = scopeOf(model, stationIds);
+  return keys.map((key) => {
+    let total = null;
+    scope.forEach((station) => {
+      const entry = station.months[key];
+      if (entry && isNum(entry[metric])) total = (total || 0) + Number(entry[metric]);
+    });
+    return total;
+  });
+}
+
+/** The `count` closed months ending at `endKey`, oldest first. */
+export function trailingMonths(model, endKey, count = 12) {
+  const upto = model.closedMonths.filter((key) => key <= endKey);
+  return upto.slice(-count);
+}
+
+/**
+ * Fuel margin over an explicit list of months, recomputed from summed dollars
+ * and gallons rather than averaging each store's own cents-per-gallon.
+ */
+export function marginOver(model, keys, stationIds = null) {
+  const profit = monthSeries(model, keys, "gas_profit", stationIds);
+  const volume = monthSeries(model, keys, "gas_vol", stationIds);
+  return profit.map((value, i) => (isNum(value) && isNum(volume[i]) && Number(volume[i]) !== 0
+    ? Number(value) / Number(volume[i])
+    : null));
 }
 
 /**

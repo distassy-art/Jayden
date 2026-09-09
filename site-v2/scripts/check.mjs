@@ -10,7 +10,9 @@
  *   node scripts/check.mjs [--base http://localhost:8787]
  */
 
-import { buildModel } from "../public/assets/analytics.js";
+import {
+  buildModel, portfolioTotals, resolveTimeframe, timeframes,
+} from "../public/assets/analytics.js";
 import { buildOwners, resolveScope } from "../public/assets/scope.js";
 import {
   buildCurrent, currentStores, partitionByPeriod, rollupDeptBudget, rollupMtd,
@@ -245,6 +247,74 @@ async function main() {
   inspect("departments?sort=margin", renderDepartments(ctx("sort=margin")));
   inspect("rankings", renderRankings(ctx()));
   inspect("rankings?metric=store_margin", renderRankings(ctx("metric=store_margin")));
+
+  /*
+   * Every timeframe the picker offers, on every page that carries it. These
+   * pages were pinned to the running year, so a month or a finished year is
+   * the first thing to break if a series is indexed by calendar position
+   * rather than by the selected keys.
+   */
+  process.stdout.write("\nTimeframes\n");
+  const timed = [
+    ["profit", renderProfit], ["fuel", renderFuel],
+    ["purchases", renderPurchases], ["rankings", renderRankings],
+  ];
+  const options = timeframes(model);
+  let rendered = 0;
+  for (const option of options) {
+    for (const [name, render] of timed) {
+      const markup = render(ctx(`t=${option.id}`));
+      assert(markup.length > 400, `${name} at ${option.id}: rendered almost nothing`);
+      assert(!/NaN|undefined|\[object/.test(markup), `${name} at ${option.id}: malformed output`);
+      rendered += 1;
+    }
+  }
+  process.stdout.write(`  ok    ${rendered} renders across ${options.length} timeframes\n`);
+
+  /*
+   * A timeframe has to actually change the figures. If the picker were wired
+   * to nothing the pages would still render, so compare two of them and
+   * require the output to differ.
+   */
+  const months = options.filter((o) => o.group === "Month").slice(0, 2).map((o) => o.id);
+  if (months.length === 2) {
+    const [a, b] = months.map((id) => renderProfit(ctx(`t=${id}`)));
+    assert(a !== b, `profit renders identically for ${months[0]} and ${months[1]}`);
+    process.stdout.write(`  ok    ${months[0]} and ${months[1]} differ\n`);
+  }
+
+  /*
+   * A single month must report that month, not the year it sits in. This is
+   * the part-against-whole trap in its other form: the picker says August and
+   * the page shows January-through-August.
+   */
+  const oneMonth = options.find((o) => o.group === "Month");
+  if (oneMonth) {
+    const tf = resolveTimeframe(model, oneMonth.id);
+    assert(tf.keys.length === 1, `${oneMonth.id} resolves to ${tf.keys.length} months, not 1`);
+    const direct = portfolioTotals(model, [oneMonth.id], null);
+    const viaYtd = portfolioTotals(model, model.ytdKeys, null);
+    assert(Math.abs(direct.total_profit) < Math.abs(viaYtd.total_profit),
+      `${oneMonth.id} totals match the whole year to date`);
+    process.stdout.write(`  ok    ${oneMonth.id} is one month `
+      + `(${Math.round(direct.total_profit).toLocaleString()}), not the year\n`);
+  }
+
+  /*
+   * A finished year takes all twelve of its months, and each is compared with
+   * the same month a year earlier rather than with whatever sits alongside it.
+   */
+  const fullYear = options.find((o) => o.group === "Year" && o.id !== "ytd");
+  if (fullYear) {
+    const tf = resolveTimeframe(model, fullYear.id);
+    assert(tf.keys.length === 12, `${fullYear.id} covers ${tf.keys.length} months, not 12`);
+    assert(tf.keys.every((key) => key.startsWith(`${fullYear.id}-`)),
+      `${fullYear.id} pulls in months from another year`);
+    assert(tf.priorKeys.every((key) => key.startsWith(`${Number(fullYear.id) - 1}-`)),
+      `${fullYear.id} compares against something other than the prior year`);
+    process.stdout.write(`  ok    ${fullYear.id} covers 12 months, compared with `
+      + `${tf.priorKeys.length} from ${Number(fullYear.id) - 1}\n`);
+  }
   inspect("rankings?metric=gas_margin&period=month", renderRankings(ctx("metric=gas_margin&period=month")));
   inspect("invoices (missing)", renderInvoices(ctx("tab=missing")));
   inspect("invoices (entered)", renderInvoices(ctx("tab=entered")));

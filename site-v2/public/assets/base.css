@@ -1318,6 +1318,13 @@ button.trail-step:hover { background: var(--surface-3); color: var(--text); }
 /* A week that has not started yet sits back rather than reading as "under". */
 tr.is-quiet > td { color: var(--text-3); }
 
+/* The selected month, when a table shows the year around it for context. */
+tr.is-marked > td {
+  background: color-mix(in srgb, var(--cyan-500) 10%, transparent);
+  box-shadow: inset 2px 0 0 var(--cyan-500);
+}
+tr.is-marked > td:first-child { font-weight: 650; }
+
 /* --------------------------------------------------------------------------
    Responsive
    -------------------------------------------------------------------------- */

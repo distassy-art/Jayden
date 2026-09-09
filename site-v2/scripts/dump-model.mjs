@@ -7,7 +7,8 @@
  */
 
 import {
-  buildModel, departmentRollup, marginSeries, scopeDays, scopeTotals, sumDays, yearSeries,
+  buildModel, departmentRollup, marginSeries, portfolioTotals, resolveTimeframe,
+  scopeDays, scopeTotals, sumDays, timeframes, yearSeries,
 } from "../public/assets/analytics.js";
 import { buildOwners, bucketDays } from "../public/assets/scope.js";
 
@@ -85,6 +86,24 @@ process.stdout.write(JSON.stringify({
       };
     }),
   ])),
+
+  /*
+   * Every timeframe the "Showing" picker offers, resolved to the months it
+   * covers and the totals over them. The verifier re-derives both from the raw
+   * overlay, so a month that quietly sums its whole year cannot pass.
+   */
+  timeframes: timeframes(model).map((option) => {
+    const tf = resolveTimeframe(model, option.id);
+    return {
+      id: tf.id,
+      kind: tf.kind,
+      label: tf.label,
+      keys: tf.keys,
+      priorKeys: tf.priorKeys,
+      totals: pick(portfolioTotals(model, tf.keys)),
+      priorTotals: pick(portfolioTotals(model, tf.priorKeys)),
+    };
+  }),
 
   departments: departmentRollup(model).map((row) => ({
     name: row.name,

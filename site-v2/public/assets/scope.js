@@ -5,14 +5,21 @@
  * were a flat list of seventeen and the owner behind them was invisible. Here
  * every page reads the same two controls:
  *
- *   scope   all stores -> one owner -> one store
- *   period  day | week | month | year
+ *   scope      all stores -> one owner -> one store
+ *   period     day | week | month | year, for bucketing the day feed
+ *   timeframe  year to date, a finished year, or a single month
  *
- * Both live in the URL so any view is linkable, and both are mirrored into
- * session storage so plain nav links keep your place.
+ * `period` and `timeframe` are not the same control and do not read the same
+ * data. `period` buckets the day feed, which runs about two months; `timeframe`
+ * selects from the monthly history, which runs two years. Performance pages
+ * want the second, the daily close wants the first.
+ *
+ * All three live in the URL so any view is linkable, and all three are mirrored
+ * into session storage so plain nav links keep your place.
  */
 
 import { esc, icon, monthLabel } from "./ui.js";
+import { resolveTimeframe, timeframes } from "./analytics.js";
 
 /* -------------------------------------------------------------------------
    Owners
@@ -110,6 +117,7 @@ function remember(scope) {
       owner: scope.owner?.id || "",
       store: scope.station?.id || "",
       period: scope.period,
+      time: scope.timeframe?.id || "",
     }));
   } catch { /* private browsing; the URL still carries it */ }
 }
@@ -141,6 +149,10 @@ export function resolveScope(model, query, { owners = model.owners || [] } = {})
   const periodId = query.get("period") || saved.period || "month";
   const period = PERIODS.some((p) => p.id === periodId) ? periodId : "month";
 
+  // Which months the performance pages are looking at. Unlike `period`, which
+  // buckets the day feed, this selects from the monthly history.
+  const timeframe = resolveTimeframe(model, query.get("t") || saved.time || "ytd");
+
   const stationIds = station ? [station.id] : (owner ? owner.stationIds.slice() : null);
 
   const scope = {
@@ -148,6 +160,7 @@ export function resolveScope(model, query, { owners = model.owners || [] } = {})
     owner,
     station,
     period,
+    timeframe,
     // `null` means the whole portfolio; views pass it straight to the analytics.
     stationIds,
     level: station ? "store" : owner ? "owner" : "all",
@@ -176,6 +189,8 @@ export function withScope(href, scope) {
   else if (!scope.station) params.delete("owner");
   if (scope.period && scope.period !== "month") params.set("period", scope.period);
   else params.delete("period");
+  if (scope.timeframe && scope.timeframe.id !== "ytd") params.set("t", scope.timeframe.id);
+  else params.delete("t");
   const qs = params.toString();
   return `#${path}${qs ? `?${qs}` : ""}`;
 }
@@ -233,8 +248,25 @@ function option(value, label, selected) {
  * the period tabs. Rendered identically at the top of every page so there is
  * one place to answer "what am I looking at".
  */
-export function scopeBar(model, scope, { period = true, csv = true } = {}) {
+export function scopeBar(model, scope, { period = true, csv = true, time = false } = {}) {
   const owners = scope.owners || [];
+
+  /*
+   * Grouped so a two-year history does not present as one flat list of
+   * twenty-six entries with the years buried among the months.
+   */
+  const timePicker = time ? (() => {
+    const options = timeframes(model);
+    const groups = [...new Set(options.map((o) => o.group))].map((group) => `
+      <optgroup label="${esc(group)}">
+        ${options.filter((o) => o.group === group)
+          .map((o) => option(o.id, o.label, o.id === scope.timeframe?.id)).join("")}
+      </optgroup>`).join("");
+    return `<div class="field field-inline">
+      <label for="timePick">Showing</label>
+      <select class="select" id="timePick">${groups}</select>
+    </div>`;
+  })() : "";
 
   /*
    * A store manager holds one store. Showing them an owner picker and a store
@@ -242,10 +274,11 @@ export function scopeBar(model, scope, { period = true, csv = true } = {}) {
    * control — and disappears entirely when the page has no period either.
    */
   if (model.stations.length < 2) {
-    if (!period && !csv) return "";
+    if (!period && !csv && !time) return "";
     return `<div class="scopebar is-slim" data-scopebar>
       <div class="scope-picks">
         <span class="scope-single">${icon("stores")}${esc(model.stations[0]?.name || "No store")}</span>
+        ${timePicker}
         ${period ? `<div class="segmented" data-period>
           ${PERIODS.map((p) => `<button class="${p.id === scope.period ? "is-active" : ""}"
             data-period-set="${esc(p.id)}">${esc(p.label)}</button>`).join("")}
@@ -298,6 +331,7 @@ export function scopeBar(model, scope, { period = true, csv = true } = {}) {
           ${option("", scope.owner ? `All ${storeCount(scope.owner.stations.length)}` : "All stores", !scope.station)}${storeOptions}
         </select>
       </div>
+      ${timePicker}
       ${period ? `<div class="field field-inline">
         <label>Period</label>
         <div class="segmented" data-period>
@@ -346,6 +380,11 @@ export function bindScopeBar(root, ctx) {
   bar.querySelector("[data-scope-owner]")?.addEventListener("click", (event) => go((params) => {
     params.delete("store");
     params.set("owner", event.currentTarget.dataset.scopeOwner);
+  }));
+
+  bar.querySelector("#timePick")?.addEventListener("change", (event) => go((params) => {
+    if (event.target.value && event.target.value !== "ytd") params.set("t", event.target.value);
+    else params.delete("t");
   }));
 
   bar.querySelectorAll("[data-period-set]").forEach((button) => {
