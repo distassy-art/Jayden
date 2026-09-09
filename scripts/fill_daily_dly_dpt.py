@@ -21,7 +21,8 @@ Requires:
   - SharePoint cookies at /tmp/od_cookies.json (FedAuth) for upload + recycle
 
 Usage:
-  python3 scripts/fill_daily_dly_dpt.py              # DLY+DPT through yesterday PT
+  python3 scripts/fill_daily_dly_dpt.py                    # DLY+DPT through yesterday PT
+  python3 scripts/fill_daily_dly_dpt.py --mode daily       # Daily Book Summary (skip existing)
   python3 scripts/fill_daily_dly_dpt.py --map-only
   python3 scripts/fill_daily_dly_dpt.py --through 2026-09-08
 """
@@ -120,6 +121,7 @@ BD_CENTRAL_DEFS = {
 }
 
 REPORTS = {
+    # ShowCost=1 includes Cost / Margin / Profit columns.
     "daily": {"rpt": "DailyTotal+Summary", "extra": {"ShowCost": "1"}},
     "dly": {"rpt": "None Fuel Invoice Total", "extra": {}},
     # Baseline DailyAPInvoice is already the collapsed vendor summary.
@@ -385,6 +387,191 @@ def delete_older_mtd(
         )
 
 
+def existing_daily_names(sp: SharePoint, folder_rel: str) -> set[str]:
+    return {f["Name"].lower() for f in sp.list_files(folder_rel)}
+
+
+def run_daily(target: date) -> dict:
+    """Pull missing day-behind Daily Book Summary PDFs; accumulate (no deletes)."""
+    stores, bd = build_store_map(target)
+    month_start = date(target.year, target.month, 1)
+    cfg = REPORTS["daily"]
+    logins = load_s2k_logins()
+    sp = SharePoint(od_cookie_header())
+    s2k = S2K(logins)
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+    results: dict[str, list] = {
+        "uploaded": [],
+        "skipped": [],
+        "failed": [],
+        "pulled": [],
+    }
+
+    days = []
+    d = month_start
+    while d <= target:
+        days.append(d)
+        d += timedelta(days=1)
+
+    print(
+        f"Daily Book Summary through {target} ({month_folder(target)}); "
+        f"days={days[0]}..{days[-1]} (skip existing)",
+        flush=True,
+    )
+
+    for key, group, acc, site, folder in stores:
+        print(f"\n=== {key} daily ({group} acc={acc} site={site}) ===", flush=True)
+        folder_rel = f"{DOCS_CLIENTS}/{folder}"
+        local = OUT_DIR / key
+        local.mkdir(exist_ok=True)
+        try:
+            s, sid, _ = s2k.sessionid_for(group, acc)
+        except Exception as e:
+            results["failed"].append(
+                {"client": key, "op": "login", "error": str(e)}
+            )
+            print(f"  LOGIN FAIL {e}", flush=True)
+            continue
+
+        have = existing_daily_names(sp, folder_rel)
+        for day in days:
+            name = f"{stamp(day)}.pdf"
+            if name.lower() in have:
+                print(f"  skip {name} (exists)", flush=True)
+                results["skipped"].append(
+                    {"client": key, "file": name, "folder": folder}
+                )
+                continue
+            rr = s2k.pull(
+                s,
+                sid,
+                cfg["rpt"],
+                day.isoformat(),
+                day.isoformat(),
+                site,
+                cfg["extra"] or None,
+            )
+            if not is_pdf(rr.content):
+                results["failed"].append(
+                    {
+                        "client": key,
+                        "file": name,
+                        "op": "pull",
+                        "status": rr.status_code,
+                        "bytes": len(rr.content),
+                    }
+                )
+                print(
+                    f"  FAIL {name} {rr.status_code} {len(rr.content)}",
+                    flush=True,
+                )
+                continue
+            path = local / name
+            path.write_bytes(rr.content)
+            results["pulled"].append(str(path))
+            print(f"  pulled {name} {len(rr.content)} bytes", flush=True)
+            up_ok, msg = sp.upload(folder_rel, name, rr.content)
+            print(f"  upload {name} -> {up_ok} {msg}", flush=True)
+            entry = {
+                "client": key,
+                "file": name,
+                "op": "upload",
+                "ok": up_ok,
+                "msg": msg,
+                "folder": folder,
+            }
+            (results["uploaded"] if up_ok else results["failed"]).append(entry)
+
+    # Big Daddy central multi-store daily
+    print("\n=== BD_central daily (hotmail -121) ===", flush=True)
+    try:
+        s, sid, meta_u = s2k.sessionid_for("hotmail", -121)
+        stores_csv = meta_u.get("stores") or ""
+        if not stores_csv:
+            raise RuntimeError("no stores list on BD account -121")
+    except Exception as e:
+        results["failed"].append(
+            {"client": "BD_central", "op": "login", "error": str(e)}
+        )
+        print(f"  LOGIN FAIL {e}", flush=True)
+        stores_csv = ""
+
+    if stores_csv:
+        print(f"  stores={stores_csv}", flush=True)
+        folder = bd["daily"]
+        folder_rel = f"{DOCS_CLIENTS}/{folder}"
+        local = OUT_DIR / "BD_central"
+        local.mkdir(exist_ok=True)
+        have = existing_daily_names(sp, folder_rel)
+        for day in days:
+            name = f"{stamp(day)}.pdf"
+            if name.lower() in have:
+                print(f"  skip {name} (exists)", flush=True)
+                results["skipped"].append(
+                    {"client": "BD_central", "file": name, "folder": folder}
+                )
+                continue
+            rr = s2k.pull(
+                s,
+                sid,
+                cfg["rpt"],
+                day.isoformat(),
+                day.isoformat(),
+                stores_csv,
+                cfg["extra"] or None,
+            )
+            if not is_pdf(rr.content, min_len=5000):
+                results["failed"].append(
+                    {
+                        "client": "BD_central",
+                        "file": name,
+                        "op": "pull",
+                        "status": rr.status_code,
+                        "bytes": len(rr.content),
+                    }
+                )
+                print(
+                    f"  FAIL {name} {rr.status_code} {len(rr.content)}",
+                    flush=True,
+                )
+                continue
+            path = local / name
+            path.write_bytes(rr.content)
+            results["pulled"].append(str(path))
+            print(f"  pulled {name} {len(rr.content)} bytes", flush=True)
+            up_ok, msg = sp.upload(folder_rel, name, rr.content)
+            print(f"  upload {name} -> {up_ok} {msg}", flush=True)
+            entry = {
+                "client": "BD_central",
+                "file": name,
+                "op": "upload",
+                "ok": up_ok,
+                "msg": msg,
+                "folder": folder,
+            }
+            (results["uploaded"] if up_ok else results["failed"]).append(entry)
+
+    out = {
+        "mode": "daily",
+        "target": target.isoformat(),
+        "month": month_folder(target),
+        "uploaded": results["uploaded"],
+        "skipped": results["skipped"],
+        "failed": results["failed"],
+        "pulled": results["pulled"],
+    }
+    daily_result = Path("/tmp/s2k/exports/daily_book_run_result.json")
+    daily_result.write_text(json.dumps(out, indent=2))
+    print(
+        f"\nDONE daily uploaded={len(out['uploaded'])} "
+        f"skipped={len(out['skipped'])} failed={len(out['failed'])} "
+        f"-> {daily_result}",
+        flush=True,
+    )
+    return out
+
+
 def run_dly_dpt(target: date) -> dict:
     stores, bd = build_store_map(target)
     month_start = date(target.year, target.month, 1)
@@ -569,6 +756,12 @@ def main(argv: list[str] | None = None) -> int:
         help="Print store map and exit",
     )
     p.add_argument(
+        "--mode",
+        choices=("dly-dpt", "daily"),
+        default="dly-dpt",
+        help="dly-dpt (default) or daily book summary",
+    )
+    p.add_argument(
         "--through",
         type=str,
         default=None,
@@ -590,7 +783,10 @@ def main(argv: list[str] | None = None) -> int:
         print("Reports:", REPORTS)
         return 0
 
-    out = run_dly_dpt(target)
+    if args.mode == "daily":
+        out = run_daily(target)
+    else:
+        out = run_dly_dpt(target)
     return 1 if out["failed"] else 0
 
 
