@@ -11,6 +11,11 @@ Policy:
   - DLY/DPT are month-to-date: after uploading the latest
     MMDDYYYYdly.pdf / MMDDYYYYdpt.pdf, delete older dly/dpt files in that month folder.
 
+Schedule (America/Los_Angeles) — see scripts/s2k_report_schedule.md:
+  - DLY + DPT: Wed 8:00 AM, Sun 4:00 AM
+  - Daily Book Summary: every day 2:00 PM
+  - Daily Excel update (from Daily PDFs): Mon/Wed/Fri/Sun 8:00 AM
+
 Requires:
   - S2K logins (gmail / hotmail / placentia)
   - SharePoint cookies at /tmp/od_cookies.json (FedAuth) for upload + recycle
