@@ -15,6 +15,7 @@ import {
   MONTH_ABBR, departmentPeriods, departmentRollup, marginSeries, scopeOf,
   scopeTotals, yearSeries,
 } from "../analytics.js";
+import { bindScopeBar, scopeBar } from "../scope.js";
 
 const CYAN = "var(--cyan-500)";
 const NAVY = "var(--navy-600)";
@@ -24,47 +25,17 @@ const AMBER = "var(--warn-line)";
    Shared chrome
    ------------------------------------------------------------------------- */
 
-/** Store scope from the URL. An empty list means the whole portfolio. */
-function scopeIds(query) {
-  const value = query.get("store");
-  return value ? [value] : [];
-}
+/*
+ * These pages used to carry their own flat store picker, which meant the owner
+ * level did not exist on half the console and a scope chosen on one page was
+ * dropped on arriving at another. They now use the same bar as everywhere else.
+ * `stationIds` is null for the whole portfolio; the roll-ups take an empty
+ * array to mean the same thing.
+ */
+const scopeIds = (scope) => scope.stationIds || [];
 
-function scopePicker(model, query, path) {
-  const current = query.get("store") || "";
-  const options = model.stations
-    .map((station) => `<option value="${esc(station.id)}"${station.id === current ? " selected" : ""}>`
-      + `${esc(station.name)} (${esc(station.id)})</option>`)
-    .join("");
-
-  return `<div class="field" data-scope-path="${esc(path)}">
-    <label for="scopePick">Scope</label>
-    <select class="select" id="scopePick">
-      <option value="">All ${esc(model.stations.length)} stores</option>${options}
-    </select>
-  </div>`;
-}
-
-function scopeLabel(model, ids) {
-  if (!ids.length) return `all ${model.stations.length} store${model.stations.length === 1 ? "" : "s"}`;
-  return model.byId.get(ids[0])?.name || ids[0];
-}
-
-/** Wire the scope picker; every analysis page uses it. */
-export function bindScope(root, ctx) {
-  const picker = root.querySelector("#scopePick");
-  if (!picker) return;
-  const path = picker.closest("[data-scope-path]")?.dataset.scopePath || "/profit";
-  picker.addEventListener("change", () => {
-    const params = new URLSearchParams(ctx.query);
-    if (picker.value) params.set("store", picker.value);
-    else params.delete("store");
-    ctx.navigate(`#${path}?${params.toString()}`);
-  });
-
-  const csv = root.querySelector("[data-csv]");
-  if (csv && ctx.csv) csv.addEventListener("click", () => ctx.csv());
-}
+/** Wire the scope bar; every analysis page uses it. */
+export const bindScope = bindScopeBar;
 
 function kpi(label, value, detail, tone = "") {
   return `<div class="stat" style="min-height:104px">
@@ -81,18 +52,14 @@ function yoyKpi(label, value, current, prior, { higherIsBetter = true, format = 
 }
 
 /** Head shared by every analysis page. */
-function head(title, blurb, model, query, path) {
+function head(title, blurb, model, scope) {
   return `<div class="page-head">
       <h2>${esc(title)}</h2>
       <p>${blurb}</p>
     </div>
-    <div class="analysis-bar">
-      ${scopePicker(model, query, path)}
-      <span class="spacer"></span>
-      <span class="tiny muted">Closed months, ${esc(model.currentYear)} through ${esc(monthLabel(model.latestMonth, true))},
-        against the same months last year</span>
-      <button class="btn btn-sm" data-csv>${icon("download")}CSV</button>
-    </div>`;
+    ${scopeBar(model, scope, { period: false })}
+    <p class="tiny muted" style="margin:-6px 0 16px">Closed months, ${esc(model.currentYear)}
+      through ${esc(monthLabel(model.latestMonth, true))}, against the same months last year.</p>`;
 }
 
 const thisYear = (model) => Number(model.currentYear);
@@ -103,8 +70,8 @@ const lastYear = (model) => Number(model.currentYear) - 1;
    ------------------------------------------------------------------------- */
 
 export function renderProfit(ctx) {
-  const { model, query } = ctx;
-  const ids = scopeIds(query);
+  const { model, scope } = ctx;
+  const ids = scopeIds(scope);
   const now = thisYear(model);
   const before = lastYear(model);
 
@@ -145,9 +112,9 @@ export function renderProfit(ctx) {
       </div>`
     : "";
 
-  return `${head("Profit", `Fuel against store against total for <b>${esc(scopeLabel(model, ids))}</b>.
+  return `${head("Profit", `Fuel against store against total for <b>${esc(scope.label)}</b>.
       Fuel can carry a month while the store quietly loses money, so the split matters as much as the total.`,
-    model, query, "/profit")}
+    model, scope)}
 
     <div class="grid cols-4" style="margin-bottom:16px">
       ${yoyKpi("Total profit", money(ytd.total_profit), ytd.total_profit, prior.total_profit)}
@@ -203,8 +170,8 @@ export function renderProfit(ctx) {
    ------------------------------------------------------------------------- */
 
 export function renderFuel(ctx) {
-  const { model, query } = ctx;
-  const ids = scopeIds(query);
+  const { model, scope } = ctx;
+  const ids = scopeIds(scope);
   const now = thisYear(model);
   const before = lastYear(model);
 
@@ -243,8 +210,8 @@ export function renderFuel(ctx) {
   }).filter((row) => isNum(row.s6.gas_vol))
     .sort((a, b) => Number(b.s6.gas_profit) - Number(a.s6.gas_profit)) : [];
 
-  return `${head("Fuel", `Gallons, cents per gallon and fuel profit for <b>${esc(scopeLabel(model, ids))}</b>.
-      Margin is dollars earned per gallon sold, not a percentage.`, model, query, "/fuel")}
+  return `${head("Fuel", `Gallons, cents per gallon and fuel profit for <b>${esc(scope.label)}</b>.
+      Margin is dollars earned per gallon sold, not a percentage.`, model, scope)}
 
     <div class="grid cols-4" style="margin-bottom:16px">
       ${yoyKpi("Gallons", num(ytd.gas_vol), ytd.gas_vol, prior.gas_vol, { format: num })}
@@ -313,8 +280,8 @@ export function renderFuel(ctx) {
    ------------------------------------------------------------------------- */
 
 export function renderPurchases(ctx) {
-  const { model, query } = ctx;
-  const ids = scopeIds(query);
+  const { model, scope } = ctx;
+  const ids = scopeIds(scope);
   const now = thisYear(model);
   const before = lastYear(model);
 
@@ -355,9 +322,9 @@ export function renderPurchases(ctx) {
     })
     .filter(Boolean);
 
-  return `${head("Purchases", `What was bought against what was sold for <b>${esc(scopeLabel(model, ids))}</b>.
+  return `${head("Purchases", `What was bought against what was sold for <b>${esc(scope.label)}</b>.
       When buying climbs faster than sales, store profit falls — that is the whole buying-control story.`,
-    model, query, "/purchases")}
+    model, scope)}
 
     <div class="grid cols-4" style="margin-bottom:16px">
       ${yoyKpi("Purchases", money(ytd.purchases), ytd.purchases, prior.purchases, { higherIsBetter: false })}
@@ -405,13 +372,13 @@ export function renderPurchases(ctx) {
    ------------------------------------------------------------------------- */
 
 export function renderDepartments(ctx) {
-  const { model, query } = ctx;
-  const ids = scopeIds(query);
+  const { model, scope, query } = ctx;
+  const ids = scopeIds(scope);
   const rows = departmentRollup(model, ids);
   const periods = departmentPeriods(model, ids);
 
   if (!rows.length) {
-    return `${head("Departments", "Department performance across the portfolio.", model, query, "/departments")}
+    return `${head("Departments", "Department performance across the portfolio.", model, scope)}
       <section class="card"><div class="card-body">
         ${emptyState("No department data for this scope", "Department breakdowns are only published for some stores.")}
       </div></section>`;
@@ -457,9 +424,9 @@ export function renderDepartments(ctx) {
     return `<button class="${sortKey === key ? "is-active" : ""}" data-sort-href="#/departments?${esc(params.toString())}">${esc(label)}</button>`;
   };
 
-  return `${head("Departments", `How each department earns for <b>${esc(scopeLabel(model, ids))}</b>.
+  return `${head("Departments", `How each department earns for <b>${esc(scope.label)}</b>.
       <b>${esc(periods.y2026)}</b> against <b>${esc(periods.y2025)}</b> — these periods are different lengths,
-      so compare the margins rather than the dollar totals.`, model, query, "/departments")}
+      so compare the margins rather than the dollar totals.`, model, scope)}
 
     <div class="grid cols-4" style="margin-bottom:16px">
       ${kpi("Departments tracked", num(rows.length),
@@ -551,7 +518,7 @@ const RANK_METRICS = [
 ];
 
 export function renderRankings(ctx) {
-  const { model, query } = ctx;
+  const { model, query, scope } = ctx;
   const metricKey = query.get("metric") || "total_profit";
   const metric = RANK_METRICS.find((m) => m.key === metricKey) || RANK_METRICS[0];
   const period = query.get("period") === "month" ? "month" : "ytd";
@@ -559,7 +526,15 @@ export function renderRankings(ctx) {
   const now = thisYear(model);
   const before = lastYear(model);
 
-  const rows = model.stations.map((station) => {
+  /*
+   * Ranking one store against itself says nothing, so picking a single store
+   * ranks it within its owner's stores and marks where it lands. Picking an
+   * owner ranks that owner's stores against each other.
+   */
+  const field = scope.owner ? scope.owner.stations : model.stations;
+  const marked = scope.station?.id || "";
+
+  const rows = field.map((station) => {
     const current = period === "month"
       ? station.months[model.latestMonth] || {}
       : scopeTotals(model, now, [station.id]);
@@ -597,9 +572,12 @@ export function renderRankings(ctx) {
   return `
     <div class="page-head">
       <h2>Rankings</h2>
-      <p>Every store against every other on one measure, for <b>${esc(periodLabel)}</b>.
+      <p>${esc(scope.owner ? `${scope.owner.client}'s stores` : "Every store")} against each other on
+      one measure, for <b>${esc(periodLabel)}</b>.
       Ranking on margin rather than dollars is what surfaces a small store running well and a big one running badly.</p>
     </div>
+
+    ${scopeBar(model, scope, { period: false, csv: false })}
 
     <div class="analysis-bar">
       <div class="segmented" data-rank>${periodTabs}</div>
@@ -622,7 +600,7 @@ export function renderRankings(ctx) {
       <section class="card">
         <div class="card-head"><h3>${esc(metric.label)}</h3><span class="hint">${esc(periodLabel)}</span></div>
         <div class="card-body">${barList(rows.map((row) => ({
-          label: row.station.name,
+          label: row.station.id === marked ? `${row.station.name} ←` : row.station.name,
           value: metric.key === "store_margin" ? row.value * 100 : row.value,
           href: `#/store/${row.station.id}`,
         })), {
@@ -651,6 +629,7 @@ export function renderRankings(ctx) {
 }
 
 export function bindRankings(root, ctx) {
+  bindScopeBar(root, ctx);
   root.querySelectorAll("[data-sort-href]").forEach((button) => {
     button.addEventListener("click", () => ctx.navigate(button.dataset.sortHref));
   });

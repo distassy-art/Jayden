@@ -275,6 +275,40 @@ async function main() {
   }
   inspect("owner/unknown", renderOwner(ctx("", { id: "no-such-client" })));
 
+  /*
+   * Scoping to an owner has to actually narrow the page.
+   * These pages each carried their own flat store picker for a while, which
+   * silently ignored `owner=` — every check above still passed, because the
+   * page rendered fine, just for the wrong seventeen stores. Naming another
+   * client's store is the symptom that catches it.
+   */
+  process.stdout.write("\nOwner scoping narrows the page\n");
+  const failuresBefore = failures;
+  const scopedViews = [
+    ["profit", renderProfit], ["fuel", renderFuel], ["purchases", renderPurchases],
+    ["departments", renderDepartments], ["rankings", renderRankings],
+    ["daily", renderDaily], ["buy", renderBudget],
+  ];
+  for (const owner of model.owners) {
+    const outside = model.stations
+      .filter((station) => !owner.stationIds.includes(station.id))
+      .map((station) => station.name)
+      .filter((name) => name.length > 3);
+
+    for (const [name, render] of scopedViews) {
+      const markup = render(ctx(`owner=${owner.id}`));
+      // The scope bar lists every store by design, so it is excluded first.
+      const body = markup.replace(/<div class="scopebar[\s\S]*?<\/div>\s*<\/div>/, "");
+      const leaked = outside.filter((storeName) => body.includes(`>${storeName}<`));
+      assert(leaked.length === 0,
+        `${name} scoped to ${owner.id}: names stores outside that client (${leaked.join(", ")})`);
+    }
+  }
+  if (failures === failuresBefore) {
+    process.stdout.write(`  ok    ${scopedViews.length} pages narrow correctly for `
+      + `${model.owners.length} clients\n`);
+  }
+
   process.stdout.write("\nStore detail (every station)\n");
   for (const station of model.stations) {
     inspect(`store/${station.id} ${station.name}`, renderStore(ctx("", { id: station.id })));
