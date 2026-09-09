@@ -11,7 +11,7 @@ import {
   barChart, change, dateLabel, deltaBadge, downloadCsv, emptyState, esc, icon,
   lineChart, money, monthLabel, num, pct, perGallon,
 } from "../ui.js";
-import { scopeDays, sumDays } from "../analytics.js";
+import { portfolioTotals, scopeDays, sumDays } from "../analytics.js";
 import {
   bindScopeBar, bucketDays, periodLabel, scopeBar,
 } from "../scope.js";
@@ -19,6 +19,94 @@ import {
 const CYAN = "var(--cyan-500)";
 const NAVY = "var(--navy-600)";
 const AMBER = "var(--warn-line)";
+
+/* -------------------------------------------------------------------------
+   How the same numbers roll up
+   -------------------------------------------------------------------------
+   The single most useful thing the old site did was print one day, one week,
+   one month and the year side by side for the same six measures, so a manager
+   could see the day they had just filed as a share of the month it lands in.
+
+   The four columns are not all drawn from the same place, and pretending
+   otherwise would be the error worth avoiding. Day, week and month come from
+   the daily book, which covers roughly the last quarter. The year comes from
+   the closed monthly books, which reach back further than the daily book does.
+   Filling the year column from the daily rows instead would show a year that
+   started in June.
+   ------------------------------------------------------------------------- */
+
+const ROLLUP_ROWS = [
+  { key: "total_profit", label: "Total profit", format: money, strong: true },
+  { key: "gas_profit", label: "Fuel profit", format: money, alt: "fuel_profit" },
+  { key: "store_profit", label: "Store profit", format: money },
+  { key: "sales", label: "Store sales", format: money },
+  { key: "purchases", label: "Purchases", format: money },
+  { key: "gas_vol", label: "Fuel volume", format: num, unit: "gal" },
+];
+
+function rollupTable(model, rows, ids) {
+  // Reuse the page's own bucketing rather than re-deriving week and month
+  // boundaries, so this table cannot drift from the one beneath it.
+  const lastOf = (period) => {
+    const buckets = bucketDays(rows, period);
+    const last = buckets[buckets.length - 1];
+    return last ? { key: last[0], ...sumDays(last[1]) } : null;
+  };
+
+  const day = lastOf("day");
+  const week = lastOf("week");
+  const month = lastOf("month");
+  const year = portfolioTotals(model, model.ytdKeys, ids && ids.length ? ids : null);
+
+  const columns = [
+    { head: "Latest day", sub: day ? periodLabel(day.key, "day") : "—", totals: day },
+    { head: "That week", sub: week ? periodLabel(week.key, "week") : "—", totals: week },
+    { head: "That month", sub: month ? periodLabel(month.key, "month") : "—", totals: month },
+    {
+      head: "Year to date",
+      sub: `${monthLabel(model.ytdKeys[0], true)} – ${monthLabel(model.ytdKeys[model.ytdKeys.length - 1], true)}`,
+      totals: year,
+      book: true,
+    },
+  ];
+
+  const body = ROLLUP_ROWS.map((row) => {
+    const cells = columns.map((column) => {
+      const source = column.totals || {};
+      const value = source[row.key] ?? (row.alt ? source[row.alt] : null);
+      const negative = Number(value) < 0;
+      return `<td class="num${row.strong ? " strong" : ""}${negative ? " neg-text" : ""}">
+        ${esc(row.format(value))}</td>`;
+    }).join("");
+    return `<tr><td class="strong">${esc(row.label)}${row.unit
+      ? ` <span class="muted tiny">${esc(row.unit)}</span>` : ""}</td>${cells}</tr>`;
+  }).join("");
+
+  const heads = columns.map((column) => `<th class="num">${esc(column.head)}
+    <div class="tiny muted" style="font-weight:500">${esc(column.sub)}</div></th>`).join("");
+
+  const filed = [day, week, month]
+    .map((totals, i) => (totals
+      ? `${num(totals.days)} store-day${totals.days === 1 ? "" : "s"} in the ${["day", "week", "month"][i]}`
+      : null))
+    .filter(Boolean).join(", ");
+
+  return `<section class="card" style="margin-bottom:16px">
+    <div class="card-head">
+      <h3>How the same numbers roll up</h3>
+      <span class="hint">One day, its week, its month, and the year</span>
+    </div>
+    <div class="table-wrap"><table class="table">
+      <thead><tr><th></th>${heads}</tr></thead>
+      <tbody>${body}</tbody>
+    </table></div>
+    <div class="card-foot tiny muted">
+      The first three columns come from the daily book — posted days only, ${esc(filed)}.
+      Year to date comes from the closed monthly books, which reach back further
+      than the daily book does.
+    </div>
+  </section>`;
+}
 
 /* -------------------------------------------------------------------------
    Daily close
@@ -102,6 +190,8 @@ export function renderDaily(ctx) {
          <span>${esc(money(latest.gas_profit))} fuel · ${esc(money(latest.store_profit))} store</span>`,
         Number(latest.total_profit) < 0 ? " neg-text" : "")}
     </div>
+
+    ${rollupTable(model, rows, scope.stationIds)}
 
     <section class="card" style="margin-bottom:16px">
       <div class="card-head">

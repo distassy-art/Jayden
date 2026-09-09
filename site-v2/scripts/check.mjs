@@ -11,9 +11,9 @@
  */
 
 import {
-  buildModel, portfolioTotals, resolveTimeframe, timeframes,
+  buildModel, portfolioTotals, resolveTimeframe, scopeDays, sumDays, timeframes,
 } from "../public/assets/analytics.js";
-import { buildOwners, resolveScope } from "../public/assets/scope.js";
+import { bucketDays, buildOwners, resolveScope } from "../public/assets/scope.js";
 import {
   buildCurrent, currentStores, partitionByPeriod, rollupDeptBudget, rollupMtd,
   rollupWeeks,
@@ -338,6 +338,53 @@ async function main() {
    * the headline figure must be the same total the Profit page prints, or the
    * two pages disagree about the same months.
    */
+  /*
+   * The four-grain rollup only means anything if the grains nest: a day sits
+   * inside its week, that week inside its month. Sales and gallons cannot go
+   * negative, so for those the containment is a hard inequality — profit is
+   * excluded because a bad day genuinely can exceed its month.
+   *
+   * The year column is drawn from the monthly books rather than the daily
+   * ones, which is the part most likely to be wired up wrongly, so it is
+   * checked to cover at least the month sitting beside it.
+   */
+  process.stdout.write("\nDay rolls into week rolls into month\n");
+  const dayRows = scopeDays(model, null);
+  const lastBucket = (period) => {
+    const buckets = bucketDays(dayRows, period);
+    const last = buckets[buckets.length - 1];
+    return last ? { key: last[0], ...sumDays(last[1]) } : null;
+  };
+  const oneDay = lastBucket("day");
+  const itsWeek = lastBucket("week");
+  const itsMonth = lastBucket("month");
+  const theYear = portfolioTotals(model, model.ytdKeys, null);
+
+  for (const measure of ["sales", "purchases", "gas_vol"]) {
+    assert(oneDay[measure] <= itsWeek[measure] + 1,
+      `${measure}: the latest day (${Math.round(oneDay[measure])}) exceeds its week `
+      + `(${Math.round(itsWeek[measure])})`);
+    assert(itsWeek[measure] <= itsMonth[measure] + 1,
+      `${measure}: the latest week (${Math.round(itsWeek[measure])}) exceeds its month `
+      + `(${Math.round(itsMonth[measure])})`);
+  }
+  assert(oneDay.days <= itsWeek.days && itsWeek.days <= itsMonth.days,
+    "store-days do not nest across the three grains");
+  assert(theYear.sales >= itsMonth.sales,
+    `year to date sales (${Math.round(theYear.sales)}) are below the latest month `
+    + `(${Math.round(itsMonth.sales)}) — the year column is not the monthly books`);
+  process.stdout.write(`  ok    ${oneDay.key} (${oneDay.days} store-days) sits inside `
+    + `its week (${itsWeek.days}) inside its month (${itsMonth.days}), `
+    + `inside ${model.ytdKeys.length} months of books\n`);
+
+  // And the page has to print those figures, not merely compute them.
+  const dailyPage = renderDaily(ctx("period=day"));
+  assert(dailyPage.includes("How the same numbers roll up"),
+    "daily: the rollup table is missing");
+  assert(dailyPage.includes(money(theYear.total_profit)),
+    `daily: rollup does not print the year total ${money(theYear.total_profit)}`);
+  process.stdout.write(`  ok    the page prints the year column as ${money(theYear.total_profit)}\n`);
+
   process.stdout.write("\nTrends wall\n");
   const wall = renderTrends(ctx());
   const expected = ["Fuel volume", "Fuel revenue", "Fuel margin", "Fuel profit",
