@@ -35,10 +35,11 @@
 
 /* Sign in ----------------------------------------------------------------- */
 
-body.is-auth { background: var(--navy-900); }
+body.is-public { background: var(--navy-900); }
 
-.auth {
-  min-height: 100vh;
+.auth-main {
+  flex: 1;
+  min-height: 0;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 }
@@ -149,7 +150,7 @@ body.is-auth { background: var(--navy-900); }
 }
 
 @media (max-width: 900px) {
-  .auth { grid-template-columns: minmax(0, 1fr); }
+  .auth-main { grid-template-columns: minmax(0, 1fr); }
   .auth-art { display: none; }
   .auth-panel { min-height: 100vh; }
 }

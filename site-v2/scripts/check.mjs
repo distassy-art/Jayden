@@ -22,6 +22,7 @@ import {
 } from "../public/assets/views/analysis.js";
 import { renderDaily, renderPnl } from "../public/assets/views/periods.js";
 import { renderCalendar, renderSchedule } from "../public/assets/views/planning.js";
+import { PUBLIC_ROUTES, renderLogin } from "../public/assets/views/site.js";
 
 const args = process.argv.slice(2);
 const baseFlag = args.indexOf("--base");
@@ -134,6 +135,15 @@ async function main() {
       navigate() {},
     };
   };
+
+  // The public site needs no data at all, which is the point: a dead upstream
+  // must not take the front of the site down with it.
+  process.stdout.write("\nPublic site\n");
+  for (const route of PUBLIC_ROUTES) {
+    inspect(`public ${route.path}`, route.render());
+  }
+  inspect("public /login", renderLogin());
+  inspect("public /login (error)", renderLogin("Wrong username or password."));
 
   process.stdout.write("\nViews\n");
   inspect("dashboard", renderDashboard(ctx()));

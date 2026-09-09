@@ -25,6 +25,7 @@ import {
 } from "./views/analysis.js";
 import { bindDaily, bindPnl, renderDaily, renderPnl } from "./views/periods.js";
 import { bindCalendar, renderCalendar, renderSchedule } from "./views/planning.js";
+import { PUBLIC_ROUTES, renderLogin } from "./views/site.js";
 
 /* -------------------------------------------------------------------------
    Routes
@@ -145,36 +146,26 @@ applyTheme(activeTheme());
    Sign in
    ------------------------------------------------------------------------- */
 
-function renderSignIn(message = "") {
-  document.body.classList.add("is-auth");
-  app.innerHTML = `
-    <div class="auth">
-      <div class="auth-panel">
-        <img class="auth-logo" src="/assets/logo-wordmark-light.png" alt="Smart Solutions AI" width="230">
-        <h1>Admin console</h1>
-        <p class="auth-sub">Sign in with your Smart Solutions username and password — the same ones you use on the live site.</p>
-        <form id="signInForm" novalidate>
-          <div class="field">
-            <label for="email">Username</label>
-            <input class="input" id="email" name="username" autocomplete="username"
-              autocapitalize="none" spellcheck="false" required>
-          </div>
-          <div class="field" style="margin-top:12px">
-            <label for="password">Password</label>
-            <input class="input" id="password" name="password" type="password"
-              autocomplete="current-password" required>
-          </div>
-          <div class="auth-error" id="authError" role="alert">${esc(message)}</div>
-          <button class="btn btn-accent auth-submit" type="submit" id="signInBtn">Sign in</button>
-        </form>
-        <p class="auth-note">${icon("alert")} This is a preview build. It reads live data but cannot change anything.</p>
-      </div>
-      <aside class="auth-art" aria-hidden="true">
-        <img src="/assets/logo-mark.png" alt="" width="120">
-        <blockquote>Better profit by controlling the buy.</blockquote>
-        <p>Every store, every day — what sold, what was bought, and what it left behind.</p>
-      </aside>
-    </div>`;
+/**
+ * The signed-out site: the public pages, plus the one log-in form.
+ *
+ * The live site scatters three sign-in surfaces across the home page, the
+ * footer and portal.html. There is one here, and the account decides where it
+ * leads.
+ */
+function renderPublic(message = "") {
+  document.body.classList.add("is-public");
+  const { pathname } = parseHash();
+
+  const route = PUBLIC_ROUTES.find((entry) => entry.path === pathname);
+  if (route && !message) {
+    app.innerHTML = route.render();
+    wirePublic();
+    return;
+  }
+
+  app.innerHTML = renderLogin(message);
+  wirePublic();
 
   const form = document.getElementById("signInForm");
   const error = document.getElementById("authError");
@@ -187,17 +178,24 @@ function renderSignIn(message = "") {
     button.textContent = "Checking…";
     try {
       state.user = await signIn(form.username.value, form.password.value);
-      document.body.classList.remove("is-auth");
+      document.body.classList.remove("is-public");
+      location.hash = "#/";
       await boot();
     } catch (failure) {
       error.textContent = failure.message || "Could not sign in.";
       button.disabled = false;
-      button.textContent = "Sign in";
+      button.textContent = "Log in";
       form.password.select();
     }
   });
 
   document.getElementById("email").focus();
+}
+
+function wirePublic() {
+  document.getElementById("siteBurger")?.addEventListener("click", () => {
+    document.querySelector(".site-nav")?.classList.toggle("is-open");
+  });
 }
 
 function signOut() {
@@ -206,7 +204,7 @@ function signOut() {
   state.data = null;
   state.model = null;
   location.hash = "#/";
-  renderSignIn("You have been signed out.");
+  renderPublic("You have been signed out.");
 }
 
 /* -------------------------------------------------------------------------
@@ -413,7 +411,8 @@ function loadingMarkup() {
 }
 
 function render(options = {}) {
-  if (!state.user) { renderSignIn(); return; }
+  if (!state.user) { renderPublic(); return; }
+  document.body.classList.remove("is-public");
 
   const { pathname, query } = parseHash();
   const matched = matchRoute(pathname) || { route: ROUTES[0], params: {} };
@@ -538,8 +537,8 @@ async function refresh(force = false) {
 
 async function boot() {
   state.user = session.read();
-  if (!state.user) { renderSignIn(); return; }
-  document.body.classList.remove("is-auth");
+  if (!state.user) { renderPublic(); return; }
+  document.body.classList.remove("is-public");
   await refresh();
 }
 
