@@ -492,7 +492,8 @@
   line-height: 1;
   color: var(--cyan-300);
 }
-.faq[open] summary::after { content: "\\2212"; }
+/* U+2212 MINUS SIGN, which lines up with the "+" above; a hyphen sits too high. */
+.faq[open] summary::after { content: "\2212"; }
 .faq summary:hover { color: #fff; }
 .faq summary:focus-visible { outline: 2px solid var(--cyan-400); outline-offset: 3px; }
 .faq p { padding: 0 0 16px; margin: 0; font-size: 14.5px; line-height: 1.65; color: #9db4cb; }
