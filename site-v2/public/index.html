@@ -2,21 +2,24 @@
 <html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
+<!-- The worker rewrites this when the console is mounted on a subpath, so every
+     relative reference below resolves under the same prefix. -->
+<base href="/">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Smart Solutions AI · An AI store manager for fuel and convenience sites</title>
 <meta name="description" content="An AI store manager for gas stations: it closes the books daily, holds each department's buying to what it sold, drafts the vendor orders, and reports to the owner every week.">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#0b2545">
 <meta name="color-scheme" content="light dark">
-<link rel="icon" href="/assets/favicon-32.png" sizes="32x32" type="image/png">
-<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
-<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Smart Solutions AI">
-<link rel="preload" as="image" href="/assets/logo-wordmark-dark.png">
-<link rel="stylesheet" href="/assets/base.css">
-<link rel="stylesheet" href="/assets/auth.css">
-<link rel="stylesheet" href="/assets/site.css">
+<link rel="preload" as="image" href="assets/logo-wordmark-dark.png">
+<link rel="stylesheet" href="assets/base.css">
+<link rel="stylesheet" href="assets/auth.css">
+<link rel="stylesheet" href="assets/site.css">
 <script>
   // Apply the stored theme before first paint so the console never flashes light.
   try {
@@ -31,7 +34,7 @@
 <body>
 <div id="app">
   <div class="boot">
-    <img src="/assets/logo-mark.png" alt="Smart Solutions AI" width="56" height="56">
+    <img src="assets/logo-mark.png" alt="Smart Solutions AI" width="56" height="56">
     <div class="boot-bar"><span></span></div>
   </div>
 </div>
@@ -43,6 +46,6 @@
   </div>
 </noscript>
 
-<script type="module" src="/assets/app.js"></script>
+<script type="module" src="assets/app.js"></script>
 </body>
 </html>

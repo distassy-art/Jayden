@@ -4,6 +4,7 @@ import {
   dateLabel, deltaBadge, downloadCsv, emptyState, esc, icon, isNum, money,
   monthLabel, num, timeAgo,
 } from "../ui.js";
+import { apiUrl } from "../data.js";
 import { inScope } from "../scope.js";
 
 /** Options for a <select>, with `all` first. */
@@ -324,7 +325,7 @@ export function renderPricing(ctx) {
 
 /** PDFs and other binaries still live on the production origin. */
 function upstream(path) {
-  return `/api/asset${String(path).startsWith("/") ? "" : "/"}${path}`;
+  return apiUrl(`/api/asset${String(path).startsWith("/") ? "" : "/"}${path}`);
 }
 
 function miniStat(label, value, detail, tone = "") {

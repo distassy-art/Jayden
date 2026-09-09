@@ -15,6 +15,19 @@ workers_dev = true
 # override it with `wrangler secret put PREVIEW_ACCESS_SHA256`.
 PREVIEW_ACCESS_SHA256 = "0ad5951af7a34935abff5f0f958135473f5fa73006338e279d445b572615fae7"
 
+# Where the console is served from. Empty means the root of whatever hostname
+# points at this worker, which is right for the workers.dev URL. Set it to
+# "/new" together with the route below to serve from smartsolutionsai.us/new.
+MOUNT_PATH = ""
+
+# To put the console on smartsolutionsai.us/new, set MOUNT_PATH = "/new" above
+# and uncomment this. It adds a route to the zone; it does not modify, redeploy
+# or reconfigure `smartsolutions-site`, which keeps serving every other path.
+#
+# [[routes]]
+# pattern = "smartsolutionsai.us/new*"
+# zone_name = "smartsolutionsai.us"
+
 [assets]
 directory = "./public"
 binding = "ASSETS"

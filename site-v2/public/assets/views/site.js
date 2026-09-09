@@ -20,8 +20,8 @@ const NAV = [
 function header(active) {
   return `<header class="site-top">
     <a class="site-brand" href="#/">
-      <img src="/assets/logo-wordmark-light.png"
-        srcset="/assets/logo-wordmark-light.png 1x, /assets/logo-wordmark-light@2x.png 2x"
+      <img src="assets/logo-wordmark-light.png"
+        srcset="assets/logo-wordmark-light.png 1x, assets/logo-wordmark-light@2x.png 2x"
         alt="Smart Solutions AI" width="190">
     </a>
     <nav class="site-nav">
@@ -36,7 +36,7 @@ function footer() {
   return `<footer class="site-foot">
     <div class="site-foot-inner">
       <div>
-        <img src="/assets/logo-wordmark-light.png" alt="Smart Solutions AI" width="164">
+        <img src="assets/logo-wordmark-light.png" alt="Smart Solutions AI" width="164">
         <p>An AI store manager for fuel and convenience sites.</p>
       </div>
       <nav>
@@ -646,7 +646,7 @@ export function renderLogin(message = "") {
           cannot change anything.</p>
       </div>
       <aside class="auth-art" aria-hidden="true">
-        <img src="/assets/logo-mark.png" alt="" width="104">
+        <img src="assets/logo-mark.png" alt="" width="104">
         <blockquote>Better profit by controlling the buy.</blockquote>
         <p>Every store, every day — what sold, what was bought, and what it left behind.</p>
       </aside>

@@ -8,6 +8,11 @@
  * The proxy is deliberately one-way. Only GET reaches the origin, and only for
  * an explicit allowlist of read endpoints, so running this preview can never
  * change anything on smartsolutionsai.us.
+ *
+ * The console can hang off a subpath — `MOUNT_PATH = "/new"` serves the whole
+ * thing from smartsolutionsai.us/new. The prefix is stripped here, once, so
+ * nothing downstream has to know about it; the shell then gets a `<base>` so
+ * the browser resolves assets and links under the same prefix.
  */
 
 const UPSTREAM = "https://smartsolutionsai.us";
@@ -79,7 +84,32 @@ function sameSecret(a, b) {
   return diff === 0;
 }
 
-function gatePage(message = "") {
+/**
+ * Normalise the configured mount point to "" or "/prefix".
+ * Everything else in the worker works in unprefixed paths.
+ */
+function mountOf(env) {
+  const raw = String(env?.MOUNT_PATH || "").trim();
+  if (!raw || raw === "/") return "";
+  return `/${raw.replace(/^\/+|\/+$/g, "")}`;
+}
+
+/**
+ * Give the shell a `<base>` matching where it is actually served.
+ * Every asset reference and in-page link in index.html is relative, so this one
+ * tag is what makes the same build work at `/` and at `/new/`.
+ */
+async function withBase(response, mount) {
+  const html = (await response.text())
+    .replace('<base href="/">', `<base href="${mount}/">`);
+  const headers = new Headers(response.headers);
+  headers.set("content-type", "text/html; charset=utf-8");
+  headers.delete("content-length");
+  headers.delete("etag");
+  return new Response(html, { status: response.status, headers });
+}
+
+function gatePage(mount, message = "") {
   return new Response(`<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -100,8 +130,8 @@ function gatePage(message = "") {
            background:#13b3a8; color:#04231f; font-size:15px; font-weight:650 }
   .err { min-height:20px; margin-top:10px; color:#ff8d86; font-size:13px }
 </style></head>
-<body><form method="GET" action="/__access">
-  <img src="/assets/logo-mark.png" alt="Smart Solutions AI">
+<body><form method="GET" action="${mount}/__access">
+  <img src="${mount}/assets/logo-mark.png" alt="Smart Solutions AI">
   <h1>Preview access</h1>
   <p>This build is not public. Enter the access phrase you were given.</p>
   <input name="key" type="password" autofocus autocomplete="current-password" aria-label="Access phrase">
@@ -183,40 +213,61 @@ function harden(response) {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    const mount = mountOf(env);
 
-    if (url.pathname === "/healthz") {
-      return json({ ok: true, service: "smartsolutions-admin-preview", upstream: UPSTREAM });
+    // Strip the mount prefix once; `path` is what the rest of the worker sees.
+    let path = url.pathname;
+    if (mount) {
+      if (path === mount) {
+        return Response.redirect(new URL(`${mount}/`, url).toString(), 308);
+      }
+      if (!path.startsWith(`${mount}/`)) {
+        return json({ ok: false, error: "not_found" }, 404);
+      }
+      path = path.slice(mount.length);
+    }
+
+    if (path === "/healthz") {
+      return json({ ok: true, service: "smartsolutions-admin-preview", upstream: UPSTREAM, mount });
     }
 
     const required = env.PREVIEW_ACCESS_SHA256;
     if (required) {
-      if (url.pathname === "/__access") {
+      if (path === "/__access") {
         const supplied = await sha256(url.searchParams.get("key") || "");
-        if (!sameSecret(supplied, required)) return gatePage("That phrase was not recognised.");
+        if (!sameSecret(supplied, required)) {
+          return gatePage(mount, "That phrase was not recognised.");
+        }
         return new Response(null, {
           status: 302,
           headers: {
-            location: "/",
-            "set-cookie": `${ACCESS_COOKIE}=${required}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=604800`,
+            location: `${mount}/`,
+            "set-cookie": `${ACCESS_COOKIE}=${required}; Path=${mount}/; HttpOnly; Secure; `
+              + "SameSite=Lax; Max-Age=604800",
           },
         });
       }
-      if (!PUBLIC_PATHS.has(url.pathname) && !sameSecret(readCookie(request, ACCESS_COOKIE), required)) {
-        return url.pathname.startsWith("/api/")
+      if (!PUBLIC_PATHS.has(path) && !sameSecret(readCookie(request, ACCESS_COOKIE), required)) {
+        return path.startsWith("/api/")
           ? json({ ok: false, error: "locked" }, 401)
-          : gatePage();
+          : gatePage(mount);
       }
     }
 
-    if (url.pathname.startsWith("/api/")) {
-      return harden(await proxy(request, url.pathname));
+    if (path.startsWith("/api/")) {
+      return harden(await proxy(request, path));
     }
 
-    const asset = await env.ASSETS.fetch(request);
+    const assetRequest = new Request(new URL(path + url.search, url), request);
+    const asset = await env.ASSETS.fetch(assetRequest);
+
     // Single-page app: unknown paths fall back to the shell so deep links work.
-    if (asset.status === 404 && request.method === "GET" && !url.pathname.includes(".")) {
+    if (asset.status === 404 && request.method === "GET" && !path.includes(".")) {
       const shell = await env.ASSETS.fetch(new Request(new URL("/index.html", url), request));
-      return harden(new Response(shell.body, { status: 200, headers: shell.headers }));
+      return harden(await withBase(new Response(shell.body, { status: 200, headers: shell.headers }), mount));
+    }
+    if (path === "/" || path === "/index.html") {
+      return harden(await withBase(asset, mount));
     }
     return harden(asset);
   },

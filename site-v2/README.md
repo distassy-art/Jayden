@@ -86,10 +86,31 @@ Deliberate choices, since the current site is fragile in these exact places:
 
 ```bash
 cd site-v2
-npm run dev            # http://localhost:8787
+npm run dev                      # http://localhost:8787
+npm run dev -- --mount /new      # http://localhost:8787/new/
 ```
 
-The dev server mirrors the worker exactly, including the read-only proxy.
+The dev server mirrors the worker exactly, including the read-only proxy and
+the subpath mount.
+
+## Serving it from `smartsolutionsai.us/new`
+
+The console works at any prefix without a rebuild. It works out where it is
+being served from at runtime — the worker rewrites the shell's `<base>`, and
+`data.js` derives the API prefix from its own module URL — so one build runs at
+both `/` and `/new/`.
+
+Two changes in `wrangler.toml`, both commented in place:
+
+1. `MOUNT_PATH = "/new"`
+2. Uncomment the `[[routes]]` block for `smartsolutionsai.us/new*`
+
+This adds a route to the zone. It does **not** modify, redeploy or reconfigure
+`smartsolutions-site`; that worker keeps serving every other path on the domain
+exactly as it does now, and deleting the route reverts it completely.
+
+Requests that arrive outside the mount return 404 from this worker rather than
+being answered, so it cannot shadow the live site.
 
 ## Check it
 

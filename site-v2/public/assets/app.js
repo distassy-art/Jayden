@@ -248,8 +248,8 @@ function railMarkup(activePath, scope) {
   const user = state.user || {};
   return `
     <div class="rail-brand">
-      <a href="#/"><img src="/assets/logo-wordmark-dark.png"
-        srcset="/assets/logo-wordmark-dark.png 1x, /assets/logo-wordmark-dark@2x.png 2x"
+      <a href="#/"><img src="assets/logo-wordmark-dark.png"
+        srcset="assets/logo-wordmark-dark.png 1x, assets/logo-wordmark-dark@2x.png 2x"
         alt="Smart Solutions AI" width="158"></a>
     </div>
     <div class="rail-scroll">${body}</div>

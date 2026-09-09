@@ -7,6 +7,21 @@
  */
 
 /* -------------------------------------------------------------------------
+   Where we are served from
+   -------------------------------------------------------------------------
+   The console can hang off a subpath (`/new`). Rather than being told, it works
+   the prefix out from this module's own URL, so one build runs correctly at
+   either mount with no configuration.
+   ------------------------------------------------------------------------- */
+
+export const MOUNT = new URL(import.meta.url).pathname.replace(/\/assets\/[^/]*$/, "");
+
+/** Prefix an internal `/api/...` path with the mount point. */
+export function apiUrl(path) {
+  return `${MOUNT}${path}`;
+}
+
+/* -------------------------------------------------------------------------
    Session — same credential scheme as the production site, so the same
    usernames and passwords work here.
    ------------------------------------------------------------------------- */
@@ -187,7 +202,7 @@ class HttpError extends Error {
 async function fetchJson(path) {
   let response;
   try {
-    response = await fetch(path, { headers: authHeaders(), credentials: "same-origin" });
+    response = await fetch(apiUrl(path), { headers: authHeaders(), credentials: "same-origin" });
   } catch {
     throw new Error("Network unreachable. Check your connection and retry.");
   }

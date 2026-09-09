@@ -8,7 +8,7 @@
 
 import { createHash } from "node:crypto";
 import { createReadStream } from "node:fs";
-import { stat } from "node:fs/promises";
+import { readFile, stat } from "node:fs/promises";
 import { createServer } from "node:http";
 import { dirname, extname, join, normalize, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -24,6 +24,12 @@ const PORT = Number(portFlag !== -1 ? args[portFlag + 1] : process.env.PORT || 8
 // The deployed worker gates access with a passphrase. Locally that only gets in
 // the way, so it stays off unless PREVIEW_ACCESS_SHA256 is exported.
 const ACCESS_HASH = process.env.PREVIEW_ACCESS_SHA256 || "";
+
+// Mirrors MOUNT_PATH in wrangler.toml, so `--mount /new` reproduces exactly
+// what a subpath deployment does.
+const mountFlag = args.indexOf("--mount");
+const rawMount = mountFlag !== -1 ? args[mountFlag + 1] : process.env.MOUNT_PATH || "";
+const MOUNT = !rawMount || rawMount === "/" ? "" : `/${String(rawMount).replace(/^\/+|\/+$/g, "")}`;
 
 const ENDPOINTS = new Map([
   ["/api/books-overlay", "/.netlify/functions/books-overlay"],
@@ -75,6 +81,21 @@ function sendJson(res, status, body) {
 
 async function serveFile(res, filePath, status = 200) {
   const info = await stat(filePath);
+
+  // The shell's `<base>` decides where every relative asset resolves, so under
+  // a mount it has to be rewritten — the same thing the worker does.
+  if (MOUNT && extname(filePath) === ".html") {
+    const html = (await readFile(filePath, "utf8"))
+      .replace('<base href="/">', `<base href="${MOUNT}/">`);
+    res.writeHead(status, {
+      "content-type": "text/html; charset=utf-8",
+      "cache-control": "no-store",
+      "x-content-type-options": "nosniff",
+    });
+    res.end(html);
+    return;
+  }
+
   res.writeHead(status, {
     "content-type": MIME[extname(filePath)] || "application/octet-stream",
     "content-length": info.size,
@@ -87,13 +108,28 @@ async function serveFile(res, filePath, status = 200) {
 const server = createServer(async (req, res) => {
   const url = new URL(req.url, `http://localhost:${PORT}`);
 
-  if (url.pathname === "/healthz") {
+  // Strip the mount prefix once; everything below works in unprefixed paths.
+  let path = url.pathname;
+  if (MOUNT) {
+    if (path === MOUNT) {
+      res.writeHead(308, { location: `${MOUNT}/` });
+      res.end();
+      return;
+    }
+    if (!path.startsWith(`${MOUNT}/`)) {
+      sendJson(res, 404, { ok: false, error: "not_found", detail: `mounted at ${MOUNT}/` });
+      return;
+    }
+    path = path.slice(MOUNT.length);
+  }
+
+  if (path === "/healthz") {
     sendJson(res, 200, { ok: true, service: "smartsolutions-admin-preview-dev", upstream: UPSTREAM });
     return;
   }
 
   if (ACCESS_HASH) {
-    if (url.pathname === "/__access") {
+    if (path === "/__access") {
       const supplied = createHash("sha256").update(url.searchParams.get("key") || "").digest("hex");
       if (supplied !== ACCESS_HASH) {
         res.writeHead(401, { "content-type": "text/plain" });
@@ -101,28 +137,28 @@ const server = createServer(async (req, res) => {
         return;
       }
       res.writeHead(302, {
-        location: "/",
-        "set-cookie": `ssv2_access=${ACCESS_HASH}; Path=/; HttpOnly; SameSite=Lax; Max-Age=604800`,
+        location: `${MOUNT}/`,
+        "set-cookie": `ssv2_access=${ACCESS_HASH}; Path=${MOUNT}/; HttpOnly; SameSite=Lax; Max-Age=604800`,
       });
       res.end();
       return;
     }
     const cookie = /(?:^|;\s*)ssv2_access=([^;]+)/.exec(req.headers.cookie || "")?.[1] || "";
-    if (url.pathname !== "/assets/logo-mark.png" && cookie !== ACCESS_HASH) {
+    if (path !== "/assets/logo-mark.png" && cookie !== ACCESS_HASH) {
       res.writeHead(401, { "content-type": "text/plain", "cache-control": "no-store" });
       res.end("Preview locked. Visit /__access?key=<phrase>");
       return;
     }
   }
 
-  if (url.pathname.startsWith("/api/")) {
+  if (path.startsWith("/api/")) {
     if (req.method !== "GET" && req.method !== "HEAD") {
       sendJson(res, 405, { ok: false, error: "read_only" });
       return;
     }
-    const upstreamPath = resolveUpstream(url.pathname);
+    const upstreamPath = resolveUpstream(path);
     if (!upstreamPath) {
-      sendJson(res, 404, { ok: false, error: "not_allowed", detail: url.pathname });
+      sendJson(res, 404, { ok: false, error: "not_allowed", detail: path });
       return;
     }
     try {
@@ -145,7 +181,7 @@ const server = createServer(async (req, res) => {
   }
 
   // Static files, with a single-page-app fallback to the shell.
-  const requested = normalize(decodeURIComponent(url.pathname)).replace(/^(\.\.[/\\])+/, "");
+  const requested = normalize(decodeURIComponent(path)).replace(/^(\.\.[/\\])+/, "");
   const candidate = join(PUBLIC, requested === "/" ? "index.html" : requested);
   if (!candidate.startsWith(PUBLIC)) {
     sendJson(res, 403, { ok: false, error: "forbidden" });
@@ -164,6 +200,6 @@ const server = createServer(async (req, res) => {
 });
 
 server.listen(PORT, () => {
-  process.stdout.write(`Admin console preview on http://localhost:${PORT}\n`);
+  process.stdout.write(`Admin console preview on http://localhost:${PORT}${MOUNT}/\n`);
   process.stdout.write(`Proxying read-only API calls to ${UPSTREAM}\n`);
 });
