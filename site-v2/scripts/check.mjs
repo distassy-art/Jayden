@@ -430,6 +430,24 @@ async function main() {
   process.stdout.write(`  ok    the page prints the year column as ${money(theYear.total_profit)}\n`);
 
   /*
+   * Daily purchases are not booked day by day, so the page must not fake a store
+   * margin from them. Instead it shows the real month-to-date store P&L from the
+   * books feed, and prints that store profit rather than the daily proxy.
+   */
+  const mtdFiled = currentStores(current, resolveScope(model, new URLSearchParams("period=day")))
+    .filter((store) => store.onPeriod);
+  const mtd = rollupMtd(mtdFiled);
+  if (mtd) {
+    assert(dailyPage.includes("This month so far"),
+      "daily: the month-to-date store P&L summary is missing");
+    assert(dailyPage.includes(money(mtd.store_profit)),
+      `daily: does not print the real month-to-date store profit ${money(mtd.store_profit)}`);
+    assert(!dailyPage.includes("Sales against purchases"),
+      "daily: still shows the misleading sales-against-purchases chart");
+    process.stdout.write("  ok    daily shows the real month-to-date store P&L, not a daily proxy\n");
+  }
+
+  /*
    * The leaks page rests on one fact about these books: a day's store profit
    * is its sales minus what it bought in, so a delivery day looks like a large
    * loss and is not one. That is asserted here rather than assumed, because if

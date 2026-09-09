@@ -198,10 +198,9 @@ function dailyNumbersSection(ctx) {
     <td class="strong">${esc(dateLabel(row.date))}</td>
     ${many ? `<td class="num muted">${esc(num(row.stores))}</td>` : ""}
     <td class="num">${esc(num(row.gas_vol))}</td>
-    <td class="num">${esc(money(row.sales))}</td>
-    <td class="num">${esc(money(row.purchases))}</td>
-    <td class="num${Number(row.store_profit) < 0 ? " neg-text" : ""}">${esc(money(row.store_profit))}</td>
-    <td class="num strong">${esc(money(row.total_profit))}</td>
+    <td class="num strong">${esc(money(row.sales))}</td>
+    <td class="num">${esc(money(row.gas_profit))}</td>
+    <td class="num">${esc(perGallon(row.gas_margin))}</td>
   </tr>`).join("");
 
   const totals = sumDays(rows);
@@ -211,25 +210,29 @@ function dailyNumbersSection(ctx) {
 
   return `<section class="card" style="margin-bottom:16px">
     <div class="card-head">
-      <h3>Daily sales &amp; purchases</h3>
+      <h3>Daily sales</h3>
       <span class="hint">${esc(hint)}</span>
     </div>
     <div class="table-wrap"><table class="table">
       <thead><tr>
         <th>Day</th>${many ? `<th class="num">Stores</th>` : ""}
-        <th class="num">Gallons</th><th class="num">Sales</th><th class="num">Purchases</th>
-        <th class="num">Store profit</th><th class="num">Total profit</th>
+        <th class="num">Gallons</th><th class="num">Sales</th>
+        <th class="num">Fuel profit</th><th class="num">$/gal</th>
       </tr></thead>
       <tbody>${body}</tbody>
       <tfoot><tr>
         <td>${esc(behind ? monthLabel(month, true) : "Month to date")}</td>${many ? `<td class="num muted">${esc(num(totals.days))}</td>` : ""}
         <td class="num">${esc(num(totals.gas_vol))}</td>
-        <td class="num">${esc(money(totals.sales))}</td>
-        <td class="num">${esc(money(totals.purchases))}</td>
-        <td class="num">${esc(money(totals.store_profit))}</td>
-        <td class="num strong">${esc(money(totals.total_profit))}</td>
+        <td class="num strong">${esc(money(totals.sales))}</td>
+        <td class="num">${esc(money(totals.gas_profit))}</td>
+        <td class="num">${esc(perGallon(totals.gas_margin))}</td>
       </tr></tfoot>
     </table></div>
+    <div class="card-foot tiny muted">
+      Purchases and store profit are booked when the month's books close, so this table
+      shows the sales and fuel that post daily. The month-to-date store profit and margin
+      are in <b>This month so far</b> above.
+    </div>
   </section>`;
 }
 

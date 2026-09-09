@@ -10,16 +10,31 @@
 
 import {
   barChart, change, dateLabel, deltaBadge, downloadCsv, emptyState, esc, icon,
-  lineChart, money, monthLabel, num, pct, perGallon,
+  isNum, lineChart, money, monthLabel, num, pct, perGallon,
 } from "../ui.js";
 import { portfolioTotals, scopeDays, sumDays } from "../analytics.js";
+import { currentStores, rollupMtd } from "../current.js";
 import {
   bindScopeBar, bucketDays, periodLabel, scopeBar,
 } from "../scope.js";
 
 const CYAN = "var(--cyan-500)";
 const NAVY = "var(--navy-600)";
-const AMBER = "var(--warn-line)";
+const DASH = "—";
+
+/*
+ * Purchases are booked when a month's books close, not day by day. So the open
+ * month's daily sheets arrive with sales but no purchases, which would compute a
+ * false 100% store margin and an inflated store and total profit. A period's
+ * store side — purchases, store profit, store margin, total profit — is only real
+ * once purchases have actually been booked for it, which is what this checks. The
+ * true month-to-date store P&L comes from the books feed and is shown separately.
+ */
+const STORE_SIDE = new Set(["purchases", "store_profit", "total_profit"]);
+function storeSettled(totals) {
+  return Boolean(totals) && isNum(totals.purchases) && Number(totals.purchases) > 0
+    && isNum(totals.store_profit);
+}
 
 /* -------------------------------------------------------------------------
    How the same numbers roll up
@@ -73,6 +88,11 @@ function rollupTable(model, rows, ids) {
 
   const body = ROLLUP_ROWS.map((row) => {
     const cells = columns.map((column) => {
+      // The open month has no booked purchases yet, so its store side is not
+      // real. Show it as pending rather than a false 100%-margin figure.
+      if (STORE_SIDE.has(row.key) && !storeSettled(column.totals)) {
+        return `<td class="num muted">${DASH}</td>`;
+      }
       const source = column.totals || {};
       const value = source[row.key] ?? (row.alt ? source[row.alt] : null);
       const negative = Number(value) < 0;
@@ -106,38 +126,85 @@ function rollupTable(model, rows, ids) {
       <tbody>${body}</tbody>
     </table></div>
     <div class="card-foot tiny muted">
-      Day, week and month are added up from the posted daily sheets (${esc(filed)}).
-      The year comes from the closed monthly books, which reach back further than the
-      daily sheets do. A “store-day” is one store's sheet for one day, so with several
-      stores in view a single date can be several store-days.
+      Gallons, fuel profit and sales come from the posted daily sheets (${esc(filed)}).
+      Purchases and store profit are booked when each month's books close, so they show
+      only once the month is closed — that is why the day, week and open month read “—” for
+      the store side while the year, from the closed books, is complete. A “store-day” is one
+      store's sheet for one day.
     </div>
   </section>`;
 }
 
 /* -------------------------------------------------------------------------
-   Daily close
+   Daily sales
    ------------------------------------------------------------------------- */
+
+/*
+ * The real month-to-date store P&L, from the closed-books manager feed rather
+ * than the daily sheets. Sales, purchases, store profit and the true store
+ * margin belong here: the daily table can't carry them because purchases are not
+ * booked day by day. Drawn only from stores that have actually filed into the
+ * open month, so a store still closing last month doesn't drag the picture back.
+ */
+function mtdSummary(ctx) {
+  const { current, scope } = ctx;
+  if (!current) return "";
+  const filed = currentStores(current, scope).filter((store) => store.onPeriod);
+  const mtd = rollupMtd(filed);
+  if (!mtd) return "";
+
+  const label = current.label || "Month to date";
+  const through = mtd.through ? dateLabel(mtd.through) : "";
+  const stores = mtd.stores || filed.length;
+  const neg = (v) => (Number(v) < 0 ? " neg-text" : "");
+  const stat = (lbl, value, foot, tone = "") => `<div class="stat">
+    <div class="stat-label">${esc(lbl)}</div>
+    <div class="stat-value${tone}" style="font-size:22px">${esc(value)}</div>
+    <div class="stat-foot"><span class="muted">${esc(foot)}</span></div>
+  </div>`;
+
+  return `<section class="card" style="margin-bottom:16px">
+    <div class="card-head">
+      <h3>This month so far</h3>
+      <span class="hint">${esc(label)}${through ? ` · through ${esc(through)}` : ""}${stores > 1 ? ` · ${esc(num(stores))} stores` : ""}</span>
+      <span class="spacer"></span>
+      <span class="hint">Purchases &amp; store profit from the books</span>
+    </div>
+    <div class="card-body">
+      <div class="grid cols-4">
+        ${stat("Store sales", money(mtd.sales), "sold at the register")}
+        ${stat("Purchases", money(mtd.purchases), `${pct(mtd.buy_ratio)} of sales`)}
+        ${stat("Store profit", money(mtd.store_profit), `${pct(mtd.margin)} store margin`, neg(mtd.store_profit))}
+        ${stat("Total profit", money(mtd.total_profit), `incl. ${money(mtd.gas_profit)} fuel`, neg(mtd.total_profit))}
+      </div>
+    </div>
+  </section>`;
+}
 
 export function renderDaily(ctx) {
   const { model, scope } = ctx;
-  const rows = scopeDays(model, scope.stationIds);
+  // This page is about days that actually recorded sales — the open operating
+  // month. Historical daily sheets carry fuel and purchases but no sales, so a
+  // "daily sales" page built on them would be mostly blank; the closed months are
+  // covered in full by Monthly totals and the Profit page.
+  const rows = scopeDays(model, scope.stationIds).filter((r) => isNum(r.sales) && r.sales !== 0);
 
   const bar = scopeBar(model, scope);
 
   if (!rows.length) {
     return `<div class="page-head">
         <h2>Daily sales</h2>
-        <p>The end-of-day sales sheet each store files — what sold, what was bought, and the
-          profit left over — for <b>${esc(scope.label)}</b>.</p>
+        <p>Day-by-day sales, gallons and fuel profit for the current operating month,
+          for <b>${esc(scope.label)}</b>.</p>
       </div>${bar}
       <section class="card"><div class="card-body">
-        ${emptyState("No day-level figures for this scope",
-          "Day records are published for the last two months. Monthly figures are on the profit page.")}
+        ${emptyState("No daily sales for this scope yet",
+          "Daily sales are recorded for the open operating month. For closed months, see Monthly totals or the Profit page.")}
       </div></section>`;
   }
 
-  // Day and week read the day feed; month and year roll the same rows up, so
-  // every grain reconciles to the same totals.
+  // Day and week read the day feed; month rolls the same rows up, so every grain
+  // reconciles to the same totals.
   const buckets = bucketDays(rows, scope.period);
   const series = buckets.map(([key, days]) => ({ key, ...sumDays(days) }));
 
@@ -150,27 +217,27 @@ export function renderDaily(ctx) {
     : scope.period === "week" ? "week"
     : scope.period === "month" ? "month" : "year";
   const title = scope.period === "day" ? "Daily sales"
-    : scope.period === "week" ? "Weekly totals"
-    : scope.period === "month" ? "Monthly totals" : "Yearly totals";
+    : scope.period === "week" ? "Weekly sales"
+    : scope.period === "month" ? "Monthly sales" : "Yearly sales";
 
-  // Enough bars to read; a two-month window at day grain is 62 of them.
+  // Enough bars to read; a month at day grain is ~31 of them.
   const window = series.slice(-(scope.period === "day" ? 31 : scope.period === "week" ? 16 : 12));
   const labels = window.map(({ key }) => (scope.period === "day"
     ? dateLabel(key).replace(/,.*$/, "")
     : scope.period === "week" ? dateLabel(key).replace(/,.*$/, "")
     : scope.period === "month" ? monthLabel(key, true) : key));
 
+  // The per-period table keeps only what the daily feed reports reliably: fuel
+  // (every day) and sales (the open month). Purchases and store profit are not
+  // booked day by day, so they live in the month-to-date summary above, drawn
+  // from the closed-books feed, rather than being faked here.
   const table = series.slice().reverse().map((row) => `<tr>
     <td class="strong">${esc(periodLabel(row.key, scope.period))}</td>
     <td class="num muted">${esc(num(row.days))}</td>
     <td class="num">${esc(num(row.gas_vol))}</td>
     <td class="num">${esc(money(row.gas_profit))}</td>
     <td class="num">${esc(perGallon(row.gas_margin))}</td>
-    <td class="num">${esc(money(row.sales))}</td>
-    <td class="num">${esc(money(row.purchases))}</td>
-    <td class="num${Number(row.store_profit) < 0 ? " neg-text strong" : ""}">${esc(money(row.store_profit))}</td>
-    <td class="num">${esc(pct(row.margin))}</td>
-    <td class="num strong">${esc(money(row.total_profit))}</td>
+    <td class="num strong">${esc(money(row.sales))}</td>
   </tr>`).join("");
 
   const stat = (label, value, foot, tone = "") => `<div class="stat">
@@ -182,46 +249,43 @@ export function renderDaily(ctx) {
   return `
     <div class="page-head">
       <h2>${esc(title)}</h2>
-      <p>Every store files a sales sheet at the close of each day — gallons pumped, what the
-        store sold, what it bought, and the profit left over. This page adds those sheets up for
-        <b>${esc(scope.label)}</b>, one row per ${esc(grain)}. Use the <b>Period</b> buttons above
-        to switch between day, week, month and year. Showing ${esc(covered)}.</p>
+      <p>Day-by-day sales, gallons and fuel profit for the current operating month, for
+        <b>${esc(scope.label)}</b>. Purchases and store profit are booked when the month's books
+        close, so they appear in <b>This month so far</b> below, not day by day.
+        Use the <b>Period</b> buttons above to group by day, week or month. Showing ${esc(covered)}.</p>
     </div>
     ${bar}
+
+    ${mtdSummary(ctx)}
 
     <div class="grid cols-4" style="margin-bottom:16px">
       ${stat(`Latest ${grain}`, periodLabel(latest.key, scope.period),
         `<span class="muted">${esc(num(latest.days))} store-day${latest.days === 1 ? "" : "s"} filed</span>`)}
       ${stat("Store sales", money(latest.sales),
         `${deltaBadge(change(latest.sales, previous?.sales))}<span>on the ${esc(grain)} before</span>`)}
-      ${stat("Bought", money(latest.purchases),
-        `${deltaBadge(change(latest.purchases, previous?.purchases), { higherIsBetter: false })}
-         <span>${esc(pct(latest.sales ? latest.purchases / latest.sales : null))} of sales</span>`)}
-      ${stat("Total profit", money(latest.total_profit),
-        `${deltaBadge(change(latest.total_profit, previous?.total_profit))}
-         <span>${esc(money(latest.gas_profit))} fuel · ${esc(money(latest.store_profit))} store</span>`,
-        Number(latest.total_profit) < 0 ? " neg-text" : "")}
+      ${stat("Gallons", num(latest.gas_vol),
+        `${deltaBadge(change(latest.gas_vol, previous?.gas_vol))}<span>fuel pumped</span>`)}
+      ${stat("Fuel profit", money(latest.gas_profit),
+        `${deltaBadge(change(latest.gas_profit, previous?.gas_profit))}
+         <span>${esc(perGallon(latest.gas_margin))} /gal</span>`)}
     </div>
 
     ${rollupTable(model, rows, scope.stationIds)}
 
     <section class="card" style="margin-bottom:16px">
       <div class="card-head">
-        <h3>Sales against purchases</h3>
-        <span class="hint">The gap is store profit · last ${esc(window.length)} ${esc(grain)}${window.length === 1 ? "" : "s"}</span>
+        <h3>Store sales</h3>
+        <span class="hint">By ${esc(grain)} · last ${esc(window.length)} ${esc(grain)}${window.length === 1 ? "" : "s"}</span>
       </div>
       <div class="card-body">${barChart(labels, [
         { name: "Store sales", color: NAVY, values: window.map((r) => r.sales ?? null) },
-        { name: "Purchases", color: AMBER, values: window.map((r) => r.purchases ?? null) },
       ], { height: 250 })}</div>
     </section>
 
     <section class="card" style="margin-bottom:16px">
-      <div class="card-head"><h3>Profit</h3><span class="hint">Fuel and store, stacked by ${esc(grain)}</span></div>
+      <div class="card-head"><h3>Fuel profit</h3><span class="hint">By ${esc(grain)}, from gallons pumped</span></div>
       <div class="card-body">${lineChart(labels, [
-        { name: "Total", color: CYAN, values: window.map((r) => r.total_profit ?? null) },
-        { name: "Fuel", color: NAVY, values: window.map((r) => r.gas_profit ?? null) },
-        { name: "Store", color: AMBER, values: window.map((r) => r.store_profit ?? null) },
+        { name: "Fuel profit", color: CYAN, values: window.map((r) => r.gas_profit ?? null) },
       ], { height: 250 })}</div>
     </section>
 
@@ -232,8 +296,7 @@ export function renderDaily(ctx) {
           <th>${esc(grain.charAt(0).toUpperCase() + grain.slice(1))}</th>
           <th class="num" title="One store's sheet for one day">Store-days</th>
           <th class="num">Gallons</th><th class="num">Fuel profit</th>
-          <th class="num">$/gal</th><th class="num">Sales</th><th class="num">Bought</th>
-          <th class="num">Store profit</th><th class="num">Margin</th><th class="num">Total profit</th>
+          <th class="num">$/gal</th><th class="num">Store sales</th>
         </tr></thead>
         <tbody>${table}</tbody>
         <tfoot><tr>
@@ -242,13 +305,14 @@ export function renderDaily(ctx) {
           <td class="num">${esc(num(all.gas_vol))}</td>
           <td class="num">${esc(money(all.gas_profit))}</td>
           <td class="num">${esc(perGallon(all.gas_margin))}</td>
-          <td class="num">${esc(money(all.sales))}</td>
-          <td class="num">${esc(money(all.purchases))}</td>
-          <td class="num">${esc(money(all.store_profit))}</td>
-          <td class="num">${esc(pct(all.margin))}</td>
-          <td class="num">${esc(money(all.total_profit))}</td>
+          <td class="num strong">${esc(money(all.sales))}</td>
         </tr></tfoot>
       </table></div>
+      <div class="card-foot tiny muted">
+        Purchases, store profit and store margin settle when the month's books close;
+        the current-month figures are in <b>This month so far</b> above, and the closed
+        months in full on the Monthly and Profit pages.
+      </div>
     </section>`;
 }
 
