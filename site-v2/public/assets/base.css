@@ -740,6 +740,31 @@ img { max-width: 100%; display: block; }
 .chart .grid-line { stroke: var(--line); stroke-width: 1; }
 .chart .axis-line { stroke: var(--line-strong); stroke-width: 1; }
 
+.analysis-bar {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.analysis-bar .field { min-width: 210px; }
+.analysis-bar .spacer { flex: 1; }
+.analysis-bar .tiny { padding-bottom: 8px; }
+
+.rank-metrics { flex-wrap: wrap; }
+
+/* Share-of-total bar. */
+.split-bar {
+  display: flex;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--surface-3);
+}
+
+.split-seg { height: 100%; transition: width 0.5s var(--ease); }
+
 .msg { padding: 10px 0; border-bottom: 1px solid var(--line); }
 .msg:last-child { border-bottom: 0; }
 .msg-meta { display: flex; gap: 8px; font-size: 12px; margin-bottom: 3px; }

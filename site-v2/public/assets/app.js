@@ -17,6 +17,10 @@ import {
 import {
   bindBilling, renderBilling, renderHealth, renderTickets,
 } from "./views/finance.js";
+import {
+  bindDepartments, bindRankings, bindScope, renderDepartments, renderFuel,
+  renderProfit, renderPurchases, renderRankings,
+} from "./views/analysis.js";
 
 /* -------------------------------------------------------------------------
    Routes
@@ -26,6 +30,11 @@ const ROUTES = [
   { path: "/", title: "Command centre", icon: "dashboard", group: "Overview", render: renderDashboard },
   { path: "/stores", title: "Stores", icon: "stores", group: "Overview", render: renderStores, bind: bindStores },
   { path: "/store/:id", title: "Store", hidden: true, render: renderStore },
+  { path: "/profit", title: "Profit", icon: "health", group: "Analysis", render: renderProfit, bind: bindScope },
+  { path: "/fuel", title: "Fuel", icon: "fuel", group: "Analysis", render: renderFuel, bind: bindScope },
+  { path: "/purchases", title: "Purchases", icon: "orders", group: "Analysis", render: renderPurchases, bind: bindScope },
+  { path: "/departments", title: "Departments", icon: "departments", group: "Analysis", render: renderDepartments, bind: bindDepartments },
+  { path: "/rankings", title: "Rankings", icon: "rankings", group: "Analysis", render: renderRankings, bind: bindRankings },
   { path: "/invoices", title: "S2K invoices", icon: "invoice", group: "Operations", render: renderInvoices, bind: bindInvoices },
   { path: "/orders", title: "Vendor orders", icon: "orders", group: "Operations", render: renderOrders, bind: bindOrders },
   { path: "/pricing", title: "Pricing", icon: "billing", group: "Operations", render: renderPricing },

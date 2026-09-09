@@ -15,6 +15,9 @@ import { renderDashboard } from "../public/assets/views/dashboard.js";
 import { renderStore, renderStores } from "../public/assets/views/stores.js";
 import { renderInvoices, renderOrders, renderPricing } from "../public/assets/views/operations.js";
 import { renderBilling, renderHealth, renderTickets } from "../public/assets/views/finance.js";
+import {
+  renderDepartments, renderFuel, renderProfit, renderPurchases, renderRankings,
+} from "../public/assets/views/analysis.js";
 
 const args = process.argv.slice(2);
 const baseFlag = args.indexOf("--base");
@@ -114,6 +117,14 @@ async function main() {
   inspect("stores", renderStores(ctx()));
   inspect("stores?period=ytd", renderStores(ctx("period=ytd")));
   inspect("stores?sort=margin&dir=asc", renderStores(ctx("sort=margin&dir=asc")));
+  inspect("profit", renderProfit(ctx()));
+  inspect("fuel", renderFuel(ctx()));
+  inspect("purchases", renderPurchases(ctx()));
+  inspect("departments", renderDepartments(ctx()));
+  inspect("departments?sort=margin", renderDepartments(ctx("sort=margin")));
+  inspect("rankings", renderRankings(ctx()));
+  inspect("rankings?metric=store_margin", renderRankings(ctx("metric=store_margin")));
+  inspect("rankings?metric=gas_margin&period=month", renderRankings(ctx("metric=gas_margin&period=month")));
   inspect("invoices (missing)", renderInvoices(ctx("tab=missing")));
   inspect("invoices (entered)", renderInvoices(ctx("tab=entered")));
   inspect("orders", renderOrders(ctx()));
@@ -127,6 +138,17 @@ async function main() {
   process.stdout.write("\nStore detail (every station)\n");
   for (const station of model.stations) {
     inspect(`store/${station.id} ${station.name}`, renderStore(ctx("", { id: station.id })));
+  }
+
+  // The analysis pages are scoped to one store as often as to the portfolio,
+  // and a single store is where sparse data shows up first.
+  process.stdout.write("\nAnalysis scoped to a single store\n");
+  for (const station of model.stations) {
+    const scoped = `store=${station.id}`;
+    inspect(`profit ${station.id}`, renderProfit(ctx(scoped)));
+    inspect(`fuel ${station.id}`, renderFuel(ctx(scoped)));
+    inspect(`purchases ${station.id}`, renderPurchases(ctx(scoped)));
+    inspect(`departments ${station.id}`, renderDepartments(ctx(scoped)));
   }
 
   process.stdout.write("\nDegraded feeds\n");

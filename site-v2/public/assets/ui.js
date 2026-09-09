@@ -64,6 +64,15 @@ export function num(value, dash = "—") {
   return NUM_0.format(Number(value));
 }
 
+/**
+ * Fuel margin is carried as dollars per gallon, not a percentage — 0.46 means
+ * 46 cents a gallon. Formatting it with `pct` would read as 46%.
+ */
+export function perGallon(value, dash = "—") {
+  if (!isNum(value)) return dash;
+  return `$${Number(value).toFixed(3)}`;
+}
+
 /** Percentage from a 0..1 ratio. */
 export function pct(ratio, { digits = 1, dash = "—" } = {}) {
   if (!isNum(ratio)) return dash;
@@ -176,6 +185,9 @@ const ICON_PATHS = {
   chevron: '<path d="M9 6l6 6-6 6"/>',
   download: '<path d="M12 3v12M7 11l5 5 5-5M4 21h16"/>',
   inbox: '<path d="M3 13h5l1.5 3h5L16 13h5M3 13l3-9h12l3 9v8H3z"/>',
+  fuel: '<path d="M4 21V5a2 2 0 012-2h6a2 2 0 012 2v16M3 21h12M6 9h6M14 8l3 2.5V17a2 2 0 004 0V9l-3-3"/>',
+  departments: '<path d="M3 4h7v7H3zM14 4h7v7h-7zM3 15h7v5H3zM14 15h7v5h-7z"/>',
+  rankings: '<path d="M4 20V11M10 20V4M16 20v-6M22 20H2"/>',
   external: '<path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/>',
 };
 
@@ -348,6 +360,64 @@ export function lineChart(labels, series, { height = 260, valueFormat = moneySho
       ${gridlines}
       <line class="axis-line" x1="${pad.left}" x2="${pad.left}" y1="${pad.top}" y2="${pad.top + plotH}"/>
       ${xLabels}${paths}${hovers}
+    </svg><div class="legend" style="margin-top:10px">${legend}</div>`;
+}
+
+/**
+ * Grouped vertical bars, for comparing the same months across two years.
+ * `series`: [{ name, color, values:[number|null] }] aligned to `labels`.
+ */
+export function barChart(labels, series, { height = 260, valueFormat = moneyShort } = {}) {
+  const usable = (series || []).filter((s) => s && s.values && s.values.some(isNum));
+  if (!labels?.length || !usable.length) return emptyState("No figures for this period");
+
+  const width = 760;
+  const pad = { top: 14, right: 14, bottom: 26, left: 54 };
+  const plotW = width - pad.left - pad.right;
+  const plotH = height - pad.top - pad.bottom;
+
+  const all = usable.flatMap((s) => s.values.filter(isNum).map(Number));
+  const max = niceCeil(Math.max(...all, 0) || 1);
+  const min = Math.min(...all, 0) < 0 ? -niceCeil(Math.abs(Math.min(...all, 0))) : 0;
+  const span = max - min || 1;
+  const y = (v) => pad.top + plotH - ((Number(v) - min) / span) * plotH;
+
+  const ticks = 4;
+  const gridlines = Array.from({ length: ticks + 1 }, (_, i) => {
+    const value = min + (span * i) / ticks;
+    const yy = y(value);
+    return `<line class="grid-line" x1="${pad.left}" x2="${width - pad.right}" y1="${yy.toFixed(1)}" y2="${yy.toFixed(1)}"/>`
+      + `<text x="${pad.left - 8}" y="${(yy + 3.5).toFixed(1)}" text-anchor="end">${esc(valueFormat(value))}</text>`;
+  }).join("");
+
+  const groupW = plotW / labels.length;
+  const barW = Math.max(2, (groupW * 0.66) / usable.length);
+  const baseline = y(0);
+
+  const bars = labels.map((label, i) => {
+    const groupX = pad.left + i * groupW + (groupW - barW * usable.length) / 2;
+    return usable.map((s, j) => {
+      const value = s.values[i];
+      if (!isNum(value)) return "";
+      const top = y(value);
+      const barH = Math.abs(baseline - top);
+      return `<rect x="${(groupX + j * barW).toFixed(1)}" y="${Math.min(top, baseline).toFixed(1)}"
+        width="${(barW - 1.5).toFixed(1)}" height="${Math.max(barH, 0.6).toFixed(1)}"
+        fill="${s.color}" rx="2"><title>${esc(label)} — ${esc(s.name)}: ${esc(valueFormat(value))}</title></rect>`;
+    }).join("");
+  }).join("");
+
+  const every = Math.ceil(labels.length / 12);
+  const xLabels = labels.map((label, i) => (i % every === 0
+    ? `<text x="${(pad.left + i * groupW + groupW / 2).toFixed(1)}" y="${height - 8}" text-anchor="middle">${esc(label)}</text>`
+    : "")).join("");
+
+  const legend = usable.map((s) => `<span><i style="background:${s.color}"></i>${esc(s.name)}</span>`).join("");
+
+  return `<svg class="chart" viewBox="0 0 ${width} ${height}" role="img" preserveAspectRatio="xMidYMid meet">
+      ${gridlines}
+      <line class="axis-line" x1="${pad.left}" x2="${width - pad.right}" y1="${baseline}" y2="${baseline}"/>
+      ${bars}${xLabels}
     </svg><div class="legend" style="margin-top:10px">${legend}</div>`;
 }
 

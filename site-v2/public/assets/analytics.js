@@ -185,6 +185,128 @@ export function portfolioSeries(model, keys, metric, stationIds = null) {
   });
 }
 
+export const MONTH_ABBR = [
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+];
+
+/** Stations in scope; `null` or an empty list means the whole portfolio. */
+export function scopeOf(model, stationIds) {
+  if (!stationIds || !stationIds.length) return model.stations;
+  return model.stations.filter((station) => stationIds.includes(station.id));
+}
+
+/**
+ * The calendar months the current year has closed, as "01".."12".
+ *
+ * Every year-over-year figure is restricted to this window. Comparing eight
+ * closed months of this year against a full twelve of last year would show a
+ * healthy portfolio as collapsing.
+ */
+export function comparableMonths(model) {
+  return model.ytdKeys.map((key) => key.slice(5));
+}
+
+/**
+ * One calendar year of a metric, indexed Jan–Dec, summed over the scope.
+ * Months outside the comparable window, and months with nothing reported, stay
+ * null so charts break rather than plotting a zero that reads as a collapse.
+ */
+export function yearSeries(model, year, metric, stationIds = null, { comparableOnly = true } = {}) {
+  const scope = scopeOf(model, stationIds);
+  const allowed = comparableOnly ? new Set(comparableMonths(model)) : null;
+
+  return MONTH_ABBR.map((_, index) => {
+    const mm = String(index + 1).padStart(2, "0");
+    if (allowed && !allowed.has(mm)) return null;
+    const key = `${year}-${mm}`;
+    let total = null;
+    scope.forEach((station) => {
+      const entry = station.months[key];
+      if (entry && isNum(entry[metric])) total = (total || 0) + Number(entry[metric]);
+    });
+    return total;
+  });
+}
+
+/**
+ * Fuel margin has to be recomputed from the summed dollars and gallons.
+ * Averaging each store's cents-per-gallon would weight a tiny site the same as
+ * the busiest one.
+ */
+export function marginSeries(model, year, stationIds = null) {
+  const profit = yearSeries(model, year, "gas_profit", stationIds);
+  const volume = yearSeries(model, year, "gas_vol", stationIds);
+  return profit.map((value, i) => (isNum(value) && isNum(volume[i]) && Number(volume[i]) !== 0
+    ? Number(value) / Number(volume[i])
+    : null));
+}
+
+/**
+ * Year-to-date totals for a scope.
+ *
+ * Restricted to the comparable window, so asking for last year returns the same
+ * eight months this year has closed rather than all twelve. Without that, a
+ * portfolio up 18% reads as down 23%.
+ */
+export function scopeTotals(model, year, stationIds = null, { comparableOnly = true } = {}) {
+  const allowed = comparableOnly ? new Set(comparableMonths(model)) : null;
+  const keys = model.closedMonths.filter((key) => key.startsWith(`${year}-`)
+    && (!allowed || allowed.has(key.slice(5))));
+  return portfolioTotals(model, keys, stationIds && stationIds.length ? stationIds : null);
+}
+
+/**
+ * Departments summed by name across the scope. Each station reports its own
+ * department list, so the same name has to be folded together rather than
+ * listed once per store.
+ */
+export function departmentRollup(model, stationIds = null) {
+  const merged = new Map();
+
+  scopeOf(model, stationIds).forEach((station) => {
+    station.departments.forEach((dept) => {
+      const name = String(dept.name || "").trim();
+      if (!name) return;
+      if (!merged.has(name)) {
+        merged.set(name, {
+          name,
+          stores: 0,
+          y2026: { sales: 0, purchases: 0, profit: 0 },
+          y2025: { sales: 0, purchases: 0, profit: 0 },
+        });
+      }
+      const row = merged.get(name);
+      row.stores += 1;
+      ["y2026", "y2025"].forEach((period) => {
+        ["sales", "purchases", "profit"].forEach((field) => {
+          const value = dept[period]?.[field];
+          if (isNum(value)) row[period][field] += Number(value);
+        });
+      });
+    });
+  });
+
+  return [...merged.values()].map((row) => {
+    const margin = (period) => (row[period].sales ? row[period].profit / row[period].sales : null);
+    const now = margin("y2026");
+    const before = margin("y2025");
+    return {
+      ...row,
+      y2026: { ...row.y2026, margin: now },
+      y2025: { ...row.y2025, margin: before },
+      marginPts: isNum(now) && isNum(before) ? (now - before) * 100 : null,
+      profitDelta: change(row.y2026.profit, row.y2025.profit),
+    };
+  }).sort((a, b) => b.y2026.profit - a.y2026.profit);
+}
+
+/** The department period labels, which differ from calendar years. */
+export function departmentPeriods(model, stationIds = null) {
+  const station = scopeOf(model, stationIds).find((s) => s.departments.length);
+  return station ? station.deptPeriods : { y2025: "2025", y2026: "2026" };
+}
+
 /**
  * Per-station scorecard for the latest closed month plus year-to-date.
  */
