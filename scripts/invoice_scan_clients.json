@@ -2,7 +2,7 @@
   "destination_root": "Clients",
   "scans_subfolder": "Scans",
   "naming": "Vendor DDMM",
-  "comment": "Existing Scans use day-then-month (e.g. Coca Cola 0409.pdf = Sep 4). User phrasing \"vendor mmdd\" maps to this warehouse DDMM convention. Raw ScanYYYY-MM-DD_*.pdf dumps are OCR-renamed. Client OneDrive/Google pull is best-effort (MFA often blocks); prefer shared Scans folders. Runs daily 8:00 PM America/Los_Angeles.",
+  "comment": "Existing Scans use day-then-month (e.g. Coca Cola 0409.pdf = Sep 4). User phrasing \"vendor mmdd\" maps to this warehouse DDMM convention. Raw ScanYYYY-MM-DD_*.pdf dumps are OCR-renamed. Client OneDrive/Google pull is best-effort (MFA often blocks); prefer shared Scans folders. Runs daily 8:00 PM America/Los_Angeles. scans_layout: scans_then_month = Clients/.../Scans/YYYY-MM Month; month_then_scans = Clients/.../YYYY-MM Month/Scans.",
   "vendor_aliases": {
     "coca cola": "Coca Cola",
     "coca-cola": "Coca Cola",
@@ -68,7 +68,8 @@
       "dest": "Clients/42004 (Arco Placentia)",
       "drive": "google",
       "username": "arcoplacentia@gmail.com",
-      "password_key": "Arco Placentia"
+      "password_key": "Arco Placentia",
+      "scans_layout": "scans_then_month"
     },
     {
       "name": "Arco HB",
@@ -76,7 +77,8 @@
       "dest": "Clients/42179 (Arco HB)",
       "drive": "onedrive",
       "username": "arcohb@outlook.com",
-      "password_key": "Arco Hb"
+      "password_key": "Arco Hb",
+      "scans_layout": "month_then_scans"
     },
     {
       "name": "Arco Db",
@@ -84,7 +86,8 @@
       "dest": "Clients/42352 (Arco Db)",
       "drive": "onedrive",
       "username": "arcodb@outlook.com",
-      "password_key": "Arco Db"
+      "password_key": "Arco Db",
+      "scans_layout": "scans_then_month"
     },
     {
       "name": "Westminster",
@@ -92,7 +95,8 @@
       "dest": "Clients/BIG DADDY/42021 (Westminster)",
       "drive": "google",
       "username": "arcowestminister42021@gmail.com",
-      "password_key": "Westminster"
+      "password_key": "Westminster",
+      "scans_layout": "month_then_scans"
     },
     {
       "name": "San Diego",
@@ -100,7 +104,8 @@
       "dest": "Clients/BIG DADDY/42048 (San Diego)",
       "drive": "onedrive",
       "username": "arcosandiego@outlook.com",
-      "password_key": "San Diego"
+      "password_key": "San Diego",
+      "scans_layout": "month_then_scans"
     },
     {
       "name": "Brookhurst 75",
@@ -108,7 +113,8 @@
       "dest": "Clients/BIG DADDY/42098 (Brookhurst 75)",
       "drive": "onedrive",
       "username": "brookhurst75@outlook.com",
-      "password_key": "Brookhurst 75"
+      "password_key": "Brookhurst 75",
+      "scans_layout": "month_then_scans"
     },
     {
       "name": "Flamingo (Koval)",
@@ -116,7 +122,8 @@
       "dest": "Clients/BIG DADDY/42279 Flamingo (Koval)",
       "drive": "onedrive",
       "username": "arcokoval@outlook.com",
-      "password_key": "Flamingo (Koval)"
+      "password_key": "Flamingo (Koval)",
+      "scans_layout": "month_then_scans"
     },
     {
       "name": "Spring Mtn",
@@ -124,7 +131,8 @@
       "dest": "Clients/BIG DADDY/42280 (Spring Mtn)",
       "drive": "onedrive",
       "username": "arcospring@outlook.com",
-      "password_key": "Spring Mtn"
+      "password_key": "Spring Mtn",
+      "scans_layout": "month_then_scans"
     },
     {
       "name": "Charleston",
@@ -132,7 +140,8 @@
       "dest": "Clients/BIG DADDY/42281 (Charleston)",
       "drive": "onedrive",
       "username": "arcocharleston@outlook.com",
-      "password_key": "Charleston"
+      "password_key": "Charleston",
+      "scans_layout": "month_then_scans"
     },
     {
       "name": "Oakey Las Vegas Blvd",
@@ -140,7 +149,8 @@
       "dest": "Clients/BIG DADDY/42282 (Oakey  Las Vegas Blvd)",
       "drive": "onedrive",
       "username": "arcooakey@outlook.com",
-      "password_key": "Oakey Las Vegas Blvd"
+      "password_key": "Oakey Las Vegas Blvd",
+      "scans_layout": "month_then_scans"
     },
     {
       "name": "Paradise",
@@ -148,7 +158,8 @@
       "dest": "Clients/BIG DADDY/42359 (Paradise)",
       "drive": "onedrive",
       "username": "arcoparadise@outlook.com",
-      "password_key": "Paradise"
+      "password_key": "Paradise",
+      "scans_layout": "month_then_scans"
     },
     {
       "name": "Garden Grove",
@@ -156,7 +167,8 @@
       "dest": "Clients/BIG DADDY/42399 (Garden Grove)",
       "drive": "onedrive",
       "username": "gardengroveblv@outlook.com",
-      "password_key": "Garden Grove"
+      "password_key": "Garden Grove",
+      "scans_layout": "month_then_scans"
     },
     {
       "name": "Vista",
@@ -164,7 +176,8 @@
       "dest": "Clients/BIG DADDY/42438 (Vista)",
       "drive": "onedrive",
       "username": "arcovista@outlook.com",
-      "password_key": "Vista"
+      "password_key": "Vista",
+      "scans_layout": "month_then_scans"
     },
     {
       "name": "Lamb",
@@ -172,7 +185,8 @@
       "dest": "Clients/BIG DADDY/42439 (Lamb)",
       "drive": "onedrive",
       "username": "arcolamb@outlook.com",
-      "password_key": "Lamb"
+      "password_key": "Lamb",
+      "scans_layout": "month_then_scans"
     },
     {
       "name": "La Mesa",
@@ -181,7 +195,8 @@
       "drive": "onedrive",
       "username": null,
       "password_key": null,
-      "note": "No separate Client-logins row; Scans folder still OCR-renamed on Mina OD"
+      "note": "No separate Client-logins row; Scans folder still OCR-renamed on Mina OD",
+      "scans_layout": "month_then_scans"
     },
     {
       "name": "Tustin",
@@ -189,7 +204,8 @@
       "dest": "Clients/BIG DADDY/42674 (Tustin)",
       "drive": "onedrive",
       "username": "arcotustin@outlook.com",
-      "password_key": "Tustin"
+      "password_key": "Tustin",
+      "scans_layout": "scans_then_month"
     }
   ]
 }

@@ -101,8 +101,11 @@ def month_folder_name(dt: datetime | None = None) -> str:
     return f"{dt.year:04d}-{dt.month:02d} {dt.strftime('%B')}"
 
 
-def scans_folder_rel(client_dest: str, month: str | None = None) -> str:
-    return f"{DOCS}/{client_dest}/Scans/{month or month_folder_name()}"
+def scans_folder_rel(client_dest: str, month: str | None = None, layout: str = "scans_then_month") -> str:
+    month = month or month_folder_name()
+    if layout == "month_then_scans":
+        return f"{DOCS}/{client_dest}/{month}/Scans"
+    return f"{DOCS}/{client_dest}/Scans/{month}"
 
 
 def list_files(folder_rel: str) -> list[dict]:
@@ -363,7 +366,7 @@ def ocr_rename_client(
     month: str | None = None,
 ) -> list[dict]:
     dest = client["dest"]
-    folder = scans_folder_rel(dest, month)
+    folder = scans_folder_rel(dest, month, layout=client.get("scans_layout", "scans_then_month"))
     results: list[dict] = []
     try:
         files = list_files(folder)

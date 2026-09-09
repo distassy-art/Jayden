@@ -247,8 +247,13 @@ def canon_vendor(text_or_name: str, aliases: dict[str, str]) -> str:
 
 def client_paths(client: dict, month: str) -> dict:
     dest = client["dest"]
+    layout = client.get("scans_layout", "scans_then_month")
+    if layout == "month_then_scans":
+        scans = f"{DOCS}/{dest}/{month}/Scans"
+    else:
+        scans = f"{DOCS}/{dest}/Scans/{month}"
     return {
-        "scans": f"{DOCS}/{dest}/Scans/{month}",
+        "scans": scans,
         "daily_summary": f"{DOCS}/{dest}/{month}/Daily Summary",
         "audit_xlsx": f"{DOCS}/{dest}/{client['name']} Audit.xlsx",
         "dly_bd": f"{DOCS}/Clients/BIG DADDY/PDF/dly/{month}",
