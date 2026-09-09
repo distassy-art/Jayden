@@ -122,15 +122,22 @@ export function buildModel(overlay) {
     ? `${Number(latestMonth.slice(0, 4)) - 1}-${latestMonth.slice(5)}`
     : null;
 
+  // Months past `latestMonth` exist only because one or two stations file ahead
+  // of everyone else. Charting them makes the portfolio look like it fell off a
+  // cliff, so every trend and roll-up works from the closed months instead.
+  const closedMonths = latestMonth
+    ? allMonths.filter((key) => key <= latestMonth)
+    : allMonths;
+
   const currentYear = latestMonth ? latestMonth.slice(0, 4) : String(new Date().getFullYear());
-  const ytdKeys = allMonths.filter((key) => key.startsWith(currentYear)
-    && (!latestMonth || key <= latestMonth));
+  const ytdKeys = closedMonths.filter((key) => key.startsWith(currentYear));
   const priorYtdKeys = priorYearKeys(ytdKeys);
 
   return {
     stations,
     byId: new Map(stations.map((s) => [s.id, s])),
     allMonths,
+    closedMonths,
     latestMonth,
     previousMonth,
     yearAgoMonth,
@@ -201,7 +208,7 @@ export function stationScorecards(model) {
       marginDelta: isNum(month?.store_margin) && isNum(prior?.store_margin)
         ? (Number(month.store_margin) - Number(prior.store_margin)) * 100
         : null,
-      trend: seriesFor(station, model.allMonths.slice(-12), "total_profit"),
+      trend: seriesFor(station, model.closedMonths.slice(-12), "total_profit"),
     };
   });
 }
@@ -352,7 +359,8 @@ export function attentionItems(model, extras = {}) {
  */
 export function dataHealth(model) {
   return model.stations.map((station) => {
-    const expected = model.allMonths.filter((key) => key >= (station.monthKeys[0] || key));
+    // Only months since this station started reporting, and only closed ones.
+    const expected = model.closedMonths.filter((key) => key >= (station.monthKeys[0] || key));
     const missingMonths = expected.filter((key) => !station.months[key]);
 
     const dayGaps = [];
@@ -363,10 +371,18 @@ export function dataHealth(model) {
       if (gap > 1) dayGaps.push({ from: station.days[i - 1].date, to: station.days[i].date, days: gap - 1 });
     }
 
+    // Months this station has started filing ahead of everyone else. They are
+    // kept out of every trend because they are part-months, so they are
+    // reported here instead rather than silently disappearing.
+    const aheadMonths = model.latestMonth
+      ? station.monthKeys.filter((key) => key > model.latestMonth)
+      : [];
+
     return {
       station,
       monthsCovered: station.monthKeys.length,
       missingMonths,
+      aheadMonths,
       daysCovered: station.days.length,
       dayGaps,
       lastMonth: station.lastMonth,

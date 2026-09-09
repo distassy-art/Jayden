@@ -51,7 +51,7 @@ export function renderDashboard(ctx) {
   const priorYtd = portfolioTotals(model, priorYtdKeys);
 
   // Trailing window for the sparklines on the stat cards.
-  const trail = model.allMonths.slice(-12);
+  const trail = model.closedMonths.slice(-12);
   const spark = (metric) => sparkline(portfolioSeries(model, trail, metric));
 
   const cards = [
@@ -93,7 +93,7 @@ export function renderDashboard(ctx) {
     : emptyState("Nothing needs attention", "No missing invoices, unpaid bills, open tickets or unclosed months.", "check");
 
   // Profit trend for the portfolio.
-  const trendKeys = model.allMonths.slice(-18);
+  const trendKeys = model.closedMonths.slice(-18);
   const trend = lineChart(
     trendKeys.map((key) => monthLabel(key, true)),
     [

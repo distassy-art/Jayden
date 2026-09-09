@@ -249,7 +249,10 @@ export function renderHealth(ctx) {
       <td>${row.closedLatest
         ? `<span class="badge pos">${icon("check")}Closed</span>`
         : '<span class="badge neg">Not closed</span>'}</td>
-      <td class="nowrap">${esc(monthLabel(row.lastMonth, true))}</td>
+      <td class="nowrap">${esc(monthLabel(row.lastMonth, true))}
+        ${row.aheadMonths.length
+          ? `<span class="badge info" title="Part-month, kept out of trends until it closes">${esc(monthLabel(row.aheadMonths[0], true))} in progress</span>`
+          : ""}</td>
       <td class="num">${esc(num(row.monthsCovered))}</td>
       <td class="nowrap">${esc(row.lastDay ? dateLabel(row.lastDay) : "—")}
         ${stale ? `<span class="badge warn" style="margin-left:6px">${esc(num(dayAge))}d old</span>` : ""}</td>
@@ -281,7 +284,9 @@ export function renderHealth(ctx) {
     <div class="page-head">
       <h2>Data health</h2>
       <p>Where the numbers come from and what is missing. Gaps here are the reason a client report
-      can look wrong, so this is the first place to check when a figure looks off.</p>
+      can look wrong, so this is the first place to check when a figure looks off.
+      Trends run through <b>${esc(monthLabel(model.latestMonth))}</b>, the newest month most stores
+      have closed; anything filed beyond it is a part-month and is flagged below.</p>
     </div>
 
     <div class="grid cols-4" style="margin-bottom:16px">

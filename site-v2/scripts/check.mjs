@@ -85,8 +85,21 @@ async function main() {
   assert(model.stations.length > 0, "model: no stations parsed");
   assert(Boolean(model.latestMonth), "model: no latest month resolved");
   assert(model.ytdKeys.length > 0, "model: no year-to-date months");
-  process.stdout.write(`  ok    ${model.stations.length} stations, latest ${model.latestMonth}, `
-    + `${model.ytdKeys.length} YTD months\n\n`);
+
+  // A month one store has filed ahead of the rest is a part-month. Letting it
+  // into a trend makes the whole portfolio look like it collapsed.
+  const ahead = model.closedMonths.filter((key) => key > model.latestMonth);
+  assert(ahead.length === 0, `model: closedMonths runs past ${model.latestMonth} (${ahead.join(", ")})`);
+  assert(model.ytdKeys.every((key) => key <= model.latestMonth),
+    "model: year-to-date includes months beyond the latest closed month");
+
+  // The latest closed month must be one most stores actually filed.
+  const filed = model.stations.filter((s) => s.months[model.latestMonth]).length;
+  assert(filed >= model.stations.length / 2,
+    `model: only ${filed}/${model.stations.length} stations filed ${model.latestMonth}`);
+
+  process.stdout.write(`  ok    ${model.stations.length} stations, latest ${model.latestMonth} `
+    + `(${filed} filed), ${model.closedMonths.length} closed months, ${model.ytdKeys.length} YTD\n\n`);
 
   const ctx = (query = "", params = {}) => ({
     model,

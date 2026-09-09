@@ -39,9 +39,13 @@
   --surface-3: #eef2f7;
   --line: #dde5ee;
   --line-strong: #c6d2e0;
+  /* Empty form controls are identified only by their outline, so this sits at
+     the 3:1 WCAG 1.4.11 boundary rather than matching the hairline colour. */
+  --field-border: #818e9d;
   --text: #0f1f33;
   --text-2: #4a5c72;
-  --text-3: #78899e;
+  /* Muted text still carries table headers and stat labels, so it holds 4.5:1. */
+  --text-3: #5e6d80;
   --shadow-sm: 0 1px 2px rgba(11, 37, 69, 0.06);
   --shadow: 0 1px 3px rgba(11, 37, 69, 0.08), 0 8px 24px -12px rgba(11, 37, 69, 0.18);
   --shadow-lg: 0 24px 60px -20px rgba(11, 37, 69, 0.35);
@@ -74,9 +78,10 @@
   --surface-3: #142941;
   --line: #1c3350;
   --line-strong: #2a4665;
+  --field-border: #52708f;
   --text: #e8eef6;
   --text-2: #9fb2c8;
-  --text-3: #6d8199;
+  --text-3: #7e92aa;
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
   --shadow: 0 1px 3px rgba(0, 0, 0, 0.5), 0 8px 24px -12px rgba(0, 0, 0, 0.6);
   --shadow-lg: 0 24px 60px -20px rgba(0, 0, 0, 0.8);
@@ -454,7 +459,7 @@ img { max-width: 100%; display: block; }
 .input, .select {
   height: 34px;
   padding: 0 11px;
-  border: 1px solid var(--line-strong);
+  border: 1px solid var(--field-border);
   border-radius: var(--radius);
   background: var(--surface);
   color: var(--text);
@@ -472,10 +477,15 @@ img { max-width: 100%; display: block; }
 .select {
   appearance: none;
   padding-right: 30px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%2378899e' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%235e6d80' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 9px center;
   background-size: 15px;
+}
+
+/* The chevron is baked into a data URI, so it needs its own dark-mode colour. */
+[data-theme="dark"] .select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%237e92aa' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
 }
 
 .search {

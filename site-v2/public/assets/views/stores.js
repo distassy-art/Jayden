@@ -205,7 +205,7 @@ export function renderStore(ctx) {
       <a class="btn" href="#/stores">${icon("back")}Back to stores</a>`;
   }
 
-  const keys = model.allMonths.filter((key) => station.months[key]);
+  const keys = model.closedMonths.filter((key) => station.months[key]);
   const latest = station.lastMonth ? station.months[station.lastMonth] : null;
   const yearAgoKey = station.lastMonth
     ? `${Number(station.lastMonth.slice(0, 4)) - 1}-${station.lastMonth.slice(5)}`
@@ -215,7 +215,7 @@ export function renderStore(ctx) {
   const ytd = sumMonths(station, model.ytdKeys);
   const priorYtd = sumMonths(station, model.priorYtdKeys);
 
-  const trendKeys = model.allMonths.slice(-24);
+  const trendKeys = model.closedMonths.slice(-24);
   const trend = lineChart(
     trendKeys.map((key) => monthLabel(key, true)),
     [
