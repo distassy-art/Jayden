@@ -1,0 +1,195 @@
+{
+  "destination_root": "Clients",
+  "scans_subfolder": "Scans",
+  "naming": "Vendor DDMM",
+  "comment": "Existing Scans use day-then-month (e.g. Coca Cola 0409.pdf = Sep 4). User phrasing \"vendor mmdd\" maps to this warehouse DDMM convention. Raw ScanYYYY-MM-DD_*.pdf dumps are OCR-renamed. Client OneDrive/Google pull is best-effort (MFA often blocks); prefer shared Scans folders. Runs daily 8:00 PM America/Los_Angeles.",
+  "vendor_aliases": {
+    "coca cola": "Coca Cola",
+    "coca-cola": "Coca Cola",
+    "coke": "Coca Cola",
+    "pepsi": "Pepsi",
+    "frito lay": "Frito Lay",
+    "fritolay": "Frito Lay",
+    "frito": "Frito Lay",
+    "core-mark": "Core-Mark",
+    "coremark": "Core-Mark",
+    "core mark": "Core-Mark",
+    "harbor": "Harbor",
+    "straub": "Straub",
+    "bimbo": "Bimbo",
+    "red bull": "Red Bull",
+    "redbull": "Red Bull",
+    "7up": "7UP",
+    "7-up": "7UP",
+    "one stop": "OneStop",
+    "onestop": "OneStop",
+    "melodee": "Melodee",
+    "kadi": "Kadi",
+    "northstar": "Northstar",
+    "united express": "United Express",
+    "ab one": "AB One",
+    "abone": "AB One",
+    "snack club": "Snack Club",
+    "sunset": "Sunset",
+    "prudential": "Prudential",
+    "universal": "Universal",
+    "jack in the box": "Jack in the Box",
+    "pepsico": "Pepsi",
+    "frito-lay": "Frito Lay",
+    "grupo bimbo": "Bimbo",
+    "harbor wholesale": "Harbor",
+    "north star": "Northstar",
+    "unitedexpress": "United Express",
+    "ab-one": "AB One",
+    "seven up": "7UP",
+    "mclane": "McLane",
+    "mc lane": "McLane",
+    "jacksons": "Jacksons",
+    "jackson": "Jacksons",
+    "monster": "Monster",
+    "dr pepper": "Dr Pepper",
+    "keurig": "Keurig Dr Pepper",
+    "marlboro": "Marlboro",
+    "altria": "Altria",
+    "reynolds": "Reynolds",
+    "anheuser": "Anheuser Busch",
+    "budweiser": "Anheuser Busch",
+    "southern glazer": "Southern Glazers",
+    "sgws": "Southern Glazers",
+    "sysco": "Sysco",
+    "us foods": "US Foods",
+    "swisher": "Swisher",
+    "swedish match": "Swedish Match"
+  },
+  "clients": [
+    {
+      "name": "Arco Placentia",
+      "station": "42004",
+      "dest": "Clients/42004 (Arco Placentia)",
+      "drive": "google",
+      "username": "arcoplacentia@gmail.com",
+      "password_key": "Arco Placentia"
+    },
+    {
+      "name": "Arco HB",
+      "station": "42179",
+      "dest": "Clients/42179 (Arco HB)",
+      "drive": "onedrive",
+      "username": "arcohb@outlook.com",
+      "password_key": "Arco Hb"
+    },
+    {
+      "name": "Arco Db",
+      "station": "42352",
+      "dest": "Clients/42352 (Arco Db)",
+      "drive": "onedrive",
+      "username": "arcodb@outlook.com",
+      "password_key": "Arco Db"
+    },
+    {
+      "name": "Westminster",
+      "station": "42021",
+      "dest": "Clients/BIG DADDY/42021 (Westminster)",
+      "drive": "google",
+      "username": "arcowestminister42021@gmail.com",
+      "password_key": "Westminster"
+    },
+    {
+      "name": "San Diego",
+      "station": "42048",
+      "dest": "Clients/BIG DADDY/42048 (San Diego)",
+      "drive": "onedrive",
+      "username": "arcosandiego@outlook.com",
+      "password_key": "San Diego"
+    },
+    {
+      "name": "Brookhurst 75",
+      "station": "42098",
+      "dest": "Clients/BIG DADDY/42098 (Brookhurst 75)",
+      "drive": "onedrive",
+      "username": "brookhurst75@outlook.com",
+      "password_key": "Brookhurst 75"
+    },
+    {
+      "name": "Flamingo (Koval)",
+      "station": "42279",
+      "dest": "Clients/BIG DADDY/42279 Flamingo (Koval)",
+      "drive": "onedrive",
+      "username": "arcokoval@outlook.com",
+      "password_key": "Flamingo (Koval)"
+    },
+    {
+      "name": "Spring Mtn",
+      "station": "42280",
+      "dest": "Clients/BIG DADDY/42280 (Spring Mtn)",
+      "drive": "onedrive",
+      "username": "arcospring@outlook.com",
+      "password_key": "Spring Mtn"
+    },
+    {
+      "name": "Charleston",
+      "station": "42281",
+      "dest": "Clients/BIG DADDY/42281 (Charleston)",
+      "drive": "onedrive",
+      "username": "arcocharleston@outlook.com",
+      "password_key": "Charleston"
+    },
+    {
+      "name": "Oakey Las Vegas Blvd",
+      "station": "42282",
+      "dest": "Clients/BIG DADDY/42282 (Oakey  Las Vegas Blvd)",
+      "drive": "onedrive",
+      "username": "arcooakey@outlook.com",
+      "password_key": "Oakey Las Vegas Blvd"
+    },
+    {
+      "name": "Paradise",
+      "station": "42359",
+      "dest": "Clients/BIG DADDY/42359 (Paradise)",
+      "drive": "onedrive",
+      "username": "arcoparadise@outlook.com",
+      "password_key": "Paradise"
+    },
+    {
+      "name": "Garden Grove",
+      "station": "42399",
+      "dest": "Clients/BIG DADDY/42399 (Garden Grove)",
+      "drive": "onedrive",
+      "username": "gardengroveblv@outlook.com",
+      "password_key": "Garden Grove"
+    },
+    {
+      "name": "Vista",
+      "station": "42438",
+      "dest": "Clients/BIG DADDY/42438 (Vista)",
+      "drive": "onedrive",
+      "username": "arcovista@outlook.com",
+      "password_key": "Vista"
+    },
+    {
+      "name": "Lamb",
+      "station": "42439",
+      "dest": "Clients/BIG DADDY/42439 (Lamb)",
+      "drive": "onedrive",
+      "username": "arcolamb@outlook.com",
+      "password_key": "Lamb"
+    },
+    {
+      "name": "La Mesa",
+      "station": "42642",
+      "dest": "Clients/BIG DADDY/42642 (La Mesa)",
+      "drive": "onedrive",
+      "username": null,
+      "password_key": null,
+      "note": "No separate Client-logins row; Scans folder still OCR-renamed on Mina OD"
+    },
+    {
+      "name": "Tustin",
+      "station": "42674",
+      "dest": "Clients/BIG DADDY/42674 (Tustin)",
+      "drive": "onedrive",
+      "username": "arcotustin@outlook.com",
+      "password_key": "Tustin"
+    }
+  ]
+}
