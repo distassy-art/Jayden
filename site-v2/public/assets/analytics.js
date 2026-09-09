@@ -44,8 +44,30 @@ function indexOpenDays(feed) {
   return out;
 }
 
+/*
+ * The reconciled per-department feed, as station id -> department bucket.
+ *
+ * The overlay carries its own `depts`, but it is an older snapshot: fewer
+ * stores, mixed Jan–Jul and YTD spans, and the pre-scrub Excel dumps the feed's
+ * note describes. Summed across stores those put the all-stores margins at
+ * nearly double the truth. This feed has every store on one clean Jan–Aug
+ * basis, so it is preferred wherever it covers a station.
+ */
+function indexDepts(feed) {
+  const out = new Map();
+  (feed?.stations || []).forEach((station) => {
+    if (station?.id == null) return;
+    out.set(String(station.id), {
+      departments: station.departments || [],
+      period_2025: station.period_2025 || null,
+      period_2026: station.period_2026 || null,
+    });
+  });
+  return out;
+}
+
 /** Normalise one station into a shape the views can rely on. */
-function normaliseStation(id, raw, { revenue = null, extraDays = null } = {}) {
+function normaliseStation(id, raw, { revenue = null, extraDays = null, depts = null } = {}) {
   const months = {};
   Object.entries(raw?.months || {}).forEach(([key, value]) => {
     if (!isRealMonth(value)) return;
@@ -80,10 +102,10 @@ function normaliseStation(id, raw, { revenue = null, extraDays = null } = {}) {
     months,
     monthKeys,
     days,
-    departments: raw?.depts?.departments || [],
+    departments: depts?.departments ?? raw?.depts?.departments ?? [],
     deptPeriods: {
-      y2025: raw?.depts?.period_2025 || "2025",
-      y2026: raw?.depts?.period_2026 || "2026",
+      y2025: depts?.period_2025 || raw?.depts?.period_2025 || "2025",
+      y2026: depts?.period_2026 || raw?.depts?.period_2026 || "2026",
     },
     profit: raw?.profit || null,
     lastMonth: monthKeys.length ? monthKeys[monthKeys.length - 1] : null,
@@ -158,18 +180,20 @@ export function priorYearKeys(keys) {
  * `stores` narrows the model to a list of station ids, so a client owner's
  * console cannot roll up another client's figures even if the feed returns them.
  */
-export function buildModel(overlay, { stores = null, monthly = null, openDays = null } = {}) {
+export function buildModel(overlay, { stores = null, monthly = null, openDays = null, depts = null } = {}) {
   const raw = overlay?.overlay?.stations || {};
   const only = stores ? new Set(stores.map(String)) : null;
 
   const revenue = indexRevenue(monthly);
   const extraDays = indexOpenDays(openDays);
+  const deptsById = indexDepts(depts);
 
   const stations = Object.entries(raw)
     .filter(([id]) => !only || only.has(String(id)))
     .map(([id, value]) => normaliseStation(id, value, {
       revenue: revenue.get(String(id)) || null,
       extraDays: extraDays.get(String(id)) || null,
+      depts: deptsById.get(String(id)) || null,
     }))
     .sort((a, b) => a.name.localeCompare(b.name));
 

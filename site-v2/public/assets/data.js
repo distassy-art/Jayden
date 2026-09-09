@@ -259,6 +259,9 @@ export const fetchManager = resource("/api/data/manager.json");
 export const fetchMonthly = resource("/api/data/monthly.json");
 export const fetchVendorSpend = resource("/api/data/vendor-spend.json");
 export const fetchOpenDays = resource("/api/data/daily-open.json");
+// The reconciled per-department feed. The overlay carries an older, uneven
+// department snapshot; this replaces it. See the worker's endpoint note.
+export const fetchDepts = resource("/api/data/depts.json");
 
 /**
  * Load everything the console needs in one pass.
@@ -279,6 +282,7 @@ export async function loadWorkspace(options) {
     monthly: fetchMonthly,
     vendorSpend: fetchVendorSpend,
     openDays: fetchOpenDays,
+    depts: fetchDepts,
   };
 
   const names = Object.keys(sources);

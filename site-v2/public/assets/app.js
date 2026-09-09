@@ -539,6 +539,7 @@ async function refresh(force = false) {
       stores: visibleStores(),
       monthly: data.monthly,
       openDays: data.openDays,
+      depts: data.depts,
     });
     model.owners = buildOwners(data.owners?.accounts || [], model);
     state.model = model;

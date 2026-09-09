@@ -48,10 +48,18 @@ const ENDPOINTS = new Map([
    * `daily-open.json` carries the current month's days. The overlay's own day
    * records stop at the end of the last closed month for every store but one,
    * which leaves the daily page blank for the month still being traded.
+   *
+   * `depts.json` is the reconciled per-department feed. The overlay bundles an
+   * older department snapshot — fewer stores, mixed Jan–Jul/YTD spans, and the
+   * pre-scrub Excel dumps its own note describes — which put the all-stores
+   * margins at nearly double the truth. This is the clean copy, all stores on
+   * one Jan–Aug basis, and it carries a verified all-stores beer margin the
+   * checks assert against.
    */
   ["/api/data/monthly.json", "/data/monthly.json"],
   ["/api/data/vendor-spend.json", "/data/vendor_dly_spend_2026.json"],
   ["/api/data/daily-open.json", "/data/daily_september.json"],
+  ["/api/data/depts.json", "/data/depts.json"],
 ]);
 
 /** Binary assets (invoice and pricing PDFs) served straight through. */

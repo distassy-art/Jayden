@@ -11,7 +11,7 @@
  */
 
 import {
-  buildModel, fuelRevenue, portfolioTotals, priorYearKeys, resolveTimeframe,
+  buildModel, departmentRollup, fuelRevenue, portfolioTotals, priorYearKeys, resolveTimeframe,
   scopeDays, storeDays, sumDays, timeframes,
 } from "../public/assets/analytics.js";
 import { bucketDays, buildOwners, resolveScope } from "../public/assets/scope.js";
@@ -95,7 +95,7 @@ async function main() {
   process.stdout.write(`Checking against ${BASE}\n\n`);
 
   const [overlay, billing, tickets, days, s2k, orders, pricing, owners, manager,
-    monthly, vendorSpend, openDays] = await Promise.all([
+    monthly, vendorSpend, openDays, depts] = await Promise.all([
     get("/api/books-overlay"),
     get("/api/billing").catch(() => null),
     get("/api/mgr-tickets").catch(() => null),
@@ -108,13 +108,14 @@ async function main() {
     get("/api/data/monthly.json").catch(() => null),
     get("/api/data/vendor-spend.json").catch(() => null),
     get("/api/data/daily-open.json").catch(() => null),
+    get("/api/data/depts.json").catch(() => null),
   ]);
 
   const data = {
     overlay, billing, tickets, days, s2k, orders, pricing, owners, manager,
-    monthly, vendorSpend, openDays, errors: {},
+    monthly, vendorSpend, openDays, depts, errors: {},
   };
-  const model = buildModel(overlay, { monthly, openDays });
+  const model = buildModel(overlay, { monthly, openDays, depts });
   model.owners = buildOwners(owners?.accounts || [], model);
   const current = buildCurrent(manager);
   data.vendors = buildVendors(vendorSpend);
@@ -264,6 +265,43 @@ async function main() {
   inspect("purchases", renderPurchases(ctx()));
   inspect("departments", renderDepartments(ctx()));
   inspect("departments?sort=margin", renderDepartments(ctx("sort=margin")));
+
+  /*
+   * Departments must come from the reconciled `depts.json`, not the older
+   * snapshot the overlay bundles. That snapshot covered fewer stores on mixed
+   * Jan–Jul/YTD spans and put the all-stores beer margin near 58% — almost
+   * double the truth. The feed ships its own verified all-stores beer margin,
+   * so the rollup is asserted straight against it.
+   */
+  process.stdout.write("\nDepartments\n");
+  if (depts && typeof depts.verified_all_stores_beer_margin === "number") {
+    const rollup = departmentRollup(model);
+    const beer = rollup.find((row) => row.name.toUpperCase() === "BEER");
+    const verified = depts.verified_all_stores_beer_margin;
+    assert(Boolean(beer), "departments: no BEER row in the all-stores rollup");
+    assert(beer && Math.abs(beer.y2026.margin - verified) < 0.005,
+      `departments: all-stores beer margin ${beer ? (beer.y2026.margin * 100).toFixed(2) : "?"}% `
+      + `does not match the feed's verified ${(verified * 100).toFixed(2)}% `
+      + "(overlay's stale snapshot is being used instead of depts.json)");
+
+    // The feed puts every store on one period; a mix means the stale overlay
+    // snapshot leaked back in and a portfolio margin would sum unequal spans.
+    const periods = new Set(model.stations
+      .filter((station) => station.departments.length)
+      .map((station) => station.deptPeriods.y2026));
+    assert(periods.size === 1,
+      `departments: stores report on mixed period spans (${[...periods].join(", ")})`);
+
+    // A "TOTAL"/metric artifact must never survive into the rollup, or every
+    // real department would be counted twice.
+    const artifact = rollup.find((row) => /^(total|metric|sales amount)/i.test(row.name));
+    assert(!artifact, `departments: an artifact row survived the rollup (${artifact?.name})`);
+    process.stdout.write(`  ok — all-stores beer margin ${(beer.y2026.margin * 100).toFixed(2)}%, `
+      + `${rollup.length} departments, one period basis (${[...periods][0]})\n`);
+  } else {
+    process.stdout.write("  skipped — depts.json unavailable\n");
+  }
+
   inspect("rankings", renderRankings(ctx()));
   inspect("rankings?metric=store_margin", renderRankings(ctx("metric=store_margin")));
 
@@ -627,7 +665,7 @@ async function main() {
   // is exactly where a portfolio-shaped assumption breaks.
   process.stdout.write("\nStore manager (single-store model)\n");
   const single = model.stations[0].id;
-  const mgrModel = buildModel(overlay, { stores: [single] });
+  const mgrModel = buildModel(overlay, { stores: [single], monthly, openDays, depts });
   mgrModel.owners = buildOwners(owners?.accounts || [], mgrModel);
   const mgrCurrent = buildCurrent(manager, { stores: [single] });
   const mgrCtx = (query = "", params = {}) => {

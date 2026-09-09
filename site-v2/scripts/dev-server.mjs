@@ -50,6 +50,7 @@ const ENDPOINTS = new Map([
   ["/api/data/monthly.json", "/data/monthly.json"],
   ["/api/data/vendor-spend.json", "/data/vendor_dly_spend_2026.json"],
   ["/api/data/daily-open.json", "/data/daily_september.json"],
+  ["/api/data/depts.json", "/data/depts.json"],
 ]);
 
 const ASSET_PREFIX = "/api/asset/";

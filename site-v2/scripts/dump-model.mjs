@@ -33,8 +33,9 @@ const side = async (path) => fetch(`${BASE}${path}`, {
 
 const monthly = await side("/api/data/monthly.json");
 const openDays = await side("/api/data/daily-open.json");
+const depts = await side("/api/data/depts.json");
 
-const model = buildModel(overlay, { monthly, openDays });
+const model = buildModel(overlay, { monthly, openDays, depts });
 model.owners = buildOwners(ownersFeed?.accounts || [], model);
 const year = Number(model.currentYear);
 const prior = year - 1;
