@@ -406,9 +406,13 @@ export function barChart(labels, series, { height = 260, valueFormat = moneyShor
       if (!isNum(value)) return "";
       const top = y(value);
       const barH = Math.abs(baseline - top);
+      // A loss drawn in the same colour as a gain reads as a short bar rather
+      // than as a bad day, so a series may name a second colour for values
+      // below zero.
+      const fill = Number(value) < 0 && s.negativeColor ? s.negativeColor : s.color;
       return `<rect x="${(groupX + j * barW).toFixed(1)}" y="${Math.min(top, baseline).toFixed(1)}"
         width="${(barW - 1.5).toFixed(1)}" height="${Math.max(barH, 0.6).toFixed(1)}"
-        fill="${s.color}" rx="2"><title>${esc(label)} — ${esc(s.name)}: ${esc(valueFormat(value))}</title></rect>`;
+        fill="${fill}" rx="2"><title>${esc(label)} — ${esc(s.name)}: ${esc(valueFormat(value))}</title></rect>`;
     }).join("");
   }).join("");
 

@@ -11,7 +11,8 @@
  */
 
 import {
-  buildModel, portfolioTotals, resolveTimeframe, scopeDays, sumDays, timeframes,
+  buildModel, portfolioTotals, resolveTimeframe, scopeDays, storeDays, sumDays,
+  timeframes,
 } from "../public/assets/analytics.js";
 import { bucketDays, buildOwners, resolveScope } from "../public/assets/scope.js";
 import {
@@ -32,8 +33,9 @@ import { renderCalendar, renderSchedule } from "../public/assets/views/planning.
 import { buildVendors } from "../public/assets/vendors.js";
 import { renderVendors } from "../public/assets/views/vendors.js";
 import { renderTrends } from "../public/assets/views/trends.js";
+import { renderLeaks } from "../public/assets/views/leaks.js";
 import { PUBLIC_ROUTES, renderLogin } from "../public/assets/views/site.js";
-import { money, pct } from "../public/assets/ui.js";
+import { isNum, money, pct } from "../public/assets/ui.js";
 
 // The trends wall prints margins to one decimal place.
 const pctText = (ratio) => pct(ratio, { digits: 1 });
@@ -385,6 +387,43 @@ async function main() {
     `daily: rollup does not print the year total ${money(theYear.total_profit)}`);
   process.stdout.write(`  ok    the page prints the year column as ${money(theYear.total_profit)}\n`);
 
+  /*
+   * The leaks page rests on one fact about these books: a day's store profit
+   * is its sales minus what it bought in, so a delivery day looks like a large
+   * loss and is not one. That is asserted here rather than assumed, because if
+   * the feed ever started carrying a true daily gross margin the page should be
+   * rewritten to use it — and if it does not, nothing on the page may flag a
+   * single day.
+   */
+  process.stdout.write("\nLeaks\n");
+  // Per store, not summed across them: a date where one store reported sales
+  // and another did not breaks the identity in the aggregate without any store
+  // having broken it.
+  const priced = storeDays(model, null)
+    .filter((row) => isNum(row.sales) && isNum(row.purchases) && isNum(row.store_profit));
+  const identity = priced.filter((row) =>
+    Math.abs(row.store_profit - (row.sales - row.purchases)) < 1).length;
+  assert(identity / priced.length > 0.9,
+    `daily store profit is no longer sales minus purchases (${identity}/${priced.length})`
+    + " — the leaks page assumes it is");
+  process.stdout.write(`  ok    daily profit is sales minus purchases on `
+    + `${identity}/${priced.length} dates, so a delivery day is not a loss\n`);
+
+  const leaks = renderLeaks(ctx());
+  const singleDayLoss = priced.filter((row) => row.store_profit < 0).length;
+  assert(singleDayLoss > 0, "expected some delivery days to look like losses");
+  assert(!/days? (in the red|that lost money)/i.test(leaks),
+    `leaks: flags single loss-making days, of which delivery timing produces ${singleDayLoss}`);
+
+  // The ratio it leads with has to be the one the rest of the console reports.
+  const book = portfolioTotals(model, model.ytdKeys, null);
+  const bought = pctText(book.purchases / book.sales);
+  assert(leaks.includes(bought), `leaks: bought-per-dollar-sold is not ${bought}`);
+  const kept = pctText(book.store_profit / book.sales);
+  assert(leaks.includes(kept), `leaks: the kept share is not ${kept}`);
+  process.stdout.write(`  ok    leads with ${bought} bought per dollar sold, `
+    + `keeping ${kept} — the same margin the trends wall prints\n`);
+
   process.stdout.write("\nTrends wall\n");
   const wall = renderTrends(ctx());
   const expected = ["Fuel volume", "Fuel revenue", "Fuel margin", "Fuel profit",
@@ -427,6 +466,7 @@ async function main() {
   inspect("schedule", renderSchedule(ctx()));
   inspect("buy", renderBudget(ctx()));
   inspect("trends", renderTrends(ctx()));
+  inspect("leaks", renderLeaks(ctx()));
   inspect("vendors", renderVendors(ctx()));
   for (const key of (data.vendors?.keys || [])) {
     inspect(`vendors?m=${key}`, renderVendors(ctx(`m=${key}`)));
@@ -462,7 +502,7 @@ async function main() {
     ["profit", renderProfit], ["fuel", renderFuel], ["purchases", renderPurchases],
     ["departments", renderDepartments], ["rankings", renderRankings],
     ["daily", renderDaily], ["buy", renderBudget], ["vendors", renderVendors],
-    ["trends", renderTrends],
+    ["trends", renderTrends], ["leaks", renderLeaks],
   ];
   for (const owner of model.owners) {
     const outside = model.stations

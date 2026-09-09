@@ -574,6 +574,33 @@ export function scopeDays(model, stationIds = null) {
     .sort((a, b) => a.date.localeCompare(b.date));
 }
 
+/**
+ * Every day in scope kept per store rather than summed across them.
+ *
+ * `scopeDays` answers "how did the portfolio trade on the 9th", which is what
+ * a trend needs. Finding a loss needs the opposite: one store on one date,
+ * because that is the level at which somebody can be asked what happened.
+ */
+export function storeDays(model, stationIds = null) {
+  const rows = [];
+  scopeOf(model, stationIds).forEach((station) => {
+    station.days.forEach((raw) => {
+      const day = normaliseDay(raw);
+      rows.push({
+        ...day,
+        storeId: station.id,
+        store: station.name,
+        margin: isNum(day.sales) && day.sales !== 0 ? day.store_profit / day.sales : null,
+        // Above 1 the store bought more than it sold that day. On a single day
+        // that is usually a delivery landing rather than a problem, which is
+        // why it is reported next to the profit it cost rather than alone.
+        buyRatio: isNum(day.sales) && day.sales !== 0 ? day.purchases / day.sales : null,
+      });
+    });
+  });
+  return rows.sort((a, b) => a.date.localeCompare(b.date));
+}
+
 /** Sum a set of day rows, recomputing the ratios afterwards. */
 export function sumDays(rows) {
   const totals = {};

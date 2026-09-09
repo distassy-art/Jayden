@@ -30,6 +30,7 @@ import { bindBudget, renderBudget } from "./views/budget.js";
 import { bindCalendar, renderCalendar, renderSchedule } from "./views/planning.js";
 import { bindVendors, renderVendors } from "./views/vendors.js";
 import { bindTrends, renderTrends } from "./views/trends.js";
+import { bindLeaks, renderLeaks } from "./views/leaks.js";
 import { PUBLIC_ROUTES, renderLogin } from "./views/site.js";
 
 /* -------------------------------------------------------------------------
@@ -53,6 +54,7 @@ const ROUTES = [
   { path: "/fuel", title: "Fuel", icon: "fuel", group: "Performance", render: renderFuel, bind: bindScope },
   { path: "/purchases", title: "Purchases", icon: "orders", group: "Performance", render: renderPurchases, bind: bindScope },
   { path: "/departments", title: "Departments", icon: "departments", group: "Performance", render: renderDepartments, bind: bindDepartments },
+  { path: "/leaks", title: "Leaks", icon: "alert", group: "Performance", render: renderLeaks, bind: bindLeaks },
   { path: "/rankings", title: "Rankings", icon: "rankings", group: "Performance", render: renderRankings, bind: bindRankings, roles: ["admin", "owner"] },
 
   { path: "/buy", title: "The buy", icon: "pricing", group: "Operations", render: renderBudget, bind: bindBudget },
