@@ -132,11 +132,24 @@ function measure(metric, v, ids) {
       before: ratio(prior),
     };
   }
+  /*
+   * Not every measure reaches as far back as the rest. Fuel revenue comes from
+   * its own feed and lags the books by a couple of months, so its card totals
+   * fewer months than the picker names. Counting them here lets the card say
+   * so, rather than presenting a short year as a bad one.
+   */
+  const months = v.keys.filter((key) => {
+    const totals = v.totalsFor([key], ids);
+    return isNum(totals[metric.key]);
+  });
+
   return {
     values: v.series(metric.key, ids),
     prior: v.priorSeries(metric.key, ids),
     now: v.totals(ids)[metric.key],
     before: v.priorTotals(ids)[metric.key],
+    months: months.length,
+    ofMonths: v.keys.length,
   };
 }
 
@@ -162,6 +175,9 @@ function card(metric, m, v) {
       higherIsBetter: metric.higherIsBetter !== false,
     });
 
+  // Ratios are not undercounted by a missing month, only totals are.
+  const short = !metric.ratio && m.months < m.ofMonths;
+
   return `<section class="card">
     <div class="card-head">
       <h3>${esc(metric.title)}</h3>
@@ -175,6 +191,9 @@ function card(metric, m, v) {
             ${esc(format(m.before))} in ${esc(v.beforeLabel)}</span></div>
         </div>
       </div>
+      ${short ? `<p class="tiny muted" style="margin:-8px 0 12px">
+        Reported for ${esc(num(m.months))} of ${esc(num(m.ofMonths))} months in
+        this period, so the total is for those months only.</p>` : ""}
       ${barChart(v.labels, [
     { name: String(v.nowLabel), values: m.values, color: CYAN },
     { name: String(v.beforeLabel), values: m.prior, color: NAVY },

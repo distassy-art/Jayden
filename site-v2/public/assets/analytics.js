@@ -420,6 +420,62 @@ export function ratioOver(model, keys, numerator, denominator, stationIds = null
     : null));
 }
 
+/**
+ * Fuel revenue, and only the profit and gallons that sit beside it.
+ *
+ * Fuel revenue arrives from its own feed and lags the rest of the books: at
+ * the time of writing it covers thirteen of seventeen stores through June, one
+ * store in July, and nobody in August. Summing it over a year-to-date window
+ * and then subtracting a year-to-date fuel profit gives a cost of goods that
+ * takes eight months of profit off six and a half months of revenue — a figure
+ * that is not wrong by a little.
+ *
+ * So revenue is totalled over the store-months that actually report it, and
+ * the profit and gallons are totalled over exactly those same store-months.
+ * The months and store count come back with the figures so the page can say
+ * what it is showing rather than implying the whole span.
+ */
+export function fuelRevenue(model, keys, stationIds = null) {
+  const scope = scopeOf(model, stationIds);
+  const months = new Set();
+  const stores = new Set();
+  let sales = null;
+  let profit = 0;
+  let volume = 0;
+
+  scope.forEach((station) => {
+    keys.forEach((key) => {
+      const month = station.months[key];
+      if (!month || !isNum(month.gas_sales)) return;
+      sales = (sales || 0) + Number(month.gas_sales);
+      if (isNum(month.gas_profit)) profit += Number(month.gas_profit);
+      if (isNum(month.gas_vol)) volume += Number(month.gas_vol);
+      months.add(key);
+      stores.add(station.id);
+    });
+  });
+
+  if (sales === null) return null;
+
+  return {
+    sales,
+    profit,
+    volume,
+    cost: sales - profit,
+    take: sales ? profit / sales : null,
+    perGallon: volume ? sales / volume : null,
+    keys: [...months].sort(),
+    // Which stores these are, not merely how many, so a prior period can be
+    // taken over the same ones rather than over whoever happened to report.
+    storeIds: [...stores],
+    stores: stores.size,
+    ofStores: scope.length,
+    ofKeys: keys.length,
+    // True only when every store in scope reported every month asked for.
+    complete: months.size === keys.length && stores.size === scope.length,
+  };
+}
+
 /** Fuel margin — dollars of fuel profit per gallon sold. */
 export function marginOver(model, keys, stationIds = null) {
   return ratioOver(model, keys, "gas_profit", "gas_vol", stationIds);

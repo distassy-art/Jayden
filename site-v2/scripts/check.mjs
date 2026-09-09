@@ -11,8 +11,8 @@
  */
 
 import {
-  buildModel, portfolioTotals, resolveTimeframe, scopeDays, storeDays, sumDays,
-  timeframes,
+  buildModel, fuelRevenue, portfolioTotals, priorYearKeys, resolveTimeframe,
+  scopeDays, storeDays, sumDays, timeframes,
 } from "../public/assets/analytics.js";
 import { bucketDays, buildOwners, resolveScope } from "../public/assets/scope.js";
 import {
@@ -395,6 +395,65 @@ async function main() {
    * rewritten to use it — and if it does not, nothing on the page may flag a
    * single day.
    */
+  /*
+   * Fuel revenue lags the other feeds, so the trap is arithmetic across two
+   * different spans: a year-to-date fuel profit taken off a six-month revenue
+   * gives a cost of goods that looks plausible and is badly wrong. Every
+   * figure in that block has to come from the same store-months.
+   */
+  process.stdout.write("\nFuel revenue spans\n");
+  const rev = fuelRevenue(model, model.ytdKeys, null);
+  if (rev) {
+    assert(Math.abs((rev.sales - rev.cost) - rev.profit) < 1,
+      "fuel revenue: cost does not reconcile to revenue minus profit");
+
+    // Recomputed here over exactly the store-months reporting revenue.
+    let sales = 0;
+    let profit = 0;
+    let volume = 0;
+    model.stations.forEach((station) => {
+      model.ytdKeys.forEach((key) => {
+        const month = station.months[key];
+        if (!month || !isNum(month.gas_sales)) return;
+        sales += Number(month.gas_sales);
+        if (isNum(month.gas_profit)) profit += Number(month.gas_profit);
+        if (isNum(month.gas_vol)) volume += Number(month.gas_vol);
+      });
+    });
+    assert(Math.abs(sales - rev.sales) < 1, "fuel revenue: sales disagree");
+    assert(Math.abs(profit - rev.profit) < 1,
+      `fuel revenue: paired profit is ${Math.round(rev.profit).toLocaleString()}, `
+      + `should be ${Math.round(profit).toLocaleString()} over the reporting months`);
+    assert(Math.abs(volume - rev.volume) < 1, "fuel revenue: paired gallons disagree");
+
+    // The whole-period fuel profit is larger, which is precisely why pairing
+    // matters — if these matched, the test would prove nothing.
+    const wholePeriod = portfolioTotals(model, model.ytdKeys, null).fuel_profit;
+    assert(wholePeriod > rev.profit,
+      "fuel revenue: the feed now covers the whole period, so this pairing can be simplified");
+
+    // And the page must not silently present the short span as the full one.
+    const fuelPage = renderFuel(ctx());
+    if (!rev.complete) {
+      assert(/not the whole of/.test(fuelPage),
+        "fuel: revenue covers only part of the period and the page does not say so");
+    }
+    process.stdout.write(`  ok    revenue ${money(rev.sales)} over ${rev.keys.length}`
+      + `/${rev.ofKeys} months and ${rev.stores}/${rev.ofStores} stores, paired with `
+      + `${money(rev.profit)} profit — not the ${money(wholePeriod)} for the full period\n`);
+
+    // Last year has to be the same stores, or thirteen are put against seventeen.
+    const priorSame = fuelRevenue(model, priorYearKeys(rev.keys), rev.storeIds);
+    const priorAll = fuelRevenue(model, priorYearKeys(rev.keys), null);
+    if (priorSame && priorAll) {
+      assert(priorSame.stores <= rev.stores,
+        "fuel revenue: the prior period pulled in stores absent from this one");
+      process.stdout.write(`  ok    compared with ${money(priorSame.sales)} over the same `
+        + `${priorSame.stores} stores, not ${money(priorAll.sales)} over `
+        + `${priorAll.stores}\n`);
+    }
+  }
+
   process.stdout.write("\nLeaks\n");
   // Per store, not summed across them: a date where one store reported sales
   // and another did not breaks the identity in the aggregate without any store

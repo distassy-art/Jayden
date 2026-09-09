@@ -12,9 +12,9 @@ import {
   isNum, lineChart, money, moneyShort, monthLabel, num, pct, perGallon,
 } from "../ui.js";
 import {
-  MONTH_ABBR, departmentPeriods, departmentRollup, marginOver, monthSeries,
-  portfolioTotals, ratioOver, resolveTimeframe, scopeOf, scopeTotals,
-  trailingMonths,
+  MONTH_ABBR, departmentPeriods, departmentRollup, fuelRevenue, marginOver,
+  monthSeries, portfolioTotals, priorYearKeys, ratioOver, resolveTimeframe,
+  scopeOf, scopeTotals, trailingMonths,
 } from "../analytics.js";
 import { bindScopeBar, scopeBar } from "../scope.js";
 
@@ -94,6 +94,9 @@ export function view(model, scope) {
       ? tf.priorLabel
       : String(Number(tf.year) - 1),
     totals: (ids) => portfolioTotals(model, tf.keys, ids && ids.length ? ids : null),
+    // Totals over an arbitrary subset of the selection, for pages that need to
+    // know which months a measure actually reported.
+    totalsFor: (keys, ids) => portfolioTotals(model, keys, ids && ids.length ? ids : null),
     priorTotals: (ids) => portfolioTotals(model, tf.priorKeys, ids && ids.length ? ids : null),
     /*
      * A month-by-month table shows the charted window, not the selection, so
@@ -118,29 +121,60 @@ export function view(model, scope) {
 /*
  * What fuel sold for, rather than what it earned.
  *
- * Fuel revenue arrives from its own feed and is missing for the earliest and
- * newest months, so the row is dropped entirely rather than shown with gaps —
- * a cost of goods computed from a half-reported revenue would be nonsense.
+ * The revenue feed lags the books — thirteen of seventeen stores through June,
+ * one store in July, none in August — so every figure here is totalled over
+ * the store-months that actually report revenue, and the profit and gallons
+ * beside it over exactly those same store-months. Taking a year-to-date fuel
+ * profit off a six-and-a-half-month revenue would produce a cost of goods that
+ * is not wrong by a little.
+ *
+ * When the span is short of the one selected, the card says so rather than
+ * letting the reader assume it covers the period named at the top of the page.
  */
-function revenueRow(now, before) {
-  if (!isNum(now.gas_sales) || !Number(now.gas_sales)) return "";
+function revenueRow(model, v, ids) {
+  const now = fuelRevenue(model, v.keys, ids && ids.length ? ids : null);
+  if (!now || !now.sales) return "";
 
-  const cost = isNum(now.gas_profit) ? now.gas_sales - now.gas_profit : null;
-  const take = isNum(now.gas_profit) ? now.gas_profit / now.gas_sales : null;
-  const priorTake = isNum(before.gas_sales) && Number(before.gas_sales) && isNum(before.gas_profit)
-    ? before.gas_profit / before.gas_sales
-    : null;
-  const perGal = isNum(now.gas_vol) && Number(now.gas_vol) ? now.gas_sales / now.gas_vol : null;
+  /*
+   * Last year over the same calendar months and the same stores. Letting the
+   * prior period take whoever reported would put thirteen stores against
+   * seventeen and call the difference a fall in fuel sales.
+   */
+  const before = fuelRevenue(model, priorYearKeys(now.keys), now.storeIds);
+  const comparable = before
+    && before.keys.length === now.keys.length
+    && before.stores === now.stores;
 
-  return `<div class="grid cols-4" style="margin-bottom:16px">
-    ${yoyKpi("Fuel revenue", money(now.gas_sales), now.gas_sales, before.gas_sales)}
-    ${kpi("Cost of the fuel", money(cost),
-      `<span class="muted">What was paid for it before margin</span>`)}
-    ${kpi("Kept from revenue", pct(take),
-      `${deltaBadge(isNum(take) && isNum(priorTake) ? (take - priorTake) * 100 : null, { suffix: " pts" })}
-       <span>from ${esc(pct(priorTake))}</span>`)}
-    ${kpi("Sold at", perGallon(perGal), `<span class="muted">Average pump price per gallon</span>`)}
-  </div>`;
+  const span = `${monthLabel(now.keys[0], true)}`
+    + (now.keys.length > 1 ? `–${monthLabel(now.keys[now.keys.length - 1], true)}` : "");
+  const short = !now.complete
+    ? `${span} · ${esc(num(now.stores))} of ${esc(num(now.ofStores))} store${now.ofStores === 1 ? "" : "s"}`
+    : span;
+
+  return `<div class="grid cols-4" style="margin-bottom:8px">
+    ${kpi("Fuel revenue", money(now.sales),
+    comparable
+      ? `${deltaBadge(change(now.sales, before.sales))}<span>from ${esc(moneyShort(before.sales))}</span>`
+      : `<span class="muted">Nothing comparable last year</span>`)}
+    ${kpi("Cost of the fuel", money(now.cost),
+    `<span class="muted">What was paid for it before margin</span>`)}
+    ${kpi("Kept from revenue", pct(now.take),
+    comparable && isNum(before.take)
+      ? `${deltaBadge((now.take - before.take) * 100, { suffix: " pts" })}
+         <span>from ${esc(pct(before.take))}</span>`
+      : `<span class="muted">Of every dollar taken at the pump</span>`)}
+    ${kpi("Sold at", perGallon(now.perGallon),
+    `<span class="muted">Average pump price per gallon</span>`)}
+  </div>
+  <p class="tiny muted" style="margin:0 0 16px">
+    ${now.complete
+    ? `Fuel revenue for ${esc(span)}.`
+    : `Fuel revenue is reported for ${esc(short)}, not the whole of
+       ${esc(v.tf.label)}. The four figures above cover only those months, and
+       the profit and gallons in them are the ones from the same months — so
+       they agree with each other, but not with the gallons and fuel profit
+       above, which cover the full period.`}
+  </p>`;
 }
 
 /** How the selected timeframe reads in a sentence, under the scope bar. */
@@ -339,7 +373,7 @@ export function renderFuel(ctx) {
          <span>vs same month last year</span>`)}
     </div>
 
-    ${revenueRow(ytd, prior)}
+    ${revenueRow(model, v, ids)}
 
     <div class="grid split" style="margin-bottom:16px">
       <section class="card">
