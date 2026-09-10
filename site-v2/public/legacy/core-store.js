@@ -453,9 +453,16 @@
         .then(function (r) { return r.ok ? r.json() : fallback; })
         .catch(function () { return fallback; });
     }
+    // Prefer the live feed so the embedded schedule stays identical to the old
+    // site; fall back to the copy bundled next to this file (dev / offline).
+    function loadSeed(liveUrl, bundledUrl, fallback) {
+      return loadJson(liveUrl, null).then(function (v) {
+        return v != null ? v : loadJson(bundledUrl, fallback);
+      });
+    }
     return Promise.all([
-      loadJson("core.json?v=r2", emptyState()),
-      loadJson("core-clocks.json", { clocks: [] })
+      loadSeed("/data/core.json?v=r2", "core.json?v=r2", emptyState()),
+      loadSeed("/data/core-clocks.json", "core-clocks.json", { clocks: [] })
     ]).then(function (pair) {
       var seed = pair[0] || emptyState();
       var extra = pair[1] || {};
