@@ -34,6 +34,10 @@ const ENDPOINTS = new Map([
   ["/api/data/billing.json", "/data/billing.json"],
   ["/api/data/pricing.json", "/data/pricing.json"],
   ["/api/data/manager.json", "/data/manager.json"],
+  // The store crew roster. Read-only, same as everything else here; it is what
+  // lets an employee sign in on the store device with their existing clock PIN,
+  // matched against the clock-pass hashes the old site already stored.
+  ["/api/data/core.json", "/data/core.json"],
 
   /*
    * Three feeds the overlay does not carry.

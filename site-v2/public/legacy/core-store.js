@@ -2188,6 +2188,37 @@
     return { ok: true, message: BREAK_SHORT[m[2]] + (m[1] === "start" ? " started" : " ended"), record: recBr };
   }
 
+  // Recognise an employee from the time-clock PIN alone — no name typed.
+  // Each stored clockPassHash is sha256(firstName + "\n" + pass), so the same
+  // four digits combined with a different first name give a different hash;
+  // matching the typed PIN against every active person's own first name picks
+  // out exactly one of them. Some old passes were saved with a dropped leading
+  // zero (e.g. "426" for what is typed as "0426"), so a zero-stripped form is
+  // tried too. The manager device that seeded the roster is not a person here.
+  function loginEmployeeByPin(pin) {
+    var sec = normPass(pin);
+    var list = (state && state.employees) || [];
+    var cands = [sec];
+    var stripped = sec.replace(/^0+/, "");
+    if (stripped === "") stripped = "0";
+    if (stripped !== sec) cands.push(stripped);
+    var idx = 0;
+    function tryNext() {
+      if (idx >= list.length) return Promise.resolve(null);
+      var e = list[idx++];
+      if (!e || e.status === "terminated" || !e.clockPassHash) return tryNext();
+      var first = firstNameOf(e.name);
+      return Promise.all(cands.map(function (c) { return hashClockPass(first, c); }))
+        .then(function (hashes) {
+          for (var i = 0; i < hashes.length; i++) {
+            if (e.clockPassHash === hashes[i]) return e;
+          }
+          return tryNext();
+        });
+    }
+    return tryNext();
+  }
+
   function loginEmployee(name, secret) {
     var first = firstNameOf(name);
     var sec = normPass(secret);
@@ -2588,6 +2619,7 @@
     paySplitRange: paySplitRange,
     applyPunch: applyPunch,
     loginEmployee: loginEmployee,
+    loginEmployeeByPin: loginEmployeeByPin,
     sameStation: sameStation,
     isManagerEmployee: isManagerEmployee,
     grantManagerSession: grantManagerSession,

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Smart Time Clock</title>
+<link rel="icon" href="../assets/logo-mark.png" type="image/png">
+<link rel="manifest" href="smart-time-clock.webmanifest">
+<meta name="theme-color" content="#0f2744">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Smart Time Clock">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="stylesheet" href="core.css?v=ck23">
+</head>
+<body>
+<div id="loginView" class="wrap">
+  <img class="logo" src="../assets/logo-wordmark-dark.png" alt="Smart Time Clock">
+  <h1>Smart Time Clock</h1>
+  <p class="lead">Enter your time clock PIN. It is the same four digits you use to clock in — no
+    name needed, we know you by your PIN.</p>
+  <label for="pin">Time clock PIN</label>
+  <input id="pin" type="password" inputmode="numeric" autocomplete="off"
+    autocapitalize="none" spellcheck="false" placeholder="••••">
+  <div class="err" id="err"></div>
+  <button type="button" id="go">Log in</button>
+  <p class="fine">Add Smart Time Clock to your Home Screen: open this page, tap Share, then
+    <b>Add to Home Screen</b>. Forgot your PIN? Ask your manager.</p>
+</div>
+<div id="appView" class="app" hidden>
+  <header>
+    <div>
+      <div class="kicker">Smart Time Clock</div>
+      <h1 id="hello">Hello</h1>
+    </div>
+    <button type="button" class="ghost" id="out">Log out</button>
+  </header>
+  <div id="annivBanner" class="anniv-banner" hidden></div>
+  <nav class="tabs" id="empTabs">
+    <button type="button" data-tab="timesheet" class="on">Timesheet</button>
+    <button type="button" data-tab="clock">Clock</button>
+    <button type="button" data-tab="schedule">Schedule</button>
+    <button type="button" data-tab="timeoff">Time off</button>
+    <button type="button" data-tab="info">My info</button>
+    <button type="button" data-tab="manager" id="mgrTab" hidden>Manager</button>
+  </nav>
+  <div id="tabClock" hidden>
+    <section class="card" id="clockTabBox"></section>
+  </div>
+  <div id="tabSchedule" hidden>
+    <section class="card" id="clockBox"></section>
+    <section class="card">
+      <h2>This week</h2>
+      <div id="weekBox"></div>
+    </section>
+    <section class="card task-card">
+      <h2>Today&rsquo;s cheat sheet</h2>
+      <div id="taskBox"></div>
+    </section>
+  </div>
+  <div id="tabTimesheet">
+    <section class="card">
+      <h2>Timesheet</h2>
+      <div class="ts-pick" id="tsPick">
+        <div class="ts-presets">
+          <button type="button" class="ghost on" id="tsThisWeek">This week</button>
+          <button type="button" class="ghost" id="tsThisPay">This pay period</button>
+        </div>
+        <div class="ts-navrow on" id="tsWeekRow">
+          <span class="ts-nav-k">Week</span>
+          <button type="button" class="ghost ts-step" id="tsPrevWeek" aria-label="Previous week">&lsaquo;</button>
+          <select id="tsWeekJump" aria-label="Choose week"></select>
+          <button type="button" class="ghost ts-step" id="tsNextWeek" aria-label="Next week">&rsaquo;</button>
+        </div>
+        <div class="ts-navrow" id="tsMonthRow">
+          <span class="ts-nav-k">Month</span>
+          <button type="button" class="ghost ts-step" id="tsPrevMonth" aria-label="Previous month">&lsaquo;</button>
+          <select id="tsMonthJump" aria-label="Choose month"></select>
+          <button type="button" class="ghost ts-step" id="tsNextMonth" aria-label="Next month">&rsaquo;</button>
+        </div>
+      </div>
+      <div id="tsBox"></div>
+    </section>
+  </div>
+  <div id="tabTimeoff" hidden>
+    <section class="card">
+      <h2>Request time off</h2>
+      <p class="mut">Pick date(s) and send a request. Your manager approves or denies it. You cannot approve your own request.</p>
+      <form id="toForm">
+        <label for="toStart">From</label>
+        <input id="toStart" type="date" required>
+        <label for="toEnd">Through (optional)</label>
+        <input id="toEnd" type="date">
+        <label for="toReason">Reason (optional)</label>
+        <input id="toReason" type="text" autocomplete="off" placeholder="Optional">
+        <div class="err" id="toErr"></div>
+        <button type="submit" id="toSubmit">Submit request</button>
+      </form>
+    </section>
+    <section class="card">
+      <h2>Your requests</h2>
+      <div id="toList"></div>
+    </section>
+  </div>
+  <div id="tabInfo" hidden>
+    <section class="card">
+      <h2>My info</h2>
+      <div id="infoBox"></div>
+    </section>
+  </div>
+  <div id="tabManager" hidden>
+    <section class="card" style="padding:0;overflow:hidden">
+      <iframe id="mgrFrame" title="Manager tools" loading="lazy"
+        style="width:100%;border:0;display:block;min-height:80vh"
+        src="schedule.html"></iframe>
+    </section>
+    <p class="fine">Manager tools for <b>ARCO AM/PM OF DIAMOND</b>: edit the team, change the
+      schedule, set tasks, and check everyone&rsquo;s hours and task performance.</p>
+  </div>
+</div>
+<script src="core-store.js?v=ck23"></script>
+<script src="core.js?v=ck23"></script>
+<script>
+  /* The Manager tab embeds the full crew schedule app (same origin). It posts
+     its content height so the panel grows with it instead of nesting a
+     scrollbar. */
+  (function () {
+    window.addEventListener("message", function (event) {
+      var data = event.data;
+      if (!data || data.type !== "ss-legacy-height") return;
+      var frame = document.getElementById("mgrFrame");
+      var height = Number(data.height);
+      if (frame && height > 0) frame.style.height = Math.ceil(height) + "px";
+    });
+  })();
+</script>
+</body>
+</html>
