@@ -137,6 +137,10 @@ await bindOk("schedule: form renders", async () => {
   const c = ctx(); const r = mount(A.renderAppSchedule(c)); await A.bindAppSchedule(r, c);
   if (!r.querySelector("#sf-save")) throw new Error("no shift form");
 });
+await bindOk("employee schedule tab: renders and binds", async () => {
+  const c = ctx(); const r = mount(A.renderStaffSchedule(c)); await A.bindStaffSchedule(r, c);
+  if (!r.querySelector("#sf-save")) throw new Error("no shift form on the manager schedule tab");
+});
 await bindOk("clock: renders", async () => {
   const c = ctx(); const r = mount(A.renderAppClock(c)); await A.bindAppClock(r, c);
 });

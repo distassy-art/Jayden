@@ -18,9 +18,10 @@
  */
 
 import {
-  esc, icon, initials, money, moneyShort, num, pct, monthLabel, toast,
+  esc, icon, initials, money, moneyShort, num, pct, monthLabel, toast, emptyState,
 } from "../ui.js";
 import { portfolioTotals } from "../analytics.js";
+import { bindScopeBar, scopeBar } from "../scope.js";
 import { isAdmin } from "../data.js";
 import {
   BREAK_KINDS, DEFAULT_RADIUS_FT, activeEmployeeId, addEmployee, addPunch, addShift,
@@ -224,10 +225,66 @@ export function renderTeamSchedule(ctx) {
   </div>`;
 }
 
+/* -------------------------------------------------------------------------
+   Manager: the employee schedule as a full console tab
+   -------------------------------------------------------------------------
+   The crew schedule lives in the phone app and on the manager's dashboard, but
+   the old site gave a manager a dedicated tab for it, so this is that tab: the
+   same shift editor, drawn as a full desktop page under the Manager section. A
+   manager holds one store, so it lands straight on their crew; an admin or
+   owner holds many, so they get the store picker to choose which one.
+   ------------------------------------------------------------------------- */
+
+/** The store a schedule page is acting on: the picked store, else the default. */
+function scheduleStore(ctx) {
+  const picked = ctx.scope?.station;
+  if (picked) return { id: String(picked.id), name: picked.name };
+  return primaryStore(ctx);
+}
+
+export function renderStaffSchedule(ctx) {
+  const { model, scope } = ctx;
+  // Only useful once there is more than one store to choose between; a manager's
+  // single-store model collapses this to nothing.
+  const bar = model && model.stations.length > 1
+    ? scopeBar(model, scope, { period: false, csv: false })
+    : "";
+  const store = scheduleStore(ctx);
+  if (!store) {
+    return `<div class="page-head"><h2>Employee schedule</h2>
+        <p>Build the coming week's shifts for your crew.</p></div>${bar}
+      <section class="card"><div class="card-body">
+        ${emptyState("No store to schedule", "Pick a store to build its schedule.")}
+      </div></section>`;
+  }
+  return `<div class="page-head">
+      <h2>Employee schedule</h2>
+      <p>Build and edit the coming week's shifts for <b>${esc(store.name)}</b>. This is the same
+        schedule your crew sees in the phone app — a shift added here shows there, and the other
+        way round.</p>
+    </div>${bar}
+    <section class="card"><div class="card-body">
+      <div id="sched-body">${loadingRow()}</div>
+    </div></section>`;
+}
+
+export async function bindStaffSchedule(root, ctx) {
+  bindScopeBar(root, ctx);
+  const store = scheduleStore(ctx);
+  const body = root.querySelector("#sched-body");
+  if (store && body) await drawSchedule(body, store, ctx);
+}
+
 export async function bindAppSchedule(root, ctx) {
   const store = primaryStore(ctx);
   if (!store) return;
   const body = root.querySelector("#sched-body");
+  if (body) await drawSchedule(body, store, ctx);
+}
+
+/* One place that fills a `#sched-body`, shared by the phone tab, the dashboard
+   embed and the console tab, so all three stay identical. */
+async function drawSchedule(body, store, ctx) {
   const draw = async () => {
     const [employees, shifts] = await Promise.all([
       listEmployees(store.id),

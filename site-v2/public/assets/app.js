@@ -40,8 +40,9 @@ import {
 import {
   appRole, ensureGeofence,
   bindAppClock, bindAppMe, bindAppSchedule, bindAppTasks, bindAppTeam, bindAppTimeclock,
+  bindStaffSchedule,
   renderAppClock, renderAppHome, renderAppMe, renderAppSchedule, renderAppTasks,
-  renderAppTeam, renderAppTimeclock,
+  renderAppTeam, renderAppTimeclock, renderStaffSchedule,
 } from "./views/app.js";
 import { activeEmployeeId } from "./appstore.js";
 import { PUBLIC_ROUTES, renderLogin } from "./views/site.js";
@@ -74,6 +75,11 @@ const ROUTES = [
   { path: "/daily", title: "Daily sales", icon: "calendar", group: "Operations", render: renderDaily, bind: bindDaily },
   { path: "/invoices", title: "S2K invoices", icon: "invoice", group: "Operations", render: renderInvoices, bind: bindInvoices },
   { path: "/pricing", title: "Pricing", icon: "pricing", group: "Operations", render: renderPricing },
+
+  // The crew. The old site gave a manager a dedicated tab to build the employee
+  // schedule, so it lives here as a full console page under the Manager section
+  // rather than only in the phone app or on the dashboard.
+  { path: "/staff-schedule", title: "Employee schedule", icon: "calendar", group: "Manager", render: renderStaffSchedule, bind: bindStaffSchedule, roles: ["admin", "owner", "manager"] },
 
   // The vendor relationship: who supplies each store, when orders go out and when
   // trucks arrive. "Ordering schedule" is the vendor timetable — not staff hours,
