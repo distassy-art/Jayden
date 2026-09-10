@@ -52,6 +52,9 @@ VENDOR_CANON = {
     "universal": "UNIVERSAL",
     "bower": "BOWER",
     "singtech": "BOWER",
+    "cintas": "CINTAS",
+    "ready for the workday": "CINTAS",
+    "ready for the work day": "CINTAS",
 }
 
 
@@ -261,35 +264,74 @@ def client_paths(client: dict, month: str) -> dict:
     }
 
 
+def _stamp_date(name: str) -> date | None:
+    """Parse leading MMDDYYYY from a daily/dly filename."""
+    m = re.match(r"^(\d{2})(\d{2})(\d{4})", name.replace("-", "").replace("_", ""))
+    if not m:
+        return None
+    mm, dd, yyyy = int(m.group(1)), int(m.group(2)), int(m.group(3))
+    try:
+        return date(yyyy, mm, dd)
+    except ValueError:
+        return None
+
+
 def pick_files(paths: dict, as_of: date) -> dict:
     mmddyyyy = f"{as_of.month:02d}{as_of.day:02d}{as_of.year:04d}"
     ddmm = f"{as_of.day:02d}{as_of.month:02d}"
     out = {"daily": [], "dly": [], "scans": []}
 
+    # Prefer exact as-of daily; else latest plain daily PDF dated <= as_of.
     for folder in (paths["daily_summary"], paths["daily_bd"]):
         try:
             files = list_files(folder)
         except Exception:
             files = []
+        exact = []
+        candidates = []
         for f in files:
             n = f["Name"].lower()
-            if "dly" in n or "dpt" in n:
+            if "dly" in n or "dpt" in n or not n.endswith(".pdf"):
                 continue
-            if n.startswith(mmddyyyy.lower()) and n.endswith(".pdf"):
-                out["daily"].append(f)
-        if out["daily"]:
+            if n.startswith(mmddyyyy.lower()):
+                exact.append(f)
+                continue
+            d = _stamp_date(f["Name"])
+            if d and d <= as_of:
+                candidates.append((d, f))
+        if exact:
+            out["daily"] = exact
+            break
+        if candidates:
+            candidates.sort(key=lambda x: x[0], reverse=True)
+            out["daily"] = [candidates[0][1]]
             break
 
+    # Prefer exact as-of DLY; else latest *dly* dated <= as_of.
     for folder in (paths["daily_summary"], paths["dly_bd"]):
         try:
             files = list_files(folder)
         except Exception:
             files = []
+        exact = []
+        candidates = []
         for f in files:
             n = f["Name"].lower().replace("-", "").replace("_", "")
-            if "dly" in n and mmddyyyy.lower() in n:
-                out["dly"].append(f)
-        if out["dly"]:
+            if "dly" not in n or not n.endswith(".pdf"):
+                continue
+            d = _stamp_date(f["Name"])
+            if d is None:
+                continue
+            if d == as_of:
+                exact.append(f)
+            elif d <= as_of:
+                candidates.append((d, f))
+        if exact:
+            out["dly"] = exact
+            break
+        if candidates:
+            candidates.sort(key=lambda x: x[0], reverse=True)
+            out["dly"] = [candidates[0][1]]
             break
 
     try:
@@ -397,6 +439,16 @@ def extract_scan_rows(picked: dict, aliases: dict[str, str]) -> list[dict]:
 def append_audit_rows(client: dict, month: str, rows: list[dict], as_of: date, dry_run: bool = False) -> dict:
     paths = client_paths(client, month)
     candidates = [paths["audit_xlsx"], f"{DOCS}/{client['dest']}/{client['name']} Audit.xlsx"]
+    # Flexible match: any *Audit*.xlsx in the client dest folder (names vary).
+    try:
+        for f in list_files(f"{DOCS}/{client['dest']}"):
+            n = f["Name"]
+            if n.lower().endswith(".xlsx") and "audit" in n.lower():
+                rel = f.get("ServerRelativeUrl") or f"{DOCS}/{client['dest']}/{n}"
+                if rel not in candidates:
+                    candidates.append(rel)
+    except Exception:
+        pass
     data = used = None
     for rel in candidates:
         try:
