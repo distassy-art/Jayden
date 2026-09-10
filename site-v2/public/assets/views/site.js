@@ -462,31 +462,34 @@ export function renderEmployee() {
   return page("/employee", `
     <div class="site-head">
       <h1>For store employees</h1>
-      <p class="site-lead">If you work at one of our client stores, this is where you check your
-        schedule and send us a question.</p>
+      <p class="site-lead">Clock in and out, take your breaks, and check your schedule and
+        timesheets — all in one place, on your own phone or the store iPad.</p>
     </div>
     <div class="site-split">
       <div class="prose">
-        <h2>Signing in</h2>
-        <p>Use the username and password your store manager gave you. It is the same log-in as
-          before — nothing has been reissued.</p>
-        <p>If you do not have one yet, ask your manager to request it. We do not create employee
-          log-ins directly.</p>
+        <h2>Sign in with your PIN</h2>
+        <p>Open <b>Smart Time Clock</b> and enter the same four-digit time clock PIN you already
+          use to punch in. No username, no name to type — the PIN alone knows who you are.</p>
+        <p><a class="btn btn-accent" href="legacy/core.html">Open Smart Time Clock</a></p>
         <h2>What you can do</h2>
         <ul>
-          <li>See your schedule for the week.</li>
-          <li>Send a question to the Smart Solutions team.</li>
-          <li>Check announcements your manager has posted.</li>
+          <li><b>Timesheets</b> — this week, this pay period, or any past week or month, with the
+            hours you actually clocked. Your old timesheets are all there.</li>
+          <li><b>Clock</b> — clock in and out at the store and take your CA-style breaks.</li>
+          <li><b>Schedule</b> — your shifts for the week and the day's cheat-sheet tasks.</li>
+          <li><b>Time off</b> — send your manager a request.</li>
         </ul>
-        <p class="tiny muted">Employees do not see store financials.</p>
+        <p class="tiny muted">Employees never see store financials.</p>
       </div>
       <aside class="side-card">
-        <h3>Employee log in</h3>
-        <p>Same details as always.</p>
-        <a class="btn btn-accent" style="width:100%;justify-content:center" href="#/login">Log in</a>
+        <h3>Get the app</h3>
+        <p>Add <b>Smart Time Clock</b> to your Home Screen so it opens like an app.</p>
+        <p><b>iPhone / iPad:</b> open it in Safari, tap Share, then <b>Add to Home Screen</b>.</p>
+        <p><b>Android:</b> open it in Chrome, open the menu, then <b>Install app</b>.</p>
+        <a class="btn" style="width:100%;justify-content:center" href="legacy/core.html">Open Smart Time Clock</a>
         <hr>
-        <h3>No log-in yet?</h3>
-        <p>Your manager can request one for you.</p>
+        <h3>Forgot your PIN?</h3>
+        <p>Your manager can look it up or reset it for you.</p>
         <a class="btn" style="width:100%;justify-content:center" href="#/contact">Contact us</a>
       </aside>
     </div>`);
