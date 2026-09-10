@@ -94,6 +94,26 @@
     var s = firstNameOf(firstName) + "\n" + normPass(pass);
     return crypto.subtle.digest("SHA-256", new TextEncoder().encode(s)).then(hex);
   }
+
+  // Time-clock PIN overrides for the new site. The live roster is the source of
+  // truth for everyone, but where the boss has set a PIN that is not yet
+  // reflected in the old site's data, it is pinned here so the person can sign
+  // in with it today. Keyed by employee id; the clock-pass hash is re-derived
+  // from the PIN at load, so the old PIN stops working and the new one starts.
+  var PIN_OVERRIDES = {
+    e_diamond_racheloberholtzer: "0704"
+  };
+  function applyPinOverrides(st) {
+    var list = (st && st.employees) || [];
+    var jobs = [];
+    list.forEach(function (e) {
+      if (!e) return;
+      var pin = PIN_OVERRIDES[e.id];
+      if (!pin) return;
+      jobs.push(hashClockPass(e.name, pin).then(function (h) { e.clockPassHash = h; }));
+    });
+    return Promise.all(jobs);
+  }
   function uid(prefix) {
     return prefix + "_" + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
   }
@@ -472,9 +492,11 @@
       }
       state = merge(seed, loadLocal());
       autoCloseOverdueClocks();
-      persist();
-      readyResolve(state);
-      return state;
+      return applyPinOverrides(state).then(function () {
+        persist();
+        readyResolve(state);
+        return state;
+      });
     });
   }
 
