@@ -19,7 +19,7 @@ import {
 import { portfolioTotals, scopeDays, sumDays } from "../analytics.js";
 import { currentStores, rollupMtd } from "../current.js";
 import {
-  bindScopeBar, bucketDays, periodLabel, scopeBar,
+  bindScopeBar, bucketDays, periodLabel, scopeBar, weekStart,
 } from "../scope.js";
 
 const CYAN = "var(--cyan-500)";
@@ -263,6 +263,37 @@ export function renderDaily(ctx) {
     : sumDays(dailyRows);
   const neg = (v) => (Number(v) < 0 ? " neg-text" : "");
 
+  // Daily sheets are entered a day or two behind, and some stores fall further
+  // behind than that. When a store has not filed in a while, its "latest" day or
+  // week is genuinely old — not a bug — so the page says so rather than letting a
+  // three-week-old week read as this week. The month-to-date summary, which comes
+  // from a separate feed, stays current regardless.
+  const nowIso = new Date().toISOString().slice(0, 10);
+  const lastIso = settled ? null : dailyRows[dailyRows.length - 1].date;
+  const daysBehind = lastIso
+    ? Math.round((Date.parse(`${nowIso}T00:00:00Z`) - Date.parse(`${lastIso}T00:00:00Z`)) / 86400000)
+    : 0;
+  const stale = !settled && daysBehind >= 3;
+  // The current week is "in progress" until all seven days are in; comparing a
+  // two-day week against a full one would read as a crash, so its delta is held.
+  const currentKey = grain === "week" ? weekStart(nowIso) : grain === "day" ? nowIso : null;
+  const partial = !settled && grain === "week" && latest.key === currentKey && (latest.dates || 0) < 7;
+
+  const staleNote = stale
+    ? `<section class="card" style="margin-bottom:16px">
+        <div class="card-body" style="display:flex;gap:10px;align-items:flex-start">
+          ${icon("alert")}
+          <div>
+            <b>Daily sheets are behind for ${esc(scope.label)}.</b>
+            <div class="muted" style="margin-top:2px">The most recent daily sheet was filed
+              ${esc(dateLabel(lastIso))}, ${esc(num(daysBehind))} days ago, so the latest ${esc(grain)}
+              shown is that ${esc(grain)} — not this one. Month-to-date store totals in
+              <b>This month so far</b> stay current.</div>
+          </div>
+        </div>
+      </section>`
+    : "";
+
   const covered = settled
     ? `${periodLabel(series[0].key, grain)} – ${periodLabel(latest.key, grain)}`
     : `${dateLabel(dailyRows[0].date)} – ${dateLabel(dailyRows[dailyRows.length - 1].date)}`;
@@ -303,14 +334,24 @@ export function renderDaily(ctx) {
       </div>`
     : `<div class="grid cols-4" style="margin-bottom:16px">
         ${stat(`Latest ${grain}`, periodLabel(latest.key, grain),
-          `<span class="muted">${esc(num(latest.days))} store-day${latest.days === 1 ? "" : "s"} filed</span>`)}
+          partial
+            ? `<span class="muted">${esc(num(latest.dates))} of 7 days so far</span>`
+            : stale
+              ? `<span class="muted">last filed · ${esc(num(latest.days))} store-day${latest.days === 1 ? "" : "s"}</span>`
+              : `<span class="muted">${esc(num(latest.days))} store-day${latest.days === 1 ? "" : "s"} filed</span>`)}
         ${stat("Store sales", money(latest.sales),
-          `${deltaBadge(change(latest.sales, previous?.sales))}<span>on the ${esc(grain)} before</span>`)}
+          partial
+            ? `<span class="muted">so far this ${esc(grain)}</span>`
+            : `${deltaBadge(change(latest.sales, previous?.sales))}<span>on the ${esc(grain)} before</span>`)}
         ${stat("Gallons", num(latest.gas_vol),
-          `${deltaBadge(change(latest.gas_vol, previous?.gas_vol))}<span>fuel pumped</span>`)}
+          partial
+            ? `<span class="muted">so far this ${esc(grain)}</span>`
+            : `${deltaBadge(change(latest.gas_vol, previous?.gas_vol))}<span>fuel pumped</span>`)}
         ${stat("Fuel profit", money(latest.gas_profit),
-          `${deltaBadge(change(latest.gas_profit, previous?.gas_profit))}
-           <span>${esc(perGallon(latest.gas_margin))} /gal</span>`)}
+          partial
+            ? `<span class="muted">${esc(perGallon(latest.gas_margin))} /gal so far</span>`
+            : `${deltaBadge(change(latest.gas_profit, previous?.gas_profit))}
+               <span>${esc(perGallon(latest.gas_margin))} /gal</span>`)}
       </div>`;
 
   const charts = settled
@@ -397,7 +438,8 @@ export function renderDaily(ctx) {
             <th class="num">$/gal</th><th class="num">Store sales</th>
           </tr></thead>
           <tbody>${series.slice().reverse().map((row) => `<tr>
-            <td class="strong">${esc(periodLabel(row.key, grain))}</td>
+            <td class="strong">${esc(periodLabel(row.key, grain))}${partial && row.key === latest.key
+              ? ` <span class="tiny muted">· in progress</span>` : ""}</td>
             <td class="num muted">${esc(num(row.days))}</td>
             <td class="num">${esc(num(row.gas_vol))}</td>
             <td class="num">${esc(money(row.gas_profit))}</td>
@@ -426,6 +468,8 @@ export function renderDaily(ctx) {
       <p>${intro}</p>
     </div>
     ${bar}
+
+    ${staleNote}
 
     ${mtdSummary(ctx)}
 
