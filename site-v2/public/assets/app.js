@@ -19,7 +19,7 @@ import {
   bindInvoices, bindOrders, renderInvoices, renderOrders, renderPricing,
 } from "./views/operations.js";
 import {
-  bindBilling, renderBilling, renderHealth, renderTickets,
+  bindBilling, bindTickets, renderBilling, renderHealth, renderTickets,
 } from "./views/finance.js";
 import {
   bindDepartments, bindRankings, bindScope, renderDepartments, renderFuel,
@@ -91,7 +91,7 @@ const ROUTES = [
 
   { path: "/billing", title: "Billing", icon: "billing", group: "Business", render: renderBilling, bind: bindBilling, roles: ["admin", "owner"] },
   { path: "/payroll", title: "Payroll", icon: "clock", group: "Business", render: renderPayroll, bind: bindPayroll, roles: ["admin", "accountant"] },
-  { path: "/tickets", title: "Tickets", icon: "inbox", group: "Business", render: renderTickets },
+  { path: "/tickets", title: "Tickets", icon: "inbox", group: "Business", render: renderTickets, bind: bindTickets },
   { path: "/health", title: "Data health", icon: "health", group: "Business", render: renderHealth, roles: ["admin"] },
 
   // Everyone's own profile — photo, name, date of birth, address. Not in the

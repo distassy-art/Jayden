@@ -62,6 +62,7 @@ global.URL.createObjectURL = () => "blob:x";
 global.URL.revokeObjectURL = () => {};
 
 const A = await import("../public/assets/views/app.js");
+const F = await import("../public/assets/views/finance.js");
 const store = await import("../public/assets/appstore.js");
 
 const origin = "http://localhost:8787";
@@ -140,6 +141,30 @@ await bindOk("schedule: form renders", async () => {
 await bindOk("employee schedule tab: renders and binds", async () => {
   const c = ctx(); const r = mount(A.renderStaffSchedule(c)); await A.bindStaffSchedule(r, c);
   if (!r.querySelector("#sf-save")) throw new Error("no shift form on the manager schedule tab");
+});
+await bindOk("tickets: manager opens one, admin sees it and replies", async () => {
+  const mgr = { model, data: {}, query: new URLSearchParams(), params: {}, pathname: "/",
+    scope: { level: "all" }, navigate() {}, rerender() {},
+    user: { email: "mgr@example.test", role: "manager", stores: [storeId] } };
+  let r = mount(F.renderTickets(mgr)); await F.bindTickets(r, mgr);
+  const subject = r.querySelector("#nt-subject"); const body = r.querySelector("#nt-body");
+  if (!subject || !body || !r.querySelector("#nt-send")) throw new Error("no open-a-ticket form for the manager");
+  subject.value = "Pump 3 offline"; body.value = "Card reader is down on pump 3.";
+  r.querySelector("#nt-send").click(); await tick();
+  const mine = (await store.listTickets()).filter((t) => t.createdBy?.email === "mgr@example.test");
+  if (!mine.length) throw new Error("manager ticket was not stored");
+
+  const admin = { model, data: {}, query: new URLSearchParams(), params: {}, pathname: "/",
+    scope: { level: "all" }, navigate() {}, rerender() {},
+    user: { email: "admin", role: "admin", stores: [] } };
+  r = mount(F.renderTickets(admin)); await F.bindTickets(r, admin); await tick();
+  const replyBox = r.querySelector("[data-ticket-text]");
+  if (!replyBox) throw new Error("admin cannot see a reply box for the open ticket");
+  replyBox.value = "A tech is on the way.";
+  r.querySelector("[data-ticket-reply]").click(); await tick();
+  const answered = (await store.listTickets()).find((t) => t.id === mine[0].id);
+  const last = (answered.messages || [])[answered.messages.length - 1];
+  if (!last || last.role !== "admin") throw new Error("admin reply did not attach to the ticket");
 });
 await bindOk("clock: renders", async () => {
   const c = ctx(); const r = mount(A.renderAppClock(c)); await A.bindAppClock(r, c);

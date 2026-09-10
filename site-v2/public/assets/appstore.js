@@ -19,6 +19,8 @@ const BLANK = {
   shifts: [],
   punches: [],
   tasks: [],
+  // Two-way support threads: a manager or owner opens one, an admin answers.
+  tickets: [],
   places: {},
   // Payroll people who are not tied to one store: they read the whole group's
   // time clock. Seeded once with a default login so payroll can get in.
@@ -384,6 +386,80 @@ export async function toggleTask(taskId, done, { photo = null, by = null } = {})
 export async function removeTask(taskId) {
   const state = read();
   state.tasks = state.tasks.filter((t) => t.id !== taskId);
+  write(state);
+}
+
+/* -------------------------------------------------------------------------
+   Support tickets
+   -------------------------------------------------------------------------
+   A two-way thread. A manager or an owner opens one with a question; an admin
+   answers; either side can add a follow-up until it is closed. Like everything
+   else here it is on-device today and a backend tomorrow with no view change.
+*/
+
+export async function listTickets() {
+  return read().tickets
+    .slice()
+    .sort((a, b) => (b.updatedAt || b.createdAt || 0) - (a.updatedAt || a.createdAt || 0));
+}
+
+export async function addTicket({
+  subject, body = "", storeId = null, storeName = "", client = "", by = null,
+}) {
+  const state = read();
+  const now = Date.now();
+  const author = by || { email: "", role: "", name: "" };
+  const row = {
+    id: id("tkt"),
+    subject: String(subject || "").trim(),
+    storeId: storeId ? String(storeId) : null,
+    storeName: String(storeName || ""),
+    client: String(client || ""),
+    createdBy: {
+      email: String(author.email || ""),
+      role: String(author.role || ""),
+      name: String(author.name || author.email || ""),
+    },
+    createdAt: now,
+    updatedAt: now,
+    status: "open",
+    messages: body
+      ? [{
+        id: id("msg"),
+        from: String(author.name || author.email || "—"),
+        role: String(author.role || ""),
+        text: String(body).trim(),
+        at: now,
+      }]
+      : [],
+  };
+  state.tickets = [...state.tickets, row];
+  write(state);
+  return row;
+}
+
+export async function addTicketMessage(ticketId, { text, from = "—", role = "" }) {
+  const state = read();
+  const now = Date.now();
+  state.tickets = state.tickets.map((t) => (t.id === ticketId
+    ? {
+      ...t,
+      updatedAt: now,
+      // An answer reopens nothing and closes nothing on its own; only the
+      // explicit status control does that.
+      messages: [...(t.messages || []), {
+        id: id("msg"), from: String(from || "—"), role: String(role || ""), text: String(text || "").trim(), at: now,
+      }],
+    }
+    : t));
+  write(state);
+  return state.tickets.find((t) => t.id === ticketId) || null;
+}
+
+export async function setTicketStatus(ticketId, status) {
+  const state = read();
+  state.tickets = state.tickets.map((t) => (t.id === ticketId
+    ? { ...t, status, updatedAt: Date.now() } : t));
   write(state);
 }
 

@@ -2,10 +2,21 @@
 
 import {
   dateLabel, daysSince, downloadCsv, emptyState, esc, icon, isNum, money,
-  monthLabel, num, timeAgo,
+  monthLabel, num, timeAgo, toast,
 } from "../ui.js";
 import { dataHealth } from "../analytics.js";
+import { isAccountant, isAdmin } from "../data.js";
+import {
+  addTicket, addTicketMessage, listTickets, setTicketStatus,
+} from "../appstore.js";
 import { inScope, invoiceStores } from "../scope.js";
+
+function roleOf(user) {
+  if (!user) return "none";
+  if (isAdmin(user)) return "admin";
+  if (isAccountant(user)) return "accountant";
+  return user?.role === "manager" ? "manager" : "owner";
+}
 
 function amountOf(invoice) {
   const candidates = [invoice.total, invoice.amount, invoice.grandTotal];
@@ -163,20 +174,87 @@ export function bindBilling(root, ctx) {
 }
 
 /* -------------------------------------------------------------------------
-   Tickets and approvals
+   Tickets
+   -------------------------------------------------------------------------
+   A two-way support thread. A manager or an owner opens a ticket with a
+   question; an admin sees every ticket and answers; either side can add a
+   follow-up until the ticket is closed. The threads live in the on-device
+   store (appstore.js) — the console has no upstream write endpoint — so the
+   page renders a shell and `bindTickets` fills and wires it, the same pattern
+   the schedule and tasks use. The read-only tickets from the live site are
+   still shown below, so nothing already on the live console is lost.
    ------------------------------------------------------------------------- */
 
 export function renderTickets(ctx) {
-  const { data } = ctx;
-  const tickets = inScope(ctx.model, ctx.scope, data.tickets?.tickets,
-    (row) => row.store ?? row.station_id);
+  const { data, user } = ctx;
+  const role = roleOf(user);
+  const canOpen = role === "manager" || role === "owner";
+
   const pending = inScope(ctx.model, ctx.scope, data.days?.items,
     (row) => row.store ?? row.station_id);
+  const upstream = inScope(ctx.model, ctx.scope, data.tickets?.tickets,
+    (row) => row.store ?? row.station_id);
 
-  const open = tickets.filter((t) => String(t.status || "open").toLowerCase() !== "closed");
-  const closed = tickets.filter((t) => String(t.status || "").toLowerCase() === "closed");
+  const scope = ctx.scope;
+  const store = scope.station || (ctx.model.stations.length === 1 ? ctx.model.stations[0] : null);
+  const where = store ? store.name : scope.owner ? scope.owner.client : "";
 
-  const ticketCard = (ticket) => `<article class="card">
+  const openForm = canOpen
+    ? `<section class="card" style="margin-bottom:16px">
+        <div class="card-head"><h3>Open a ticket</h3>
+          <span class="hint">${where ? `For ${esc(where)}` : "Ask Smart Solutions a question"}</span></div>
+        <div class="card-body">
+          <div class="field"><label for="nt-subject">Subject</label>
+            <input class="input" id="nt-subject" maxlength="120" placeholder="What do you need help with?"></div>
+          <div class="field" style="margin-top:10px"><label for="nt-body">Message</label>
+            <textarea class="input" id="nt-body" rows="3" placeholder="Describe it in a sentence or two…"></textarea></div>
+          <div style="margin-top:12px"><button class="btn btn-sm btn-primary" id="nt-send">${icon("mail")}Send to Smart Solutions</button></div>
+        </div>
+      </section>`
+    : "";
+
+  return `
+    <div class="page-head">
+      <h2>Tickets</h2>
+      <p>${role === "admin"
+        ? "Questions from store managers and owners. Answer here — they see your reply the next time they open this page."
+        : "Ask Smart Solutions a question and read the answer here. Open a ticket and we'll reply."}</p>
+    </div>
+
+    <div id="tickets-stats" class="grid cols-3" style="margin-bottom:16px"></div>
+
+    ${openForm}
+
+    <div id="tickets-app">${loadingCard("Loading tickets…")}</div>
+
+    ${pending.length ? `<section class="card" style="margin:16px 0">
+      <div class="card-head"><h3>Awaiting approval</h3>
+        <span class="hint">Days submitted by managers</span></div>
+      <div class="table-wrap"><table class="table">
+        <thead><tr><th>Date</th><th>Store</th><th>Submitted by</th><th>Status</th></tr></thead>
+        <tbody>${pending.map((item) => `<tr>
+          <td class="nowrap">${esc(dateLabel(item.date))}</td>
+          <td>${esc(item.store || item.station || "—")}</td>
+          <td>${esc(item.by || item.email || "—")}</td>
+          <td><span class="badge warn">${esc(item.status || "pending")}</span></td>
+        </tr>`).join("")}</tbody>
+      </table></div>
+    </section>` : ""}
+
+    ${upstream.length ? `<details style="margin-top:16px">
+      <summary class="btn btn-ghost" style="display:inline-flex">From the live site — read-only (${esc(upstream.length)})</summary>
+      <div class="stack" style="margin-top:12px">${upstream.map(upstreamCard).join("")}</div>
+    </details>` : ""}
+  `;
+}
+
+function loadingCard(text = "Loading…") {
+  return `<section class="card"><div class="card-body"><p class="muted">${esc(text)}</p></div></section>`;
+}
+
+/* A read-only card for a ticket that came from the live upstream feed. */
+function upstreamCard(ticket) {
+  return `<article class="card">
     <div class="card-head">
       <h3>${esc(ticket.subject || ticket.title || "Manager ticket")}</h3>
       <span class="badge ${String(ticket.status).toLowerCase() === "closed" ? "" : "warn"}">${esc(ticket.status || "open")}</span>
@@ -191,43 +269,155 @@ export function renderTickets(ctx) {
       </div>`).join("") || `<p class="muted">${esc(ticket.body || ticket.text || "No message body.")}</p>`}
     </div>
   </article>`;
+}
 
-  return `
-    <div class="page-head">
-      <h2>Tickets and approvals</h2>
-      <p>Questions raised by store managers, and days submitted for sign-off.
-      This view is read-only in the preview — replies still happen on the live site.</p>
+/* One interactive thread from the on-device store. */
+function ticketThread(ticket, role, myEmail) {
+  const closed = String(ticket.status || "").toLowerCase() === "closed";
+  const mine = ticket.createdBy?.email
+    && String(ticket.createdBy.email).toLowerCase() === String(myEmail || "").toLowerCase();
+  const canAct = role === "admin" || mine;
+  const who = [ticket.storeName || ticket.client, ticket.createdBy?.role]
+    .filter(Boolean).join(" · ");
+
+  const messages = (ticket.messages || []).map((message) => {
+    const fromAdmin = String(message.role || "").toLowerCase() === "admin";
+    return `<div class="msg">
+      <div class="msg-meta">
+        <b>${esc(message.from || "—")}</b>
+        ${fromAdmin ? `<span class="badge info">Smart Solutions</span>` : ""}
+        <span class="muted">${esc(message.at ? timeAgo(message.at) : "")}</span>
+      </div>
+      <div>${esc(message.text || "")}</div>
+    </div>`;
+  }).join("") || `<p class="muted">No messages yet.</p>`;
+
+  const footer = closed
+    ? (canAct ? `<div style="margin-top:10px"><button class="btn btn-ghost btn-sm" data-ticket-reopen="${esc(ticket.id)}">Reopen</button></div>` : "")
+    : `<div style="margin-top:12px">
+        <textarea class="input" data-ticket-text="${esc(ticket.id)}" rows="2"
+          placeholder="${role === "admin" ? "Write an answer…" : "Add a message…"}"></textarea>
+        <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-sm btn-primary" data-ticket-reply="${esc(ticket.id)}">${icon("mail")}Send</button>
+          ${canAct ? `<button class="btn btn-ghost btn-sm" data-ticket-close="${esc(ticket.id)}">Close ticket</button>` : ""}
+        </div>
+      </div>`;
+
+  return `<article class="card" style="margin-bottom:12px">
+    <div class="card-head">
+      <h3>${esc(ticket.subject || "Ticket")}</h3>
+      <span class="badge ${closed ? "" : "warn"}">${closed ? "Closed" : "Open"}</span>
+      <span class="spacer"></span>
+      <span class="hint">${esc(who)}${who ? " · " : ""}${esc(timeAgo(ticket.createdAt))}</span>
     </div>
+    <div class="card-body">${messages}${footer}</div>
+  </article>`;
+}
 
-    <div class="grid cols-3" style="margin-bottom:16px">
-      ${figure("Open tickets", num(open.length), "Waiting on Smart Solutions", open.length ? "warn" : "pos")}
-      ${figure("Days awaiting approval", num(pending.length), "Submitted by managers", pending.length ? "warn" : "pos")}
-      ${figure("Closed tickets", num(closed.length), "Resolved")}
-    </div>
+export function bindTickets(root, ctx) {
+  const { user } = ctx;
+  const role = roleOf(user);
+  const me = {
+    email: user?.email || "",
+    role,
+    name: user?.client || user?.name || user?.email || "You",
+  };
 
-    ${pending.length ? `<section class="card" style="margin-bottom:16px">
-      <div class="card-head"><h3>Awaiting approval</h3></div>
-      <div class="table-wrap"><table class="table">
-        <thead><tr><th>Date</th><th>Store</th><th>Submitted by</th><th>Status</th></tr></thead>
-        <tbody>${pending.map((item) => `<tr>
-          <td class="nowrap">${esc(dateLabel(item.date))}</td>
-          <td>${esc(item.store || item.station || "—")}</td>
-          <td>${esc(item.by || item.email || "—")}</td>
-          <td><span class="badge warn">${esc(item.status || "pending")}</span></td>
-        </tr>`).join("")}</tbody>
-      </table></div>
-    </section>` : ""}
+  const list = root.querySelector("#tickets-app");
+  const stats = root.querySelector("#tickets-stats");
+  if (!list) return;
 
-    <div class="stack">
-      ${open.length ? open.map(ticketCard).join("") : `<section class="card"><div class="card-body">
-        ${emptyState("No open tickets", "Every manager question has been answered.", "check")}</div></section>`}
-    </div>
+  const stat = (label, value, detail, tone = "") => `<div class="stat" style="min-height:96px">
+    <div class="stat-label">${esc(label)}</div>
+    <div class="stat-value" style="font-size:22px">${esc(value)}</div>
+    <div class="stat-foot">${tone ? `<span class="dot ${esc(tone)}"></span>` : ""}<span>${esc(detail || "")}</span></div>
+  </div>`;
 
-    ${closed.length ? `<details style="margin-top:16px">
-      <summary class="btn btn-ghost" style="display:inline-flex">Closed tickets (${esc(closed.length)})</summary>
-      <div class="stack" style="margin-top:12px">${closed.map(ticketCard).join("")}</div>
-    </details>` : ""}
-  `;
+  const draw = async () => {
+    const all = await listTickets();
+    const visible = role === "admin"
+      ? all
+      : all.filter((t) => t.createdBy?.email
+        && String(t.createdBy.email).toLowerCase() === me.email.toLowerCase());
+
+    const open = visible.filter((t) => String(t.status || "").toLowerCase() !== "closed");
+    const closed = visible.filter((t) => String(t.status || "").toLowerCase() === "closed");
+    const awaiting = open.filter((t) => {
+      const last = (t.messages || [])[t.messages.length - 1];
+      return role === "admin"
+        ? last && String(last.role || "").toLowerCase() !== "admin"
+        : last && String(last.role || "").toLowerCase() === "admin";
+    });
+
+    if (stats) {
+      stats.innerHTML = role === "admin"
+        ? stat("Open tickets", num(open.length), "From managers and owners", open.length ? "warn" : "pos")
+          + stat("Need a reply", num(awaiting.length), "Waiting on Smart Solutions", awaiting.length ? "warn" : "pos")
+          + stat("Closed", num(closed.length), "Resolved")
+        : stat("Your open tickets", num(open.length), "Awaiting or in progress", open.length ? "warn" : "pos")
+          + stat("New answers", num(awaiting.length), "Replies from Smart Solutions", awaiting.length ? "pos" : "")
+          + stat("Closed", num(closed.length), "Resolved");
+    }
+
+    const body = visible.length
+      ? `${open.map((t) => ticketThread(t, role, me.email)).join("")}
+         ${closed.length ? `<details style="margin-top:6px">
+            <summary class="btn btn-ghost btn-sm" style="display:inline-flex">Closed (${esc(closed.length)})</summary>
+            <div style="margin-top:12px">${closed.map((t) => ticketThread(t, role, me.email)).join("")}</div>
+          </details>` : ""}`
+      : loadingCard(role === "admin"
+        ? "No tickets yet. When a manager or owner opens one, it shows here."
+        : "You have no tickets yet. Open one above and Smart Solutions will reply.");
+    list.innerHTML = body;
+    wire();
+  };
+
+  const wire = () => {
+    list.querySelectorAll("[data-ticket-reply]").forEach((btn) => btn.addEventListener("click", async () => {
+      const ticketId = btn.dataset.ticketReply;
+      const box = list.querySelector(`[data-ticket-text="${ticketId}"]`);
+      const text = (box?.value || "").trim();
+      if (!text) { toast("Write a message first", "warn"); return; }
+      await addTicketMessage(ticketId, { text, from: me.name, role: me.role });
+      toast(role === "admin" ? "Answer sent" : "Message sent", "ok");
+      draw();
+    }));
+    list.querySelectorAll("[data-ticket-close]").forEach((btn) => btn.addEventListener("click", async () => {
+      await setTicketStatus(btn.dataset.ticketClose, "closed");
+      toast("Ticket closed");
+      draw();
+    }));
+    list.querySelectorAll("[data-ticket-reopen]").forEach((btn) => btn.addEventListener("click", async () => {
+      await setTicketStatus(btn.dataset.ticketReopen, "open");
+      toast("Ticket reopened");
+      draw();
+    }));
+  };
+
+  const sendBtn = root.querySelector("#nt-send");
+  if (sendBtn) {
+    sendBtn.addEventListener("click", async () => {
+      const subject = (root.querySelector("#nt-subject")?.value || "").trim();
+      const bodyText = (root.querySelector("#nt-body")?.value || "").trim();
+      if (!subject || !bodyText) { toast("Add a subject and a message", "warn"); return; }
+      const scope = ctx.scope;
+      const store = scope.station || (ctx.model.stations.length === 1 ? ctx.model.stations[0] : null);
+      await addTicket({
+        subject,
+        body: bodyText,
+        storeId: store?.id || null,
+        storeName: store?.name || "",
+        client: scope.owner?.client || "",
+        by: me,
+      });
+      root.querySelector("#nt-subject").value = "";
+      root.querySelector("#nt-body").value = "";
+      toast("Ticket opened", "ok");
+      draw();
+    });
+  }
+
+  draw();
 }
 
 /* -------------------------------------------------------------------------
