@@ -741,9 +741,12 @@
   }
 
   function registerSW() {
-    // The bundled copy ships no service worker of its own; registering the old
-    // site's "/core/sw.js" would claim a cross-app scope. Keep only the focus
-    // refresh so the clock and reminders stay live when the tab comes back.
+    // Register this app's own worker, scoped to its folder (never the console
+    // at the site root). It relays the break/meal/clock-out reminders so they
+    // still show when the app is in the background, and caches the shell.
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("sw.js", { scope: "./" }).catch(function () {});
+    }
     window.addEventListener("focus", function () {
       if (emp) {
         notifyToday();
