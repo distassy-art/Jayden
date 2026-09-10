@@ -263,10 +263,10 @@ def main(figures_path, overlay_path, owners_path, monthly_path=None, open_days_p
     # calls the purchases column `purch`, which is exactly the kind of rename a
     # port silently drops.
     # The overlay's day records stop at the last closed month for all but one
-    # store, so the console merges the open month in from its own feed. Merge
-    # it here the same way — overlay wins on a shared date, being the
-    # reconciled copy — or the recomputed totals describe a shorter year than
-    # the one on screen.
+    # store, so the console merges the open month in from its own feed. Merge it
+    # here the same way: the overlay wins for the months it has reconciled, but
+    # for the open month it carries gas only (sales null), so there the
+    # open-month sheet — which holds the real daily sales — fills in.
     open_days = {}
     if open_days_path:
         for station in (json.load(open(open_days_path)).get("stations") or []):
@@ -275,13 +275,26 @@ def main(figures_path, overlay_path, owners_path, monthly_path=None, open_days_p
                 if day.get("date"):
                     open_days.setdefault(sid, {})[str(day["date"])] = day
 
+    def is_num(v):
+        if v is None or v == "":
+            return False
+        try:
+            float(v)
+            return True
+        except (TypeError, ValueError):
+            return False
+
     by_date = defaultdict(lambda: defaultdict(float))
     day_count = defaultdict(int)
     for sid, s in stations.items():
-        merged = dict(open_days.get(str(sid), {}))
+        merged = {}
         for day in (s.get("days") or []):
             if day.get("date"):
                 merged[str(day["date"])] = day
+        for iso, day in open_days.get(str(sid), {}).items():
+            existing = merged.get(iso)
+            if existing is None or not is_num(existing.get("sales")):
+                merged[iso] = day
         for iso, day in merged.items():
             if not iso:
                 continue

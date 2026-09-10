@@ -85,12 +85,24 @@ function normaliseStation(id, raw, { revenue = null, extraDays = null, depts = n
    * already present wins, on the grounds that the overlay is the reconciled
    * copy and the open-month file is still being written to.
    */
+  /*
+   * The overlay is the reconciled copy, so it wins for every month it has
+   * closed. But for the open month it carries gas only — sales and purchases
+   * sit null until the books close — while the open-month sheet already holds
+   * the day's real sales. So the overlay is laid down first, then the sheet
+   * fills in any open-month date the overlay is still carrying as gas-only. A
+   * reconciled day (one with a real sales figure) is never overwritten, so the
+   * closed months are untouched.
+   */
   const byDate = new Map();
-  (extraDays || []).forEach((day) => {
-    if (day?.date) byDate.set(String(day.date), day);
-  });
   (raw?.days || []).forEach((day) => {
     if (day?.date) byDate.set(String(day.date), day);
+  });
+  (extraDays || []).forEach((day) => {
+    if (!day?.date) return;
+    const key = String(day.date);
+    const existing = byDate.get(key);
+    if (!existing || !isNum(existing.sales)) byDate.set(key, day);
   });
   const days = [...byDate.values()]
     .sort((a, b) => String(a.date).localeCompare(String(b.date)));
