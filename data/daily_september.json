@@ -1,0 +1,1308 @@
+{
+  "month": "2026-09",
+  "label": "September 2026 month to date",
+  "through": "2026-09-08",
+  "closed": false,
+  "stations": [
+    {
+      "id": "42004",
+      "name": "Arco Placentia",
+      "days": [
+        {
+          "date": "2026-09-01",
+          "gas_vol": 6580.87,
+          "gas_profit": 2461.27,
+          "sales": 3140.71,
+          "purch": 91.36,
+          "store_profit": 3049.35,
+          "margin": 0.9709,
+          "total_profit": 5510.62
+        },
+        {
+          "date": "2026-09-02",
+          "gas_vol": 7061.52,
+          "gas_profit": 2456.48,
+          "sales": 3081.63,
+          "purch": 4954.98,
+          "store_profit": -1873.35,
+          "margin": -0.6079,
+          "total_profit": 583.13
+        },
+        {
+          "date": "2026-09-03",
+          "gas_vol": 7413.34,
+          "gas_profit": 2859.28,
+          "sales": 3623.13,
+          "purch": 6912.04,
+          "store_profit": -3288.91,
+          "margin": -0.9078,
+          "total_profit": -429.63
+        },
+        {
+          "date": "2026-09-04",
+          "gas_vol": 6793.07,
+          "gas_profit": 2586.11,
+          "sales": 3813.97,
+          "purch": 463.85,
+          "store_profit": 3350.12,
+          "margin": 0.8784,
+          "total_profit": 5936.23
+        },
+        {
+          "date": "2026-09-05",
+          "gas_vol": 5870.84,
+          "gas_profit": 2285.03,
+          "sales": 4042.66,
+          "purch": 0.0,
+          "store_profit": 4042.66,
+          "margin": 1.0,
+          "total_profit": 6327.69
+        },
+        {
+          "date": "2026-09-06",
+          "gas_vol": 4414.43,
+          "gas_profit": 1627.89,
+          "sales": 2818.87,
+          "purch": 0.0,
+          "store_profit": 2818.87,
+          "margin": 1.0,
+          "total_profit": 4446.76
+        },
+        {
+          "date": "2026-09-07",
+          "gas_vol": 5448.47,
+          "gas_profit": 1996.51,
+          "sales": 3076.56,
+          "purch": 0.0,
+          "store_profit": 3076.56,
+          "margin": 1.0,
+          "total_profit": 5073.07
+        },
+        {
+          "date": "2026-09-08",
+          "gas_vol": 7035.59,
+          "gas_profit": 2576.49,
+          "sales": 3505.46,
+          "purch": 9759.42,
+          "store_profit": -6253.96,
+          "margin": -1.7841,
+          "total_profit": -3677.47
+        }
+      ]
+    },
+    {
+      "id": "42021",
+      "name": "Westminster",
+      "days": [
+        {
+          "date": "2026-09-01",
+          "gas_vol": 2911.96,
+          "gas_profit": 2116.64,
+          "sales": 1635.55,
+          "purch": 1035.7,
+          "store_profit": 599.85,
+          "margin": 0.3668,
+          "total_profit": 2716.49
+        },
+        {
+          "date": "2026-09-02",
+          "gas_vol": 2495.46,
+          "gas_profit": 1769.83,
+          "sales": 1879.55,
+          "purch": 939.64,
+          "store_profit": 939.91,
+          "margin": 0.5001,
+          "total_profit": 2709.74
+        },
+        {
+          "date": "2026-09-03",
+          "gas_vol": 2579.29,
+          "gas_profit": 1885.83,
+          "sales": 1973.32,
+          "purch": 14.71,
+          "store_profit": 1958.61,
+          "margin": 0.9925,
+          "total_profit": 3844.44
+        },
+        {
+          "date": "2026-09-04",
+          "gas_vol": 2859.2,
+          "gas_profit": 2291.79,
+          "sales": 2066.0,
+          "purch": 2142.43,
+          "store_profit": -76.43,
+          "margin": -0.037,
+          "total_profit": 2215.36
+        },
+        {
+          "date": "2026-09-05",
+          "gas_vol": 2094.67,
+          "gas_profit": 1678.93,
+          "sales": 1750.45,
+          "purch": 0.0,
+          "store_profit": 1750.45,
+          "margin": 1.0,
+          "total_profit": 3429.38
+        },
+        {
+          "date": "2026-09-06",
+          "gas_vol": 1695.73,
+          "gas_profit": 1222.17,
+          "sales": 1212.13,
+          "purch": 0.0,
+          "store_profit": 1212.13,
+          "margin": 1.0,
+          "total_profit": 2434.3
+        },
+        {
+          "date": "2026-09-07",
+          "gas_vol": 2260.26,
+          "gas_profit": 1649.75,
+          "sales": 1731.19,
+          "purch": 0.0,
+          "store_profit": 1731.19,
+          "margin": 1.0,
+          "total_profit": 3380.94
+        },
+        {
+          "date": "2026-09-08",
+          "gas_vol": 2738.32,
+          "gas_profit": 2044.06,
+          "sales": 2022.0,
+          "purch": 0.0,
+          "store_profit": 2022.0,
+          "margin": 1.0,
+          "total_profit": 4066.06
+        }
+      ]
+    },
+    {
+      "id": "42048",
+      "name": "San Diego",
+      "days": [
+        {
+          "date": "2026-09-01",
+          "gas_vol": 656.54,
+          "gas_profit": 331.31,
+          "sales": 3567.23,
+          "purch": 6028.96,
+          "store_profit": -2461.73,
+          "margin": -0.6901,
+          "total_profit": -2130.42
+        },
+        {
+          "date": "2026-09-02",
+          "gas_vol": 5185.02,
+          "gas_profit": 4072.82,
+          "sales": 4589.79,
+          "purch": 1437.8,
+          "store_profit": 3151.99,
+          "margin": 0.6867,
+          "total_profit": 7224.81
+        },
+        {
+          "date": "2026-09-03",
+          "gas_vol": 4895.52,
+          "gas_profit": 3786.07,
+          "sales": 4372.14,
+          "purch": 2955.87,
+          "store_profit": 1416.27,
+          "margin": 0.3239,
+          "total_profit": 5202.34
+        },
+        {
+          "date": "2026-09-04",
+          "gas_vol": 4444.26,
+          "gas_profit": 3442.35,
+          "sales": 4133.0,
+          "purch": 13739.92,
+          "store_profit": -9606.92,
+          "margin": -2.3244,
+          "total_profit": -6164.57
+        },
+        {
+          "date": "2026-09-05",
+          "gas_vol": 2260.54,
+          "gas_profit": 1744.79,
+          "sales": 2636.0,
+          "purch": 0,
+          "store_profit": 2636.0,
+          "margin": 1.0,
+          "total_profit": 4380.79
+        },
+        {
+          "date": "2026-09-06",
+          "gas_vol": 2065.91,
+          "gas_profit": 1588.23,
+          "sales": 2166.33,
+          "purch": 0,
+          "store_profit": 2166.33,
+          "margin": 1.0,
+          "total_profit": 3754.56
+        },
+        {
+          "date": "2026-09-07",
+          "gas_vol": 1164.79,
+          "gas_profit": 953.47,
+          "sales": 1912.73,
+          "purch": 0,
+          "store_profit": 1912.73,
+          "margin": 1.0,
+          "total_profit": 2866.2
+        },
+        {
+          "date": "2026-09-08",
+          "gas_vol": 870.25,
+          "gas_profit": 548.57,
+          "sales": 3715.45,
+          "purch": 0,
+          "store_profit": 3715.45,
+          "margin": 1.0,
+          "total_profit": 4264.02
+        }
+      ]
+    },
+    {
+      "id": "42098",
+      "name": "Brookhurst 75",
+      "days": [
+        {
+          "date": "2026-09-01",
+          "gas_vol": 3731.75,
+          "gas_profit": 2857.06,
+          "sales": 3343.05,
+          "purch": 3977.7,
+          "store_profit": -634.65,
+          "margin": -0.1898,
+          "total_profit": 2222.41
+        },
+        {
+          "date": "2026-09-02",
+          "gas_vol": 3549.9,
+          "gas_profit": 2766.9,
+          "sales": 3255.37,
+          "purch": 3885.25,
+          "store_profit": -629.88,
+          "margin": -0.1935,
+          "total_profit": 2137.02
+        },
+        {
+          "date": "2026-09-03",
+          "gas_vol": 3623.01,
+          "gas_profit": 2969.33,
+          "sales": 4268.28,
+          "purch": 1026.06,
+          "store_profit": 3242.22,
+          "margin": 0.7596,
+          "total_profit": 6211.55
+        },
+        {
+          "date": "2026-09-04",
+          "gas_vol": 3636.14,
+          "gas_profit": 2933.8,
+          "sales": 4242.75,
+          "purch": 1487.2,
+          "store_profit": 2755.55,
+          "margin": 0.6495,
+          "total_profit": 5689.35
+        },
+        {
+          "date": "2026-09-05",
+          "gas_vol": 3088.46,
+          "gas_profit": 2491.35,
+          "sales": 3961.74,
+          "purch": 0.0,
+          "store_profit": 3961.74,
+          "margin": 1.0,
+          "total_profit": 6453.09
+        },
+        {
+          "date": "2026-09-06",
+          "gas_vol": 2515.27,
+          "gas_profit": 2035.71,
+          "sales": 2544.64,
+          "purch": 0.0,
+          "store_profit": 2544.64,
+          "margin": 1.0,
+          "total_profit": 4580.35
+        },
+        {
+          "date": "2026-09-07",
+          "gas_vol": 2878.28,
+          "gas_profit": 2331.43,
+          "sales": 2540.48,
+          "purch": 0.0,
+          "store_profit": 2540.48,
+          "margin": 1.0,
+          "total_profit": 4871.91
+        },
+        {
+          "date": "2026-09-08",
+          "gas_vol": 3944.23,
+          "gas_profit": 3102.46,
+          "sales": 4048.65,
+          "purch": 0.0,
+          "store_profit": 4048.65,
+          "margin": 1.0,
+          "total_profit": 7151.11
+        }
+      ]
+    },
+    {
+      "id": "42179",
+      "name": "Arco HB",
+      "days": [
+        {
+          "date": "2026-09-01",
+          "gas_vol": 7688.86,
+          "gas_profit": 2258.62,
+          "sales": 4698.3,
+          "purch": 432.56,
+          "store_profit": 4265.74,
+          "margin": 0.9079,
+          "total_profit": 6524.36
+        },
+        {
+          "date": "2026-09-02",
+          "gas_vol": 8002.04,
+          "gas_profit": 2443.31,
+          "sales": 4743.49,
+          "purch": 78.99,
+          "store_profit": 4664.5,
+          "margin": 0.9833,
+          "total_profit": 7107.81
+        },
+        {
+          "date": "2026-09-03",
+          "gas_vol": 8050.07,
+          "gas_profit": 3377.14,
+          "sales": 4698.3,
+          "purch": 0.0,
+          "store_profit": 4698.3,
+          "margin": 1.0,
+          "total_profit": 8075.44
+        },
+        {
+          "date": "2026-09-04",
+          "gas_vol": 8050.07,
+          "gas_profit": 3377.14,
+          "sales": 5231.97,
+          "purch": -21.98,
+          "store_profit": 5253.95,
+          "margin": 1.0042,
+          "total_profit": 8631.09
+        },
+        {
+          "date": "2026-09-05",
+          "gas_vol": 8050.07,
+          "gas_profit": 3377.14,
+          "sales": 4698.3,
+          "purch": 0.0,
+          "store_profit": 4698.3,
+          "margin": 1.0,
+          "total_profit": 8075.44
+        },
+        {
+          "date": "2026-09-06",
+          "gas_vol": 3532.56,
+          "gas_profit": 1552.23,
+          "sales": 4698.3,
+          "purch": 0.0,
+          "store_profit": 4698.3,
+          "margin": 1.0,
+          "total_profit": 6250.53
+        },
+        {
+          "date": "2026-09-07",
+          "gas_vol": 4520.02,
+          "gas_profit": 1827.25,
+          "sales": 4698.3,
+          "purch": 0.0,
+          "store_profit": 4698.3,
+          "margin": 1.0,
+          "total_profit": 6525.55
+        },
+        {
+          "date": "2026-09-08",
+          "gas_vol": 8007.2,
+          "gas_profit": 3159.08,
+          "sales": 4698.3,
+          "purch": 0.0,
+          "store_profit": 4698.3,
+          "margin": 1.0,
+          "total_profit": 7857.38
+        }
+      ]
+    },
+    {
+      "id": "42279",
+      "name": "Koval",
+      "days": [
+        {
+          "date": "2026-09-01",
+          "gas_vol": 2090.35,
+          "gas_profit": 1879.35,
+          "sales": 2494.84,
+          "purch": 1321.56,
+          "store_profit": 1173.28,
+          "margin": 0.4703,
+          "total_profit": 3052.63
+        },
+        {
+          "date": "2026-09-02",
+          "gas_vol": 1819.07,
+          "gas_profit": 1501.06,
+          "sales": 2778.68,
+          "purch": 3003.76,
+          "store_profit": -225.08,
+          "margin": -0.081,
+          "total_profit": 1275.98
+        },
+        {
+          "date": "2026-09-03",
+          "gas_vol": 1789.57,
+          "gas_profit": 1416.58,
+          "sales": 3907.07,
+          "purch": 4802.59,
+          "store_profit": -895.52,
+          "margin": -0.2292,
+          "total_profit": 521.06
+        },
+        {
+          "date": "2026-09-04",
+          "gas_vol": 2730.11,
+          "gas_profit": 2220.68,
+          "sales": 5143.72,
+          "purch": 11.16,
+          "store_profit": 5132.56,
+          "margin": 0.9978,
+          "total_profit": 7353.24
+        },
+        {
+          "date": "2026-09-05",
+          "gas_vol": 3476.41,
+          "gas_profit": 2669.18,
+          "sales": 7413.06,
+          "purch": 0.0,
+          "store_profit": 7413.06,
+          "margin": 1.0,
+          "total_profit": 10082.24
+        },
+        {
+          "date": "2026-09-06",
+          "gas_vol": 4096.01,
+          "gas_profit": 3107.45,
+          "sales": 6004.61,
+          "purch": 0.0,
+          "store_profit": 6004.61,
+          "margin": 1.0,
+          "total_profit": 9112.06
+        },
+        {
+          "date": "2026-09-07",
+          "gas_vol": 4766.95,
+          "gas_profit": 3547.81,
+          "sales": 4599.46,
+          "purch": 0.0,
+          "store_profit": 4599.46,
+          "margin": 1.0,
+          "total_profit": 8147.27
+        },
+        {
+          "date": "2026-09-08",
+          "gas_vol": 2597.99,
+          "gas_profit": 1940.77,
+          "sales": 2748.91,
+          "purch": 0.0,
+          "store_profit": 2748.91,
+          "margin": 1.0,
+          "total_profit": 4689.68
+        }
+      ]
+    },
+    {
+      "id": "42280",
+      "name": "Spring Mtn",
+      "days": [
+        {
+          "date": "2026-09-01",
+          "gas_vol": 3045.48,
+          "gas_profit": 1207.39,
+          "sales": 2700.85,
+          "purch": 3140.03,
+          "store_profit": -439.18,
+          "margin": -0.1626,
+          "total_profit": 768.21
+        },
+        {
+          "date": "2026-09-02",
+          "gas_vol": 3516.21,
+          "gas_profit": 1204.56,
+          "sales": 2777.58,
+          "purch": 3963.69,
+          "store_profit": -1186.11,
+          "margin": -0.427,
+          "total_profit": 18.45
+        },
+        {
+          "date": "2026-09-03",
+          "gas_vol": 3340.0,
+          "gas_profit": 1140.49,
+          "sales": 2529.2,
+          "purch": 6082.33,
+          "store_profit": -3553.13,
+          "margin": -1.4048,
+          "total_profit": -2412.64
+        },
+        {
+          "date": "2026-09-04",
+          "gas_vol": 4270.71,
+          "gas_profit": 1371.07,
+          "sales": 3089.59,
+          "purch": 3193.11,
+          "store_profit": -103.52,
+          "margin": -0.0335,
+          "total_profit": 1267.55
+        },
+        {
+          "date": "2026-09-05",
+          "gas_vol": 4368.8,
+          "gas_profit": 1501.34,
+          "sales": 3186.57,
+          "purch": 0.0,
+          "store_profit": 3186.57,
+          "margin": 1.0,
+          "total_profit": 4687.91
+        },
+        {
+          "date": "2026-09-06",
+          "gas_vol": 4400.9,
+          "gas_profit": 1638.18,
+          "sales": 3073.69,
+          "purch": 0.0,
+          "store_profit": 3073.69,
+          "margin": 1.0,
+          "total_profit": 4711.87
+        },
+        {
+          "date": "2026-09-07",
+          "gas_vol": 5565.27,
+          "gas_profit": 2123.5,
+          "sales": 3116.08,
+          "purch": 0.0,
+          "store_profit": 3116.08,
+          "margin": 1.0,
+          "total_profit": 5239.58
+        },
+        {
+          "date": "2026-09-08",
+          "gas_vol": 3571.28,
+          "gas_profit": 1280.08,
+          "sales": 2468.52,
+          "purch": 0.0,
+          "store_profit": 2468.52,
+          "margin": 1.0,
+          "total_profit": 3748.6
+        }
+      ]
+    },
+    {
+      "id": "42281",
+      "name": "Charleston",
+      "days": [
+        {
+          "date": "2026-09-01",
+          "gas_vol": 3331.05,
+          "gas_profit": 1364.76,
+          "sales": 2264.34,
+          "purch": 3321.61,
+          "store_profit": -1057.27,
+          "margin": -0.4669,
+          "total_profit": 307.49
+        },
+        {
+          "date": "2026-09-02",
+          "gas_vol": 3026.12,
+          "gas_profit": 1080.75,
+          "sales": 2311.12,
+          "purch": 2374.92,
+          "store_profit": -63.8,
+          "margin": -0.0276,
+          "total_profit": 1016.95
+        },
+        {
+          "date": "2026-09-03",
+          "gas_vol": 3536.74,
+          "gas_profit": 1581.98,
+          "sales": 2604.66,
+          "purch": 525.25,
+          "store_profit": 2079.41,
+          "margin": 0.7983,
+          "total_profit": 3661.39
+        },
+        {
+          "date": "2026-09-04",
+          "gas_vol": 3466.27,
+          "gas_profit": 1543.9,
+          "sales": 2920.95,
+          "purch": 3528.55,
+          "store_profit": -607.6,
+          "margin": -0.208,
+          "total_profit": 936.3
+        },
+        {
+          "date": "2026-09-05",
+          "gas_vol": 3605.39,
+          "gas_profit": 1603.32,
+          "sales": 3614.09,
+          "purch": 0.0,
+          "store_profit": 3614.09,
+          "margin": 1.0,
+          "total_profit": 5217.41
+        },
+        {
+          "date": "2026-09-06",
+          "gas_vol": 3481.81,
+          "gas_profit": 1464.65,
+          "sales": 2442.19,
+          "purch": 0.0,
+          "store_profit": 2442.19,
+          "margin": 1.0,
+          "total_profit": 3906.84
+        },
+        {
+          "date": "2026-09-07",
+          "gas_vol": 3803.05,
+          "gas_profit": 1642.83,
+          "sales": 3145.71,
+          "purch": 0.0,
+          "store_profit": 3145.71,
+          "margin": 1.0,
+          "total_profit": 4788.54
+        },
+        {
+          "date": "2026-09-08",
+          "gas_vol": 3349.2,
+          "gas_profit": 1403.69,
+          "sales": 2341.83,
+          "purch": 0,
+          "store_profit": 2341.83,
+          "margin": 1.0,
+          "total_profit": 3745.52
+        }
+      ]
+    },
+    {
+      "id": "42282",
+      "name": "Oakey Las Vegas Blvd",
+      "days": [
+        {
+          "date": "2026-09-01",
+          "gas_vol": 1596.75,
+          "gas_profit": 682.78,
+          "sales": 680.9,
+          "purch": 2905.55,
+          "store_profit": -2224.65,
+          "margin": -3.2672,
+          "total_profit": -1541.87
+        },
+        {
+          "date": "2026-09-02",
+          "gas_vol": 1557.74,
+          "gas_profit": 596.71,
+          "sales": 1022.4,
+          "purch": 1350.43,
+          "store_profit": -328.03,
+          "margin": -0.3208,
+          "total_profit": 268.68
+        },
+        {
+          "date": "2026-09-03",
+          "gas_vol": 1625.76,
+          "gas_profit": 605.57,
+          "sales": 1073.47,
+          "purch": 0.0,
+          "store_profit": 1073.47,
+          "margin": 1.0,
+          "total_profit": 1679.04
+        },
+        {
+          "date": "2026-09-04",
+          "gas_vol": 2030.29,
+          "gas_profit": 766.06,
+          "sales": 1292.77,
+          "purch": 2672.92,
+          "store_profit": -1380.15,
+          "margin": -1.0676,
+          "total_profit": -614.09
+        },
+        {
+          "date": "2026-09-05",
+          "gas_vol": 2215.84,
+          "gas_profit": 872.74,
+          "sales": 1478.11,
+          "purch": 0.0,
+          "store_profit": 1478.11,
+          "margin": 1.0,
+          "total_profit": 2350.85
+        },
+        {
+          "date": "2026-09-06",
+          "gas_vol": 2239.85,
+          "gas_profit": 832.86,
+          "sales": 1358.29,
+          "purch": 0.0,
+          "store_profit": 1358.29,
+          "margin": 1.0,
+          "total_profit": 2191.15
+        },
+        {
+          "date": "2026-09-07",
+          "gas_vol": 2451.62,
+          "gas_profit": 927.66,
+          "sales": 1221.68,
+          "purch": 0.0,
+          "store_profit": 1221.68,
+          "margin": 1.0,
+          "total_profit": 2149.34
+        },
+        {
+          "date": "2026-09-08",
+          "gas_vol": 1921.96,
+          "gas_profit": 639.15,
+          "sales": 923.14,
+          "purch": 0,
+          "store_profit": 923.14,
+          "margin": 1.0,
+          "total_profit": 1562.29
+        }
+      ]
+    },
+    {
+      "id": "42352",
+      "name": "Arco Db",
+      "days": [
+        {
+          "date": "2026-09-01",
+          "gas_vol": 6952.98,
+          "gas_profit": 2442.22,
+          "sales": 3980.88,
+          "purch": 7716.0,
+          "store_profit": -3735.12,
+          "margin": -0.9383,
+          "total_profit": -1292.9
+        },
+        {
+          "date": "2026-09-02",
+          "gas_vol": 7020.78,
+          "gas_profit": 2116.99,
+          "sales": 4323.1,
+          "purch": 8887.54,
+          "store_profit": -4564.44,
+          "margin": -1.0558,
+          "total_profit": -2447.45
+        },
+        {
+          "date": "2026-09-03",
+          "gas_vol": 7609.97,
+          "gas_profit": 2684.55,
+          "sales": 4304.0,
+          "purch": 4258.99,
+          "store_profit": 45.01,
+          "margin": 0.0105,
+          "total_profit": 2729.56
+        },
+        {
+          "date": "2026-09-04",
+          "gas_vol": 7361.17,
+          "gas_profit": 2753.08,
+          "sales": 4744.86,
+          "purch": 0.0,
+          "store_profit": 4744.86,
+          "margin": 1.0,
+          "total_profit": 7497.94
+        },
+        {
+          "date": "2026-09-05",
+          "gas_vol": 6615.26,
+          "gas_profit": 2398.22,
+          "sales": 4165.16,
+          "purch": 0.0,
+          "store_profit": 4165.16,
+          "margin": 1.0,
+          "total_profit": 6563.38
+        },
+        {
+          "date": "2026-09-06",
+          "gas_vol": 4447.87,
+          "gas_profit": 1442.18,
+          "sales": 2415.38,
+          "purch": 0.0,
+          "store_profit": 2415.38,
+          "margin": 1.0,
+          "total_profit": 3857.56
+        },
+        {
+          "date": "2026-09-07",
+          "gas_vol": 5503.03,
+          "gas_profit": 1827.09,
+          "sales": 2970.02,
+          "purch": 0.0,
+          "store_profit": 2970.02,
+          "margin": 1.0,
+          "total_profit": 4797.11
+        },
+        {
+          "date": "2026-09-08",
+          "gas_vol": 7478.07,
+          "gas_profit": 2102.67,
+          "sales": 3980.88,
+          "purch": 0.0,
+          "store_profit": 3980.88,
+          "margin": 1.0,
+          "total_profit": 6083.55
+        }
+      ]
+    },
+    {
+      "id": "42359",
+      "name": "Paradise",
+      "days": []
+    },
+    {
+      "id": "42399",
+      "name": "Garden Grove",
+      "days": [
+        {
+          "date": "2026-09-01",
+          "gas_vol": 3528.28,
+          "gas_profit": 3027.95,
+          "sales": 3061.37,
+          "purch": 518.35,
+          "store_profit": 2543.02,
+          "margin": 0.8307,
+          "total_profit": 5570.97
+        },
+        {
+          "date": "2026-09-02",
+          "gas_vol": 3816.44,
+          "gas_profit": 2920.09,
+          "sales": 3402.74,
+          "purch": 2987.12,
+          "store_profit": 415.62,
+          "margin": 0.1221,
+          "total_profit": 3335.71
+        },
+        {
+          "date": "2026-09-03",
+          "gas_vol": 3946.34,
+          "gas_profit": 3013.49,
+          "sales": 4142.42,
+          "purch": 947.92,
+          "store_profit": 3194.5,
+          "margin": 0.7712,
+          "total_profit": 6207.99
+        },
+        {
+          "date": "2026-09-04",
+          "gas_vol": 3918.38,
+          "gas_profit": 2816.14,
+          "sales": 4142.42,
+          "purch": 320.1,
+          "store_profit": 3822.32,
+          "margin": 0.9227,
+          "total_profit": 6638.46
+        },
+        {
+          "date": "2026-09-05",
+          "gas_vol": 2867.34,
+          "gas_profit": 2086.29,
+          "sales": 4142.42,
+          "purch": 0.0,
+          "store_profit": 4142.42,
+          "margin": 1.0,
+          "total_profit": 6228.71
+        },
+        {
+          "date": "2026-09-06",
+          "gas_vol": 2312.19,
+          "gas_profit": 1690.66,
+          "sales": 3067.36,
+          "purch": 0.0,
+          "store_profit": 3067.36,
+          "margin": 1.0,
+          "total_profit": 4758.02
+        },
+        {
+          "date": "2026-09-07",
+          "gas_vol": 3219.63,
+          "gas_profit": 2365.86,
+          "sales": 3483.19,
+          "purch": 0.0,
+          "store_profit": 3483.19,
+          "margin": 1.0,
+          "total_profit": 5849.05
+        },
+        {
+          "date": "2026-09-08",
+          "gas_vol": 3843.94,
+          "gas_profit": 2835.04,
+          "sales": 4056.32,
+          "purch": 0.0,
+          "store_profit": 4056.32,
+          "margin": 1.0,
+          "total_profit": 6891.36
+        }
+      ]
+    },
+    {
+      "id": "42438",
+      "name": "Vista",
+      "days": [
+        {
+          "date": "2026-09-01",
+          "gas_vol": 3468.98,
+          "gas_profit": 1339.68,
+          "sales": 2586.35,
+          "purch": 6643.81,
+          "store_profit": -4057.46,
+          "margin": -1.5688,
+          "total_profit": -2717.78
+        },
+        {
+          "date": "2026-09-02",
+          "gas_vol": 3975.04,
+          "gas_profit": 1431.36,
+          "sales": 2394.11,
+          "purch": 3656.57,
+          "store_profit": -1262.46,
+          "margin": -0.5273,
+          "total_profit": 168.9
+        },
+        {
+          "date": "2026-09-03",
+          "gas_vol": 3919.85,
+          "gas_profit": 1256.33,
+          "sales": 2699.42,
+          "purch": 512.42,
+          "store_profit": 2187.0,
+          "margin": 0.8102,
+          "total_profit": 3443.33
+        },
+        {
+          "date": "2026-09-04",
+          "gas_vol": 4140.82,
+          "gas_profit": 1358.62,
+          "sales": 3573.58,
+          "purch": 6658.5,
+          "store_profit": -3084.92,
+          "margin": -0.8633,
+          "total_profit": -1726.3
+        },
+        {
+          "date": "2026-09-05",
+          "gas_vol": 4555.67,
+          "gas_profit": 1311.65,
+          "sales": 3113.06,
+          "purch": 0.0,
+          "store_profit": 3113.06,
+          "margin": 1.0,
+          "total_profit": 4424.71
+        },
+        {
+          "date": "2026-09-06",
+          "gas_vol": 3403.46,
+          "gas_profit": 1324.66,
+          "sales": 3316.3,
+          "purch": 0.0,
+          "store_profit": 3316.3,
+          "margin": 1.0,
+          "total_profit": 4640.96
+        },
+        {
+          "date": "2026-09-07",
+          "gas_vol": 3759.88,
+          "gas_profit": 1396.21,
+          "sales": 2891.39,
+          "purch": 0.0,
+          "store_profit": 2891.39,
+          "margin": 1.0,
+          "total_profit": 4287.6
+        },
+        {
+          "date": "2026-09-08",
+          "gas_vol": 3894.89,
+          "gas_profit": 1403.03,
+          "sales": 2472.39,
+          "purch": 0.0,
+          "store_profit": 2472.39,
+          "margin": 1.0,
+          "total_profit": 3875.42
+        }
+      ]
+    },
+    {
+      "id": "42439",
+      "name": "Lamb",
+      "days": [
+        {
+          "date": "2026-09-01",
+          "gas_vol": 4599.33,
+          "gas_profit": 1937.57,
+          "sales": 2791.18,
+          "purch": 7536.01,
+          "store_profit": -4744.83,
+          "margin": -1.6999,
+          "total_profit": -2807.26
+        },
+        {
+          "date": "2026-09-02",
+          "gas_vol": 4702.69,
+          "gas_profit": 1717.38,
+          "sales": 2362.81,
+          "purch": 1251.11,
+          "store_profit": 1111.7,
+          "margin": 0.4705,
+          "total_profit": 2829.08
+        },
+        {
+          "date": "2026-09-03",
+          "gas_vol": 4080.5,
+          "gas_profit": 1804.59,
+          "sales": 2697.01,
+          "purch": 1778.94,
+          "store_profit": 918.07,
+          "margin": 0.3404,
+          "total_profit": 2722.66
+        },
+        {
+          "date": "2026-09-04",
+          "gas_vol": 4785.19,
+          "gas_profit": 2102.43,
+          "sales": 2817.21,
+          "purch": 2564.23,
+          "store_profit": 252.98,
+          "margin": 0.0898,
+          "total_profit": 2355.41
+        },
+        {
+          "date": "2026-09-05",
+          "gas_vol": 5320.35,
+          "gas_profit": 2337.63,
+          "sales": 3248.16,
+          "purch": 0.0,
+          "store_profit": 3248.16,
+          "margin": 1.0,
+          "total_profit": 5585.79
+        },
+        {
+          "date": "2026-09-06",
+          "gas_vol": 4041.76,
+          "gas_profit": 1726.21,
+          "sales": 2886.95,
+          "purch": 0.0,
+          "store_profit": 2886.95,
+          "margin": 1.0,
+          "total_profit": 4613.16
+        },
+        {
+          "date": "2026-09-07",
+          "gas_vol": 3931.25,
+          "gas_profit": 1665.45,
+          "sales": 2655.66,
+          "purch": 0.0,
+          "store_profit": 2655.66,
+          "margin": 1.0,
+          "total_profit": 4321.11
+        },
+        {
+          "date": "2026-09-08",
+          "gas_vol": 4623.67,
+          "gas_profit": 1820.58,
+          "sales": 2742.52,
+          "purch": 0,
+          "store_profit": 2742.52,
+          "margin": 1.0,
+          "total_profit": 4563.1
+        }
+      ]
+    },
+    {
+      "id": "42642",
+      "name": "La Mesa",
+      "days": [
+        {
+          "date": "2026-09-01",
+          "gas_vol": 1603.94,
+          "gas_profit": 1262.97,
+          "sales": 3667.16,
+          "purch": 0.0,
+          "store_profit": 3667.16,
+          "margin": 1.0,
+          "total_profit": 4930.13
+        },
+        {
+          "date": "2026-09-02",
+          "gas_vol": 3128.14,
+          "gas_profit": 2039.59,
+          "sales": 4188.81,
+          "purch": 0.0,
+          "store_profit": 4188.81,
+          "margin": 1.0,
+          "total_profit": 6228.4
+        },
+        {
+          "date": "2026-09-03",
+          "gas_vol": 3158.3,
+          "gas_profit": 2192.2,
+          "sales": 4599.68,
+          "purch": 0.0,
+          "store_profit": 4599.68,
+          "margin": 1.0,
+          "total_profit": 6791.88
+        },
+        {
+          "date": "2026-09-04",
+          "gas_vol": 3645.48,
+          "gas_profit": 2521.75,
+          "sales": 4805.67,
+          "purch": 0.0,
+          "store_profit": 4805.67,
+          "margin": 1.0,
+          "total_profit": 7327.42
+        },
+        {
+          "date": "2026-09-05",
+          "gas_vol": 2439.88,
+          "gas_profit": 1763.26,
+          "sales": 2960.56,
+          "purch": 0.0,
+          "store_profit": 2960.56,
+          "margin": 1.0,
+          "total_profit": 4723.82
+        },
+        {
+          "date": "2026-09-06",
+          "gas_vol": 1795.04,
+          "gas_profit": 1298.65,
+          "sales": 3186.83,
+          "purch": 0.0,
+          "store_profit": 3186.83,
+          "margin": 1.0,
+          "total_profit": 4485.48
+        },
+        {
+          "date": "2026-09-07",
+          "gas_vol": 2700.35,
+          "gas_profit": 1965.98,
+          "sales": 3357.32,
+          "purch": 0.0,
+          "store_profit": 3357.32,
+          "margin": 1.0,
+          "total_profit": 5323.3
+        },
+        {
+          "date": "2026-09-08",
+          "gas_vol": 2420.41,
+          "gas_profit": 1809.83,
+          "sales": 4335.81,
+          "purch": 0,
+          "store_profit": 4335.81,
+          "margin": 1.0,
+          "total_profit": 6145.64
+        }
+      ]
+    },
+    {
+      "id": "42674",
+      "name": "Tustin",
+      "days": [
+        {
+          "date": "2026-09-01",
+          "gas_vol": 2778.51,
+          "gas_profit": 1916.75,
+          "sales": 2813.17,
+          "purch": 4360.99,
+          "store_profit": -1547.82,
+          "margin": -0.5502,
+          "total_profit": 368.93
+        },
+        {
+          "date": "2026-09-02",
+          "gas_vol": 3264.49,
+          "gas_profit": 2106.08,
+          "sales": 4116.2,
+          "purch": 4452.61,
+          "store_profit": -336.41,
+          "margin": -0.0817,
+          "total_profit": 1769.67
+        },
+        {
+          "date": "2026-09-03",
+          "gas_vol": 1992.35,
+          "gas_profit": 1277.57,
+          "sales": 2331.38,
+          "purch": 9634.97,
+          "store_profit": -7303.59,
+          "margin": -3.1327,
+          "total_profit": -6026.02
+        },
+        {
+          "date": "2026-09-04",
+          "gas_vol": 2682.66,
+          "gas_profit": 1728.33,
+          "sales": 3941.16,
+          "purch": 944.7,
+          "store_profit": 2996.46,
+          "margin": 0.7603,
+          "total_profit": 4724.79
+        },
+        {
+          "date": "2026-09-05",
+          "gas_vol": 2465.56,
+          "gas_profit": 1597.97,
+          "sales": 2813.17,
+          "purch": 0.0,
+          "store_profit": 2813.17,
+          "margin": 1.0,
+          "total_profit": 4411.14
+        },
+        {
+          "date": "2026-09-06",
+          "gas_vol": 1673.32,
+          "gas_profit": 1081.73,
+          "sales": 2813.17,
+          "purch": 0.0,
+          "store_profit": 2813.17,
+          "margin": 1.0,
+          "total_profit": 3894.9
+        },
+        {
+          "date": "2026-09-07",
+          "gas_vol": 2516.63,
+          "gas_profit": 1633.07,
+          "sales": 2813.17,
+          "purch": 0.0,
+          "store_profit": 2813.17,
+          "margin": 1.0,
+          "total_profit": 4446.24
+        },
+        {
+          "date": "2026-09-08",
+          "gas_vol": 1051.39,
+          "gas_profit": 781.89,
+          "sales": 2813.17,
+          "purch": 0.0,
+          "store_profit": 2813.17,
+          "margin": 1.0,
+          "total_profit": 3595.06
+        }
+      ]
+    },
+    {
+      "id": "extramile",
+      "name": "ExtraMile",
+      "days": []
+    }
+  ]
+}
