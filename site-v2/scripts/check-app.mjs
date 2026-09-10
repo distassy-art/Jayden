@@ -138,9 +138,13 @@ await bindOk("schedule: form renders", async () => {
   const c = ctx(); const r = mount(A.renderAppSchedule(c)); await A.bindAppSchedule(r, c);
   if (!r.querySelector("#sf-save")) throw new Error("no shift form");
 });
-await bindOk("employee schedule tab: renders and binds", async () => {
+await bindOk("employee schedule tab: embeds the legacy schedule frame", async () => {
   const c = ctx(); const r = mount(A.renderStaffSchedule(c)); await A.bindStaffSchedule(r, c);
-  if (!r.querySelector("#sf-save")) throw new Error("no shift form on the manager schedule tab");
+  const frame = r.querySelector("#legacy-schedule");
+  if (!frame) throw new Error("no legacy schedule frame on the manager schedule tab");
+  if (!/legacy\/schedule\.html/.test(frame.getAttribute("src") || "")) {
+    throw new Error("frame does not point at the legacy schedule page");
+  }
 });
 await bindOk("tickets: manager opens one, admin sees it and replies", async () => {
   const mgr = { model, data: {}, query: new URLSearchParams(), params: {}, pathname: "/",

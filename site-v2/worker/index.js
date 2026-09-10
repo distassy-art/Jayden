@@ -309,7 +309,9 @@ function harden(response) {
   const headers = new Headers(response.headers);
   headers.set("x-content-type-options", "nosniff");
   headers.set("referrer-policy", "same-origin");
-  headers.set("x-frame-options", "DENY");
+  // SAMEORIGIN, not DENY: the console frames its own bundled legacy schedule
+  // page (same origin). Cross-origin framing is still refused.
+  headers.set("x-frame-options", "SAMEORIGIN");
   headers.set("x-robots-tag", "noindex, nofollow");
   return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
 }

@@ -18,10 +18,9 @@
  */
 
 import {
-  esc, icon, initials, money, moneyShort, num, pct, monthLabel, toast, emptyState,
+  esc, icon, initials, money, moneyShort, num, pct, monthLabel, toast,
 } from "../ui.js";
 import { portfolioTotals } from "../analytics.js";
-import { bindScopeBar, scopeBar } from "../scope.js";
 import { isAdmin } from "../data.js";
 import {
   BREAK_KINDS, DEFAULT_RADIUS_FT, activeEmployeeId, addEmployee, addPunch, addShift,
@@ -228,51 +227,37 @@ export function renderTeamSchedule(ctx) {
 /* -------------------------------------------------------------------------
    Manager: the employee schedule as a full console tab
    -------------------------------------------------------------------------
-   The crew schedule lives in the phone app and on the manager's dashboard, but
-   the old site gave a manager a dedicated tab for it, so this is that tab: the
-   same shift editor, drawn as a full desktop page under the Manager section. A
-   manager holds one store, so it lands straight on their crew; an admin or
-   owner holds many, so they get the store picker to choose which one.
+   The old site gave a manager a dedicated crew schedule — roster, week grid,
+   shifts, time off, availability, task bars and timesheets. Rather than
+   reimplement all of it, this tab embeds that exact page, lifted verbatim into
+   `public/legacy/` (its own code, styles and seeded roster), inside a
+   same-origin frame so it looks and behaves identically to the old Core app.
+   The frame auto-sizes to its content, so it reads as one console page.
    ------------------------------------------------------------------------- */
 
-/** The store a schedule page is acting on: the picked store, else the default. */
-function scheduleStore(ctx) {
-  const picked = ctx.scope?.station;
-  if (picked) return { id: String(picked.id), name: picked.name };
-  return primaryStore(ctx);
-}
-
-export function renderStaffSchedule(ctx) {
-  const { model, scope } = ctx;
-  // Only useful once there is more than one store to choose between; a manager's
-  // single-store model collapses this to nothing.
-  const bar = model && model.stations.length > 1
-    ? scopeBar(model, scope, { period: false, csv: false })
-    : "";
-  const store = scheduleStore(ctx);
-  if (!store) {
-    return `<div class="page-head"><h2>Employee schedule</h2>
-        <p>Build the coming week's shifts for your crew.</p></div>${bar}
-      <section class="card"><div class="card-body">
-        ${emptyState("No store to schedule", "Pick a store to build its schedule.")}
-      </div></section>`;
-  }
+export function renderStaffSchedule() {
   return `<div class="page-head">
       <h2>Employee schedule</h2>
-      <p>Build and edit the coming week's shifts for <b>${esc(store.name)}</b>. This is the same
-        schedule your crew sees in the phone app — a shift added here shows there, and the other
-        way round.</p>
-    </div>${bar}
-    <section class="card"><div class="card-body">
-      <div id="sched-body">${loadingRow()}</div>
+      <p>The store crew schedule — roster, weekly shifts, time off and timesheets —
+        exactly as on the old site, with the full team for <b>ARCO AM/PM OF DIAMOND</b>.</p>
+    </div>
+    <section class="card"><div class="card-body" style="padding:0">
+      <iframe id="legacy-schedule" title="Employee schedule"
+        style="width:100%;border:0;display:block;min-height:640px"
+        src="legacy/schedule.html"></iframe>
     </div></section>`;
 }
 
-export async function bindStaffSchedule(root, ctx) {
-  bindScopeBar(root, ctx);
-  const store = scheduleStore(ctx);
-  const body = root.querySelector("#sched-body");
-  if (store && body) await drawSchedule(body, store, ctx);
+export function bindStaffSchedule(root) {
+  const frame = root.querySelector("#legacy-schedule");
+  if (!frame) return;
+  const onMessage = (event) => {
+    const data = event.data;
+    if (!data || data.type !== "ss-legacy-height") return;
+    const height = Number(data.height);
+    if (height > 0) frame.style.height = `${Math.ceil(height)}px`;
+  };
+  window.addEventListener("message", onMessage);
 }
 
 export async function bindAppSchedule(root, ctx) {

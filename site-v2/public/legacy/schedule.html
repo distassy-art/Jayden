@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Employee schedule · Smart Solutions AI</title>
+<link rel="stylesheet" href="app.css?v=h38">
+<link rel="stylesheet" href="schedule.css?v=ck26">
+<style>
+  :root{--navy:#0f2744;--navy2:#163454;--cyan:#2ad4c8;--bg:#eef3f7;--card:#fff;--mut:#5c6d7e;--line:#d7e1ea;--up:#1a7a4c;--dn:#b42318;--avg:#c39214;--avg2:#e0b52a}
+  html,body{margin:0;background:transparent}
+  body{font-family:"Segoe UI",Calibri,Arial,sans-serif;color:#142033}
+  .legacy-wrap{padding:18px 20px 30px;max-width:1060px;margin:0 auto}
+</style>
+<script>
+  /* This is the store manager's crew schedule, lifted verbatim from the old
+     Core app. It grants a manager session for ARCO AM/PM OF DIAMOND (store
+     42352) so the page opens on that store's full roster, exactly as the old
+     site shows it. State still persists in this browser under ss_core_v1. */
+  (function () {
+    try {
+      var q = new URLSearchParams(location.search);
+      sessionStorage.setItem("ss_station", q.get("station") || "42352");
+      sessionStorage.setItem("ss_email", "racheloberholtzer");
+      sessionStorage.setItem("ss_role", "manager");
+      sessionStorage.setItem("ss_mgr", "1");
+    } catch (e) { /* private mode: the page still renders read-through */ }
+  })();
+</script>
+</head>
+<body data-page="schedule">
+  <div class="legacy-wrap"><div id="view"></div></div>
+  <script src="core-store.js?v=ck23"></script>
+  <script src="schedule.js?v=ck26"></script>
+  <script>
+    /* Size the frame to its content so it sits inline in the console with no
+       nested scrollbar. The parent listens for this and sets the height. */
+    (function () {
+      function postHeight() {
+        var h = Math.max(
+          document.documentElement.scrollHeight,
+          document.body ? document.body.scrollHeight : 0
+        );
+        try { parent.postMessage({ type: "ss-legacy-height", height: h }, "*"); } catch (e) {}
+      }
+      window.addEventListener("load", postHeight);
+      window.addEventListener("resize", postHeight);
+      if (window.MutationObserver && document.body) {
+        new MutationObserver(function () { setTimeout(postHeight, 40); })
+          .observe(document.body, { childList: true, subtree: true, attributes: true });
+      }
+      setInterval(postHeight, 1200);
+    })();
+  </script>
+</body>
+</html>
