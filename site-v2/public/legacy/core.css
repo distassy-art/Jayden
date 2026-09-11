@@ -56,7 +56,9 @@ a:hover { color: var(--navy3); }
 .wrap {
   max-width: 400px;
   margin: 0 auto;
-  padding: 32px 18px 48px;
+  /* Clear the phone's status bar / notch when installed (viewport-fit=cover). */
+  padding: calc(32px + env(safe-area-inset-top)) calc(18px + env(safe-area-inset-right))
+    calc(48px + env(safe-area-inset-bottom)) calc(18px + env(safe-area-inset-left));
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
@@ -189,7 +191,13 @@ button.ghost:disabled:hover { background: #fff; }
 .fine { font-size: 12.5px; color: var(--mut); margin-top: 16px; line-height: 1.5; }
 
 /* -------- App shell ----------------------------------------------------- */
-.app { max-width: 620px; margin: 0 auto; padding: 14px 14px 72px; }
+.app {
+  max-width: 620px;
+  margin: 0 auto;
+  /* Top inset keeps the name/header clear of the status bar in standalone mode. */
+  padding: calc(14px + env(safe-area-inset-top)) calc(14px + env(safe-area-inset-right))
+    72px calc(14px + env(safe-area-inset-left));
+}
 header {
   display: flex;
   align-items: center;
