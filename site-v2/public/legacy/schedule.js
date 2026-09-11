@@ -2528,14 +2528,10 @@
     weekMon = C.weekStartMonday();
     dayYmd = C.todayYMD();
     payStart = C.payPeriodOf(dayYmd).start;
-    // Embed convenience: the copied schedule data runs through a fixed date, so
-    // the live "current" week can be empty on arrival. If it is, open on the
-    // most recent earlier week that actually has shifts. "This week" still jumps
-    // back to today. Does nothing once the current week has shifts of its own.
-    // Shared with the employee week card so both land on the same week.
-    try {
-      if (C.postedWeekStart) weekMon = C.postedWeekStart(sid(), weekMon);
-    } catch (e) { /* leave weekMon on the current week */ }
+    // Open on the current week, ready to fill, rather than rewinding to the last
+    // week that has shifts. A manager's job here is to build the upcoming
+    // schedule, so "this week" is what they should land on. The week arrows and
+    // "Apply last week to this week" reach any other week.
     var pick = $("stationPick");
     if (pick) pick.addEventListener("change", function () { render(); });
     render();
