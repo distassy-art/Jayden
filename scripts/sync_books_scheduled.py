@@ -406,6 +406,46 @@ def build_extramile(path: Path) -> dict | None:
     }
 
 
+
+def last_closed_month_pt() -> str:
+    """Previous calendar month in America/Los_Angeles (open month is never closed)."""
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+    today = datetime.now(ZoneInfo("America/Los_Angeles")).date()
+    y, m = today.year, today.month
+    if m == 1:
+        return f"{y - 1}-12"
+    return f"{y}-{m - 1:02d}"
+
+
+def strip_open_months(stations: list[dict], closed: str | None = None) -> list[dict]:
+    """Keep days for MTD, but drop/zero months after last closed month for Trends."""
+    closed = closed or last_closed_month_pt()
+    out = []
+    for s in stations:
+        st = dict(s)
+        months = {}
+        for key, rec in (st.get("months") or {}).items():
+            if key <= closed:
+                months[key] = rec
+            else:
+                # Neutralize so isRealMonth fails if merge keeps the key
+                months[key] = {
+                    "sales": 0,
+                    "purchases": 0,
+                    "gas_vol": 0,
+                    "gas_profit": 0,
+                    "store_profit": 0,
+                    "total_profit": 0,
+                    "store_margin": 0,
+                    "gas_margin": 0,
+                    "days": 0,
+                }
+        st["months"] = months
+        out.append(st)
+    return out
+
+
 def merge_stations(items: list[dict]) -> list[dict]:
     by: dict[str, dict] = {}
     for s in items:
@@ -546,7 +586,9 @@ def main() -> None:
     stations = merge_stations(built)
     if not stations:
         raise SystemExit("no stations built — nothing to publish")
-    print(f"publishing {len(stations)} stations")
+    closed = last_closed_month_pt()
+    stations = strip_open_months(stations, closed)
+    print(f"publishing {len(stations)} stations (months closed through {closed})")
     publish(stations, dry_run=args.dry_run)
 
 
