@@ -100,6 +100,67 @@ python3 scripts/extract-daily-month-sheets.py <Daily.xlsx> --min-month 2026-09
 
 San Diego Daily values live on `* Calculations` sheets. Brookhurst Daily values live on `* Source` sheets. The extractor reads both. Skip empty placeholder months (Paradise September was still all zeros).
 
+## Fuel revenue (`gas_sales`)
+
+Fuel revenue is the **Fuel Sales ($)** column of the Monthly Summary fuel sheets —
+what the fuel sold for, as opposed to the gallons and the cents per gallon that
+`gas_vol` / `gas_margin` / `gas_profit` carry. It reconciles to the cent with the
+`FUEL Total:` **Sales Rev.** line of that month's `Monthly Reports/Sales/MMYYYY.pdf`
+("Sales Report by Station"), which is the upstream source for both.
+
+`extract-fuel-summary-months.py` finds fuel columns by header text, so it reads
+both workbook layouts (the single `20xx Fuel` sheets and the two-block
+`Fuel Summary` sheet) and carries `gas_sales` through.
+
+**There is currently no way to publish fuel revenue to the live site.**
+
+- `POST /.netlify/functions/books` merges **day rows only**; it ignores `months`
+  in the payload, so `gas_sales` never reaches KV. Verified by posting a month
+  carrying `gas_sales` (and `fuel_profit`) and reading back
+  `GET /.netlify/functions/books`: neither field was stored.
+- `/data/monthly.json` is the only feed the site reads `gas_sales` from, and it
+  is a static asset in the site deploy, not writable over the API.
+
+So fuel revenue has to be merged into `monthly.json` and deployed. Generate the
+figures with:
+
+```
+python3 scripts/emit-fuel-sales-feed.py <storeId>:<file.xlsx> … > data/fuel-sales.json
+```
+
+`data/fuel-sales.json` holds every store-month with a workbook figure and flags
+the ones `monthly.json` has no value for. As of 2026-09-11 that is **47
+store-months, $26,315,219.62** of fuel revenue absent from the site: Westminster
+and San Diego for 2026-01..08, Paradise 2026-01..07, Placentia 2026-08, Arco HB
+2026-07, and 2026-07 plus 2026-08 for the other eleven fuel stores. The 264
+store-months `monthly.json` does carry agree with the workbooks to the cent.
+
+Once the write path accepts months, `backfill-fuel-sales.py` builds the publish
+payload (only the months `monthly.json` lacks, each carrying its existing
+overlay fields plus `gas_sales`):
+
+```
+python3 scripts/backfill-fuel-sales.py <storeId>:<file.xlsx> … > stations.json
+node scripts/publish-books.mjs --file stations.json
+```
+
+### No fuel revenue in the source
+
+- **ExtraMile** — the workbook's `GAS SALES` row is gallons, not dollars (it
+  equals `gas_vol`), there is no revenue column, and ExtraMile has no
+  `Monthly Reports` PDFs. All 20 of its months lack fuel revenue at source.
+- **Arco HB and Paradise, 2026-08** — the workbook fuel sheets stop at 2026-07
+  and neither store has an `082026.pdf` under `Monthly Reports/Sales`. Their
+  August fuel revenue cannot be recovered until one of those lands.
+
+### Publishing with `kind: "monthly"` recomputes the open month
+
+Re-posting a station's existing day rows with `kind: "monthly"` makes the server
+recompute that station's open month from those days. On Arco Db this replaced an
+all-zero `2026-09` with the real September gas volume, profit and purchases. The
+other stores' September months were still zeros while holding days through
+2026-09-10, so the routine day publish does not refresh them.
+
 Skip ExtraMile **Daily.xlsx** / **Monthly.xlsx** when they are still the `#00000` / Store Name templates. Skip `_Archived` (Laguna, Arco GG).
 
 ExtraMile’s live book is the operational workbook `Extramile.xlsx` (month sheets `JULY26`, `AUG26`, …). The Worker `books-parse` path does not read that layout. Extract and save with:
