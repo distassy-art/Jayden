@@ -4,7 +4,7 @@ All times are **America/Los_Angeles** (Pacific). Cron for cloud timers uses UTC 
 
 | Job | What | Pacific | Cron (PDT / UTC−7) |
 |-----|------|---------|---------------------|
-| **DLY + DPT** | None Fuel Invoice Total + DailyAPInvoice (collapsed). Upload latest MTD file; delete older `*dly*` / `*dpt*` in that month folder. | Wed **8:00 AM**, Sun **4:00 AM** | `0 15 * * 3`, `0 11 * * 0` |
+| **DLY + DPT** | None Fuel Invoice Total (**View Type Expand** / `Toggle=1`) + DailyAPInvoice (collapsed). Upload latest MTD file; delete older `*dly*` / `*dpt*` in that month folder. | Wed **8:00 AM**, Sun **4:00 AM** | `0 15 * * 3`, `0 11 * * 0` |
 | **Daily Book Summary** | `DailyTotal+Summary` with `ShowCost=1`. One PDF per business day (day-behind). Accumulate; do not delete prior days. | **Every day 2:00 PM** | `0 21 * * *` |
 | **Daily Excel update** | Fill missing days in each client `* Daily.xlsx` from Daily Book Summary PDFs (gas vol/profit, c-store total, tax/scratch/lotto/card). Leave Net Purchases alone. | Mon / Wed / Fri / Sun **8:00 AM** | `0 15 * * 1,3,5,0` |
 

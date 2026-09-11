@@ -3,7 +3,7 @@
 
 Reports (S2K):
   - Daily  = DailyTotal+Summary with ShowCost=1  (one PDF per business day)
-  - DLY    = None Fuel Invoice Total             (month-to-date; keep latest only)
+  - DLY    = None Fuel Invoice Total, View Type Expand (Toggle=1)
   - DPT    = DailyAPInvoice                      (baseline = collapsed vendor summary MTD)
 
 Policy:
@@ -22,6 +22,7 @@ Requires:
 
 Usage:
   python3 scripts/fill_daily_dly_dpt.py              # DLY+DPT through yesterday PT
+  python3 scripts/fill_daily_dly_dpt.py --kinds dly  # Expand DLY only
   python3 scripts/fill_daily_dly_dpt.py --map-only
   python3 scripts/fill_daily_dly_dpt.py --through 2026-09-08
 """
@@ -121,7 +122,9 @@ BD_CENTRAL_DEFS = {
 
 REPORTS = {
     "daily": {"rpt": "DailyTotal+Summary", "extra": {"ShowCost": "1"}},
-    "dly": {"rpt": "None Fuel Invoice Total", "extra": {}},
+    # Non-Fuel Invoice Summary: View Type Expand All (param Toggle=1).
+    # Toggle=0 / omitted = Collapse All (vendor totals only).
+    "dly": {"rpt": "None Fuel Invoice Total", "extra": {"Toggle": "1"}},
     # Baseline DailyAPInvoice is already the collapsed vendor summary.
     # Do NOT pass ViewType=CollapseAll — that has returned HTTP 500.
     "dpt": {"rpt": "DailyAPInvoice", "extra": {}},
@@ -385,12 +388,16 @@ def delete_older_mtd(
         )
 
 
-def run_dly_dpt(target: date) -> dict:
+def run_dly_dpt(target: date, kinds: set[str] | None = None) -> dict:
+    kinds = kinds or {"dly", "dpt"}
+    if not kinds.issubset({"dly", "dpt"}):
+        raise SystemExit(f"Invalid kinds {kinds}; expected subset of dly,dpt")
     stores, bd = build_store_map(target)
     month_start = date(target.year, target.month, 1)
     end = month_end(target)
     dly_name = f"{stamp(target)}dly.pdf"
     dpt_name = f"{stamp(target)}dpt.pdf"
+    kind_names = {"dly": dly_name, "dpt": dpt_name}
 
     logins = load_s2k_logins()
     sp = SharePoint(od_cookie_header())
@@ -405,8 +412,8 @@ def run_dly_dpt(target: date) -> dict:
     }
 
     print(
-        f"DLY+DPT through {target} ({month_folder(target)}) "
-        f"-> {dly_name} / {dpt_name}",
+        f"{'+'.join(sorted(kinds)).upper()} through {target} ({month_folder(target)}) "
+        f"-> {', '.join(kind_names[k] for k in sorted(kinds))}",
         flush=True,
     )
 
@@ -425,7 +432,9 @@ def run_dly_dpt(target: date) -> dict:
             print(f"  LOGIN FAIL {e}", flush=True)
             continue
 
-        for kind, name in (("dly", dly_name), ("dpt", dpt_name)):
+        keep: set[str] = set()
+        for kind in sorted(kinds):
+            name = kind_names[kind]
             cfg = REPORTS[kind]
             rr = s2k.pull(
                 s,
@@ -466,15 +475,19 @@ def run_dly_dpt(target: date) -> dict:
                 "folder": folder,
             }
             (results["uploaded"] if up_ok else results["failed"]).append(entry)
+            if up_ok:
+                keep.add(name)
 
-        delete_older_mtd(
-            sp,
-            folder_rel,
-            {dly_name, dpt_name},
-            "both",
-            results,
-            key,
-        )
+        if keep:
+            delete_kind = "both" if kinds == {"dly", "dpt"} else next(iter(kinds))
+            delete_older_mtd(
+                sp,
+                folder_rel,
+                keep,
+                delete_kind,
+                results,
+                key,
+            )
 
     # Big Daddy central multi-store
     print(f"\n=== BD_central (hotmail -121) ===", flush=True)
@@ -492,10 +505,9 @@ def run_dly_dpt(target: date) -> dict:
         print(f"  stores={stores_csv}", flush=True)
         local = OUT_DIR / "BD_central"
         local.mkdir(exist_ok=True)
-        for kind, name, folder_key in (
-            ("dly", dly_name, "dly"),
-            ("dpt", dpt_name, "dpt"),
-        ):
+        for kind in sorted(kinds):
+            name = kind_names[kind]
+            folder_key = kind
             cfg = REPORTS[kind]
             folder = bd[folder_key]
             folder_rel = f"{DOCS_CLIENTS}/{folder}"
@@ -538,15 +550,17 @@ def run_dly_dpt(target: date) -> dict:
                 "folder": folder,
             }
             (results["uploaded"] if up_ok else results["failed"]).append(entry)
-            delete_older_mtd(
-                sp, folder_rel, {name}, kind, results, "BD_central"
-            )
+            if up_ok:
+                delete_older_mtd(
+                    sp, folder_rel, {name}, kind, results, "BD_central"
+                )
 
     out = {
         "target": target.isoformat(),
         "month": month_folder(target),
-        "dly_name": dly_name,
-        "dpt_name": dpt_name,
+        "kinds": sorted(kinds),
+        "dly_name": dly_name if "dly" in kinds else None,
+        "dpt_name": dpt_name if "dpt" in kinds else None,
         "uploaded": results["uploaded"],
         "deleted": results["deleted"],
         "failed": results["failed"],
@@ -574,6 +588,12 @@ def main(argv: list[str] | None = None) -> int:
         default=None,
         help="Inclusive day-behind date YYYY-MM-DD (default: yesterday PT)",
     )
+    p.add_argument(
+        "--kinds",
+        type=str,
+        default="dly,dpt",
+        help="Comma-separated report kinds to pull: dly, dpt (default: both)",
+    )
     args = p.parse_args(argv)
 
     if args.through:
@@ -581,6 +601,7 @@ def main(argv: list[str] | None = None) -> int:
     else:
         target = datetime.now(PT).date() - timedelta(days=1)
 
+    kinds = {k.strip().lower() for k in args.kinds.split(",") if k.strip()}
     stores, bd = build_store_map(target)
     if args.map_only:
         print("Store map:")
@@ -588,9 +609,10 @@ def main(argv: list[str] | None = None) -> int:
             print(" ", row)
         print("BD central:", bd)
         print("Reports:", REPORTS)
+        print("Kinds:", sorted(kinds))
         return 0
 
-    out = run_dly_dpt(target)
+    out = run_dly_dpt(target, kinds=kinds)
     return 1 if out["failed"] else 0
 
 
