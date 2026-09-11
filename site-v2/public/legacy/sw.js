@@ -8,7 +8,7 @@
  *      prompts the clock schedules.
  *   2. Cache the app shell so it opens offline at the store.
  */
-var CACHE = "ss-timeclock-v1";
+var CACHE = "ss-timeclock-v2";
 var SHELL = [
   "./",
   "core.html",

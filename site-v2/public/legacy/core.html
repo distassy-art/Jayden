@@ -12,40 +12,61 @@
 <meta name="apple-mobile-web-app-title" content="Smart Time Clock">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
-<link rel="stylesheet" href="core.css?v=ck23">
+<link rel="stylesheet" href="core.css?v=ck25">
 </head>
 <body>
 <div id="loginView" class="wrap">
-  <img class="logo" src="../assets/logo-wordmark-dark.png" alt="Smart Time Clock">
-  <h1>Smart Time Clock</h1>
-  <p class="lead">Enter your time clock PIN. It is the same four digits you use to clock in — no
-    name needed, we know you by your PIN.</p>
-  <label for="pin">Time clock PIN</label>
-  <input id="pin" type="password" inputmode="numeric" autocomplete="off"
-    autocapitalize="none" spellcheck="false" placeholder="••••">
-  <div class="err" id="err"></div>
-  <button type="button" id="go">Log in</button>
-  <p class="fine">Add Smart Time Clock to your Home Screen: open this page, tap Share, then
-    <b>Add to Home Screen</b>. Forgot your PIN? Ask your manager.</p>
+  <div class="login-card">
+    <img class="logo" src="../assets/logo-wordmark-dark.png" alt="Smart Time Clock">
+    <h1>Smart Time Clock</h1>
+    <p class="lead">Enter your four-digit time clock PIN. It's the same PIN you use to clock in —
+      no name needed, we know you by your PIN.</p>
+    <div class="pin-dots" id="pinDots" aria-hidden="true"></div>
+    <input id="pin" type="password" inputmode="none" autocomplete="off"
+      autocapitalize="none" spellcheck="false" readonly
+      style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none">
+    <div class="keypad" id="keypad">
+      <button type="button" data-key="1">1</button>
+      <button type="button" data-key="2">2</button>
+      <button type="button" data-key="3">3</button>
+      <button type="button" data-key="4">4</button>
+      <button type="button" data-key="5">5</button>
+      <button type="button" data-key="6">6</button>
+      <button type="button" data-key="7">7</button>
+      <button type="button" data-key="8">8</button>
+      <button type="button" data-key="9">9</button>
+      <button type="button" class="key-util" data-key="clear">Clear</button>
+      <button type="button" data-key="0">0</button>
+      <button type="button" class="key-util" data-key="back" aria-label="Delete">
+        <svg class="key-ico" viewBox="0 0 24 24"><path d="M21 5H8L2 12l6 7h13a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1z"/><path d="M17 9l-6 6M11 9l6 6"/></svg>
+      </button>
+    </div>
+    <div class="err" id="err"></div>
+    <button type="button" id="go">Log in</button>
+    <p class="fine">Add Smart Time Clock to your Home Screen: open this page, tap Share, then
+      <b>Add to Home Screen</b>. Forgot your PIN? Ask your manager.</p>
+  </div>
 </div>
 <div id="appView" class="app" hidden>
   <header>
-    <div>
+    <div class="avatar" id="avatar" aria-hidden="true"></div>
+    <div class="who">
       <div class="kicker">Smart Time Clock</div>
       <h1 id="hello">Hello</h1>
     </div>
+    <div class="live-clock" id="liveClock" aria-hidden="true"></div>
     <button type="button" class="ghost" id="out">Log out</button>
   </header>
   <div id="annivBanner" class="anniv-banner" hidden></div>
   <nav class="tabs" id="empTabs">
-    <button type="button" data-tab="timesheet" class="on">Timesheet</button>
-    <button type="button" data-tab="clock">Clock</button>
-    <button type="button" data-tab="schedule">Schedule</button>
-    <button type="button" data-tab="timeoff">Time off</button>
-    <button type="button" data-tab="info">My info</button>
-    <button type="button" data-tab="manager" id="mgrTab" hidden>Manager</button>
+    <button type="button" data-tab="clock" class="on"><svg class="tico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Clock</button>
+    <button type="button" data-tab="timesheet"><svg class="tico" viewBox="0 0 24 24"><path d="M4 5h16v16H4z"/><path d="M4 9h16M9 5v16"/></svg>Timesheet</button>
+    <button type="button" data-tab="schedule"><svg class="tico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>Schedule</button>
+    <button type="button" data-tab="timeoff"><svg class="tico" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9"/><path d="M21 3l-9 9"/></svg>Time off</button>
+    <button type="button" data-tab="info"><svg class="tico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>My info</button>
+    <button type="button" data-tab="manager" id="mgrTab" hidden><svg class="tico" viewBox="0 0 24 24"><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><circle cx="9" cy="7" r="3"/><path d="M17 11l2 2 4-4"/></svg>Manager</button>
   </nav>
-  <div id="tabClock" hidden>
+  <div id="tabClock">
     <section class="card" id="clockTabBox"></section>
   </div>
   <div id="tabSchedule" hidden>
@@ -59,7 +80,7 @@
       <div id="taskBox"></div>
     </section>
   </div>
-  <div id="tabTimesheet">
+  <div id="tabTimesheet" hidden>
     <section class="card">
       <h2>Timesheet</h2>
       <div class="ts-pick" id="tsPick">
@@ -119,8 +140,8 @@
       schedule, set tasks, and check everyone&rsquo;s hours and task performance.</p>
   </div>
 </div>
-<script src="core-store.js?v=ck23"></script>
-<script src="core.js?v=ck23"></script>
+<script src="core-store.js?v=ck25"></script>
+<script src="core.js?v=ck25"></script>
 <script>
   /* The Manager tab embeds the full crew schedule app (same origin). It posts
      its content height so the panel grows with it instead of nesting a

@@ -2,7 +2,8 @@
   var C = window.SSCore;
   var emp = null;
   var pendingPhoto = {};
-  var tab = "schedule";
+  var tab = "clock";
+  var clockTick = null;
   var tsKind = "week";
   var tsWeekMon = "";
   var tsMonth = "";
@@ -16,6 +17,75 @@
   function setSession(id) {
     if (id) sessionStorage.setItem("ss_core_emp", id);
     else sessionStorage.removeItem("ss_core_emp");
+  }
+
+  // The roster stores names run together ("RachelOberholtzer"); split the camel
+  // case so a person reads their own name the way they wrote it.
+  function prettyName(name) {
+    return String(name || "").replace(/([a-z])([A-Z])/g, "$1 $2").trim();
+  }
+  function initials(name) {
+    var parts = prettyName(name).split(/\s+/).filter(Boolean);
+    if (!parts.length) return "";
+    var first = parts[0].charAt(0);
+    var last = parts.length > 1 ? parts[parts.length - 1].charAt(0) : "";
+    return (first + last).toUpperCase();
+  }
+
+  // ---- PIN keypad ----------------------------------------------------------
+  function pinValue() {
+    var el = $("pin");
+    return el ? el.value : "";
+  }
+  function setPin(v) {
+    var el = $("pin");
+    if (el) el.value = v;
+    renderPinDots();
+  }
+  function renderPinDots() {
+    var box = $("pinDots");
+    if (!box) return;
+    var n = pinValue().length;
+    var slots = Math.max(4, n);
+    var html = "";
+    for (var i = 0; i < slots; i++) {
+      html += '<i' + (i < n ? ' class="on"' : "") + "></i>";
+    }
+    box.innerHTML = html;
+  }
+  function failPin(msg) {
+    var err = $("err");
+    if (err) err.textContent = msg || "That PIN was not recognised.";
+    var dots = $("pinDots");
+    if (dots) {
+      dots.classList.remove("shake");
+      void dots.offsetWidth;
+      dots.classList.add("shake");
+    }
+    setPin("");
+  }
+  function pressKey(k) {
+    if ($("err")) $("err").textContent = "";
+    if (k === "clear") { setPin(""); return; }
+    if (k === "back") { setPin(pinValue().slice(0, -1)); return; }
+    if (!/^[0-9]$/.test(k)) return;
+    if (pinValue().length >= 8) return;
+    setPin(pinValue() + k);
+    if (pinValue().length === 4) signin();
+  }
+
+  // ---- Live clock in the header -------------------------------------------
+  function tickClock() {
+    var el = $("liveClock");
+    if (!el) return;
+    var now = new Date();
+    var time = now.toLocaleTimeString("en-US", {
+      timeZone: C.TZ, hour: "numeric", minute: "2-digit"
+    });
+    var day = now.toLocaleDateString("en-US", {
+      timeZone: C.TZ, weekday: "short", month: "short", day: "numeric"
+    });
+    el.innerHTML = C.esc(time) + "<small>" + C.esc(day) + "</small>";
   }
 
   function showLogin() {
@@ -43,17 +113,19 @@
   function showApp() {
     $("loginView").hidden = true;
     $("appView").hidden = false;
-    $("hello").textContent = "Hi, " + emp.name;
+    $("hello").textContent = "Hi, " + prettyName(emp.name);
+    var av = $("avatar");
+    if (av) av.textContent = initials(emp.name);
     renderAnnivBanner();
     syncMgrTab();
-    if (tab === "manager" && !isMgrEmp()) tab = "schedule";
-    showTab(tab || "schedule");
+    if (tab === "manager" && !isMgrEmp()) tab = "clock";
+    showTab(tab || "clock");
     notifyToday();
   }
 
   function showTab(id) {
-    tab = id || "schedule";
-    if (tab === "manager" && !isMgrEmp()) tab = "schedule";
+    tab = id || "clock";
+    if (tab === "manager" && !isMgrEmp()) tab = "clock";
     var map = { schedule: "tabSchedule", clock: "tabClock", timesheet: "tabTimesheet", timeoff: "tabTimeoff", info: "tabInfo", manager: "tabManager" };
     Object.keys(map).forEach(function (k) {
       var el = $(map[k]);
@@ -90,21 +162,22 @@
   }
 
   function signin() {
-    var pin = $("pin").value;
-    $("err").textContent = "";
+    var pin = pinValue();
+    if ($("err")) $("err").textContent = "";
+    if (pin.length < 4) { failPin("Enter your four-digit PIN."); return; }
     C.loginEmployeeByPin(pin).then(function (found) {
-      $("pin").value = "";
       if (!found) {
-        $("err").textContent = "That PIN was not recognised.";
+        failPin("That PIN was not recognised.");
         return;
       }
+      setPin("");
       emp = found;
       applyEmployeeSession(found);
-      tab = "schedule";
+      tab = "clock";
       startClockPoll();
       showApp();
     }).catch(function () {
-      $("err").textContent = "That PIN was not recognised.";
+      failPin("That PIN was not recognised.");
     });
   }
 
@@ -221,8 +294,8 @@
     if (typeof renderAnnivBanner === "function") renderAnnivBanner();
     if (C.clearManagerSession) C.clearManagerSession();
     setSession("");
-    if ($("pin")) $("pin").value = "";
-    tab = "schedule";
+    setPin("");
+    tab = "clock";
     syncMgrTab();
     tsKind = "week";
     tsWeekMon = "";
@@ -357,9 +430,14 @@
     if (!emp) return;
     lastClockSig = clockSig();
     var html = clockPanelHtml();
+    var clockedIn = !!C.breakState(emp).clockedIn;
     ["clockBox", "clockTabBox"].forEach(function (id) {
       var el = $(id);
-      if (el) { el.innerHTML = html; bindClock(el); }
+      if (el) {
+        el.innerHTML = html;
+        el.classList.toggle("is-in", clockedIn);
+        bindClock(el);
+      }
     });
     scheduleBreakReminders();
   }
@@ -759,8 +837,23 @@
   function boot() {
     registerSW();
     $("go").onclick = signin;
-    $("pin").addEventListener("keydown", function (ev) { if (ev.key === "Enter") signin(); });
+    renderPinDots();
+    var keypad = $("keypad");
+    if (keypad) {
+      keypad.querySelectorAll("[data-key]").forEach(function (b) {
+        b.onclick = function () { pressKey(b.getAttribute("data-key")); };
+      });
+    }
+    // Physical keyboard support for kiosks with a real number pad.
+    document.addEventListener("keydown", function (ev) {
+      if ($("loginView").hidden) return;
+      if (/^[0-9]$/.test(ev.key)) { pressKey(ev.key); ev.preventDefault(); }
+      else if (ev.key === "Backspace") { pressKey("back"); ev.preventDefault(); }
+      else if (ev.key === "Enter") { signin(); ev.preventDefault(); }
+    });
     $("out").onclick = signOut;
+    tickClock();
+    if (!clockTick) clockTick = setInterval(tickClock, 15000);
     document.querySelectorAll("#empTabs [data-tab]").forEach(function (b) {
       b.onclick = function () { showTab(b.getAttribute("data-tab")); };
     });
