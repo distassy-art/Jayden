@@ -80,6 +80,16 @@
       var id = sessionStorage.getItem("ss_core_emp");
       if (id && C && C.isManagerEmployee) return !!C.isManagerEmployee(C.employeeById(id));
     } catch (e) {}
+    // Embedded in the /new console, which stores its signed-in user here. An
+    // owner or store manager may publish the schedule; an accountant (timesheets
+    // only) stays read-only.
+    try {
+      var raw = sessionStorage.getItem("ssv2_session");
+      if (raw) {
+        var u = JSON.parse(raw);
+        if (u && (u.role === "owner" || u.role === "manager")) return true;
+      }
+    } catch (e) {}
     return false;
   }
   function canManagePay() {

@@ -578,9 +578,25 @@
     });
   }
 
+  function hasSharedContent() {
+    if (!state) return false;
+    return SHARED_SECTIONS.some(function (k) {
+      var v = state[k];
+      if (Array.isArray(v)) return v.length > 0;
+      return v && typeof v === "object" && Object.keys(v).length > 0;
+    });
+  }
+
   function enableRosterWrite(role, by) {
     sharedWriteRole = role ? String(role).toLowerCase() : null;
     if (by) sharedWriteBy = String(by).slice(0, 80);
+    // First manager to open the editor after the shared store goes live seeds
+    // it with whatever schedule/tasks already exist on this device, so nothing
+    // entered before the store existed has to be re-typed. Only when the server
+    // copy is still empty (version 0), so it never overwrites a real one.
+    if (sharedWriteRole && sharedVersion === 0 && hasSharedContent()) {
+      scheduleSharedSync();
+    }
   }
 
   function onSharedChange(cb) {
