@@ -480,7 +480,7 @@ def merge_stations(items: list[dict]) -> list[dict]:
     return [by[k] for k in sorted(by)]
 
 
-def publish(stations: list[dict], dry_run: bool) -> None:
+def _publish_payload(stations: list[dict], dry_run: bool, label: str) -> None:
     payload = {"stations": stations}
     with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as fh:
         json.dump(payload, fh)
@@ -488,10 +488,47 @@ def publish(stations: list[dict], dry_run: bool) -> None:
     cmd = ["node", str(REPO / "scripts/publish-books.mjs"), "--file", tmp]
     if dry_run:
         cmd.append("--dry-run")
-    print("publish:", " ".join(cmd), f"({len(stations)} stations)")
+    print(f"publish [{label}]:", " ".join(cmd), f"({len(stations)} stations)")
     proc = subprocess.run(cmd)
     if proc.returncode != 0:
         raise SystemExit(proc.returncode)
+
+
+def publish(stations: list[dict], dry_run: bool) -> None:
+    """Two-phase publish so open-month days don't rebuild Trends months.
+
+    Worker mergeStation overwrites any month touched by incoming days via
+    monthsFromDays. Phase 1 pushes days (+ closed months). Phase 2 pushes
+    empty days with neutralized open months so those keys stay non-real for
+    /new analytics.js majority closedMonths logic.
+    """
+    closed = last_closed_month_pt()
+    phase1 = []
+    phase2 = []
+    for s in stations:
+        st = dict(s)
+        months = dict(st.get("months") or {})
+        open_months = {k: v for k, v in months.items() if k > closed}
+        closed_months = {k: v for k, v in months.items() if k <= closed}
+        st1 = dict(st)
+        st1["months"] = closed_months
+        phase1.append(st1)
+        if open_months:
+            phase2.append(
+                {
+                    "file": st.get("file") or f"{st['id']}.xlsx",
+                    "kind": st.get("kind") or "daily",
+                    "id": st["id"],
+                    "name": st.get("name") or st["id"],
+                    "period": closed,
+                    "days": [],
+                    "months": open_months,
+                    "kpis": {},
+                }
+            )
+    _publish_payload(phase1, dry_run, "days+closed-months")
+    if phase2:
+        _publish_payload(phase2, dry_run, "neutralize-open-months")
 
 
 def main() -> None:
