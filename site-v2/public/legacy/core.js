@@ -116,11 +116,42 @@
     $("hello").textContent = "Hi, " + prettyName(emp.name);
     var av = $("avatar");
     if (av) av.textContent = initials(emp.name);
+    updateWhoMeta();
     renderAnnivBanner();
     syncMgrTab();
     if (tab === "manager" && !isMgrEmp()) tab = "clock";
     showTab(tab || "clock");
     notifyToday();
+  }
+
+  // Years of employment as a short label; "New" when no hire date is on file.
+  function yearsLabel() {
+    if (!C.hiredYmd(emp)) return "New";
+    var yrs = C.tenureYears(emp);
+    if (yrs <= 0) return "1st year";
+    return yrs + (yrs === 1 ? " yr here" : " yrs here");
+  }
+  // Green at 90%+, amber at 75%+, red below — the same read managers get.
+  function scoreTone(pct) {
+    if (pct == null) return "";
+    if (pct >= 0.9) return "pos";
+    if (pct >= 0.75) return "warn";
+    return "neg";
+  }
+  // The score + tenure line under the name: an at-a-glance record.
+  function updateWhoMeta() {
+    var box = $("whoMeta");
+    if (!box || !emp) return;
+    var sc = C.performanceScore(emp);
+    var html = "";
+    if (sc.pct != null) {
+      html += '<span class="score-chip ' + scoreTone(sc.pct) + '">' + Math.round(sc.pct * 100) + '%</span>';
+      html += '<span class="who-sub">tasks done · ' + C.esc(yearsLabel()) + "</span>";
+    } else {
+      html += '<span class="who-sub">' + C.esc(yearsLabel()) + "</span>";
+    }
+    box.innerHTML = html;
+    box.hidden = false;
   }
 
   function showTab(id) {
@@ -777,8 +808,26 @@
     if (C.isAnniversaryToday(emp)) {
       html += '<div class="anniv-banner">Happy ' + C.esc(C.ordinal(C.anniversaryYear(emp))) + " anniversary</div>";
     }
+    // Two headline tiles: the CORE-task performance score and years on the job.
+    var sc = C.performanceScore(emp);
+    var hasHire = !!C.hiredYmd(emp);
+    var yrs = C.tenureYears(emp);
+    var scoreVal = sc.pct != null ? Math.round(sc.pct * 100) + "%" : "—";
+    var scoreSub = sc.assigned
+      ? sc.done + " of " + sc.assigned + " CORE tasks done" + (hasHire ? " since " + fmtYMDYear(emp.hiredOn) : "")
+      : "No tasks assigned yet";
+    var yearsVal = hasHire ? (yrs > 0 ? String(yrs) : "<1") : "—";
+    var yearsSub = hasHire ? "Here " + C.formatTenure(emp) : "Hire date not on file";
+    html += '<div class="stat-duo">' +
+      '<div class="stat-tile"><div class="st-k">Performance score</div>' +
+      '<div class="st-v ' + scoreTone(sc.pct) + '">' + C.esc(scoreVal) + "</div>" +
+      '<div class="st-sub">' + C.esc(scoreSub) + "</div></div>" +
+      '<div class="stat-tile"><div class="st-k">Years of employment</div>' +
+      '<div class="st-v">' + C.esc(yearsVal) + "</div>" +
+      '<div class="st-sub">' + C.esc(yearsSub) + "</div></div>" +
+      "</div>";
     var hired = "—";
-    if (C.hiredYmd(emp)) {
+    if (hasHire) {
       hired = "Hired " + fmtYMDYear(emp.hiredOn) + ". Here " + C.formatTenure(emp) + ".";
     }
     html +=

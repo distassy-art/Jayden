@@ -224,6 +224,34 @@ header .who { flex: 1; min-width: 0; }
 header h1 { margin: 1px 0 0; font-size: 19px; letter-spacing: -0.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .live-clock { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--navy); font-size: 15px; text-align: right; line-height: 1.15; }
 .live-clock small { display: block; font-weight: 600; color: var(--mut); font-size: 11px; letter-spacing: 0.02em; }
+.who-meta { display: flex; align-items: center; gap: 7px; margin-top: 3px; flex-wrap: wrap; }
+.who-sub { font-size: 12px; color: var(--mut); font-weight: 600; }
+.score-chip {
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--navy);
+  color: #fff;
+  letter-spacing: 0.01em;
+}
+.score-chip.pos { background: var(--ok-bg); color: var(--ok-fg); }
+.score-chip.warn { background: var(--warn-bg); color: var(--warn-fg); }
+.score-chip.neg { background: var(--bad-bg); color: var(--bad-fg); }
+
+/* My info: the two headline tiles (performance score, years of employment). */
+.stat-duo { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 0 0 14px; }
+.stat-tile { background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; }
+.st-k { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mut); font-weight: 700; }
+.st-v { font-size: 30px; font-weight: 800; letter-spacing: -0.02em; color: var(--navy); margin: 4px 0 2px; line-height: 1; }
+.st-v.pos { color: var(--ok-fg); }
+.st-v.warn { color: var(--warn-fg); }
+.st-v.neg { color: var(--bad-fg); }
+.st-sub { font-size: 12px; color: var(--mut); line-height: 1.4; }
+@media (max-width: 380px) { .stat-duo { grid-template-columns: 1fr; } }
 
 /* -------- Tabs (segmented, icon + label, scrollable) -------------------- */
 .tabs {

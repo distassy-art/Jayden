@@ -2468,6 +2468,43 @@
     });
     return { total: asg.length, done: done, left: asg.length - done };
   }
+  /*
+   * A person's task record over their whole employment: how many day-tasks were
+   * assigned to them (from their hire date to today) and how many they finished.
+   * A task counts as done when a completion is on file for that same assignment
+   * and day. The score is done / assigned; null when nothing has been assigned
+   * yet, so a brand-new hire never reads as 0%.
+   */
+  function performanceScore(emp, opts) {
+    opts = opts || {};
+    if (!emp) return { assigned: 0, done: 0, pct: null };
+    var sid = emp.stationId;
+    var eid = emp.id;
+    var start = opts.start || hiredYmd(emp) || "";
+    var end = opts.end || todayYMD();
+    // Make sure today's cheat sheet exists so the current day is counted.
+    if (sid) ensureLiveCheatSheet(sid, end);
+    var inRange = function (d) {
+      if (!d) return false;
+      if (start && d < start) return false;
+      return d <= end;
+    };
+    var asg = ((state && state.assignments) || []).filter(function (a) {
+      return a && sameStation(a.stationId, sid) && a.employeeId === eid && inRange(a.date);
+    });
+    var doneKeys = {};
+    ((state && state.completions) || []).forEach(function (c) {
+      if (!c || !sameStation(c.stationId, sid) || c.employeeId !== eid || !inRange(c.date)) return;
+      doneKeys[c.assignmentId + "|" + c.date] = true;
+    });
+    var done = 0;
+    asg.forEach(function (a) { if (doneKeys[a.id + "|" + a.date]) done += 1; });
+    return {
+      assigned: asg.length,
+      done: done,
+      pct: asg.length > 0 ? done / asg.length : null
+    };
+  }
   function taskBarHtml(prog, opts) {
     opts = opts || {};
     prog = prog || { total: 0, done: 0, left: 0 };
@@ -2651,6 +2688,7 @@
     compressImage: compressImage,
     reminderText: reminderText,
     taskProgress: taskProgress,
+    performanceScore: performanceScore,
     taskBarHtml: taskBarHtml
   };
 
