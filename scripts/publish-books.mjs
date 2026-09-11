@@ -103,6 +103,25 @@ function daysFromPatch(patch) {
   return [...byDate.values()].sort((a, b) => String(a.date).localeCompare(String(b.date)));
 }
 
+/** Collect the month map for one store from a books-parse patch.
+ *
+ * `patch.monthly` comes in two shapes: a bare `{ "2026-08": {...} }` map, or
+ * the per-store packs `[{ id, name, months }]` the monthly extractors emit.
+ * Treating a pack array as a month map silently published zero months.
+ */
+function monthsFromPatch(patch, id) {
+  const monthly = patch && patch.monthly;
+  if (!monthly || typeof monthly !== "object") return {};
+  if (!Array.isArray(monthly)) return monthly;
+  const out = {};
+  for (const pack of monthly) {
+    if (!pack || !pack.months) continue;
+    if (pack.id != null && String(pack.id) !== String(id)) continue;
+    Object.assign(out, pack.months);
+  }
+  return out;
+}
+
 function stationsFromPatches(patches) {
   const out = [];
   for (const p of patches) {
@@ -110,16 +129,19 @@ function stationsFromPatches(patches) {
     const id = String((p.store && p.store.id) || "").trim();
     if (!id) continue;
     const days = daysFromPatch(p.patch);
-    const months = (p.patch && p.patch.monthly) || {};
-    if (!days.length && (!months || !Object.keys(months).length)) continue;
+    const months = monthsFromPatch(p.patch, id);
+    if (!days.length && !Object.keys(months).length) continue;
+    const monthKeys = Object.keys(months).sort();
     out.push({
       file: p.file || `${id}.xlsx`,
       kind: p.type || "daily",
       id,
       name: (p.store && p.store.name) || id,
-      period: p.period || (days.length ? days[days.length - 1].date.slice(0, 7) : ""),
+      period:
+        p.period ||
+        (days.length ? days[days.length - 1].date.slice(0, 7) : monthKeys[monthKeys.length - 1] || ""),
       days,
-      months: typeof months === "object" && !Array.isArray(months) ? months : {},
+      months,
       kpis: p.kpis || {},
     });
   }
@@ -145,7 +167,11 @@ if (dry) {
   for (const s of stations) {
     const n = Array.isArray(s.days) ? s.days.length : 0;
     const last = n ? s.days[n - 1].date : "—";
-    console.log(`  ${s.id} ${s.name || ""} days=${n} last=${last}`);
+    const months = s.months && typeof s.months === "object" ? Object.keys(s.months).sort() : [];
+    console.log(
+      `  ${s.id} ${s.name || ""} days=${n} last=${last} months=${months.length}` +
+        (months.length ? ` (${months[0]}..${months[months.length - 1]})` : "")
+    );
   }
   process.exit(0);
 }
