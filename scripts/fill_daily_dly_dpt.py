@@ -4,7 +4,7 @@
 Reports (S2K):
   - Daily  = DailyTotal+Summary with ShowCost=1  (one PDF per business day)
   - DLY    = None Fuel Invoice Total, View Type Expand (Toggle=1)
-  - DPT    = DailyAPInvoice                      (baseline = collapsed vendor summary MTD)
+  - DPT    = DailyAPInvoice, Group By Department (GroupBy=1)
 
 Policy:
   - Daily files accumulate (MMDDYYYY.pdf).
@@ -125,9 +125,9 @@ REPORTS = {
     # Non-Fuel Invoice Summary: View Type Expand All (param Toggle=1).
     # Toggle=0 / omitted = Collapse All (vendor totals only).
     "dly": {"rpt": "None Fuel Invoice Total", "extra": {"Toggle": "1"}},
-    # Baseline DailyAPInvoice is already the collapsed vendor summary.
-    # Do NOT pass ViewType=CollapseAll — that has returned HTTP 500.
-    "dpt": {"rpt": "DailyAPInvoice", "extra": {}},
+    # Non-Fuel Invoices by Vendor/Dept: GroupBy 0=Vendor, 1=Department, 2=Invoice #.
+    # Default GroupBy=0 (vendor); we want Department.
+    "dpt": {"rpt": "DailyAPInvoice", "extra": {"GroupBy": "1"}},
 }
 
 
