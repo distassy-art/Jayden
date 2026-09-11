@@ -2532,15 +2532,9 @@
     // the live "current" week can be empty on arrival. If it is, open on the
     // most recent earlier week that actually has shifts. "This week" still jumps
     // back to today. Does nothing once the current week has shifts of its own.
+    // Shared with the employee week card so both land on the same week.
     try {
-      var probeMon = weekMon;
-      for (var hop = 0; hop < 12; hop += 1) {
-        var hasShift = C.weekDates(probeMon).some(function (d) {
-          return activePeople().some(function (e) { return C.shiftsFor(sid(), d, e.id)[0]; });
-        });
-        if (hasShift) { weekMon = probeMon; break; }
-        probeMon = C.addDays(probeMon, -7);
-      }
+      if (C.postedWeekStart) weekMon = C.postedWeekStart(sid(), weekMon);
     } catch (e) { /* leave weekMon on the current week */ }
     var pick = $("stationPick");
     if (pick) pick.addEventListener("change", function () { render(); });

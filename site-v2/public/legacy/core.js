@@ -213,9 +213,21 @@
   }
 
   function renderWeek() {
-    var mon = C.weekStartMonday();
+    // Open on the week the manager's schedule actually covers. The editor
+    // already rewinds to the most recent posted week, so pinning this card to
+    // today's week left every day reading "Not scheduled" once the posted
+    // schedule ran past its end date — a manager saw a full week and published
+    // it while the crew saw nothing.
+    var thisMon = C.weekStartMonday();
+    var mon = C.postedWeekStart ? C.postedWeekStart(emp.stationId, thisMon) : thisMon;
     var dates = C.weekDates(mon);
     var today = C.todayYMD();
+    var heading = $("weekHeading");
+    if (heading) {
+      heading.textContent = mon === thisMon
+        ? "This week"
+        : "Posted schedule · " + C.formatYMD(dates[0]) + " – " + C.formatYMD(dates[6]);
+    }
     var html = "";
     dates.forEach(function (d, i) {
       var on = d === today;

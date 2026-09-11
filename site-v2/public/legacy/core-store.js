@@ -832,6 +832,23 @@
       return true;
     });
   }
+  /* The schedule a manager posts runs through a fixed end date, so once real
+     time passes it the live "current" week is empty. Resolve the week a
+     station's schedule should open on: today's week when it has shifts, else
+     the most recent earlier week that does. Returns the starting Monday, and
+     falls back to the current week when nothing is scheduled at all. */
+  function postedWeekStart(stationId, fromMon) {
+    var startMon = fromMon || weekStartMonday();
+    var probe = startMon;
+    for (var hop = 0; hop < 12; hop += 1) {
+      var hasShift = weekDates(probe).some(function (d) {
+        return shiftsFor(stationId, d).length > 0;
+      });
+      if (hasShift) return probe;
+      probe = addDays(probe, -7);
+    }
+    return startMon;
+  }
   function upsertShift(employeeId, stationId, dateYmd, start, end) {
     if ((start || end) && isTimeOff(employeeId, stationId, dateYmd)) return null;
     var list = state.shifts || [];
@@ -2749,6 +2766,7 @@
     removeRole: removeRole,
     roleName: roleName,
     shiftsFor: shiftsFor,
+    postedWeekStart: postedWeekStart,
     upsertShift: upsertShift,
     shiftBand: shiftBand,
     isShiftLeader: isShiftLeader,
