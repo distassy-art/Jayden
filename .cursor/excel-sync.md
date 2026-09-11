@@ -44,24 +44,45 @@ Known station IDs:
 
 ## Publish to the live site
 
+`/new` reads the **same** live books overlay as `/` (`/new/api/books-overlay` → same KV). One successful publish updates both. `/new` is read-only for writes.
+
+**Write path:** `POST /.netlify/functions/books` with `{ email, role, stations }`.  
+Do **not** rely on `books-save` + `patches` — that only bumps `updated_at` and does not merge days.
+
 1. GET `https://smartsolutionsai.us/.netlify/functions/books-overlay` (current KV overlay).
-2. For each Daily/Monthly `.xlsx`, POST parse:
+2. Build station day rows (from `books-parse`, or `extract-daily-month-sheets.py` when `DATE()` cells have empty caches).
+3. Publish:
 
 ```
-POST https://smartsolutionsai.us/.netlify/functions/books-parse
-{ "email": "smartsolutionsai", "role": "owner", "name": "<filename.xlsx>", "content": "<base64>" }
+POST https://smartsolutionsai.us/.netlify/functions/books
+{
+  "email": "smartsolutionsai",
+  "role": "owner",
+  "stations": [
+    {
+      "file": "Arco HB Daily.xlsx",
+      "kind": "daily",
+      "id": "42179",
+      "name": "Arco HB",
+      "period": "2026-09",
+      "days": [ { "date": "2026-09-09", "gas_vol": …, "gas_profit": …, "purch": 0 } ],
+      "months": {},
+      "kpis": {}
+    }
+  ]
+}
 ```
 
-3. Collect successful `{ file, type, store, period, patch }` results.
-4. POST save:
+Or pipe patches/stations through:
 
 ```
-POST https://smartsolutionsai.us/.netlify/functions/books-save
-{ "email": "smartsolutionsai", "role": "owner", "patches": [ ... ] }
+node scripts/publish-books.mjs --file stations.json
 ```
 
-5. GET overlay again and confirm each store’s `days` / `months` updated.
-6. Spot-check https://smartsolutionsai.us/yearly.html (owner session) if a browser is available.
+(`publish-books.mjs` accepts `stations[]` or legacy `patches[]` and always posts to `books`.)
+
+4. GET overlay again (and `/new/api/books-overlay`) and confirm each store’s `days` through the target date.
+5. Spot-check https://smartsolutionsai.us/yearly.html and https://smartsolutionsai.us/new/ (owner session) if a browser is available.
 
 Skip Store Services workbooks. Merge is additive by date/month; do not wipe other stations.
 
