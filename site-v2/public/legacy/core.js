@@ -121,7 +121,7 @@
     syncMgrTab();
     if (tab === "manager" && !isMgrEmp()) tab = "clock";
     showTab(tab || "clock");
-    notifyToday();
+    ensureNotifyPermission();
   }
 
   // Years of employment as a short label; "New" when no hire date is on file.
@@ -854,22 +854,12 @@
     $("infoBox").innerHTML = html;
   }
 
-  function notifyToday() {
+  // Ask once for notification permission so the break/meal reminders can show.
+  // We deliberately do not send task ("unfinished tasks today") notifications.
+  function ensureNotifyPermission() {
     if (!("Notification" in window)) return;
-    var asg = C.assignmentsForDay(emp.stationId, emp.id, C.todayYMD());
-    var left = asg.filter(function (a) { return !C.isDoneToday(a.id); }).length;
-    function ping() {
-      if (!left) return;
-      var body = left + " unfinished task" + (left === 1 ? "" : "s") + " today.";
-      if (navigator.serviceWorker && navigator.serviceWorker.controller) {
-        navigator.serviceWorker.controller.postMessage({ type: "remind", title: "Smart Time Clock", body: body });
-      } else if (Notification.permission === "granted") {
-        try { new Notification("Smart Time Clock", { body: body, icon: "../assets/icon-192.png" }); } catch (e) {}
-      }
-    }
-    if (Notification.permission === "granted") ping();
-    else if (Notification.permission === "default") {
-      Notification.requestPermission().then(function (p) { if (p === "granted") ping(); }).catch(function () {});
+    if (Notification.permission === "default") {
+      Notification.requestPermission().catch(function () {});
     }
   }
 
@@ -882,7 +872,6 @@
     }
     window.addEventListener("focus", function () {
       if (emp) {
-        notifyToday();
         renderClock();
         scheduleBreakReminders();
       }
