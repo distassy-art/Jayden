@@ -10,7 +10,6 @@
  */
 var CACHE = "ss-timeclock-v2";
 var SHELL = [
-  "./",
   "core.html",
   "core.css",
   "core.js",
@@ -23,7 +22,12 @@ var SHELL = [
 
 self.addEventListener("install", function (ev) {
   ev.waitUntil(
-    caches.open(CACHE).then(function (c) { return c.addAll(SHELL); }).then(function () {
+    caches.open(CACHE).then(function (c) {
+      // Add each entry on its own so one miss cannot fail the whole precache.
+      return Promise.all(SHELL.map(function (u) {
+        return c.add(u).catch(function () {});
+      }));
+    }).then(function () {
       return self.skipWaiting();
     }).catch(function () { return self.skipWaiting(); })
   );

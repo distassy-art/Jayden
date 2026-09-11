@@ -35,6 +35,9 @@
   --font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 * { box-sizing: border-box; }
+/* Author rules like `.wrap { display: flex }` outrank the UA `[hidden]` rule,
+   so the hidden login/app views would otherwise still show. Force it. */
+[hidden] { display: none !important; }
 body {
   margin: 0;
   font-family: var(--font);
