@@ -19,6 +19,23 @@ PREVIEW_ACCESS_SHA256 = "ba67702aadfdd4112766515c7b462430d90e57de539dbb0399106e6
 # points at this worker, which is right for a workers.dev URL.
 MOUNT_PATH = ""
 
+# --------------------------------------------------------------------------
+# Shared roster store (Durable Object)
+# --------------------------------------------------------------------------
+# Holds the manager-authored schedule and tasks so every employee device reads
+# the same copy. SQLite-backed, so it runs on the free plan and needs no
+# pre-provisioned namespace id — the migration below creates the class on
+# deploy. Bindings are not inherited by named environments, so [env.live]
+# repeats this binding; the migration is top-level and applies to every
+# environment `wrangler deploy` targets.
+[[durable_objects.bindings]]
+name = "ROSTER"
+class_name = "RosterState"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["RosterState"]
+
 [assets]
 directory = "./public"
 binding = "ASSETS"
@@ -82,6 +99,10 @@ zone_name = "smartsolutionsai.us"
 # `wrangler secret put PREVIEW_ACCESS_SHA256`) to turn the gate back on.
 PREVIEW_ACCESS_SHA256 = ""
 MOUNT_PATH = "/new"
+
+[[env.live.durable_objects.bindings]]
+name = "ROSTER"
+class_name = "RosterState"
 
 [env.live.assets]
 directory = "./public"

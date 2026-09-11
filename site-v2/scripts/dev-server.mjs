@@ -8,7 +8,7 @@
 
 import { createHash } from "node:crypto";
 import { createReadStream } from "node:fs";
-import { readFile, stat } from "node:fs/promises";
+import { readFile, stat, writeFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { dirname, extname, join, normalize, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -56,6 +56,53 @@ const ENDPOINTS = new Map([
 
 const ASSET_PREFIX = "/api/asset/";
 const ASSET_ALLOWED = /^\/data\/[A-Za-z0-9._/-]+\.(pdf|png|jpg|jpeg|webp|csv|xlsx)$/i;
+
+// Local stand-in for the worker's RosterState Durable Object: the shared
+// schedule/task overlay every device reads. Persisted to a temp file so it
+// survives a dev-server restart during testing.
+const ROSTER_WRITE_ROLES = new Set(["manager", "owner", "admin"]);
+const ROSTER_FILE = join(process.env.TMPDIR || "/tmp", "ss-roster-dev.json");
+let rosterDoc = { overlay: null, version: 0, updatedAt: null, updatedBy: null };
+try {
+  rosterDoc = JSON.parse(await readFile(ROSTER_FILE, "utf8"));
+} catch { /* first run: keep the empty document */ }
+
+async function readBody(req) {
+  const chunks = [];
+  for await (const chunk of req) chunks.push(chunk);
+  return Buffer.concat(chunks).toString("utf8");
+}
+
+async function handleRosterState(req, res) {
+  if (req.method === "GET" || req.method === "HEAD") {
+    sendJson(res, 200, { ok: true, ...rosterDoc });
+    return;
+  }
+  if (req.method === "PUT" || req.method === "POST") {
+    const role = String(req.headers["x-ss-roster-role"] || req.headers["x-ss-role"] || "").trim().toLowerCase();
+    if (!ROSTER_WRITE_ROLES.has(role)) {
+      sendJson(res, 403, { ok: false, error: "forbidden" });
+      return;
+    }
+    let body;
+    try { body = JSON.parse(await readBody(req)); } catch { sendJson(res, 400, { ok: false, error: "bad_json" }); return; }
+    const base = Number(body?.baseVersion);
+    if (Number.isFinite(base) && base !== rosterDoc.version) {
+      sendJson(res, 409, { ok: false, error: "version_conflict", version: rosterDoc.version, overlay: rosterDoc.overlay });
+      return;
+    }
+    rosterDoc = {
+      overlay: body && typeof body.overlay === "object" && body.overlay ? body.overlay : {},
+      version: rosterDoc.version + 1,
+      updatedAt: new Date().toISOString(),
+      updatedBy: String(body?.by || "manager").slice(0, 80),
+    };
+    writeFile(ROSTER_FILE, JSON.stringify(rosterDoc)).catch(() => {});
+    sendJson(res, 200, { ok: true, version: rosterDoc.version });
+    return;
+  }
+  sendJson(res, 405, { ok: false, error: "method_not_allowed" });
+}
 
 const MIME = {
   ".html": "text/html; charset=utf-8",
@@ -180,6 +227,10 @@ const server = createServer(async (req, res) => {
   }
 
   if (path.startsWith("/api/")) {
+    if (path === "/api/roster-state") {
+      await handleRosterState(req, res);
+      return;
+    }
     if (req.method !== "GET" && req.method !== "HEAD") {
       sendJson(res, 405, { ok: false, error: "read_only" });
       return;

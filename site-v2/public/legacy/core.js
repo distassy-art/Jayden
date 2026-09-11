@@ -937,6 +937,26 @@
       renderTimesheet();
     };
     trySession();
+    // Pick up schedule/task changes a manager published from another device.
+    if (C.onSharedChange) C.onSharedChange(refreshSharedViews);
+    var pollShared = function () {
+      if (document.hidden || $("appView").hidden) return;
+      if (C.refreshShared) C.refreshShared();
+    };
+    document.addEventListener("visibilitychange", function () { if (!document.hidden) pollShared(); });
+    window.addEventListener("focus", pollShared);
+    setInterval(pollShared, 60000);
+  }
+
+  // Re-render the data views after the shared schedule/tasks change underneath
+  // us. The manager tab hosts its own editor frame, so leave it be.
+  function refreshSharedViews() {
+    if (!emp || $("appView").hidden || tab === "manager") return;
+    updateWhoMeta();
+    renderClock();
+    renderTasks();
+    if (tab === "schedule") renderWeek();
+    if (tab === "timesheet") renderTimesheet();
   }
 
   if (!C) return;

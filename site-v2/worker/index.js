@@ -75,6 +75,90 @@ const ASSET_ALLOWED = /^\/data\/[A-Za-z0-9._/-]+\.(pdf|png|jpg|jpeg|webp|csv|xls
 const FORWARD_HEADERS = ["x-ss-email", "x-ss-role"];
 
 /* -------------------------------------------------------------------------
+   Shared roster store
+   -------------------------------------------------------------------------
+   The schedule and tasks a manager sets have to reach every employee's phone,
+   not just the browser that entered them. This is the one place the console
+   keeps writable state of its own: a single JSON overlay of the manager-authored
+   scheduling sections, held in a Durable Object and read by every device on
+   load. It is entirely separate from the read-only proxy above — nothing here
+   ever touches smartsolutionsai.us. Only a manager may write; everyone reads.
+   ------------------------------------------------------------------------- */
+const ROSTER_WRITE_ROLES = new Set(["manager", "owner", "admin"]);
+const ROSTER_DO_NAME = "global";
+
+async function rosterState(request, env) {
+  if (!env || !env.ROSTER) {
+    return json({ ok: false, error: "no_store", detail: "Shared roster store is not configured." }, 501);
+  }
+  const method = request.method;
+  if (method !== "GET" && method !== "HEAD") {
+    const role = (request.headers.get("x-ss-roster-role")
+      || request.headers.get("x-ss-role") || "").trim().toLowerCase();
+    if (!ROSTER_WRITE_ROLES.has(role)) {
+      return json({ ok: false, error: "forbidden", detail: "Only a manager can change the shared schedule." }, 403);
+    }
+  }
+  const stub = env.ROSTER.get(env.ROSTER.idFromName(ROSTER_DO_NAME));
+  return stub.fetch(new Request("https://roster/state", {
+    method,
+    headers: request.headers,
+    body: method === "GET" || method === "HEAD" ? undefined : request.body,
+  }));
+}
+
+/**
+ * Durable Object holding the shared scheduling overlay.
+ *
+ * One instance (`global`) stores the whole document. Writes carry the version
+ * the client last saw; a mismatch means someone else saved first, so the write
+ * is refused with the current state and the client re-syncs before retrying.
+ */
+export class RosterState {
+  constructor(state) {
+    this.state = state;
+  }
+
+  async fetch(request) {
+    const method = request.method;
+    if (method === "GET" || method === "HEAD") {
+      const stored = await this.state.storage.get(["overlay", "version", "updatedAt", "updatedBy"]);
+      return json({
+        ok: true,
+        overlay: stored.get("overlay") || null,
+        version: stored.get("version") || 0,
+        updatedAt: stored.get("updatedAt") || null,
+        updatedBy: stored.get("updatedBy") || null,
+      });
+    }
+    if (method === "PUT" || method === "POST") {
+      let body;
+      try {
+        body = await request.json();
+      } catch {
+        return json({ ok: false, error: "bad_json" }, 400);
+      }
+      const current = (await this.state.storage.get("version")) || 0;
+      const base = Number(body && body.baseVersion);
+      if (Number.isFinite(base) && base !== current) {
+        const overlay = await this.state.storage.get("overlay");
+        return json({ ok: false, error: "version_conflict", version: current, overlay: overlay || null }, 409);
+      }
+      const overlay = body && typeof body.overlay === "object" && body.overlay ? body.overlay : {};
+      const next = current + 1;
+      await this.state.storage.put({
+        overlay,
+        version: next,
+        updatedAt: new Date().toISOString(),
+        updatedBy: String((body && body.by) || "manager").slice(0, 80),
+      });
+      return json({ ok: true, version: next });
+    }
+    return json({ ok: false, error: "method_not_allowed" }, 405);
+  }
+}
+
+/* -------------------------------------------------------------------------
    Preview gate
    -------------------------------------------------------------------------
    A preview URL is reachable by anyone who has it, and these pages show real
@@ -365,6 +449,9 @@ export default {
     }
 
     if (path.startsWith("/api/")) {
+      if (path === "/api/roster-state") {
+        return harden(await rosterState(request, env));
+      }
       if (path === "/api/billing-mine") {
         if (request.method !== "GET" && request.method !== "HEAD") {
           return harden(json({ ok: false, error: "read_only" }, 405));

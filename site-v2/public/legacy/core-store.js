@@ -17,6 +17,19 @@
   var readyResolve;
   var ready = new Promise(function (res) { readyResolve = res; });
 
+  /* Shared roster store (see worker /api/roster-state). Only these sections are
+     manager-authored scheduling data that must sync across devices; everything
+     else (punches, task completions, time-off requests) stays on the device
+     that made it, exactly as before. */
+  var SHARED_SECTIONS = ["shifts", "assignments", "taskCatalog", "timeOff", "publishedWeeks"];
+  var sharedVersion = 0;      // last version seen from the server
+  var sharedWriteRole = null; // non-null (a role string) enables pushing edits
+  var sharedWriteBy = "manager"; // audit label recorded with each write
+  var sharedSyncTimer = null;
+  var sharedPushing = false;
+  var sharedDirty = false;
+  var sharedChangeCbs = [];
+
   function hex(buf) {
     return Array.from(new Uint8Array(buf)).map(function (b) {
       return b.toString(16).padStart(2, "0");
@@ -458,6 +471,120 @@
     try {
       localStorage.setItem(LS_KEY, JSON.stringify(state));
     } catch (e) {}
+    if (sharedWriteRole) scheduleSharedSync();
+  }
+
+  /* -------- Shared roster sync ------------------------------------------- */
+
+  // Resolve /api/roster-state under whatever prefix this page is served from.
+  // The legacy pages live at <mount>/legacy/*, so the API sits at <mount>/api/*.
+  function rosterUrl() {
+    var base = "";
+    try {
+      var m = /^(.*)\/legacy\//.exec(w.location && w.location.pathname);
+      if (m) base = m[1];
+    } catch (e) {}
+    return base + "/api/roster-state";
+  }
+
+  function sharedSectionsOf(st) {
+    var o = {};
+    if (!st) return o;
+    SHARED_SECTIONS.forEach(function (k) {
+      if (st[k] !== undefined) o[k] = st[k];
+    });
+    return o;
+  }
+
+  // Overlay the server's copy of the shared sections onto the running state.
+  // The server is authoritative for these, so a deletion there propagates here.
+  function applyShared(overlay) {
+    if (!state || !overlay || typeof overlay !== "object") return false;
+    var changed = false;
+    SHARED_SECTIONS.forEach(function (k) {
+      if (overlay[k] === undefined) return;
+      if (JSON.stringify(state[k]) !== JSON.stringify(overlay[k])) changed = true;
+      state[k] = overlay[k];
+    });
+    return changed;
+  }
+
+  function fetchShared() {
+    return fetch(rosterUrl(), { credentials: "same-origin", headers: { accept: "application/json" } })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .catch(function () { return null; });
+  }
+
+  function scheduleSharedSync() {
+    sharedDirty = true;
+    if (sharedSyncTimer) return;
+    sharedSyncTimer = setTimeout(function () {
+      sharedSyncTimer = null;
+      pushShared();
+    }, 700);
+  }
+
+  function pushShared(isRetry) {
+    if (!sharedWriteRole || sharedPushing || !state) return;
+    if (!sharedDirty && !isRetry) return;
+    sharedPushing = true;
+    sharedDirty = false;
+    var body = JSON.stringify({
+      overlay: sharedSectionsOf(state),
+      baseVersion: sharedVersion,
+      by: sharedWriteBy
+    });
+    fetch(rosterUrl(), {
+      method: "PUT",
+      credentials: "same-origin",
+      headers: { "content-type": "application/json", "x-ss-roster-role": sharedWriteRole },
+      body: body
+    }).then(function (r) {
+      return r.json().then(function (data) { return { status: r.status, data: data }; });
+    }).then(function (res) {
+      sharedPushing = false;
+      if (res.status === 200 && res.data && res.data.ok) {
+        sharedVersion = res.data.version || sharedVersion;
+      } else if (res.status === 409 && !isRetry) {
+        // Someone saved first. Adopt their version and re-send ours on top
+        // (last write wins), then flush anything that queued meanwhile.
+        sharedVersion = (res.data && res.data.version) || sharedVersion;
+        pushShared(true);
+        return;
+      }
+      if (sharedDirty) scheduleSharedSync();
+    }).catch(function () {
+      // Offline or a transient error: keep the edit queued for the next save.
+      sharedPushing = false;
+      sharedDirty = true;
+    });
+  }
+
+  // Pull the latest shared copy and, if it changed, re-render. Used on load and
+  // whenever an employee's app regains focus, so a manager's edit shows up
+  // without a manual reload.
+  function refreshShared() {
+    return fetchShared().then(function (data) {
+      if (!data || !data.ok) return false;
+      var v = data.version || 0;
+      if (v === sharedVersion && sharedVersion !== 0) return false;
+      var changed = applyShared(data.overlay);
+      sharedVersion = v;
+      if (changed) {
+        persist();
+        sharedChangeCbs.forEach(function (cb) { try { cb(); } catch (e) {} });
+      }
+      return changed;
+    });
+  }
+
+  function enableRosterWrite(role, by) {
+    sharedWriteRole = role ? String(role).toLowerCase() : null;
+    if (by) sharedWriteBy = String(by).slice(0, 80);
+  }
+
+  function onSharedChange(cb) {
+    if (typeof cb === "function") sharedChangeCbs.push(cb);
   }
   function loadLocal() {
     try {
@@ -482,15 +609,23 @@
     }
     return Promise.all([
       loadSeed("/data/core.json?v=r2", "core.json?v=r2", emptyState()),
-      loadSeed("/data/core-clocks.json", "core-clocks.json", { clocks: [] })
+      loadSeed("/data/core-clocks.json", "core-clocks.json", { clocks: [] }),
+      fetchShared()
     ]).then(function (pair) {
       var seed = pair[0] || emptyState();
       var extra = pair[1] || {};
+      var shared = pair[2];
       var clocks = Array.isArray(extra) ? extra : (extra.clocks || []);
       if (clocks.length && !(seed.clocks && seed.clocks.length)) {
         seed.clocks = clocks;
       }
       state = merge(seed, loadLocal());
+      // The server holds the authoritative schedule and tasks; overlay them so
+      // this device shows exactly what the manager published, deletions and all.
+      if (shared && shared.ok) {
+        applyShared(shared.overlay);
+        sharedVersion = shared.version || 0;
+      }
       autoCloseOverdueClocks();
       return applyPinOverrides(state).then(function () {
         persist();
@@ -2580,6 +2715,9 @@
     nowISO: nowISO,
     getState: getState,
     persist: persist,
+    enableRosterWrite: enableRosterWrite,
+    refreshShared: refreshShared,
+    onSharedChange: onSharedChange,
     catalog: catalog,
     catalogById: catalogById,
     locationLabel: locationLabel,

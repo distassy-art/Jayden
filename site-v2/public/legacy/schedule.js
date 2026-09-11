@@ -68,6 +68,20 @@
     if ((sessionStorage.getItem("ss_email") || "").toLowerCase() === "racheloberholtzer") return true;
     return false;
   }
+  // A manager for the purpose of writing the shared schedule/tasks. Mirrors the
+  // signals canManagePay/canDecideTimeOff already trust, so write access lines
+  // up with who can edit this page at all.
+  function isManagerHere() {
+    if (sessionStorage.getItem("ss_mgr") === "1") return true;
+    if ((sessionStorage.getItem("ss_role") || "") === "manager") return true;
+    if ((sessionStorage.getItem("ss_email") || "").toLowerCase() === "racheloberholtzer") return true;
+    if (sessionStorage.getItem("ss_ok")) return true;
+    try {
+      var id = sessionStorage.getItem("ss_core_emp");
+      if (id && C && C.isManagerEmployee) return !!C.isManagerEmployee(C.employeeById(id));
+    } catch (e) {}
+    return false;
+  }
   function canManagePay() {
     if (sessionStorage.getItem("ss_mgr") === "1") return true;
     if ((sessionStorage.getItem("ss_role") || "") === "manager") return true;
@@ -2496,6 +2510,11 @@
     lockMgrArco();
     readHash();
     C = wSS();
+    // This page is the manager's schedule/task editor. Only enable writing the
+    // shared store (which every employee device reads) for an actual manager —
+    // same signals the pay/time-off controls already gate on. A regular employee
+    // who lands here stays read-only, exactly as with the rest of this page.
+    if (C.enableRosterWrite && isManagerHere()) C.enableRosterWrite("manager", managerActor());
     weekMon = C.weekStartMonday();
     dayYmd = C.todayYMD();
     payStart = C.payPeriodOf(dayYmd).start;
