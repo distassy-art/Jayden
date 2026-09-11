@@ -177,7 +177,13 @@ function monthEstimateSection(ctx) {
 /** Day-by-day sales, purchases and profit for the running month, newest first. */
 function dailyNumbersSection(ctx) {
   const { model, current } = ctx;
+  // Only days whose sales sheet has actually been posted belong here. Fuel
+  // volume auto-posts a day or two ahead of the sheet, so the overlay can carry
+  // a gas-only day (e.g. today's) with sales still null; showing it would put a
+  // dash under "Sales" that reads as missing data. The /daily page filters the
+  // same way, so the two views agree on the latest posted day.
   const all = scopeDays(model, ctx.scope.stationIds)
+    .filter((row) => isNum(row.sales) && row.sales !== 0)
     .sort((a, b) => b.date.localeCompare(a.date));
   if (!all.length) return "";
 
@@ -229,9 +235,10 @@ function dailyNumbersSection(ctx) {
       </tr></tfoot>
     </table></div>
     <div class="card-foot tiny muted">
-      Purchases and store profit are booked when the month's books close, so this table
-      shows the sales and fuel that post daily. The month-to-date store profit and margin
-      are in <b>This month so far</b> above.
+      A day appears here once its sales sheet is posted; fuel volume can lead store
+      sales by a day or two, so the newest fuel day may not be listed yet. Purchases and
+      store profit are booked when the month's books close — the month-to-date store
+      profit and margin are in <b>This month so far</b> above.
     </div>
   </section>`;
 }
