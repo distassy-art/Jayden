@@ -436,6 +436,66 @@ def extract_scan_rows(picked: dict, aliases: dict[str, str]) -> list[dict]:
     return rows
 
 
+SECTION_STOP_RE = re.compile(
+    r"^(MTD|ACTIVE\s*S2K|S2K\s*REPORT|CASHIER|BANK|EXCLUDED|SUMMARY|VENDOR\s*AUDIT\b|SETTING\b|MONTH-?END|NO\s*SCAN)",
+    re.I,
+)
+
+
+def _unmerge_cell(ws, row: int, col: int) -> None:
+    """If (row,col) sits in a merge, unmerge that range so the cell is writable."""
+    for rng in list(ws.merged_cells.ranges):
+        if rng.min_row <= row <= rng.max_row and rng.min_col <= col <= rng.max_col:
+            try:
+                ws.unmerge_cells(str(rng))
+            except KeyError:
+                # insert_rows can leave stale merge coords; drop from the merge set directly
+                try:
+                    ws.merged_cells.ranges.remove(rng)
+                except Exception:
+                    pass
+
+
+def _clear_row_merges(ws, row: int) -> None:
+    """Unmerge every range that touches `row` (banner rows / section headers)."""
+    for rng in list(ws.merged_cells.ranges):
+        if rng.min_row <= row <= rng.max_row:
+            try:
+                ws.unmerge_cells(str(rng))
+            except KeyError:
+                try:
+                    ws.merged_cells.ranges.remove(rng)
+                except Exception:
+                    pass
+
+
+def _set_cell(ws, row: int, col: int, value) -> None:
+    _unmerge_cell(ws, row, col)
+    ws.cell(row, col).value = value
+
+
+def _clean_vendor(name: str) -> str:
+    """Collapse OCR junk like 'YASTA\\nBILL TO\\n~  YASTA LLC...' to a short vendor."""
+    if not name:
+        return name
+    text = str(name).replace("\r", "\n")
+    # Prefer a known-looking ALLCAPS / Title line with LLC/INC/CO
+    for line in text.split("\n"):
+        s = re.sub(r"^[\s~\-_|]+", "", line).strip()
+        if not s or len(s) < 3:
+            continue
+        up = s.upper()
+        if up in {"BILL TO", "SOLD TO", "SHIP TO", "INVOICE", "CUSTOMER", "BUSINESS"}:
+            continue
+        if re.search(r"\b(LLC|INC|CO\.?|COMPANY|DISTRIBUT)\b", up) or (
+            s.isupper() and 3 <= len(s) <= 48 and " " not in s[:1]
+        ):
+            return s[:80]
+    # Fallback: first non-empty line, single-line
+    first = next((ln.strip() for ln in text.split("\n") if ln.strip()), str(name))
+    return re.sub(r"\s+", " ", first)[:80]
+
+
 def append_audit_rows(client: dict, month: str, rows: list[dict], as_of: date, dry_run: bool = False) -> dict:
     paths = client_paths(client, month)
     candidates = [paths["audit_xlsx"], f"{DOCS}/{client['dest']}/{client['name']} Audit.xlsx"]
@@ -481,7 +541,8 @@ def append_audit_rows(client: dict, month: str, rows: list[dict], as_of: date, d
     write_row = header_row + 1
     for r in range(header_row + 1, header_row + 200):
         v = ws.cell(r, 1).value
-        if v is None or str(v).strip() == "" or str(v).strip().upper().startswith("MTD"):
+        label = str(v).strip() if v is not None else ""
+        if label == "" or SECTION_STOP_RE.match(label):
             write_row = r
             break
         d = ws.cell(r, 2).value
@@ -496,36 +557,74 @@ def append_audit_rows(client: dict, month: str, rows: list[dict], as_of: date, d
             aval = round(float(a), 2) if a is not None else None
         except Exception:
             aval = None
-        existing.add((str(v).strip().upper(), dkey, aval))
+        existing.add((label.upper(), dkey, aval))
         write_row = r + 1
 
-    added = []
+    # Count new rows first so we can insert above a following section (e.g. ACTIVE S2K).
+    to_add = []
     for row in rows:
         if row["amount"] is None or row["invoice_date"] is None:
             continue
-        key = (str(row["vendor"]).strip().upper(), row["invoice_date"].isoformat(), round(float(row["amount"]), 2))
+        vendor = _clean_vendor(row["vendor"])
+        key = (vendor.strip().upper(), row["invoice_date"].isoformat(), round(float(row["amount"]), 2))
         if key in existing:
             continue
-        if not dry_run:
-            ws.cell(write_row, 1).value = row["vendor"]
-            ws.cell(write_row, 2).value = datetime.combine(row["invoice_date"], datetime.min.time())
-            ws.cell(write_row, 3).value = float(row["amount"])
-        added.append({**row, "row": write_row, "status": "dry_run" if dry_run else "added"})
+        to_add.append((row, vendor, key))
         existing.add(key)
+
+    stop_label = ws.cell(write_row, 1).value
+    if (
+        to_add
+        and stop_label is not None
+        and SECTION_STOP_RE.match(str(stop_label).strip())
+        and not dry_run
+    ):
+        # Push the section (and merges) down so new invoice rows sit above it.
+        ws.insert_rows(write_row, amount=len(to_add))
+
+    # Expand any Excel Table that ends just above the write row so new cells persist.
+    if to_add and not dry_run:
+        from openpyxl.utils import range_boundaries, get_column_letter
+
+        end_row = write_row + len(to_add) - 1
+        for name in list(ws.tables.keys()):
+            t = ws.tables[name]
+            min_col, min_row, max_col, max_row = range_boundaries(t.ref)
+            # Scanned-invoices tables sit under the VENDOR NAME header.
+            if min_col == 1 and min_row <= header_row + 1 and max_row + 1 >= write_row and max_row <= end_row + 5:
+                new_ref = f"A{min_row}:{get_column_letter(max_col)}{max(max_row, end_row)}"
+                if new_ref != t.ref:
+                    t.ref = new_ref
+                    if t.autoFilter is not None:
+                        t.autoFilter.ref = new_ref
+
+    added = []
+    for row, vendor, key in to_add:
+        if not dry_run:
+            _clear_row_merges(ws, write_row)
+            _set_cell(ws, write_row, 1, vendor)
+            _set_cell(ws, write_row, 2, datetime.combine(row["invoice_date"], datetime.min.time()))
+            _set_cell(ws, write_row, 3, float(row["amount"]))
+        added.append({**row, "vendor": vendor, "row": write_row, "status": "dry_run" if dry_run else "added"})
         write_row += 1
 
-    ws.cell(3, 1).value = (
+    note = (
         f"{as_of.strftime('%B')} scanned invoices loaded through {as_of.isoformat()}; "
         f"agent OCR append {datetime.now(PT).strftime('%Y-%m-%d %H:%M %Z')}."
     )
+    try:
+        _set_cell(ws, 3, 1, note)
+    except Exception:
+        pass
     if "Cover" in wb.sheetnames:
         cover = wb["Cover"]
         for r in range(1, 20):
             v = cover.cell(r, 1).value
             if v and as_of.strftime("%b") in str(v):
-                cover.cell(r, 2).value = (
-                    f"{as_of.strftime('%B')} scanned invoices loaded through {as_of.isoformat()}."
-                )
+                try:
+                    _set_cell(cover, r, 2, f"{as_of.strftime('%B')} scanned invoices loaded through {as_of.isoformat()}.")
+                except Exception:
+                    pass
                 break
 
     if not dry_run and added:
@@ -572,32 +671,34 @@ def run(only: str | None, as_of_s: str | None, month: str | None, dry_run: bool)
 
     report = {"started": datetime.now(PT).isoformat(), "as_of": as_of.isoformat(), "month": month, "clients": []}
     for client in clients:
-        paths = client_paths(client, month)
-        picked = pick_files(paths, as_of)
-        entry = {
-            "client": client["name"],
-            "picked": {
+        entry = {"client": client["name"]}
+        try:
+            paths = client_paths(client, month)
+            picked = pick_files(paths, as_of)
+            entry["picked"] = {
                 "daily": [f["Name"] for f in picked["daily"]],
                 "dly": [f["Name"] for f in picked["dly"]],
                 "scans": [f["Name"] for f in picked["scans"]],
-            },
-        }
-        if dry_run:
-            entry["stage"] = {"status": "dry_run"}
-        else:
-            entry["stage"] = stage_for_copilot(client, as_of, picked)
-        rows = extract_scan_rows(picked, aliases) if picked["scans"] else []
-        entry["extract"] = [
-            {
-                "vendor": r["vendor"],
-                "invoice_date": r["invoice_date"].isoformat() if r["invoice_date"] else None,
-                "amount": r["amount"],
-                "source": r["source"],
-                "ocr_sample": r.get("ocr_sample"),
             }
-            for r in rows
-        ]
-        entry["audit"] = append_audit_rows(client, month, rows, as_of, dry_run=dry_run)
+            if dry_run:
+                entry["stage"] = {"status": "dry_run"}
+            else:
+                entry["stage"] = stage_for_copilot(client, as_of, picked)
+            rows = extract_scan_rows(picked, aliases) if picked["scans"] else []
+            entry["extract"] = [
+                {
+                    "vendor": r["vendor"],
+                    "invoice_date": r["invoice_date"].isoformat() if r["invoice_date"] else None,
+                    "amount": r["amount"],
+                    "source": r["source"],
+                    "ocr_sample": r.get("ocr_sample"),
+                }
+                for r in rows
+            ]
+            entry["audit"] = append_audit_rows(client, month, rows, as_of, dry_run=dry_run)
+        except Exception as e:
+            entry["error"] = f"{type(e).__name__}: {e}"
+            entry.setdefault("audit", {"status": "error", "error": str(e)})
         report["clients"].append(entry)
         print(json.dumps(entry, indent=2, default=str, ensure_ascii=False))
 
