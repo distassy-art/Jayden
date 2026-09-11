@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
-"""Build a books-save monthly patch from Monthly Summary workbooks whose
-Fuel Summary sheet uses Excel serial dates (Westminster / San Diego layout).
+"""Build a books monthly patch from the fuel sheets of a Monthly Summary workbook.
+
+Columns are located by their header text rather than by fixed offsets, so this
+reads both workbook layouts: the single "20xx Fuel" sheets and the two-block
+"Fuel Summary" sheet that carries 2025 on the left and 2026 on the right
+(Westminster 42021, San Diego 42048). Month cells may be Excel serial dates or
+labels such as "Jul 2026".
 
 Usage: python3 scripts/extract-fuel-summary-months.py <file.xlsx> <storeId> <storeName>
 Prints {"patches":[...]} JSON to stdout.
@@ -43,6 +48,8 @@ def cell_val(c, strings):
             return v.text
     if t == "inlineStr" and isel is not None:
         return "".join((x.text or "") for x in isel.iter(f"{NS}t"))
+    if t == "str" and v is not None:
+        return v.text
     if v is not None:
         try:
             return float(v.text)
@@ -77,18 +84,11 @@ def grid(z, target, strings):
 
 
 def r2(x):
-    return None if x is None else round(float(x), 2)
+    return None if x is None or isinstance(x, str) else round(float(x), 2)
 
 
 def r4(x):
-    return None if x is None else round(float(x), 4)
-
-
-def excel_ym(n):
-    if not isinstance(n, (int, float)) or n < 40000:
-        return None
-    d = datetime(1899, 12, 30) + timedelta(days=int(n))
-    return f"{d.year}-{d.month:02d}"
+    return None if x is None or isinstance(x, str) else round(float(x), 4)
 
 
 MON = {
@@ -105,8 +105,59 @@ def bare_month(val):
     s = str(val).strip().lower()
     if s in MON:
         return MON[s]
-    key = s[:3]
-    return MON.get(key)
+    return MON.get(s[:3])
+
+
+def month_key(value, fallback_year=None):
+    """Read a "YYYY-MM" key from an Excel serial date or a label like "Jul 2026"."""
+    if isinstance(value, (int, float)):
+        if not 20000 < value < 80000:
+            return None
+        d = datetime(1899, 12, 30) + timedelta(days=int(value))
+        return f"{d.year}-{d.month:02d}"
+    bare = bare_month(value)
+    if not bare:
+        return None
+    year = fallback_year
+    for token in str(value).replace("-", " ").replace("/", " ").split():
+        if token.isdigit() and len(token) == 4:
+            year = int(token)
+        elif token.isdigit() and len(token) == 2:
+            year = 2000 + int(token)
+    return f"{year}-{bare:02d}" if year else None
+
+
+# Header text that identifies each fuel column. "Fuel Sales ($)" is the gross
+# fuel revenue the site publishes as gas_sales; reading it by offset used to
+# skip it, which left fuel revenue blank on the website.
+FIELDS = (
+    ("gas_vol", ("gas volume", "volume (gal)", "gallons"), r2),
+    ("gas_sales", ("fuel sales", "gas sales", "fuel revenue"), r2),
+    ("gas_margin", ("margin ($/gal)", "margin"), r4),
+    ("gas_profit", ("profit ($)", "profit"), r2),
+)
+
+
+def header_blocks(row):
+    """Find every "Month … Fuel Sales …" header block in one row.
+
+    A sheet holding two years side by side yields one block per year, each
+    mapping field name → column index.
+    """
+    labels = [str(x or "").strip().lower() for x in row]
+    starts = [i for i, x in enumerate(labels) if x in ("month", "period")]
+    blocks = []
+    for pos, start in enumerate(starts):
+        end = starts[pos + 1] if pos + 1 < len(starts) else len(labels)
+        block = {"month": start}
+        for key, needles, _ in FIELDS:
+            for i in range(start + 1, end):
+                if any(n in labels[i] for n in needles):
+                    block.setdefault(key, i)
+                    break
+        if "gas_sales" in block or "gas_vol" in block:
+            blocks.append(block)
+    return blocks
 
 
 def put(months, key, rec):
@@ -116,6 +167,46 @@ def put(months, key, rec):
     for k, v in rec.items():
         if v is not None and slot.get(k) is None:
             slot[k] = v
+
+
+def read_fuel_sheet(rows, fallback_year=None):
+    out = {}
+    blocks = []
+    for row in rows:
+        found = header_blocks(row)
+        if found:
+            blocks = found
+            continue
+        for block in blocks:
+            col = block["month"]
+            key = month_key(row[col] if col < len(row) else None, fallback_year)
+            if not key:
+                continue
+            rec = {}
+            for field, _, rounder in FIELDS:
+                i = block.get(field)
+                if i is not None and i < len(row):
+                    value = rounder(row[i])
+                    if value is not None:
+                        rec[field] = value
+            if rec:
+                put(out, key, rec)
+    return out
+
+
+def sheet_year(name):
+    for token in str(name).replace("-", " ").split():
+        if token.isdigit() and len(token) == 4:
+            return int(token)
+    return None
+
+
+def fuel_sheets(by):
+    """Fuel sheets worth reading, skipping year-over-year comparison sheets."""
+    for name in by:
+        low = name.lower()
+        if "fuel" in low and " vs" not in low and not low.startswith("vs"):
+            yield name
 
 
 def extract(path: str, store_id: str, store_name: str):
@@ -129,43 +220,19 @@ def extract(path: str, store_id: str, store_name: str):
             sh.get("name"): resolve(rid[sh.get(f"{REL}id")])
             for sh in wb.findall(f"{NS}sheets/{NS}sheet")
         }
-        if "Fuel Summary" not in by:
-            raise SystemExit("no Fuel Summary sheet")
-        for row in grid(z, by["Fuel Summary"], strings):
-            if not row or not isinstance(row[0], (int, float)) or row[0] < 40000:
-                continue
-            k25 = excel_ym(row[0])
-            if k25 and len(row) > 4 and row[1] not in (None, ""):
-                gp = r2(row[4])
-                put(
-                    months,
-                    k25,
-                    {
-                        "gas_vol": r2(row[1]),
-                        "gas_profit": gp,
-                        "gas_margin": r4(row[3]) if len(row) > 3 else None,
-                        "fuel_profit": gp,
-                    },
-                )
-            if len(row) > 10 and isinstance(row[6], (int, float)) and row[6] > 40000:
-                k26 = excel_ym(row[6])
-                if k26 and row[7] not in (None, ""):
-                    gp = r2(row[10])
-                    put(
-                        months,
-                        k26,
-                        {
-                            "gas_vol": r2(row[7]),
-                            "gas_profit": gp,
-                            "gas_margin": r4(row[9]) if len(row) > 9 else None,
-                            "fuel_profit": gp,
-                        },
-                    )
+        names = list(fuel_sheets(by))
+        if not names:
+            raise SystemExit("no fuel sheet")
+        for name in names:
+            rows = grid(z, by[name], strings)
+            for key, rec in read_fuel_sheet(rows, sheet_year(name)).items():
+                put(months, key, rec)
+
         if "Profit Summary" in by:
             in_table = False
             for row in grid(z, by["Profit Summary"], strings):
                 labels = [str(x or "").strip().lower() for x in row]
-                if labels and labels[0] == "month" and any("fuel 2025" in x or x == "fuel 2025" for x in labels):
+                if labels and labels[0] == "month" and any("fuel 2025" in x for x in labels):
                     in_table = True
                     continue
                 if not in_table:
@@ -176,11 +243,14 @@ def extract(path: str, store_id: str, store_name: str):
                 bare = bare_month(row[0] if row else None)
                 if not bare or len(row) < 7:
                     continue
-                k25 = f"2025-{bare:02d}"
-                k26 = f"2026-{bare:02d}"
-                put(months, k25, {"gas_profit": r2(row[1]), "store_profit": r2(row[2]), "total_profit": r2(row[3])})
-                put(months, k26, {"gas_profit": r2(row[4]), "store_profit": r2(row[5]), "total_profit": r2(row[6])})
+                put(months, f"2025-{bare:02d}",
+                    {"gas_profit": r2(row[1]), "store_profit": r2(row[2]), "total_profit": r2(row[3])})
+                put(months, f"2026-{bare:02d}",
+                    {"gas_profit": r2(row[4]), "store_profit": r2(row[5]), "total_profit": r2(row[6])})
+
     for rec in months.values():
+        if rec.get("fuel_profit") is None and rec.get("gas_profit") is not None:
+            rec["fuel_profit"] = rec["gas_profit"]
         if rec.get("store_profit") is None and rec.get("sales") is not None and rec.get("purchases") is not None:
             rec["store_profit"] = r2(rec["sales"] - rec["purchases"])
         if rec.get("total_profit") is None and rec.get("store_profit") is not None and rec.get("gas_profit") is not None:
@@ -191,17 +261,18 @@ def extract(path: str, store_id: str, store_name: str):
             rec["gas_margin"] = r4(rec["gas_profit"] / rec["gas_vol"])
 
     if not months:
-        raise SystemExit("no serial-date fuel rows")
+        raise SystemExit("no fuel rows")
 
+    fuel_keys = ("gas_vol", "gas_sales", "gas_margin", "gas_profit")
     fuel_months = {
-        k: {kk: vv for kk, vv in rec.items() if kk in ("gas_vol", "gas_profit", "gas_margin")}
+        k: {kk: vv for kk, vv in rec.items() if kk in fuel_keys}
         for k, rec in months.items()
     }
     return {
         "file": path.rsplit("/", 1)[-1],
         "type": "monthly",
         "store": {"id": store_id, "name": store_name},
-        "period": "2026-07",
+        "period": max(months),
         "patch": {
             "monthly": [{"id": store_id, "name": store_name, "months": months}],
             "fuel": [{"id": store_id, "name": store_name, "months": fuel_months}],
