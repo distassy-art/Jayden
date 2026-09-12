@@ -117,8 +117,14 @@ function normaliseDeptBudget(block) {
     .map((item) => {
       const spent = numOrNull(item.purchases_mtd) ?? 0;
       const budget = numOrNull(item.month_budget);
-      const left = isNum(item.remaining) ? Number(item.remaining)
-        : (isNum(budget) ? budget - spent : null);
+      /*
+       * Headroom is subtracted here rather than read from the feed's own
+       * `remaining`. At two stores the two disagree — one reports $1,381 over on
+       * a $0.53 budget against $1,063 spent — so carrying it over printed a
+       * number that did not follow from the two beside it. A reader can check
+       * this one.
+       */
+      const left = isNum(budget) ? budget - spent : null;
       return {
         name: item.name,
         spent,
@@ -262,6 +268,58 @@ export function rollupMtd(stores) {
   totals.through = rows.map((row) => row.through).filter(Boolean).sort().pop() || null;
   totals.stores = rows.length;
   return withRatios(totals);
+}
+
+/**
+ * How far behind the open month's purchase invoices are, store by store.
+ *
+ * Sales are posted at the close of each day; purchase invoices are keyed
+ * whenever the paperwork is done. So mid-month a store's cost is whatever has
+ * been keyed so far, not what it actually bought, and `sales - purchases` is
+ * not its profit. Through 8 September the portfolio read a 53.4% store margin
+ * against 39.0% for the August books, because La Mesa had keyed no invoices at
+ * all and Arco HB had keyed $490 against $38,165 of sales.
+ *
+ * A store is called behind when its month-to-date purchases are less than
+ * `floor` of what its own closed books say it normally buys per dollar sold.
+ * Comparing each store with itself rather than with a portfolio average keeps
+ * a genuinely low-cost site from being flagged forever.
+ *
+ * `bookRatios` is `buyRatioByStation(model)`.
+ */
+export function purchaseKeying(stores, bookRatios, { floor = 0.6 } = {}) {
+  const rows = [];
+  stores.forEach((store) => {
+    const mtd = store.mtd;
+    if (!mtd || !isNum(mtd.sales) || Number(mtd.sales) <= 0) return;
+    const book = bookRatios?.get?.(String(store.id));
+    if (!isNum(book) || Number(book) <= 0) return;
+    const keyed = Number(mtd.purchases) || 0;
+    const mtdRatio = keyed / Number(mtd.sales);
+    rows.push({
+      id: store.id,
+      name: store.name,
+      sales: Number(mtd.sales),
+      purchases: keyed,
+      mtdRatio,
+      bookRatio: Number(book),
+      share: mtdRatio / Number(book),
+      behind: mtdRatio < Number(book) * floor,
+    });
+  });
+
+  const behind = rows.filter((row) => row.behind)
+    .sort((a, b) => a.share - b.share);
+  // What the same sales would have cost at each store's own closed-book rate.
+  // Used to say how far off the month-to-date profit is, never to replace it:
+  // the shortfall is missing paperwork, not a forecast.
+  const atBook = rows.reduce((sum, row) => sum + row.sales * row.bookRatio, 0);
+  const keyed = rows.reduce((sum, row) => sum + row.purchases, 0);
+
+  return {
+    stores: rows, behind, counted: rows.length,
+    keyed, atBook, shortfall: Math.max(atBook - keyed, 0),
+  };
 }
 
 export function rollupProjection(stores) {

@@ -2,9 +2,9 @@
 
 import {
   dateLabel, daysSince, downloadCsv, emptyState, esc, icon, isNum, money,
-  monthLabel, num, timeAgo, toast,
+  monthLabel, num, pct, timeAgo, toast,
 } from "../ui.js";
-import { dataHealth } from "../analytics.js";
+import { dataHealth, shortMonths } from "../analytics.js";
 import { isAccountant, isAdmin } from "../data.js";
 import {
   addTicket, addTicketMessage, listTickets, setTicketStatus,
@@ -435,15 +435,36 @@ export function renderHealth(ctx) {
     return age != null && age > 10;
   });
 
+  /*
+   * A month can close with a fraction of the store's trade in it — Garden
+   * Grove's August closed at 11% of its own run rate — and every reconciliation
+   * still passes, because the short figures agree with each other. Those months
+   * are named here rather than dropped: excluding one would invent a portfolio
+   * no feed states, but leaving it unmarked is how a client report goes out on
+   * half a month.
+   */
+  const short = shortMonths(model);
+  const shortLatest = short.filter((row) => row.key === model.latestMonth);
+  const shortByStore = new Map();
+  short.forEach((row) => {
+    if (!shortByStore.has(row.station.id)) shortByStore.set(row.station.id, []);
+    shortByStore.get(row.station.id).push(row);
+  });
+
   const rows = health.map((row) => {
     const dayAge = daysSince(row.lastDay);
     const stale = dayAge != null && dayAge > 10;
+    const partial = shortByStore.get(row.station.id) || [];
     return `<tr class="is-clickable" data-href="#/store/${esc(row.station.id)}">
       <td><div class="cell-main"><span class="store-tag">${esc(row.station.id)}</span>
         <span class="strong">${esc(row.station.name)}</span></div></td>
       <td>${row.closedLatest
         ? `<span class="badge pos">${icon("check")}Closed</span>`
-        : '<span class="badge neg">Not closed</span>'}</td>
+        : '<span class="badge neg">Not closed</span>'}
+        ${partial.length
+          ? `<span class="badge warn" style="margin-left:6px"
+              title="Closed with a fraction of this store's usual sales in it">${esc(num(partial.length))} part-month${partial.length === 1 ? "" : "s"}</span>`
+          : ""}</td>
       <td class="nowrap">${esc(monthLabel(row.lastMonth, true))}
         ${row.aheadMonths.length
           ? `<span class="badge info" title="Part-month, kept out of trends until it closes">${esc(monthLabel(row.aheadMonths[0], true))} in progress</span>`
@@ -487,9 +508,35 @@ export function renderHealth(ctx) {
     <div class="grid cols-4" style="margin-bottom:16px">
       ${figure("Stores reporting", num(model.stations.length), "In the books feed")}
       ${figure("Not closed", num(behind.length), `For ${monthLabel(model.latestMonth, true)}`, behind.length ? "warn" : "pos")}
-      ${figure("Stale daily data", num(staleDays.length), "No day filed in over 10 days", staleDays.length ? "warn" : "pos")}
+      ${figure("Part-months closed", num(short.length),
+        shortLatest.length ? `${num(shortLatest.length)} in ${monthLabel(model.latestMonth, true)}`
+          : "None in the newest month", short.length ? "warn" : "pos")}
       ${figure("Stores with day gaps", num(withGaps.length), "Missing dates inside the range", withGaps.length ? "warn" : "pos")}
     </div>
+
+    ${short.length ? `<section class="card" style="margin-bottom:16px">
+      <div class="card-head"><h3>Months that closed short</h3>
+        <span class="hint">Below half the store's own median month</span></div>
+      <div class="table-wrap"><table class="table">
+        <thead><tr><th>Store</th><th>Month</th><th class="num">Store sales</th>
+          <th class="num">Usual month</th><th class="num">Share</th><th class="num">Purchases</th></tr></thead>
+        <tbody>${short.map((row) => `<tr class="is-clickable" data-href="#/store/${esc(row.station.id)}">
+          <td><div class="cell-main"><span class="store-tag">${esc(row.station.id)}</span>
+            <span class="strong">${esc(row.station.name)}</span></div></td>
+          <td class="nowrap">${esc(monthLabel(row.key, true))}</td>
+          <td class="num strong">${esc(money(row.sales))}</td>
+          <td class="num muted">${esc(money(row.typical))}</td>
+          <td class="num"><span class="badge warn">${esc(pct(row.share, { digits: 0 }))}</span></td>
+          <td class="num">${esc(row.purchases == null ? "—" : money(row.purchases))}</td>
+        </tr>`).join("")}</tbody>
+      </table></div>
+      <div class="card-foot tiny muted">
+        These months are counted in every total on the console, because the books close them and
+        nothing here invents a figure a feed does not state. They are listed so a client report is
+        not sent on half a month — the store's sales and its buying are both short by the same
+        stretch, which is what a partial posting looks like rather than a bad month.
+      </div>
+    </section>` : ""}
 
     <section class="card" style="margin-bottom:16px">
       <div class="card-head"><h3>Coverage by store</h3>

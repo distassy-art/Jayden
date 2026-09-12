@@ -40,12 +40,15 @@ const ENDPOINTS = new Map([
   ["/api/data/core.json", "/data/core.json"],
 
   /*
-   * Three feeds the overlay does not carry.
+   * Four feeds the overlay does not carry, or does not carry correctly.
    *
-   * `monthly.json` is the only source of `gas_sales` — fuel revenue. Without it
-   * the console can describe fuel as gallons and cents per gallon but cannot
-   * say what fuel actually sold for, which at most sites is the large majority
-   * of the money through the door.
+   * `monthly.json` is the reconciled monthly book: it states the span it covers
+   * ("closed months through August 2026"), holds every store on that one span,
+   * and is fixed once a month closes. The overlay is the working file behind it
+   * and for the months either side of a close it is not yet a book — unposted
+   * stores report zero sales, some rows are placeholders, and fuel profit goes
+   * missing under one of its two names. So this is the source for every closed
+   * month it reaches, and the overlay covers only what it has not.
    *
    * `vendor-spend.json` breaks purchases down by who they were bought from.
    * The overlay gives one purchases total per store per month, so an owner can

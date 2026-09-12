@@ -302,19 +302,26 @@ export function renderBudget(ctx) {
       </tr></thead>
       <tbody>
         ${[
-          ["Store sales", "sales"],
-          ["Bought", "purchases"],
-          ["Store profit", "store_profit"],
-          ["Fuel profit", "gas_profit"],
-        ].map(([label, key]) => {
+          // Store profit is sales minus purchases, and an open month's purchases
+          // are only the invoices keyed so far — so it is left out of both the
+          // "so far" and the pace columns rather than crediting unkeyed cost as
+          // margin. What has been bought is a fact and is shown; pacing it would
+          // carry a store with nothing keyed yet to month end at no cost at all.
+          ["Store sales", "sales", { paced: true }],
+          ["Bought so far", "purchases", { paced: false }],
+          ["Store profit", "store_profit", { open: false }],
+          ["Fuel profit", "gas_profit", { paced: true }],
+        ].map(([label, key, opts]) => {
+          const settled = opts.open !== false;
           const ly = lastYear ? lastYear[key] : null;
-          const pace = projection[key];
+          const pace = settled && opts.paced ? projection[key] : null;
           const delta = isNum(ly) && isNum(pace) && Number(ly) !== 0
             ? ((pace - ly) / Math.abs(ly)) * 100 : null;
+          const dash = `<span class="muted" title="Settles when the books close">—</span>`;
           return `<tr>
             <th scope="row">${esc(label)}</th>
-            <td class="num">${esc(money(mtd[key]))}</td>
-            <td class="num strong">${esc(money(pace))}</td>
+            <td class="num">${settled ? esc(money(mtd[key])) : dash}</td>
+            <td class="num strong">${isNum(pace) ? esc(money(pace)) : dash}</td>
             ${lastYear ? `<td class="num muted">${esc(money(ly))}</td>
               <td class="num">${isNum(delta)
                 ? deltaBadge(delta, { higherIsBetter: key !== "purchases" }) : "—"}</td>` : ""}
@@ -327,7 +334,8 @@ export function renderBudget(ctx) {
         <div><b>“At this pace” is arithmetic, not a forecast.</b>
           It assumes the rest of the month trades like the days already filed. The comparison
           runs against last year's full month, so it is only meaningful against the pace column —
-          never against “so far”.</div>
+          never against “so far”. Store profit is blank until the books close: purchase invoices
+          are keyed later than sales, so subtracting them now would read as margin.</div>
       </div>
     </div>
   </section>` : "";

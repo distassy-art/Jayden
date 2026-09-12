@@ -11,13 +11,13 @@
  */
 
 import {
-  buildModel, departmentRollup, fuelRevenue, portfolioTotals, priorYearKeys, resolveTimeframe,
-  scopeDays, storeDays, sumDays, timeframes,
+  buildModel, buyRatioByStation, departmentRollup, portfolioTotals, resolveTimeframe,
+  scopeDays, shortMonths, storeDays, sumDays, timeframes,
 } from "../public/assets/analytics.js";
 import { bucketDays, buildOwners, resolveScope } from "../public/assets/scope.js";
 import {
-  buildCurrent, currentStores, partitionByPeriod, rollupDeptBudget, rollupMtd,
-  rollupWeeks,
+  buildCurrent, currentStores, partitionByPeriod, purchaseKeying, rollupDeptBudget,
+  rollupMtd, rollupWeeks,
 } from "../public/assets/current.js";
 import { renderDashboard } from "../public/assets/views/dashboard.js";
 import { renderStore, renderStores } from "../public/assets/views/stores.js";
@@ -37,9 +37,7 @@ import { renderLeaks } from "../public/assets/views/leaks.js";
 import { renderPayroll } from "../public/assets/views/payroll.js";
 import { renderProfile } from "../public/assets/views/profile.js";
 import { PUBLIC_ROUTES, renderLogin } from "../public/assets/views/site.js";
-import { isNum, money, moneyShort, pct } from "../public/assets/ui.js";
-
-const moneyShortText = (value) => moneyShort(value);
+import { isNum, money, pct } from "../public/assets/ui.js";
 
 // The trends wall prints margins to one decimal place.
 const pctText = (ratio) => pct(ratio, { digits: 1 });
@@ -405,12 +403,23 @@ async function main() {
   const theYear = portfolioTotals(model, model.ytdKeys, null);
 
   for (const measure of ["sales", "purchases", "gas_vol"]) {
-    assert(oneDay[measure] <= itsWeek[measure] + 1,
-      `${measure}: the latest day (${Math.round(oneDay[measure])}) exceeds its week `
-      + `(${Math.round(itsWeek[measure])})`);
-    assert(itsWeek[measure] <= itsMonth[measure] + 1,
-      `${measure}: the latest week (${Math.round(itsWeek[measure])}) exceeds its month `
-      + `(${Math.round(itsMonth[measure])})`);
+    // A bucket can legitimately report no store side at all: every store's pump
+    // is metered daily but not every store files a sheet, and rather than add two
+    // stores' sales to fifteen stores' gallons the store figures are withheld.
+    // Nesting still has to hold wherever both ends are reported.
+    if (!isNum(oneDay[measure]) || !isNum(itsWeek[measure])) {
+      assert(oneDay.storeFiled === false || itsWeek.storeFiled === false,
+        `${measure}: a bucket reports nothing yet is not marked short of sheets`);
+    } else {
+      assert(oneDay[measure] <= itsWeek[measure] + 1,
+        `${measure}: the latest day (${Math.round(oneDay[measure])}) exceeds its week `
+        + `(${Math.round(itsWeek[measure])})`);
+    }
+    if (isNum(itsWeek[measure]) && isNum(itsMonth[measure])) {
+      assert(itsWeek[measure] <= itsMonth[measure] + 1,
+        `${measure}: the latest week (${Math.round(itsWeek[measure])}) exceeds its month `
+        + `(${Math.round(itsMonth[measure])})`);
+    }
   }
   assert(oneDay.days <= itsWeek.days && itsWeek.days <= itsMonth.days,
     "store-days do not nest across the three grains");
@@ -430,22 +439,72 @@ async function main() {
   process.stdout.write(`  ok    the page prints the year column as ${money(theYear.total_profit)}\n`);
 
   /*
-   * Daily purchases are not booked day by day, so the page must not fake a store
-   * margin from them. Instead it shows the real month-to-date store P&L from the
-   * books feed, and prints that store profit rather than the daily proxy.
+   * The open month has no settled store side anywhere on this page.
+   *
+   * Sales are posted at the close of each day; purchase invoices are keyed later.
+   * So month-to-date "store profit" is sales minus whatever paperwork is done,
+   * and it read $205,580 at a 53.4% margin while the same stores had just closed
+   * August at 39.0%. The page must publish the figures the open month can support
+   * — sales, gallons, fuel profit — and must not publish that store profit, its
+   * margin, or the total profit built on it. The closed-book year column is
+   * checked above, so this cannot pass by dropping the store side everywhere.
    */
   const mtdFiled = currentStores(current, resolveScope(model, new URLSearchParams("period=day")))
     .filter((store) => store.onPeriod);
   const mtd = rollupMtd(mtdFiled);
   if (mtd) {
     assert(dailyPage.includes("This month so far"),
-      "daily: the month-to-date store P&L summary is missing");
-    assert(dailyPage.includes(money(mtd.store_profit)),
-      `daily: does not print the real month-to-date store profit ${money(mtd.store_profit)}`);
+      "daily: the month-to-date summary is missing");
+    assert(dailyPage.includes(money(mtd.sales)),
+      `daily: does not print month-to-date store sales ${money(mtd.sales)}`);
+    assert(dailyPage.includes(money(mtd.gas_profit)),
+      `daily: does not print month-to-date fuel profit ${money(mtd.gas_profit)}`);
+    assert(!dailyPage.includes(money(mtd.store_profit)),
+      `daily: still prints the open month's store profit ${money(mtd.store_profit)}`);
+    assert(!dailyPage.includes(`${pct(mtd.margin)} store margin`),
+      `daily: still prints the open month's store margin ${pct(mtd.margin)}`);
+    assert(!dailyPage.includes(money(mtd.total_profit)),
+      `daily: still prints the open month's total profit ${money(mtd.total_profit)}`);
     assert(!dailyPage.includes("Sales against purchases"),
       "daily: still shows the misleading sales-against-purchases chart");
-    process.stdout.write("  ok    daily shows the real month-to-date store P&L, not a daily proxy\n");
+    process.stdout.write(`  ok    daily publishes month-to-date sales ${money(mtd.sales)} and fuel `
+      + `profit ${money(mtd.gas_profit)}, and withholds the unsettled store side\n`);
+
+    // The reason has to be on the page, not just in the code, and the stores
+    // holding it up have to be nameable.
+    const keying = purchaseKeying(mtdFiled, buyRatioByStation(model));
+    assert(keying.counted > 0, "no store could be compared with its own closed books");
+    assert(dailyPage.includes("purchase invoices are keyed later"),
+      "daily: does not say why the store side is missing");
+    if (keying.behind.length) {
+      assert(dailyPage.includes(keying.behind[0].name),
+        `daily: does not name ${keying.behind[0].name}, the furthest behind on invoices`);
+      process.stdout.write(`  ok    ${keying.behind.length} of ${keying.counted} stores named as `
+        + `behind on invoices, ${money(keying.shortfall)} of cost not yet keyed\n`);
+    }
   }
+
+  /*
+   * The store side of a day is withheld unless every store that traded that day
+   * filed a sheet. Without that gate the newest days summed two stores' sales
+   * against fifteen stores' gallons: $8,963 of sales beside 64,892 gallons, about
+   * a sixth of the sales those days really did.
+   */
+  const shortDays = dayRows.filter((row) => !row.storeFiled);
+  const fullDays = dayRows.filter((row) => row.storeFiled);
+  assert(fullDays.length > 0, "no day has a complete set of store sheets");
+  for (const row of shortDays) {
+    assert(row.sales === null && row.purchases === null && row.store_profit === null,
+      `${row.date}: only ${row.salesStores} of ${row.stores} stores filed, yet store figures are reported`);
+    assert(isNum(row.gas_vol),
+      `${row.date}: gallons are missing on a day that is only short of store sheets`);
+  }
+  for (const row of fullDays) {
+    assert(row.salesStores === row.stores,
+      `${row.date}: marked complete with ${row.salesStores} of ${row.stores} sheets`);
+  }
+  process.stdout.write(`  ok    ${fullDays.length} days carry a full set of store sheets, `
+    + `${shortDays.length} report fuel only\n`);
 
   /*
    * The leaks page rests on one fact about these books: a day's store profit
@@ -456,62 +515,66 @@ async function main() {
    * single day.
    */
   /*
-   * Fuel revenue lags the other feeds, so the trap is arithmetic across two
-   * different spans: a year-to-date fuel profit taken off a six-month revenue
-   * gives a cost of goods that looks plausible and is badly wrong. Every
-   * figure in that block has to come from the same store-months.
+   * Fuel revenue is gone, and has to stay gone.
+   *
+   * It was the one measure whose feed did not cover the months it was shown
+   * against — one store in July, none in August — so every figure derived from
+   * it carried a caveat about which stores and which months it covered, and a
+   * cost of goods that took eight months of profit off six of revenue. A field
+   * reappearing upstream must not quietly put the block back.
    */
-  process.stdout.write("\nFuel revenue spans\n");
-  const rev = fuelRevenue(model, model.ytdKeys, null);
-  if (rev) {
-    assert(Math.abs((rev.sales - rev.cost) - rev.profit) < 1,
-      "fuel revenue: cost does not reconcile to revenue minus profit");
+  process.stdout.write("\nFuel revenue is not reported\n");
+  const revenueLeak = model.stations.flatMap((station) => model.closedMonths
+    .filter((key) => isNum(station.months[key]?.gas_sales))
+    .map((key) => `${station.id} ${key}`));
+  assert(revenueLeak.length === 0,
+    `fuel revenue: gas_sales is back in the model (${revenueLeak.slice(0, 3).join(", ")})`);
+  const fuelPage = renderFuel(ctx());
+  for (const page of [["fuel", fuelPage], ["trends", renderTrends(ctx())]]) {
+    assert(!/Fuel revenue|Cost of the fuel|Kept from revenue/.test(page[1]),
+      `${page[0]}: still shows a fuel revenue figure`);
+  }
+  process.stdout.write("  ok    no page reports what fuel sold for, only gallons, "
+    + "cents per gallon and profit\n");
 
-    // Recomputed here over exactly the store-months reporting revenue.
-    let sales = 0;
-    let profit = 0;
-    let volume = 0;
-    model.stations.forEach((station) => {
-      model.ytdKeys.forEach((key) => {
-        const month = station.months[key];
-        if (!month || !isNum(month.gas_sales)) return;
-        sales += Number(month.gas_sales);
-        if (isNum(month.gas_profit)) profit += Number(month.gas_profit);
-        if (isNum(month.gas_vol)) volume += Number(month.gas_vol);
-      });
-    });
-    assert(Math.abs(sales - rev.sales) < 1, "fuel revenue: sales disagree");
-    assert(Math.abs(profit - rev.profit) < 1,
-      `fuel revenue: paired profit is ${Math.round(rev.profit).toLocaleString()}, `
-      + `should be ${Math.round(profit).toLocaleString()} over the reporting months`);
-    assert(Math.abs(volume - rev.volume) < 1, "fuel revenue: paired gallons disagree");
-
-    // The whole-period fuel profit is larger, which is precisely why pairing
-    // matters — if these matched, the test would prove nothing.
-    const wholePeriod = portfolioTotals(model, model.ytdKeys, null).fuel_profit;
-    assert(wholePeriod > rev.profit,
-      "fuel revenue: the feed now covers the whole period, so this pairing can be simplified");
-
-    // And the page must not silently present the short span as the full one.
-    const fuelPage = renderFuel(ctx());
-    if (!rev.complete) {
-      assert(/not the whole of/.test(fuelPage),
-        "fuel: revenue covers only part of the period and the page does not say so");
+  /*
+   * A month that closed with a fraction of a store's own trade in it.
+   *
+   * Garden Grove's August closed at 11% of its run rate on 1% of its usual
+   * buying — figures that agree with each other, so every reconciliation above
+   * passes. They are counted, because nothing here invents a figure a feed does
+   * not state, but the page has to name them or a client report goes out on half
+   * a month.
+   */
+  process.stdout.write("\nPart-months\n");
+  const short = shortMonths(model);
+  for (const row of short) {
+    assert(row.sales < row.typical,
+      `${row.station.id} ${row.key}: flagged short at ${row.sales} against ${row.typical}`);
+    // Both halves short by the same stretch is what a partial posting looks
+    // like. A real collapse in sales would not halve the buying with it.
+    assert(!isNum(row.purchases) || row.purchases <= row.typical,
+      `${row.station.id} ${row.key}: bought a full month against short sales`);
+  }
+  const healthPage = renderHealth(ctx());
+  if (short.length) {
+    assert(/Months that closed short/.test(healthPage),
+      "health: part-months are not reported");
+    for (const row of short) {
+      assert(healthPage.includes(money(row.sales)),
+        `health: does not name ${row.station.name}'s ${row.key} at ${money(row.sales)}`);
     }
-    process.stdout.write(`  ok    revenue ${money(rev.sales)} over ${rev.keys.length}`
-      + `/${rev.ofKeys} months and ${rev.stores}/${rev.ofStores} stores, paired with `
-      + `${money(rev.profit)} profit — not the ${money(wholePeriod)} for the full period\n`);
-
-    // Last year has to be the same stores, or thirteen are put against seventeen.
-    const priorSame = fuelRevenue(model, priorYearKeys(rev.keys), rev.storeIds);
-    const priorAll = fuelRevenue(model, priorYearKeys(rev.keys), null);
-    if (priorSame && priorAll) {
-      assert(priorSame.stores <= rev.stores,
-        "fuel revenue: the prior period pulled in stores absent from this one");
-      process.stdout.write(`  ok    compared with ${money(priorSame.sales)} over the same `
-        + `${priorSame.stores} stores, not ${money(priorAll.sales)} over `
-        + `${priorAll.stores}\n`);
+    // And they must still be inside the totals, not quietly dropped.
+    const flagged = short.filter((row) => row.key === model.latestMonth);
+    for (const row of flagged) {
+      const counted = portfolioTotals(model, [row.key], [row.station.id]).sales;
+      assert(Math.abs(Number(counted) - row.sales) < 0.01,
+        `${row.station.id} ${row.key}: flagged short and then excluded from the totals`);
     }
+    process.stdout.write(`  ok    ${short.length} part-months named on data health, `
+      + `all still counted (${short.map((r) => `${r.station.name} ${r.key}`).join(", ")})\n`);
+  } else {
+    process.stdout.write("  ok    no month closed short of its store's run rate\n");
   }
 
   process.stdout.write("\nLeaks\n");
@@ -549,10 +612,39 @@ async function main() {
 
   process.stdout.write("\nTrends wall\n");
   const wall = renderTrends(ctx());
-  const expected = ["Fuel volume", "Fuel revenue", "Fuel margin", "Fuel profit",
+  const expected = ["Fuel volume", "Fuel margin", "Fuel profit",
     "Store sales", "Purchases", "Store margin", "Store profit", "Total profit"];
   const missingMetric = expected.filter((title) => !wall.includes(`<h3>${title}</h3>`));
   assert(missingMetric.length === 0, `trends: missing ${missingMetric.join(", ")}`);
+
+  /*
+   * Closed months only. The wall carried the running month scaled to a full
+   * month, and a year-end estimate built on it, above eight columns of actuals.
+   * Nothing projected may appear here again, and no chart may reach into a month
+   * that has not closed.
+   */
+  for (const phrase of ["This month so far", "Year-end estimate", "on pace"]) {
+    assert(!wall.includes(phrase), `trends: still shows "${phrase}" — closed months only`);
+  }
+  const openMonth = model.allMonths.filter((key) => key > model.latestMonth);
+  assert(openMonth.every((key) => !model.closedMonths.includes(key)),
+    `trends: ${openMonth.join(", ")} has not closed but is in the charted months`);
+  process.stdout.write(`  ok    closed months only, ${model.latestMonth} back`
+    + `${openMonth.length ? `, holding ${openMonth.join(", ")} out` : ""}\n`);
+
+  // Every metric on the wall has to reach the newest closed month. Fuel profit
+  // charted as a gap over July and August because the working overlay names it
+  // `gas_profit` there and drops `fuel_profit`; both feeds are reconciled now.
+  for (const metric of ["fuel_profit", "gas_profit", "gas_vol", "sales",
+    "purchases", "store_profit", "total_profit"]) {
+    const latest = portfolioTotals(model, [model.latestMonth], null)[metric];
+    assert(isNum(latest) && Number(latest) !== 0,
+      `${metric}: nothing reported for ${model.latestMonth}`);
+    const gaps = model.ytdKeys.filter((key) => !isNum(portfolioTotals(model, [key], null)[metric]));
+    assert(gaps.length === 0, `${metric}: no figure for ${gaps.join(", ")}`);
+  }
+  process.stdout.write(`  ok    every measure reports all ${model.ytdKeys.length} `
+    + `closed months of ${model.currentYear}\n`);
 
   const charts = (wall.match(/class="chart"/g) || []).length;
   assert(charts >= expected.length,
@@ -563,24 +655,6 @@ async function main() {
   assert(wall.includes(headline),
     `trends: total profit headline is not ${headline}`);
 
-  /*
-   * The fuel revenue card must compare like with like. Its prior figure is the
-   * one over the same stores, never the larger all-stores total, and the card
-   * must admit that it covers fewer months than the picker names.
-   */
-  if (rev && !rev.complete) {
-    const priorAll = fuelRevenue(model, priorYearKeys(rev.keys), null);
-    const priorSame = fuelRevenue(model, priorYearKeys(rev.keys), rev.storeIds);
-    if (priorAll && priorSame && priorAll.sales !== priorSame.sales) {
-      assert(!wall.includes(moneyShortText(priorAll.sales)),
-        `trends: fuel revenue compares against ${moneyShortText(priorAll.sales)}, `
-        + `the all-stores total, instead of ${moneyShortText(priorSame.sales)}`);
-    }
-    assert(/Reported for \d+ of \d+ months/.test(wall),
-      "trends: fuel revenue covers part of the period and the card does not say so");
-    process.stdout.write(`  ok    fuel revenue card is marked short and compares `
-      + `against ${moneyShortText(priorSame.sales)} over the same stores\n`);
-  }
   process.stdout.write(`  ok    ${expected.length} metrics, ${charts} charts, `
     + `total profit reads ${headline}\n`);
 
@@ -661,6 +735,65 @@ async function main() {
         `${name} scoped to ${owner.id}: names stores outside that client (${leaked.join(", ")})`);
     }
   }
+  /*
+   * No page may publish an open month's store profit, store margin or total
+   * profit, for any client or any store.
+   *
+   * All three are sales minus purchases, and an open month's purchases are only
+   * the invoices keyed into it so far. The figures therefore move with the
+   * paperwork rather than the trade: the portfolio read a 53.4% store margin
+   * against 39.0% for the August books, and La Mesa read 100% because it had
+   * keyed nothing at all. Fixing the three pages that showed it is not enough on
+   * its own — the same rollup is one import away from any page — so every scope
+   * is swept here instead of the three that happened to be wrong.
+   */
+  process.stdout.write("\nThe open month's store side stays unpublished\n");
+  const openBefore = failures;
+  const openMonthViews = [["daily", renderDaily], ["buy", renderBudget], ["dashboard", renderDashboard]];
+  const scopeQueries = [
+    ["all stores", ""],
+    ...model.owners.map((owner) => [owner.id, `owner=${owner.id}`]),
+    ...model.stations.map((station) => [station.name, `store=${station.id}`]),
+  ];
+  let sweptScopes = 0;
+  for (const [label, query] of scopeQueries) {
+    const scoped = resolveScope(model, new URLSearchParams(query));
+    const openMtd = rollupMtd(currentStores(current, scoped).filter((store) => store.onPeriod));
+    if (!openMtd || !isNum(openMtd.store_profit) || Number(openMtd.store_profit) === 0) continue;
+    sweptScopes += 1;
+    // Where a store has keyed no invoices at all its store profit is arithmetically
+    // its sales, and the two are the same string on the page. Sales are a fact the
+    // page must keep, so the figure itself proves nothing there; the margin and the
+    // total profit built on it are still distinguishable, and are what get checked.
+    const profitReadsAsSales = money(openMtd.store_profit) === money(openMtd.sales);
+    for (const [name, render] of openMonthViews) {
+      const markup = render(ctx(query));
+      if (!profitReadsAsSales) {
+        assert(!markup.includes(money(openMtd.store_profit)),
+          `${name} (${label}): publishes the open month's store profit ${money(openMtd.store_profit)}`);
+      }
+      assert(!markup.includes(`${pct(openMtd.margin)} store margin`),
+        `${name} (${label}): publishes the open month's store margin ${pct(openMtd.margin)}`);
+      assert(!markup.includes(`${pct(openMtd.margin)} margin`),
+        `${name} (${label}): publishes the open month's margin ${pct(openMtd.margin)}`);
+      if (isNum(openMtd.total_profit) && Number(openMtd.total_profit) !== 0) {
+        assert(!markup.includes(money(openMtd.total_profit)),
+          `${name} (${label}): publishes the open month's total profit ${money(openMtd.total_profit)}`);
+      }
+    }
+    // And it must not go quiet instead: the figures the open month can support
+    // have to still be on the page, or this passes by rendering an empty card.
+    const daily = renderDaily(ctx(query));
+    assert(daily.includes(money(openMtd.sales)),
+      `daily (${label}): dropped month-to-date store sales ${money(openMtd.sales)}`);
+    assert(daily.includes(money(openMtd.gas_profit)),
+      `daily (${label}): dropped month-to-date fuel profit ${money(openMtd.gas_profit)}`);
+  }
+  if (failures === openBefore) {
+    process.stdout.write(`  ok    ${sweptScopes} scopes across ${openMonthViews.length} pages keep `
+      + "sales and fuel and withhold the store side\n");
+  }
+
   if (failures === failuresBefore) {
     process.stdout.write(`  ok    ${scopedViews.length} pages narrow correctly for `
       + `${model.owners.length} clients\n`);
