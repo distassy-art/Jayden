@@ -424,8 +424,8 @@ export function renderDaily(ctx) {
         </table></div>
         <div class="card-foot tiny muted">
           Purchases and store profit are the booked figures for each closed month, so this table
-          is the final store P&L. Fuel revenue lags at some stores, so $/gal can cover fewer
-          months than the profit beside it.
+          is the final store P&amp;L. $/gal is fuel profit divided by gallons, both from the same
+          months, not a pump price.
         </div>
       </section>`
     : `<section class="card">
