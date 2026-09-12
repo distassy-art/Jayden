@@ -11,13 +11,13 @@
  */
 
 import {
-  buildModel, departmentRollup, portfolioTotals, resolveTimeframe,
+  buildModel, buyRatioByStation, departmentRollup, portfolioTotals, resolveTimeframe,
   scopeDays, shortMonths, storeDays, sumDays, timeframes,
 } from "../public/assets/analytics.js";
 import { bucketDays, buildOwners, resolveScope } from "../public/assets/scope.js";
 import {
-  buildCurrent, currentStores, partitionByPeriod, rollupDeptBudget, rollupMtd,
-  rollupWeeks,
+  buildCurrent, currentStores, partitionByPeriod, purchaseKeying, rollupDeptBudget,
+  rollupMtd, rollupWeeks,
 } from "../public/assets/current.js";
 import { renderDashboard } from "../public/assets/views/dashboard.js";
 import { renderStore, renderStores } from "../public/assets/views/stores.js";
@@ -403,12 +403,23 @@ async function main() {
   const theYear = portfolioTotals(model, model.ytdKeys, null);
 
   for (const measure of ["sales", "purchases", "gas_vol"]) {
-    assert(oneDay[measure] <= itsWeek[measure] + 1,
-      `${measure}: the latest day (${Math.round(oneDay[measure])}) exceeds its week `
-      + `(${Math.round(itsWeek[measure])})`);
-    assert(itsWeek[measure] <= itsMonth[measure] + 1,
-      `${measure}: the latest week (${Math.round(itsWeek[measure])}) exceeds its month `
-      + `(${Math.round(itsMonth[measure])})`);
+    // A bucket can legitimately report no store side at all: every store's pump
+    // is metered daily but not every store files a sheet, and rather than add two
+    // stores' sales to fifteen stores' gallons the store figures are withheld.
+    // Nesting still has to hold wherever both ends are reported.
+    if (!isNum(oneDay[measure]) || !isNum(itsWeek[measure])) {
+      assert(oneDay.storeFiled === false || itsWeek.storeFiled === false,
+        `${measure}: a bucket reports nothing yet is not marked short of sheets`);
+    } else {
+      assert(oneDay[measure] <= itsWeek[measure] + 1,
+        `${measure}: the latest day (${Math.round(oneDay[measure])}) exceeds its week `
+        + `(${Math.round(itsWeek[measure])})`);
+    }
+    if (isNum(itsWeek[measure]) && isNum(itsMonth[measure])) {
+      assert(itsWeek[measure] <= itsMonth[measure] + 1,
+        `${measure}: the latest week (${Math.round(itsWeek[measure])}) exceeds its month `
+        + `(${Math.round(itsMonth[measure])})`);
+    }
   }
   assert(oneDay.days <= itsWeek.days && itsWeek.days <= itsMonth.days,
     "store-days do not nest across the three grains");
@@ -428,22 +439,72 @@ async function main() {
   process.stdout.write(`  ok    the page prints the year column as ${money(theYear.total_profit)}\n`);
 
   /*
-   * Daily purchases are not booked day by day, so the page must not fake a store
-   * margin from them. Instead it shows the real month-to-date store P&L from the
-   * books feed, and prints that store profit rather than the daily proxy.
+   * The open month has no settled store side anywhere on this page.
+   *
+   * Sales are posted at the close of each day; purchase invoices are keyed later.
+   * So month-to-date "store profit" is sales minus whatever paperwork is done,
+   * and it read $205,580 at a 53.4% margin while the same stores had just closed
+   * August at 39.0%. The page must publish the figures the open month can support
+   * — sales, gallons, fuel profit — and must not publish that store profit, its
+   * margin, or the total profit built on it. The closed-book year column is
+   * checked above, so this cannot pass by dropping the store side everywhere.
    */
   const mtdFiled = currentStores(current, resolveScope(model, new URLSearchParams("period=day")))
     .filter((store) => store.onPeriod);
   const mtd = rollupMtd(mtdFiled);
   if (mtd) {
     assert(dailyPage.includes("This month so far"),
-      "daily: the month-to-date store P&L summary is missing");
-    assert(dailyPage.includes(money(mtd.store_profit)),
-      `daily: does not print the real month-to-date store profit ${money(mtd.store_profit)}`);
+      "daily: the month-to-date summary is missing");
+    assert(dailyPage.includes(money(mtd.sales)),
+      `daily: does not print month-to-date store sales ${money(mtd.sales)}`);
+    assert(dailyPage.includes(money(mtd.gas_profit)),
+      `daily: does not print month-to-date fuel profit ${money(mtd.gas_profit)}`);
+    assert(!dailyPage.includes(money(mtd.store_profit)),
+      `daily: still prints the open month's store profit ${money(mtd.store_profit)}`);
+    assert(!dailyPage.includes(`${pct(mtd.margin)} store margin`),
+      `daily: still prints the open month's store margin ${pct(mtd.margin)}`);
+    assert(!dailyPage.includes(money(mtd.total_profit)),
+      `daily: still prints the open month's total profit ${money(mtd.total_profit)}`);
     assert(!dailyPage.includes("Sales against purchases"),
       "daily: still shows the misleading sales-against-purchases chart");
-    process.stdout.write("  ok    daily shows the real month-to-date store P&L, not a daily proxy\n");
+    process.stdout.write(`  ok    daily publishes month-to-date sales ${money(mtd.sales)} and fuel `
+      + `profit ${money(mtd.gas_profit)}, and withholds the unsettled store side\n`);
+
+    // The reason has to be on the page, not just in the code, and the stores
+    // holding it up have to be nameable.
+    const keying = purchaseKeying(mtdFiled, buyRatioByStation(model));
+    assert(keying.counted > 0, "no store could be compared with its own closed books");
+    assert(dailyPage.includes("purchase invoices are keyed later"),
+      "daily: does not say why the store side is missing");
+    if (keying.behind.length) {
+      assert(dailyPage.includes(keying.behind[0].name),
+        `daily: does not name ${keying.behind[0].name}, the furthest behind on invoices`);
+      process.stdout.write(`  ok    ${keying.behind.length} of ${keying.counted} stores named as `
+        + `behind on invoices, ${money(keying.shortfall)} of cost not yet keyed\n`);
+    }
   }
+
+  /*
+   * The store side of a day is withheld unless every store that traded that day
+   * filed a sheet. Without that gate the newest days summed two stores' sales
+   * against fifteen stores' gallons: $8,963 of sales beside 64,892 gallons, about
+   * a sixth of the sales those days really did.
+   */
+  const shortDays = dayRows.filter((row) => !row.storeFiled);
+  const fullDays = dayRows.filter((row) => row.storeFiled);
+  assert(fullDays.length > 0, "no day has a complete set of store sheets");
+  for (const row of shortDays) {
+    assert(row.sales === null && row.purchases === null && row.store_profit === null,
+      `${row.date}: only ${row.salesStores} of ${row.stores} stores filed, yet store figures are reported`);
+    assert(isNum(row.gas_vol),
+      `${row.date}: gallons are missing on a day that is only short of store sheets`);
+  }
+  for (const row of fullDays) {
+    assert(row.salesStores === row.stores,
+      `${row.date}: marked complete with ${row.salesStores} of ${row.stores} sheets`);
+  }
+  process.stdout.write(`  ok    ${fullDays.length} days carry a full set of store sheets, `
+    + `${shortDays.length} report fuel only\n`);
 
   /*
    * The leaks page rests on one fact about these books: a day's store profit

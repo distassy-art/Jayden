@@ -669,6 +669,23 @@ function normaliseDay(day) {
   };
 }
 
+/*
+ * Fuel is metered at every store every day. A daily store sheet is not: outside
+ * the open month only a handful of stores file one, and the newest days of the
+ * open month have none at all yet.
+ *
+ * Summing the store side regardless put two stores' sales next to fifteen
+ * stores' gallons and presented the pair as one day's trade — $8,963 of sales
+ * against 64,892 gallons, roughly a sixth of the sales the day really did.
+ * A day's store figures are therefore only a portfolio figure when every store
+ * that traded that day also filed a sheet. Short of that they are withheld,
+ * because there is no honest way to scale two stores up to fifteen.
+ *
+ * The test is relative to the scope, so drilling into a store that does file
+ * daily still shows its own day-by-day sales.
+ */
+const STORE_DAY_METRICS = ["sales", "purchases", "store_profit", "total_profit"];
+
 /** Every day in scope, summed across stores, one row per calendar date. */
 export function scopeDays(model, stationIds = null) {
   const byDate = new Map();
@@ -676,9 +693,12 @@ export function scopeDays(model, stationIds = null) {
   scopeOf(model, stationIds).forEach((station) => {
     station.days.forEach((raw) => {
       const day = normaliseDay(raw);
-      if (!byDate.has(day.date)) byDate.set(day.date, { date: day.date, stores: 0 });
+      if (!byDate.has(day.date)) {
+        byDate.set(day.date, { date: day.date, stores: 0, salesStores: 0 });
+      }
       const row = byDate.get(day.date);
       row.stores += 1;
+      if (isNum(day.sales)) row.salesStores += 1;
       DAY_METRICS.forEach((key) => {
         if (isNum(day[key])) row[key] = (row[key] || 0) + day[key];
       });
@@ -686,14 +706,41 @@ export function scopeDays(model, stationIds = null) {
   });
 
   return [...byDate.values()]
-    .map((row) => ({
-      ...row,
+    .map((row) => {
+      const wholeDay = row.salesStores === row.stores;
+      const out = { ...row, storeFiled: wholeDay };
+      if (!wholeDay) STORE_DAY_METRICS.forEach((key) => { out[key] = null; });
       // Recomputed from the summed dollars; averaging each store's own margin
       // would weight a quiet site the same as the busiest one.
-      margin: ratio(row.store_profit, row.sales),
-      gas_margin: ratio(row.gas_profit, row.gas_vol),
-    }))
+      out.margin = ratio(out.store_profit, out.sales);
+      out.gas_margin = ratio(out.gas_profit, out.gas_vol);
+      return out;
+    })
     .sort((a, b) => a.date.localeCompare(b.date));
+}
+
+/**
+ * Each store's purchases as a share of its sales, across every closed month.
+ *
+ * This is the yardstick for the open month. Sales are posted daily but purchase
+ * invoices are keyed later, so mid-month a store can show every dollar of sales
+ * and barely any of its cost. Against its own closed-book rate that is obvious;
+ * against nothing it reads as a store keeping all it sells.
+ */
+export function buyRatioByStation(model) {
+  const out = new Map();
+  model.stations.forEach((station) => {
+    let sales = 0;
+    let purchases = 0;
+    model.closedMonths.forEach((key) => {
+      const month = station.months[key];
+      if (!month) return;
+      if (isNum(month.sales)) sales += Number(month.sales);
+      if (isNum(month.purchases)) purchases += Number(month.purchases);
+    });
+    out.set(String(station.id), sales ? purchases / sales : null);
+  });
+  return out;
 }
 
 /**
@@ -737,6 +784,12 @@ export function sumDays(rows) {
   // filed is not the same as one where all of them did.
   totals.days = rows.reduce((sum, row) => sum + (row.stores || 1), 0);
   totals.dates = rows.length;
+  // Fuel covers every date in the bucket; the store side covers only the dates
+  // every store filed a sheet for. A week holding two filed days and two
+  // fuel-only ones has a real fuel total and a two-day store total, and saying
+  // so is the difference between a short week and a bad one.
+  totals.storeDates = rows.filter((row) => row.storeFiled !== false).length;
+  totals.storeFiled = totals.storeDates === rows.length;
   return totals;
 }
 

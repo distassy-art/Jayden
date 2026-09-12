@@ -16,8 +16,8 @@ import {
   barChart, change, dateLabel, deltaBadge, downloadCsv, emptyState, esc, icon,
   isNum, lineChart, money, monthLabel, num, pct, perGallon,
 } from "../ui.js";
-import { portfolioTotals, scopeDays, sumDays } from "../analytics.js";
-import { currentStores, rollupMtd } from "../current.js";
+import { buyRatioByStation, portfolioTotals, scopeDays, sumDays } from "../analytics.js";
+import { currentStores, purchaseKeying, rollupMtd } from "../current.js";
 import {
   bindScopeBar, bucketDays, periodLabel, scopeBar, weekStart,
 } from "../scope.js";
@@ -27,18 +27,19 @@ const NAVY = "var(--navy-600)";
 const DASH = "—";
 
 /*
- * Purchases are booked when a month's books close, not day by day. So the open
- * month's daily sheets arrive with sales but no purchases, which would compute a
- * false 100% store margin and an inflated store and total profit. A period's
+ * Purchases are booked when a month's books close, not day by day. So a period's
  * store side — purchases, store profit, store margin, total profit — is only real
- * once purchases have actually been booked for it, which is what this checks. The
- * true month-to-date store P&L comes from the books feed and is shown separately.
+ * once the books behind it are closed.
+ *
+ * This used to be tested by asking whether any purchases had been recorded for
+ * the period, which is not the same question. Invoices are keyed in lumps: some
+ * days carry a delivery and most carry none, so a day almost always has *some*
+ * purchases and never a month's worth. The test passed, and one day of sales was
+ * divided by one day of deliveries to make a 67% store margin against the 39%
+ * August actually closed at. Only the closed books can answer it, so only the
+ * column drawn from them is allowed to.
  */
 const STORE_SIDE = new Set(["purchases", "store_profit", "total_profit"]);
-function storeSettled(totals) {
-  return Boolean(totals) && isNum(totals.purchases) && Number(totals.purchases) > 0
-    && isNum(totals.store_profit);
-}
 
 /* -------------------------------------------------------------------------
    How the same numbers roll up
@@ -92,9 +93,9 @@ function rollupTable(model, rows, ids) {
 
   const body = ROLLUP_ROWS.map((row) => {
     const cells = columns.map((column) => {
-      // The open month has no booked purchases yet, so its store side is not
-      // real. Show it as pending rather than a false 100%-margin figure.
-      if (STORE_SIDE.has(row.key) && !storeSettled(column.totals)) {
+      // Only the closed books carry a settled store side. Show the rest as
+      // pending rather than dividing a day of sales by a day of deliveries.
+      if (STORE_SIDE.has(row.key) && !column.book) {
         return `<td class="num muted">${DASH}</td>`;
       }
       const source = column.totals || {};
@@ -144,14 +145,21 @@ function rollupTable(model, rows, ids) {
    ------------------------------------------------------------------------- */
 
 /*
- * The real month-to-date store P&L, from the closed-books manager feed rather
- * than the daily sheets. Sales, purchases, store profit and the true store
- * margin belong here: the daily table can't carry them because purchases are not
- * booked day by day. Drawn only from stores that have actually filed into the
- * open month, so a store still closing last month doesn't drag the picture back.
+ * Where the open month has got to, from the manager feed.
+ *
+ * This card used to present a month-to-date store P&L and call it the real one,
+ * on the reasoning that the manager feed comes from the books. It does not: the
+ * feed says of itself "do not treat September as a closed month". Its purchases
+ * are the invoices keyed so far, so store profit read $205,580 and a 53.4%
+ * margin when the same stores had just closed August at 39.0%.
+ *
+ * So the card now shows only what the open month can actually support — sales,
+ * gallons and fuel profit, all posted daily — and says why the store P&L is not
+ * here. Drawn only from stores that have filed into the open month, so a store
+ * still closing last month doesn't drag the picture back.
  */
 function mtdSummary(ctx) {
-  const { current, scope } = ctx;
+  const { current, scope, model } = ctx;
   if (!current) return "";
   const filed = currentStores(current, scope).filter((store) => store.onPeriod);
   const mtd = rollupMtd(filed);
@@ -160,27 +168,54 @@ function mtdSummary(ctx) {
   const label = current.label || "Month to date";
   const through = mtd.through ? dateLabel(mtd.through) : "";
   const stores = mtd.stores || filed.length;
-  const neg = (v) => (Number(v) < 0 ? " neg-text" : "");
-  const stat = (lbl, value, foot, tone = "") => `<div class="stat">
+  const stat = (lbl, value, foot) => `<div class="stat">
     <div class="stat-label">${esc(lbl)}</div>
-    <div class="stat-value${tone}" style="font-size:22px">${esc(value)}</div>
+    <div class="stat-value" style="font-size:22px">${esc(value)}</div>
     <div class="stat-foot"><span class="muted">${esc(foot)}</span></div>
   </div>`;
+
+  const keying = purchaseKeying(filed, buyRatioByStation(model));
+  const behind = keying.behind;
+  // The margin the same stores actually closed August at, as the yardstick for
+  // the month-to-date cost. Not a target and not a forecast — just the last
+  // number that was finished.
+  const lastClosed = model.latestMonth
+    ? portfolioTotals(model, [model.latestMonth], scope.stationIds?.length ? scope.stationIds : null)
+    : null;
+
+  const names = behind.slice(0, 3).map((row) => row.name).join(", ");
+  const more = behind.length > 3 ? ` and ${behind.length - 3} more` : "";
 
   return `<section class="card" style="margin-bottom:16px">
     <div class="card-head">
       <h3>This month so far</h3>
       <span class="hint">${esc(label)}${through ? ` · through ${esc(through)}` : ""}${stores > 1 ? ` · ${esc(num(stores))} stores` : ""}</span>
       <span class="spacer"></span>
-      <span class="hint">Purchases &amp; store profit from the books</span>
+      <span class="hint">Sales and fuel are posted daily</span>
     </div>
     <div class="card-body">
       <div class="grid cols-4">
         ${stat("Store sales", money(mtd.sales), "sold at the register")}
-        ${stat("Purchases", money(mtd.purchases), `${pct(mtd.buy_ratio)} of sales`)}
-        ${stat("Store profit", money(mtd.store_profit), `${pct(mtd.margin)} store margin`, neg(mtd.store_profit))}
-        ${stat("Total profit", money(mtd.total_profit), `incl. ${money(mtd.gas_profit)} fuel`, neg(mtd.total_profit))}
+        ${stat("Gallons", num(mtd.gas_vol), "fuel pumped")}
+        ${stat("Fuel profit", money(mtd.gas_profit), `${perGallon(mtd.gas_margin)} /gal`)}
+        ${stat("Purchases keyed", money(mtd.purchases),
+          `${pct(mtd.buy_ratio)} of sales so far`)}
       </div>
+    </div>
+    <div class="card-foot tiny muted">
+      Store profit and store margin are not shown for an open month. Sales are posted at the
+      close of each day but purchase invoices are keyed later, so subtracting one from the
+      other now would overstate profit${keying.shortfall > 0
+        ? ` by roughly ${esc(money(keying.shortfall))}` : ""}.
+      ${behind.length
+        ? `${esc(num(behind.length))} of ${esc(num(keying.counted))} stores have keyed well under
+           their usual cost per dollar sold (${esc(names)}${esc(more)}).`
+        : "Every store's invoices are keyed close to its usual rate."}
+      ${lastClosed && isNum(lastClosed.store_margin)
+        ? `${esc(monthLabel(model.latestMonth, true))} closed at
+           ${esc(pct(lastClosed.store_margin))} store margin — see the Month grain for the
+           finished figures.`
+        : "See the Month grain for the finished figures."}
     </div>
   </section>`;
 }
@@ -240,8 +275,14 @@ export function renderDaily(ctx) {
 
   // The open month's daily sheets: day and week bucket these, and the rollup
   // table always reads them regardless of grain.
-  const dailyRows = scopeDays(model, scope.stationIds).filter((r) => isNum(r.sales) && r.sales !== 0);
+  const allDays = scopeDays(model, scope.stationIds);
+  const dailyRows = allDays.filter((r) => isNum(r.sales) && r.sales !== 0);
   const series = periodSeries(model, scope, dailyRows);
+  // Pumps report before sheets do, so there are usually a day or two of metered
+  // gallons past the last sheet. Those days are not on this page — a day is only
+  // shown once its store side can be stated too — so the page says where fuel has
+  // reached rather than looking a couple of days stale for no stated reason.
+  const meteredThrough = allDays.length ? allDays[allDays.length - 1].date : null;
 
   if (!series.length) {
     const message = settled
@@ -287,8 +328,9 @@ export function renderDaily(ctx) {
             <b>Daily sheets are behind for ${esc(scope.label)}.</b>
             <div class="muted" style="margin-top:2px">The most recent daily sheet was filed
               ${esc(dateLabel(lastIso))}, ${esc(num(daysBehind))} days ago, so the latest ${esc(grain)}
-              shown is that ${esc(grain)} — not this one. Month-to-date store totals in
-              <b>This month so far</b> stay current.</div>
+              shown is that ${esc(grain)} — not this one.${meteredThrough && meteredThrough > lastIso
+                ? ` Gallons are metered through ${esc(dateLabel(meteredThrough))}, but a day only
+                    appears here once its sales sheet is in too.` : ""}</div>
           </div>
         </div>
       </section>`
@@ -315,9 +357,10 @@ export function renderDaily(ctx) {
        These figures are final — purchases and store profit are booked when each month closes.
        Use the <b>Period</b> buttons above to switch grain. Showing ${esc(covered)}.`
     : `Day-by-day sales, gallons and fuel profit for the current operating month, for
-       <b>${esc(scope.label)}</b>. Purchases and store profit are booked when the month's books
-       close, so they appear in <b>This month so far</b> below and, in full, on the Month and Year
-       grains. Use the <b>Period</b> buttons above to switch grain. Showing ${esc(covered)}.`;
+       <b>${esc(scope.label)}</b>. Purchases are keyed in lumps rather than daily, so store profit
+       and store margin are not shown at this grain — the Month and Year grains carry them, from
+       the closed books. Use the <b>Period</b> buttons above to switch grain.
+       Showing ${esc(covered)}, the days every store in scope has filed a sheet for.`;
 
   const statsGrid = settled
     ? `<div class="grid cols-4" style="margin-bottom:16px">
@@ -456,9 +499,9 @@ export function renderDaily(ctx) {
           </tr></tfoot>
         </table></div>
         <div class="card-foot tiny muted">
-          Purchases, store profit and store margin settle when the month's books close;
-          the current-month figures are in <b>This month so far</b> above, and every closed
-          month in full on the <b>Month</b> and <b>Year</b> grains.
+          Purchases, store profit and store margin settle when the month's books close, so they
+          are not shown here — every closed month carries them in full on the <b>Month</b> and
+          <b>Year</b> grains. A “store-day” is one store's sheet for one day.
         </div>
       </section>`;
 

@@ -73,11 +73,17 @@ function currentMonthSection(ctx) {
 
   // A part-month total against last year's whole month is meaningless, so the
   // year-over-year read is only ever put on the pace projection, and labelled.
+  //
+  // The pace is drawn on fuel profit, not total profit. Total profit needs the
+  // store side, and the store side of an open month is only as complete as the
+  // invoices keyed into it — pacing it projected the missing paperwork as if it
+  // were margin. Fuel is metered daily and complete, so it can be paced.
   const paced = projection && lastYear && lastYear.wholeMonth;
   const pace = paced
-    ? `<div class="stat-foot">${deltaBadge(change(projection.total_profit, lastYear.total_profit))}
-       <span>on pace for ${esc(moneyShort(projection.total_profit))} vs
-       ${esc(moneyShort(lastYear.total_profit))} in ${esc(lastYear.label)}</span></div>`
+    ? `<div class="stat-foot">${deltaBadge(change(projection.gas_profit, lastYear.gas_profit))}
+       <span>fuel profit on pace for ${esc(moneyShort(projection.gas_profit))} vs
+       ${esc(moneyShort(lastYear.gas_profit))} in ${esc(lastYear.label)}. Store profit settles
+       when the books close.</span></div>`
     : `<div class="stat-foot"><span class="muted">Straight-line pace needs a full month last year to compare</span></div>`;
 
   return `<section class="card" style="margin-bottom:16px">
@@ -90,14 +96,11 @@ function currentMonthSection(ctx) {
     <div class="card-body">
       <div class="grid cols-4">
         ${stat("Store sales", money(mtd.sales), `<span class="muted">Merchandise, month to date</span>`)}
-        ${stat("Purchases", money(mtd.purchases),
-          `<span class="muted">${esc(pct(mtd.sales ? mtd.purchases / mtd.sales : null))} of sales</span>`)}
-        ${stat("Store profit", money(mtd.store_profit),
-          `<span class="muted">${esc(pct(mtd.margin))} margin</span>`,
-          Number(mtd.store_profit) < 0 ? " neg-text" : "")}
-        ${stat("Total profit", money(mtd.total_profit),
-          `<span class="muted">${esc(money(mtd.gas_profit))} fuel · ${esc(money(mtd.store_profit))} store</span>`,
-          Number(mtd.total_profit) < 0 ? " neg-text" : "")}
+        ${stat("Gallons", num(mtd.gas_vol), `<span class="muted">Fuel pumped</span>`)}
+        ${stat("Fuel profit", money(mtd.gas_profit),
+          `<span class="muted">${esc(perGallon(mtd.gas_margin))} /gal</span>`)}
+        ${stat("Purchases keyed", money(mtd.purchases),
+          `<span class="muted">${esc(pct(mtd.sales ? mtd.purchases / mtd.sales : null))} of sales so far</span>`)}
       </div>
       ${pace}
     </div>
@@ -121,30 +124,43 @@ function monthEstimateSection(ctx) {
   const through = mtd.through ? dateLabel(mtd.through) : "";
   const canYoY = Boolean(lastYear && lastYear.wholeMonth);
 
+  // Store profit and total profit are left blank for the open month and its
+  // estimate. Both are sales minus purchases, and the month's purchases are only
+  // the invoices keyed so far — so the figure rises and falls with the paperwork
+  // rather than the trade, and pacing it carries that error to month end. Last
+  // year's closed column still shows them, because those books are finished.
+  const OPEN_MONTH_BLANK = new Set(["store_profit", "total_profit"]);
+  // Purchases keyed is a real figure but it measures paperwork, not trade, so it
+  // is shown and not paced. A store with nothing keyed yet was otherwise carried
+  // to month end as $0 of cost and reported as 100% down on last year.
+  const NOT_PACED = new Set(["purchases"]);
   const metrics = [
     ["Store sales", "sales", true],
-    ["Purchases", "purchases", false],
+    ["Purchases keyed", "purchases", false],
     ["Store profit", "store_profit", true],
     ["Fuel profit", "gas_profit", true],
     ["Total profit", "total_profit", true],
   ];
   const neg = (v) => (Number(v) < 0 ? " neg-text" : "");
   const rows = metrics.map(([name, key, higherIsBetter]) => {
-    const cur = mtd[key];
-    const est = projection ? projection[key] : null;
+    const blank = OPEN_MONTH_BLANK.has(key);
+    const cur = blank ? null : mtd[key];
+    const est = blank || NOT_PACED.has(key) || !projection ? null : projection[key];
     const ly = lastYear ? lastYear[key] : null;
     const delta = canYoY && isNum(est) && isNum(ly) ? change(est, ly) : null;
     return `<tr>
       <td class="strong">${esc(name)}</td>
-      <td class="num${neg(cur)}">${esc(money(cur))}</td>
-      <td class="num strong${neg(est)}">${isNum(est) ? esc(money(est)) : "—"}</td>
+      <td class="num${neg(cur)}">${blank ? `<span class="muted" title="Settles when the books close">—</span>` : esc(money(cur))}</td>
+      <td class="num strong${neg(est)}">${isNum(est) ? esc(money(est)) : `<span class="muted">—</span>`}</td>
       <td class="num">${isNum(ly) ? esc(money(ly)) : "—"}</td>
       <td class="num">${delta != null ? deltaBadge(delta, { higherIsBetter }) : `<span class="muted">—</span>`}</td>
     </tr>`;
   }).join("");
 
   const pace = projection
-    ? `Estimated at this month's pace — ${esc(num(mtd.days))} of ${esc(num(projection.daysInMonth))} days filed`
+    ? `Estimated at this month's pace — ${esc(num(mtd.days))} of ${esc(num(projection.daysInMonth))} days filed.
+       Store profit and total profit are blank until the books close, because the month's
+       purchases are only the invoices keyed so far`
     : "The month is essentially complete, so the month-to-date is the month";
   const yoyNote = canYoY
     ? `The last-year column and change compare against ${esc(lastYear.label)}, the whole month.`

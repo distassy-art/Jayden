@@ -320,9 +320,10 @@ def main(figures_path, overlay_path, owners_path, monthly_path=None, open_days_p
     # actually filed on a date: the newest days of the open month carry gallons
     # only, and a date nobody reported store profit for is unknown, not a
     # break-even zero.
-    by_date = defaultdict(lambda: defaultdict(float))
-    reported = defaultdict(set)
+    raw_by_date = defaultdict(lambda: defaultdict(float))
+    raw_reported = defaultdict(set)
     day_count = defaultdict(int)
+    sales_count = defaultdict(int)
     columns = {"gas_vol": "gas_vol", "gas_profit": "gas_profit", "sales": "sales",
                "purchases": "purch", "store_profit": "store_profit",
                "total_profit": "total_profit"}
@@ -339,11 +340,31 @@ def main(figures_path, overlay_path, owners_path, monthly_path=None, open_days_p
             if not iso:
                 continue
             day_count[iso] += 1
+            if is_num(day.get("sales")):
+                sales_count[iso] += 1
             for metric, column in columns.items():
                 value = day.get(column)
                 if is_num(value):
-                    by_date[iso][metric] += float(value)
-                    reported[iso].add(metric)
+                    raw_by_date[iso][metric] += float(value)
+                    raw_reported[iso].add(metric)
+
+    # Every store's fuel is metered daily; a store sheet is not. On a date where
+    # only some of the stores that traded filed a sheet, the store side is not a
+    # portfolio figure and the console withholds it, so it is withheld here too.
+    # Re-deriving it independently is the point: if the console ever starts adding
+    # two stores' sales to fifteen stores' gallons again, these totals diverge.
+    store_side = {"sales", "purchases", "store_profit", "total_profit"}
+    by_date = defaultdict(lambda: defaultdict(float))
+    reported = defaultdict(set)
+    for iso, row in raw_by_date.items():
+        whole = sales_count[iso] == day_count[iso]
+        bucket = by_date[iso]
+        for metric in DAY_METRICS:
+            if metric in store_side and not whole:
+                continue
+            if metric in raw_reported[iso]:
+                bucket[metric] += row[metric]
+                reported[iso].add(metric)
 
     def bucket_key(iso, period):
         if period == "day":
