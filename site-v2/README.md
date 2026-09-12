@@ -123,6 +123,33 @@ a wall of actuals invited every figure below to be read as one. The open month
 is on its own pages — **The buy** and **Daily sales** — where it is labelled as
 one.
 
+### An open month has sales, not profit
+
+Sales are posted at the close of each day. Purchase invoices are keyed whenever
+the paperwork gets done. So mid-month, `sales - purchases` is not profit — it is
+sales minus however much filing has happened, and it falls as the invoices go in.
+
+Through 8 September the console read $205,580 of store profit at a **53.4% store
+margin**, while the same stores had just closed August at **39.0%**. La Mesa had
+keyed no invoices at all, so it read a 100% margin; Arco HB had keyed $490
+against $38,165 of sales. At each store's own closed-book rate the real figure
+was about $133,000, so the published one was 55% too high.
+
+The open month is therefore shown as **store sales, gallons, fuel profit and
+purchases keyed so far** — all of which are posted daily and complete — and its
+store profit, store margin and total profit are withheld until the books close.
+The pages say so, and name the stores whose invoices are furthest behind. Fuel
+profit can still be paced to month end because pumps are metered daily; store
+profit cannot, so nothing paces it.
+
+The same rule applies a grain down. Every store's fuel is metered every day, but
+only a handful file a daily store sheet, so a day's *store* figures are only a
+portfolio figure when every store that traded that day filed one. Without that
+test the newest days added two stores' sales to fifteen stores' gallons — $8,963
+of sales beside 64,892 gallons, about a sixth of what those days really sold. The
+test is relative to whatever is in scope, so opening a store that does file daily
+still shows its own day-by-day history.
+
 The **Needs attention** feed on the command centre ranks departments over
 budget, weeks bought past their ceiling, missing invoices, unpaid bills, open
 tickets and stores losing money inside the shop — worst first, each linking to

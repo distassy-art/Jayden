@@ -212,10 +212,9 @@ function mtdSummary(ctx) {
            their usual cost per dollar sold (${esc(names)}${esc(more)}).`
         : "Every store's invoices are keyed close to its usual rate."}
       ${lastClosed && isNum(lastClosed.store_margin)
-        ? `${esc(monthLabel(model.latestMonth, true))} closed at
-           ${esc(pct(lastClosed.store_margin))} store margin — see the Month grain for the
-           finished figures.`
-        : "See the Month grain for the finished figures."}
+        ? `The last finished month, ${esc(monthLabel(model.latestMonth, true))}, closed at
+           ${esc(pct(lastClosed.store_margin))} store margin.`
+        : ""}
     </div>
   </section>`;
 }
