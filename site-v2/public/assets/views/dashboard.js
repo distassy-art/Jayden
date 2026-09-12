@@ -13,8 +13,6 @@ import {
   rollupMtd, rollupProjection, rollupWeeks,
 } from "../current.js";
 import { apiUrl, isAdmin } from "../data.js";
-import { renderTeamSchedule } from "./app.js";
-import { renderManagerPayrollCard } from "./payroll.js";
 
 const SEVERITY_TONE = { high: "neg", medium: "warn", low: "info" };
 
@@ -248,8 +246,9 @@ function dailyNumbersSection(ctx) {
    -------------------------------------------------------------------------
    A manager holds one store and lives in the running month, not the closed
    books an owner reads. Their command centre is that store: the month to date,
-   the daily sales and purchases, this week's buying ceiling, the bill for the
-   month, and the same team schedule the phone app carries.
+   the daily sales and purchases, this week's buying ceiling, and the bill for
+   the month. Team schedule and payroll timesheets stay on their own pages,
+   not on this desk.
    ------------------------------------------------------------------------- */
 
 function managerAlert(store) {
@@ -357,9 +356,7 @@ function renderManagerDashboard(ctx) {
     ${managerAlert(store)}
     ${dailyNumbersSection(ctx)}
     ${managerWeeksCard(store)}
-    ${managerBillingCard(ctx.data)}
-    ${renderTeamSchedule(ctx)}
-    ${renderManagerPayrollCard(ctx)}`;
+    ${managerBillingCard(ctx.data)}`;
 }
 
 export function renderDashboard(ctx) {

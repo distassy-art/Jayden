@@ -14,15 +14,17 @@
  *
  * Margins are recomputed from summed dollars month by month rather than
  * averaged across stores, so each line agrees with the total printed above it.
+ *
+ * Closed months only, and nothing else. This page used to open with the running
+ * month scaled to a full month and a straight-line year-end estimate built on
+ * top of it. Two projections above a wall of actuals invited every figure below
+ * to be read as one, and the month they described was a few days old. Both are
+ * gone: the open month has its own page, where it is labelled as one.
  */
 
 import {
-  barChart, change, deltaBadge, esc, isNum, money, moneyShort, monthLabel, num, pct, perGallon,
+  barChart, change, deltaBadge, esc, isNum, money, moneyShort, num, pct, perGallon,
 } from "../ui.js";
-import { portfolioTotals } from "../analytics.js";
-import {
-  currentStores, partitionByPeriod, rollupLastYear, rollupMtd, rollupProjection,
-} from "../current.js";
 import { bindScopeBar } from "../scope.js";
 import { head, scopeIds, view } from "./analysis.js";
 
@@ -44,21 +46,6 @@ const METRICS = [
     title: "Fuel volume",
     unit: "Gallons sold",
     format: num,
-  },
-  {
-    group: "Fuel",
-    key: "gas_sales",
-    title: "Fuel revenue",
-    unit: "What the fuel sold for",
-    format: moneyShort,
-    full: money,
-    /*
-     * This feed lags the others and covers fewer stores, so last year has to
-     * be taken over the same stores and months. Left to the ordinary path it
-     * would put thirteen stores against sixteen and report a fall that is
-     * really a difference in who filed.
-     */
-    paired: true,
   },
   {
     group: "Fuel",
@@ -144,52 +131,26 @@ function measure(metric, v, ids) {
     };
   }
   /*
-   * Not every measure reaches as far back as the rest. Fuel revenue comes from
-   * its own feed and lags the books by a couple of months, so its card totals
-   * fewer months than the picker names. Counting them here lets the card say
-   * so, rather than presenting a short year as a bad one.
+   * A store can be missing from a month even after it closes. Counting the
+   * months that actually reported lets the card say so, rather than presenting
+   * a short period as a bad one.
    */
   const months = v.keys.filter((key) => {
     const totals = v.totalsFor([key], ids);
     return isNum(totals[metric.key]);
   });
 
-  const common = {
+  return {
     values: v.series(metric.key, ids),
     prior: v.priorSeries(metric.key, ids),
     months: months.length,
     ofMonths: v.keys.length,
-  };
-
-  if (metric.paired) {
-    const now = v.revenue(ids);
-    const before = now ? v.priorRevenue(now) : null;
-    return {
-      ...common,
-      now: now ? now.sales : null,
-      // Withheld rather than approximated when the two spans do not match.
-      before: before && before.keys.length === now.keys.length
-        && before.stores === now.stores
-        ? before.sales
-        : null,
-      stores: now ? now.stores : null,
-      ofStores: now ? now.ofStores : null,
-    };
-  }
-
-  return {
-    ...common,
     now: v.totals(ids)[metric.key],
     before: v.priorTotals(ids)[metric.key],
   };
 }
 
-/*
- * A measure with nothing in it is dropped rather than drawn as an empty frame.
- * Fuel revenue is the case that matters: it comes from its own feed and does
- * not reach back as far as the rest, so on an early month it genuinely has
- * nothing to say.
- */
+/** A measure with nothing in it is dropped rather than drawn as an empty frame. */
 function reported(m) {
   return m.values.some(isNum) || isNum(m.now);
 }
@@ -226,129 +187,13 @@ function card(metric, m, v) {
       </div>
       ${short ? `<p class="tiny muted" style="margin:-8px 0 12px">
         Reported for ${esc(num(m.months))} of ${esc(num(m.ofMonths))} months in
-        this period${isNum(m.stores) && m.stores < m.ofStores
-    ? ` by ${esc(num(m.stores))} of ${esc(num(m.ofStores))} stores` : ""},
-        so the total is for those only.</p>` : ""}
+        this period, so the total is for those only.</p>` : ""}
       ${barChart(v.labels, [
     { name: String(v.nowLabel), values: m.values, color: CYAN },
     { name: String(v.beforeLabel), values: m.prior, color: NAVY },
   ], { height: 210, valueFormat: metric.format })}
     </div>
   </section>`;
-}
-
-/* -------------------------------------------------------------------------
-   The running month and where the year is headed
-   -------------------------------------------------------------------------
-   The wall below is closed months only. But the question a manager and an owner
-   both ask first is "how is this month going, and where does the year land?".
-   These two rows answer that: the current month on pace against the same month
-   last year, and a straight-line year-end estimate against last year's actual.
-   Both are projections and say so — a part-month against last year's whole
-   month is only fair once the part is scaled to the whole.
-   ------------------------------------------------------------------------- */
-
-const SUMMARY_METRICS = [
-  { label: "Total profit", pk: "total_profit", ck: "total_profit" },
-  { label: "Fuel profit", pk: "fuel_profit", ck: "gas_profit" },
-  { label: "Store profit", pk: "store_profit", ck: "store_profit" },
-  { label: "Store sales", pk: "sales", ck: "sales" },
-];
-
-function estStat(label, value, foot, tone = "") {
-  return `<div class="stat">
-    <div class="stat-label">${esc(label)}</div>
-    <div class="stat-value${tone}" style="font-size:21px">${esc(value)}</div>
-    <div class="stat-foot">${foot}</div>
-  </div>`;
-}
-
-/** Straight-line year-end estimate per metric, against last year's full year. */
-function yearEndEstimate(model, current, scope, ids) {
-  const ytdKeys = model.ytdKeys;
-  if (!ytdKeys.length) return null;
-
-  const scoped = ids.length ? ids : null;
-  const closed = portfolioTotals(model, ytdKeys, scoped);
-  const monthsClosed = ytdKeys.length;
-
-  const filed = current ? partitionByPeriod(currentStores(current, scope)).filed : [];
-  const projection = filed.length ? rollupProjection(filed) : null;
-
-  const priorYear = Number(model.currentYear) - 1;
-  const priorKeys = model.allMonths.filter((key) => key.startsWith(`${priorYear}-`));
-  const priorFull = portfolioTotals(model, priorKeys, scoped);
-  const priorComplete = priorKeys.length === 12;
-
-  const hasCurrent = Boolean(projection);
-  const remaining = Math.max(0, 12 - monthsClosed - (hasCurrent ? 1 : 0));
-
-  const rows = SUMMARY_METRICS.map((metric) => {
-    const closedVal = Number(closed[metric.pk] || 0);
-    const avgMonth = monthsClosed ? closedVal / monthsClosed : 0;
-    const currentVal = projection && isNum(projection[metric.ck]) ? Number(projection[metric.ck]) : avgMonth;
-    const estimate = closedVal + currentVal + avgMonth * remaining;
-    const prior = priorComplete && isNum(priorFull[metric.pk]) ? Number(priorFull[metric.pk]) : null;
-    return { label: metric.label, estimate, prior };
-  });
-
-  return { rows, priorYear, priorComplete, monthsClosed, remaining, currentYear: model.currentYear };
-}
-
-function currentAndEstimate(ctx) {
-  const { model, scope, current } = ctx;
-  const ids = scopeIds(scope);
-  const filed = current ? partitionByPeriod(currentStores(current, scope)).filed : [];
-  const mtd = filed.length ? rollupMtd(filed) : null;
-  const projection = filed.length ? rollupProjection(filed) : null;
-  const lastYear = filed.length ? rollupLastYear(filed) : null;
-  const estimate = yearEndEstimate(model, current, scope, ids);
-
-  if (!mtd && !estimate) return "";
-
-  const monthLabelText = current?.label || (current?.month ? monthLabel(current.month) : "This month");
-  const paced = projection && lastYear && lastYear.wholeMonth;
-
-  const monthCards = mtd ? SUMMARY_METRICS.map((metric) => {
-    const projected = projection && isNum(projection[metric.ck]) ? Number(projection[metric.ck]) : null;
-    const lastYr = paced && isNum(lastYear[metric.ck]) ? Number(lastYear[metric.ck]) : null;
-    const mtdVal = isNum(mtd[metric.ck]) ? Number(mtd[metric.ck]) : null;
-    const foot = isNum(projected) && isNum(lastYr)
-      ? `${deltaBadge(change(projected, lastYr))}<span>on pace vs ${esc(moneyShort(lastYr))} last year</span>`
-      : `<span class="muted">${esc(money(mtdVal))} so far</span>`;
-    const value = isNum(projected) ? moneyShort(projected) : money(mtdVal);
-    const numeric = isNum(projected) ? projected : mtdVal;
-    return estStat(metric.label, value, foot, Number(numeric) < 0 ? " neg-text" : "");
-  }).join("") : "";
-
-  const estCards = estimate ? estimate.rows.map((row) => {
-    const foot = isNum(row.prior)
-      ? `${deltaBadge(change(row.estimate, row.prior))}<span>vs ${esc(moneyShort(row.prior))} in ${esc(estimate.priorYear)}</span>`
-      : `<span class="muted">No full ${esc(estimate.priorYear)} to compare</span>`;
-    return estStat(row.label, moneyShort(row.estimate), foot,
-      Number(row.estimate) < 0 ? " neg-text" : "");
-  }).join("") : "";
-
-  const monthSection = mtd ? `<section class="card" style="margin-bottom:16px">
-    <div class="card-head"><h3>This month so far</h3>
-      <span class="hint">${esc(monthLabelText)}${mtd.through ? ` · through ${esc(mtd.through)}` : ""}${mtd.stores > 1 ? ` · ${esc(num(mtd.stores))} stores` : ""}</span></div>
-    <div class="card-body"><div class="grid cols-4">${monthCards}</div>
-      <p class="tiny muted" style="margin:10px 0 0">Figures shown are the month scaled to a full month on the days filed so far,
-        against ${paced ? `the same month last year` : `last year (a full prior month is needed to compare)`}.</p>
-    </div>
-  </section>` : "";
-
-  const estSection = estCards ? `<section class="card" style="margin-bottom:16px">
-    <div class="card-head"><h3>Year-end estimate</h3>
-      <span class="hint">${esc(estimate.currentYear)} projected · vs ${esc(estimate.priorYear)} actual</span></div>
-    <div class="card-body"><div class="grid cols-4">${estCards}</div>
-      <p class="tiny muted" style="margin:10px 0 0">A straight-line estimate: the ${esc(num(estimate.monthsClosed))} closed months,
-        plus this month on pace, plus ${esc(num(estimate.remaining))} more at the year's average.
-        ${estimate.priorComplete ? "" : `Last year's total is incomplete, so the comparison is left off.`}</p>
-    </div>
-  </section>` : "";
-
-  return `${monthSection}${estSection}`;
 }
 
 export function renderTrends(ctx) {
@@ -383,7 +228,7 @@ export function renderTrends(ctx) {
       <div class="grid cols-2 trend-grid">${cards}</div>`;
   }).join("");
 
-  return `${heading}${currentAndEstimate(ctx)}${sections}`;
+  return `${heading}${sections}`;
 }
 
 export function bindTrends(root, ctx) {
