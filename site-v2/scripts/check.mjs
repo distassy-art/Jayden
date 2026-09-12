@@ -11,7 +11,7 @@
  */
 
 import {
-  buildModel, departmentRollup, fuelRevenue, portfolioTotals, priorYearKeys, resolveTimeframe,
+  buildModel, departmentRollup, portfolioTotals, resolveTimeframe,
   scopeDays, storeDays, sumDays, timeframes,
 } from "../public/assets/analytics.js";
 import { bucketDays, buildOwners, resolveScope } from "../public/assets/scope.js";
@@ -37,9 +37,7 @@ import { renderLeaks } from "../public/assets/views/leaks.js";
 import { renderPayroll } from "../public/assets/views/payroll.js";
 import { renderProfile } from "../public/assets/views/profile.js";
 import { PUBLIC_ROUTES, renderLogin } from "../public/assets/views/site.js";
-import { isNum, money, moneyShort, pct } from "../public/assets/ui.js";
-
-const moneyShortText = (value) => moneyShort(value);
+import { isNum, money, pct } from "../public/assets/ui.js";
 
 // The trends wall prints margins to one decimal place.
 const pctText = (ratio) => pct(ratio, { digits: 1 });
@@ -456,63 +454,27 @@ async function main() {
    * single day.
    */
   /*
-   * Fuel revenue lags the other feeds, so the trap is arithmetic across two
-   * different spans: a year-to-date fuel profit taken off a six-month revenue
-   * gives a cost of goods that looks plausible and is badly wrong. Every
-   * figure in that block has to come from the same store-months.
+   * Fuel revenue is gone, and has to stay gone.
+   *
+   * It was the one measure whose feed did not cover the months it was shown
+   * against — one store in July, none in August — so every figure derived from
+   * it carried a caveat about which stores and which months it covered, and a
+   * cost of goods that took eight months of profit off six of revenue. A field
+   * reappearing upstream must not quietly put the block back.
    */
-  process.stdout.write("\nFuel revenue spans\n");
-  const rev = fuelRevenue(model, model.ytdKeys, null);
-  if (rev) {
-    assert(Math.abs((rev.sales - rev.cost) - rev.profit) < 1,
-      "fuel revenue: cost does not reconcile to revenue minus profit");
-
-    // Recomputed here over exactly the store-months reporting revenue.
-    let sales = 0;
-    let profit = 0;
-    let volume = 0;
-    model.stations.forEach((station) => {
-      model.ytdKeys.forEach((key) => {
-        const month = station.months[key];
-        if (!month || !isNum(month.gas_sales)) return;
-        sales += Number(month.gas_sales);
-        if (isNum(month.gas_profit)) profit += Number(month.gas_profit);
-        if (isNum(month.gas_vol)) volume += Number(month.gas_vol);
-      });
-    });
-    assert(Math.abs(sales - rev.sales) < 1, "fuel revenue: sales disagree");
-    assert(Math.abs(profit - rev.profit) < 1,
-      `fuel revenue: paired profit is ${Math.round(rev.profit).toLocaleString()}, `
-      + `should be ${Math.round(profit).toLocaleString()} over the reporting months`);
-    assert(Math.abs(volume - rev.volume) < 1, "fuel revenue: paired gallons disagree");
-
-    // The whole-period fuel profit is larger, which is precisely why pairing
-    // matters — if these matched, the test would prove nothing.
-    const wholePeriod = portfolioTotals(model, model.ytdKeys, null).fuel_profit;
-    assert(wholePeriod > rev.profit,
-      "fuel revenue: the feed now covers the whole period, so this pairing can be simplified");
-
-    // And the page must not silently present the short span as the full one.
-    const fuelPage = renderFuel(ctx());
-    if (!rev.complete) {
-      assert(/not the whole of/.test(fuelPage),
-        "fuel: revenue covers only part of the period and the page does not say so");
-    }
-    process.stdout.write(`  ok    revenue ${money(rev.sales)} over ${rev.keys.length}`
-      + `/${rev.ofKeys} months and ${rev.stores}/${rev.ofStores} stores, paired with `
-      + `${money(rev.profit)} profit — not the ${money(wholePeriod)} for the full period\n`);
-
-    // Last year has to be the same stores, or thirteen are put against seventeen.
-    const priorSame = fuelRevenue(model, priorYearKeys(rev.keys), rev.storeIds);
-    const priorAll = fuelRevenue(model, priorYearKeys(rev.keys), null);
-    if (priorSame && priorAll) {
-      assert(priorSame.stores <= rev.stores,
-        "fuel revenue: the prior period pulled in stores absent from this one");
-      process.stdout.write(`  ok    compared with ${money(priorSame.sales)} over the same `
-        + `${priorSame.stores} stores, not ${money(priorAll.sales)} over `
-        + `${priorAll.stores}\n`);
-    }
+  process.stdout.write("\nFuel revenue is not reported\n");
+  const revenueLeak = model.stations.flatMap((station) => model.closedMonths
+    .filter((key) => isNum(station.months[key]?.gas_sales))
+    .map((key) => `${station.id} ${key}`));
+  assert(revenueLeak.length === 0,
+    `fuel revenue: gas_sales is back in the model (${revenueLeak.slice(0, 3).join(", ")})`);
+  const fuelPage = renderFuel(ctx());
+  for (const page of [["fuel", fuelPage], ["trends", renderTrends(ctx())]]) {
+    assert(!/Fuel revenue|Cost of the fuel|Kept from revenue/.test(page[1]),
+      `${page[0]}: still shows a fuel revenue figure`);
   }
+  process.stdout.write("  ok    no page reports what fuel sold for, only gallons, "
+    + "cents per gallon and profit\n");
 
   process.stdout.write("\nLeaks\n");
   // Per store, not summed across them: a date where one store reported sales
@@ -549,10 +511,39 @@ async function main() {
 
   process.stdout.write("\nTrends wall\n");
   const wall = renderTrends(ctx());
-  const expected = ["Fuel volume", "Fuel revenue", "Fuel margin", "Fuel profit",
+  const expected = ["Fuel volume", "Fuel margin", "Fuel profit",
     "Store sales", "Purchases", "Store margin", "Store profit", "Total profit"];
   const missingMetric = expected.filter((title) => !wall.includes(`<h3>${title}</h3>`));
   assert(missingMetric.length === 0, `trends: missing ${missingMetric.join(", ")}`);
+
+  /*
+   * Closed months only. The wall carried the running month scaled to a full
+   * month, and a year-end estimate built on it, above eight columns of actuals.
+   * Nothing projected may appear here again, and no chart may reach into a month
+   * that has not closed.
+   */
+  for (const phrase of ["This month so far", "Year-end estimate", "on pace"]) {
+    assert(!wall.includes(phrase), `trends: still shows "${phrase}" — closed months only`);
+  }
+  const openMonth = model.allMonths.filter((key) => key > model.latestMonth);
+  assert(openMonth.every((key) => !model.closedMonths.includes(key)),
+    `trends: ${openMonth.join(", ")} has not closed but is in the charted months`);
+  process.stdout.write(`  ok    closed months only, ${model.latestMonth} back`
+    + `${openMonth.length ? `, holding ${openMonth.join(", ")} out` : ""}\n`);
+
+  // Every metric on the wall has to reach the newest closed month. Fuel profit
+  // charted as a gap over July and August because the working overlay names it
+  // `gas_profit` there and drops `fuel_profit`; both feeds are reconciled now.
+  for (const metric of ["fuel_profit", "gas_profit", "gas_vol", "sales",
+    "purchases", "store_profit", "total_profit"]) {
+    const latest = portfolioTotals(model, [model.latestMonth], null)[metric];
+    assert(isNum(latest) && Number(latest) !== 0,
+      `${metric}: nothing reported for ${model.latestMonth}`);
+    const gaps = model.ytdKeys.filter((key) => !isNum(portfolioTotals(model, [key], null)[metric]));
+    assert(gaps.length === 0, `${metric}: no figure for ${gaps.join(", ")}`);
+  }
+  process.stdout.write(`  ok    every measure reports all ${model.ytdKeys.length} `
+    + `closed months of ${model.currentYear}\n`);
 
   const charts = (wall.match(/class="chart"/g) || []).length;
   assert(charts >= expected.length,
@@ -563,24 +554,6 @@ async function main() {
   assert(wall.includes(headline),
     `trends: total profit headline is not ${headline}`);
 
-  /*
-   * The fuel revenue card must compare like with like. Its prior figure is the
-   * one over the same stores, never the larger all-stores total, and the card
-   * must admit that it covers fewer months than the picker names.
-   */
-  if (rev && !rev.complete) {
-    const priorAll = fuelRevenue(model, priorYearKeys(rev.keys), null);
-    const priorSame = fuelRevenue(model, priorYearKeys(rev.keys), rev.storeIds);
-    if (priorAll && priorSame && priorAll.sales !== priorSame.sales) {
-      assert(!wall.includes(moneyShortText(priorAll.sales)),
-        `trends: fuel revenue compares against ${moneyShortText(priorAll.sales)}, `
-        + `the all-stores total, instead of ${moneyShortText(priorSame.sales)}`);
-    }
-    assert(/Reported for \d+ of \d+ months/.test(wall),
-      "trends: fuel revenue covers part of the period and the card does not say so");
-    process.stdout.write(`  ok    fuel revenue card is marked short and compares `
-      + `against ${moneyShortText(priorSame.sales)} over the same stores\n`);
-  }
   process.stdout.write(`  ok    ${expected.length} metrics, ${charts} charts, `
     + `total profit reads ${headline}\n`);
 

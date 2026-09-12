@@ -16,22 +16,58 @@ function isRealMonth(entry) {
     .some((key) => isNum(entry[key]) && Number(entry[key]) !== 0);
 }
 
-/**
- * Fuel revenue, as station id -> month key -> dollars.
+/*
+ * The reconciled monthly feed, as station id -> month key -> figures.
  *
- * The feed is a list of stations rather than the overlay's map, and it reports
- * some months the overlay rejects as empty, so only the field itself is taken.
+ * `monthly.json` is the closed-books copy: it states its own span ("closed
+ * months through August 2026"), carries all seventeen stores on that one span,
+ * and is fixed once a month closes. The overlay is the working file behind it,
+ * and for the months either side of the close it is not yet a book:
+ *
+ *   - a store that has not been posted yet reports `sales: 0` rather than
+ *     nothing, so it lands in a portfolio total as a confident zero;
+ *   - some rows are placeholders — one store's August arrived as
+ *     `purchases: 1, store_profit: 2, total_profit: 3`;
+ *   - `fuel_profit` is simply absent from the newest months, though
+ *     `gas_profit` beside it is right, so fuel profit charts as a gap;
+ *   - several stores carry no store figures at all for the current year.
+ *
+ * Summed, those put August store sales at a third of the truth and the August
+ * store margin at 7% against a real 39%. So where this feed covers a station's
+ * month it is the book, and the overlay is the fallback for months it has not
+ * reached. The overlay is still the source for days, departments and profit.
  */
-function indexRevenue(monthly) {
+function indexMonthly(monthly) {
   const out = new Map();
   (monthly?.stations || []).forEach((station) => {
+    if (station?.id == null) return;
     const months = {};
     Object.entries(station?.months || {}).forEach(([key, value]) => {
-      if (isNum(value?.gas_sales)) months[key] = Number(value.gas_sales);
+      if (value && typeof value === "object") months[key] = value;
     });
     if (Object.keys(months).length) out.set(String(station.id), months);
   });
   return out;
+}
+
+/**
+ * One month entry, in the shape the views expect.
+ *
+ * `fuel_profit` and `gas_profit` are the same dollars under two names, and
+ * neither feed carries both in every month. Filling each from the other here,
+ * once, is what stops a chart keyed on one of them breaking its line over a
+ * month that reported only the other.
+ *
+ * `gas_sales` is dropped. It is the only figure whose feed does not cover the
+ * months it would be shown against, and nothing reports it any more; removing
+ * it here means an upstream field cannot quietly put it back on a page.
+ */
+function normaliseMonth(entry) {
+  const { gas_sales: _ignored, ...month } = entry;
+  if (isNum(month.fuel_profit) && isNum(month.gas_profit)) return month;
+  if (isNum(month.gas_profit)) return { ...month, fuel_profit: Number(month.gas_profit) };
+  if (isNum(month.fuel_profit)) return { ...month, gas_profit: Number(month.fuel_profit) };
+  return month;
 }
 
 /** The open month's day records, as station id -> rows. */
@@ -67,14 +103,19 @@ function indexDepts(feed) {
 }
 
 /** Normalise one station into a shape the views can rely on. */
-function normaliseStation(id, raw, { revenue = null, extraDays = null, depts = null } = {}) {
+function normaliseStation(id, raw, { reconciled = null, extraDays = null, depts = null } = {}) {
   const months = {};
-  Object.entries(raw?.months || {}).forEach(([key, value]) => {
-    if (!isRealMonth(value)) return;
-    // Fuel revenue lives in its own feed; fold it in so every month entry is
-    // one object regardless of which upstream file each field came from.
-    const gasSales = revenue?.[key];
-    months[key] = isNum(gasSales) ? { ...value, gas_sales: Number(gasSales) } : value;
+  const monthNames = new Set([
+    ...Object.keys(raw?.months || {}),
+    ...Object.keys(reconciled || {}),
+  ]);
+  monthNames.forEach((key) => {
+    // The reconciled book wins outright rather than field by field. Merging the
+    // two would keep the overlay's placeholder figures wherever the book left a
+    // field out, which is the opposite of what is wanted.
+    const entry = reconciled?.[key] || raw?.months?.[key];
+    if (!isRealMonth(entry)) return;
+    months[key] = normaliseMonth(entry);
   });
 
   const monthKeys = Object.keys(months).sort();
@@ -125,17 +166,17 @@ function normaliseStation(id, raw, { revenue = null, extraDays = null, depts = n
   };
 }
 
+/*
+ * Fuel revenue — what fuel sold for, as opposed to what it earned — used to be
+ * summed here from a `gas_sales` field. It is not carried for the months that
+ * matter (one store in July, none in August), and every figure derived from it
+ * had to be hedged with which stores and which months it covered. A measure
+ * that has to explain itself that hard is worse than not shown, so the console
+ * reports fuel in gallons, cents per gallon and profit only.
+ */
 const METRICS = [
   "gas_vol", "gas_profit", "fuel_profit", "sales", "purchases",
   "store_profit", "total_profit",
-  /*
-   * What fuel sold for, as opposed to what it earned. It arrives from a
-   * separate feed rather than the overlay, and at most sites it dwarfs store
-   * sales — Placentia turns over about $844k of fuel against $93k of shop
-   * goods. Without it "sales" means shop sales alone, which reads as though
-   * these were small businesses.
-   */
-  "gas_sales",
 ];
 
 function addInto(target, source) {
@@ -178,6 +219,15 @@ export function sumMonths(station, keys) {
   return withRatios(totals);
 }
 
+/**
+ * The calendar month before `date`, as `YYYY-MM`.
+ * The last month that can possibly have closed, whatever the feeds say.
+ */
+function monthBefore(date) {
+  const start = new Date(date.getFullYear(), date.getMonth() - 1, 1);
+  return `${start.getFullYear()}-${String(start.getMonth() + 1).padStart(2, "0")}`;
+}
+
 /** The same calendar months one year earlier, for like-for-like comparison. */
 export function priorYearKeys(keys) {
   return keys.map((key) => {
@@ -192,18 +242,19 @@ export function priorYearKeys(keys) {
  * `stores` narrows the model to a list of station ids, so a client owner's
  * console cannot roll up another client's figures even if the feed returns them.
  */
-export function buildModel(overlay, { stores = null, monthly = null, openDays = null, depts = null } = {}) {
+export function buildModel(overlay, { stores = null, monthly = null, openDays = null, depts = null,
+  today = new Date() } = {}) {
   const raw = overlay?.overlay?.stations || {};
   const only = stores ? new Set(stores.map(String)) : null;
 
-  const revenue = indexRevenue(monthly);
+  const reconciled = indexMonthly(monthly);
   const extraDays = indexOpenDays(openDays);
   const deptsById = indexDepts(depts);
 
   const stations = Object.entries(raw)
     .filter(([id]) => !only || only.has(String(id)))
     .map(([id, value]) => normaliseStation(id, value, {
-      revenue: revenue.get(String(id)) || null,
+      reconciled: reconciled.get(String(id)) || null,
       extraDays: extraDays.get(String(id)) || null,
       depts: deptsById.get(String(id)) || null,
     }))
@@ -212,16 +263,28 @@ export function buildModel(overlay, { stores = null, monthly = null, openDays = 
   // Every month any station reports, newest last.
   const allMonths = [...new Set(stations.flatMap((s) => s.monthKeys))].sort();
 
-  // The newest month at least half the reporting stations have closed. A single
-  // station filing early should not make the whole portfolio look like a cliff.
+  /*
+   * The month now being traded is not a closed month, however much of it has
+   * been filed. It used to reach the trends wall because most stores had
+   * something posted against it, which put a part-month — usually a few days —
+   * beside twelve whole ones and read as a collapse. So the calendar decides:
+   * nothing later than the month before this one can be a closed month, and the
+   * open month is held out until it closes on its own.
+   */
+  const cap = monthBefore(today);
+  const candidates = allMonths.filter((key) => key <= cap);
+
+  // Of those, the newest month at least half the reporting stations have filed.
+  // A single station posting early should not make the portfolio look like a
+  // cliff either.
   const reporting = stations.filter((s) => s.monthKeys.length);
   let latestMonth = null;
-  for (let i = allMonths.length - 1; i >= 0; i -= 1) {
-    const key = allMonths[i];
+  for (let i = candidates.length - 1; i >= 0; i -= 1) {
+    const key = candidates[i];
     const filed = reporting.filter((s) => s.months[key]).length;
     if (reporting.length && filed >= Math.ceil(reporting.length / 2)) { latestMonth = key; break; }
   }
-  if (!latestMonth && allMonths.length) latestMonth = allMonths[allMonths.length - 1];
+  if (!latestMonth && candidates.length) latestMonth = candidates[candidates.length - 1];
 
   const previousMonth = latestMonth
     ? allMonths[allMonths.indexOf(latestMonth) - 1] || null
@@ -230,12 +293,12 @@ export function buildModel(overlay, { stores = null, monthly = null, openDays = 
     ? `${Number(latestMonth.slice(0, 4)) - 1}-${latestMonth.slice(5)}`
     : null;
 
-  // Months past `latestMonth` exist only because one or two stations file ahead
-  // of everyone else. Charting them makes the portfolio look like it fell off a
-  // cliff, so every trend and roll-up works from the closed months instead.
+  // Months past `latestMonth` are the open month and anything a store has
+  // posted ahead of it. Charting them makes the portfolio look like it fell off
+  // a cliff, so every trend and roll-up works from the closed months instead.
   const closedMonths = latestMonth
     ? allMonths.filter((key) => key <= latestMonth)
-    : allMonths;
+    : [];
 
   const currentYear = latestMonth ? latestMonth.slice(0, 4) : String(new Date().getFullYear());
   const ytdKeys = closedMonths.filter((key) => key.startsWith(currentYear));
@@ -456,62 +519,6 @@ export function ratioOver(model, keys, numerator, denominator, stationIds = null
     : null));
 }
 
-/**
- * Fuel revenue, and only the profit and gallons that sit beside it.
- *
- * Fuel revenue arrives from its own feed and lags the rest of the books: at
- * the time of writing it covers thirteen of seventeen stores through June, one
- * store in July, and nobody in August. Summing it over a year-to-date window
- * and then subtracting a year-to-date fuel profit gives a cost of goods that
- * takes eight months of profit off six and a half months of revenue — a figure
- * that is not wrong by a little.
- *
- * So revenue is totalled over the store-months that actually report it, and
- * the profit and gallons are totalled over exactly those same store-months.
- * The months and store count come back with the figures so the page can say
- * what it is showing rather than implying the whole span.
- */
-export function fuelRevenue(model, keys, stationIds = null) {
-  const scope = scopeOf(model, stationIds);
-  const months = new Set();
-  const stores = new Set();
-  let sales = null;
-  let profit = 0;
-  let volume = 0;
-
-  scope.forEach((station) => {
-    keys.forEach((key) => {
-      const month = station.months[key];
-      if (!month || !isNum(month.gas_sales)) return;
-      sales = (sales || 0) + Number(month.gas_sales);
-      if (isNum(month.gas_profit)) profit += Number(month.gas_profit);
-      if (isNum(month.gas_vol)) volume += Number(month.gas_vol);
-      months.add(key);
-      stores.add(station.id);
-    });
-  });
-
-  if (sales === null) return null;
-
-  return {
-    sales,
-    profit,
-    volume,
-    cost: sales - profit,
-    take: sales ? profit / sales : null,
-    perGallon: volume ? sales / volume : null,
-    keys: [...months].sort(),
-    // Which stores these are, not merely how many, so a prior period can be
-    // taken over the same ones rather than over whoever happened to report.
-    storeIds: [...stores],
-    stores: stores.size,
-    ofStores: scope.length,
-    ofKeys: keys.length,
-    // True only when every store in scope reported every month asked for.
-    complete: months.size === keys.length && stores.size === scope.length,
-  };
-}
-
 /** Fuel margin — dollars of fuel profit per gallon sold. */
 export function marginOver(model, keys, stationIds = null) {
   return ratioOver(model, keys, "gas_profit", "gas_vol", stationIds);
@@ -627,6 +634,20 @@ export function departmentPeriods(model, stationIds = null) {
 
 const DAY_METRICS = ["gas_vol", "gas_profit", "sales", "purchases", "store_profit", "total_profit"];
 
+/**
+ * A ratio, or null when either side was not reported.
+ *
+ * The newest days of the open month carry gallons and fuel profit only — no
+ * store figures at all. Dividing a missing numerator gave `NaN` where one store
+ * had filed sales, and a confident 0% where none had; both read as a store that
+ * kept nothing on the day rather than as a day not yet posted.
+ */
+function ratio(top, bottom) {
+  return isNum(top) && isNum(bottom) && Number(bottom) !== 0
+    ? Number(top) / Number(bottom)
+    : null;
+}
+
 function normaliseDay(day) {
   return {
     date: String(day.date),
@@ -660,8 +681,8 @@ export function scopeDays(model, stationIds = null) {
       ...row,
       // Recomputed from the summed dollars; averaging each store's own margin
       // would weight a quiet site the same as the busiest one.
-      margin: isNum(row.sales) && row.sales !== 0 ? row.store_profit / row.sales : null,
-      gas_margin: isNum(row.gas_vol) && row.gas_vol !== 0 ? row.gas_profit / row.gas_vol : null,
+      margin: ratio(row.store_profit, row.sales),
+      gas_margin: ratio(row.gas_profit, row.gas_vol),
     }))
     .sort((a, b) => a.date.localeCompare(b.date));
 }
@@ -682,11 +703,11 @@ export function storeDays(model, stationIds = null) {
         ...day,
         storeId: station.id,
         store: station.name,
-        margin: isNum(day.sales) && day.sales !== 0 ? day.store_profit / day.sales : null,
+        margin: ratio(day.store_profit, day.sales),
         // Above 1 the store bought more than it sold that day. On a single day
         // that is usually a delivery landing rather than a problem, which is
         // why it is reported next to the profit it cost rather than alone.
-        buyRatio: isNum(day.sales) && day.sales !== 0 ? day.purchases / day.sales : null,
+        buyRatio: ratio(day.purchases, day.sales),
       });
     });
   });
@@ -701,10 +722,8 @@ export function sumDays(rows) {
       if (isNum(row[key])) totals[key] = (totals[key] || 0) + Number(row[key]);
     });
   });
-  totals.margin = isNum(totals.sales) && totals.sales !== 0
-    ? totals.store_profit / totals.sales : null;
-  totals.gas_margin = isNum(totals.gas_vol) && totals.gas_vol !== 0
-    ? totals.gas_profit / totals.gas_vol : null;
+  totals.margin = ratio(totals.store_profit, totals.sales);
+  totals.gas_margin = ratio(totals.gas_profit, totals.gas_vol);
   // Store-days, not calendar days: a week where fifteen of seventeen stores
   // filed is not the same as one where all of them did.
   totals.days = rows.reduce((sum, row) => sum + (row.stores || 1), 0);
@@ -946,9 +965,10 @@ export function dataHealth(model) {
       if (gap > 1) dayGaps.push({ from: station.days[i - 1].date, to: station.days[i].date, days: gap - 1 });
     }
 
-    // Months this station has started filing ahead of everyone else. They are
-    // kept out of every trend because they are part-months, so they are
-    // reported here instead rather than silently disappearing.
+    // Months this station has figures for that have not closed — the month
+    // being traded, plus anything posted ahead of it. They are kept out of
+    // every trend because they are part-months, so they are reported here
+    // instead rather than silently disappearing.
     const aheadMonths = model.latestMonth
       ? station.monthKeys.filter((key) => key > model.latestMonth)
       : [];

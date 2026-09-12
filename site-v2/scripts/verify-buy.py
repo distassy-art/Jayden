@@ -173,6 +173,13 @@ def main():
             if num((raw.get("mtd") or {}).get(key)) is not None:
                 totals[key] += raw["mtd"][key]
 
+    # The feed's `mtd` blocks carry no total profit of their own, so the console
+    # adds the two halves. Derived here the same way rather than compared against
+    # an unreported zero, which would read as the whole month earning nothing.
+    if not any(num((raw.get("mtd") or {}).get("total_profit")) is not None
+               for raw in feed["stations"] if str(raw["id"]) in summed):
+        totals["total_profit"] = totals["gas_profit"] + totals["store_profit"]
+
     for key in SUMMABLE:
         check(close(console["rollup"]["mtd"].get(key), totals[key], 0.05),
               f"rollup mtd {key}: {console['rollup']['mtd'].get(key)} vs {totals[key]}")

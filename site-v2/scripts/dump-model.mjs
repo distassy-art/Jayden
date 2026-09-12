@@ -41,7 +41,7 @@ const year = Number(model.currentYear);
 const prior = year - 1;
 
 const METRICS = ["total_profit", "fuel_profit", "gas_profit", "store_profit",
-  "sales", "purchases", "gas_vol", "gas_sales"];
+  "sales", "purchases", "gas_vol"];
 
 const pick = (totals) => Object.fromEntries(
   METRICS.map((key) => [key, totals[key] ?? null])
