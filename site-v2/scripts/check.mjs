@@ -735,6 +735,65 @@ async function main() {
         `${name} scoped to ${owner.id}: names stores outside that client (${leaked.join(", ")})`);
     }
   }
+  /*
+   * No page may publish an open month's store profit, store margin or total
+   * profit, for any client or any store.
+   *
+   * All three are sales minus purchases, and an open month's purchases are only
+   * the invoices keyed into it so far. The figures therefore move with the
+   * paperwork rather than the trade: the portfolio read a 53.4% store margin
+   * against 39.0% for the August books, and La Mesa read 100% because it had
+   * keyed nothing at all. Fixing the three pages that showed it is not enough on
+   * its own — the same rollup is one import away from any page — so every scope
+   * is swept here instead of the three that happened to be wrong.
+   */
+  process.stdout.write("\nThe open month's store side stays unpublished\n");
+  const openBefore = failures;
+  const openMonthViews = [["daily", renderDaily], ["buy", renderBudget], ["dashboard", renderDashboard]];
+  const scopeQueries = [
+    ["all stores", ""],
+    ...model.owners.map((owner) => [owner.id, `owner=${owner.id}`]),
+    ...model.stations.map((station) => [station.name, `store=${station.id}`]),
+  ];
+  let sweptScopes = 0;
+  for (const [label, query] of scopeQueries) {
+    const scoped = resolveScope(model, new URLSearchParams(query));
+    const openMtd = rollupMtd(currentStores(current, scoped).filter((store) => store.onPeriod));
+    if (!openMtd || !isNum(openMtd.store_profit) || Number(openMtd.store_profit) === 0) continue;
+    sweptScopes += 1;
+    // Where a store has keyed no invoices at all its store profit is arithmetically
+    // its sales, and the two are the same string on the page. Sales are a fact the
+    // page must keep, so the figure itself proves nothing there; the margin and the
+    // total profit built on it are still distinguishable, and are what get checked.
+    const profitReadsAsSales = money(openMtd.store_profit) === money(openMtd.sales);
+    for (const [name, render] of openMonthViews) {
+      const markup = render(ctx(query));
+      if (!profitReadsAsSales) {
+        assert(!markup.includes(money(openMtd.store_profit)),
+          `${name} (${label}): publishes the open month's store profit ${money(openMtd.store_profit)}`);
+      }
+      assert(!markup.includes(`${pct(openMtd.margin)} store margin`),
+        `${name} (${label}): publishes the open month's store margin ${pct(openMtd.margin)}`);
+      assert(!markup.includes(`${pct(openMtd.margin)} margin`),
+        `${name} (${label}): publishes the open month's margin ${pct(openMtd.margin)}`);
+      if (isNum(openMtd.total_profit) && Number(openMtd.total_profit) !== 0) {
+        assert(!markup.includes(money(openMtd.total_profit)),
+          `${name} (${label}): publishes the open month's total profit ${money(openMtd.total_profit)}`);
+      }
+    }
+    // And it must not go quiet instead: the figures the open month can support
+    // have to still be on the page, or this passes by rendering an empty card.
+    const daily = renderDaily(ctx(query));
+    assert(daily.includes(money(openMtd.sales)),
+      `daily (${label}): dropped month-to-date store sales ${money(openMtd.sales)}`);
+    assert(daily.includes(money(openMtd.gas_profit)),
+      `daily (${label}): dropped month-to-date fuel profit ${money(openMtd.gas_profit)}`);
+  }
+  if (failures === openBefore) {
+    process.stdout.write(`  ok    ${sweptScopes} scopes across ${openMonthViews.length} pages keep `
+      + "sales and fuel and withhold the store side\n");
+  }
+
   if (failures === failuresBefore) {
     process.stdout.write(`  ok    ${scopedViews.length} pages narrow correctly for `
       + `${model.owners.length} clients\n`);
