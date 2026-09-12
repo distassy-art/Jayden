@@ -6,7 +6,8 @@
   "description": "Preview admin console for smartsolutionsai.us — reads live data, writes nothing.",
   "scripts": {
     "dev": "node scripts/dev-server.mjs",
-    "check": "node scripts/contrast.mjs && node scripts/check.mjs && node scripts/check-app.mjs && npm run --silent check:numbers",
+    "check": "node scripts/contrast.mjs && node scripts/check.mjs && node scripts/check-app.mjs && node scripts/audit.mjs && npm run --silent check:numbers",
+    "check:audit": "node scripts/audit.mjs",
     "check:contrast": "node scripts/contrast.mjs",
     "check:views": "node scripts/check.mjs",
     "check:app": "node scripts/check-app.mjs",

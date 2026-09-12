@@ -46,8 +46,8 @@ const ENDPOINTS = new Map([
   ["/api/data/billing.json", "/data/billing.json"],
   ["/api/data/pricing.json", "/data/pricing.json"],
   ["/api/data/manager.json", "/data/manager.json"],
-  // Fuel revenue, purchases by vendor, and the open month's days. See the
-  // worker's copy of this map for why each is needed.
+  // The reconciled monthly book, purchases by vendor, and the open month's
+  // days. See the worker's copy of this map for why each is needed.
   ["/api/data/monthly.json", "/data/monthly.json"],
   ["/api/data/vendor-spend.json", "/data/vendor_dly_spend_2026.json"],
   ["/api/data/daily-open.json", "/data/daily_september.json"],

@@ -117,8 +117,14 @@ function normaliseDeptBudget(block) {
     .map((item) => {
       const spent = numOrNull(item.purchases_mtd) ?? 0;
       const budget = numOrNull(item.month_budget);
-      const left = isNum(item.remaining) ? Number(item.remaining)
-        : (isNum(budget) ? budget - spent : null);
+      /*
+       * Headroom is subtracted here rather than read from the feed's own
+       * `remaining`. At two stores the two disagree — one reports $1,381 over on
+       * a $0.53 budget against $1,063 spent — so carrying it over printed a
+       * number that did not follow from the two beside it. A reader can check
+       * this one.
+       */
+      const left = isNum(budget) ? budget - spent : null;
       return {
         name: item.name,
         spent,

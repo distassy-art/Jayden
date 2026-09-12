@@ -32,7 +32,7 @@ import { bindVendors, renderVendors } from "./views/vendors.js";
 import { bindTrends, renderTrends } from "./views/trends.js";
 import { bindLeaks, renderLeaks } from "./views/leaks.js";
 import {
-  bindManagerPayroll, bindPayroll, renderPayroll,
+  bindPayroll, renderPayroll,
 } from "./views/payroll.js";
 import {
   bindAppProfile, bindProfile, renderAppProfile, renderProfile,
@@ -56,7 +56,7 @@ import { PUBLIC_ROUTES, renderLogin } from "./views/site.js";
    ------------------------------------------------------------------------- */
 
 const ROUTES = [
-  { path: "/", title: "Command centre", icon: "dashboard", group: "Overview", render: renderDashboard, bind: bindDashboardExtras },
+  { path: "/", title: "Command centre", icon: "dashboard", group: "Overview", render: renderDashboard },
   { path: "/owners", title: "Owners", icon: "owners", group: "Overview", render: renderOwners, bind: bindOwners, roles: ["admin"] },
   // A manager holds one store, so a store list is a list of one.
   { path: "/stores", title: "Stores", icon: "stores", group: "Overview", render: renderStores, bind: bindStores, roles: ["admin", "owner"] },
@@ -127,15 +127,6 @@ function allowed(route, user) {
   const role = roleOf(user);
   if (role === "accountant") return (route.roles || []).includes("accountant");
   return !route.roles || route.roles.includes(role);
-}
-
-/* The manager's dashboard carries the same team schedule the phone app does,
-   plus a payroll book to approve and print timesheets. */
-function bindDashboardExtras(root, ctx) {
-  if (appRole(ctx.user) === "manager") {
-    bindAppSchedule(root, ctx);
-    bindManagerPayroll(root, ctx);
-  }
 }
 
 /** Match a hash path against the route table, extracting `:params`. */

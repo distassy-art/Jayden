@@ -17,9 +17,10 @@ import json
 import math
 import sys
 from collections import defaultdict
+from datetime import date
 
 METRICS = ["total_profit", "fuel_profit", "gas_profit", "store_profit",
-           "sales", "purchases", "gas_vol", "gas_sales"]
+           "sales", "purchases", "gas_vol"]
 
 # Cent-level agreement; these are dollar figures summed over many rows.
 TOLERANCE = 0.01
@@ -57,30 +58,51 @@ def real_month(entry):
                          "fuel_profit", "total_profit"))
 
 
+def with_fuel_profit(entry):
+    """`fuel_profit` and `gas_profit` are the same dollars under two names."""
+    if is_number(entry.get("fuel_profit")) and is_number(entry.get("gas_profit")):
+        return entry
+    if is_number(entry.get("gas_profit")):
+        return {**entry, "fuel_profit": float(entry["gas_profit"])}
+    if is_number(entry.get("fuel_profit")):
+        return {**entry, "gas_profit": float(entry["fuel_profit"])}
+    return entry
+
+
+def month_before_now():
+    """The calendar month before this one — the last that can have closed."""
+    today = date.today()
+    year, month = (today.year - 1, 12) if today.month == 1 else (today.year, today.month - 1)
+    return f"{year}-{month:02d}"
+
+
 def main(figures_path, overlay_path, owners_path, monthly_path=None, open_days_path=None,
          depts_path=None):
     figures = json.load(open(figures_path))
     stations = json.load(open(overlay_path))["overlay"]["stations"]
 
-    # Rebuild the month map with the same "is it real" rule, derived here.
-    months = {sid: {k: v for k, v in (s.get("months") or {}).items() if real_month(v)}
-              for sid, s in stations.items()}
-
-    # Fuel revenue comes from a separate feed and is folded into the same month
-    # entries by the console. Fold it in here too, independently, so the
-    # gas_sales totals are checked rather than skipped.
-    revenue = {}
+    # monthly.json is the reconciled book and wins for every station-month it
+    # covers; the overlay is the working file behind it and is the fallback for
+    # months the book has not reached. Derived here rather than read from the
+    # console, so preferring the wrong one shows up as a mismatch.
+    reconciled = {}
     if monthly_path:
         for station in (json.load(open(monthly_path)).get("stations") or []):
             sid = str(station.get("id"))
             for key, entry in (station.get("months") or {}).items():
-                value = (entry or {}).get("gas_sales")
-                if is_number(value):
-                    revenue.setdefault(sid, {})[key] = float(value)
-        for sid, by_month in revenue.items():
-            for key, value in by_month.items():
-                if sid in months and key in months[sid]:
-                    months[sid][key] = {**months[sid][key], "gas_sales": value}
+                if isinstance(entry, dict):
+                    reconciled.setdefault(sid, {})[key] = entry
+
+    months = {}
+    for sid, station in stations.items():
+        book = reconciled.get(str(sid), {})
+        overlay_months = station.get("months") or {}
+        out = {}
+        for key in set(overlay_months) | set(book):
+            entry = book.get(key) or overlay_months.get(key)
+            if real_month(entry):
+                out[key] = with_fuel_profit(entry)
+        months[str(sid)] = out
 
     print("Station set")
     check(sorted(months) == sorted(figures["stationIds"]),
@@ -89,16 +111,25 @@ def main(figures_path, overlay_path, owners_path, monthly_path=None, open_days_p
     print(f"  ok    {len(months)} stations\n")
 
     # --- latest closed month -------------------------------------------------
+    # The month being traded is not a closed month however much of it is filed.
+    # Two things cap the search before the half-the-stores rule runs: the
+    # calendar, and the span the reconciled book says it covers. The book is the
+    # stronger of the two, because the overlay fills a month in as it is traded.
     all_months = sorted({m for mm in months.values() for m in mm})
+    book_through = max((key for by_month in reconciled.values() for key in by_month),
+                       default=None)
+    cap = min(filter(None, [month_before_now(), book_through]))
     reporting = [sid for sid, mm in months.items() if mm]
     latest = None
-    for key in reversed(all_months):
+    for key in reversed([m for m in all_months if m <= cap]):
         filed = sum(1 for sid in reporting if key in months[sid])
         if filed >= math.ceil(len(reporting) / 2):
             latest = key
             break
 
     print("Period resolution")
+    check(latest is not None and latest <= cap,
+          f"latest closed month {latest} is not before the open month (cap {cap})")
     check(latest == figures["latestMonth"],
           f"latest closed month: recomputed {latest}, console says {figures['latestMonth']}")
 
@@ -284,8 +315,17 @@ def main(figures_path, overlay_path, owners_path, monthly_path=None, open_days_p
         except (TypeError, ValueError):
             return False
 
+    # The feed calls the purchases column `purch`, which is exactly the kind of
+    # rename a port silently drops. `reported` tracks which metrics any store
+    # actually filed on a date: the newest days of the open month carry gallons
+    # only, and a date nobody reported store profit for is unknown, not a
+    # break-even zero.
     by_date = defaultdict(lambda: defaultdict(float))
+    reported = defaultdict(set)
     day_count = defaultdict(int)
+    columns = {"gas_vol": "gas_vol", "gas_profit": "gas_profit", "sales": "sales",
+               "purchases": "purch", "store_profit": "store_profit",
+               "total_profit": "total_profit"}
     for sid, s in stations.items():
         merged = {}
         for day in (s.get("days") or []):
@@ -299,13 +339,11 @@ def main(figures_path, overlay_path, owners_path, monthly_path=None, open_days_p
             if not iso:
                 continue
             day_count[iso] += 1
-            row = by_date[iso]
-            row["gas_vol"] += day.get("gas_vol") or 0
-            row["gas_profit"] += day.get("gas_profit") or 0
-            row["sales"] += day.get("sales") or 0
-            row["purchases"] += day.get("purch") or 0
-            row["store_profit"] += day.get("store_profit") or 0
-            row["total_profit"] += day.get("total_profit") or 0
+            for metric, column in columns.items():
+                value = day.get(column)
+                if is_num(value):
+                    by_date[iso][metric] += float(value)
+                    reported[iso].add(metric)
 
     def bucket_key(iso, period):
         if period == "day":
@@ -319,10 +357,12 @@ def main(figures_path, overlay_path, owners_path, monthly_path=None, open_days_p
 
     for period in ("day", "week", "month", "year"):
         buckets = defaultdict(lambda: defaultdict(float))
+        bucket_reported = defaultdict(set)
         counts = defaultdict(int)
         for iso, row in by_date.items():
             key = bucket_key(iso, period)
             counts[key] += day_count[iso]
+            bucket_reported[key] |= reported[iso]
             for metric in DAY_METRICS:
                 buckets[key][metric] += row[metric]
 
@@ -337,9 +377,12 @@ def main(figures_path, overlay_path, owners_path, monthly_path=None, open_days_p
             check(counts[key] == got["days"],
                   f"{period} {key} store-days: recomputed {counts[key]}, console {got['days']}")
             for metric in DAY_METRICS:
-                check(close(row[metric], got[metric]),
-                      f"{period} {key} {metric}: recomputed {row[metric]}, console {got[metric]}")
-            expected = (row["store_profit"] / row["sales"]) if row["sales"] else None
+                mine = row[metric] if metric in bucket_reported[key] else None
+                check(close(mine, got[metric]),
+                      f"{period} {key} {metric}: recomputed {mine}, console {got[metric]}")
+            expected = ((row["store_profit"] / row["sales"])
+                        if {"sales", "store_profit"} <= bucket_reported[key] and row["sales"]
+                        else None)
             check(close(expected, got["margin"], tol=1e-9),
                   f"{period} {key} margin: recomputed {expected}, console {got['margin']}")
 
