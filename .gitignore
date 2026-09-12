@@ -1,1 +1,3 @@
 cloudflare/scan-ingest/station-tokens.json
+cloudflare/scan-ingest/station-tokens.local.json
+**/station-tokens.local.json
