@@ -1,0 +1,9 @@
+{
+  "station_id": "42179",
+  "station_token": "PASTE_TOKEN_FROM_MINA",
+  "api_url": "https://smartsolutionsai.us/api/scan-ingest",
+  "watch_folder": "C:\\Scans",
+  "sent_folder": "C:\\Scans\\Sent",
+  "poll_seconds": 15,
+  "stable_seconds": 5
+}
