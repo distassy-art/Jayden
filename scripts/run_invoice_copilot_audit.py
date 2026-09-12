@@ -55,6 +55,22 @@ VENDOR_CANON = {
     "cintas": "CINTAS",
     "ready for the workday": "CINTAS",
     "ready for the work day": "CINTAS",
+    "breakthru": "BREAKTHRU BEVERAGE",
+    "breakthru beverage": "BREAKTHRU BEVERAGE",
+    "nevada beer": "BREAKTHRU BEVERAGE",
+    "food pro": "FOOD PRO DISTRIBUTION",
+    "foodpro": "FOOD PRO DISTRIBUTION",
+    "food pro distrubution": "FOOD PRO DISTRIBUTION",
+    "food pro dist rubut": "FOOD PRO DISTRIBUTION",
+    "holly energy": "HOLLY ENERGY PARTNERS",
+    "hep las vegas": "HOLLY ENERGY PARTNERS",
+    "tso lgstcs": "TSO LOGISTICS",
+    "tso logistics": "TSO LOGISTICS",
+    "patriot energy": "PATRIOT ENERGY",
+    "patriot": "PATRIOT ENERGY",
+    "univercell": "UNIVERCELL",
+    "southern glazer": "SOUTHERN GLAZERS",
+    "sgws": "SOUTHERN GLAZERS",
 }
 
 

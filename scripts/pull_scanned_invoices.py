@@ -358,6 +358,15 @@ def detect_vendor(text: str, fname: str, aliases: dict[str, str]) -> str | None:
         "store",
         "arco",
         "ampm",
+        "office",
+        "emailed copy",
+        "original",
+        "articles",
+        "notice",
+        "remittance",
+        "bill of lading",
+        "loading ticket",
+        "rma",
     )
     for line in text.splitlines():
         L = line.strip()
