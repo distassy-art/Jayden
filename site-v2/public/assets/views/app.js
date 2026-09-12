@@ -428,7 +428,7 @@ const REMINDER_COPY = {
   rest1: ["Time for a 10-minute rest break", "Paid 10-minute rest break. (California)"],
   meal: ["Time for your 30-minute meal break", "Unpaid meal — start it before the end of your 5th hour. (California)"],
   rest2: ["Time for your second 10-minute rest break", "Paid 10-minute rest break. (California)"],
-  clockout: ["Your shift has ended", "Time to clock out."],
+  clockout: ["Your shift has ended", "This is a reminder only — we do not clock you out."],
 };
 
 /*
@@ -497,11 +497,15 @@ export async function ensureGeofence(employeeId, rerender) {
   if (place && geoSupported()) {
     geoMonitor.stop = watchGeofence(
       { lat: place.lat, lng: place.lng },
-      place.radiusFt || DEFAULT_RADIUS_FT,
+      DEFAULT_RADIUS_FT,
       {
-        onExit: async () => {
-          await clockOut(punch.id, { auto: true });
-          notify("Clocked out automatically", "You left the store area, so the clock stopped.");
+        onExit: async ({ distanceFt: feet, coords }) => {
+          notify(
+            "You left the store",
+            `You're ${distanceLabel(feet)} away (more than ${DEFAULT_RADIUS_FT} ft). Clocking you out.`,
+          );
+          await markReminder(punch.id, "geofence");
+          await clockOut(punch.id, { auto: true, coords, reason: "geofence" });
           teardownMonitor();
           rerender?.();
         },
@@ -653,7 +657,7 @@ function recentPunches(punches) {
     return `<div class="app-row">
       <div class="grow">
         <div class="r-title">${esc(dayName(p.date))}</div>
-        <div class="r-sub">${esc(clockTime(p.clockIn))} – ${esc(clockTime(p.clockOut))}${p.auto ? " · auto" : ""}</div>
+        <div class="r-sub">${esc(clockTime(p.clockIn))} – ${esc(clockTime(p.clockOut))}${p.auto ? (p.autoReason === "geofence" ? " · left the store" : " · auto") : ""}</div>
       </div>
       <div class="r-value">${esc(worked)}</div>
     </div>`;

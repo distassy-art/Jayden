@@ -269,18 +269,26 @@
   function markNagged(kind) {
     try { sessionStorage.setItem(nagKey(kind), "1"); } catch (e) {}
   }
+  function pushNotice(title, body) {
+    if (!("Notification" in window) || Notification.permission !== "granted") return;
+    if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({ type: "remind", title: title, body: body });
+    } else {
+      try { new Notification(title, { body: body, icon: "../assets/icon-192.png" }); } catch (e) {}
+    }
+  }
   function fireBreakNotice(kind) {
     if (!emp || alreadyNagged(kind)) return;
     var due = C.reminderDue(emp);
     if (!due || due.kind !== kind || due.skipped) return;
     markNagged(kind);
-    var body = due.label + " · " + locName();
-    if (!("Notification" in window) || Notification.permission !== "granted") return;
-    if (navigator.serviceWorker && navigator.serviceWorker.controller) {
-      navigator.serviceWorker.controller.postMessage({ type: "remind", title: "Smart Time Clock", body: body });
-    } else {
-      try { new Notification("Smart Time Clock", { body: body, icon: "../assets/icon-192.png" }); } catch (e) {}
-    }
+    pushNotice("Smart Time Clock", due.label + " · " + locName());
+  }
+  function fireLeaveNotice(feet) {
+    if (!emp || alreadyNagged("geofence")) return;
+    markNagged("geofence");
+    var howFar = feet != null ? (feet + " feet from the store") : "more than 400 feet from the store";
+    pushNotice("You left the store", howFar + ". Clocking you out.");
   }
   function clearRemindTimers() {
     remindTimers.forEach(function (id) { clearTimeout(id); });
@@ -316,15 +324,32 @@
       }, left + 250);
     }
   }
+  function checkLeaveFence() {
+    if (!emp || !C.geoLeaveReading || !C.closeClockIfAway || !C.requestGeo) return;
+    var st = C.breakState(emp);
+    if (!st.clockedIn || !st.openClock) return;
+    C.requestGeo().then(function (geo) {
+      var reading = C.geoLeaveReading(st.openClock.stationId, geo);
+      if (!reading.away) return;
+      fireLeaveNotice(reading.feet);
+      var left = C.closeClockIfAway(emp.id, geo);
+      if (!left) return;
+      renderClock();
+      scheduleBreakReminders();
+    });
+  }
   function startClockPoll() {
     if (pollTimer) return;
-    pollTimer = setInterval(function () {
+    function tick() {
       if (!emp) return;
       if (C.autoCloseOverdueClocks) C.autoCloseOverdueClocks();
+      checkLeaveFence();
       var due = C.reminderDue(emp);
       if (due && !due.skipped) fireBreakNotice(due.kind);
       if (clockSig() !== lastClockSig) renderClock();
-    }, 15000);
+    }
+    pollTimer = setInterval(tick, 15000);
+    tick();
   }
   function signOut() {
     emp = null;
@@ -363,7 +388,7 @@
     if (due && due.kind === "clockout") {
       html += '<div class="remind-card">';
       html += "<b>Clock out — your shift ended</b>";
-      if (due.dueAt) html += '<p class="mut">Scheduled end ' + C.esc(C.formatLATime(due.dueAt)) + ". We clock you out at that time if you do not.</p>";
+      if (due.dueAt) html += '<p class="mut">Scheduled end ' + C.esc(C.formatLATime(due.dueAt)) + ". This is a reminder only — we do not clock you out.</p>";
       html += '<div class="rowbtns">';
       html += '<button type="button" class="cyan" data-punch="out">Clock out now</button>';
       html += "</div></div>";
