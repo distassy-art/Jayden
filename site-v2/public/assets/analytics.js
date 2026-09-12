@@ -7,7 +7,7 @@
  * once rather than being recalculated inside each view.
  */
 
-import { change, isNum } from "./ui.js";
+import { change, isNum, monthLabel } from "./ui.js";
 
 /** Months a station reports but which hold no usable figures are dropped. */
 function isRealMonth(entry) {
@@ -901,6 +901,28 @@ export function attentionItems(model, extras = {}) {
     });
   }
 
+  /*
+   * Months that closed with a fraction of the store's own trade in them. A
+   * closed month is not the same as a finished one, and this is the entry that
+   * stops a client report going out built on half a month.
+   */
+  const short = shortMonths(model).filter((row) => row.key === model.latestMonth);
+  if (short.length) {
+    const lost = short.reduce((sum, row) => sum + (row.typical - row.sales), 0);
+    items.push({
+      severity: "high",
+      kind: "Data",
+      title: `${short.length} store${short.length === 1 ? "" : "s"} closed `
+        + `${monthLabel(model.latestMonth, true)} with a part-month of sales`,
+      detail: `${short.map((row) => `${row.station.name} at `
+        + `${Math.round(row.share * 100)}% of its usual`).join(", ")}`
+        + " — closed in the books, but not a month the store traded.",
+      value: lost,
+      href: "#/health",
+      action: "Data health",
+    });
+  }
+
   // Stations that did not file the month everyone else filed.
   if (model.latestMonth) {
     const behind = model.stations.filter((s) => s.monthKeys.length && !s.months[model.latestMonth]);
@@ -908,7 +930,8 @@ export function attentionItems(model, extras = {}) {
       items.push({
         severity: "medium",
         kind: "Data",
-        title: `${behind.length} store${behind.length === 1 ? "" : "s"} have not closed ${model.latestMonth}`,
+        title: `${behind.length} store${behind.length === 1 ? "" : "s"} have not closed `
+          + `${monthLabel(model.latestMonth, true)}`,
         detail: behind.map((s) => s.name).join(", "),
         href: "#/health",
         action: "Data health",
@@ -955,6 +978,61 @@ export function attentionItems(model, extras = {}) {
 /* -------------------------------------------------------------------------
    Data health
    ------------------------------------------------------------------------- */
+
+/**
+ * Closed store-months posted so far below the store's own run rate that they
+ * are almost certainly incomplete rather than merely bad.
+ *
+ * A month being closed is not the same as a month being finished. Garden Grove's
+ * August closed with $15,545 of store sales against a $150,000 run rate, and
+ * $1,516 of purchases — a figure that is internally consistent, passes every
+ * reconciliation, and cannot describe a month a store actually traded. Left
+ * unmarked it takes the portfolio's August down and its margin up, and there is
+ * nothing on the page to say why.
+ *
+ * These are reported, never dropped. Excluding a store-month would invent a
+ * portfolio that no feed states; naming it lets somebody go and get the rest.
+ */
+export function shortMonths(model, { floor = 0.5, minimum = 3 } = {}) {
+  const found = [];
+
+  model.stations.forEach((station) => {
+    const closed = model.closedMonths.filter((key) => station.months[key]);
+    const sales = closed
+      .map((key) => station.months[key].sales)
+      .filter((value) => isNum(value) && Number(value) > 0)
+      .map(Number);
+    // Too few months to have a run rate is not the same as a short month.
+    if (sales.length < minimum) return;
+
+    closed.forEach((key) => {
+      const month = station.months[key];
+      if (!isNum(month.sales)) return;
+      // The store's own median, excluding the month being judged, so one short
+      // month cannot lower the bar it is measured against.
+      const others = closed
+        .filter((other) => other !== key)
+        .map((other) => station.months[other].sales)
+        .filter((value) => isNum(value) && Number(value) > 0)
+        .map(Number)
+        .sort((a, b) => a - b);
+      if (others.length < minimum) return;
+      const typical = others[Math.floor(others.length / 2)];
+      const share = typical ? Number(month.sales) / typical : null;
+      if (!isNum(share) || share >= floor) return;
+      found.push({
+        station,
+        key,
+        sales: Number(month.sales),
+        purchases: isNum(month.purchases) ? Number(month.purchases) : null,
+        typical,
+        share,
+      });
+    });
+  });
+
+  return found.sort((a, b) => b.key.localeCompare(a.key) || a.share - b.share);
+}
 
 /**
  * Per-station freshness and coverage, so gaps are visible before they turn

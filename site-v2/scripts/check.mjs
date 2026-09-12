@@ -12,7 +12,7 @@
 
 import {
   buildModel, departmentRollup, portfolioTotals, resolveTimeframe,
-  scopeDays, storeDays, sumDays, timeframes,
+  scopeDays, shortMonths, storeDays, sumDays, timeframes,
 } from "../public/assets/analytics.js";
 import { bucketDays, buildOwners, resolveScope } from "../public/assets/scope.js";
 import {
@@ -475,6 +475,46 @@ async function main() {
   }
   process.stdout.write("  ok    no page reports what fuel sold for, only gallons, "
     + "cents per gallon and profit\n");
+
+  /*
+   * A month that closed with a fraction of a store's own trade in it.
+   *
+   * Garden Grove's August closed at 11% of its run rate on 1% of its usual
+   * buying — figures that agree with each other, so every reconciliation above
+   * passes. They are counted, because nothing here invents a figure a feed does
+   * not state, but the page has to name them or a client report goes out on half
+   * a month.
+   */
+  process.stdout.write("\nPart-months\n");
+  const short = shortMonths(model);
+  for (const row of short) {
+    assert(row.sales < row.typical,
+      `${row.station.id} ${row.key}: flagged short at ${row.sales} against ${row.typical}`);
+    // Both halves short by the same stretch is what a partial posting looks
+    // like. A real collapse in sales would not halve the buying with it.
+    assert(!isNum(row.purchases) || row.purchases <= row.typical,
+      `${row.station.id} ${row.key}: bought a full month against short sales`);
+  }
+  const healthPage = renderHealth(ctx());
+  if (short.length) {
+    assert(/Months that closed short/.test(healthPage),
+      "health: part-months are not reported");
+    for (const row of short) {
+      assert(healthPage.includes(money(row.sales)),
+        `health: does not name ${row.station.name}'s ${row.key} at ${money(row.sales)}`);
+    }
+    // And they must still be inside the totals, not quietly dropped.
+    const flagged = short.filter((row) => row.key === model.latestMonth);
+    for (const row of flagged) {
+      const counted = portfolioTotals(model, [row.key], [row.station.id]).sales;
+      assert(Math.abs(Number(counted) - row.sales) < 0.01,
+        `${row.station.id} ${row.key}: flagged short and then excluded from the totals`);
+    }
+    process.stdout.write(`  ok    ${short.length} part-months named on data health, `
+      + `all still counted (${short.map((r) => `${r.station.name} ${r.key}`).join(", ")})\n`);
+  } else {
+    process.stdout.write("  ok    no month closed short of its store's run rate\n");
+  }
 
   process.stdout.write("\nLeaks\n");
   // Per store, not summed across them: a date where one store reported sales
