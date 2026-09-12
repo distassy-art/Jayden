@@ -265,13 +265,22 @@ export function buildModel(overlay, { stores = null, monthly = null, openDays = 
 
   /*
    * The month now being traded is not a closed month, however much of it has
-   * been filed. It used to reach the trends wall because most stores had
-   * something posted against it, which put a part-month — usually a few days —
-   * beside twelve whole ones and read as a collapse. So the calendar decides:
-   * nothing later than the month before this one can be a closed month, and the
-   * open month is held out until it closes on its own.
+   * been filed. Two things cap the search, and the earlier wins.
+   *
+   * The calendar: nothing later than the month before this one can have closed.
+   *
+   * And the reconciled book's own span. That is the stronger of the two, because
+   * the overlay starts filling a month in as it is traded — by the middle of
+   * October it holds most of September — and a part-month that has not been
+   * reconciled reads as a collapse next to twelve whole ones. The book says
+   * which months it has closed, so it decides; the calendar is the backstop for
+   * when that feed cannot be reached.
    */
-  const cap = monthBefore(today);
+  const reconciledThrough = [...reconciled.values()]
+    .flatMap((byMonth) => Object.keys(byMonth))
+    .sort()
+    .pop() || null;
+  const cap = [monthBefore(today), reconciledThrough].filter(Boolean).sort()[0];
   const candidates = allMonths.filter((key) => key <= cap);
 
   // Of those, the newest month at least half the reporting stations have filed.

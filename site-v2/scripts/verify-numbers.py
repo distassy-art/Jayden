@@ -111,10 +111,14 @@ def main(figures_path, overlay_path, owners_path, monthly_path=None, open_days_p
     print(f"  ok    {len(months)} stations\n")
 
     # --- latest closed month -------------------------------------------------
-    # The month being traded is not a closed month however much of it is filed,
-    # so the calendar caps the search before the half-the-stores rule runs.
+    # The month being traded is not a closed month however much of it is filed.
+    # Two things cap the search before the half-the-stores rule runs: the
+    # calendar, and the span the reconciled book says it covers. The book is the
+    # stronger of the two, because the overlay fills a month in as it is traded.
     all_months = sorted({m for mm in months.values() for m in mm})
-    cap = month_before_now()
+    book_through = max((key for by_month in reconciled.values() for key in by_month),
+                       default=None)
+    cap = min(filter(None, [month_before_now(), book_through]))
     reporting = [sid for sid, mm in months.items() if mm]
     latest = None
     for key in reversed([m for m in all_months if m <= cap]):
