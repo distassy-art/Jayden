@@ -38,6 +38,10 @@
 
   var DIAMOND_IDS = { diamond: 1, "42352": 1 };
   var CLOCK_RADIUS_FEET = 20;
+  // Leaving the store is a different rule from clocking in: anyone still
+  // punched in more than 400 feet from the pin is reminded, then clocked out.
+  // Shift end never clocks anyone out — reminder only.
+  var LEAVE_RADIUS_FEET = 400;
   var STATION_GEO = {
     diamond: { lat: 33.9675725, lng: -117.8481447, address: "3302 S Diamond Bar Blvd, Diamond Bar, CA 91765" },
     "42352": { lat: 33.9675725, lng: -117.8481447, address: "3302 S Diamond Bar Blvd, Diamond Bar, CA 91765" }
@@ -2259,34 +2263,49 @@
     persist();
     return { ok: true, request: rec };
   }
-  function closeClockAtScheduled(rec) {
-    if (!rec || !rec.inAt || rec.outAt) return false;
-    var sh = scheduledShiftFor(rec.employeeId, rec.date, rec.stationId);
-    if (!sh) return false;
-    var end = shiftEndDate(sh);
-    if (!end) return false;
-    rec.outAt = end.toISOString();
-    rec.autoOut = true;
-    rec.autoOutReason = "scheduled";
-    var ms = end.getTime() - new Date(rec.inAt).getTime();
-    rec.hours = r2(ms > 0 ? ms / 3600000 : 0);
-    return true;
+  function geoLeaveReading(stationId, geo) {
+    var pin = stationGeo(stationId);
+    if (!geo || geo.geo === false || geo.lat == null || geo.lng == null || isNaN(Number(geo.lat))) {
+      return { away: false, reason: "nogeo" };
+    }
+    var feet = haversineFeet(Number(geo.lat), Number(geo.lng), pin.lat, pin.lng);
+    var accM = Number(geo.accuracy);
+    var accFeet = isNaN(accM) ? 0 : accM * 3.28084;
+    var margin = Math.min(Math.max(accFeet, 0), LEAVE_RADIUS_FEET);
+    var closest = Math.max(0, feet - margin);
+    if (closest <= LEAVE_RADIUS_FEET) {
+      return { away: false, reason: "inside", feet: Math.round(feet) };
+    }
+    return { away: true, reason: "geofence", feet: Math.round(feet) };
   }
+
+  // The only automatic clock-out. A missing or stale GPS fix never closes a
+  // punch — only a reading that is more than 400 feet from the store does.
+  // Everyone is under the same rule, including Rachel.
+  function closeClockIfAway(employeeId, geo) {
+    employeeId = empIdOf(employeeId);
+    var open = openClockAny(employeeId);
+    if (!open) return null;
+    var reading = geoLeaveReading(open.stationId, geo);
+    if (!reading.away) return null;
+    open.outAt = nowISO();
+    open.outGeo = normalizeGeo(geo);
+    if (!open.locationName) open.locationName = locationLabel(open.stationId);
+    open.autoOut = true;
+    open.autoOutReason = "geofence";
+    var ms = new Date(open.outAt).getTime() - new Date(open.inAt).getTime();
+    open.hours = r2(ms > 0 ? ms / 3600000 : 0);
+    persist();
+    return { record: open, feet: reading.feet };
+  }
+
   function autoCloseOverdueClocks() {
     if (!state || !state.clocks) return 0;
-    var now = Date.now();
     var n = 0;
     state.clocks.forEach(function (c) {
       if (!c || !c.inAt || c.outAt) return;
-      var sh = scheduledShiftFor(c.employeeId, c.date, c.stationId);
-      if (sh) {
-        var end = shiftEndDate(sh);
-        if (!end) return;
-        if (now >= end.getTime() + 10 * 60 * 1000) {
-          if (closeClockAtScheduled(c)) n++;
-        }
-        return;
-      }
+      // A scheduled shift that has ended is a reminder, never a clock-out.
+      if (scheduledShiftFor(c.employeeId, c.date, c.stationId)) return;
       if (c.date && c.date < todayYMD()) {
         var stored = Number(c.hours);
         if (!isNaN(stored) && stored > 0) {
@@ -2315,7 +2334,6 @@
     var end = shiftEndDate(sh);
     var endMs = end ? end.getTime() : 0;
     var now = Date.now();
-    if (endMs && now >= endMs + 10 * 60 * 1000) return { phase: "auto", open: open, shift: sh, endAt: endMs };
     if (endMs && now >= endMs) return { phase: "remind", open: open, shift: sh, endAt: endMs };
     return { phase: "working", open: open, shift: sh, endAt: endMs };
   }
@@ -2777,6 +2795,8 @@
     denyClockPermit: denyClockPermit,
     pendingClockPermit: pendingClockPermit,
     autoCloseOverdueClocks: autoCloseOverdueClocks,
+    closeClockIfAway: closeClockIfAway,
+    geoLeaveReading: geoLeaveReading,
     clockOutStatus: clockOutStatus,
     availabilityFor: availabilityFor,
     setAvailability: setAvailability,
@@ -2819,6 +2839,7 @@
     requestGeo: requestGeo,
     geoAtStore: geoAtStore,
     CLOCK_RADIUS_FEET: CLOCK_RADIUS_FEET,
+    LEAVE_RADIUS_FEET: LEAVE_RADIUS_FEET,
     laDateTime: laDateTime,
     formatLATime: formatLATime,
     shiftAnchorMs: shiftAnchorMs,

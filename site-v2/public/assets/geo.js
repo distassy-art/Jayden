@@ -2,11 +2,13 @@
  * Location and notifications for the time clock.
  *
  * The clock is location-based: an employee may only clock in while they are at
- * the store, and if they leave they are clocked out for them. This module is
- * the thin, testable layer over the browser's Geolocation and Notification
- * APIs that makes that possible — distance maths, a live geofence watch, and a
- * phone notification when the fence is crossed. It holds no state and knows
- * nothing about employees or shifts; the caller wires it to the store.
+ * the store. Leaving is the only case the clock may close a punch for them —
+ * after a reminder — and only once they are more than 400 feet from the pin.
+ * Shift end is a reminder, never a clock-out. This module is the thin,
+ * testable layer over the browser's Geolocation and Notification APIs: distance
+ * maths, a live geofence watch, and a phone notification when the fence is
+ * crossed. It holds no state and knows nothing about employees or shifts; the
+ * caller wires it to the store.
  */
 
 const EARTH_RADIUS_FT = 20902231; // mean Earth radius in feet

@@ -223,12 +223,19 @@ export async function clockIn(employeeId, storeId, coords = null) {
   return row;
 }
 
-export async function clockOut(punchId, { auto = false, coords = null } = {}) {
+export async function clockOut(punchId, { auto = false, coords = null, reason = "" } = {}) {
   const state = read();
   state.punches = state.punches.map((p) => {
     if (p.id !== punchId || p.clockOut) return p;
     const breaks = p.breaks.map((b) => (b.end ? b : { ...b, end: Date.now() }));
-    return { ...p, clockOut: Date.now(), clockOutAt: coords || null, auto, breaks };
+    return {
+      ...p,
+      clockOut: Date.now(),
+      clockOutAt: coords || null,
+      auto,
+      autoReason: auto ? (reason || "geofence") : "",
+      breaks,
+    };
   });
   write(state);
 }

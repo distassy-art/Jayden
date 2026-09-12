@@ -65,6 +65,31 @@ const A = await import("../public/assets/views/app.js");
 const F = await import("../public/assets/views/finance.js");
 const store = await import("../public/assets/appstore.js");
 
+assert(store.DEFAULT_RADIUS_FT === 400, "leave fence is 400 ft for everybody");
+{
+  const { distanceFt } = await import("../public/assets/geo.js");
+  const pin = { lat: 33.9675725, lng: -117.8481447 };
+  const stillOnLot = { lat: 33.9675725, lng: -117.8481447 };
+  const about200ft = { lat: 33.9675725 + 200 / 364000, lng: -117.8481447 };
+  const about500ft = { lat: 33.9675725 + 500 / 364000, lng: -117.8481447 };
+  const d0 = distanceFt(pin, stillOnLot);
+  const d200 = distanceFt(pin, about200ft);
+  const d500 = distanceFt(pin, about500ft);
+  assert(d0 < 1, "a fix on the pin is inside the leave fence");
+  assert(d200 > 150 && d200 < store.DEFAULT_RADIUS_FT, "200 ft is still inside the 400-ft leave fence");
+  assert(d500 > store.DEFAULT_RADIUS_FT, "500 ft is past the 400-ft leave fence for everybody");
+}
+{
+  const empId = "e_test_geofence";
+  await store.clockIn(empId, "diamond", { lat: 34.0, lng: -117.8 });
+  const open = await store.openPunch(empId);
+  assert(!!open && !open.clockOut, "open punch stays open until a leave or a tap");
+  await store.clockOut(open.id, { auto: true, reason: "geofence", coords: { lat: 34.01, lng: -117.8 } });
+  const done = (await store.listPunches({ employeeId: empId }))[0];
+  assert(done.auto === true && done.autoReason === "geofence" && !!done.clockOut,
+    "a 400-ft leave reminder is followed by a tagged clock-out");
+}
+
 const origin = "http://localhost:8787";
 const get = async (p) => {
   const res = await fetch(origin + p);
