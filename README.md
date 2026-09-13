@@ -1,6 +1,6 @@
 # Farsai calendar
 
-Click a day to enter the **17 S2K numbers** (Mina’s names). Month totals and trend roll those 17 up. Values save on the Worker (D1). Fields 18 and 19 were cancelled.
+Click a day to enter the **17 S2K numbers** (Mina’s names). The day editor has those 17 fields. Month-end shows **totals + trend only**, not 17 line items. Values save on the Worker (D1). Fields 18 and 19 were cancelled.
 
 ## Open it
 
@@ -20,9 +20,7 @@ npm run dev
 
 ## Data
 
-Daily 10am numbers will come from an **S2K login / report URL** (chosen). Report URL, login, whether HB and DB are two reports or one switch, and timezone are still waiting on Mina. Do not invent credentials. Do not scrape. The 17-slot day editor stays as the manual path. File import stays as a fallback.
-
-When login arrives, store it only as Cloudflare Worker secrets (`npx wrangler secret put …` on `farsai-calendar`). Never commit secrets or `.dev.vars`.
+Daily 10am numbers come from **S2K Prime** (one shared login for Arco DB and Arco HB). Confirm **DB first**, then HB. Username/password are Cloudflare Worker secrets only — never git. The 17-slot day editor stays. File import stays as a fallback. Do not invent S2K field mappings.
 
 Upload Excel, CSV, or HTML if you have a Daily export. Sample files:
 

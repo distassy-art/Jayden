@@ -169,15 +169,12 @@ function slotMeta(i) {
 }
 
 function renderSummary() {
-  const totals = state.summary?.totals ?? [];
-  const n = fieldCount();
-  const rows = [];
-  for (let i = 0; i < n; i++) {
-    const slot = slotMeta(i);
-    rows.push([slot.label, fmtNum(totals[i])]);
-  }
-  rows.push(["All 17", fmtNum(state.summary?.grand)]);
-  els.totals.innerHTML = rows
+  const grand = state.summary?.grand;
+  const prior = state.summary?.priorGrand;
+  els.totals.innerHTML = [
+    ["Total", fmtNum(grand)],
+    ["Prior period", fmtNum(prior)],
+  ]
     .map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`)
     .join("");
   const trend = state.summary?.trend;
@@ -189,7 +186,7 @@ function renderSummary() {
   const up = trend.delta >= 0;
   els.trend.className = `trend ${up ? "up" : "down"}`;
   const pct = trend.pct == null ? "" : ` (${Math.abs(trend.pct * 100).toFixed(1)}%)`;
-  els.trend.innerHTML = `${up ? "Up" : "Down"} ${fmtNum(Math.abs(trend.delta))}${pct}<small>${trend.label} · all 17</small>`;
+  els.trend.innerHTML = `${up ? "Up" : "Down"} ${fmtNum(Math.abs(trend.delta))}${pct}<small>${trend.label}</small>`;
 }
 
 function openDay(iso) {

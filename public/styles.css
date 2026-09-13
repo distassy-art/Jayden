@@ -292,9 +292,10 @@ h1 {
 
 #totals {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px 16px;
+  grid-template-columns: 1fr;
+  gap: 8px;
   margin: 0;
+  max-width: 280px;
 }
 
 #totals div {

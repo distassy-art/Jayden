@@ -1,7 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  // S2K login / report URL: wrangler secret put only, never git.
-  // Do not invent secret names or values until Mina sends the real URL and login.
+  // S2K Prime login: secrets S2K_USERNAME and S2K_PASSWORD via wrangler secret put only. Never git.
   "name": "farsai-calendar",
   "main": "src/index.ts",
   "compatibility_date": "2026-09-13",
