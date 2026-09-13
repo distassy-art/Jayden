@@ -34,28 +34,41 @@ function day(date: string, values: Array<number | null>): DayRow {
   return { day: date, ...blankMetrics(), s2k };
 }
 
-test("slots are numbered 1-19 with no invented names", () => {
+test("exactly 17 Mina-named slots; 18 and 19 are gone", () => {
   const slots = s2kSlots();
-  assert.equal(slots.length, S2K_COUNT);
-  assert.equal(slots[0].label, "1");
-  assert.equal(slots[18].label, "19");
+  assert.equal(S2K_COUNT, 17);
+  assert.equal(slots.length, 17);
+  assert.equal(slots[0].label, "Gas Inventory from S2K");
+  assert.equal(slots[7].label, "Net Cstore Sales");
+  assert.equal(slots[9].label, "Lotto Sales");
+  assert.equal(slots[10].label, "Scratchers Sales");
+  assert.equal(slots[11].label, "Lotto Payout");
+  assert.equal(slots[12].label, "Lottery Payout");
+  assert.equal(slots[13].label, "Cashier Over/Short");
+  assert.equal(slots[14].label, "Payouts");
+  assert.equal(slots[15].label, "Fuel Deposit");
+  assert.equal(
+    slots[16].label,
+    "Credit + Debit + EBT + Mobile + Prepaid Gift − fees",
+  );
+  assert.equal(slots.at(-1)?.index, 17);
 });
 
 test("parse and set one field at a time without filling the rest", () => {
   let fields = parseS2k(null);
-  assert.equal(fields.length, 19);
+  assert.equal(fields.length, 17);
   assert.equal(filledCount(fields), 0);
   fields = setS2kField(fields, 1, 10);
-  fields = setS2kField(fields, 19, 5);
+  fields = setS2kField(fields, 17, 5);
   assert.equal(filledCount(fields), 2);
   assert.equal(fields[0], 10);
-  assert.equal(fields[18], 5);
+  assert.equal(fields[16], 5);
   assert.equal(grandTotal(fields), 15);
 });
 
-test("month totals and trend roll up all 19 slots", () => {
-  const currentVals = Array.from({ length: 19 }, (_, i) => i + 1);
-  const priorVals = Array.from({ length: 19 }, () => 1);
+test("month totals and trend roll up all 17 slots", () => {
+  const currentVals = Array.from({ length: 17 }, (_, i) => i + 1);
+  const priorVals = Array.from({ length: 17 }, () => 1);
   const current = [day("2026-09-01", currentVals), day("2026-09-02", currentVals)];
   const prior: DayRow[] = [];
   for (let d = 1; d <= 31; d++) {
@@ -65,9 +78,9 @@ test("month totals and trend roll up all 19 slots", () => {
   assert.equal(slice.length, 2);
   const summary = summarizeMonth(2026, 9, current, prior);
   assert.equal(summary.totals[0], 2);
-  assert.equal(summary.totals[18], 38);
-  assert.equal(summary.grand, (19 * 20) / 2 * 2);
-  assert.equal(summary.priorGrand, 19 * 2);
+  assert.equal(summary.totals[16], 34);
+  assert.equal(summary.grand, ((17 * 18) / 2) * 2);
+  assert.equal(summary.priorGrand, 17 * 2);
   assert.equal(summary.trend.field, "s2k_total");
   assert.equal(summary.comparable, true);
 });

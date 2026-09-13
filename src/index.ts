@@ -8,6 +8,7 @@ import {
   parseStation,
   setS2kField,
   shiftMonth,
+  S2K_COUNT,
   s2kSlots,
   summarizeMonth,
   type DayRow,
@@ -80,6 +81,12 @@ async function handleApi(
     const day = parseDateCell(body.day);
     if (!station || !day) {
       return json({ ok: false, error: "invalid_day" }, 400);
+    }
+    if (body.index != null) {
+      const index = Number(body.index);
+      if (!Number.isInteger(index) || index < 1 || index > S2K_COUNT) {
+        return json({ ok: false, error: "invalid_field" }, 400);
+      }
     }
     const saved = await saveDayFields(db, station, day, body);
     return json({ ok: true, day: saved, station, filled: filledCount(saved.s2k) });

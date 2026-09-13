@@ -396,7 +396,7 @@ h1 {
 
 .s2k-fields {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 8px;
   max-height: min(52vh, 420px);
   overflow: auto;
@@ -405,16 +405,31 @@ h1 {
 
 .s2k-fields label {
   display: grid;
-  grid-template-columns: 28px 1fr auto;
-  gap: 6px;
+  grid-template-columns: minmax(8rem, 1.4fr) 1fr auto;
+  gap: 8px;
   align-items: center;
   font-size: 13px;
 }
 
 .s2k-fields .slot {
-  font-weight: 700;
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  min-width: 0;
+  font-weight: 650;
   color: var(--muted);
-  text-align: right;
+  text-align: left;
+}
+
+.s2k-fields .slot-num {
+  flex: 0 0 1.4rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.s2k-fields .slot-name {
+  font-weight: 600;
+  color: var(--ink);
+  overflow-wrap: anywhere;
 }
 
 .s2k-fields input {

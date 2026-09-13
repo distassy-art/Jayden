@@ -11,7 +11,28 @@ export type DayMetrics = {
   total_profit: number | null;
 };
 
-export const S2K_COUNT = 19;
+export const S2K_COUNT = 17;
+
+/** Mina-dictated names only. Fields 18–19 were cancelled. */
+export const S2K_FIELD_NAMES: string[] = [
+  "Gas Inventory from S2K",
+  "Non integrated fuel",
+  "Propane exchange",
+  "Safe drop",
+  "Diesel Gallons sold",
+  "Total Gallons Sold",
+  "Gas Profit",
+  "Net Cstore Sales",
+  "Tax1 + Tax4",
+  "Lotto Sales",
+  "Scratchers Sales",
+  "Lotto Payout",
+  "Lottery Payout",
+  "Cashier Over/Short",
+  "Payouts",
+  "Fuel Deposit",
+  "Credit + Debit + EBT + Mobile + Prepaid Gift − fees",
+];
 
 export type S2kValues = (number | null)[];
 
@@ -22,9 +43,9 @@ export function emptyS2k(): S2kValues {
 }
 
 export function s2kSlots(): { index: number; label: string }[] {
-  return Array.from({ length: S2K_COUNT }, (_, i) => ({
+  return S2K_FIELD_NAMES.map((label, i) => ({
     index: i + 1,
-    label: String(i + 1),
+    label,
   }));
 }
 

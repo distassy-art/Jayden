@@ -27,6 +27,7 @@ const state = {
   prefs: { farsai: "hb", owner: "hb" },
   summary: null,
   selectedDay: null,
+  slots: [],
 };
 
 function isOwner() {
@@ -95,6 +96,7 @@ function applyState(data) {
   state.days = data.days ?? [];
   state.prefs = data.prefs ?? state.prefs;
   state.summary = data.summary;
+  state.slots = data.slots ?? [];
   els.body.dataset.station = state.station;
   const meta = STATIONS[state.station];
   els.title.textContent = meta.title;
@@ -144,7 +146,7 @@ function renderGrid() {
     if (!filled) classes.push("empty");
     if (iso === today) classes.push("today");
     if (iso === state.selectedDay) classes.push("selected");
-    const vol = filled ? `${filled}/19` : "—";
+    const vol = filled ? `${filled}/${fieldCount()}` : "—";
     html.push(
       `<button type="button" class="${classes.join(" ")}" data-day="${iso}">
         <span class="dom">${d}</span>
@@ -158,13 +160,23 @@ function renderGrid() {
   });
 }
 
+function fieldCount() {
+  return state.slots.length || 17;
+}
+
+function slotMeta(i) {
+  return state.slots[i] || { index: i + 1, label: String(i + 1) };
+}
+
 function renderSummary() {
   const totals = state.summary?.totals ?? [];
+  const n = fieldCount();
   const rows = [];
-  for (let i = 0; i < 19; i++) {
-    rows.push([String(i + 1), fmtNum(totals[i])]);
+  for (let i = 0; i < n; i++) {
+    const slot = slotMeta(i);
+    rows.push([slot.label, fmtNum(totals[i])]);
   }
-  rows.push(["All 19", fmtNum(state.summary?.grand)]);
+  rows.push(["All 17", fmtNum(state.summary?.grand)]);
   els.totals.innerHTML = rows
     .map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`)
     .join("");
@@ -177,22 +189,24 @@ function renderSummary() {
   const up = trend.delta >= 0;
   els.trend.className = `trend ${up ? "up" : "down"}`;
   const pct = trend.pct == null ? "" : ` (${Math.abs(trend.pct * 100).toFixed(1)}%)`;
-  els.trend.innerHTML = `${up ? "Up" : "Down"} ${fmtNum(Math.abs(trend.delta))}${pct}<small>${trend.label} · all 19</small>`;
+  els.trend.innerHTML = `${up ? "Up" : "Down"} ${fmtNum(Math.abs(trend.delta))}${pct}<small>${trend.label} · all 17</small>`;
 }
 
 function openDay(iso) {
   state.selectedDay = iso;
   renderGrid();
   const row = state.days.find((d) => d.day === iso);
-  const s2k = Array.from({ length: 19 }, (_, i) => row?.s2k?.[i] ?? null);
+  const s2k = Array.from({ length: fieldCount() }, (_, i) => row?.s2k?.[i] ?? null);
   els.dayTitle.textContent = `${STATIONS[state.station].title.replace(" calendar", "")} · ${iso}`;
   els.s2kFields.innerHTML = s2k
     .map((value, i) => {
       const n = i + 1;
+      const slot = slotMeta(i);
       const filled = value != null ? " filled" : "";
+      const title = escapeHtml(slot.label);
       return `<label class="${filled.trim()}">
-        <span class="slot">${n}</span>
-        <input name="s2k-${n}" type="number" step="any" value="${value ?? ""}" data-index="${n}" />
+        <span class="slot"><span class="slot-num">${n}</span><span class="slot-name">${title}</span></span>
+        <input name="s2k-${n}" type="number" step="any" value="${value ?? ""}" data-index="${n}" aria-label="${title}" />
         <button type="button" data-add="${n}">Add</button>
       </label>`;
     })
@@ -205,7 +219,7 @@ function openDay(iso) {
 }
 
 function readS2kFromForm() {
-  return Array.from({ length: 19 }, (_, i) => {
+  return Array.from({ length: fieldCount() }, (_, i) => {
     const input = els.dayForm.elements[`s2k-${i + 1}`];
     const raw = String(input?.value ?? "").trim();
     return raw === "" ? null : Number(raw);
@@ -214,7 +228,7 @@ function readS2kFromForm() {
 
 function updateFilledLabel() {
   const filled = readS2kFromForm().filter((v) => v != null).length;
-  els.dayFilled.textContent = `${filled} of 19 filled`;
+  els.dayFilled.textContent = `${filled} of ${fieldCount()} filled`;
 }
 
 async function addOneField(index) {
@@ -235,7 +249,7 @@ async function addOneField(index) {
     }),
   });
   updateFilledLabel();
-  showStatus(`Saved slot ${index} on this site.`);
+  showStatus(`Saved ${slotMeta(index - 1).label} on this site.`);
   const next = els.dayForm.elements[`s2k-${index + 1}`];
   if (next) next.focus();
   await refresh();
@@ -395,6 +409,14 @@ function showStatus(message, isError = false) {
   els.status.hidden = false;
   els.status.textContent = message;
   els.status.className = `status${isError ? " error" : ""}`;
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 }
 
 function fmtNum(n) {

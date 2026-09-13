@@ -1,6 +1,6 @@
 # Farsai calendar
 
-Click a day to enter the **19 S2K numbers** one by one (slots 1–19 until Mina sends names). Month totals and trend roll those 19 up. Values save on the Worker (D1).
+Click a day to enter the **17 S2K numbers** (Mina’s names). Month totals and trend roll those 17 up. Values save on the Worker (D1). Fields 18 and 19 were cancelled.
 
 ## Open it
 
