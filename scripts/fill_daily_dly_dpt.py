@@ -14,7 +14,8 @@ Policy:
 Schedule (America/Los_Angeles) — see scripts/s2k_report_schedule.md:
   - DLY + DPT: Wed 8:00 AM, Sun 4:00 AM
   - Daily Book Summary: every day 2:00 PM
-  - Daily Excel update (from Daily PDFs): Mon/Wed/Fri/Sun 8:00 AM
+  - Daily Excel update (scripted PDF fill, not Copilot): Mon/Wed/Fri/Sun 8:00 AM
+    → scripts/fill_daily_excel.py then scripts/fill_daily_excel_secondary.py
 
 Requires:
   - S2K logins from /tmp/s2k/creds/Client-logins.xlsx sheet ``s2k``
