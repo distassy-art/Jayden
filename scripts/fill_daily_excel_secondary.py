@@ -435,6 +435,17 @@ def parse_args():
         help="Fill through this date (YYYY-MM-DD). Default: yesterday PT.",
     )
     p.add_argument(
+        "--store",
+        action="append",
+        dest="stores",
+        help="Limit to store id(s), e.g. 42179. Repeatable.",
+    )
+    p.add_argument(
+        "--force-lottery",
+        action="store_true",
+        help="Overwrite Receipt LOTTERY/LOTTO when PDF differs (default: blanks only).",
+    )
+    p.add_argument(
         "--dry-run",
         action="store_true",
         help="Save locally but do not upload.",
@@ -463,6 +474,12 @@ def main():
         for sid, meta in gaps.items():
             if sid in stores:
                 stores[sid] = {**stores[sid], **{k: meta[k] for k in ("folder", "name") if k in meta}}
+    if args.stores:
+        want = set(args.stores)
+        stores = {sid: cfg for sid, cfg in stores.items() if sid in want}
+        missing = want - set(stores)
+        if missing:
+            print(f"unknown --store ids: {sorted(missing)}")
 
     report = {}
     for sid, cfg in stores.items():
@@ -502,15 +519,42 @@ def main():
 
             if lot_hdr:
                 r = lot_hdr + day
+                main_r = 8 + day
+                # Scratchers/Lotto sales from main M/N when blank (or static leftovers).
+                for col, letter in ((2, "M"), (3, "N")):
+                    cur = ws.cell(r, col).value
+                    want = f"={letter}{main_r}"
+                    if empty(cur) or (
+                        isinstance(cur, (int, float))
+                        and not empty(ws.cell(main_r, 13 if letter == "M" else 14).value)
+                    ):
+                        if empty(cur) or isinstance(cur, (int, float)):
+                            ws.cell(r, col).value = want
+                            changes.append(f"{sn}!{chr(64+col)}{r}={want}")
+                for col, formula in (
+                    (4, f"=B{r}+C{r}"),
+                    (7, f"=E{r}+F{r}"),
+                    (8, f"=D{r}-G{r}"),
+                ):
+                    if empty(ws.cell(r, col).value):
+                        ws.cell(r, col).value = formula
+                        changes.append(f"{sn}!{chr(64+col)}{r}={formula}")
+
                 if parsed["has_receipt_section"]:
-                    if empty(ws.cell(r, 5).value):
-                        ws.cell(r, 5).value = parsed["lottery"]
-                        changes.append(f"{sn}!E{r}={parsed['lottery']}")
-                    if empty(ws.cell(r, 6).value):
-                        ws.cell(r, 6).value = parsed["lotto_rcpt"]
-                        changes.append(f"{sn}!F{r}={parsed['lotto_rcpt']}")
+                    for col, key, label in (
+                        (5, "lottery", "E"),
+                        (6, "lotto_rcpt", "F"),
+                    ):
+                        new_v = parsed[key]
+                        cur = ws.cell(r, col).value
+                        if empty(cur) or (
+                            args.force_lottery
+                            and isinstance(cur, (int, float))
+                            and float(cur) != float(new_v)
+                        ):
+                            ws.cell(r, col).value = new_v
+                            changes.append(f"{sn}!{label}{r}={new_v}")
                 else:
-                    main_r = 8 + day
                     if not empty(ws.cell(main_r, 2).value) and empty(ws.cell(r, 5).value):
                         ws.cell(r, 5).value = 0
                         ws.cell(r, 6).value = 0
