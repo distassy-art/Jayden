@@ -1,9 +1,14 @@
 import {
   daysInMonth,
+  emptyS2k,
+  filledCount,
   monthRange,
   parseRole,
+  parseS2k,
   parseStation,
+  setS2kField,
   shiftMonth,
+  s2kSlots,
   summarizeMonth,
   type DayRow,
   type Role,
@@ -13,6 +18,7 @@ import {
   defaultStationFromFilename,
   normalizeImportDays,
   parseCsv,
+  parseDateCell,
   parseHtmlTables,
 } from "./lib/parse.ts";
 import { sampleSeed } from "./lib/seed.ts";
@@ -71,12 +77,12 @@ async function handleApi(
   if (path === "/api/day" && request.method === "POST") {
     const body = await readJson(request);
     const station = parseStation(body.station);
-    const days = normalizeImportDays([body]);
-    if (!station || days.length !== 1) {
+    const day = parseDateCell(body.day);
+    if (!station || !day) {
       return json({ ok: false, error: "invalid_day" }, 400);
     }
-    await upsertDays(db, station, days);
-    return json({ ok: true, day: days[0], station });
+    const saved = await saveDayFields(db, station, day, body);
+    return json({ ok: true, day: saved, station, filled: filledCount(saved.s2k) });
   }
   if (path === "/api/import" && request.method === "POST") {
     const body = await readJson(request);
@@ -91,7 +97,16 @@ async function handleApi(
     }
     if (days.length === 0) return json({ ok: false, error: "no_rows" }, 400);
     if (days.length > 800) return json({ ok: false, error: "too_many_rows" }, 400);
-    await upsertDays(db, station, days);
+    const withS2k: DayRow[] = [];
+    for (const d of days) {
+      const row = { ...d, s2k: d.s2k ?? emptyS2k() };
+      if (filledCount(row.s2k) === 0) {
+        const existing = await getDay(db, station, d.day);
+        if (existing) row.s2k = existing.s2k;
+      }
+      withS2k.push(row);
+    }
+    await upsertDays(db, station, withS2k);
     const role = parseRole(body.role);
     await db
       .prepare(
@@ -140,6 +155,7 @@ async function loadState(db: D1Database, params: URLSearchParams) {
     year,
     month,
     daysInMonth: daysInMonth(year, month),
+    slots: s2kSlots(),
     days: currentDays,
     priorDays,
     summary,
@@ -176,11 +192,57 @@ async function listDays(
 ): Promise<DayRow[]> {
   const { results } = await db
     .prepare(
-      "SELECT day, gas_vol, gas_profit, sales, purch, store_profit, margin, total_profit FROM calendar_days WHERE station = ? AND day >= ? AND day <= ? ORDER BY day",
+      "SELECT day, gas_vol, gas_profit, sales, purch, store_profit, margin, total_profit, s2k FROM calendar_days WHERE station = ? AND day >= ? AND day <= ? ORDER BY day",
     )
     .bind(station, start, end)
-    .all<DayRow>();
-  return results ?? [];
+    .all<DayRow & { s2k: string | null }>();
+  return (results ?? []).map((row) => ({
+    ...row,
+    s2k: parseS2k(row.s2k),
+  }));
+}
+
+async function getDay(
+  db: D1Database,
+  station: Station,
+  day: string,
+): Promise<DayRow | null> {
+  const row = await db
+    .prepare(
+      "SELECT day, gas_vol, gas_profit, sales, purch, store_profit, margin, total_profit, s2k FROM calendar_days WHERE station = ? AND day = ?",
+    )
+    .bind(station, day)
+    .first<DayRow & { s2k: string | null }>();
+  if (!row) return null;
+  return { ...row, s2k: parseS2k(row.s2k) };
+}
+
+async function saveDayFields(
+  db: D1Database,
+  station: Station,
+  day: string,
+  body: Record<string, unknown>,
+): Promise<DayRow> {
+  const existing = await getDay(db, station, day);
+  let s2k = existing?.s2k ?? emptyS2k();
+  if (body.index != null) {
+    s2k = setS2kField(s2k, Number(body.index), body.value);
+  } else if (body.s2k != null) {
+    s2k = parseS2k(body.s2k);
+  }
+  const row: DayRow = {
+    day,
+    gas_vol: existing?.gas_vol ?? null,
+    gas_profit: existing?.gas_profit ?? null,
+    sales: existing?.sales ?? null,
+    purch: existing?.purch ?? null,
+    store_profit: existing?.store_profit ?? null,
+    margin: existing?.margin ?? null,
+    total_profit: existing?.total_profit ?? null,
+    s2k,
+  };
+  await upsertDays(db, station, [row]);
+  return row;
 }
 
 async function upsertDays(
@@ -192,8 +254,8 @@ async function upsertDays(
   const stmts = days.map((d) =>
     db
       .prepare(
-        `INSERT INTO calendar_days (station, day, gas_vol, gas_profit, sales, purch, store_profit, margin, total_profit, updated_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `INSERT INTO calendar_days (station, day, gas_vol, gas_profit, sales, purch, store_profit, margin, total_profit, s2k, updated_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
          ON CONFLICT(station, day) DO UPDATE SET
            gas_vol = excluded.gas_vol,
            gas_profit = excluded.gas_profit,
@@ -202,6 +264,7 @@ async function upsertDays(
            store_profit = excluded.store_profit,
            margin = excluded.margin,
            total_profit = excluded.total_profit,
+           s2k = excluded.s2k,
            updated_at = excluded.updated_at`,
       )
       .bind(
@@ -214,6 +277,7 @@ async function upsertDays(
         d.store_profit,
         d.margin,
         d.total_profit,
+        JSON.stringify(d.s2k ?? emptyS2k()),
         now,
       ),
   );
@@ -231,8 +295,8 @@ async function ensureSeed(db: D1Database): Promise<void> {
   const stmts = sampleSeed().map((d) =>
     db
       .prepare(
-        `INSERT OR IGNORE INTO calendar_days (station, day, gas_vol, gas_profit, sales, purch, store_profit, margin, total_profit, updated_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        `INSERT OR IGNORE INTO calendar_days (station, day, gas_vol, gas_profit, sales, purch, store_profit, margin, total_profit, s2k, updated_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       )
       .bind(
         d.station,
@@ -244,6 +308,7 @@ async function ensureSeed(db: D1Database): Promise<void> {
         d.store_profit,
         d.margin,
         d.total_profit,
+        JSON.stringify(d.s2k ?? emptyS2k()),
         now,
       ),
   );

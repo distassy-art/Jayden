@@ -1,6 +1,6 @@
 # Farsai calendar
 
-Monthly Arco **HB / DB** calendar. Day numbers are stored on this Cloudflare Worker (D1), not only shown in the browser.
+Click a day to enter the **19 S2K numbers** one by one (slots 1–19 until Mina sends names). Month totals and trend roll those 19 up. Values save on the Worker (D1).
 
 ## Open it
 

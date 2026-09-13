@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   comparablePriorDays,
+  emptyS2k,
   isOwnerSearch,
   parseStation,
   roleFromSearch,
@@ -11,6 +12,8 @@ import {
 } from "../src/lib/calendar.ts";
 
 function day(date: string, profit: number): DayRow {
+  const s2k = emptyS2k();
+  s2k[0] = profit;
   return {
     day: date,
     gas_vol: 100,
@@ -20,6 +23,7 @@ function day(date: string, profit: number): DayRow {
     store_profit: 100,
     margin: 0.5,
     total_profit: profit,
+    s2k,
   };
 }
 

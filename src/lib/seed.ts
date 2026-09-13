@@ -1,4 +1,5 @@
 import {
+  emptyS2k,
   finalizeMetrics,
   round2,
   type DayRow,
@@ -29,6 +30,7 @@ export function sampleDay(station: Station, day: string): DayRow {
   const purch = round2(sales * (0.68 + u * 0.04));
   return {
     day,
+    s2k: emptyS2k(),
     ...finalizeMetrics({ gas_vol, gas_profit, sales, purch }),
   };
 }

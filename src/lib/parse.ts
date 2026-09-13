@@ -1,5 +1,7 @@
 import {
+  emptyS2k,
   finalizeMetrics,
+  parseS2k,
   type DayMetrics,
   type DayRow,
   type Station,
@@ -105,6 +107,7 @@ export function rowsToDays(rows: unknown[][]): DayRow[] {
     };
     out.push({
       day,
+      s2k: emptyS2k(),
       ...finalizeMetrics({
         gas_vol: pick("gas_vol"),
         gas_profit: pick("gas_profit"),
@@ -129,6 +132,7 @@ export function normalizeImportDays(input: unknown): DayRow[] {
     if (!day) continue;
     out.push({
       day,
+      s2k: parseS2k(rec.s2k),
       ...finalizeMetrics({
         gas_vol: rec.gas_vol as number | null,
         gas_profit: rec.gas_profit as number | null,

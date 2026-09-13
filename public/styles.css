@@ -383,6 +383,62 @@ h1 {
   margin: 16px 0;
 }
 
+.day-note {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.day-filled {
+  margin: 8px 0 12px;
+  font-weight: 650;
+}
+
+.s2k-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  max-height: min(52vh, 420px);
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.s2k-fields label {
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  gap: 6px;
+  align-items: center;
+  font-size: 13px;
+}
+
+.s2k-fields .slot {
+  font-weight: 700;
+  color: var(--muted);
+  text-align: right;
+}
+
+.s2k-fields input {
+  font: inherit;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  min-width: 0;
+}
+
+.s2k-fields button {
+  border: 0;
+  background: var(--ink);
+  color: white;
+  border-radius: 999px;
+  padding: 7px 10px;
+  font: inherit;
+  font-size: 12px;
+}
+
+.s2k-fields label.filled .slot {
+  color: var(--accent);
+}
+
 .fields label {
   display: grid;
   gap: 6px;

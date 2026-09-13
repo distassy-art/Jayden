@@ -52,6 +52,8 @@ const els = {
   dialog: document.getElementById("day-dialog"),
   dayTitle: document.getElementById("day-title"),
   dayForm: document.getElementById("day-form"),
+  dayFilled: document.getElementById("day-filled"),
+  s2kFields: document.getElementById("s2k-fields"),
   file: document.getElementById("file"),
 };
 
@@ -68,6 +70,8 @@ async function init() {
   els.btnHb.addEventListener("click", () => setStation("hb"));
   els.btnDb.addEventListener("click", () => setStation("db"));
   els.dayForm.addEventListener("submit", onDaySubmit);
+  els.s2kFields.addEventListener("click", onAddOne);
+  els.s2kFields.addEventListener("keydown", onFieldKey);
   els.file.addEventListener("change", onFile);
   await refresh({ usePref: true });
 }
@@ -136,10 +140,11 @@ function renderGrid() {
     const iso = `${state.year}-${String(state.month).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
     const row = byDay.get(iso);
     const classes = ["cell"];
-    if (!row) classes.push("empty");
+    const filled = (row?.s2k || []).filter((v) => v != null).length;
+    if (!filled) classes.push("empty");
     if (iso === today) classes.push("today");
     if (iso === state.selectedDay) classes.push("selected");
-    const vol = row?.gas_vol != null ? `${fmtNum(row.gas_vol)} gal` : "—";
+    const vol = filled ? `${filled}/19` : "—";
     html.push(
       `<button type="button" class="${classes.join(" ")}" data-day="${iso}">
         <span class="dom">${d}</span>
@@ -154,20 +159,14 @@ function renderGrid() {
 }
 
 function renderSummary() {
-  const t = state.summary?.totals ?? {};
-  const rows = [
-    ["Gas volume", fmtNum(t.gas_vol), "gal"],
-    ["Gas profit", fmtMoney(t.gas_profit)],
-    ["C-store sales", fmtMoney(t.sales)],
-    ["Purchases", fmtMoney(t.purch)],
-    ["Store profit", fmtMoney(t.store_profit)],
-    ["Total profit", fmtMoney(t.total_profit)],
-  ];
+  const totals = state.summary?.totals ?? [];
+  const rows = [];
+  for (let i = 0; i < 19; i++) {
+    rows.push([String(i + 1), fmtNum(totals[i])]);
+  }
+  rows.push(["All 19", fmtNum(state.summary?.grand)]);
   els.totals.innerHTML = rows
-    .map(
-      ([k, v, suffix]) =>
-        `<div><dt>${k}</dt><dd>${v}${suffix ? ` ${suffix}` : ""}</dd></div>`,
-    )
+    .map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`)
     .join("");
   const trend = state.summary?.trend;
   if (!trend || trend.delta == null) {
@@ -178,18 +177,84 @@ function renderSummary() {
   const up = trend.delta >= 0;
   els.trend.className = `trend ${up ? "up" : "down"}`;
   const pct = trend.pct == null ? "" : ` (${Math.abs(trend.pct * 100).toFixed(1)}%)`;
-  els.trend.innerHTML = `${up ? "Up" : "Down"} ${fmtMoney(Math.abs(trend.delta))}${pct}<small>${trend.label}</small>`;
+  els.trend.innerHTML = `${up ? "Up" : "Down"} ${fmtNum(Math.abs(trend.delta))}${pct}<small>${trend.label} · all 19</small>`;
 }
 
 function openDay(iso) {
   state.selectedDay = iso;
   renderGrid();
-  const row = state.days.find((d) => d.day === iso) ?? {};
+  const row = state.days.find((d) => d.day === iso);
+  const s2k = Array.from({ length: 19 }, (_, i) => row?.s2k?.[i] ?? null);
   els.dayTitle.textContent = `${STATIONS[state.station].title.replace(" calendar", "")} · ${iso}`;
-  for (const name of ["gas_vol", "gas_profit", "sales", "purch", "store_profit", "total_profit"]) {
-    els.dayForm.elements[name].value = row[name] ?? "";
-  }
+  els.s2kFields.innerHTML = s2k
+    .map((value, i) => {
+      const n = i + 1;
+      const filled = value != null ? " filled" : "";
+      return `<label class="${filled.trim()}">
+        <span class="slot">${n}</span>
+        <input name="s2k-${n}" type="number" step="any" value="${value ?? ""}" data-index="${n}" />
+        <button type="button" data-add="${n}">Add</button>
+      </label>`;
+    })
+    .join("");
+  updateFilledLabel();
   els.dialog.showModal();
+  const firstEmpty = els.s2kFields.querySelector("input[value=''], input:not([value])") ||
+    [...els.s2kFields.querySelectorAll("input")].find((el) => el.value === "");
+  firstEmpty?.focus();
+}
+
+function readS2kFromForm() {
+  return Array.from({ length: 19 }, (_, i) => {
+    const input = els.dayForm.elements[`s2k-${i + 1}`];
+    const raw = String(input?.value ?? "").trim();
+    return raw === "" ? null : Number(raw);
+  });
+}
+
+function updateFilledLabel() {
+  const filled = readS2kFromForm().filter((v) => v != null).length;
+  els.dayFilled.textContent = `${filled} of 19 filled`;
+}
+
+async function addOneField(index) {
+  const input = els.dayForm.elements[`s2k-${index}`];
+  const raw = String(input?.value ?? "").trim();
+  const value = raw === "" ? null : Number(raw);
+  if (raw !== "" && !Number.isFinite(value)) {
+    showStatus("Enter a number", true);
+    return;
+  }
+  await api("/api/day", {
+    method: "POST",
+    body: JSON.stringify({
+      station: state.station,
+      day: state.selectedDay,
+      index,
+      value,
+    }),
+  });
+  updateFilledLabel();
+  showStatus(`Saved slot ${index} on this site.`);
+  const next = els.dayForm.elements[`s2k-${index + 1}`];
+  if (next) next.focus();
+  await refresh();
+}
+
+function onAddOne(event) {
+  const btn = event.target.closest("[data-add]");
+  if (!btn) return;
+  event.preventDefault();
+  addOneField(Number(btn.getAttribute("data-add")));
+}
+
+function onFieldKey(event) {
+  if (event.key !== "Enter") return;
+  const input = event.target;
+  if (input?.dataset?.index) {
+    event.preventDefault();
+    addOneField(Number(input.dataset.index));
+  }
 }
 
 async function onDaySubmit(event) {
@@ -199,13 +264,14 @@ async function onDaySubmit(event) {
     els.dialog.close();
     return;
   }
-  const form = new FormData(els.dayForm);
-  const payload = { station: state.station, day: state.selectedDay };
-  for (const key of ["gas_vol", "gas_profit", "sales", "purch", "store_profit", "total_profit"]) {
-    const raw = String(form.get(key) ?? "").trim();
-    payload[key] = raw === "" ? null : Number(raw);
-  }
-  await api("/api/day", { method: "POST", body: JSON.stringify(payload) });
+  await api("/api/day", {
+    method: "POST",
+    body: JSON.stringify({
+      station: state.station,
+      day: state.selectedDay,
+      s2k: readS2kFromForm(),
+    }),
+  });
   els.dialog.close();
   showStatus("Day saved on this site.");
   await refresh();
@@ -333,7 +399,7 @@ function showStatus(message, isError = false) {
 
 function fmtNum(n) {
   if (n == null) return "—";
-  return Number(n).toLocaleString("en-US", { maximumFractionDigits: 0 });
+  return Number(n).toLocaleString("en-US", { maximumFractionDigits: 2 });
 }
 
 function fmtMoney(n) {

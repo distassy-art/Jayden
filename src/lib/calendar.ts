@@ -11,7 +11,80 @@ export type DayMetrics = {
   total_profit: number | null;
 };
 
-export type DayRow = DayMetrics & { day: string };
+export const S2K_COUNT = 19;
+
+export type S2kValues = (number | null)[];
+
+export type DayRow = DayMetrics & { day: string; s2k: S2kValues };
+
+export function emptyS2k(): S2kValues {
+  return Array.from({ length: S2K_COUNT }, () => null);
+}
+
+export function s2kSlots(): { index: number; label: string }[] {
+  return Array.from({ length: S2K_COUNT }, (_, i) => ({
+    index: i + 1,
+    label: String(i + 1),
+  }));
+}
+
+export function parseS2k(raw: unknown): S2kValues {
+  const out = emptyS2k();
+  let arr: unknown[] = [];
+  if (typeof raw === "string" && raw.trim()) {
+    try {
+      const parsed: unknown = JSON.parse(raw);
+      if (Array.isArray(parsed)) arr = parsed;
+    } catch {
+      return out;
+    }
+  } else if (Array.isArray(raw)) {
+    arr = raw;
+  }
+  for (let i = 0; i < S2K_COUNT; i++) {
+    out[i] = numOrNull(arr[i]);
+  }
+  return out;
+}
+
+export function setS2kField(
+  fields: S2kValues,
+  index: number,
+  value: unknown,
+): S2kValues {
+  const out = parseS2k(fields);
+  if (index < 1 || index > S2K_COUNT) return out;
+  out[index - 1] = numOrNull(value);
+  return out;
+}
+
+export function filledCount(fields: S2kValues): number {
+  return fields.reduce((n, v) => (v != null ? n + 1 : n), 0);
+}
+
+export function sumS2k(days: DayRow[]): S2kValues {
+  const acc = emptyS2k();
+  for (const day of days) {
+    const fields = day.s2k ?? emptyS2k();
+    for (let i = 0; i < S2K_COUNT; i++) {
+      const value = fields[i];
+      if (value != null) acc[i] = round2((acc[i] ?? 0) + value);
+    }
+  }
+  return acc;
+}
+
+export function grandTotal(fields: S2kValues): number | null {
+  let sum = 0;
+  let any = false;
+  for (const value of fields) {
+    if (value != null) {
+      sum += value;
+      any = true;
+    }
+  }
+  return any ? round2(sum) : null;
+}
 
 export const STATIONS: Record<
   Station,
@@ -172,7 +245,7 @@ export function comparablePriorDays(
 }
 
 export type Trend = {
-  field: "total_profit";
+  field: "s2k_total";
   current: number | null;
   prior: number | null;
   delta: number | null;
@@ -180,23 +253,21 @@ export type Trend = {
   label: string;
 };
 
-export function profitTrend(
-  current: DayMetrics,
-  prior: DayMetrics,
+export function rollupTrend(
+  current: number | null,
+  prior: number | null,
   comparable: boolean,
 ): Trend {
-  const cur = current.total_profit;
-  const prev = prior.total_profit;
   let delta: number | null = null;
   let pct: number | null = null;
-  if (cur != null && prev != null) {
-    delta = round2(cur - prev);
-    pct = prev === 0 ? null : round4((cur - prev) / Math.abs(prev));
+  if (current != null && prior != null) {
+    delta = round2(current - prior);
+    pct = prior === 0 ? null : round4((current - prior) / Math.abs(prior));
   }
   return {
-    field: "total_profit",
-    current: cur,
-    prior: prev,
+    field: "s2k_total",
+    current,
+    prior,
     delta,
     pct,
     label: comparable ? "vs same days last month" : "vs last month",
@@ -206,8 +277,10 @@ export function profitTrend(
 export type MonthSummary = {
   year: number;
   month: number;
-  totals: DayMetrics;
-  priorTotals: DayMetrics;
+  totals: S2kValues;
+  priorTotals: S2kValues;
+  grand: number | null;
+  priorGrand: number | null;
   trend: Trend;
   comparable: boolean;
 };
@@ -221,19 +294,23 @@ export function summarizeMonth(
   const dim = daysInMonth(year, month);
   const comparableDays = comparablePriorDays(currentDays, priorDays, dim);
   const comparable = comparableDays.length !== priorDays.length;
-  const totals = sumMetrics(currentDays);
-  const priorTotals = sumMetrics(comparable ? comparableDays : priorDays);
+  const totals = sumS2k(currentDays);
+  const priorTotals = sumS2k(comparable ? comparableDays : priorDays);
+  const grand = grandTotal(totals);
+  const priorGrand = grandTotal(priorTotals);
   return {
     year,
     month,
     totals,
     priorTotals,
-    trend: profitTrend(totals, priorTotals, comparable),
+    grand,
+    priorGrand,
+    trend: rollupTrend(grand, priorGrand, comparable),
     comparable,
   };
 }
 
-function numOrNull(value: unknown): number | null {
+export function numOrNull(value: unknown): number | null {
   if (value == null || value === "") return null;
   const n = typeof value === "number" ? value : Number(value);
   return Number.isFinite(n) ? n : null;
