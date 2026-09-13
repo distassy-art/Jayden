@@ -258,7 +258,9 @@ def client_paths(client: dict, month: str) -> dict:
     return {
         "scans": scans,
         "daily_summary": f"{DOCS}/{dest}/{month}/Daily Summary",
-        "audit_xlsx": f"{DOCS}/{dest}/{client['name']} Audit.xlsx",
+        "audit_xlsx": f"{DOCS}/{dest}/{client['name']} Vendor Audit.xlsx",
+        "audit_xlsx_legacy": f"{DOCS}/{dest}/{client['name']} Audit.xlsx",
+        "financial_audit_xlsx": f"{DOCS}/{dest}/{client['name']} Financial Audit.xlsx",
         "dly_bd": f"{DOCS}/Clients/BIG DADDY/PDF/dly/{month}",
         "daily_bd": f"{DOCS}/Clients/BIG DADDY/PDF/daily/{month}",
     }
@@ -498,17 +500,38 @@ def _clean_vendor(name: str) -> str:
 
 def append_audit_rows(client: dict, month: str, rows: list[dict], as_of: date, dry_run: bool = False) -> dict:
     paths = client_paths(client, month)
-    candidates = [paths["audit_xlsx"], f"{DOCS}/{client['dest']}/{client['name']} Audit.xlsx"]
-    # Flexible match: any *Audit*.xlsx in the client dest folder (names vary).
+    dest_folder = f"{DOCS}/{client['dest']}"
+    candidates = []
+    # Prefer Vendor Audit (scanned + S2K). Fall back to combined Audit.xlsx.
     try:
-        for f in list_files(f"{DOCS}/{client['dest']}"):
-            n = f["Name"]
-            if n.lower().endswith(".xlsx") and "audit" in n.lower():
-                rel = f.get("ServerRelativeUrl") or f"{DOCS}/{client['dest']}/{n}"
-                if rel not in candidates:
-                    candidates.append(rel)
+        files = list_files(dest_folder)
     except Exception:
-        pass
+        files = []
+    vendor = [
+        f
+        for f in files
+        if f["Name"].lower().endswith(".xlsx") and "vendor audit" in f["Name"].lower()
+    ]
+    combined = [
+        f
+        for f in files
+        if f["Name"].lower().endswith(".xlsx")
+        and "audit" in f["Name"].lower()
+        and "vendor audit" not in f["Name"].lower()
+        and "financial audit" not in f["Name"].lower()
+        and "prototype" not in f["Name"].lower()
+    ]
+    for f in vendor + combined:
+        rel = f.get("ServerRelativeUrl") or f"{dest_folder}/{f['Name']}"
+        if rel not in candidates:
+            candidates.append(rel)
+    for rel in (
+        paths.get("audit_xlsx"),
+        f"{dest_folder}/{client['name']} Vendor Audit.xlsx",
+        f"{dest_folder}/{client['name']} Audit.xlsx",
+    ):
+        if rel and rel not in candidates:
+            candidates.append(rel)
     data = used = None
     for rel in candidates:
         try:
