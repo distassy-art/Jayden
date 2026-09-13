@@ -32,3 +32,30 @@ See `scripts/fill_daily_dly_dpt.py` for S2K logins, site IDs, and OneDrive folde
 - **Wednesday 8:00 AM**: DLY/DPT and Daily Excel both run — run DLY/DPT first, then Excel.
 - **Sunday**: DLY/DPT at 4:00 AM; Excel at 8:00 AM.
 - Day-behind rule: as of calendar day D, pull through end of D−1.
+
+## Financial Audit S2K fill
+
+Script: `scripts/fill_financial_audit_from_s2k.py`
+
+Pulls Daily Book Summary PDFs and writes S2K cashier columns:
+
+| PDF Receipts | Financial Audit column |
+|---|---|
+| SAFEDROP | S2K Safe Drop |
+| CREDIT+DEBIT+EBT+MOBILE+PREPAID GIFT − FEE | S2K Daily Receipt (Credit Debit) |
+| abs(FEE) | EFT Fee Amount |
+| CASH OVER/SHORT | Over / Short |
+
+**Cutoff:** America/Los_Angeles today − 2 days (e.g. Sep 13 run fills through Sep 11). Override with `--through YYYY-MM-DD`.
+
+Bank Safe Drop / Bank Credit+Debit+EBT stay blank for manual bank entry.
+
+Example (Placentia):
+
+```bash
+python3 scripts/fill_financial_audit_from_s2k.py \
+  --xlsx /tmp/s2k/exports/placentia_financial_audit.xlsx \
+  --pdf-dir /tmp/s2k/pdfs/secondary_fill_d12 \
+  --station 42004 --year 2026 --month 9 \
+  --upload --od-path "Clients/42004 (Arco Placentia)/Placentia Financial Audit.xlsx"
+```
