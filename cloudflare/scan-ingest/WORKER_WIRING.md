@@ -1,5 +1,10 @@
 # Wire scan-ingest into the site Cloudflare Worker
 
+This is the permanent wiring, for the site's own source tree. The live Worker is
+currently running a wrapper around its deployed bundle instead, because that
+tree is not in this repo — see `GO_LIVE.md` section 2. Doing the wiring below is
+what makes the endpoint survive the next deploy of the site.
+
 ## Copy files
 ```
 src/handlers/scan-ingest.js  ← cloudflare/scan-ingest/scan-ingest.js
