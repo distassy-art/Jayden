@@ -20,7 +20,9 @@ npm run dev
 
 ## Data
 
-How the 17 numbers arrive at 10am is still open (Excel/HTML export, an S2K report URL Mina provides, or paste in the day editor). Do not scrape S2K. File import and the 17-slot editor both stay.
+Daily 10am numbers will come from an **S2K login / report URL** (chosen). Report URL, login, whether HB and DB are two reports or one switch, and timezone are still waiting on Mina. Do not invent credentials. Do not scrape. The 17-slot day editor stays as the manual path. File import stays as a fallback.
+
+When login arrives, store it only as Cloudflare Worker secrets (`npx wrangler secret put …` on `farsai-calendar`). Never commit secrets or `.dev.vars`.
 
 Upload Excel, CSV, or HTML if you have a Daily export. Sample files:
 
