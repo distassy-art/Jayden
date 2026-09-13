@@ -67,7 +67,8 @@ promote. To undo, deploy the previous version:
 ```bash
 # 882e7abd… is the last version before any of this; 647cecb2… is that same code
 # plus the two new secrets.
-python3 cloudflare/scan-ingest/deploy-into-live-worker.py --rollback 647cecb2-2429-48d3-b555-363a6234a90b
+python3 cloudflare/scan-ingest/deploy-into-live-worker.py \
+  --deploy 647cecb2-2429-48d3-b555-363a6234a90b -m "roll back scan-ingest"
 ```
 
 **When the site's own source tree is deployed again, this wrapper is replaced

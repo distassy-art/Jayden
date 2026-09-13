@@ -217,12 +217,18 @@ def deploy(version_id: str, message: str) -> dict:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--promote", action="store_true", help="Send 100% of traffic to the new version")
-    parser.add_argument("--rollback", metavar="VERSION_ID", help="Deploy an existing version instead")
+    parser.add_argument(
+        "--deploy",
+        "--rollback",
+        metavar="VERSION_ID",
+        dest="deploy_version",
+        help="Deploy a version that is already uploaded, instead of uploading one",
+    )
     parser.add_argument("-m", "--message", default="scan-ingest wired into live site worker")
     args = parser.parse_args()
 
-    if args.rollback:
-        deploy(args.rollback, f"rollback to {args.rollback}")
+    if args.deploy_version:
+        deploy(args.deploy_version, args.message)
         return
 
     version = upload_version(args.message)
