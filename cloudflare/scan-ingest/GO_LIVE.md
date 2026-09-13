@@ -14,7 +14,22 @@ Save scans into **`C:\Scans`** only. The station uploader posts to:
 `https://smartsolutionsai.us/api/scan-ingest`
 
 ## Install / reinstall a station
-Packs (tokens baked in) are on OneDrive under **`Guide/Station Uploaders/`**.
+All 18 station packs (tokens baked in, UserId fix included) are on OneDrive:
+
+**`Guide/Station Uploaders/`**
+
+Per store:
+1. Download that store’s zip (example: `42179_Arco_HB.zip`)
+2. Extract to Desktop — do **not** run from the zip preview window
+3. Double-click `INSTALL.bat`  
+   or open `PASTE_INSTALL.txt`, copy all, paste into Windows PowerShell
+
+Watch folder on every PC: **`C:\Scans`**
+
+Rebuild packs locally:
+```bash
+python3 station-uploader/build_packs.py -o /tmp/station-uploader-packs
+```
 
 Or manually:
 
@@ -26,7 +41,7 @@ powershell -ExecutionPolicy Bypass -File .\Install-ScanUploader.ps1 `
   -ApiUrl "https://smartsolutionsai.us/api/scan-ingest"
 ```
 
-Mina PC uses station id `mina` (pack: `mina_Mina_PC.zip`).
+Mina PC uses station id `mina` (pack: `mina_Mina_PC.zip`, or `mina_PASTE_INSTALL.txt`).
 
 ## Rotate tokens / re-put secrets
 ```bash
