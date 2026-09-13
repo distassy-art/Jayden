@@ -20,7 +20,9 @@ npm run dev
 
 ## Data
 
-Until a live Arco pull exists, upload an Excel, CSV, or HTML Daily export. Sample files:
+How the 17 numbers arrive at 10am is still open (Excel/HTML export, an S2K report URL Mina provides, or paste in the day editor). Do not scrape S2K. File import and the 17-slot editor both stay.
+
+Upload Excel, CSV, or HTML if you have a Daily export. Sample files:
 
 - `public/sample-hb.csv`
 - `public/sample-db.html`
