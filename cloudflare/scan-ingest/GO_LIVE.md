@@ -1,68 +1,22 @@
-# Go-live: station auto-upload → Mina OneDrive (Cloudflare)
+# Go-live: station auto-upload → Mina OneDrive (Cloudflare only)
 
-This VM cannot log into your Cloudflare account, so secrets/deploy must be run on your machine (or after you provide `CLOUDFLARE_API_TOKEN`).
+**Status: LIVE (2026-09-13)** on Worker `smartsolutions-site` / `smartsolutionsai.us`.
 
-## 1) Entra / Azure AD (one time)
-App used by Worker Graph secrets (`GRAPH_CLIENT_ID`):
+Verified smoke tests:
+- `mina` → `Clients/Mina PC/2026-09 September/Scans/` (HTTP 200)
+- `42179` (Arco HB) → `Clients/42179 (Arco HB)/2026-09 September/Scans/` (HTTP 200)
 
-1. Azure Portal → App registrations → that app  
-2. **API permissions** → Add → Microsoft Graph → **Application** → **Files.ReadWrite.All**  
-3. **Grant admin consent**  
-4. Confirm existing mail permission still present if you use send-summary
+Secrets on Worker: `GRAPH_TENANT_ID`, `GRAPH_CLIENT_ID`, `GRAPH_CLIENT_SECRET`, `GRAPH_DRIVE_USER`, `SCAN_STATION_TOKENS`.
 
-## 2) Put scan-ingest into the live Worker
-Site Worker name: `smartsolutions-site` (domain `smartsolutionsai.us`).
+## What managers do
+Save scans into **`C:\Scans`** only. The station uploader posts to:
 
-Files already prepared under `cloudflare/scan-ingest/` and wired in the local `/tmp/ss-site` copy:
+`https://smartsolutionsai.us/api/scan-ingest`
 
-- `src/handlers/scan-ingest.js`
-- `src/handlers/stations.js`
-- route in `src/worker.js`: `POST /api/scan-ingest`
+## Install / reinstall a station
+Packs (tokens baked in) are on OneDrive under **`Guide/Station Uploaders/`**.
 
-Deploy your normal site Worker build that includes those files.
-
-## 3) Set Worker secrets
-From this repo (after `npx wrangler login`):
-
-```bash
-# tokens already generated on this agent VM:
-#   cloudflare/scan-ingest/station-tokens.local.json  (gitignored)
-
-export GRAPH_DRIVE_USER='MinaMorcos@smartsolutionsai26.onmicrosoft.com'
-bash cloudflare/scan-ingest/deploy-secrets.sh
-```
-
-If tokens are missing:
-
-```bash
-python3 cloudflare/scan-ingest/generate_tokens.py
-```
-
-Existing secrets (keep): `GRAPH_TENANT_ID`, `GRAPH_CLIENT_ID`, `GRAPH_CLIENT_SECRET`.
-
-## 4) Smoke test
-```bash
-python3 - <<'PY'
-import json
-print(json.load(open('cloudflare/scan-ingest/station-tokens.local.json'))['42179'])
-PY
-# then:
-curl -sS -X POST https://smartsolutionsai.us/api/scan-ingest \
-  -H "X-Station-Id: 42179" \
-  -H "X-Station-Token: PASTE_TOKEN" \
-  -H "X-Filename: probe.pdf" \
-  -H "Content-Type: application/pdf" \
-  --data-binary @/tmp/t.pdf
-```
-
-Expect JSON `{"ok":true,"folder":"Clients/.../Scans/..."}` and the file in your OneDrive.
-
-## 5) Install on each store PC
-Per-station zip packs (with tokens baked in) are on this VM at:
-
-`/tmp/station-uploader-packs/*.zip`
-
-Or install manually from `station-uploader/`:
+Or manually:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\Install-ScanUploader.ps1 `
@@ -72,10 +26,15 @@ powershell -ExecutionPolicy Bypass -File .\Install-ScanUploader.ps1 `
   -ApiUrl "https://smartsolutionsai.us/api/scan-ingest"
 ```
 
-Tell managers: **save scans into `C:\Scans` only.**
+Mina PC uses station id `mina` (pack: `mina_Mina_PC.zip`).
 
-## Blockers on this agent
-- No Cloudflare login / `CLOUDFLARE_API_TOKEN` → cannot push secrets or deploy from here  
-- Graph **Files.ReadWrite.All** must be consented in your tenant  
+## Rotate tokens / re-put secrets
+```bash
+npx wrangler login   # or CLOUDFLARE_API_TOKEN
+python3 cloudflare/scan-ingest/generate_tokens.py
+export GRAPH_DRIVE_USER='MinaMorcos@smartsolutionsai26.onmicrosoft.com'
+bash cloudflare/scan-ingest/deploy-secrets.sh
+```
 
-If you paste a Cloudflare API token (Account Workers Scripts Edit + Secrets edit) into the environment, I can run deploy + secret put for you next.
+## Entra reminder
+App (`GRAPH_CLIENT_ID`) needs Application permission **Files.ReadWrite.All** + admin consent (already working as of go-live).
