@@ -8,6 +8,18 @@ All times are **America/Los_Angeles** (Pacific). Cron for cloud timers uses UTC 
 | **Daily Book Summary** | `DailyTotal+Summary` with `ShowCost=1`. One PDF per business day (day-behind). Accumulate; do not delete prior days. | **Every day 2:00 PM** | `0 21 * * *` |
 | **Daily Excel update** | Fill missing days in each client `* Daily.xlsx` from Daily Book Summary PDFs via `scripts/update_daily_excels.py` (gas vol/profit, c-store total, tax/scratch/lotto/card). Leave Net Purchases alone. | Mon / Wed / Fri / Sun **8:00 AM** | `0 15 * * 1,3,5,0` |
 
+## Audit workbooks (vendor vs financial)
+
+Each client with an Audit file now has **two** workbooks (combined `* Audit.xlsx` kept as archive):
+
+| File | Contents |
+|------|----------|
+| `* Vendor Audit.xlsx` | Scanned invoices + Active S2K + Electronic/Excluded S2K |
+| `* Financial Audit.xlsx` | Cashier safe-drop + Cash over/short + EOM safe-drop |
+
+Invoice OCR append (`scripts/run_invoice_copilot_audit.py`) writes to **Vendor Audit** first.  
+Split/re-split: `python3 scripts/split_audit_workbook.py --all-clients`
+
 ## Stores / destinations
 
 See `scripts/fill_daily_dly_dpt.py` for S2K logins, site IDs, and OneDrive folder paths.
