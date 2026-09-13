@@ -453,7 +453,17 @@ def zero_empty_purchases(ws, through: int, cols: dict[str, str]) -> list[str]:
 
 
 def remap_formula(formula, src_row, dst_row):
-    return re.sub(rf"(?<![A-Z0-9]){src_row}(?!\d)", str(dst_row), formula)
+    """Remap A1-style row refs from src_row -> dst_row (e.g. J9:O9 -> J12:O12).
+
+    Must match digits after column letters. A lookbehind that bans A-Z never
+    matches ``B9`` / ``J9``, which left every filled day pointing at the
+    template row (seen on Arco HB September C-Store formulas).
+    """
+    return re.sub(
+        rf"([A-Za-z]+){src_row}(?!\d)",
+        rf"\g<1>{dst_row}",
+        formula,
+    )
 
 
 def template_formulas(ws, day: int) -> dict[str, str]:
