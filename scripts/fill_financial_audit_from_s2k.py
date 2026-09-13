@@ -9,8 +9,9 @@ Receipts mapping
   abs(FEE)                     → EFT Fee Amount
   CASH OVER/SHORT              → Over / Short
 
-Default cutoff: America/Los_Angeles today − 2 days
-  (e.g. Sep 13 fill → through Sep 11).
+Standing rule: always leave 2 days behind for the next round.
+  Fill every available day through (PT today − 2); leave today and
+  yesterday for the next run (e.g. Sep 13 → fill through Sep 11).
 
 Example
 -------
@@ -163,7 +164,7 @@ def month_sheet_name(year: int, month: int) -> str:
 
 
 def default_through() -> date:
-    """Financial fill cutoff: PT today − 2 calendar days."""
+    """Last day to fill: PT today − 2 (leave 2 days for the next round)."""
     return datetime.now(PT).date() - timedelta(days=2)
 
 
@@ -468,7 +469,7 @@ def main() -> None:
         "--through",
         type=date.fromisoformat,
         default=None,
-        help="Last business day to fill (YYYY-MM-DD). Default: PT today − 2.",
+        help="Last day to fill (YYYY-MM-DD). Default: PT today−2 (leave 2 days behind).",
     )
     ap.add_argument("--out", type=Path, help="Output xlsx (default: overwrite --xlsx)")
     ap.add_argument(
@@ -485,7 +486,10 @@ def main() -> None:
     args = ap.parse_args()
 
     through = args.through or default_through()
-    print(f"Cutoff through={through.isoformat()} (PT today−2 unless overridden)")
+    print(
+        f"Fill through={through.isoformat()} "
+        f"(leave 2 days behind; PT today−2 unless --through set)"
+    )
 
     pdfs = discover_pdfs(
         args.pdf_dir, args.station, args.year, args.month, through=through

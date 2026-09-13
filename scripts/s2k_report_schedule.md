@@ -46,7 +46,10 @@ Pulls Daily Book Summary PDFs and writes S2K cashier columns:
 | abs(FEE) | EFT Fee Amount |
 | CASH OVER/SHORT | Over / Short |
 
-**Cutoff:** America/Los_Angeles today − 2 days (e.g. Sep 13 run fills through Sep 11). Override with `--through YYYY-MM-DD`.
+**Cutoff (standing rule):** always leave 2 days behind for the next round.
+Fill all available days through America/Los_Angeles **today − 2**; do not fill
+today or yesterday (e.g. Sep 13 run → through Sep 11). Override only for
+backfills with `--through YYYY-MM-DD`.
 
 Bank Safe Drop / Bank Credit+Debit+EBT stay blank for manual bank entry.
 
