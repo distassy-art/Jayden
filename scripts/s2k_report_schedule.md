@@ -7,6 +7,7 @@ All times are **America/Los_Angeles** (Pacific). Cron for cloud timers uses UTC 
 | **DLY + DPT** | None Fuel Invoice Total (**View Type Expand** / `Toggle=1`) + DailyAPInvoice (**Group By Department** / `GroupBy=1`). Upload latest MTD file; delete older `*dly*` / `*dpt*` in that month folder. | Wed **8:00 AM**, Sun **4:00 AM** | `0 15 * * 3`, `0 11 * * 0` |
 | **Daily Book Summary** | `DailyTotal+Summary` with `ShowCost=1`. One PDF per business day (day-behind). Accumulate; do not delete prior days. | **Every day 2:00 PM** | `0 21 * * *` |
 | **Daily Excel update** | Fill missing days in each client `* Daily.xlsx` from Daily Book Summary PDFs via `scripts/update_daily_excels.py` (gas vol/profit, c-store total, tax/scratch/lotto/card). Leave Net Purchases alone. | Mon / Wed / Fri / Sun **8:00 AM** | `0 15 * * 1,3,5,0` |
+| **Financial Audit fill** | Fill all client `* Financial Audit.xlsx` S2K columns from Daily Book Summary PDFs via `scripts/fill_financial_audit_from_s2k.py --all --upload`. Always leave 2 days behind. | **Sun 9:00 AM** | `0 16 * * 0` |
 
 ## Audit workbooks (vendor vs financial)
 
@@ -30,14 +31,16 @@ See `scripts/fill_daily_dly_dpt.py` for S2K logins, site IDs, and OneDrive folde
 ## Overlap notes
 
 - **Wednesday 8:00 AM**: DLY/DPT and Daily Excel both run — run DLY/DPT first, then Excel.
-- **Sunday**: DLY/DPT at 4:00 AM; Excel at 8:00 AM.
+- **Sunday**: DLY/DPT at 4:00 AM; Excel at 8:00 AM; Financial Audit fill at 9:00 AM.
 - Day-behind rule: as of calendar day D, pull through end of D−1.
+- Financial Audit leave-2-days rule: as of calendar day D, fill through end of D−2.
 
-## Financial Audit S2K fill
+## Financial Audit S2K fill (weekly)
 
-Script: `scripts/fill_financial_audit_from_s2k.py`
+Script: `scripts/fill_financial_audit_from_s2k.py`  
+Schedule: **every Sunday 9:00 AM** America/Los_Angeles (`0 16 * * 0` PDT / UTC−7).
 
-Pulls Daily Book Summary PDFs and writes S2K cashier columns:
+Pulls Daily Book Summary PDFs and writes S2K cashier columns for **all** Financial Audit clients:
 
 | PDF Receipts | Financial Audit column |
 |---|---|
@@ -53,12 +56,22 @@ backfills with `--through YYYY-MM-DD`.
 
 Bank Safe Drop / Bank Credit+Debit+EBT stay blank for manual bank entry.
 
-Example (Placentia):
+Weekly command:
+
+```bash
+# current calendar month in PT; leave 2 days behind; upload to OneDrive
+python3 scripts/fill_financial_audit_from_s2k.py \
+  --all --year YYYY --month M --upload
+```
+
+Single-store example (Placentia):
 
 ```bash
 python3 scripts/fill_financial_audit_from_s2k.py \
-  --xlsx /tmp/s2k/exports/placentia_financial_audit.xlsx \
-  --pdf-dir /tmp/s2k/pdfs/secondary_fill_d12 \
-  --station 42004 --year 2026 --month 9 \
-  --upload --od-path "Clients/42004 (Arco Placentia)/Placentia Financial Audit.xlsx"
+  --station 42004 --year 2026 --month 9 --upload
 ```
+
+## Overlap notes (Financial Audit)
+
+- **Sunday 9:00 AM**: runs after Sunday DLY/DPT (4:00 AM) and Daily Excel (8:00 AM).
+- Skips stores with no Daily Summary PDFs (currently Paradise, ExtraMile).
