@@ -5,12 +5,13 @@ Standard method for Daily.xlsx (do **not** use Copilot for this):
   1. Ensure day-behind Daily Book Summary PDFs exist on OneDrive.
   2. Fill blank main-table cells (gas vol/profit, c-store total, tax/scratch/lotto/card).
   3. Restore blank formula columns from a template row.
-  4. Leave Net Purchases / purchase-ledger columns alone.
+  4. If Net Purchases is blank on a day that already has sales, set it to **0**
+     temporarily until the next DLY/DPT pull supplies real purchase totals.
   5. Run ``fill_daily_excel_secondary.py`` for lottery receipt + Top N dept tables.
 
 Schedule (America/Los_Angeles) — see ``scripts/s2k_report_schedule.md``:
   Mon / Wed / Fri / Sun **8:00 AM**. If day-behind Daily PDFs are missing
-  (Daily Book job is 2:00 PM), pull them first with
+  (Daily Book + DLY/DPT job is every day 2:00 PM), pull them first with
   ``fill_daily_dly_dpt.py --mode daily``.
 
 Requires:
@@ -395,7 +396,60 @@ def header_map(ws) -> dict[str, str]:
             cols["lotto"] = letter
         elif "card" in hl:
             cols["card"] = letter
+        elif "purchase" in hl:
+            # Prefer Net Purchases; keep Base Purchases as a separate input col
+            if "base" in hl:
+                cols["purchases_base"] = letter
+            else:
+                cols["purchases"] = letter
+    if "purchases" not in cols:
+        cols["purchases"] = cols.get("purchases_base", "F")
     return cols
+
+
+def cell_empty(v) -> bool:
+    return v is None or (isinstance(v, str) and not str(v).strip())
+
+
+def has_sales_row(ws, row: int, gas_col: str = "B") -> bool:
+    b = ws[f"{gas_col}{row}"].value
+    if cell_empty(b):
+        return False
+    if isinstance(b, (int, float)) and b == 0:
+        j = ws[f"J{row}"].value
+        if cell_empty(j) or j == 0:
+            return False
+    return True
+
+
+def zero_empty_purchases(ws, through: int, cols: dict[str, str]) -> list[str]:
+    """Placeholder 0 until DLY/DPT lands real Net Purchases — blank cells only.
+
+    Skips formula cells. If Net Purchases is formula-driven from a Base Purchases
+    column, also zero blank Base cells so the Net formula can resolve.
+    """
+    gas_col = cols.get("gas_vol", "B")
+    targets = []
+    for key in ("purchases", "purchases_base"):
+        letter = cols.get(key)
+        if letter and letter not in targets:
+            targets.append(letter)
+    if not targets:
+        targets = ["F"]
+    changed = []
+    for day in range(1, through + 1):
+        r = HDR + day
+        if not has_sales_row(ws, r, gas_col):
+            continue
+        for letter in targets:
+            cell = f"{letter}{r}"
+            val = ws[cell].value
+            if isinstance(val, str) and val.startswith("="):
+                continue
+            if cell_empty(val):
+                ws[cell] = 0
+                changed.append(f"{cell}=0")
+    return changed
 
 
 def remap_formula(formula, src_row, dst_row):
@@ -447,6 +501,12 @@ def write_values(ws, day, vals, cols):
         if ws[f"{col}{r}"].value in (None, ""):
             ws[f"{col}{r}"] = formula
             changed.append(f"{col}=formula")
+    # Temporary placeholder until DLY/DPT supplies real purchase totals
+    purch = cols.get("purchases", "F")
+    gas_col = cols.get("gas_vol", "B")
+    if has_sales_row(ws, r, gas_col) and cell_empty(ws[f"{purch}{r}"].value):
+        ws[f"{purch}{r}"] = 0
+        changed.append(f"{purch}{r}=0")
     return changed
 
 
@@ -467,6 +527,7 @@ def fill_brookhurst(wb, day, vals, year, month, sn):
         "E": round(vals["cstore_total"] - tax_sum, 2)
         if vals.get("cstore_total") is not None
         else None,
+        "F": 0,  # temporary Net Purchases until DLY/DPT
         "J": vals.get("cstore_total"),
         "K": vals.get("tax1", 0.0),
         "L": vals.get("tax4", 0.0),
@@ -537,6 +598,9 @@ def fill_garden_grove(ws, day, vals):
         if ws[f"{col}{r}"].value in (None, ""):
             ws[f"{col}{r}"] = formula
             changed.append(f"{col}=formula")
+    if has_sales_row(ws, r) and cell_empty(ws[f"F{r}"].value):
+        ws[f"F{r}"] = 0
+        changed.append(f"F{r}=0")
     return changed
 
 
@@ -666,21 +730,12 @@ def main():
             "missing_days": miss,
         }
         print(f"{key} missing={miss}")
-        if not miss:
-            report.append(
-                {
-                    "store": key,
-                    "filled": [],
-                    "file": meta["name"],
-                    "note": "up_to_date",
-                }
-            )
-            continue
 
         sheet = pick_sheet(wb, year, month)
         calc = f"{MONTH_NAMES[month]} Calculations"
+        purch_zeros: list[str] = []
         if key == "42048":
-            ws = wb[calc]
+            ws = wb[calc] if calc in wb.sheetnames else None
             cols = {}
         else:
             if not sheet:
@@ -689,12 +744,25 @@ def main():
             ws = wb[sheet]
             cols = header_map(ws)
             print(f"  columns: {cols}")
+            purch_zeros = zero_empty_purchases(ws, through, cols)
+            if meta.get("source"):
+                src_name = f"{MONTH_NAMES[month]} {year} Source"
+                if src_name in wb.sheetnames:
+                    src = wb[src_name]
+                    for day in range(1, through + 1):
+                        sr = 2 + day
+                        # Source F = Net Purchases when sales row present
+                        if src[f"B{sr}"].value not in (None, "") and cell_empty(src[f"F{sr}"].value):
+                            src[f"F{sr}"] = 0
+                            purch_zeros.append(f"src!F{sr}=0")
+            if purch_zeros:
+                print(f"  purchases->0: {purch_zeros[:12]}{'...' if len(purch_zeros)>12 else ''}")
 
         filled = []
         skipped_no_pdf = []
         for day in miss:
             if key == "42048":
-                if ws[f"B{2 + day}"].value not in (None, ""):
+                if ws is None or ws[f"B{2 + day}"].value not in (None, ""):
                     continue
             else:
                 gas_col = cols.get("gas_vol", "B")
@@ -721,24 +789,28 @@ def main():
             elif key == "42399":
                 ch = fill_garden_grove(ws, day, vals)
             else:
-                ch = write_values(ws, day, vals, cols)
+                # prefer write_values; fall back to write_values alias if renamed
+                writer = globals().get("write_values") or globals().get("write_values")
+                ch = writer(ws, day, vals, cols)
             print(f"  day {day}: {ch}")
             if ch:
                 filled.append(day)
 
-        if filled and not args.dry_run:
+        changed = bool(filled or purch_zeros)
+        if changed and not args.dry_run:
             wb.save(local)
             upload_file(server, local.read_bytes())
-            print(f"  UPLOADED days {filled}")
-        elif filled:
+            print(f"  UPLOADED filled={filled} purchases0={len(purch_zeros)}")
+        elif changed:
             wb.save(local)
-            print(f"  DRY-RUN saved locally days {filled}")
+            print(f"  DRY-RUN saved filled={filled} purchases0={len(purch_zeros)}")
         else:
             print("  nothing uploaded")
         report.append(
             {
                 "store": key,
                 "filled": filled,
+                "purchases_zeroed": purch_zeros,
                 "skipped_no_pdf": skipped_no_pdf,
                 "file": meta["name"],
             }

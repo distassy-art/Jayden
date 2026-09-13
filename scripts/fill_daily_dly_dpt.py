@@ -12,10 +12,10 @@ Policy:
     MMDDYYYYdly.pdf / MMDDYYYYdpt.pdf, delete older dly/dpt files in that month folder.
 
 Schedule (America/Los_Angeles) — see scripts/s2k_report_schedule.md:
-  - DLY + DPT: Wed 8:00 AM, Sun 4:00 AM
-  - Daily Book Summary: every day 2:00 PM
+  - Daily Book Summary + DLY + DPT: every day 2:00 PM (same day-behind run)
   - Daily Excel update (scripted PDF fill, not Copilot): Mon/Wed/Fri/Sun 8:00 AM
     → scripts/fill_daily_excel.py then scripts/fill_daily_excel_secondary.py
+    → blank Net Purchases set to 0 until DLY/DPT supplies real totals
 
 Requires:
   - S2K logins from /tmp/s2k/creds/Client-logins.xlsx sheet ``s2k``
