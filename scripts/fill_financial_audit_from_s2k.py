@@ -5,22 +5,17 @@ Receipts mapping
 ----------------
   SAFEDROP                     → S2K Safe Drop
   CREDIT+DEBIT+EBT+MOBILE
-    +PREPAID GIFT − FEE        → S2K Daily Receipt  (Credit Debit)
-  abs(FEE)                     → EFT Fee Amount
+    +PREPAID GIFT − FEE        → S2K Daily Receipt / S2K Credit+Debit+EBT
+  abs(FEE)                     → EFT Fee Amount (when that column exists)
   CASH OVER/SHORT              → Over / Short
 
 Standing rule: always leave 2 days behind for the next round.
-  Fill every available day through (PT today − 2); leave today and
-  yesterday for the next run (e.g. Sep 13 → fill through Sep 11).
+  Fill through (PT today − 2); leave today and yesterday for the next run.
 
-Example
--------
-  python3 scripts/fill_financial_audit_from_s2k.py \\
-    --xlsx /tmp/s2k/exports/placentia_financial_audit.xlsx \\
-    --pdf-dir /tmp/s2k/pdfs/secondary_fill_d12 \\
-    --station 42004 --year 2026 --month 9 \\
-    --out /tmp/s2k/exports/placentia_financial_audit_filled.xlsx \\
-    --upload --od-path "Clients/42004 (Arco Placentia)/Placentia Financial Audit.xlsx"
+Examples
+--------
+  python3 scripts/fill_financial_audit_from_s2k.py --station 42004 --year 2026 --month 9 --upload
+  python3 scripts/fill_financial_audit_from_s2k.py --all --year 2026 --month 9 --upload
 """
 
 from __future__ import annotations
@@ -29,6 +24,7 @@ import argparse
 import json
 import re
 import ssl
+import traceback
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -64,10 +60,157 @@ BASE = f"{HOST}/personal/minamorcos_smartsolutionsai26_onmicrosoft_com"
 DOCS_ROOT = "/personal/minamorcos_smartsolutionsai26_onmicrosoft_com/Documents"
 OD_COOKIES = Path("/tmp/od_cookies.json")
 SSL_CTX = ssl.create_default_context()
+WORK_DIR = Path("/tmp/s2k/exports/financial_fill_all")
 
 LINE_RE = re.compile(
     r"^([A-Za-z][A-Za-z0-9 /&'.-]*?)\s+(\(\$?[\d,]+\.\d{2}\)|\$?[\d,]+\.\d{2})\s*$"
 )
+
+# pdf_mode: solo = store Daily Summary; bd = BIG DADDY multi-station daily PDF; none = skip
+CLIENTS: list[dict[str, str]] = [
+    {
+        "station": "42004",
+        "tso": "42004",
+        "label": "Placentia",
+        "od_xlsx": "Clients/42004 (Arco Placentia)/Placentia Financial Audit.xlsx",
+        "pdf_mode": "solo",
+        "pdf_folder": "Clients/42004 (Arco Placentia)/{month}/Daily Summary",
+    },
+    {
+        "station": "42179",
+        "tso": "42179",
+        "label": "Arco HB",
+        "od_xlsx": "Clients/42179 (Arco HB)/Arco HB Financial Audit.xlsx",
+        "pdf_mode": "solo",
+        "pdf_folder": "Clients/42179 (Arco HB)/{month}/Daily Summary",
+    },
+    {
+        "station": "42352",
+        "tso": "42352",
+        "label": "Arco Db",
+        "od_xlsx": "Clients/42352 (Arco Db)/Arco Db Financial Audit.xlsx",
+        "pdf_mode": "solo",
+        "pdf_folder": "Clients/42352 (Arco Db)/{month}/Daily Summary",
+    },
+    {
+        "station": "42674",
+        "tso": "42674",
+        "label": "Tustin",
+        "od_xlsx": "Clients/BIG DADDY/42674 (Tustin)/Tustin  Financial Audit.xlsx",
+        "pdf_mode": "solo",
+        "pdf_folder": "Clients/BIG DADDY/42674 (Tustin)/{month}/Daily Summary",
+    },
+    {
+        "station": "42021",
+        "tso": "42021",
+        "label": "Westminster",
+        "od_xlsx": "Clients/BIG DADDY/42021 (Westminster)/Westminster Financial Audit.xlsx",
+        "pdf_mode": "bd",
+        "pdf_folder": "Clients/BIG DADDY/PDF/daily/{month}",
+    },
+    {
+        "station": "42048",
+        "tso": "42048",
+        "label": "San Diego",
+        "od_xlsx": "Clients/BIG DADDY/42048 (San Diego)/San Diego Financial Audit.xlsx",
+        "pdf_mode": "bd",
+        "pdf_folder": "Clients/BIG DADDY/PDF/daily/{month}",
+    },
+    {
+        "station": "42098",
+        "tso": "42098",
+        "label": "Brookhurst 75",
+        "od_xlsx": "Clients/BIG DADDY/42098 (Brookhurst 75)/Brookhurst  Financial Audit.xlsx",
+        "pdf_mode": "bd",
+        "pdf_folder": "Clients/BIG DADDY/PDF/daily/{month}",
+    },
+    {
+        "station": "42279",
+        "tso": "42279",
+        "label": "Koval",
+        "od_xlsx": "Clients/BIG DADDY/42279 Flamingo (Koval)/Koval Financial Audit.xlsx",
+        "pdf_mode": "bd",
+        "pdf_folder": "Clients/BIG DADDY/PDF/daily/{month}",
+    },
+    {
+        "station": "42280",
+        "tso": "42280",
+        "label": "Spring Mtn",
+        "od_xlsx": "Clients/BIG DADDY/42280 (Spring Mtn)/Spring Mtn  Financial Audit.xlsx",
+        "pdf_mode": "bd",
+        "pdf_folder": "Clients/BIG DADDY/PDF/daily/{month}",
+    },
+    {
+        "station": "42281",
+        "tso": "42281",
+        "label": "Charleston",
+        "od_xlsx": "Clients/BIG DADDY/42281 (Charleston)/Charleston  Financial Audit.xlsx",
+        "pdf_mode": "bd",
+        "pdf_folder": "Clients/BIG DADDY/PDF/daily/{month}",
+    },
+    {
+        "station": "42282",
+        "tso": "42282",
+        "label": "Oakey Las Vegas Blvd",
+        "od_xlsx": "Clients/BIG DADDY/42282 (Oakey  Las Vegas Blvd)/Oakey Las Vegas Blvd Financial Audit.xlsx",
+        "pdf_mode": "bd",
+        "pdf_folder": "Clients/BIG DADDY/PDF/daily/{month}",
+    },
+    {
+        "station": "42399",
+        "tso": "42399",
+        "label": "Garden Grove",
+        "od_xlsx": "Clients/BIG DADDY/42399 (Garden Grove)/Garden Grove Financial Audit.xlsx",
+        "pdf_mode": "bd",
+        "pdf_folder": "Clients/BIG DADDY/PDF/daily/{month}",
+    },
+    {
+        "station": "42438",
+        "tso": "42438",
+        "label": "Vista",
+        "od_xlsx": "Clients/BIG DADDY/42438 (Vista)/Vista Financial Audit.xlsx",
+        "pdf_mode": "bd",
+        "pdf_folder": "Clients/BIG DADDY/PDF/daily/{month}",
+    },
+    {
+        "station": "42439",
+        "tso": "42439",
+        "label": "Lamb",
+        "od_xlsx": "Clients/BIG DADDY/42439 (Lamb)/Lamb Financial Audit.xlsx",
+        "pdf_mode": "bd",
+        "pdf_folder": "Clients/BIG DADDY/PDF/daily/{month}",
+    },
+    {
+        "station": "42359",
+        "tso": "42359",
+        "label": "Paradise",
+        "od_xlsx": "Clients/BIG DADDY/42359 (Paradise)/Paradise Financial Audit.xlsx",
+        "pdf_mode": "solo",
+        "pdf_folder": "Clients/BIG DADDY/42359 (Paradise)/{month}/Daily Summary",
+        "optional": "1",
+    },
+    {
+        "station": "extramile",
+        "tso": "",
+        "label": "ExtraMile",
+        "od_xlsx": "Clients/ExtraMile/ExtraMile Financial Audit.xlsx",
+        "pdf_mode": "none",
+        "pdf_folder": "",
+        "optional": "1",
+    },
+]
+
+
+def month_folder(year: int, month: int) -> str:
+    return f"{year}-{month:02d} {MONTH_NAMES[month]}"
+
+
+def default_through() -> date:
+    return datetime.now(PT).date() - timedelta(days=2)
+
+
+def month_sheet_name(year: int, month: int) -> str:
+    return f"{MONTH_NAMES[month]} {year}"
 
 
 def parse_money(raw: str) -> float | None:
@@ -82,16 +225,22 @@ def parse_money(raw: str) -> float | None:
         return None
 
 
-def parse_receipts(text: str) -> dict[str, float]:
-    m = re.search(r"\nReceipts?\s*\n", text, re.I)
-    block = text[m.start() :] if m else text
+def strip_pdf_noise(text: str) -> str:
+    text = re.sub(r"Daily Book Summary Report\n", "\n", text, flags=re.I)
+    text = re.sub(r"Last updated on[^\n]*\n", "\n", text, flags=re.I)
+    text = re.sub(r"^\s*\d+\s+of\s+\d+\s*$", "", text, flags=re.M)
+    text = re.sub(r"TSO_BIG DADDYS OIL S2K[^\n]*\n", "\n", text, flags=re.I)
+    return text
+
+
+def parse_receipt_lines(block: str) -> dict[str, float]:
     out: dict[str, float] = {}
     for line in block.splitlines():
         line = line.strip()
         if not line:
             continue
         up = line.upper()
-        if up.startswith(("RECEIPT TYPE", "TSO #", "LAST UPDATED")):
+        if up.startswith(("RECEIPT TYPE", "RECEIPT AMOUNT", "TSO #", "LAST UPDATED")):
             continue
         mm = LINE_RE.match(line)
         if not mm:
@@ -104,6 +253,34 @@ def parse_receipts(text: str) -> dict[str, float]:
     return out
 
 
+def parse_receipts_single(text: str) -> dict[str, float]:
+    text = strip_pdf_noise(text)
+    m = re.search(r"\nReceipts?\s*\n", text, re.I)
+    block = text[m.start() :] if m else text
+    return parse_receipt_lines(block)
+
+
+def parse_receipts_for_tso(text: str, tso: str) -> dict[str, float]:
+    text = strip_pdf_noise(text)
+    m = re.search(r"\nReceipts?\b", text, re.I)
+    block = text[m.start() :] if m else text
+    pat = re.compile(
+        rf"TSO\s*#({re.escape(tso)}\d*)[^\n]*\n(.*?)(?=\nTSO\s*#|\Z)",
+        re.S | re.I,
+    )
+    best: dict[str, float] = {}
+    best_score = -1
+    for mm in pat.finditer(block):
+        got = parse_receipt_lines(mm.group(2))
+        score = sum(
+            1 for k in got if k.replace(" ", "") in {"CREDIT", "DEBIT", "SAFEDROP", "SAFEDROP"}
+        )
+        if score > best_score or (score == best_score and len(got) > len(best)):
+            best = got
+            best_score = score
+    return best
+
+
 def is_prepaid_gift(name: str) -> bool:
     compact = name.replace(" ", "")
     if compact in {"PREPAIDGIFT", "PREPAYGIFT", "PREPAIDGIFTCARD"}:
@@ -112,7 +289,6 @@ def is_prepaid_gift(name: str) -> bool:
 
 
 def financial_fields(receipts: dict[str, float]) -> dict[str, float | None]:
-    """Credit Debit = CREDIT+DEBIT+EBT+MOBILE+PREPAID GIFT − FEE."""
     safe = None
     for k, v in receipts.items():
         if k.replace(" ", "") in {"SAFEDROP", "SAFEDROP"}:
@@ -152,20 +328,13 @@ def financial_fields(receipts: dict[str, float]) -> dict[str, float | None]:
     }
 
 
-def parse_daily_pdf(path: Path) -> dict[str, Any]:
+def parse_daily_pdf(path: Path, tso: str | None = None) -> dict[str, Any]:
     with pdfplumber.open(path) as pdf:
         text = "\n".join((p.extract_text() or "") for p in pdf.pages)
-    receipts = parse_receipts(text)
+    receipts = (
+        parse_receipts_for_tso(text, tso) if tso else parse_receipts_single(text)
+    )
     return {"path": str(path), "receipts": receipts, **financial_fields(receipts)}
-
-
-def month_sheet_name(year: int, month: int) -> str:
-    return f"{MONTH_NAMES[month]} {year}"
-
-
-def default_through() -> date:
-    """Last day to fill: PT today − 2 (leave 2 days for the next round)."""
-    return datetime.now(PT).date() - timedelta(days=2)
 
 
 def norm_col(name: str) -> str:
@@ -191,11 +360,11 @@ def find_tables(ws: Worksheet) -> tuple[Table | None, Table | None]:
     return cashier, over
 
 
-def parse_ref(ref: str) -> tuple[int, int]:
-    m = re.match(r"[A-Z]+(\d+):[A-Z]+(\d+)", ref)
+def parse_ref(ref: str) -> tuple[str, int, str, int]:
+    m = re.match(r"([A-Z]+)(\d+):([A-Z]+)(\d+)", ref)
     if not m:
         raise ValueError(f"Bad table ref {ref}")
-    return int(m.group(1)), int(m.group(2))
+    return m.group(1), int(m.group(2)), m.group(3), int(m.group(4))
 
 
 def as_date(v: Any) -> date | None:
@@ -204,6 +373,67 @@ def as_date(v: Any) -> date | None:
     if isinstance(v, date):
         return v
     return None
+
+
+def set_cell(ws: Worksheet, row: int, col: int, value: Any) -> None:
+    """Write a cell value; never write into a MergedCell (that corrupts the file)."""
+    from openpyxl.cell.cell import MergedCell
+
+    cell = ws.cell(row, col)
+    if isinstance(cell, MergedCell):
+        raise RuntimeError(
+            f"Refusing to write merged cell {cell.coordinate} on {ws.title} "
+            f"(would corrupt workbook)"
+        )
+    cell.value = value
+
+
+def ensure_table_rows(ws: Worksheet, table: Table, needed_data_rows: int) -> None:
+    """Grow a table by inserting rows so content/merges below shift safely.
+
+    Blindly extending table.ref into the next section (e.g. CASH OVER/SHORT
+    title merges) corrupts the workbook — that was the all-client failure mode.
+    """
+    if needed_data_rows <= 0:
+        return
+    c1, r1, c2, r2 = parse_ref(table.ref)
+    has_totals = any(
+        bool(c.totalsRowFunction or c.totalsRowLabel or c.totalsRowFormula)
+        for c in table.tableColumns
+    )
+    data_rows_now = (r2 - r1) - (1 if has_totals else 0)
+    if needed_data_rows <= data_rows_now:
+        return
+
+    grow = needed_data_rows - data_rows_now
+    # Insert above totals row when present; otherwise right after current last data row.
+    insert_at = r2 if has_totals else (r2 + 1)
+
+    # openpyxl insert_rows does not reliably move merges — shift them ourselves.
+    old_merges = [str(mr) for mr in ws.merged_cells.ranges]
+    to_remerge: list[str] = []
+    for ref in old_merges:
+        m = re.match(r"([A-Z]+)(\d+):([A-Z]+)(\d+)", ref)
+        if not m:
+            continue
+        min_row, max_row = int(m.group(2)), int(m.group(4))
+        if min_row >= insert_at:
+            ws.unmerge_cells(ref)
+            to_remerge.append(
+                f"{m.group(1)}{min_row + grow}:{m.group(3)}{max_row + grow}"
+            )
+
+    ws.insert_rows(insert_at, amount=grow)
+    for ref in to_remerge:
+        ws.merge_cells(ref)
+
+    # Shift every table whose range starts at/after the insertion point.
+    for t in ws.tables.values():
+        tc1, tr1, tc2, tr2 = parse_ref(t.ref)
+        if t.name == table.name:
+            t.ref = f"{c1}{r1}:{c2}{r2 + grow}"
+        elif tr1 >= insert_at:
+            t.ref = f"{tc1}{tr1 + grow}:{tc2}{tr2 + grow}"
 
 
 def fix_broken_split_refs(ws: Worksheet) -> int:
@@ -249,7 +479,12 @@ def fill_month(
     if cashier is None:
         raise SystemExit(f"No cashier table on {ws.title}")
 
-    header_row, last_row = parse_ref(cashier.ref)
+    needed = max(by_day) if by_day else 0
+    ensure_table_rows(ws, cashier, needed)
+    if over is not None:
+        ensure_table_rows(ws, over, needed)
+
+    _, header_row, _, last_row = parse_ref(cashier.ref)
     has_totals = any(
         bool(c.totalsRowFunction or c.totalsRowLabel or c.totalsRowFormula)
         for c in cashier.tableColumns
@@ -258,9 +493,14 @@ def fill_month(
 
     c_date = col_index(cashier, "Date") or 1
     c_safe = col_index(cashier, "S2K Safe Drop")
-    c_daily = col_index(cashier, "S2K Daily Receipt")
+    c_daily = col_index(
+        cashier,
+        "S2K Daily Receipt",
+        "S2K Credit + Debit + EBT",
+        "S2K Credit + Debit + EBT",
+    )
     c_fee = col_index(cashier, "EFT Fee Amount")
-    if not all([c_safe, c_daily, c_fee]):
+    if not c_safe or not c_daily:
         names = [c.name for c in cashier.tableColumns]
         raise SystemExit(f"Missing S2K cols on {ws.title}; have {names}")
 
@@ -283,7 +523,7 @@ def fill_month(
                 skipped.append({"day": day, "reason": "no empty row"})
                 continue
             row = empty_rows.pop(0)
-            ws.cell(row, c_date).value = datetime(year, month, day)
+            set_cell(ws, row, c_date, datetime(year, month, day))
             date_rows[d] = row
 
         if not overwrite and ws.cell(row, c_safe).value not in (None, ""):
@@ -291,11 +531,11 @@ def fill_month(
             continue
 
         if fields.get("safe_drop") is not None:
-            ws.cell(row, c_safe).value = fields["safe_drop"]
+            set_cell(ws, row, c_safe, fields["safe_drop"])
         if fields.get("daily_receipt") is not None:
-            ws.cell(row, c_daily).value = round(float(fields["daily_receipt"]), 2)
-        if fields.get("eft_fee") is not None:
-            ws.cell(row, c_fee).value = fields["eft_fee"]
+            set_cell(ws, row, c_daily, round(float(fields["daily_receipt"]), 2))
+        if c_fee and fields.get("eft_fee") is not None:
+            set_cell(ws, row, c_fee, fields["eft_fee"])
         filled.append(
             {
                 "day": day,
@@ -309,7 +549,7 @@ def fill_month(
 
     over_filled: list[dict[str, Any]] = []
     if over is not None:
-        o_header, o_last = parse_ref(over.ref)
+        _, o_header, _, o_last = parse_ref(over.ref)
         o_has_totals = any(
             bool(c.totalsRowFunction or c.totalsRowLabel or c.totalsRowFormula)
             for c in over.tableColumns
@@ -317,7 +557,6 @@ def fill_month(
         o_data_last = o_last - (1 if o_has_totals else 0)
         header_val = ws.cell(o_header, 1).value
         first_data = o_header + (1 if isinstance(header_val, str) else 0)
-
         o_date_rows: dict[date, int] = {}
         o_empty: list[int] = []
         for r in range(first_data, o_data_last + 1):
@@ -336,21 +575,20 @@ def fill_month(
                 if not o_empty:
                     continue
                 row = o_empty.pop(0)
-                ws.cell(row, 1).value = datetime(year, month, day)
+                set_cell(ws, row, 1, datetime(year, month, day))
                 o_date_rows[d] = row
             if overwrite or ws.cell(row, 2).value in (None, ""):
-                ws.cell(row, 2).value = fields["over_short"]
+                set_cell(ws, row, 2, fields["over_short"])
                 over_filled.append(
                     {"day": day, "row": row, "over_short": fields["over_short"]}
                 )
 
-    refs_fixed = fix_broken_split_refs(ws)
     return {
         "sheet": ws.title,
         "cashier_filled": filled,
         "over_filled": over_filled,
         "skipped": skipped,
-        "refs_fixed": refs_fixed,
+        "refs_fixed": fix_broken_split_refs(ws),
     }
 
 
@@ -388,6 +626,32 @@ def digest() -> str:
     return json.loads(od_req(BASE + "/_api/contextinfo", method="POST", data=b"")[1])[
         "d"
     ]["GetContextWebInformation"]["FormDigestValue"]
+
+
+def od_list_files(folder_under_docs: str) -> list[dict[str, Any]]:
+    server = f"{DOCS_ROOT}/{folder_under_docs.lstrip('/')}"
+    enc = urllib.parse.quote(server, safe="/")
+    url = (
+        BASE
+        + f"/_api/web/GetFolderByServerRelativeUrl('{enc}')/Files"
+        + "?$select=Name,Length,TimeLastModified&$top=200"
+    )
+    code, body = od_req(url)
+    if code != 200:
+        return []
+    return json.loads(body)["d"]["results"]
+
+
+def od_download(rel_under_docs: str, dest: Path) -> Path:
+    server = f"{DOCS_ROOT}/{rel_under_docs.lstrip('/')}"
+    enc = urllib.parse.quote(server, safe="/")
+    url = BASE + f"/_api/web/GetFileByServerRelativeUrl('{enc}')/$value"
+    code, body = od_req(url)
+    if code != 200:
+        raise RuntimeError(f"download failed {code} {rel_under_docs} {body[:160]!r}")
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_bytes(body)
+    return dest
 
 
 def upload_od(rel_under_docs: str, content: bytes) -> bool:
@@ -430,81 +694,74 @@ def upload_od(rel_under_docs: str, content: bytes) -> bool:
     return False
 
 
-def discover_pdfs(
-    pdf_dir: Path, station: str, year: int, month: int, through: date
+def download_month_pdfs(
+    client: dict[str, str], year: int, month: int, through: date, dest_dir: Path
 ) -> dict[int, Path]:
+    if client["pdf_mode"] == "none":
+        return {}
+    folder = client["pdf_folder"].format(month=month_folder(year, month))
+    files = od_list_files(folder)
     out: dict[int, Path] = {}
-    patterns = [
-        re.compile(rf"^{re.escape(station)}_(\d{{2}})(\d{{2}}){year}\.pdf$", re.I),
-        re.compile(rf"^(\d{{2}})(\d{{2}}){year}\.pdf$", re.I),
-    ]
-    for p in sorted(pdf_dir.glob("*.pdf")):
-        if re.search(r"dly|dpt", p.name, re.I):
+    for f in files:
+        name = f["Name"]
+        if re.search(r"dly|dpt", name, re.I):
             continue
-        for pat in patterns:
-            m = pat.match(p.name)
-            if not m:
-                continue
-            mm, dd = int(m.group(1)), int(m.group(2))
-            if mm != month:
-                continue
-            d = date(year, month, dd)
-            if d > through:
-                continue
-            out[dd] = p
-            break
+        m = re.match(r"^(\d{2})(\d{2})(\d{4})\.pdf$", name, re.I)
+        if not m:
+            continue
+        mm, dd, yy = int(m.group(1)), int(m.group(2)), int(m.group(3))
+        if yy != year or mm != month:
+            continue
+        d = date(year, month, dd)
+        if d > through:
+            continue
+        local = dest_dir / name
+        if not local.exists() or local.stat().st_size != int(f.get("Length") or -1):
+            od_download(f"{folder}/{name}", local)
+        out[dd] = local
     return out
 
 
-def main() -> None:
-    ap = argparse.ArgumentParser(
-        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
-    )
-    ap.add_argument("--xlsx", required=True, type=Path)
-    ap.add_argument("--pdf-dir", required=True, type=Path)
-    ap.add_argument("--station", required=True)
-    ap.add_argument("--year", type=int, required=True)
-    ap.add_argument("--month", type=int, required=True)
-    ap.add_argument(
-        "--through",
-        type=date.fromisoformat,
-        default=None,
-        help="Last day to fill (YYYY-MM-DD). Default: PT today−2 (leave 2 days behind).",
-    )
-    ap.add_argument("--out", type=Path, help="Output xlsx (default: overwrite --xlsx)")
-    ap.add_argument(
-        "--no-overwrite",
-        action="store_true",
-        help="Skip days that already have S2K Safe Drop",
-    )
-    ap.add_argument("--upload", action="store_true")
-    ap.add_argument(
-        "--od-path",
-        default="Clients/42004 (Arco Placentia)/Placentia Financial Audit.xlsx",
-    )
-    ap.add_argument("--report", type=Path, help="Write JSON report")
-    args = ap.parse_args()
+def fill_client(
+    client: dict[str, str],
+    year: int,
+    month: int,
+    through: date,
+    upload: bool,
+    overwrite: bool,
+) -> dict[str, Any]:
+    label = client["label"]
+    station = client["station"]
+    print(f"\n=== {label} ({station}) ===")
+    work = WORK_DIR / station
+    work.mkdir(parents=True, exist_ok=True)
 
-    through = args.through or default_through()
-    print(
-        f"Fill through={through.isoformat()} "
-        f"(leave 2 days behind; PT today−2 unless --through set)"
-    )
+    if client["pdf_mode"] == "none":
+        return {
+            "station": station,
+            "label": label,
+            "status": "skipped",
+            "reason": "no Daily Summary PDF source configured",
+        }
 
-    pdfs = discover_pdfs(
-        args.pdf_dir, args.station, args.year, args.month, through=through
-    )
+    pdfs = download_month_pdfs(client, year, month, through, work / "pdfs")
     if not pdfs:
-        raise SystemExit(
-            f"No daily PDFs for {args.station} {args.year}-{args.month:02d} "
-            f"through {through} in {args.pdf_dir}"
-        )
+        status = "skipped" if client.get("optional") == "1" else "error"
+        return {
+            "station": station,
+            "label": label,
+            "status": status,
+            "reason": "no PDFs through cutoff",
+            "pdf_folder": client["pdf_folder"].format(month=month_folder(year, month)),
+        }
 
+    use_tso = client["pdf_mode"] == "bd"
+    tso = client.get("tso") or None
     by_day: dict[int, dict[str, Any]] = {}
     parse_errors: list[dict[str, Any]] = []
     for day, path in sorted(pdfs.items()):
         try:
-            parsed = parse_daily_pdf(path)
+            parsed = parse_daily_pdf(path, tso=tso if use_tso else None)
             if parsed.get("safe_drop") is None and parsed.get("daily_receipt") is None:
                 parse_errors.append(
                     {"day": day, "path": str(path), "reason": "no receipts parsed"}
@@ -514,61 +771,156 @@ def main() -> None:
         except Exception as e:  # noqa: BLE001
             parse_errors.append({"day": day, "path": str(path), "error": str(e)})
 
-    wb = load_workbook(args.xlsx)
-    sheet = month_sheet_name(args.year, args.month)
-    if sheet not in wb.sheetnames:
-        raise SystemExit(f"Missing sheet {sheet}; have {wb.sheetnames}")
+    if not by_day:
+        status = "skipped" if client.get("optional") == "1" else "error"
+        return {
+            "station": station,
+            "label": label,
+            "status": status,
+            "reason": "no usable receipt days",
+            "parse_errors": parse_errors,
+        }
 
-    result = fill_month(
-        wb[sheet],
-        args.year,
-        args.month,
-        by_day,
-        overwrite=not args.no_overwrite,
-    )
+    xlsx_local = work / Path(client["od_xlsx"]).name
+    od_download(client["od_xlsx"], xlsx_local)
+    wb = load_workbook(xlsx_local)
+    sheet = month_sheet_name(year, month)
+    if sheet not in wb.sheetnames:
+        return {
+            "station": station,
+            "label": label,
+            "status": "error",
+            "reason": f"missing sheet {sheet}",
+            "sheets": wb.sheetnames,
+        }
+
+    result = fill_month(wb[sheet], year, month, by_day, overwrite=overwrite)
     for sn in wb.sheetnames:
-        if sn == sheet:
-            continue
-        if re.search(r"20\d{2}", sn):
+        if sn != sheet and re.search(r"20\d{2}", sn):
             result.setdefault("other_refs_fixed", {})[sn] = fix_broken_split_refs(
                 wb[sn]
             )
 
-    out = args.out or args.xlsx
+    out = work / f"{Path(client['od_xlsx']).stem}_filled.xlsx"
     wb.save(out)
 
-    report = {
-        "station": args.station,
-        "year": args.year,
-        "month": args.month,
-        "through": through.isoformat(),
-        "pdfs_found": {str(k): str(v) for k, v in pdfs.items()},
-        "parsed_days": sorted(by_day),
-        "parse_errors": parse_errors,
-        "fill": result,
-        "out": str(out),
-        "upload": None,
-    }
+    # Validate reopen before any upload — refuse to push a corrupt workbook.
+    try:
+        check = load_workbook(out)
+        _ = check.sheetnames
+        if sheet not in check.sheetnames:
+            raise RuntimeError(f"saved workbook missing sheet {sheet}")
+        check.close()
+    except Exception as e:  # noqa: BLE001
+        return {
+            "station": station,
+            "label": label,
+            "status": "error",
+            "reason": f"saved workbook failed validation: {e}",
+            "out": str(out),
+        }
 
-    if args.upload:
-        ok = upload_od(args.od_path, out.read_bytes())
-        report["upload"] = {"ok": ok, "path": args.od_path}
-        print("UPLOADED" if ok else "UPLOAD FAILED", args.od_path)
-
-    if args.report:
-        args.report.parent.mkdir(parents=True, exist_ok=True)
-        args.report.write_text(json.dumps(report, indent=2, default=str))
+    upload_info = None
+    if upload:
+        ok = upload_od(client["od_xlsx"], out.read_bytes())
+        upload_info = {"ok": ok, "path": client["od_xlsx"]}
+        print("  UPLOADED" if ok else "  UPLOAD FAILED", client["od_xlsx"])
 
     print(
-        f"Filled {sheet} through {through}: "
-        f"{len(result['cashier_filled'])} cashier days, "
-        f"{len(result['over_filled'])} over/short, refs_fixed={result['refs_fixed']}"
+        f"  filled {len(result['cashier_filled'])} days / "
+        f"{len(result['over_filled'])} over-short through {through}"
     )
-    for row in result["cashier_filled"]:
-        print(
-            f"  {args.month:02d}/{row['day']:02d}: safe={row['safe_drop']} "
-            f"daily={row['daily_receipt']} fee={row['eft_fee']} os={row['over_short']}"
-        )
+    return {
+        "station": station,
+        "label": label,
+        "status": "ok",
+        "through": through.isoformat(),
+        "parsed_days": sorted(by_day),
+        "parse_errors": parse_errors,
+        "fill": {
+            "cashier_days": len(result["cashier_filled"]),
+            "over_days": len(result["over_filled"]),
+            "skipped": result["skipped"],
+            "refs_fixed": result["refs_fixed"],
+            "days": result["cashier_filled"],
+        },
+        "out": str(out),
+        "upload": upload_info,
+    }
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    ap.add_argument("--all", action="store_true", help="Fill every Financial Audit client")
+    ap.add_argument("--station", help="Single station id (e.g. 42004)")
+    ap.add_argument("--year", type=int, required=True)
+    ap.add_argument("--month", type=int, required=True)
+    ap.add_argument("--through", type=date.fromisoformat, default=None)
+    ap.add_argument("--upload", action="store_true")
+    ap.add_argument("--no-overwrite", action="store_true")
+    ap.add_argument(
+        "--report",
+        type=Path,
+        default=WORK_DIR / "financial_fill_all_report.json",
+    )
+    args = ap.parse_args()
+
+    through = args.through or default_through()
+    print(
+        f"Fill through={through.isoformat()} "
+        f"(leave 2 days behind; PT today−2 unless --through set)"
+    )
+
+    if args.all:
+        targets = CLIENTS
+    elif args.station:
+        targets = [c for c in CLIENTS if c["station"] == args.station]
+        if not targets:
+            raise SystemExit(f"Unknown station {args.station}")
+    else:
+        raise SystemExit("Pass --all or --station")
+
+    WORK_DIR.mkdir(parents=True, exist_ok=True)
+    results: list[dict[str, Any]] = []
+    for client in targets:
+        try:
+            results.append(
+                fill_client(
+                    client,
+                    args.year,
+                    args.month,
+                    through,
+                    upload=args.upload,
+                    overwrite=not args.no_overwrite,
+                )
+            )
+        except Exception as e:  # noqa: BLE001
+            print(f"  FAILED {client['label']}: {e}")
+            traceback.print_exc()
+            results.append(
+                {
+                    "station": client["station"],
+                    "label": client["label"],
+                    "status": "error",
+                    "error": str(e),
+                }
+            )
+
+    report = {
+        "through": through.isoformat(),
+        "year": args.year,
+        "month": args.month,
+        "results": results,
+    }
+    args.report.parent.mkdir(parents=True, exist_ok=True)
+    args.report.write_text(json.dumps(report, indent=2, default=str))
+
+    ok = sum(1 for r in results if r.get("status") == "ok")
+    skipped = sum(1 for r in results if r.get("status") == "skipped")
+    err = sum(1 for r in results if r.get("status") == "error")
+    print(f"\nDONE ok={ok} skipped={skipped} error={err} report={args.report}")
 
 
 if __name__ == "__main__":
