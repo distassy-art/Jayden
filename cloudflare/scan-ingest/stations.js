@@ -83,5 +83,10 @@ export default {
     "name": "Extra Mile",
     "dest": "Clients/ExtraMile",
     "scans_layout": "month_then_scans"
+  },
+  "mina": {
+    "name": "Mina PC",
+    "dest": "Clients/Mina PC",
+    "scans_layout": "month_then_scans"
   }
 };
