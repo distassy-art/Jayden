@@ -40,12 +40,25 @@ $taskName = "SmartSolutionsScanUploader"
 $ps = Join-Path $env:SystemRoot "System32\WindowsPowerShell\v1.0\powershell.exe"
 $arg = "-NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File `"$InstallDir\ScanUploader.ps1`""
 
+# Bare USERNAME (e.g. "MINA") fails Register-ScheduledTask; need DOMAIN\user.
+$userId = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
+if (-not $userId) { $userId = "$env:USERDOMAIN\$env:USERNAME" }
+
 Unregister-ScheduledTask -TaskName $taskName -Confirm:$false -ErrorAction SilentlyContinue | Out-Null
 $action = New-ScheduledTaskAction -Execute $ps -Argument $arg
-$trigger = New-ScheduledTaskTrigger -AtLogOn -User $env:USERNAME
+$trigger = New-ScheduledTaskTrigger -AtLogOn -User $userId
 $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -RestartCount 3 -RestartInterval (New-TimeSpan -Minutes 1)
-$principal = New-ScheduledTaskPrincipal -UserId $env:USERNAME -LogonType Interactive -RunLevel Limited
-Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Settings $settings -Principal $principal -Force | Out-Null
+
+try {
+  Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Settings $settings -User $userId -RunLevel Limited -Force | Out-Null
+} catch {
+  # Fallback for odd Microsoft / local account forms
+  $tr = "`"$ps`" $arg"
+  $p = Start-Process -FilePath "$env:SystemRoot\System32\schtasks.exe" -ArgumentList @(
+    "/Create", "/TN", $taskName, "/TR", $tr, "/SC", "ONLOGON", "/RL", "LIMITED", "/F"
+  ) -Wait -PassThru -NoNewWindow
+  if ($p.ExitCode -ne 0) { throw "Failed to register scheduled task for $userId : $($_.Exception.Message)" }
+}
 
 Start-Process -FilePath $ps -ArgumentList $arg -WindowStyle Hidden
 
