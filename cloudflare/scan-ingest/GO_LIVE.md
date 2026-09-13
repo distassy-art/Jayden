@@ -1,46 +1,45 @@
 # Go-live: station auto-upload → Mina OneDrive (Cloudflare)
 
-Status: the endpoint is **live in production** at
-`https://smartsolutionsai.us/api/scan-ingest`, station tokens are set, and the
-only thing left is one Azure permission. Until that is granted every upload
-answers `502 graph_upload_failed / accessDenied`, so do not install the store
-PCs yet — the uploader would retry against a closed door.
+Status: **working end to end.** The endpoint is live at
+`https://smartsolutionsai.us/api/scan-ingest`, the Graph app has drive
+permission, and real PDFs land in Mina's business OneDrive. What is left is
+physical: rotate tokens, build the packs, install the store PCs.
 
 ## Done
 
 | Step | State |
 |------|-------|
-| `scan-ingest` wired into `smartsolutions-site` | version `edf8688c-b9a8-48c8-a0d4-31905da790f5` (150), 100% of traffic |
+| `scan-ingest` wired into `smartsolutions-site` | live at 100% of traffic; see "current version" below |
 | `GRAPH_DRIVE_USER` secret | set to `MinaMorcos@smartsolutionsai26.onmicrosoft.com` |
 | `SCAN_STATION_TOKENS` secret | set, 17 stations |
-| `GRAPH_TENANT_ID` / `GRAPH_CLIENT_ID` / `GRAPH_CLIENT_SECRET` | already existed, untouched, and the client-credentials token they mint works |
-| Station install packs | built, see below |
+| `GRAPH_TENANT_ID` / `GRAPH_CLIENT_ID` / `GRAPH_CLIENT_SECRET` | already existed, untouched, shared with `send-summary` |
+| `Files.ReadWrite.All`, admin consent | granted 2026-09-13 on **Smart Solutions Summary Mail**, `5728760e-b482-4782-8ca0-76ac7fc447fd` |
+| Live upload verified | 2026-09-13, stations 42179, 42004, 42021 — `{"ok":true}`, files in OneDrive |
 
-## 1) The one remaining blocker: Files.ReadWrite.All
+Current version: `11f72d13-016e-4dfc-b592-a40816939083` (151) — the wrapper from
+section 2 plus the station tokens rotated during the 2026-09-13 retest.
 
-The Graph app behind `GRAPH_CLIENT_ID` is the one the site already uses for
-`sendMail`, so it has mail permission and no drive permission. Graph hands the
-Worker a valid token and then refuses the write:
+## 1) The Graph app
 
-```
-mkdir_failed:/Clients:403:{"error":{"code":"accessDenied","message":"Access denied"}}
-```
+`GRAPH_CLIENT_ID` is **Smart Solutions Summary Mail**
+(`5728760e-b482-4782-8ca0-76ac7fc447fd`), the same app `send-summary` uses for
+mail. It now holds Application permission `Files.ReadWrite.All` with admin
+consent, which is what uploads need; the mail permission is still in place.
 
-To fix, in the Azure portal:
+Before consent, every upload answered
+`502 graph_upload_failed … mkdir_failed:/Clients:403 accessDenied` — a valid
+token refused at the drive write. If that reappears, the consent was removed or
+`GRAPH_CLIENT_ID` was repointed at an app without the permission.
 
-1. **App registrations** → the app used by `GRAPH_CLIENT_ID`
-2. **API permissions** → Add → Microsoft Graph → **Application permissions** → **Files.ReadWrite.All**
-3. **Grant admin consent** for the tenant
-4. Leave the existing mail permission in place — `send-summary` still needs it
+To confirm which app the Worker is actually using without printing the value,
+upload a version (no `--promote`) that returns `sha256(env.GRAPH_CLIENT_ID)` and
+hit its preview URL: `sha256` of the id above is
+`953191d4d562d78dc38afb449aba4876789b65d6f9f37184fcf3b2ac26d790b1`.
 
-No redeploy is needed afterwards. Re-run the smoke test in section 3; consent
-can take a minute or two to propagate.
-
-If you would rather not give the mail app drive-wide access, register a second
-app for scans only and put its values in `GRAPH_TENANT_ID` / `GRAPH_CLIENT_ID` /
-`GRAPH_CLIENT_SECRET` — but those three are shared with `send-summary`, so
-splitting them means giving the scan app its own secret names and a one-line
-change in `scan-ingest.js`.
+If you would rather not leave the mail app with drive-wide access, register a
+second app for scans only — but those three secrets are shared with
+`send-summary`, so splitting them means giving the scan app its own secret names
+and a one-line change in `scan-ingest.js`.
 
 ## 2) How scan-ingest got into the live Worker
 
@@ -119,6 +118,10 @@ on**. If they are gone, regenerate rather than hunt for them — `generate_token
 --force`, then `deploy-secrets.sh`, then `build-station-packs.py`. Rotating
 tokens this way invalidates any pack already installed on a PC, so rotate before
 you visit the stores, not after.
+
+The tokens live on the Worker were last rotated during the 2026-09-13 retest, on
+a VM that is gone, so **the packs have to be rebuilt before any install** — build
+them on the machine you will carry to the stores.
 
 Manual install, if you prefer not to use a pack:
 
