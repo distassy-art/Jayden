@@ -30,6 +30,10 @@ function Test-FileStable([string]$Path, [int]$Seconds) {
 }
 
 function Send-Pdf($Cfg, [string]$FilePath) {
+  # Windows PowerShell 5.1 defaults can fail TLS1.2 / get CF bot-blocked (1010).
+  try {
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+  } catch {}
   $name = [IO.Path]::GetFileName($FilePath)
   $bytes = [IO.File]::ReadAllBytes($FilePath)
   $headers = @{
@@ -38,7 +42,8 @@ function Send-Pdf($Cfg, [string]$FilePath) {
     "X-Filename"      = $name
   }
   $resp = Invoke-WebRequest -Uri $Cfg.api_url -Method POST -Headers $headers `
-    -ContentType "application/pdf" -Body $bytes -UseBasicParsing -TimeoutSec 180
+    -ContentType "application/pdf" -Body $bytes -UseBasicParsing -TimeoutSec 180 `
+    -UserAgent "SmartSolutions-ScanUploader/1.0 (Windows NT; station)"
   $json = $resp.Content | ConvertFrom-Json
   if (-not $json.ok) { throw "API ok=false: $($resp.Content)" }
   return $json
