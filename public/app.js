@@ -18,24 +18,10 @@ const STATIONS = {
   db: { title: "DB calendar", sub: "Arco DB · store 42352" },
 };
 
-const FALLBACK_GRID_FIELDS = [
+/** Temporary cell lines only. Mina will name majors — do not invent the rest. */
+const FALLBACK_CELL_FIELDS = [
   { index: 1, short: "Gas Inv", tone: "gas" },
-  { index: 2, short: "Non fuel", tone: "nonfuel" },
-  { index: 3, short: "Propane", tone: "propane" },
   { index: 4, short: "Safe drop", tone: "drop" },
-  { index: 5, short: "Diesel gal", tone: "diesel" },
-  { index: 6, short: "Gallons", tone: "gallons" },
-  { index: 7, short: "Gas profit", tone: "gasprofit" },
-  { index: 8, short: "C-store", tone: "cstore" },
-  { index: 9, short: "Tax", tone: "tax" },
-  { index: 10, short: "Lotto", tone: "lotto" },
-  { index: 11, short: "Scratchers", tone: "scratch" },
-  { index: 12, short: "Lotto pay", tone: "lottopay" },
-  { index: 13, short: "Lottery pay", tone: "lotterypay" },
-  { index: 14, short: "O/S", tone: "os" },
-  { index: 15, short: "Payouts", tone: "payouts" },
-  { index: 16, short: "Fuel dep", tone: "fueldep" },
-  { index: 17, short: "Credit", tone: "credit" },
 ];
 
 const state = {
@@ -48,7 +34,7 @@ const state = {
   summary: null,
   selectedDay: null,
   slots: [],
-  gridFields: FALLBACK_GRID_FIELDS,
+  cellFields: FALLBACK_CELL_FIELDS,
 };
 
 function isOwner() {
@@ -71,12 +57,9 @@ const els = {
   totals: document.getElementById("totals"),
   trend: document.getElementById("trend"),
   status: document.getElementById("status"),
-  dialog: document.getElementById("day-dialog"),
+  dayDetail: document.getElementById("day-detail"),
   dayTitle: document.getElementById("day-title"),
-  dayForm: document.getElementById("day-form"),
-  dayFilled: document.getElementById("day-filled"),
   s2kFields: document.getElementById("s2k-fields"),
-  file: document.getElementById("file"),
 };
 
 init();
@@ -91,10 +74,6 @@ async function init() {
   document.getElementById("next-month").addEventListener("click", () => shiftMonth(1));
   els.btnHb.addEventListener("click", () => setStation("hb"));
   els.btnDb.addEventListener("click", () => setStation("db"));
-  els.dayForm.addEventListener("submit", onDaySubmit);
-  els.s2kFields.addEventListener("click", onAddOne);
-  els.s2kFields.addEventListener("keydown", onFieldKey);
-  els.file.addEventListener("change", onFile);
   await refresh({ usePref: true });
 }
 
@@ -118,7 +97,8 @@ function applyState(data) {
   state.prefs = data.prefs ?? state.prefs;
   state.summary = data.summary;
   state.slots = data.slots ?? [];
-  state.gridFields = data.gridFields?.length ? data.gridFields : FALLBACK_GRID_FIELDS;
+  const fromApi = data.cellFields?.length ? data.cellFields : data.gridFields;
+  state.cellFields = fromApi?.length ? fromApi : FALLBACK_CELL_FIELDS;
   els.body.dataset.station = state.station;
   const meta = STATIONS[state.station];
   els.title.textContent = meta.title;
@@ -128,11 +108,16 @@ function applyState(data) {
   els.btnDb.setAttribute("aria-pressed", String(state.station === "db"));
   const farsai = (state.prefs.farsai || "hb").toUpperCase();
   els.farsaiNote.textContent = `Farsai is on ${farsai}.`;
+  if (state.selectedDay && !state.days.some((row) => row.day === state.selectedDay)) {
+    state.selectedDay = null;
+  }
   renderGrid();
   renderSummary();
+  renderDayDetail();
 }
 
 async function setStation(station) {
+  state.selectedDay = null;
   const data = await api("/api/prefs", {
     method: "POST",
     body: JSON.stringify({
@@ -146,6 +131,7 @@ async function setStation(station) {
 }
 
 async function shiftMonth(delta) {
+  state.selectedDay = null;
   const d = new Date(Date.UTC(state.year, state.month - 1 + delta, 1));
   state.year = d.getUTCFullYear();
   state.month = d.getUTCMonth() + 1;
@@ -194,7 +180,7 @@ function renderGrid() {
 
 function gridCellMetrics(s2k) {
   const fields = s2k || [];
-  return (state.gridFields || FALLBACK_GRID_FIELDS).flatMap((field) => {
+  return (state.cellFields || FALLBACK_CELL_FIELDS).flatMap((field) => {
     const value = fields[field.index - 1];
     if (value == null) return [];
     return [{ ...field, value }];
@@ -207,6 +193,10 @@ function fieldCount() {
 
 function slotMeta(i) {
   return state.slots[i] || { index: i + 1, label: String(i + 1) };
+}
+
+function cellIndexes() {
+  return new Set((state.cellFields || FALLBACK_CELL_FIELDS).map((f) => f.index));
 }
 
 function renderSummary() {
@@ -233,202 +223,37 @@ function renderSummary() {
 function openDay(iso) {
   state.selectedDay = iso;
   renderGrid();
+  renderDayDetail({ scroll: true });
+}
+
+function renderDayDetail(opts = {}) {
+  const iso = state.selectedDay;
+  if (!iso) {
+    els.dayDetail.hidden = true;
+    els.s2kFields.innerHTML = "";
+    return;
+  }
   const row = state.days.find((d) => d.day === iso);
   const s2k = Array.from({ length: fieldCount() }, (_, i) => row?.s2k?.[i] ?? null);
+  const onCell = cellIndexes();
   els.dayTitle.textContent = `${STATIONS[state.station].title.replace(" calendar", "")} · ${iso}`;
   els.s2kFields.innerHTML = s2k
     .map((value, i) => {
       const n = i + 1;
       const slot = slotMeta(i);
       const filled = value != null ? " filled" : "";
+      const onSquare = onCell.has(n) ? " on-cell" : "";
       const title = escapeHtml(slot.label);
-      return `<label class="${filled.trim()}">
+      return `<div class="s2k-row${filled}${onSquare}">
         <span class="slot"><span class="slot-num">${n}</span><span class="slot-name">${title}</span></span>
-        <input name="s2k-${n}" type="number" step="any" value="${value ?? ""}" data-index="${n}" aria-label="${title}" />
-        <button type="button" data-add="${n}">Add</button>
-      </label>`;
+        <span class="slot-val">${fmtNum(value)}</span>
+      </div>`;
     })
     .join("");
-  updateFilledLabel();
-  els.dialog.showModal();
-  const firstEmpty = els.s2kFields.querySelector("input[value=''], input:not([value])") ||
-    [...els.s2kFields.querySelectorAll("input")].find((el) => el.value === "");
-  firstEmpty?.focus();
-}
-
-function readS2kFromForm() {
-  return Array.from({ length: fieldCount() }, (_, i) => {
-    const input = els.dayForm.elements[`s2k-${i + 1}`];
-    const raw = String(input?.value ?? "").trim();
-    return raw === "" ? null : Number(raw);
-  });
-}
-
-function updateFilledLabel() {
-  const filled = readS2kFromForm().filter((v) => v != null).length;
-  els.dayFilled.textContent = `${filled} of ${fieldCount()} filled`;
-}
-
-async function addOneField(index) {
-  const input = els.dayForm.elements[`s2k-${index}`];
-  const raw = String(input?.value ?? "").trim();
-  const value = raw === "" ? null : Number(raw);
-  if (raw !== "" && !Number.isFinite(value)) {
-    showStatus("Enter a number", true);
-    return;
+  els.dayDetail.hidden = false;
+  if (opts.scroll) {
+    els.dayDetail.scrollIntoView({ behavior: "smooth", block: "start" });
   }
-  await api("/api/day", {
-    method: "POST",
-    body: JSON.stringify({
-      station: state.station,
-      day: state.selectedDay,
-      index,
-      value,
-    }),
-  });
-  updateFilledLabel();
-  showStatus(`Saved ${slotMeta(index - 1).label} on this site.`);
-  const next = els.dayForm.elements[`s2k-${index + 1}`];
-  if (next) next.focus();
-  await refresh();
-}
-
-function onAddOne(event) {
-  const btn = event.target.closest("[data-add]");
-  if (!btn) return;
-  event.preventDefault();
-  addOneField(Number(btn.getAttribute("data-add")));
-}
-
-function onFieldKey(event) {
-  if (event.key !== "Enter") return;
-  const input = event.target;
-  if (input?.dataset?.index) {
-    event.preventDefault();
-    addOneField(Number(input.dataset.index));
-  }
-}
-
-async function onDaySubmit(event) {
-  event.preventDefault();
-  const submitter = event.submitter;
-  if (submitter?.value !== "save") {
-    els.dialog.close();
-    return;
-  }
-  await api("/api/day", {
-    method: "POST",
-    body: JSON.stringify({
-      station: state.station,
-      day: state.selectedDay,
-      s2k: readS2kFromForm(),
-    }),
-  });
-  els.dialog.close();
-  showStatus("Day saved on this site.");
-  await refresh();
-}
-
-async function onFile(event) {
-  const file = event.target.files?.[0];
-  event.target.value = "";
-  if (!file) return;
-  try {
-    const payload = await fileToPayload(file);
-    payload.role = state.role;
-    payload.station = state.station;
-    const data = await api("/api/import", {
-      method: "POST",
-      body: JSON.stringify(payload),
-    });
-    showStatus(`Saved ${data.imported} ${state.station.toUpperCase()} rows on this site.`);
-    if (data.year && data.month) {
-      state.year = data.year;
-      state.month = data.month;
-    }
-    await refresh();
-  } catch (err) {
-    showStatus(err.message || "Import failed", true);
-  }
-}
-
-async function fileToPayload(file) {
-  const name = file.name || "upload";
-  const lower = name.toLowerCase();
-  if (lower.endsWith(".csv")) {
-    return { filename: name, csv: await file.text() };
-  }
-  if (lower.endsWith(".html") || lower.endsWith(".htm")) {
-    return { filename: name, html: await file.text() };
-  }
-  if (lower.endsWith(".xlsx") || lower.endsWith(".xls")) {
-    const xlsx = globalThis.XLSX;
-    if (!xlsx) throw new Error("Excel parser did not load");
-    const buf = await file.arrayBuffer();
-    const wb = xlsx.read(buf, { type: "array", cellDates: true });
-    const days = [];
-    for (const sheetName of wb.SheetNames) {
-      const rows = xlsx.utils.sheet_to_json(wb.Sheets[sheetName], { header: 1 });
-      days.push(...sheetRowsToDays(rows));
-    }
-    if (!days.length) throw new Error("No dated rows found in that workbook");
-    return { filename: name, days };
-  }
-  throw new Error("Use Excel, CSV, or HTML");
-}
-
-function sheetRowsToDays(rows) {
-  for (let headerAt = 0; headerAt < Math.min(rows.length, 12); headerAt++) {
-    const labels = (rows[headerAt] || []).map((v) =>
-      String(v ?? "").trim().toLowerCase(),
-    );
-    const dateIdx = firstIdx(labels, [["date"]]);
-    if (dateIdx < 0) continue;
-    const col = {
-      gas_vol: firstIdx(labels, [["gas volume"], ["gas vol"], ["gallons"]]),
-      gas_profit: firstIdx(labels, [["gas profit"]]),
-      sales: firstIdx(labels, [["c-store sales"], ["sales"]]),
-      purch: firstIdx(labels, [["purchase"]]),
-      store_profit: firstIdx(labels, [["store profit"]]),
-      total_profit: firstIdx(labels, [["total profit"]]),
-    };
-    const out = [];
-    for (const row of rows.slice(headerAt + 1)) {
-      const day = toIso(row[dateIdx]);
-      if (!day) continue;
-      const rec = { day };
-      for (const [k, i] of Object.entries(col)) {
-        rec[k] = i < 0 ? null : toNum(row[i]);
-      }
-      out.push(rec);
-    }
-    if (out.length) return out;
-  }
-  return [];
-}
-
-function firstIdx(labels, groups) {
-  for (const group of groups) {
-    const i = labels.findIndex((label) => group.every((n) => label.includes(n)));
-    if (i >= 0) return i;
-  }
-  return -1;
-}
-
-function toIso(value) {
-  if (!value) return null;
-  if (value instanceof Date && !Number.isNaN(value.getTime())) {
-    return value.toISOString().slice(0, 10);
-  }
-  const s = String(value);
-  if (/^\d{4}-\d{2}-\d{2}/.test(s)) return s.slice(0, 10);
-  return null;
-}
-
-function toNum(value) {
-  if (value == null || value === "") return null;
-  const n = typeof value === "number" ? value : Number(String(value).replace(/[$,]/g, ""));
-  return Number.isFinite(n) ? n : null;
 }
 
 async function api(path, opts = {}) {
@@ -443,12 +268,6 @@ async function api(path, opts = {}) {
   return data;
 }
 
-function showStatus(message, isError = false) {
-  els.status.hidden = false;
-  els.status.textContent = message;
-  els.status.className = `status${isError ? " error" : ""}`;
-}
-
 function escapeHtml(value) {
   return String(value)
     .replace(/&/g, "&amp;")
@@ -460,12 +279,4 @@ function escapeHtml(value) {
 function fmtNum(n) {
   if (n == null) return "—";
   return Number(n).toLocaleString("en-US", { maximumFractionDigits: 2 });
-}
-
-function fmtMoney(n) {
-  if (n == null) return "—";
-  return Number(n).toLocaleString("en-US", {
-    style: "currency",
-    currency: "USD",
-  });
 }

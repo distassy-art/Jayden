@@ -164,6 +164,7 @@ async function loadState(db: D1Database, params: URLSearchParams) {
     month,
     daysInMonth: daysInMonth(year, month),
     slots: s2kSlots(),
+    cellFields: GRID_FIELDS,
     gridFields: GRID_FIELDS,
     days: currentDays,
     priorDays,

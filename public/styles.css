@@ -94,9 +94,7 @@ h1 {
 }
 
 .month-nav button,
-.station-switch button,
-.file-btn,
-#day-dialog button {
+.station-switch button {
   font: inherit;
   cursor: pointer;
 }
@@ -209,8 +207,7 @@ h1 {
 
 .calendar-wrap,
 .summary article,
-.import-block,
-#day-dialog {
+.day-detail {
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 20px;
@@ -235,7 +232,7 @@ h1 {
 .grid {
   flex: 1;
   grid-auto-rows: 1fr;
-  min-height: min(72vh, 820px);
+  min-height: min(52vh, 560px);
 }
 
 .dow {
@@ -247,16 +244,16 @@ h1 {
 }
 
 .grid button {
-  min-height: 148px;
+  min-height: 92px;
   height: 100%;
   border: 1px solid var(--line);
   background: #fff;
   border-radius: 14px;
-  padding: 7px 8px;
+  padding: 8px;
   text-align: left;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
   overflow: hidden;
 }
 
@@ -271,27 +268,23 @@ h1 {
 }
 
 .grid button .metrics {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
   width: 100%;
-  align-content: start;
-  min-height: 0;
 }
 
 .grid button .metric {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 4px;
+  flex-direction: column;
+  gap: 0;
   min-width: 0;
-  line-height: 1.2;
+  line-height: 1.15;
 }
 
 .grid button .metric-name {
-  font-size: 9px;
-  letter-spacing: 0.01em;
+  font-size: 10px;
+  letter-spacing: 0.02em;
   color: var(--muted);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -300,36 +293,21 @@ h1 {
 
 .grid button .metric-val {
   font-variant-numeric: tabular-nums;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--accent);
   white-space: nowrap;
 }
 
 .grid button .metric[data-tone="gas"] .metric-val { color: #0f6e6b; }
-.grid button .metric[data-tone="nonfuel"] .metric-val { color: #4a5560; }
-.grid button .metric[data-tone="propane"] .metric-val { color: #b15b12; }
 .grid button .metric[data-tone="drop"] .metric-val { color: #1f7a46; }
-.grid button .metric[data-tone="diesel"] .metric-val { color: #2b6a8a; }
-.grid button .metric[data-tone="gallons"] .metric-val { color: #1d4f91; }
-.grid button .metric[data-tone="gasprofit"] .metric-val { color: #0b5c3a; }
-.grid button .metric[data-tone="cstore"] .metric-val { color: #9a4a1c; }
-.grid button .metric[data-tone="tax"] .metric-val { color: #6b3fa0; }
-.grid button .metric[data-tone="lotto"] .metric-val { color: #8a2f5a; }
-.grid button .metric[data-tone="scratch"] .metric-val { color: #c45c12; }
-.grid button .metric[data-tone="lottopay"] .metric-val { color: #7a2848; }
-.grid button .metric[data-tone="lotterypay"] .metric-val { color: #5a3060; }
-.grid button .metric[data-tone="payouts"] .metric-val { color: #a33b2b; }
-.grid button .metric[data-tone="os"] .metric-val { color: #875400; }
-.grid button .metric[data-tone="fueldep"] .metric-val { color: #2d5a3d; }
-.grid button .metric[data-tone="credit"] .metric-val { color: #163a5f; }
 
 .grid button.empty {
   opacity: 0.55;
 }
 
 .grid .pad {
-  min-height: 148px;
+  min-height: 86px;
 }
 
 .grid button.today {
@@ -348,13 +326,12 @@ h1 {
   margin-top: 16px;
 }
 
-.summary article,
-.import-block {
+.summary article {
   padding: 16px 18px;
 }
 
 .summary h2,
-.import-block h2 {
+.day-detail h2 {
   font-size: 18px;
   margin-bottom: 10px;
 }
@@ -406,80 +383,31 @@ h1 {
   color: var(--bad);
 }
 
-.import-block {
-  margin-top: 12px;
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  align-items: center;
-}
-
-.import-block p {
-  margin: 6px 0 0;
-  color: var(--muted);
-  max-width: 52ch;
-}
-
-.file-btn {
-  position: relative;
-  overflow: hidden;
-  background: var(--ink);
-  color: white;
-  border-radius: 999px;
-  padding: 12px 18px;
-}
-
-.file-btn input {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  cursor: pointer;
-}
-
-#day-dialog {
-  width: min(980px, 96vw);
-  max-height: 94vh;
-  border: 0;
-  padding: 20px;
-}
-
-#day-dialog::backdrop {
-  background: rgba(28, 36, 48, 0.45);
-}
-
-.fields {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin: 16px 0;
+.day-detail {
+  margin-top: 16px;
+  padding: 18px 20px 22px;
 }
 
 .day-note {
-  margin: 8px 0 0;
+  margin: 8px 0 14px;
   color: var(--muted);
   font-size: 13px;
-}
-
-.day-filled {
-  margin: 8px 0 12px;
-  font-weight: 650;
 }
 
 .s2k-fields {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px 16px;
-  max-height: min(68vh, 640px);
-  overflow: auto;
-  padding-right: 4px;
+  gap: 0 24px;
 }
 
-.s2k-fields label {
+.s2k-row {
   display: grid;
-  grid-template-columns: minmax(7rem, 1.3fr) 1fr auto;
+  grid-template-columns: minmax(8rem, 1.6fr) auto;
   gap: 8px;
-  align-items: center;
+  align-items: baseline;
   font-size: 13px;
+  padding: 7px 0;
+  border-bottom: 1px dashed var(--line);
 }
 
 .s2k-fields .slot {
@@ -487,7 +415,6 @@ h1 {
   gap: 8px;
   align-items: baseline;
   min-width: 0;
-  font-weight: 650;
   color: var(--muted);
   text-align: left;
 }
@@ -495,6 +422,7 @@ h1 {
 .s2k-fields .slot-num {
   flex: 0 0 1.4rem;
   font-variant-numeric: tabular-nums;
+  font-weight: 650;
 }
 
 .s2k-fields .slot-name {
@@ -503,70 +431,25 @@ h1 {
   overflow-wrap: anywhere;
 }
 
-.s2k-fields input {
-  font: inherit;
-  padding: 8px 10px;
-  border-radius: 10px;
-  border: 1px solid var(--line);
-  min-width: 0;
+.s2k-fields .slot-val {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--muted);
 }
 
-.s2k-fields button {
-  border: 0;
-  background: var(--ink);
-  color: white;
-  border-radius: 999px;
-  padding: 7px 10px;
-  font: inherit;
-  font-size: 12px;
-}
-
-.s2k-fields label.filled .slot {
+.s2k-row.filled .slot-val {
   color: var(--accent);
 }
 
-.fields label {
-  display: grid;
-  gap: 6px;
-  font-size: 13px;
-  color: var(--muted);
-}
-
-.fields input {
-  font: inherit;
-  padding: 8px 10px;
-  border-radius: 10px;
-  border: 1px solid var(--line);
-}
-
-#day-dialog menu {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  padding: 0;
-  margin: 0;
-}
-
-#day-dialog button[value="save"] {
-  background: var(--accent);
-  color: white;
-  border: 0;
-  border-radius: 999px;
-  padding: 10px 16px;
-}
-
-#day-dialog .ghost {
-  background: transparent;
-  border: 0;
-  color: var(--muted);
+.s2k-row.on-cell .slot-name {
+  color: var(--accent);
 }
 
 @media (max-width: 720px) {
   .top,
   .summary,
-  .import-block,
   .owner-bar,
-  .fields {
+  .s2k-fields {
     grid-template-columns: 1fr;
     flex-direction: column;
     align-items: stretch;
@@ -574,24 +457,19 @@ h1 {
 
   .grid button,
   .grid .pad {
-    min-height: 120px;
+    min-height: 84px;
   }
 
   .grid {
-    min-height: 62vh;
-  }
-
-  .grid button .metrics,
-  .s2k-fields {
-    grid-template-columns: 1fr;
+    min-height: 48vh;
   }
 
   .grid button .metric-name {
-    font-size: 8px;
+    font-size: 9px;
   }
 
   .grid button .metric-val {
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .dow span:nth-child(odd) {

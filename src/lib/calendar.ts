@@ -49,39 +49,29 @@ export function s2kSlots(): { index: number; label: string }[] {
   }));
 }
 
-/** All 17 named slots can appear on the month-grid day cell. Empty slots are omitted. */
+/**
+ * Temporary cell lines until Mina names the majors.
+ * Do not treat this as a major list — only filled Gas Inv + Safe drop for now.
+ */
 export type GridField = {
   index: number;
   short: string;
   tone: string;
 };
 
-export const GRID_FIELDS: GridField[] = [
+export const CELL_FIELDS: GridField[] = [
   { index: 1, short: "Gas Inv", tone: "gas" },
-  { index: 2, short: "Non fuel", tone: "nonfuel" },
-  { index: 3, short: "Propane", tone: "propane" },
   { index: 4, short: "Safe drop", tone: "drop" },
-  { index: 5, short: "Diesel gal", tone: "diesel" },
-  { index: 6, short: "Gallons", tone: "gallons" },
-  { index: 7, short: "Gas profit", tone: "gasprofit" },
-  { index: 8, short: "C-store", tone: "cstore" },
-  { index: 9, short: "Tax", tone: "tax" },
-  { index: 10, short: "Lotto", tone: "lotto" },
-  { index: 11, short: "Scratchers", tone: "scratch" },
-  { index: 12, short: "Lotto pay", tone: "lottopay" },
-  { index: 13, short: "Lottery pay", tone: "lotterypay" },
-  { index: 14, short: "O/S", tone: "os" },
-  { index: 15, short: "Payouts", tone: "payouts" },
-  { index: 16, short: "Fuel dep", tone: "fueldep" },
-  { index: 17, short: "Credit", tone: "credit" },
 ];
+
+export const GRID_FIELDS = CELL_FIELDS;
 
 export type GridMetric = GridField & { value: number };
 
 export function gridCellMetrics(s2k: S2kValues | null | undefined): GridMetric[] {
   const fields = s2k ?? emptyS2k();
   const out: GridMetric[] = [];
-  for (const field of GRID_FIELDS) {
+  for (const field of CELL_FIELDS) {
     const value = fields[field.index - 1];
     if (value == null) continue;
     out.push({ ...field, value });

@@ -8,7 +8,7 @@
       name="description"
       content="Monthly Arco HB / Arco DB calendar with saved day numbers."
     />
-    <link rel="stylesheet" href="/styles.css?v=cells-17" />
+    <link rel="stylesheet" href="/styles.css?v=readonly-day" />
   </head>
   <body data-station="hb" data-role="farsai">
     <div class="page">
@@ -77,40 +77,17 @@
         </article>
       </section>
 
-      <section class="import-block">
-        <div>
-          <h2>Load Arco export</h2>
-          <p>
-            Upload Excel, CSV, or HTML. Rows save onto this site for the
-            station you are viewing. Daily 10am numbers will come from an
-            S2K login / report URL (waiting on Mina). The 17-slot editor
-            stays. Do not scrape. Secrets stay in Worker env, never git.
-          </p>
-        </div>
-        <label class="file-btn">
-          Upload file
-          <input id="file" type="file" accept=".xlsx,.xls,.csv,.html,.htm,text/csv,text/html" />
-        </label>
+      <section id="day-detail" class="day-detail" hidden>
+        <h2 id="day-title">Day</h2>
+        <p class="day-note">
+          Read-only. Majors stay on the calendar cell once Mina names them.
+          The 17 named fields for this day are listed here. Empty stays blank
+          — not 0.
+        </p>
+        <div id="s2k-fields" class="s2k-fields"></div>
       </section>
     </div>
 
-    <dialog id="day-dialog">
-      <form id="day-form" method="dialog">
-        <h2 id="day-title">Day</h2>
-        <p class="day-note">
-          All 17 named S2K numbers for this day. Filled values also show
-          on the calendar cell. Empty slots stay blank — not 0.
-        </p>
-        <p id="day-filled" class="day-filled">0 of 17 filled</p>
-        <div id="s2k-fields" class="s2k-fields"></div>
-        <menu>
-          <button type="submit" value="cancel" class="ghost">Close</button>
-          <button type="submit" value="save" id="save-day">Save day</button>
-        </menu>
-      </form>
-    </dialog>
-
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-    <script src="/app.js?v=cells-17" type="module"></script>
+    <script src="/app.js?v=readonly-day" type="module"></script>
   </body>
 </html>

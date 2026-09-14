@@ -1,6 +1,6 @@
 # Farsai calendar
 
-Click a day to enter the **17 S2K numbers** (Mina’s names). The day editor has those 17 fields. Month-end shows **totals + trend only**, not 17 line items. Values save on the Worker (D1). Fields 18 and 19 were cancelled.
+Click a day to see the **17 named S2K fields** at the bottom of the page (read-only). Day cells show majors only — until Mina names them, filled Gas Inventory and Safe drop. Month-end shows **totals + trend only**, not 17 line items. Values live on the Worker (D1). Fields 18 and 19 were cancelled.
 
 ## Open it
 
@@ -20,11 +20,6 @@ npm run dev
 
 ## Data
 
-Daily 10am numbers come from **S2K Prime** (one shared login for Arco DB and Arco HB). Confirm **DB first**, then HB. Username/password are Cloudflare Worker secrets only — never git. The 17-slot day editor stays. File import stays as a fallback. Do not invent S2K field mappings.
-
-Upload Excel, CSV, or HTML if you have a Daily export. Sample files:
-
-- `public/sample-hb.csv`
-- `public/sample-db.html`
+Daily 10am numbers come from **S2K Prime** (one shared login for Arco DB and Arco HB). Confirm **DB first**, then HB. Username/password are Cloudflare Worker secrets only — never git. Do not invent S2K field mappings. Do not guess the major-cell list.
 
 Empty databases seed realistic HB and DB days for August 1–September 13, 2026.
