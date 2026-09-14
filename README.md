@@ -1,6 +1,6 @@
 # Farsai calendar
 
-The month grid fills the page. Each day square lists **all 17 named S2K fields** (empty stays blank, not 0). Click a day to **view** this day’s numbers plus **month totals** at the bottom. Month-end shows **totals + trend only**. Values live on the Worker (D1). Fields 18 and 19 were cancelled.
+The month grid fills the page. Each day square shows **filled majors** (Gas Inv, Safe drop, Gallons, C-store, Tax1+4, Payouts, O/S, Credit). Empty stays blank, not 0. Click a day to **view** all 17 named fields plus **month totals** at the bottom. Month-end lists **per-category totals + trend** — not one mixed Total. Values live on the Worker (D1). Fields 18 and 19 were cancelled.
 
 ## Open it
 

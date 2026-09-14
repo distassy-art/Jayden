@@ -18,25 +18,16 @@ const STATIONS = {
   db: { title: "DB calendar", sub: "Arco DB · store 42352" },
 };
 
-/** All 17 named fields on the day square. Empty stays blank. */
+/** Mina's 8 cell majors. Filled values show; empty stays blank. */
 const FALLBACK_CELL_FIELDS = [
   { index: 1, short: "Gas Inv", tone: "gas" },
-  { index: 2, short: "Non fuel", tone: "other" },
-  { index: 3, short: "Propane", tone: "other" },
   { index: 4, short: "Safe drop", tone: "drop" },
-  { index: 5, short: "Diesel gal", tone: "other" },
   { index: 6, short: "Gallons", tone: "gallons" },
-  { index: 7, short: "Gas profit", tone: "other" },
   { index: 8, short: "C-store", tone: "cstore" },
   { index: 9, short: "Tax1+4", tone: "tax" },
-  { index: 10, short: "Lotto", tone: "other" },
-  { index: 11, short: "Scratch", tone: "other" },
-  { index: 12, short: "Lotto pay", tone: "other" },
-  { index: 13, short: "Ltry pay", tone: "other" },
-  { index: 14, short: "O/S", tone: "os" },
   { index: 15, short: "Payouts", tone: "payouts" },
-  { index: 16, short: "Fuel dep", tone: "other" },
-  { index: 17, short: "C+D+EBT", tone: "credit" },
+  { index: 14, short: "O/S", tone: "os" },
+  { index: 17, short: "Credit", tone: "credit" },
 ];
 
 const state = {
@@ -164,18 +155,19 @@ function renderGrid() {
   for (let d = 1; d <= last; d++) {
     const iso = `${state.year}-${String(state.month).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
     const row = byDay.get(iso);
-    const metrics = gridCellMetrics(row?.s2k);
-    const filled = metrics.filter((m) => m.value != null);
+    const metrics = gridCellMetrics(row?.s2k).filter((m) => m.value != null);
+    const filled = metrics;
     const classes = ["cell"];
     if (!filled.length) classes.push("empty");
     if (iso === today) classes.push("today");
     if (iso === state.selectedDay) classes.push("selected");
-    const lines = `<span class="metrics">${metrics
-      .map((m) => {
-        const blank = m.value == null ? " blank" : "";
-        return `<span class="metric${blank}" data-tone="${escapeHtml(m.tone)}"><span class="metric-num">${m.index}</span><span class="metric-name">${escapeHtml(m.short)}</span><span class="metric-val">${fmtNum(m.value)}</span></span>`;
-      })
-      .join("")}</span>`;
+    const lines = filled.length
+      ? `<span class="metrics" data-count="${filled.length}">${filled
+          .map((m) => {
+            return `<span class="metric" data-tone="${escapeHtml(m.tone)}"><span class="metric-num">${m.index}</span><span class="metric-name">${escapeHtml(m.short)}</span><span class="metric-val">${fmtNum(m.value)}</span></span>`;
+          })
+          .join("")}</span>`
+      : "";
     const aria = filled.length
       ? `${d}, ${filled.map((m) => `${m.short} ${fmtNum(m.value)}`).join(", ")}`
       : String(d);
@@ -213,14 +205,22 @@ function cellIndexes() {
 }
 
 function renderSummary() {
-  const grand = state.summary?.grand;
-  const prior = state.summary?.priorGrand;
-  els.totals.innerHTML = [
-    ["Total", fmtNum(grand)],
-    ["Prior period", fmtNum(prior)],
-  ]
-    .map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`)
-    .join("");
+  const totals = state.summary?.totals ?? [];
+  const rows = (state.cellFields || FALLBACK_CELL_FIELDS)
+    .map((field) => {
+      const value = totals[field.index - 1];
+      if (value == null) return null;
+      return [field.short, fmtNum(value), field.tone];
+    })
+    .filter(Boolean);
+  els.totals.innerHTML = rows.length
+    ? rows
+        .map(
+          ([k, v, tone]) =>
+            `<div data-tone="${escapeHtml(tone)}"><dt>${escapeHtml(k)}</dt><dd>${v}</dd></div>`,
+        )
+        .join("")
+    : `<div><dt>Totals</dt><dd></dd></div>`;
   const trend = state.summary?.trend;
   if (!trend || trend.delta == null) {
     els.trend.className = "trend";

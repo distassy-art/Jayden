@@ -65,9 +65,9 @@ test("open month trends against the same days last month", () => {
   const summary = summarizeMonth(2026, 9, current, prior);
   assert.equal(summary.comparable, true);
   assert.equal(summary.trend.label, "vs same days last month");
-  assert.equal(summary.trend.prior, 200);
-  assert.equal(summary.trend.current, 200);
-  assert.equal(summary.trend.delta, 0);
+  assert.equal(summary.grand, null);
+  assert.equal(summary.trend.delta, null);
+  assert.equal(summary.totals[0], 200);
 });
 
 test("full month trends against the whole prior month", () => {
@@ -80,5 +80,8 @@ test("full month trends against the whole prior month", () => {
   const summary = summarizeMonth(2026, 8, current, prior);
   assert.equal(summary.comparable, false);
   assert.equal(summary.trend.label, "vs last month");
-  assert.equal(summary.trend.delta, 620);
+  assert.equal(summary.grand, null);
+  assert.equal(summary.trend.delta, null);
+  assert.equal(summary.totals[0], 3720);
+  assert.equal(summary.priorTotals[0], 3100);
 });

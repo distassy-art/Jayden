@@ -72,8 +72,9 @@ export function dayDetailRows(
 }
 
 /**
- * All 17 named fields on each day square (short labels).
- * Empty stays blank — do not invent 0.
+ * Mina's 8 color-coded majors on the day square.
+ * Put filled majors on the cell; empty stays blank — do not invent 0.
+ * The 17 named fields stay in the bottom day list.
  */
 export type GridField = {
   index: number;
@@ -83,22 +84,13 @@ export type GridField = {
 
 export const CELL_FIELDS: GridField[] = [
   { index: 1, short: "Gas Inv", tone: "gas" },
-  { index: 2, short: "Non fuel", tone: "other" },
-  { index: 3, short: "Propane", tone: "other" },
   { index: 4, short: "Safe drop", tone: "drop" },
-  { index: 5, short: "Diesel gal", tone: "other" },
   { index: 6, short: "Gallons", tone: "gallons" },
-  { index: 7, short: "Gas profit", tone: "other" },
   { index: 8, short: "C-store", tone: "cstore" },
   { index: 9, short: "Tax1+4", tone: "tax" },
-  { index: 10, short: "Lotto", tone: "other" },
-  { index: 11, short: "Scratch", tone: "other" },
-  { index: 12, short: "Lotto pay", tone: "other" },
-  { index: 13, short: "Ltry pay", tone: "other" },
-  { index: 14, short: "O/S", tone: "os" },
   { index: 15, short: "Payouts", tone: "payouts" },
-  { index: 16, short: "Fuel dep", tone: "other" },
-  { index: 17, short: "C+D+EBT", tone: "credit" },
+  { index: 14, short: "O/S", tone: "os" },
+  { index: 17, short: "Credit", tone: "credit" },
 ];
 
 export const GRID_FIELDS = CELL_FIELDS;
@@ -121,6 +113,11 @@ export function gridCellMetrics(s2k: S2kValues | null | undefined): GridMetric[]
     ...field,
     value: fields[field.index - 1] ?? null,
   }));
+}
+
+/** Majors that have a value — these are what the day square shows. */
+export function filledCellMetrics(s2k: S2kValues | null | undefined): GridMetric[] {
+  return gridCellMetrics(s2k).filter((row) => row.value != null);
 }
 
 export function parseS2k(raw: unknown): S2kValues {
@@ -391,16 +388,15 @@ export function summarizeMonth(
   const comparable = comparableDays.length !== priorDays.length;
   const totals = sumS2k(currentDays);
   const priorTotals = sumS2k(comparable ? comparableDays : priorDays);
-  const grand = grandTotal(totals);
-  const priorGrand = grandTotal(priorTotals);
+  // Do not mix unlike categories (inventory + safedrop is not a real total).
   return {
     year,
     month,
     totals,
     priorTotals,
-    grand,
-    priorGrand,
-    trend: rollupTrend(grand, priorGrand, comparable),
+    grand: null,
+    priorGrand: null,
+    trend: rollupTrend(null, null, comparable),
     comparable,
   };
 }
