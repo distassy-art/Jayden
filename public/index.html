@@ -8,7 +8,7 @@
       name="description"
       content="Monthly Arco HB / Arco DB calendar with saved day numbers."
     />
-    <link rel="stylesheet" href="/styles.css?v=majors-tiny-3" />
+    <link rel="stylesheet" href="/styles.css?v=close-day-1" />
   </head>
   <body data-station="hb" data-role="farsai">
     <div class="page">
@@ -75,16 +75,20 @@
       </section>
 
       <section id="day-detail" class="day-detail" hidden>
-        <h2 id="day-title">Day</h2>
+        <div class="day-detail-top">
+          <h2 id="day-title">Day</h2>
+          <button type="button" id="close-day">Back to calendar</button>
+        </div>
         <p class="day-note">
           Display only. Day squares show filled majors.
           Empty stays blank — not 0. Click a day for all 17 named
           fields with this day’s numbers plus month totals at the bottom.
+          Click Back to calendar, or the same day again, to return to the month grid.
         </p>
         <div id="s2k-fields" class="s2k-fields"></div>
       </section>
     </div>
 
-    <script src="/app.js?v=majors-tiny-3" type="module"></script>
+    <script src="/app.js?v=close-day-1" type="module"></script>
   </body>
 </html>

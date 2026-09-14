@@ -437,6 +437,30 @@ h1 {
   overflow: auto;
 }
 
+.day-detail-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.day-detail-top h2 {
+  margin-bottom: 0;
+}
+
+#close-day {
+  font: inherit;
+  cursor: pointer;
+  flex-shrink: 0;
+  border: 0;
+  border-radius: 999px;
+  padding: 6px 14px;
+  background: var(--ink);
+  color: white;
+  font-size: 13px;
+  font-weight: 650;
+}
+
 .day-note {
   margin: 4px 0 8px;
   color: var(--muted);

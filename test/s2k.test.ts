@@ -184,3 +184,13 @@ test("calendar UI is view-only with no Add control, file input, or Save", () => 
   assert.match(js, /filter\(\(m\) => m\.value != null\)/);
   assert.doesNotMatch(js, /\["Total"/);
 });
+
+test("day details close with Back to calendar or a second click on the selected day", () => {
+  const html = readFileSync(new URL("../public/index.html", import.meta.url), "utf8");
+  const js = readFileSync(new URL("../public/app.js", import.meta.url), "utf8");
+  assert.match(html, /id="close-day"/);
+  assert.match(html, /Back to calendar/);
+  assert.match(js, /els\.closeDay\.addEventListener\("click", closeDay\)/);
+  assert.match(js, /if \(state\.selectedDay === iso\) \{\s*closeDay\(\);/s);
+  assert.match(js, /function closeDay\(\) \{\s*state\.selectedDay = null;/s);
+});

@@ -65,6 +65,7 @@ const els = {
   status: document.getElementById("status"),
   dayDetail: document.getElementById("day-detail"),
   dayTitle: document.getElementById("day-title"),
+  closeDay: document.getElementById("close-day"),
   s2kFields: document.getElementById("s2k-fields"),
 };
 
@@ -80,6 +81,7 @@ async function init() {
   document.getElementById("next-month").addEventListener("click", () => shiftMonth(1));
   els.btnHb.addEventListener("click", () => setStation("hb"));
   els.btnDb.addEventListener("click", () => setStation("db"));
+  els.closeDay.addEventListener("click", closeDay);
   await refresh({ usePref: true });
 }
 
@@ -180,7 +182,9 @@ function renderGrid() {
   }
   els.grid.innerHTML = html.join("");
   els.grid.querySelectorAll("button[data-day]").forEach((btn) => {
-    btn.addEventListener("click", () => openDay(btn.getAttribute("data-day")));
+    const iso = btn.getAttribute("data-day");
+    btn.setAttribute("aria-pressed", String(iso === state.selectedDay));
+    btn.addEventListener("click", () => openDay(iso));
   });
 }
 
@@ -234,9 +238,19 @@ function renderSummary() {
 }
 
 function openDay(iso) {
+  if (state.selectedDay === iso) {
+    closeDay();
+    return;
+  }
   state.selectedDay = iso;
   renderGrid();
   renderDayDetail({ scroll: true });
+}
+
+function closeDay() {
+  state.selectedDay = null;
+  renderGrid();
+  renderDayDetail();
 }
 
 function renderDayDetail(opts = {}) {
