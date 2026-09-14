@@ -49,6 +49,39 @@ export function s2kSlots(): { index: number; label: string }[] {
   }));
 }
 
+/** Filled values shown on the month-grid day cell. Empty slots are omitted. */
+export type GridField = {
+  index: number;
+  short: string;
+  tone: string;
+};
+
+export const GRID_FIELDS: GridField[] = [
+  { index: 1, short: "Gas Inv", tone: "gas" },
+  { index: 2, short: "Non fuel", tone: "nonfuel" },
+  { index: 3, short: "Propane", tone: "propane" },
+  { index: 4, short: "Safe drop", tone: "drop" },
+  { index: 6, short: "Gallons", tone: "gallons" },
+  { index: 8, short: "C-store", tone: "cstore" },
+  { index: 9, short: "Tax", tone: "tax" },
+  { index: 15, short: "Payouts", tone: "payouts" },
+  { index: 14, short: "O/S", tone: "os" },
+  { index: 17, short: "Credit", tone: "credit" },
+];
+
+export type GridMetric = GridField & { value: number };
+
+export function gridCellMetrics(s2k: S2kValues | null | undefined): GridMetric[] {
+  const fields = s2k ?? emptyS2k();
+  const out: GridMetric[] = [];
+  for (const field of GRID_FIELDS) {
+    const value = fields[field.index - 1];
+    if (value == null) continue;
+    out.push({ ...field, value });
+  }
+  return out;
+}
+
 export function parseS2k(raw: unknown): S2kValues {
   const out = emptyS2k();
   let arr: unknown[] = [];

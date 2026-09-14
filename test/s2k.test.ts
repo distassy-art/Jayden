@@ -5,6 +5,7 @@ import {
   emptyS2k,
   filledCount,
   grandTotal,
+  gridCellMetrics,
   parseS2k,
   setS2kField,
   S2K_COUNT,
@@ -90,4 +91,24 @@ test("sumS2k leaves unused slots null", () => {
   assert.equal(sums[0], 3);
   assert.equal(sums[1], null);
   assert.equal(filledCount(sums), 1);
+});
+
+test("month-grid cells show filled majors and fields 2–3, skip empties", () => {
+  const s2k = emptyS2k();
+  s2k[0] = 20891;
+  s2k[3] = 9223;
+  const lines = gridCellMetrics(s2k);
+  assert.deepEqual(
+    lines.map((row) => [row.index, row.short, row.value]),
+    [
+      [1, "Gas Inv", 20891],
+      [4, "Safe drop", 9223],
+    ],
+  );
+  s2k[1] = 12;
+  s2k[2] = 3;
+  const withOptional = gridCellMetrics(s2k);
+  assert.equal(withOptional[1].short, "Non fuel");
+  assert.equal(withOptional[2].short, "Propane");
+  assert.equal(gridCellMetrics(emptyS2k()).length, 0);
 });

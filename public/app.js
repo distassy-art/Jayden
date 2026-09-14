@@ -18,6 +18,19 @@ const STATIONS = {
   db: { title: "DB calendar", sub: "Arco DB · store 42352" },
 };
 
+const FALLBACK_GRID_FIELDS = [
+  { index: 1, short: "Gas Inv", tone: "gas" },
+  { index: 2, short: "Non fuel", tone: "nonfuel" },
+  { index: 3, short: "Propane", tone: "propane" },
+  { index: 4, short: "Safe drop", tone: "drop" },
+  { index: 6, short: "Gallons", tone: "gallons" },
+  { index: 8, short: "C-store", tone: "cstore" },
+  { index: 9, short: "Tax", tone: "tax" },
+  { index: 15, short: "Payouts", tone: "payouts" },
+  { index: 14, short: "O/S", tone: "os" },
+  { index: 17, short: "Credit", tone: "credit" },
+];
+
 const state = {
   role: isOwner() ? "owner" : "farsai",
   station: "hb",
@@ -28,6 +41,7 @@ const state = {
   summary: null,
   selectedDay: null,
   slots: [],
+  gridFields: FALLBACK_GRID_FIELDS,
 };
 
 function isOwner() {
@@ -97,6 +111,7 @@ function applyState(data) {
   state.prefs = data.prefs ?? state.prefs;
   state.summary = data.summary;
   state.slots = data.slots ?? [];
+  state.gridFields = data.gridFields?.length ? data.gridFields : FALLBACK_GRID_FIELDS;
   els.body.dataset.station = state.station;
   const meta = STATIONS[state.station];
   els.title.textContent = meta.title;
@@ -141,22 +156,41 @@ function renderGrid() {
   for (let d = 1; d <= last; d++) {
     const iso = `${state.year}-${String(state.month).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
     const row = byDay.get(iso);
+    const metrics = gridCellMetrics(row?.s2k);
     const classes = ["cell"];
-    const filled = (row?.s2k || []).filter((v) => v != null).length;
-    if (!filled) classes.push("empty");
+    if (!metrics.length) classes.push("empty");
     if (iso === today) classes.push("today");
     if (iso === state.selectedDay) classes.push("selected");
-    const vol = filled ? `${filled}/${fieldCount()}` : "—";
+    const lines = metrics.length
+      ? `<span class="metrics">${metrics
+          .map(
+            (m) =>
+              `<span class="metric" data-tone="${escapeHtml(m.tone)}"><span class="metric-name">${escapeHtml(m.short)}</span><span class="metric-val">${fmtNum(m.value)}</span></span>`,
+          )
+          .join("")}</span>`
+      : `<span class="vol">—</span>`;
+    const aria = metrics.length
+      ? `${d}, ${metrics.map((m) => `${m.short} ${fmtNum(m.value)}`).join(", ")}`
+      : String(d);
     html.push(
-      `<button type="button" class="${classes.join(" ")}" data-day="${iso}">
+      `<button type="button" class="${classes.join(" ")}" data-day="${iso}" aria-label="${escapeHtml(aria)}">
         <span class="dom">${d}</span>
-        <span class="vol">${vol}</span>
+        ${lines}
       </button>`,
     );
   }
   els.grid.innerHTML = html.join("");
   els.grid.querySelectorAll("button[data-day]").forEach((btn) => {
     btn.addEventListener("click", () => openDay(btn.getAttribute("data-day")));
+  });
+}
+
+function gridCellMetrics(s2k) {
+  const fields = s2k || [];
+  return (state.gridFields || FALLBACK_GRID_FIELDS).flatMap((field) => {
+    const value = fields[field.index - 1];
+    if (value == null) return [];
+    return [{ ...field, value }];
   });
 }
 

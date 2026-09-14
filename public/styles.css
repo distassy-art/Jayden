@@ -234,7 +234,7 @@ h1 {
 }
 
 .grid button {
-  min-height: 86px;
+  min-height: 96px;
   border: 1px solid var(--line);
   background: #fff;
   border-radius: 14px;
@@ -251,9 +251,50 @@ h1 {
 
 .grid button .vol {
   font-variant-numeric: tabular-nums;
-  color: var(--accent);
+  color: var(--muted);
   font-size: 13px;
 }
+
+.grid button .metrics {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+}
+
+.grid button .metric {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+  line-height: 1.15;
+}
+
+.grid button .metric-name {
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.grid button .metric-val {
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.grid button .metric[data-tone="gas"] .metric-val { color: #0f6e6b; }
+.grid button .metric[data-tone="nonfuel"] .metric-val { color: #4a5560; }
+.grid button .metric[data-tone="propane"] .metric-val { color: #b15b12; }
+.grid button .metric[data-tone="drop"] .metric-val { color: #1f7a46; }
+.grid button .metric[data-tone="gallons"] .metric-val { color: #1d4f91; }
+.grid button .metric[data-tone="cstore"] .metric-val { color: #9a4a1c; }
+.grid button .metric[data-tone="tax"] .metric-val { color: #6b3fa0; }
+.grid button .metric[data-tone="payouts"] .metric-val { color: #a33b2b; }
+.grid button .metric[data-tone="os"] .metric-val { color: #875400; }
+.grid button .metric[data-tone="credit"] .metric-val { color: #163a5f; }
 
 .grid button.empty {
   opacity: 0.55;
@@ -504,7 +545,15 @@ h1 {
 
   .grid button,
   .grid .pad {
-    min-height: 72px;
+    min-height: 88px;
+  }
+
+  .grid button .metric-name {
+    font-size: 9px;
+  }
+
+  .grid button .metric-val {
+    font-size: 11px;
   }
 
   .dow span:nth-child(odd) {
