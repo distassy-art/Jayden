@@ -34,7 +34,21 @@ export default {
   async fetch(request, env): Promise<Response> {
     const url = new URL(request.url);
     if (!url.pathname.startsWith("/api/")) {
-      return env.ASSETS.fetch(request);
+      const res = await env.ASSETS.fetch(request);
+      const path = url.pathname;
+      const htmlOrAsset =
+        path === "/" ||
+        path.endsWith(".html") ||
+        path.endsWith(".js") ||
+        path.endsWith(".css");
+      if (!htmlOrAsset) return res;
+      const headers = new Headers(res.headers);
+      headers.set("Cache-Control", "no-store");
+      return new Response(res.body, {
+        status: res.status,
+        statusText: res.statusText,
+        headers,
+      });
     }
     try {
       await ensureSeed(env.DB);

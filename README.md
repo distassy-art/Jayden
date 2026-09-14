@@ -1,6 +1,6 @@
 # Farsai calendar
 
-Click a day to see the **17 named S2K fields** at the bottom of the page (read-only), each with that category’s **month total** beside it. Day cells show the **first 4 majors** when filled (Gas Inv, Safe drop, Gallons, C-store). Majors 5–8 wait. Month-end shows **totals + trend only**, not 17 line items. Values live on the Worker (D1). Fields 18 and 19 were cancelled.
+Click a day to see the **17 named S2K fields** at the bottom of the page (display only), each with that category’s **month total** beside it. Day cells show the **first 4 majors** when filled, color coded (Gas Inv, Safe drop, Gallons, C-store). Majors 5–8 wait. **No Add, no edit.** Month-end shows **totals + trend only**, not 17 line items. Values live on the Worker (D1). Fields 18 and 19 were cancelled.
 
 ## Open it
 

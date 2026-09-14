@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 import {
   comparablePriorDays,
@@ -150,4 +151,18 @@ test("day details pair each named field with that category's month total", () =>
   const rest = remainingDayDetailRows(dayVals, monthVals);
   assert.equal(rest.length, 13);
   assert.ok(rest.every((row) => ![1, 4, 6, 8].includes(row.index)));
+});
+
+test("calendar UI has no Add, add-field, file input, or Save", () => {
+  const html = readFileSync(new URL("../public/index.html", import.meta.url), "utf8");
+  const js = readFileSync(new URL("../public/app.js", import.meta.url), "utf8");
+  for (const src of [html, js]) {
+    assert.doesNotMatch(src, /add field/i);
+    assert.doesNotMatch(src, /\+ Add\b/);
+    assert.doesNotMatch(src, /id="add"/i);
+    assert.doesNotMatch(src, /id="save-day"/);
+    assert.doesNotMatch(src, /<input\b/i);
+    assert.doesNotMatch(src, /type="file"/i);
+  }
+  assert.match(html, /No Add/);
 });

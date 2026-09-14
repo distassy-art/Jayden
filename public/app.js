@@ -163,7 +163,7 @@ function renderGrid() {
               `<span class="metric" data-tone="${escapeHtml(m.tone)}"><span class="metric-name">${escapeHtml(m.short)}</span><span class="metric-val">${fmtNum(m.value)}</span></span>`,
           )
           .join("")}</span>`
-      : `<span class="vol">—</span>`;
+      : `<span class="vol"></span>`;
     const aria = metrics.length
       ? `${d}, ${metrics.map((m) => `${m.short} ${fmtNum(m.value)}`).join(", ")}`
       : String(d);
@@ -286,6 +286,6 @@ function escapeHtml(value) {
 }
 
 function fmtNum(n) {
-  if (n == null) return "—";
+  if (n == null) return "";
   return Number(n).toLocaleString("en-US", { maximumFractionDigits: 2 });
 }
