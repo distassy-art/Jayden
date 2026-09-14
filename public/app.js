@@ -164,7 +164,7 @@ function renderGrid() {
     const lines = filled.length
       ? `<span class="metrics" data-count="${filled.length}">${filled
           .map((m) => {
-            return `<span class="metric" data-tone="${escapeHtml(m.tone)}"><span class="metric-num">${m.index}</span><span class="metric-name">${escapeHtml(m.short)}</span><span class="metric-val">${fmtNum(m.value)}</span></span>`;
+            return `<span class="metric" data-tone="${escapeHtml(m.tone)}"><span class="metric-label"><span class="metric-num">${m.index}</span> ${escapeHtml(m.short)}</span><span class="metric-val">${fmtNum(m.value)}</span></span>`;
           })
           .join("")}</span>`
       : "";

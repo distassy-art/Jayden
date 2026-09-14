@@ -178,6 +178,9 @@ test("calendar UI is view-only with no Add control, file input, or Save", () => 
     assert.doesNotMatch(src, /type="file"/i);
   }
   assert.match(html, /Display only/);
+  assert.match(html, /filled majors/);
   assert.doesNotMatch(html, /id="add-field"/i);
   assert.doesNotMatch(html, /\bSave\b/);
+  assert.match(js, /filter\(\(m\) => m\.value != null\)/);
+  assert.doesNotMatch(js, /\["Total"/);
 });

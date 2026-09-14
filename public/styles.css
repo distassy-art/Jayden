@@ -280,51 +280,42 @@ h1 {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-auto-rows: minmax(0, 1fr);
-  gap: 4px 10px;
+  gap: 8px 14px;
   width: 100%;
   flex: 1;
   min-height: 0;
   align-content: center;
 }
 
-.grid button .metrics[data-count="1"] {
-  grid-template-columns: 1fr;
-}
-
+.grid button .metrics[data-count="1"],
 .grid button .metrics[data-count="2"],
 .grid button .metrics[data-count="3"] {
   grid-template-columns: 1fr;
 }
 
 .grid button .metric {
-  display: grid;
-  grid-template-columns: 1.2rem minmax(0, 1fr) auto;
-  gap: 4px;
-  align-items: baseline;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
   min-width: 0;
-  line-height: 1.2;
+  line-height: 1.15;
   min-height: 0;
 }
 
-.grid button .metric-num {
-  font-size: 10px;
-  font-variant-numeric: tabular-nums;
+.grid button .metric-label {
+  font-size: clamp(11px, 1.05vw, 14px);
   color: var(--muted);
-  font-weight: 650;
+  white-space: nowrap;
 }
 
-.grid button .metric-name {
-  font-size: clamp(11px, 1.05vw, 14px);
-  letter-spacing: 0;
-  color: var(--muted);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.grid button .metric-label .metric-num {
+  font-variant-numeric: tabular-nums;
+  font-weight: 650;
 }
 
 .grid button .metric-val {
   font-variant-numeric: tabular-nums;
-  font-size: clamp(12px, 1.2vw, 16px);
+  font-size: clamp(14px, 1.5vw, 20px);
   font-weight: 700;
   color: var(--accent);
   white-space: nowrap;
@@ -530,12 +521,12 @@ h1 {
     gap: 8px;
   }
 
-  .grid button .metric-name {
+  .grid button .metric-label {
     font-size: 11px;
   }
 
   .grid button .metric-val {
-    font-size: 12px;
+    font-size: 13px;
   }
 }
 
