@@ -165,4 +165,6 @@ test("calendar UI has no Add, add-field, file input, or Save", () => {
     assert.doesNotMatch(src, /type="file"/i);
   }
   assert.match(html, /No Add/);
+  assert.match(html, /View only/);
+  assert.doesNotMatch(html, /id="add-field"/i);
 });
