@@ -3,6 +3,7 @@ import test from "node:test";
 import {
   comparablePriorDays,
   dayDetailRows,
+  remainingDayDetailRows,
   emptyS2k,
   filledCount,
   grandTotal,
@@ -95,7 +96,7 @@ test("sumS2k leaves unused slots null", () => {
   assert.equal(filledCount(sums), 1);
 });
 
-test("month-grid cells show only temporary Gas Inv and Safe drop when filled", () => {
+test("month-grid cells show Mina's 8 majors when filled and skip the rest", () => {
   const s2k = emptyS2k();
   s2k[0] = 20891;
   s2k[3] = 9223;
@@ -109,23 +110,27 @@ test("month-grid cells show only temporary Gas Inv and Safe drop when filled", (
   );
   s2k[1] = 12;
   s2k[2] = 3;
-  s2k[4] = 55.5;
+  s2k[5] = 5584.53;
+  s2k[7] = 800;
+  s2k[8] = 90;
+  s2k[13] = -2;
+  s2k[14] = 40;
   s2k[16] = 100;
-  const stillOnlyTemp = gridCellMetrics(s2k);
+  const majors = gridCellMetrics(s2k);
   assert.deepEqual(
-    stillOnlyTemp.map((row) => row.short),
-    ["Gas Inv", "Safe drop"],
+    majors.map((row) => row.short),
+    ["Gas Inv", "Safe drop", "Gallons", "C-store", "Tax", "Payouts", "O/S", "Credit"],
   );
   assert.equal(gridCellMetrics(emptyS2k()).length, 0);
 });
 
-test("cell fields are not a guessed major list — only 1 and 4 until Mina names majors", () => {
+test("Mina named exactly 8 cell majors; Credit is index 17 when stored", () => {
   assert.deepEqual(
     CELL_FIELDS.map((field) => field.index),
-    [1, 4],
+    [1, 4, 6, 8, 9, 15, 14, 17],
   );
   const full = emptyS2k().map((_, i) => i + 1);
-  assert.equal(gridCellMetrics(full).length, 2);
+  assert.equal(gridCellMetrics(full).length, 8);
 });
 
 test("day details pair each named field with that category's month total", () => {
@@ -145,4 +150,7 @@ test("day details pair each named field with that category's month total", () =>
   assert.equal(rows[3].month, 80327);
   assert.equal(rows[1].day, null);
   assert.equal(rows[1].month, null);
+  const rest = remainingDayDetailRows(dayVals, monthVals);
+  assert.equal(rest.length, 9);
+  assert.ok(rest.every((row) => ![1, 4, 6, 8, 9, 14, 15, 17].includes(row.index)));
 });

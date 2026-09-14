@@ -244,16 +244,16 @@ h1 {
 }
 
 .grid button {
-  min-height: 92px;
+  min-height: 128px;
   height: 100%;
   border: 1px solid var(--line);
   background: #fff;
   border-radius: 14px;
-  padding: 8px;
+  padding: 7px 8px;
   text-align: left;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
   overflow: hidden;
 }
 
@@ -268,23 +268,26 @@ h1 {
 }
 
 .grid button .metrics {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px 8px;
   width: 100%;
+  align-content: start;
 }
 
 .grid button .metric {
   display: flex;
-  flex-direction: column;
-  gap: 0;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 4px;
   min-width: 0;
   line-height: 1.15;
 }
 
 .grid button .metric-name {
-  font-size: 10px;
-  letter-spacing: 0.02em;
+  font-size: 9px;
+  letter-spacing: 0.01em;
   color: var(--muted);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -293,7 +296,7 @@ h1 {
 
 .grid button .metric-val {
   font-variant-numeric: tabular-nums;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 700;
   color: var(--accent);
   white-space: nowrap;
@@ -301,13 +304,19 @@ h1 {
 
 .grid button .metric[data-tone="gas"] .metric-val { color: #0f6e6b; }
 .grid button .metric[data-tone="drop"] .metric-val { color: #1f7a46; }
+.grid button .metric[data-tone="gallons"] .metric-val { color: #1d4f91; }
+.grid button .metric[data-tone="cstore"] .metric-val { color: #9a4a1c; }
+.grid button .metric[data-tone="tax"] .metric-val { color: #6b3fa0; }
+.grid button .metric[data-tone="payouts"] .metric-val { color: #a33b2b; }
+.grid button .metric[data-tone="os"] .metric-val { color: #875400; }
+.grid button .metric[data-tone="credit"] .metric-val { color: #163a5f; }
 
 .grid button.empty {
   opacity: 0.55;
 }
 
 .grid .pad {
-  min-height: 86px;
+  min-height: 120px;
 }
 
 .grid button.today {
@@ -476,7 +485,7 @@ h1 {
 
   .grid button,
   .grid .pad {
-    min-height: 84px;
+    min-height: 110px;
   }
 
   .grid {

@@ -72,8 +72,9 @@ export function dayDetailRows(
 }
 
 /**
- * Temporary cell lines until Mina names the majors.
- * Do not treat this as a major list — only filled Gas Inv + Safe drop for now.
+ * Mina-named majors on each day cell. Empty slots are omitted.
+ * Credit is Receipts CREDIT (index 17) only when that value is stored —
+ * not an invented combo.
  */
 export type GridField = {
   index: number;
@@ -84,9 +85,27 @@ export type GridField = {
 export const CELL_FIELDS: GridField[] = [
   { index: 1, short: "Gas Inv", tone: "gas" },
   { index: 4, short: "Safe drop", tone: "drop" },
+  { index: 6, short: "Gallons", tone: "gallons" },
+  { index: 8, short: "C-store", tone: "cstore" },
+  { index: 9, short: "Tax", tone: "tax" },
+  { index: 15, short: "Payouts", tone: "payouts" },
+  { index: 14, short: "O/S", tone: "os" },
+  { index: 17, short: "Credit", tone: "credit" },
 ];
 
 export const GRID_FIELDS = CELL_FIELDS;
+
+export const CELL_INDEXES = new Set(CELL_FIELDS.map((field) => field.index));
+
+/** Named fields that are not on the day cell (the rest of the 17). */
+export function remainingDayDetailRows(
+  dayS2k: S2kValues | null | undefined,
+  monthTotals: S2kValues | null | undefined,
+): DayDetailRow[] {
+  return dayDetailRows(dayS2k, monthTotals).filter(
+    (row) => !CELL_INDEXES.has(row.index),
+  );
+}
 
 export type GridMetric = GridField & { value: number };
 

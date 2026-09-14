@@ -18,10 +18,16 @@ const STATIONS = {
   db: { title: "DB calendar", sub: "Arco DB · store 42352" },
 };
 
-/** Temporary cell lines only. Mina will name majors — do not invent the rest. */
+/** Mina’s 8 majors on the day cell. Empty omitted. Credit = Receipts CREDIT only when stored. */
 const FALLBACK_CELL_FIELDS = [
   { index: 1, short: "Gas Inv", tone: "gas" },
   { index: 4, short: "Safe drop", tone: "drop" },
+  { index: 6, short: "Gallons", tone: "gallons" },
+  { index: 8, short: "C-store", tone: "cstore" },
+  { index: 9, short: "Tax", tone: "tax" },
+  { index: 15, short: "Payouts", tone: "payouts" },
+  { index: 14, short: "O/S", tone: "os" },
+  { index: 17, short: "Credit", tone: "credit" },
 ];
 
 const state = {
