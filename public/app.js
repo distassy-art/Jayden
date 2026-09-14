@@ -18,12 +18,25 @@ const STATIONS = {
   db: { title: "DB calendar", sub: "Arco DB · store 42352" },
 };
 
-/** First 4 majors on the day cell. Empty omitted. */
+/** All 17 named fields on the day square. Empty stays blank. */
 const FALLBACK_CELL_FIELDS = [
   { index: 1, short: "Gas Inv", tone: "gas" },
+  { index: 2, short: "Non fuel", tone: "other" },
+  { index: 3, short: "Propane", tone: "other" },
   { index: 4, short: "Safe drop", tone: "drop" },
+  { index: 5, short: "Diesel gal", tone: "other" },
   { index: 6, short: "Gallons", tone: "gallons" },
+  { index: 7, short: "Gas profit", tone: "other" },
   { index: 8, short: "C-store", tone: "cstore" },
+  { index: 9, short: "Tax1+4", tone: "tax" },
+  { index: 10, short: "Lotto", tone: "other" },
+  { index: 11, short: "Scratch", tone: "other" },
+  { index: 12, short: "Lotto pay", tone: "other" },
+  { index: 13, short: "Ltry pay", tone: "other" },
+  { index: 14, short: "O/S", tone: "os" },
+  { index: 15, short: "Payouts", tone: "payouts" },
+  { index: 16, short: "Fuel dep", tone: "other" },
+  { index: 17, short: "C+D+EBT", tone: "credit" },
 ];
 
 const state = {
@@ -152,20 +165,19 @@ function renderGrid() {
     const iso = `${state.year}-${String(state.month).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
     const row = byDay.get(iso);
     const metrics = gridCellMetrics(row?.s2k);
+    const filled = metrics.filter((m) => m.value != null);
     const classes = ["cell"];
-    if (!metrics.length) classes.push("empty");
+    if (!filled.length) classes.push("empty");
     if (iso === today) classes.push("today");
     if (iso === state.selectedDay) classes.push("selected");
-    const lines = metrics.length
-      ? `<span class="metrics">${metrics
-          .map(
-            (m) =>
-              `<span class="metric" data-tone="${escapeHtml(m.tone)}"><span class="metric-name">${escapeHtml(m.short)}</span><span class="metric-val">${fmtNum(m.value)}</span></span>`,
-          )
-          .join("")}</span>`
-      : `<span class="vol"></span>`;
-    const aria = metrics.length
-      ? `${d}, ${metrics.map((m) => `${m.short} ${fmtNum(m.value)}`).join(", ")}`
+    const lines = `<span class="metrics">${metrics
+      .map((m) => {
+        const blank = m.value == null ? " blank" : "";
+        return `<span class="metric${blank}" data-tone="${escapeHtml(m.tone)}"><span class="metric-num">${m.index}</span><span class="metric-name">${escapeHtml(m.short)}</span><span class="metric-val">${fmtNum(m.value)}</span></span>`;
+      })
+      .join("")}</span>`;
+    const aria = filled.length
+      ? `${d}, ${filled.map((m) => `${m.short} ${fmtNum(m.value)}`).join(", ")}`
       : String(d);
     html.push(
       `<button type="button" class="${classes.join(" ")}" data-day="${iso}" aria-label="${escapeHtml(aria)}">
@@ -182,11 +194,10 @@ function renderGrid() {
 
 function gridCellMetrics(s2k) {
   const fields = s2k || [];
-  return (state.cellFields || FALLBACK_CELL_FIELDS).flatMap((field) => {
-    const value = fields[field.index - 1];
-    if (value == null) return [];
-    return [{ ...field, value }];
-  });
+  return (state.cellFields || FALLBACK_CELL_FIELDS).map((field) => ({
+    ...field,
+    value: fields[field.index - 1] ?? null,
+  }));
 }
 
 function fieldCount() {

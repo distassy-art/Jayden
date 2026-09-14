@@ -8,7 +8,7 @@
       name="description"
       content="Monthly Arco HB / Arco DB calendar with saved day numbers."
     />
-    <link rel="stylesheet" href="/styles.css?v=view-only-1" />
+    <link rel="stylesheet" href="/styles.css?v=fullpage-17" />
   </head>
   <body data-station="hb" data-role="farsai">
     <div class="page">
@@ -17,6 +17,16 @@
           <p class="eyebrow" id="role-label">Farsai</p>
           <h1 id="title">HB calendar</h1>
           <p class="sub" id="subtitle">Arco HB · store 42179</p>
+        </div>
+        <div class="station-switch" role="group" aria-label="HB or DB">
+          <button type="button" id="btn-hb" data-station="hb" aria-pressed="true">
+            HB
+            <span>Arco HB</span>
+          </button>
+          <button type="button" id="btn-db" data-station="db" aria-pressed="false">
+            DB
+            <span>Arco DB</span>
+          </button>
         </div>
         <nav class="month-nav" aria-label="Month">
           <button type="button" id="prev-month" aria-label="Previous month">‹</button>
@@ -42,20 +52,7 @@
         </label>
       </aside>
 
-      <section class="switch-block" aria-label="Station">
-        <p class="switch-label" id="switch-label">Station</p>
-        <div class="station-switch" role="group" aria-label="HB or DB">
-          <button type="button" id="btn-hb" data-station="hb" aria-pressed="true">
-            HB
-            <span>Arco HB</span>
-          </button>
-          <button type="button" id="btn-db" data-station="db" aria-pressed="false">
-            DB
-            <span>Arco DB</span>
-          </button>
-        </div>
-      </section>
-
+      <p id="switch-label" class="switch-label" hidden>Station</p>
       <p id="status" class="status" hidden></p>
 
       <section class="calendar-wrap">
@@ -80,15 +77,14 @@
       <section id="day-detail" class="day-detail" hidden>
         <h2 id="day-title">Day</h2>
         <p class="day-note">
-          Display only. Filled majors stay on the calendar cell, color
-          coded. All 17 named fields are listed here with this day’s
-          number and that category’s month total. Empty stays blank — not
-          0. View only. No Add. No edit.
+          Display only. Each day square lists all 17 named fields.
+          Empty stays blank — not 0. Click for this day’s numbers plus
+          month totals if they don’t all fit. View only. No Add. No edit.
         </p>
         <div id="s2k-fields" class="s2k-fields"></div>
       </section>
     </div>
 
-    <script src="/app.js?v=view-only-1" type="module"></script>
+    <script src="/app.js?v=fullpage-17" type="module"></script>
   </body>
 </html>

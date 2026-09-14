@@ -97,13 +97,14 @@ test("sumS2k leaves unused slots null", () => {
   assert.equal(filledCount(sums), 1);
 });
 
-test("month-grid cells show the first 4 majors when filled and skip the rest", () => {
+test("month-grid cells list all 17 named fields and leave empty blank", () => {
   const s2k = emptyS2k();
   s2k[0] = 20891;
   s2k[3] = 9223;
   const lines = gridCellMetrics(s2k);
+  assert.equal(lines.length, 17);
   assert.deepEqual(
-    lines.map((row) => [row.index, row.short, row.value]),
+    lines.filter((row) => row.value != null).map((row) => [row.index, row.short, row.value]),
     [
       [1, "Gas Inv", 20891],
       [4, "Safe drop", 9223],
@@ -114,21 +115,23 @@ test("month-grid cells show the first 4 majors when filled and skip the rest", (
   s2k[8] = 90;
   s2k[14] = 40;
   s2k[16] = 100;
-  const four = gridCellMetrics(s2k);
+  const filled = gridCellMetrics(s2k).filter((row) => row.value != null);
   assert.deepEqual(
-    four.map((row) => row.short),
-    ["Gas Inv", "Safe drop", "Gallons", "C-store"],
+    filled.map((row) => row.short),
+    ["Gas Inv", "Safe drop", "Gallons", "C-store", "Tax1+4", "Payouts", "C+D+EBT"],
   );
-  assert.equal(gridCellMetrics(emptyS2k()).length, 0);
+  assert.equal(gridCellMetrics(emptyS2k()).length, 17);
+  assert.ok(gridCellMetrics(emptyS2k()).every((row) => row.value == null));
 });
 
-test("cells show only the first 4 majors until 5–8 are filled", () => {
+test("day squares reserve all 17 slots", () => {
+  assert.equal(CELL_FIELDS.length, 17);
   assert.deepEqual(
     CELL_FIELDS.map((field) => field.index),
-    [1, 4, 6, 8],
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
   );
   const full = emptyS2k().map((_, i) => i + 1);
-  assert.equal(gridCellMetrics(full).length, 4);
+  assert.equal(gridCellMetrics(full).length, 17);
 });
 
 test("day details pair each named field with that category's month total", () => {
@@ -149,8 +152,9 @@ test("day details pair each named field with that category's month total", () =>
   assert.equal(rows[1].day, null);
   assert.equal(rows[1].month, null);
   const rest = remainingDayDetailRows(dayVals, monthVals);
-  assert.equal(rest.length, 13);
-  assert.ok(rest.every((row) => ![1, 4, 6, 8].includes(row.index)));
+  assert.equal(rest.length, 15);
+  assert.ok(rest.every((row) => row.day == null));
+  assert.ok(!rest.some((row) => [1, 4].includes(row.index)));
 });
 
 test("calendar UI has no Add, add-field, file input, or Save", () => {

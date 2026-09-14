@@ -72,8 +72,8 @@ export function dayDetailRows(
 }
 
 /**
- * First 4 majors on each day cell until 5–8 are filled from S2K.
- * Empty slots are omitted. Do not invent values.
+ * All 17 named fields on each day square (short labels).
+ * Empty stays blank — do not invent 0.
  */
 export type GridField = {
   index: number;
@@ -83,36 +83,44 @@ export type GridField = {
 
 export const CELL_FIELDS: GridField[] = [
   { index: 1, short: "Gas Inv", tone: "gas" },
+  { index: 2, short: "Non fuel", tone: "other" },
+  { index: 3, short: "Propane", tone: "other" },
   { index: 4, short: "Safe drop", tone: "drop" },
+  { index: 5, short: "Diesel gal", tone: "other" },
   { index: 6, short: "Gallons", tone: "gallons" },
+  { index: 7, short: "Gas profit", tone: "other" },
   { index: 8, short: "C-store", tone: "cstore" },
+  { index: 9, short: "Tax1+4", tone: "tax" },
+  { index: 10, short: "Lotto", tone: "other" },
+  { index: 11, short: "Scratch", tone: "other" },
+  { index: 12, short: "Lotto pay", tone: "other" },
+  { index: 13, short: "Ltry pay", tone: "other" },
+  { index: 14, short: "O/S", tone: "os" },
+  { index: 15, short: "Payouts", tone: "payouts" },
+  { index: 16, short: "Fuel dep", tone: "other" },
+  { index: 17, short: "C+D+EBT", tone: "credit" },
 ];
 
 export const GRID_FIELDS = CELL_FIELDS;
 
 export const CELL_INDEXES = new Set(CELL_FIELDS.map((field) => field.index));
 
-/** Named fields that are not on the day cell (the rest of the 17). */
+/** Fields with no day value yet (still listed on the square as blank). */
 export function remainingDayDetailRows(
   dayS2k: S2kValues | null | undefined,
   monthTotals: S2kValues | null | undefined,
 ): DayDetailRow[] {
-  return dayDetailRows(dayS2k, monthTotals).filter(
-    (row) => !CELL_INDEXES.has(row.index),
-  );
+  return dayDetailRows(dayS2k, monthTotals).filter((row) => row.day == null);
 }
 
-export type GridMetric = GridField & { value: number };
+export type GridMetric = GridField & { value: number | null };
 
 export function gridCellMetrics(s2k: S2kValues | null | undefined): GridMetric[] {
   const fields = s2k ?? emptyS2k();
-  const out: GridMetric[] = [];
-  for (const field of CELL_FIELDS) {
-    const value = fields[field.index - 1];
-    if (value == null) continue;
-    out.push({ ...field, value });
-  }
-  return out;
+  return CELL_FIELDS.map((field) => ({
+    ...field,
+    value: fields[field.index - 1] ?? null,
+  }));
 }
 
 export function parseS2k(raw: unknown): S2kValues {

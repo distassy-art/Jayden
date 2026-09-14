@@ -8,7 +8,7 @@
   --accent-2: #9a4a1c;
   --good: #1f7a46;
   --bad: #a33b2b;
-  --shadow: 0 12px 40px rgba(28, 36, 48, 0.08);
+  --shadow: 0 8px 24px rgba(28, 36, 48, 0.08);
 }
 
 * {
@@ -18,7 +18,7 @@
 html,
 body {
   margin: 0;
-  min-height: 100%;
+  height: 100%;
 }
 
 body {
@@ -35,26 +35,29 @@ body[data-station="db"] {
 }
 
 .page {
-  width: min(1680px, calc(100% - 16px));
-  margin: 10px auto 20px;
-  min-height: calc(100vh - 30px);
+  width: 100%;
+  height: 100dvh;
+  margin: 0;
+  padding: 8px 10px 10px;
   display: flex;
   flex-direction: column;
+  gap: 8px;
+  min-height: 0;
 }
 
 .top {
   display: flex;
   justify-content: space-between;
-  gap: 24px;
-  align-items: end;
-  margin-bottom: 20px;
+  gap: 12px;
+  align-items: center;
+  flex-shrink: 0;
 }
 
 .eyebrow {
-  margin: 0 0 6px;
+  margin: 0 0 2px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  font-size: 11px;
+  font-size: 10px;
   color: var(--muted);
 }
 
@@ -66,31 +69,34 @@ h2 {
 }
 
 h1 {
-  font-size: clamp(24px, 4vw, 36px);
+  font-size: clamp(20px, 2.4vw, 28px);
   letter-spacing: -0.03em;
 }
 
 .sub {
-  margin: 8px 0 0;
+  margin: 2px 0 0;
   color: var(--muted);
+  font-size: 12px;
 }
 
 .month-nav {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 999px;
-  padding: 6px;
+  padding: 4px;
   box-shadow: var(--shadow);
+  flex-shrink: 0;
 }
 
 .month-nav p {
   margin: 0;
-  min-width: 148px;
+  min-width: 132px;
   text-align: center;
   font-weight: 650;
+  font-size: 14px;
 }
 
 .month-nav button,
@@ -100,8 +106,8 @@ h1 {
 }
 
 .month-nav button {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   border: 0;
   background: var(--ink);
@@ -113,11 +119,11 @@ h1 {
   justify-content: space-between;
   gap: 16px;
   align-items: center;
-  padding: 14px 16px;
-  margin-bottom: 16px;
-  border-radius: 16px;
+  padding: 10px 14px;
+  border-radius: 14px;
   background: #1c2430;
   color: #f4efe4;
+  flex-shrink: 0;
 }
 
 .owner-bar[hidden] {
@@ -149,40 +155,34 @@ h1 {
   border: 0;
 }
 
-.switch-block {
-  margin: 8px 0 18px;
-}
-
-.switch-label {
-  margin: 0 0 8px;
-  font-size: 12px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--muted);
+.switch-label[hidden] {
+  display: none !important;
 }
 
 .station-switch {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 8px;
+  min-width: min(42vw, 420px);
+  flex: 1;
 }
 
 .station-switch button {
   border: 1px solid var(--line);
   background: var(--card);
-  border-radius: 16px;
-  padding: 10px 16px;
+  border-radius: 12px;
+  padding: 6px 12px;
   text-align: left;
-  font-size: 22px;
+  font-size: 18px;
   font-family: Georgia, serif;
   box-shadow: var(--shadow);
 }
 
 .station-switch button span {
   display: block;
-  margin-top: 4px;
+  margin-top: 1px;
   font-family: "Segoe UI", sans-serif;
-  font-size: 13px;
+  font-size: 11px;
   color: var(--muted);
 }
 
@@ -197,11 +197,12 @@ h1 {
 }
 
 .status {
-  margin: 0 0 12px;
-  padding: 10px 12px;
+  margin: 0;
+  padding: 8px 12px;
   border-radius: 12px;
   background: #e7f3ea;
   color: var(--good);
+  flex-shrink: 0;
 }
 
 .status.error {
@@ -214,13 +215,13 @@ h1 {
 .day-detail {
   background: var(--card);
   border: 1px solid var(--line);
-  border-radius: 20px;
+  border-radius: 16px;
   box-shadow: var(--shadow);
 }
 
 .calendar-wrap {
-  padding: 12px;
-  flex: 1;
+  padding: 8px;
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   min-height: 0;
@@ -229,69 +230,83 @@ h1 {
 .dow,
 .grid {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 6px;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 5px;
 }
 
 .grid {
   flex: 1;
   grid-auto-rows: 1fr;
-  min-height: min(52vh, 560px);
+  min-height: 0;
 }
 
 .dow {
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+  flex-shrink: 0;
 }
 
 .grid button {
-  min-height: 128px;
+  min-height: 0;
   height: 100%;
   border: 1px solid var(--line);
   background: #fff;
-  border-radius: 14px;
-  padding: 7px 8px;
+  border-radius: 10px;
+  padding: 4px 5px 5px;
   text-align: left;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
   overflow: hidden;
 }
 
 .grid button .dom {
   font-weight: 700;
+  font-size: 13px;
+  line-height: 1;
+  flex-shrink: 0;
 }
 
 .grid button .vol {
   font-variant-numeric: tabular-nums;
   color: var(--muted);
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .grid button .metrics {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2px 8px;
+  grid-auto-rows: minmax(0, 1fr);
+  gap: 0 6px;
   width: 100%;
-  align-content: start;
+  flex: 1;
+  min-height: 0;
+  align-content: stretch;
 }
 
 .grid button .metric {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1.1rem minmax(0, 1fr) auto;
+  gap: 3px;
   align-items: baseline;
-  gap: 4px;
   min-width: 0;
-  line-height: 1.15;
+  line-height: 1.12;
+  min-height: 0;
+}
+
+.grid button .metric-num {
+  font-size: 8px;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+  font-weight: 650;
 }
 
 .grid button .metric-name {
   font-size: 9px;
-  letter-spacing: 0.01em;
+  letter-spacing: 0;
   color: var(--muted);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -300,10 +315,14 @@ h1 {
 
 .grid button .metric-val {
   font-variant-numeric: tabular-nums;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   color: var(--accent);
   white-space: nowrap;
+}
+
+.grid button .metric.blank .metric-val {
+  color: transparent;
 }
 
 .grid button .metric[data-tone="gas"] .metric-val { color: #0f6e6b; }
@@ -314,13 +333,14 @@ h1 {
 .grid button .metric[data-tone="payouts"] .metric-val { color: #a33b2b; }
 .grid button .metric[data-tone="os"] .metric-val { color: #875400; }
 .grid button .metric[data-tone="credit"] .metric-val { color: #163a5f; }
+.grid button .metric[data-tone="other"] .metric-val { color: var(--ink); }
 
 .grid button.empty {
-  opacity: 0.55;
+  opacity: 0.72;
 }
 
 .grid .pad {
-  min-height: 120px;
+  min-height: 0;
 }
 
 .grid button.today {
@@ -335,24 +355,24 @@ h1 {
 .summary {
   display: grid;
   grid-template-columns: 1.4fr 1fr;
-  gap: 12px;
-  margin-top: 16px;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .summary article {
-  padding: 16px 18px;
+  padding: 8px 12px;
 }
 
 .summary h2,
 .day-detail h2 {
-  font-size: 18px;
-  margin-bottom: 10px;
+  font-size: 15px;
+  margin-bottom: 4px;
 }
 
 #totals {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 8px;
+  gap: 4px;
   margin: 0;
   max-width: 280px;
 }
@@ -362,7 +382,8 @@ h1 {
   justify-content: space-between;
   gap: 12px;
   border-bottom: 1px dashed var(--line);
-  padding-bottom: 6px;
+  padding-bottom: 2px;
+  font-size: 13px;
 }
 
 #totals dt {
@@ -376,15 +397,15 @@ h1 {
 
 .trend {
   margin: 0;
-  font-size: 22px;
+  font-size: 18px;
   font-family: Georgia, serif;
 }
 
 .trend small {
   display: block;
-  margin-top: 6px;
+  margin-top: 4px;
   font-family: "Segoe UI", sans-serif;
-  font-size: 13px;
+  font-size: 12px;
   color: var(--muted);
 }
 
@@ -397,14 +418,16 @@ h1 {
 }
 
 .day-detail {
-  margin-top: 16px;
-  padding: 18px 20px 22px;
+  padding: 10px 14px 12px;
+  flex-shrink: 0;
+  max-height: 34vh;
+  overflow: auto;
 }
 
 .day-note {
-  margin: 8px 0 14px;
+  margin: 4px 0 8px;
   color: var(--muted);
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .s2k-fields {
@@ -419,7 +442,7 @@ h1 {
   gap: 12px;
   align-items: baseline;
   font-size: 13px;
-  padding: 8px 0;
+  padding: 6px 0;
   border-bottom: 1px dashed var(--line);
 }
 
@@ -473,13 +496,14 @@ h1 {
   color: var(--accent);
 }
 
-@media (max-width: 720px) {
-  .top,
-  .summary,
-  .owner-bar {
-    grid-template-columns: 1fr;
-    flex-direction: column;
-    align-items: stretch;
+@media (max-width: 900px) {
+  .top {
+    flex-wrap: wrap;
+  }
+
+  .station-switch {
+    min-width: 100%;
+    order: 3;
   }
 
   .s2k-row {
@@ -487,24 +511,24 @@ h1 {
     gap: 8px;
   }
 
-  .grid button,
-  .grid .pad {
-    min-height: 110px;
-  }
-
-  .grid {
-    min-height: 48vh;
-  }
-
   .grid button .metric-name {
-    font-size: 9px;
+    font-size: 8px;
   }
 
   .grid button .metric-val {
-    font-size: 12px;
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 720px) {
+  .summary,
+  .owner-bar {
+    grid-template-columns: 1fr;
+    flex-direction: column;
+    align-items: stretch;
   }
 
-  .dow span:nth-child(odd) {
-    letter-spacing: 0;
+  .grid button .metrics {
+    grid-template-columns: 1fr;
   }
 }
