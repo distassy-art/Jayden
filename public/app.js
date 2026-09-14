@@ -199,8 +199,11 @@ function gridCellMetrics(s2k) {
 }
 
 function scanPdfLink(iso, field) {
-  const href = state.scans?.[iso]?.[String(field)] ?? state.scans?.[iso]?.[field];
-  if (!href || (field !== 4 && field !== 12 && field !== 13)) return "";
+  if (field !== 4 && field !== 12 && field !== 13) return "";
+  const key = String(field);
+  const row = state.days.find((d) => d.day === iso);
+  const href = row?.scans?.[key] ?? state.scans?.[iso]?.[key];
+  if (!href) return "";
   return ` <a class="scan-pdf" href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer">PDF</a>`;
 }
 
