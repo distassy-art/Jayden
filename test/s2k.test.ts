@@ -96,7 +96,7 @@ test("sumS2k leaves unused slots null", () => {
   assert.equal(filledCount(sums), 1);
 });
 
-test("month-grid cells show Mina's 8 majors when filled and skip the rest", () => {
+test("month-grid cells show the first 4 majors when filled and skip the rest", () => {
   const s2k = emptyS2k();
   s2k[0] = 20891;
   s2k[3] = 9223;
@@ -108,29 +108,26 @@ test("month-grid cells show Mina's 8 majors when filled and skip the rest", () =
       [4, "Safe drop", 9223],
     ],
   );
-  s2k[1] = 12;
-  s2k[2] = 3;
   s2k[5] = 5584.53;
   s2k[7] = 800;
   s2k[8] = 90;
-  s2k[13] = -2;
   s2k[14] = 40;
   s2k[16] = 100;
-  const majors = gridCellMetrics(s2k);
+  const four = gridCellMetrics(s2k);
   assert.deepEqual(
-    majors.map((row) => row.short),
-    ["Gas Inv", "Safe drop", "Gallons", "C-store", "Tax", "Payouts", "O/S", "Credit"],
+    four.map((row) => row.short),
+    ["Gas Inv", "Safe drop", "Gallons", "C-store"],
   );
   assert.equal(gridCellMetrics(emptyS2k()).length, 0);
 });
 
-test("Mina named exactly 8 cell majors; Credit is index 17 when stored", () => {
+test("cells show only the first 4 majors until 5–8 are filled", () => {
   assert.deepEqual(
     CELL_FIELDS.map((field) => field.index),
-    [1, 4, 6, 8, 9, 15, 14, 17],
+    [1, 4, 6, 8],
   );
   const full = emptyS2k().map((_, i) => i + 1);
-  assert.equal(gridCellMetrics(full).length, 8);
+  assert.equal(gridCellMetrics(full).length, 4);
 });
 
 test("day details pair each named field with that category's month total", () => {
@@ -151,6 +148,6 @@ test("day details pair each named field with that category's month total", () =>
   assert.equal(rows[1].day, null);
   assert.equal(rows[1].month, null);
   const rest = remainingDayDetailRows(dayVals, monthVals);
-  assert.equal(rest.length, 9);
-  assert.ok(rest.every((row) => ![1, 4, 6, 8, 9, 14, 15, 17].includes(row.index)));
+  assert.equal(rest.length, 13);
+  assert.ok(rest.every((row) => ![1, 4, 6, 8].includes(row.index)));
 });

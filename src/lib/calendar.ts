@@ -72,9 +72,8 @@ export function dayDetailRows(
 }
 
 /**
- * Mina-named majors on each day cell. Empty slots are omitted.
- * Credit is Receipts CREDIT (index 17) only when that value is stored —
- * not an invented combo.
+ * First 4 majors on each day cell until 5–8 are filled from S2K.
+ * Empty slots are omitted. Do not invent values.
  */
 export type GridField = {
   index: number;
@@ -87,10 +86,6 @@ export const CELL_FIELDS: GridField[] = [
   { index: 4, short: "Safe drop", tone: "drop" },
   { index: 6, short: "Gallons", tone: "gallons" },
   { index: 8, short: "C-store", tone: "cstore" },
-  { index: 9, short: "Tax", tone: "tax" },
-  { index: 15, short: "Payouts", tone: "payouts" },
-  { index: 14, short: "O/S", tone: "os" },
-  { index: 17, short: "Credit", tone: "credit" },
 ];
 
 export const GRID_FIELDS = CELL_FIELDS;
