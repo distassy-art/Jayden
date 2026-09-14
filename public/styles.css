@@ -35,8 +35,11 @@ body[data-station="db"] {
 }
 
 .page {
-  width: min(980px, calc(100% - 32px));
-  margin: 28px auto 64px;
+  width: min(1680px, calc(100% - 16px));
+  margin: 10px auto 20px;
+  min-height: calc(100vh - 30px);
+  display: flex;
+  flex-direction: column;
 }
 
 .top {
@@ -63,7 +66,7 @@ h2 {
 }
 
 h1 {
-  font-size: clamp(28px, 5vw, 44px);
+  font-size: clamp(24px, 4vw, 36px);
   letter-spacing: -0.03em;
 }
 
@@ -165,10 +168,10 @@ h1 {
 .station-switch button {
   border: 1px solid var(--line);
   background: var(--card);
-  border-radius: 18px;
-  padding: 16px 18px;
+  border-radius: 16px;
+  padding: 10px 16px;
   text-align: left;
-  font-size: 28px;
+  font-size: 22px;
   font-family: Georgia, serif;
   box-shadow: var(--shadow);
 }
@@ -215,14 +218,24 @@ h1 {
 }
 
 .calendar-wrap {
-  padding: 16px;
+  padding: 12px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .dow,
 .grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 8px;
+  gap: 6px;
+}
+
+.grid {
+  flex: 1;
+  grid-auto-rows: 1fr;
+  min-height: min(72vh, 820px);
 }
 
 .dow {
@@ -234,15 +247,17 @@ h1 {
 }
 
 .grid button {
-  min-height: 96px;
+  min-height: 148px;
+  height: 100%;
   border: 1px solid var(--line);
   background: #fff;
   border-radius: 14px;
-  padding: 8px;
+  padding: 7px 8px;
   text-align: left;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
+  overflow: hidden;
 }
 
 .grid button .dom {
@@ -257,21 +272,26 @@ h1 {
 
 .grid button .metrics {
   display: grid;
-  gap: 4px;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px 8px;
   width: 100%;
+  align-content: start;
+  min-height: 0;
 }
 
 .grid button .metric {
   display: flex;
-  flex-direction: column;
-  gap: 0;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 4px;
   min-width: 0;
-  line-height: 1.15;
+  line-height: 1.2;
 }
 
 .grid button .metric-name {
-  font-size: 10px;
-  letter-spacing: 0.02em;
+  font-size: 9px;
+  letter-spacing: 0.01em;
   color: var(--muted);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -280,20 +300,28 @@ h1 {
 
 .grid button .metric-val {
   font-variant-numeric: tabular-nums;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   color: var(--accent);
+  white-space: nowrap;
 }
 
 .grid button .metric[data-tone="gas"] .metric-val { color: #0f6e6b; }
 .grid button .metric[data-tone="nonfuel"] .metric-val { color: #4a5560; }
 .grid button .metric[data-tone="propane"] .metric-val { color: #b15b12; }
 .grid button .metric[data-tone="drop"] .metric-val { color: #1f7a46; }
+.grid button .metric[data-tone="diesel"] .metric-val { color: #2b6a8a; }
 .grid button .metric[data-tone="gallons"] .metric-val { color: #1d4f91; }
+.grid button .metric[data-tone="gasprofit"] .metric-val { color: #0b5c3a; }
 .grid button .metric[data-tone="cstore"] .metric-val { color: #9a4a1c; }
 .grid button .metric[data-tone="tax"] .metric-val { color: #6b3fa0; }
+.grid button .metric[data-tone="lotto"] .metric-val { color: #8a2f5a; }
+.grid button .metric[data-tone="scratch"] .metric-val { color: #c45c12; }
+.grid button .metric[data-tone="lottopay"] .metric-val { color: #7a2848; }
+.grid button .metric[data-tone="lotterypay"] .metric-val { color: #5a3060; }
 .grid button .metric[data-tone="payouts"] .metric-val { color: #a33b2b; }
 .grid button .metric[data-tone="os"] .metric-val { color: #875400; }
+.grid button .metric[data-tone="fueldep"] .metric-val { color: #2d5a3d; }
 .grid button .metric[data-tone="credit"] .metric-val { color: #163a5f; }
 
 .grid button.empty {
@@ -301,7 +329,7 @@ h1 {
 }
 
 .grid .pad {
-  min-height: 86px;
+  min-height: 148px;
 }
 
 .grid button.today {
@@ -409,7 +437,8 @@ h1 {
 }
 
 #day-dialog {
-  width: min(520px, 92vw);
+  width: min(980px, 96vw);
+  max-height: 94vh;
   border: 0;
   padding: 20px;
 }
@@ -438,16 +467,16 @@ h1 {
 
 .s2k-fields {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 8px;
-  max-height: min(52vh, 420px);
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 16px;
+  max-height: min(68vh, 640px);
   overflow: auto;
   padding-right: 4px;
 }
 
 .s2k-fields label {
   display: grid;
-  grid-template-columns: minmax(8rem, 1.4fr) 1fr auto;
+  grid-template-columns: minmax(7rem, 1.3fr) 1fr auto;
   gap: 8px;
   align-items: center;
   font-size: 13px;
@@ -545,15 +574,24 @@ h1 {
 
   .grid button,
   .grid .pad {
-    min-height: 88px;
+    min-height: 120px;
+  }
+
+  .grid {
+    min-height: 62vh;
+  }
+
+  .grid button .metrics,
+  .s2k-fields {
+    grid-template-columns: 1fr;
   }
 
   .grid button .metric-name {
-    font-size: 9px;
+    font-size: 8px;
   }
 
   .grid button .metric-val {
-    font-size: 11px;
+    font-size: 10px;
   }
 
   .dow span:nth-child(odd) {

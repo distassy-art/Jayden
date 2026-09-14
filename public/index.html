@@ -8,7 +8,7 @@
       name="description"
       content="Monthly Arco HB / Arco DB calendar with saved day numbers."
     />
-    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/styles.css?v=cells-17" />
   </head>
   <body data-station="hb" data-role="farsai">
     <div class="page">
@@ -98,9 +98,8 @@
       <form id="day-form" method="dialog">
         <h2 id="day-title">Day</h2>
         <p class="day-note">
-          17 daily S2K numbers at 10am via S2K login / report URL
-          (URL, login, HB vs DB, and timezone still waiting). Type or
-          paste here until that pull exists. No scrape, no invented login.
+          All 17 named S2K numbers for this day. Filled values also show
+          on the calendar cell. Empty slots stay blank — not 0.
         </p>
         <p id="day-filled" class="day-filled">0 of 17 filled</p>
         <div id="s2k-fields" class="s2k-fields"></div>
@@ -112,6 +111,6 @@
     </dialog>
 
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-    <script src="/app.js" type="module"></script>
+    <script src="/app.js?v=cells-17" type="module"></script>
   </body>
 </html>

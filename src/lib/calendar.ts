@@ -49,7 +49,7 @@ export function s2kSlots(): { index: number; label: string }[] {
   }));
 }
 
-/** Filled values shown on the month-grid day cell. Empty slots are omitted. */
+/** All 17 named slots can appear on the month-grid day cell. Empty slots are omitted. */
 export type GridField = {
   index: number;
   short: string;
@@ -61,11 +61,18 @@ export const GRID_FIELDS: GridField[] = [
   { index: 2, short: "Non fuel", tone: "nonfuel" },
   { index: 3, short: "Propane", tone: "propane" },
   { index: 4, short: "Safe drop", tone: "drop" },
+  { index: 5, short: "Diesel gal", tone: "diesel" },
   { index: 6, short: "Gallons", tone: "gallons" },
+  { index: 7, short: "Gas profit", tone: "gasprofit" },
   { index: 8, short: "C-store", tone: "cstore" },
   { index: 9, short: "Tax", tone: "tax" },
-  { index: 15, short: "Payouts", tone: "payouts" },
+  { index: 10, short: "Lotto", tone: "lotto" },
+  { index: 11, short: "Scratchers", tone: "scratch" },
+  { index: 12, short: "Lotto pay", tone: "lottopay" },
+  { index: 13, short: "Lottery pay", tone: "lotterypay" },
   { index: 14, short: "O/S", tone: "os" },
+  { index: 15, short: "Payouts", tone: "payouts" },
+  { index: 16, short: "Fuel dep", tone: "fueldep" },
   { index: 17, short: "Credit", tone: "credit" },
 ];
 

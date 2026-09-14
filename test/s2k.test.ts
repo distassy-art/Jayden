@@ -5,6 +5,7 @@ import {
   emptyS2k,
   filledCount,
   grandTotal,
+  GRID_FIELDS,
   gridCellMetrics,
   parseS2k,
   setS2kField,
@@ -93,7 +94,7 @@ test("sumS2k leaves unused slots null", () => {
   assert.equal(filledCount(sums), 1);
 });
 
-test("month-grid cells show filled majors and fields 2–3, skip empties", () => {
+test("month-grid cells show every filled S2K number and skip empties", () => {
   const s2k = emptyS2k();
   s2k[0] = 20891;
   s2k[3] = 9223;
@@ -107,8 +108,23 @@ test("month-grid cells show filled majors and fields 2–3, skip empties", () =>
   );
   s2k[1] = 12;
   s2k[2] = 3;
-  const withOptional = gridCellMetrics(s2k);
-  assert.equal(withOptional[1].short, "Non fuel");
-  assert.equal(withOptional[2].short, "Propane");
+  s2k[4] = 55.5;
+  s2k[16] = 100;
+  const more = gridCellMetrics(s2k);
+  assert.equal(more[1].short, "Non fuel");
+  assert.equal(more[2].short, "Propane");
+  assert.equal(more[3].short, "Safe drop");
+  assert.equal(more[4].short, "Diesel gal");
+  assert.equal(more.at(-1)?.short, "Credit");
   assert.equal(gridCellMetrics(emptyS2k()).length, 0);
+});
+
+test("grid fields cover all 17 named slots so a full day fits on the cell", () => {
+  assert.equal(GRID_FIELDS.length, 17);
+  assert.deepEqual(
+    GRID_FIELDS.map((field) => field.index),
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+  );
+  const full = emptyS2k().map((_, i) => i + 1);
+  assert.equal(gridCellMetrics(full).length, 17);
 });
