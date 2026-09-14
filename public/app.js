@@ -41,6 +41,7 @@ const state = {
   selectedDay: null,
   slots: [],
   cellFields: FALLBACK_CELL_FIELDS,
+  scans: {},
 };
 
 function isOwner() {
@@ -107,6 +108,7 @@ function applyState(data) {
   state.slots = data.slots ?? [];
   const fromApi = data.cellFields?.length ? data.cellFields : data.gridFields;
   state.cellFields = fromApi?.length ? fromApi : FALLBACK_CELL_FIELDS;
+  state.scans = data.scans && typeof data.scans === "object" ? data.scans : {};
   els.body.dataset.station = state.station;
   const meta = STATIONS[state.station];
   els.title.textContent = meta.title;
@@ -196,6 +198,12 @@ function gridCellMetrics(s2k) {
   }));
 }
 
+function scanPdfLink(iso, field) {
+  const href = state.scans?.[iso]?.[String(field)] ?? state.scans?.[iso]?.[field];
+  if (!href || (field !== 4 && field !== 12 && field !== 13)) return "";
+  return ` <a class="scan-pdf" href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer">PDF</a>`;
+}
+
 function fieldCount() {
   return state.slots.length || 17;
 }
@@ -277,9 +285,10 @@ function renderDayDetail(opts = {}) {
       const filled = value != null ? " filled" : "";
       const onSquare = onCell.has(n) ? " on-cell" : "";
       const title = escapeHtml(slot.label);
+      const scan = scanPdfLink(iso, n);
       return `<div class="s2k-row${filled}${onSquare}">
         <span class="slot"><span class="slot-num">${n}</span><span class="slot-name">${title}</span></span>
-        <span class="slot-val">${fmtNum(value)}</span>
+        <span class="slot-val">${fmtNum(value)}${scan}</span>
         <span class="slot-month">${fmtNum(monthTotals[i])}</span>
       </div>`;
     }),

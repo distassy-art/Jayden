@@ -475,7 +475,7 @@ h1 {
 
 .s2k-row {
   display: grid;
-  grid-template-columns: minmax(10rem, 1.8fr) 7.5rem 7.5rem;
+  grid-template-columns: minmax(10rem, 1.8fr) 9rem 7.5rem;
   gap: 12px;
   align-items: baseline;
   font-size: 13px;
@@ -519,10 +519,26 @@ h1 {
   font-weight: 700;
   text-align: right;
   color: var(--muted);
+  white-space: nowrap;
 }
 
 .s2k-row.filled .slot-val {
   color: var(--accent);
+}
+
+.scan-pdf {
+  margin-left: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  color: var(--accent-2);
+  border-bottom: 1px solid currentColor;
+}
+
+.scan-pdf:hover,
+.scan-pdf:focus-visible {
+  color: var(--ink);
 }
 
 .s2k-row.filled .slot-month {

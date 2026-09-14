@@ -24,6 +24,7 @@ import {
   parseHtmlTables,
 } from "./lib/parse.ts";
 import { sampleSeed } from "./lib/seed.ts";
+import { scansForMonth } from "./lib/scans.ts";
 
 const JSON_HEADERS = {
   "content-type": "application/json; charset=utf-8",
@@ -182,6 +183,7 @@ async function loadState(db: D1Database, params: URLSearchParams) {
     gridFields: GRID_FIELDS,
     days: currentDays,
     priorDays,
+    scans: scansForMonth(station, year, month),
     summary,
   };
 }
