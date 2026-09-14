@@ -237,8 +237,14 @@ function renderDayDetail(opts = {}) {
   const s2k = Array.from({ length: fieldCount() }, (_, i) => row?.s2k?.[i] ?? null);
   const onCell = cellIndexes();
   els.dayTitle.textContent = `${STATIONS[state.station].title.replace(" calendar", "")} · ${iso}`;
-  els.s2kFields.innerHTML = s2k
-    .map((value, i) => {
+  const monthTotals = state.summary?.totals ?? [];
+  els.s2kFields.innerHTML = [
+    `<div class="s2k-row head" aria-hidden="true">
+      <span class="slot"><span class="slot-num"></span><span class="slot-name">Field</span></span>
+      <span class="slot-val">This day</span>
+      <span class="slot-month">Month</span>
+    </div>`,
+    ...s2k.map((value, i) => {
       const n = i + 1;
       const slot = slotMeta(i);
       const filled = value != null ? " filled" : "";
@@ -247,9 +253,10 @@ function renderDayDetail(opts = {}) {
       return `<div class="s2k-row${filled}${onSquare}">
         <span class="slot"><span class="slot-num">${n}</span><span class="slot-name">${title}</span></span>
         <span class="slot-val">${fmtNum(value)}</span>
+        <span class="slot-month">${fmtNum(monthTotals[i])}</span>
       </div>`;
-    })
-    .join("");
+    }),
+  ].join("");
   els.dayDetail.hidden = false;
   if (opts.scroll) {
     els.dayDetail.scrollIntoView({ behavior: "smooth", block: "start" });

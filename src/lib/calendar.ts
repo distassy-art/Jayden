@@ -49,6 +49,28 @@ export function s2kSlots(): { index: number; label: string }[] {
   }));
 }
 
+/** One named field: this day's value plus that category's month total. */
+export type DayDetailRow = {
+  index: number;
+  label: string;
+  day: number | null;
+  month: number | null;
+};
+
+export function dayDetailRows(
+  dayS2k: S2kValues | null | undefined,
+  monthTotals: S2kValues | null | undefined,
+): DayDetailRow[] {
+  const day = dayS2k ?? emptyS2k();
+  const month = monthTotals ?? emptyS2k();
+  return S2K_FIELD_NAMES.map((label, i) => ({
+    index: i + 1,
+    label,
+    day: day[i] ?? null,
+    month: month[i] ?? null,
+  }));
+}
+
 /**
  * Temporary cell lines until Mina names the majors.
  * Do not treat this as a major list — only filled Gas Inv + Safe drop for now.

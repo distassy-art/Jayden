@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   comparablePriorDays,
+  dayDetailRows,
   emptyS2k,
   filledCount,
   grandTotal,
@@ -125,4 +126,23 @@ test("cell fields are not a guessed major list — only 1 and 4 until Mina names
   );
   const full = emptyS2k().map((_, i) => i + 1);
   assert.equal(gridCellMetrics(full).length, 2);
+});
+
+test("day details pair each named field with that category's month total", () => {
+  const dayVals = emptyS2k();
+  dayVals[0] = 20891;
+  dayVals[3] = 9223;
+  const monthVals = emptyS2k();
+  monthVals[0] = 171863;
+  monthVals[3] = 80327;
+  const rows = dayDetailRows(dayVals, monthVals);
+  assert.equal(rows.length, 17);
+  assert.equal(rows[0].label, "Gas Inventory from S2K");
+  assert.equal(rows[0].day, 20891);
+  assert.equal(rows[0].month, 171863);
+  assert.equal(rows[3].label, "Safe drop");
+  assert.equal(rows[3].day, 9223);
+  assert.equal(rows[3].month, 80327);
+  assert.equal(rows[1].day, null);
+  assert.equal(rows[1].month, null);
 });

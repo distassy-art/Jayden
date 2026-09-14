@@ -1,6 +1,6 @@
 # Farsai calendar
 
-Click a day to see the **17 named S2K fields** at the bottom of the page (read-only). Day cells show majors only — until Mina names them, filled Gas Inventory and Safe drop. Month-end shows **totals + trend only**, not 17 line items. Values live on the Worker (D1). Fields 18 and 19 were cancelled.
+Click a day to see the **17 named S2K fields** at the bottom of the page (read-only), each with that category’s **month total** beside it. Day cells show majors only — until Mina names them, filled Gas Inventory and Safe drop. Month-end shows **totals + trend only**, not 17 line items. Values live on the Worker (D1). Fields 18 and 19 were cancelled.
 
 ## Open it
 

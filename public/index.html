@@ -8,7 +8,7 @@
       name="description"
       content="Monthly Arco HB / Arco DB calendar with saved day numbers."
     />
-    <link rel="stylesheet" href="/styles.css?v=readonly-day" />
+    <link rel="stylesheet" href="/styles.css?v=day-month-totals" />
   </head>
   <body data-station="hb" data-role="farsai">
     <div class="page">
@@ -80,14 +80,13 @@
       <section id="day-detail" class="day-detail" hidden>
         <h2 id="day-title">Day</h2>
         <p class="day-note">
-          Read-only. Majors stay on the calendar cell once Mina names them.
-          The 17 named fields for this day are listed here. Empty stays blank
-          — not 0.
+          Read-only. Each named field shows this day’s number and the
+          month total for that category. Empty stays blank — not 0.
         </p>
         <div id="s2k-fields" class="s2k-fields"></div>
       </section>
     </div>
 
-    <script src="/app.js?v=readonly-day" type="module"></script>
+    <script src="/app.js?v=day-month-totals" type="module"></script>
   </body>
 </html>

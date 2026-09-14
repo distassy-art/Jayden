@@ -396,18 +396,27 @@ h1 {
 
 .s2k-fields {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0 24px;
+  grid-template-columns: 1fr;
+  gap: 0;
 }
 
 .s2k-row {
   display: grid;
-  grid-template-columns: minmax(8rem, 1.6fr) auto;
-  gap: 8px;
+  grid-template-columns: minmax(10rem, 1.8fr) 7.5rem 7.5rem;
+  gap: 12px;
   align-items: baseline;
   font-size: 13px;
-  padding: 7px 0;
+  padding: 8px 0;
   border-bottom: 1px dashed var(--line);
+}
+
+.s2k-row.head {
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding-bottom: 6px;
 }
 
 .s2k-fields .slot {
@@ -431,14 +440,20 @@ h1 {
   overflow-wrap: anywhere;
 }
 
-.s2k-fields .slot-val {
+.s2k-fields .slot-val,
+.s2k-fields .slot-month {
   font-variant-numeric: tabular-nums;
   font-weight: 700;
+  text-align: right;
   color: var(--muted);
 }
 
 .s2k-row.filled .slot-val {
   color: var(--accent);
+}
+
+.s2k-row.filled .slot-month {
+  color: var(--ink);
 }
 
 .s2k-row.on-cell .slot-name {
@@ -448,11 +463,15 @@ h1 {
 @media (max-width: 720px) {
   .top,
   .summary,
-  .owner-bar,
-  .s2k-fields {
+  .owner-bar {
     grid-template-columns: 1fr;
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .s2k-row {
+    grid-template-columns: minmax(8rem, 1fr) 5.5rem 5.5rem;
+    gap: 8px;
   }
 
   .grid button,
