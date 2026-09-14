@@ -120,6 +120,10 @@ h1 {
   color: #f4efe4;
 }
 
+.owner-bar[hidden] {
+  display: none !important;
+}
+
 .owner-kicker {
   margin: 0;
   font-size: 11px;
