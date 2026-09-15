@@ -288,7 +288,7 @@ h1 {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-auto-rows: min-content;
-  gap: 1px 6px;
+  gap: 1px 4px;
   width: 100%;
   flex: 1 0 auto;
   min-height: 0;
@@ -306,7 +306,7 @@ h1 {
   flex-direction: row;
   justify-content: space-between;
   align-items: baseline;
-  gap: 4px;
+  gap: 3px;
   min-width: 0;
   line-height: 1.2;
   min-height: 0;
@@ -327,8 +327,12 @@ h1 {
   font-weight: 700;
   color: var(--accent);
   white-space: nowrap;
-  overflow: visible;
-  flex-shrink: 0;
+  overflow: hidden;
+  text-overflow: clip;
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: right;
+  letter-spacing: -0.02em;
 }
 
 .grid button .metric.blank .metric-val {
@@ -614,6 +618,12 @@ h1 {
   color: var(--accent);
 }
 
+@media (max-width: 1280px) {
+  .grid button .metric-val {
+    font-size: 12px;
+  }
+}
+
 @media (max-width: 900px) {
   .top {
     flex-wrap: wrap;
@@ -634,7 +644,7 @@ h1 {
   }
 
   .grid button .metric-val {
-    font-size: 13px;
+    font-size: 12px;
   }
 }
 
