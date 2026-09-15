@@ -236,6 +236,12 @@ test("calendar UI is view-only with no Add control, file input, or Save", () => 
   }
   assert.match(html, /Display only/);
   assert.match(html, /filled numbers with short keys/);
+  assert.match(html, /cell-keys-3/);
+  assert.match(html, /class="key-legend"/);
+  const css = readFileSync(new URL("../public/styles.css", import.meta.url), "utf8");
+  assert.match(css, /\.grid button \.metric-key \{\s*font-size: 10px;/s);
+  assert.match(css, /\.grid button \.metric-val \{[\s\S]*?font-size: 13px;/);
+  assert.match(css, /grid-auto-rows: minmax\(158px/);
   assert.doesNotMatch(html, /id="add-field"/i);
   assert.doesNotMatch(html, /\bSave\b/);
   assert.match(js, /filter\(\(m\) => m\.value != null\)/);
