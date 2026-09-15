@@ -51,7 +51,6 @@ STORES = [
         'pdf_mode': 'single',
         'pdf_folder': 'Clients/BIG DADDY/42674 (Tustin)/2026-09 September/Daily Summary',
     },
-    {'key': '42642', 'pdf_mode': 'bd', 'tso': '42642'},
     {'key': '42280', 'pdf_mode': 'bd', 'tso': '42280'},
     {'key': '42438', 'pdf_mode': 'bd', 'tso': '42438'},
     {'key': '42281', 'pdf_mode': 'bd', 'tso': '42281'},

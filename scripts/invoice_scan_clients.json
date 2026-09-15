@@ -192,16 +192,6 @@
       "scans_layout": "month_then_scans"
     },
     {
-      "name": "La Mesa",
-      "station": "42642",
-      "dest": "Clients/BIG DADDY/42642 (La Mesa)",
-      "drive": "onedrive",
-      "username": null,
-      "password_key": null,
-      "note": "No separate Client-logins row; Scans folder still OCR-renamed on Mina OD",
-      "scans_layout": "month_then_scans"
-    },
-    {
       "name": "Tustin",
       "station": "42674",
       "dest": "Clients/BIG DADDY/42674 (Tustin)",
