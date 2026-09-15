@@ -135,9 +135,10 @@ test("day squares list all 17 named fields in field order", () => {
     CELL_FIELDS.map((field) => field.index),
     [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
   );
-  assert.equal(CELL_FIELDS[0].short, "Gas Inv");
-  assert.equal(CELL_FIELDS[5].short, "Gallons");
-  assert.equal(CELL_FIELDS[7].short, "C-store");
+  assert.equal(CELL_FIELDS[0].key, "GI");
+  assert.equal(CELL_FIELDS[5].key, "GL");
+  assert.equal(CELL_FIELDS[7].key, "CS");
+  assert.ok(CELL_FIELDS.every((field) => /^[A-Z]{1,3}$/.test(field.key)));
   const full = emptyS2k().map((_, i) => i + 1);
   assert.equal(gridCellMetrics(full).length, 17);
   assert.equal(filledCellMetrics(full).length, 17);
@@ -174,17 +175,35 @@ test("month footer omits Gas Inventory; day cells and details still include it",
   assert.match(js, /includeInMonthTotals\(n\) \? fmtNum\(monthTotals\[i\]\) : ""/);
   const gridChunk = js.slice(js.indexOf("function renderGrid"), js.indexOf("function gridCellMetrics"));
   assert.match(gridChunk, /fmtNum\(m\.value\)/);
+  assert.match(gridChunk, /metric-key/);
+  assert.match(gridChunk, /m\.key/);
   assert.doesNotMatch(gridChunk, /includeInMonthTotals/);
-  assert.match(js, /index: 1, short: "Gas Inv"/);
+  assert.doesNotMatch(gridChunk, /scan-pdf/);
+  assert.match(js, /index: 1, short: "Gas Inv", key: "GI"/);
   assert.match(js, /const FOOTER_FIELDS = \[/);
   assert.match(js, /const FALLBACK_CELL_FIELDS = \[/);
   const cellBlock = js.slice(
     js.indexOf("const FALLBACK_CELL_FIELDS"),
     js.indexOf("const FOOTER_FIELDS"),
   );
-  assert.match(cellBlock, /index: 2, short: "Non-int"/);
-  assert.match(cellBlock, /index: 17, short: "Credit"/);
+  assert.match(cellBlock, /index: 2, short: "Non-int", key: "NI"/);
+  assert.match(cellBlock, /index: 17, short: "Credit", key: "CR"/);
   assert.equal((cellBlock.match(/index: \d+/g) || []).length, 17);
+});
+
+test("day-cell keys are 1 to 3 letters, not full field names", () => {
+  const js = readFileSync(new URL("../public/app.js", import.meta.url), "utf8");
+  const cellBlock = js.slice(
+    js.indexOf("const FALLBACK_CELL_FIELDS"),
+    js.indexOf("const FOOTER_FIELDS"),
+  );
+  const keys = [...cellBlock.matchAll(/key: "([A-Z]{1,3})"/g)].map((m) => m[1]);
+  assert.equal(keys.length, 17);
+  assert.equal(new Set(keys).size, 17);
+  const gridChunk = js.slice(js.indexOf("function renderGrid"), js.indexOf("function gridCellMetrics"));
+  assert.match(gridChunk, /metric-key/);
+  assert.match(gridChunk, /escapeHtml\(m\.key\)/);
+  assert.doesNotMatch(gridChunk, /metric-label/);
 });
 
 test("Trend compares gallons and C-store to this month’s daily average", () => {
@@ -216,7 +235,7 @@ test("calendar UI is view-only with no Add control, file input, or Save", () => 
     assert.doesNotMatch(src, /type="file"/i);
   }
   assert.match(html, /Display only/);
-  assert.match(html, /every filled field of the 17/);
+  assert.match(html, /filled numbers with short keys/);
   assert.doesNotMatch(html, /id="add-field"/i);
   assert.doesNotMatch(html, /\bSave\b/);
   assert.match(js, /filter\(\(m\) => m\.value != null\)/);

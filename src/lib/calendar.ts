@@ -73,44 +73,46 @@ export function dayDetailRows(
 
 /**
  * All 17 named fields on the day square.
+ * Cells use short 1–3 letter keys; full names stay in day details.
  * Show every filled value; empty stays blank — do not invent 0.
  */
 export type GridField = {
   index: number;
   short: string;
+  key: string;
   tone: string;
 };
 
 export const CELL_FIELDS: GridField[] = [
-  { index: 1, short: "Gas Inv", tone: "gas" },
-  { index: 2, short: "Non-int", tone: "nonint" },
-  { index: 3, short: "Propane", tone: "propane" },
-  { index: 4, short: "Safe drop", tone: "drop" },
-  { index: 5, short: "Diesel", tone: "diesel" },
-  { index: 6, short: "Gallons", tone: "gallons" },
-  { index: 7, short: "Profit", tone: "profit" },
-  { index: 8, short: "C-store", tone: "cstore" },
-  { index: 9, short: "Tax1+4", tone: "tax" },
-  { index: 10, short: "Lotto", tone: "lotto" },
-  { index: 11, short: "Scratch", tone: "scratch" },
-  { index: 12, short: "Lotto pay", tone: "lottopay" },
-  { index: 13, short: "Lottery", tone: "lottery" },
-  { index: 14, short: "O/S", tone: "os" },
-  { index: 15, short: "Payouts", tone: "payouts" },
-  { index: 16, short: "Fuel dep", tone: "fueldep" },
-  { index: 17, short: "Credit", tone: "credit" },
+  { index: 1, short: "Gas Inv", key: "GI", tone: "gas" },
+  { index: 2, short: "Non-int", key: "NI", tone: "nonint" },
+  { index: 3, short: "Propane", key: "PR", tone: "propane" },
+  { index: 4, short: "Safe drop", key: "SD", tone: "drop" },
+  { index: 5, short: "Diesel", key: "DG", tone: "diesel" },
+  { index: 6, short: "Gallons", key: "GL", tone: "gallons" },
+  { index: 7, short: "Profit", key: "GP", tone: "profit" },
+  { index: 8, short: "C-store", key: "CS", tone: "cstore" },
+  { index: 9, short: "Tax1+4", key: "TX", tone: "tax" },
+  { index: 10, short: "Lotto", key: "LS", tone: "lotto" },
+  { index: 11, short: "Scratch", key: "SC", tone: "scratch" },
+  { index: 12, short: "Lotto pay", key: "LP", tone: "lottopay" },
+  { index: 13, short: "Lottery", key: "LY", tone: "lottery" },
+  { index: 14, short: "O/S", key: "OS", tone: "os" },
+  { index: 15, short: "Payouts", key: "PO", tone: "payouts" },
+  { index: 16, short: "Fuel dep", key: "FD", tone: "fueldep" },
+  { index: 17, short: "Credit", key: "CR", tone: "credit" },
 ];
 
 /** Month footer stays the 8 majors (Gas Inventory is then omitted from sums). */
 export const FOOTER_FIELDS: GridField[] = [
-  { index: 1, short: "Gas Inv", tone: "gas" },
-  { index: 4, short: "Safe drop", tone: "drop" },
-  { index: 6, short: "Gallons", tone: "gallons" },
-  { index: 8, short: "C-store", tone: "cstore" },
-  { index: 9, short: "Tax1+4", tone: "tax" },
-  { index: 15, short: "Payouts", tone: "payouts" },
-  { index: 14, short: "O/S", tone: "os" },
-  { index: 17, short: "Credit", tone: "credit" },
+  { index: 1, short: "Gas Inv", key: "GI", tone: "gas" },
+  { index: 4, short: "Safe drop", key: "SD", tone: "drop" },
+  { index: 6, short: "Gallons", key: "GL", tone: "gallons" },
+  { index: 8, short: "C-store", key: "CS", tone: "cstore" },
+  { index: 9, short: "Tax1+4", key: "TX", tone: "tax" },
+  { index: 15, short: "Payouts", key: "PO", tone: "payouts" },
+  { index: 14, short: "O/S", key: "OS", tone: "os" },
+  { index: 17, short: "Credit", key: "CR", tone: "credit" },
 ];
 
 export const GRID_FIELDS = CELL_FIELDS;
@@ -205,8 +207,8 @@ export const CSTORE_INDEX = 8;
 
 /** Trend compares these to this month's daily average (not Gas Inventory). */
 export const TREND_FIELDS: GridField[] = [
-  { index: GALLONS_INDEX, short: "Gallons", tone: "gallons" },
-  { index: CSTORE_INDEX, short: "C-store", tone: "cstore" },
+  { index: GALLONS_INDEX, short: "Gallons", key: "GL", tone: "gallons" },
+  { index: CSTORE_INDEX, short: "C-store", key: "CS", tone: "cstore" },
 ];
 
 export function includeInMonthTotals(index: number): boolean {
