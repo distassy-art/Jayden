@@ -165,6 +165,34 @@ test("day details pair each named field with that category's month total", () =>
   assert.ok(!rest.some((row) => [1, 4].includes(row.index)));
 });
 
+test("month footer omits Gas Inventory; day cells and details still include it", () => {
+  const js = readFileSync(new URL("../public/app.js", import.meta.url), "utf8");
+  assert.match(js, /const GAS_INV_INDEX = 1/);
+  assert.match(js, /function includeInMonthTotals\(index\) \{\s*return index !== GAS_INV_INDEX;/s);
+  assert.match(js, /\.filter\(\(field\) => includeInMonthTotals\(field\.index\)\)/);
+  assert.match(js, /includeInMonthTotals\(n\) \? fmtNum\(monthTotals\[i\]\) : ""/);
+  const gridChunk = js.slice(js.indexOf("function renderGrid"), js.indexOf("function gridCellMetrics"));
+  assert.match(gridChunk, /fmtNum\(m\.value\)/);
+  assert.doesNotMatch(gridChunk, /includeInMonthTotals/);
+  assert.match(js, /index: 1, short: "Gas Inv"/);
+});
+
+test("Trend compares gallons and C-store to this month’s daily average", () => {
+  const js = readFileSync(new URL("../public/app.js", import.meta.url), "utf8");
+  const trendBlock = js.slice(
+    js.indexOf("const TREND_FIELDS"),
+    js.indexOf("const FALLBACK_CELL_FIELDS"),
+  );
+  assert.match(trendBlock, /index: 6, short: "Gallons"/);
+  assert.match(trendBlock, /index: 8, short: "C-store"/);
+  assert.doesNotMatch(trendBlock, /index: 1/);
+  assert.match(js, /function monthAverage/);
+  assert.match(js, /function renderTrend/);
+  assert.match(js, /vs month avg/);
+  assert.match(js, /openDay[\s\S]*renderTrend/);
+  assert.match(js, /closeDay[\s\S]*renderTrend/);
+});
+
 test("calendar UI is view-only with no Add control, file input, or Save", () => {
   const html = readFileSync(new URL("../public/index.html", import.meta.url), "utf8");
   const js = readFileSync(new URL("../public/app.js", import.meta.url), "utf8");

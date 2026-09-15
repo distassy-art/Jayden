@@ -18,6 +18,15 @@ const STATIONS = {
   db: { title: "DB calendar", sub: "Arco DB · store 42352" },
 };
 
+/** Canonical field 1 is a close snapshot — show on cells/details, not in month sums. */
+const GAS_INV_INDEX = 1;
+
+/** Trend: Total Gallons Sold and Net Cstore Sales vs this month’s daily average. */
+const TREND_FIELDS = [
+  { index: 6, short: "Gallons", tone: "gallons" },
+  { index: 8, short: "C-store", tone: "cstore" },
+];
+
 /** Mina's 8 cell majors. Filled values show; empty stays blank. */
 const FALLBACK_CELL_FIELDS = [
   { index: 1, short: "Gas Inv", tone: "gas" },
@@ -219,9 +228,36 @@ function cellIndexes() {
   return new Set((state.cellFields || FALLBACK_CELL_FIELDS).map((f) => f.index));
 }
 
+function includeInMonthTotals(index) {
+  return index !== GAS_INV_INDEX;
+}
+
+function monthAverage(index) {
+  if (!includeInMonthTotals(index)) return null;
+  const fromApi = state.summary?.averages?.[index - 1];
+  if (fromApi != null) return fromApi;
+  const vals = state.days.map((d) => d.s2k?.[index - 1]).filter((v) => v != null);
+  if (!vals.length) return null;
+  return vals.reduce((a, b) => a + b, 0) / vals.length;
+}
+
+function trendCompareRow() {
+  if (state.selectedDay) {
+    return state.days.find((d) => d.day === state.selectedDay) ?? null;
+  }
+  for (let i = state.days.length - 1; i >= 0; i--) {
+    const s2k = state.days[i].s2k;
+    if (s2k?.[TREND_FIELDS[0].index - 1] != null || s2k?.[TREND_FIELDS[1].index - 1] != null) {
+      return state.days[i];
+    }
+  }
+  return null;
+}
+
 function renderSummary() {
   const totals = state.summary?.totals ?? [];
   const rows = (state.cellFields || FALLBACK_CELL_FIELDS)
+    .filter((field) => includeInMonthTotals(field.index))
     .map((field) => {
       const value = totals[field.index - 1];
       if (value == null) return null;
@@ -236,16 +272,44 @@ function renderSummary() {
         )
         .join("")
     : `<div><dt>Totals</dt><dd></dd></div>`;
-  const trend = state.summary?.trend;
-  if (!trend || trend.delta == null) {
+  renderTrend();
+}
+
+function renderTrend() {
+  const row = trendCompareRow();
+  const lines = TREND_FIELDS.map((field) => {
+    const avg = monthAverage(field.index);
+    const value = row?.s2k?.[field.index - 1] ?? null;
+    let klass = "trend-row";
+    let compare = "No value this day";
+    if (value != null && avg != null) {
+      const delta = value - avg;
+      const pct = avg === 0 ? null : delta / Math.abs(avg);
+      const above = delta >= 0;
+      klass += above ? " up" : " down";
+      const pctTxt = pct == null ? "" : ` (${Math.abs(pct * 100).toFixed(1)}%)`;
+      compare = `${above ? "above" : "below"} avg ${fmtNum(avg)}${pctTxt}`;
+    } else if (avg != null) {
+      compare = `avg ${fmtNum(avg)}`;
+    }
+    return `<div class="${klass}" data-tone="${escapeHtml(field.tone)}">
+      <dt>${escapeHtml(field.short)}</dt>
+      <dd>${fmtNum(value)}<small>${compare}</small></dd>
+    </div>`;
+  });
+  const hasAvg = TREND_FIELDS.some((field) => monthAverage(field.index) != null);
+  if (!hasAvg) {
     els.trend.className = "trend";
-    els.trend.innerHTML = `No prior period yet.<small>${trend?.label ?? ""}</small>`;
+    els.trend.innerHTML = `No gallons or C-store yet.<small>vs this month’s daily average</small>`;
     return;
   }
-  const up = trend.delta >= 0;
-  els.trend.className = `trend ${up ? "up" : "down"}`;
-  const pct = trend.pct == null ? "" : ` (${Math.abs(trend.pct * 100).toFixed(1)}%)`;
-  els.trend.innerHTML = `${up ? "Up" : "Down"} ${fmtNum(Math.abs(trend.delta))}${pct}<small>${trend.label}</small>`;
+  const which = state.selectedDay
+    ? `${state.selectedDay} vs month avg`
+    : row
+      ? `${row.day} vs month avg`
+      : "vs this month’s daily average";
+  els.trend.className = "trend";
+  els.trend.innerHTML = `<small>${escapeHtml(which)}</small>${lines.join("")}`;
 }
 
 function openDay(iso) {
@@ -255,12 +319,14 @@ function openDay(iso) {
   }
   state.selectedDay = iso;
   renderGrid();
+  renderTrend();
   renderDayDetail({ scroll: true });
 }
 
 function closeDay() {
   state.selectedDay = null;
   renderGrid();
+  renderTrend();
   renderDayDetail();
 }
 
@@ -289,10 +355,11 @@ function renderDayDetail(opts = {}) {
       const onSquare = onCell.has(n) ? " on-cell" : "";
       const title = escapeHtml(slot.label);
       const scan = scanPdfLink(iso, n);
+      const month = includeInMonthTotals(n) ? fmtNum(monthTotals[i]) : "";
       return `<div class="s2k-row${filled}${onSquare}">
         <span class="slot"><span class="slot-num">${n}</span><span class="slot-name">${title}</span></span>
         <span class="slot-val">${fmtNum(value)}${scan}</span>
-        <span class="slot-month">${fmtNum(monthTotals[i])}</span>
+        <span class="slot-month">${month}</span>
       </div>`;
     }),
   ].join("");

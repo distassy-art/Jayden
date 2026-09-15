@@ -3,11 +3,13 @@ import test from "node:test";
 import {
   comparablePriorDays,
   emptyS2k,
+  fieldDailyAverage,
   isOwnerSearch,
   parseStation,
   roleFromSearch,
   sumMetrics,
   summarizeMonth,
+  vsAverage,
   type DayRow,
 } from "../src/lib/calendar.ts";
 
@@ -84,4 +86,24 @@ test("full month trends against the whole prior month", () => {
   assert.equal(summary.trend.delta, null);
   assert.equal(summary.totals[0], 3720);
   assert.equal(summary.priorTotals[0], 3100);
+});
+
+test("month averages omit Gas Inventory and mean filled gallons and C-store days", () => {
+  const a = day("2026-09-01", 1000);
+  a.s2k[0] = 20891;
+  a.s2k[5] = 100;
+  a.s2k[7] = 50;
+  const b = day("2026-09-02", 1100);
+  b.s2k[0] = 21000;
+  b.s2k[5] = 200;
+  b.s2k[7] = 70;
+  const summary = summarizeMonth(2026, 9, [a, b], []);
+  assert.equal(fieldDailyAverage([a, b], 1), null);
+  assert.equal(summary.averages[0], null);
+  assert.equal(summary.averages[5], 150);
+  assert.equal(summary.averages[7], 60);
+  assert.equal(summary.totals[0], 41891);
+  assert.deepEqual(vsAverage(200, 150), { delta: 50, pct: 0.3333 });
+  assert.deepEqual(vsAverage(50, 60), { delta: -10, pct: -0.1667 });
+  assert.deepEqual(vsAverage(null, 150), { delta: null, pct: null });
 });

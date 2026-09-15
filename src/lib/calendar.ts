@@ -178,6 +178,52 @@ export function grandTotal(fields: S2kValues): number | null {
   return any ? round2(sum) : null;
 }
 
+/** Close snapshot — keep on day cells/details, never in month sums or Trend. */
+export const GAS_INV_INDEX = 1;
+export const GALLONS_INDEX = 6;
+export const CSTORE_INDEX = 8;
+
+/** Trend compares these to this month's daily average (not Gas Inventory). */
+export const TREND_FIELDS: GridField[] = [
+  { index: GALLONS_INDEX, short: "Gallons", tone: "gallons" },
+  { index: CSTORE_INDEX, short: "C-store", tone: "cstore" },
+];
+
+export function includeInMonthTotals(index: number): boolean {
+  return index !== GAS_INV_INDEX;
+}
+
+/** Mean of filled days for a 1-based S2K field. Gas Inventory is never averaged. */
+export function fieldDailyAverage(
+  days: DayRow[],
+  index: number,
+): number | null {
+  if (!includeInMonthTotals(index)) return null;
+  const vals: number[] = [];
+  for (const day of days) {
+    const value = day.s2k?.[index - 1];
+    if (value != null) vals.push(value);
+  }
+  if (!vals.length) return null;
+  return round2(vals.reduce((a, b) => a + b, 0) / vals.length);
+}
+
+export function monthAverages(days: DayRow[]): S2kValues {
+  return Array.from({ length: S2K_COUNT }, (_, i) =>
+    fieldDailyAverage(days, i + 1),
+  );
+}
+
+export function vsAverage(
+  value: number | null,
+  average: number | null,
+): { delta: number | null; pct: number | null } {
+  if (value == null || average == null) return { delta: null, pct: null };
+  const delta = round2(value - average);
+  const pct = average === 0 ? null : round4(delta / Math.abs(average));
+  return { delta, pct };
+}
+
 export const STATIONS: Record<
   Station,
   { id: Station; label: string; arco: string; storeId: string }
@@ -371,6 +417,7 @@ export type MonthSummary = {
   month: number;
   totals: S2kValues;
   priorTotals: S2kValues;
+  averages: S2kValues;
   grand: number | null;
   priorGrand: number | null;
   trend: Trend;
@@ -394,6 +441,7 @@ export function summarizeMonth(
     month,
     totals,
     priorTotals,
+    averages: monthAverages(currentDays),
     grand: null,
     priorGrand: null,
     trend: rollupTrend(null, null, comparable),
