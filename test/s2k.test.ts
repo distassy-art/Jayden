@@ -99,16 +99,18 @@ test("sumS2k leaves unused slots null", () => {
   assert.equal(filledCount(sums), 1);
 });
 
-test("month-grid cells show filled majors and leave empty blank", () => {
+test("month-grid cells show every filled field of the 17 and leave empty blank", () => {
   const s2k = emptyS2k();
   s2k[0] = 20891;
+  s2k[1] = 222.07;
   s2k[3] = 9223;
   const lines = gridCellMetrics(s2k);
-  assert.equal(lines.length, 8);
+  assert.equal(lines.length, 17);
   assert.deepEqual(
     filledCellMetrics(s2k).map((row) => [row.index, row.short, row.value]),
     [
       [1, "Gas Inv", 20891],
+      [2, "Non-int", 222.07],
       [4, "Safe drop", 9223],
     ],
   );
@@ -120,26 +122,25 @@ test("month-grid cells show filled majors and leave empty blank", () => {
   const filled = filledCellMetrics(s2k);
   assert.deepEqual(
     filled.map((row) => row.short),
-    ["Gas Inv", "Safe drop", "Gallons", "C-store", "Tax1+4", "Payouts", "Credit"],
+    ["Gas Inv", "Non-int", "Safe drop", "Gallons", "C-store", "Tax1+4", "Payouts", "Credit"],
   );
-  assert.equal(gridCellMetrics(emptyS2k()).length, 8);
+  assert.equal(gridCellMetrics(emptyS2k()).length, 17);
   assert.equal(filledCellMetrics(emptyS2k()).length, 0);
   assert.ok(gridCellMetrics(emptyS2k()).every((row) => row.value == null));
 });
 
-test("day squares use Mina's 8 color-coded majors", () => {
-  assert.equal(CELL_FIELDS.length, 8);
+test("day squares list all 17 named fields in field order", () => {
+  assert.equal(CELL_FIELDS.length, 17);
   assert.deepEqual(
     CELL_FIELDS.map((field) => field.index),
-    [1, 4, 6, 8, 9, 15, 14, 17],
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
   );
-  assert.deepEqual(
-    CELL_FIELDS.map((field) => field.short),
-    ["Gas Inv", "Safe drop", "Gallons", "C-store", "Tax1+4", "Payouts", "O/S", "Credit"],
-  );
+  assert.equal(CELL_FIELDS[0].short, "Gas Inv");
+  assert.equal(CELL_FIELDS[5].short, "Gallons");
+  assert.equal(CELL_FIELDS[7].short, "C-store");
   const full = emptyS2k().map((_, i) => i + 1);
-  assert.equal(gridCellMetrics(full).length, 8);
-  assert.equal(filledCellMetrics(full).length, 8);
+  assert.equal(gridCellMetrics(full).length, 17);
+  assert.equal(filledCellMetrics(full).length, 17);
 });
 
 test("day details pair each named field with that category's month total", () => {
@@ -175,6 +176,15 @@ test("month footer omits Gas Inventory; day cells and details still include it",
   assert.match(gridChunk, /fmtNum\(m\.value\)/);
   assert.doesNotMatch(gridChunk, /includeInMonthTotals/);
   assert.match(js, /index: 1, short: "Gas Inv"/);
+  assert.match(js, /const FOOTER_FIELDS = \[/);
+  assert.match(js, /const FALLBACK_CELL_FIELDS = \[/);
+  const cellBlock = js.slice(
+    js.indexOf("const FALLBACK_CELL_FIELDS"),
+    js.indexOf("const FOOTER_FIELDS"),
+  );
+  assert.match(cellBlock, /index: 2, short: "Non-int"/);
+  assert.match(cellBlock, /index: 17, short: "Credit"/);
+  assert.equal((cellBlock.match(/index: \d+/g) || []).length, 17);
 });
 
 test("Trend compares gallons and C-store to this month’s daily average", () => {
@@ -206,7 +216,7 @@ test("calendar UI is view-only with no Add control, file input, or Save", () => 
     assert.doesNotMatch(src, /type="file"/i);
   }
   assert.match(html, /Display only/);
-  assert.match(html, /filled majors/);
+  assert.match(html, /every filled field of the 17/);
   assert.doesNotMatch(html, /id="add-field"/i);
   assert.doesNotMatch(html, /\bSave\b/);
   assert.match(js, /filter\(\(m\) => m\.value != null\)/);

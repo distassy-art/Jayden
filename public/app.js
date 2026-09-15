@@ -27,8 +27,29 @@ const TREND_FIELDS = [
   { index: 8, short: "C-store", tone: "cstore" },
 ];
 
-/** Mina's 8 cell majors. Filled values show; empty stays blank. */
+/** All 17 named fields on the day square. Filled values show; empty stays blank. */
 const FALLBACK_CELL_FIELDS = [
+  { index: 1, short: "Gas Inv", tone: "gas" },
+  { index: 2, short: "Non-int", tone: "nonint" },
+  { index: 3, short: "Propane", tone: "propane" },
+  { index: 4, short: "Safe drop", tone: "drop" },
+  { index: 5, short: "Diesel", tone: "diesel" },
+  { index: 6, short: "Gallons", tone: "gallons" },
+  { index: 7, short: "Profit", tone: "profit" },
+  { index: 8, short: "C-store", tone: "cstore" },
+  { index: 9, short: "Tax1+4", tone: "tax" },
+  { index: 10, short: "Lotto", tone: "lotto" },
+  { index: 11, short: "Scratch", tone: "scratch" },
+  { index: 12, short: "Lotto pay", tone: "lottopay" },
+  { index: 13, short: "Lottery", tone: "lottery" },
+  { index: 14, short: "O/S", tone: "os" },
+  { index: 15, short: "Payouts", tone: "payouts" },
+  { index: 16, short: "Fuel dep", tone: "fueldep" },
+  { index: 17, short: "Credit", tone: "credit" },
+];
+
+/** Month footer stays the 8 majors; Gas Inventory is then omitted from sums. */
+const FOOTER_FIELDS = [
   { index: 1, short: "Gas Inv", tone: "gas" },
   { index: 4, short: "Safe drop", tone: "drop" },
   { index: 6, short: "Gallons", tone: "gallons" },
@@ -116,7 +137,8 @@ function applyState(data) {
   state.summary = data.summary;
   state.slots = data.slots ?? [];
   const fromApi = data.cellFields?.length ? data.cellFields : data.gridFields;
-  state.cellFields = fromApi?.length ? fromApi : FALLBACK_CELL_FIELDS;
+  state.cellFields =
+    fromApi?.length === 17 ? fromApi : FALLBACK_CELL_FIELDS;
   state.scans = data.scans && typeof data.scans === "object" ? data.scans : {};
   els.body.dataset.station = state.station;
   const meta = STATIONS[state.station];
@@ -256,7 +278,7 @@ function trendCompareRow() {
 
 function renderSummary() {
   const totals = state.summary?.totals ?? [];
-  const rows = (state.cellFields || FALLBACK_CELL_FIELDS)
+  const rows = FOOTER_FIELDS
     .filter((field) => includeInMonthTotals(field.index))
     .map((field) => {
       const value = totals[field.index - 1];

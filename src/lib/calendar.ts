@@ -72,9 +72,8 @@ export function dayDetailRows(
 }
 
 /**
- * Mina's 8 color-coded majors on the day square.
- * Put filled majors on the cell; empty stays blank — do not invent 0.
- * The 17 named fields stay in the bottom day list.
+ * All 17 named fields on the day square.
+ * Show every filled value; empty stays blank — do not invent 0.
  */
 export type GridField = {
   index: number;
@@ -83,6 +82,27 @@ export type GridField = {
 };
 
 export const CELL_FIELDS: GridField[] = [
+  { index: 1, short: "Gas Inv", tone: "gas" },
+  { index: 2, short: "Non-int", tone: "nonint" },
+  { index: 3, short: "Propane", tone: "propane" },
+  { index: 4, short: "Safe drop", tone: "drop" },
+  { index: 5, short: "Diesel", tone: "diesel" },
+  { index: 6, short: "Gallons", tone: "gallons" },
+  { index: 7, short: "Profit", tone: "profit" },
+  { index: 8, short: "C-store", tone: "cstore" },
+  { index: 9, short: "Tax1+4", tone: "tax" },
+  { index: 10, short: "Lotto", tone: "lotto" },
+  { index: 11, short: "Scratch", tone: "scratch" },
+  { index: 12, short: "Lotto pay", tone: "lottopay" },
+  { index: 13, short: "Lottery", tone: "lottery" },
+  { index: 14, short: "O/S", tone: "os" },
+  { index: 15, short: "Payouts", tone: "payouts" },
+  { index: 16, short: "Fuel dep", tone: "fueldep" },
+  { index: 17, short: "Credit", tone: "credit" },
+];
+
+/** Month footer stays the 8 majors (Gas Inventory is then omitted from sums). */
+export const FOOTER_FIELDS: GridField[] = [
   { index: 1, short: "Gas Inv", tone: "gas" },
   { index: 4, short: "Safe drop", tone: "drop" },
   { index: 6, short: "Gallons", tone: "gallons" },
@@ -115,7 +135,7 @@ export function gridCellMetrics(s2k: S2kValues | null | undefined): GridMetric[]
   }));
 }
 
-/** Majors that have a value — these are what the day square shows. */
+/** Filled fields of the 17 — these are what the day square shows. */
 export function filledCellMetrics(s2k: S2kValues | null | undefined): GridMetric[] {
   return gridCellMetrics(s2k).filter((row) => row.value != null);
 }

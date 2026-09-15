@@ -220,11 +220,11 @@ h1 {
 }
 
 .calendar-wrap {
-  padding: 8px;
+  padding: 6px;
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  min-height: 0;
+  min-height: 48vh;
 }
 
 .dow,
@@ -254,18 +254,20 @@ h1 {
   height: 100%;
   border: 1px solid var(--line);
   background: #fff;
-  border-radius: 10px;
-  padding: 3px 4px 3px;
+  border-radius: 8px;
+  padding: 2px 3px 2px;
   text-align: left;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
   overflow: hidden;
+  container-type: size;
+  container-name: daycell;
 }
 
 .grid button .dom {
   font-weight: 700;
-  font-size: clamp(10px, 0.85vw, 12px);
+  font-size: clamp(9px, 8cqh, 11px);
   line-height: 1;
   flex-shrink: 0;
 }
@@ -280,7 +282,7 @@ h1 {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-auto-rows: min-content;
-  gap: 1px 4px;
+  gap: 0 4px;
   width: 100%;
   flex: 1;
   min-height: 0;
@@ -295,19 +297,22 @@ h1 {
 
 .grid button .metric {
   display: flex;
-  flex-direction: column;
-  gap: 0;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 3px;
   min-width: 0;
-  line-height: 1.05;
+  line-height: 1.12;
   min-height: 0;
   overflow: hidden;
 }
 
 .grid button .metric-label {
-  font-size: 10px;
+  font-size: clamp(7px, 6.2cqh, 9px);
   color: var(--muted);
   white-space: nowrap;
   overflow: hidden;
+  min-width: 0;
 }
 
 .grid button .metric-label .metric-num {
@@ -317,11 +322,12 @@ h1 {
 
 .grid button .metric-val {
   font-variant-numeric: tabular-nums;
-  font-size: 13px;
+  font-size: clamp(8px, 7.2cqh, 10px);
   font-weight: 700;
   color: var(--accent);
   white-space: nowrap;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .grid button .metric.blank .metric-val {
@@ -336,6 +342,15 @@ h1 {
 .grid button .metric[data-tone="payouts"] .metric-val { color: #a33b2b; }
 .grid button .metric[data-tone="os"] .metric-val { color: #875400; }
 .grid button .metric[data-tone="credit"] .metric-val { color: #163a5f; }
+.grid button .metric[data-tone="nonint"] .metric-val { color: #3b6d8c; }
+.grid button .metric[data-tone="propane"] .metric-val { color: #7a4e8c; }
+.grid button .metric[data-tone="diesel"] .metric-val { color: #2a5f7a; }
+.grid button .metric[data-tone="profit"] .metric-val { color: #1f6b4a; }
+.grid button .metric[data-tone="lotto"] .metric-val { color: #8a3d5c; }
+.grid button .metric[data-tone="scratch"] .metric-val { color: #a15a20; }
+.grid button .metric[data-tone="lottopay"] .metric-val { color: #8a3d5c; }
+.grid button .metric[data-tone="lottery"] .metric-val { color: #6b3d7a; }
+.grid button .metric[data-tone="fueldep"] .metric-val { color: #4a5a2e; }
 .grid button .metric[data-tone="other"] .metric-val { color: var(--ink); }
 
 .grid button.empty {
@@ -462,9 +477,9 @@ h1 {
 .trend-row[data-tone="cstore"] dt { color: #9a4a1c; }
 
 .day-detail {
-  padding: 10px 14px 12px;
+  padding: 8px 12px 10px;
   flex-shrink: 0;
-  max-height: 34vh;
+  max-height: 26vh;
   overflow: auto;
 }
 
@@ -596,11 +611,11 @@ h1 {
   }
 
   .grid button .metric-label {
-    font-size: 9px;
+    font-size: clamp(7px, 6.2cqh, 8px);
   }
 
   .grid button .metric-val {
-    font-size: 11px;
+    font-size: clamp(8px, 7.2cqh, 9px);
   }
 }
 
