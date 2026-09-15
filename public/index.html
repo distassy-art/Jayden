@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Farsai calendar</title>
+    <meta
+      name="description"
+      content="Monthly Arco HB / Arco DB calendar with saved day numbers."
+    />
+    <link rel="stylesheet" href="/styles.css?v=cell-keys-4" />
+  </head>
+  <body data-station="hb" data-role="farsai">
+    <div class="page">
+      <header class="top">
+        <div class="brand">
+          <p class="eyebrow" id="role-label">Farsai</p>
+          <h1 id="title">HB calendar</h1>
+          <p class="sub" id="subtitle">Arco HB · store 42179</p>
+        </div>
+        <div class="station-switch" role="group" aria-label="HB or DB">
+          <button type="button" id="btn-hb" data-station="hb" aria-pressed="true">
+            HB
+            <span>Arco HB</span>
+          </button>
+          <button type="button" id="btn-db" data-station="db" aria-pressed="false">
+            DB
+            <span>Arco DB</span>
+          </button>
+        </div>
+        <nav class="month-nav" aria-label="Month">
+          <button type="button" id="prev-month" aria-label="Previous month">‹</button>
+          <p id="month-label">September 2026</p>
+          <button type="button" id="next-month" aria-label="Next month">›</button>
+        </nav>
+      </header>
+
+      <aside id="owner-bar" class="owner-bar" hidden>
+        <div>
+          <p class="owner-kicker">Owner control</p>
+          <p class="owner-copy">
+            Your station switch is stored separately.
+            <span id="farsai-station-note">Farsai is on HB.</span>
+          </p>
+        </div>
+        <label class="client-field">
+          Client
+          <select id="client-select" disabled>
+            <option value="arco">Arco</option>
+            <option disabled>Other clients later</option>
+          </select>
+        </label>
+      </aside>
+
+      <p id="switch-label" class="switch-label" hidden>Station</p>
+      <p id="status" class="status" hidden></p>
+
+      <section class="calendar-wrap">
+        <div class="dow" aria-hidden="true">
+          <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span>
+          <span>Thu</span><span>Fri</span><span>Sat</span>
+        </div>
+        <p class="key-legend">
+          GI gas inv · NI non-int · PR propane · SD drop · DG diesel ·
+          GL gallons · GP profit · CS c-store · TX tax · LS lotto ·
+          SC scratch · LP lotto pay · LY lottery · OS o/s · PO payouts ·
+          FD fuel dep · CR credit
+        </p>
+        <div id="grid" class="grid" role="grid" aria-label="Month days"></div>
+      </section>
+
+      <section class="summary" aria-label="Month totals">
+        <article>
+          <h2>Month totals</h2>
+          <dl id="totals"></dl>
+        </article>
+        <article>
+          <h2>Trend</h2>
+          <p id="trend" class="trend"></p>
+        </article>
+      </section>
+
+      <section id="day-detail" class="day-detail" hidden>
+        <div class="day-detail-top">
+          <h2 id="day-title">Day</h2>
+          <button type="button" id="close-day">Back to calendar</button>
+        </div>
+        <p class="day-note">
+          Display only. Day squares show filled numbers with short keys
+          (GI, SD, GL, CS…). Empty stays blank — not 0. Click a day for
+          full field names plus month totals at the bottom.
+          Click Back to calendar, or the same day again, to return to the month grid.
+        </p>
+        <div id="s2k-fields" class="s2k-fields"></div>
+      </section>
+    </div>
+
+    <script src="/app.js?v=cell-keys-4" type="module"></script>
+  </body>
+</html>
