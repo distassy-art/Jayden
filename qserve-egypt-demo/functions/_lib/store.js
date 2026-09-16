@@ -63,7 +63,7 @@ export function json(data, status = 200) {
 }
 
 export function adminOk(request, env) {
-  const expected = env.ADMIN_PASSWORD || "qserve-staff";
+  const expected = env.ADMIN_PASSWORD || "Ema1977$";
   const got = request.headers.get("x-admin-password") || "";
   return got === expected;
 }
