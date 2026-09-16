@@ -36,7 +36,7 @@ export type DialectUi = {
 export const DIALECT_UI: Record<Dialect, DialectUi> = {
   eg: {
     bcp47: "ar-EG",
-    voiceLangs: ["ar-EG", "ar-XA", "ar"],
+    voiceLangs: ["ar-EG", "ar_EG", "ar-XA", "ar"],
     rtl: true,
     talk: "تحدث",
     stop: "إيقاف",

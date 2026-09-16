@@ -1,6 +1,7 @@
 import { dialectOf, dialectVoiceBlock, dialectFallback, DIALECT_BY_CURRENCY } from "../functions/_lib/dialect.js";
 import { prepSpeak } from "../functions/_lib/tts.js";
 import { systemPrompt, parseActions, inferCartOps } from "../functions/_lib/prompt.js";
+import fs from "node:fs";
 
 const expect = {
   EGP: "eg",
@@ -48,6 +49,19 @@ ok("21.5 is not qty 21", !screenOps.some((o) => o.qty === 21));
 ok("three 21.5 -> LCD-215 x3", screenOps.some((o) => o.sku === "LCD-215" && o.qty === 3));
 ok("prepSpeak egyptian brand", prepSpeak("Q AI HDMI", "eg").includes("كيو"));
 ok("eg copy stay-on", dialectVoiceBlock("eg").includes("إزيك"));
+ok("eg cairo salesman", /بائع شارع|عامية مصرية/.test(dialectVoiceBlock("eg")));
+ok("eg forbids MSA news", dialectVoiceBlock("eg").includes("فصحى") && dialectVoiceBlock("eg").includes("معلش"));
+
+const chatSrc = fs.readFileSync(new URL("../components/SalesmanChat.tsx", import.meta.url), "utf8");
+const voiceSrc = fs.readFileSync(new URL("../lib/voice.ts", import.meta.url), "utf8");
+const aiSrc = fs.readFileSync(new URL("../netlify/functions/ai.ts", import.meta.url), "utf8");
+ok("client posts /api/ai", chatSrc.includes('fetch("/api/ai"'));
+ok("client does not post /api/chat", !chatSrc.includes('fetch("/api/chat"'));
+ok("voice skips robotic /api/tts", !voiceSrc.includes("/api/tts") && voiceSrc.includes("ar-EG"));
+ok("gemini 2.5 flash", aiSrc.includes("gemini-2.5-flash") && aiSrc.includes("GoogleGenAI"));
+ok("no grok pin", !aiSrc.toLowerCase().includes("grok"));
+ok("empty GoogleGenAI constructor", aiSrc.includes("new GoogleGenAI({})"));
+ok("does not set provider keys", !/GEMINI_API_KEY\s*=/.test(aiSrc) && !/OPENAI_API_KEY\s*=/.test(aiSrc) && !aiSrc.includes("apiKey:"));
 
 if (failed) {
   console.error(failed, "checks failed");

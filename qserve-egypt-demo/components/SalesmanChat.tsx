@@ -158,7 +158,7 @@ export function SalesmanChat() {
     setBusy(true);
     listenCtl.current.pause();
     try {
-      const res = await fetch("/api/chat", {
+      const res = await fetch("/api/ai", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({

@@ -1,0 +1,17 @@
+[build]
+  command = "npm run build"
+  publish = "out"
+
+[build.environment]
+  NODE_VERSION = "20"
+  # Do not set GEMINI_API_KEY / OPENAI_API_KEY — Netlify AI Gateway injects them.
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+  included_files = ["functions/_lib/**"]
+
+[dev]
+  command = "npm run dev"
+  targetPort = 3000
+  framework = "#custom"

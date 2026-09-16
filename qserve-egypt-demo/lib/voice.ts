@@ -13,8 +13,8 @@ type Rec = {
   onend: (() => void) | null;
 };
 
-let currentAudio: HTMLAudioElement | null = null;
 let audioCtx: AudioContext | null = null;
+let voicesReady: Promise<void> | null = null;
 
 function recognitionCtor(): RecCtor | null {
   if (typeof window === "undefined") return null;
@@ -35,12 +35,28 @@ function stopBrowserSpeak() {
   }
 }
 
-function stopAudio() {
-  if (currentAudio) {
-    currentAudio.pause();
-    currentAudio.src = "";
-    currentAudio = null;
-  }
+function warmVoices() {
+  if (typeof window === "undefined" || !window.speechSynthesis) return Promise.resolve();
+  if (voicesReady) return voicesReady;
+  voicesReady = new Promise((resolve) => {
+    const done = () => resolve();
+    const have = window.speechSynthesis.getVoices();
+    if (have.length) {
+      done();
+      return;
+    }
+    const timer = window.setTimeout(done, 600);
+    window.speechSynthesis.addEventListener(
+      "voiceschanged",
+      () => {
+        window.clearTimeout(timer);
+        done();
+      },
+      { once: true },
+    );
+    void window.speechSynthesis.getVoices();
+  });
+  return voicesReady;
 }
 
 export function unlockSpeech() {
@@ -50,6 +66,7 @@ export function unlockSpeech() {
   } catch {
     /* ignore */
   }
+  void warmVoices();
   try {
     const AC = window.AudioContext || (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
     if (AC) {
@@ -59,70 +76,73 @@ export function unlockSpeech() {
   } catch {
     /* ignore */
   }
-  try {
-    const kick = new Audio("data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAABhgC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAAYYoeg6XAAAAAAD/+1DEAAAH8YF7YRAAAK5uGteEAAAAnQCR//uQxAAA");
-    kick.volume = 0.01;
-    void kick.play().catch(() => {});
-  } catch {
-    /* ignore */
-  }
 }
 
-async function playNeural(text: string, dialect: Dialect, onStart?: () => void, onEnd?: () => void) {
-  const res = await fetch("/api/tts", {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({ text, dialect, currency: dialect === "eg" ? "EGP" : dialect === "en" ? "USD" : dialect === "ae" ? "AED" : dialect === "sa" ? "SAR" : dialect === "qa" ? "QAR" : "KWD" }),
-  });
-  if (!res.ok) throw new Error("tts http");
-  const buf = await res.arrayBuffer();
-  if (buf.byteLength < 200) throw new Error("tts empty");
-  const url = URL.createObjectURL(new Blob([buf], { type: res.headers.get("content-type") || "audio/mpeg" }));
-  return await new Promise<() => void>((resolve, reject) => {
-    const audio = new Audio(url);
-    currentAudio = audio;
-    let finished = false;
-    const done = () => {
-      if (finished) return;
-      finished = true;
-      URL.revokeObjectURL(url);
-      if (currentAudio === audio) currentAudio = null;
-      onEnd?.();
-    };
-    audio.onplay = () => onStart?.();
-    audio.onended = done;
-    audio.onerror = () => {
-      done();
-      reject(new Error("play"));
-    };
-    void audio.play().then(
-      () => {
-        resolve(() => {
-          audio.pause();
-          done();
-        });
-      },
-      (err) => {
-        done();
-        reject(err);
-      },
-    );
-  });
+export function prepSpeak(text: string, dialect: Dialect) {
+  let t = String(text || "").replace(/\s+/g, " ").trim();
+  t = t.replace(/https?:\/\/\S+/g, " ");
+  t = t.replace(/\bCART_ADD:\S+/gi, " ");
+  t = t.replace(/\bSHOW_CART\b/gi, " ");
+  t = t.replace(/\bNAV:\/\S+/g, " ");
+  t = t.replace(/\bSHIP:\S+/gi, " ");
+  t = t.replace(/\bPARTNER:\S+/gi, " ");
+  if (dialect !== "en") {
+    t = t.replace(/\bQ AI\b/g, "كيو أيه آي");
+    t = t.replace(/\bQServe\b/gi, "كيوسيرف");
+    t = t.replace(/\bHDMI\b/g, "إتش دي إم آي");
+    t = t.replace(/\bWi-?Fi\b/gi, "واي فاي");
+    t = t.replace(/\bAMC\b/g, "أي إم سي");
+  }
+  const clauses = t
+    .replace(/\s+/g, " ")
+    .trim()
+    .split(/(?<=[.!?؟])\s+/)
+    .filter(Boolean);
+  return clauses.slice(0, 2).join(" ").slice(0, 280);
+}
+
+function scoreVoice(voice: SpeechSynthesisVoice, dialect: Dialect) {
+  const lang = (voice.lang || "").toLowerCase();
+  const name = `${voice.name} ${voice.lang}`.toLowerCase();
+  let score = 0;
+  if (dialect === "eg") {
+    if (lang === "ar-eg") score += 80;
+    if (/egypt|cairo|hoda|salma/.test(name)) score += 50;
+    if (lang.startsWith("ar-eg")) score += 20;
+  }
+  if (dialect === "ae" && (lang === "ar-ae" || /emirati|uae|hamdan/.test(name))) score += 70;
+  if (dialect === "sa" && (lang === "ar-sa" || /saudi|hamed|zariyah/.test(name))) score += 70;
+  if (dialect === "qa" && lang === "ar-qa") score += 70;
+  if (dialect === "kw" && lang === "ar-kw") score += 70;
+  if (dialect === "en") {
+    if (lang === "en-us") score += 60;
+    if (/english|us english|google us/.test(name)) score += 30;
+  } else if (lang.startsWith("ar")) score += 10;
+  if (/google|microsoft|natural|neural|online/.test(name)) score += 8;
+  return score;
 }
 
 function pickVoice(dialect: Dialect) {
   const voices = window.speechSynthesis?.getVoices() || [];
   const prefs = (DIALECT_UI[dialect] || DIALECT_UI.eg).voiceLangs.map((l) => l.toLowerCase());
-  for (const want of prefs) {
-    const hit = voices.find((v) => v.lang.toLowerCase() === want || v.lang.toLowerCase().startsWith(want));
-    if (hit) return hit;
+  let best: SpeechSynthesisVoice | null = null;
+  let bestScore = 0;
+  for (const voice of voices) {
+    const lang = voice.lang.toLowerCase();
+    let score = scoreVoice(voice, dialect);
+    for (let i = 0; i < prefs.length; i += 1) {
+      const want = prefs[i];
+      if (lang === want) score += 40 - i * 4;
+      else if (lang.startsWith(want)) score += 20 - i * 2;
+    }
+    if (score > bestScore) {
+      best = voice;
+      bestScore = score;
+    }
   }
+  if (best && bestScore > 0) return best;
   if (dialect === "en") return voices.find((v) => /english/i.test(v.name)) || null;
-  return (
-    voices.find((v) => /egypt|cairo|shakir|salma/i.test(`${v.name} ${v.lang}`)) ||
-    voices.find((v) => /arab/i.test(v.name) || v.lang.toLowerCase().startsWith("ar")) ||
-    null
-  );
+  return voices.find((v) => /arab/i.test(v.name) || v.lang.toLowerCase().startsWith("ar")) || null;
 }
 
 function speakBrowser(text: string, dialect: Dialect, onStart?: () => void, onEnd?: () => void) {
@@ -131,12 +151,15 @@ function speakBrowser(text: string, dialect: Dialect, onStart?: () => void, onEn
     return () => {};
   }
   const ui = DIALECT_UI[dialect] || DIALECT_UI.eg;
-  const u = new SpeechSynthesisUtterance(text.slice(0, 900));
-  u.lang = ui.bcp47;
-  u.rate = dialect === "eg" ? 0.92 : dialect === "en" ? 1 : 0.95;
-  u.pitch = dialect === "eg" ? 0.95 : 1;
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = dialect === "eg" ? "ar-EG" : ui.bcp47;
+  u.rate = dialect === "eg" ? 1.04 : dialect === "en" ? 1 : 1.02;
+  u.pitch = 1;
   const voice = pickVoice(dialect);
-  if (voice) u.voice = voice;
+  if (voice) {
+    u.voice = voice;
+    if (voice.lang) u.lang = voice.lang;
+  }
   let finished = false;
   const done = () => {
     if (finished) return;
@@ -150,7 +173,7 @@ function speakBrowser(text: string, dialect: Dialect, onStart?: () => void, onEn
   window.speechSynthesis.speak(u);
   const watchdog = window.setTimeout(() => {
     if (!window.speechSynthesis.speaking && !window.speechSynthesis.pending) done();
-  }, 1500);
+  }, 1800);
   return () => {
     window.clearTimeout(watchdog);
     window.speechSynthesis.cancel();
@@ -163,36 +186,24 @@ export function speakText(text: string, dialect: Dialect, onStart?: () => void, 
     onEnd?.();
     return () => {};
   }
-  const said = String(text || "").replace(/\s+/g, " ").trim();
+  const said = prepSpeak(text, dialect);
   if (!said) {
     onEnd?.();
     return () => {};
   }
-  stopAudio();
   stopBrowserSpeak();
   let cancelled = false;
   let stopInner: () => void = () => {};
-  void playNeural(said, dialect, onStart, () => {
-    if (!cancelled) onEnd?.();
-  })
-    .then((stop) => {
-      if (cancelled) {
-        stop();
-        return;
-      }
-      stopInner = stop;
-    })
-    .catch(() => {
-      if (cancelled) {
-        onEnd?.();
-        return;
-      }
-      stopInner = speakBrowser(said, dialect, onStart, onEnd);
-    });
+  void warmVoices().then(() => {
+    if (cancelled) {
+      onEnd?.();
+      return;
+    }
+    stopInner = speakBrowser(said, dialect, onStart, onEnd);
+  });
   return () => {
     cancelled = true;
     stopInner();
-    stopAudio();
     stopBrowserSpeak();
     onEnd?.();
   };
