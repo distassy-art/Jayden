@@ -457,7 +457,16 @@ def fill_garden_grove(ws, day: int, vals: dict) -> list[str]:
         'I': f'=IF(OR(C{r}="",G{r}=""),"",C{r}+G{r})',
     }
     for col, formula in extras.items():
-        if ws[f'{col}{r}'].value in (None, ''):
+        cur = ws[f'{col}{r}'].value
+        if cur == formula:
+            continue
+        # Overwrite blank, hardcoded, or wrong-row formulas (GG days 1–4 once
+        # pointed at row 13).
+        bad = cur in (None, '') or not (isinstance(cur, str) and cur.startswith('='))
+        if isinstance(cur, str) and cur.startswith('='):
+            refs = re.findall(r'[A-Za-z]+(\d+)', cur)
+            bad = any(int(n) != r and int(n) < 40 for n in refs) if refs else True
+        if bad:
             ws[f'{col}{r}'] = formula
             changed.append(f'{col}=formula')
     return changed

@@ -460,6 +460,21 @@ def remap_formula(formula, src_row, dst_row):
     )
 
 
+def _formula_refs_own_row(formula: str, row: int) -> bool:
+    """True when every A1 row ref in the formula points at ``row`` (or totals ≥40)."""
+    refs = re.findall(r"[A-Za-z]+(\d+)", formula)
+    if not refs:
+        return False
+    for num in refs:
+        n = int(num)
+        if n == row:
+            continue
+        if n >= 40:  # month totals / averages block
+            continue
+        return False
+    return True
+
+
 def template_formulas(ws, day: int) -> dict[str, str]:
     target = HDR + day
     for ref_day in range(1, 32):
@@ -469,12 +484,16 @@ def template_formulas(ws, day: int) -> dict[str, str]:
             continue
         if not (isinstance(dval, str) and dval.startswith("=")):
             continue
+        # Skip damaged template rows that still point at another day (e.g. all → 13)
+        if not _formula_refs_own_row(dval, rr):
+            continue
         mapping = {}
         for col in ("D", "E", "G", "H", "I"):
             val = ws[f"{col}{rr}"].value
-            if isinstance(val, str) and val.startswith("="):
+            if isinstance(val, str) and val.startswith("=") and _formula_refs_own_row(val, rr):
                 mapping[col] = remap_formula(val, rr, target)
-        return mapping
+        if mapping:
+            return mapping
     return {}
 
 
@@ -574,6 +593,43 @@ def fill_brookhurst(wb, day, vals, year, month, sn):
     return changed
 
 
+def garden_grove_day_formulas(r: int) -> dict[str, str]:
+    """Self-row D/E/G/H/I formulas for Garden Grove Daily (never hardcode values)."""
+    return {
+        "D": f'=IF(OR(B{r}="",B{r}=0),"",C{r}/B{r})',
+        "E": f'=IF(J{r}="","",J{r}-N(K{r})-N(L{r})-N(M{r})-N(N{r})-N(O{r}))',
+        "G": f'=IF(OR(E{r}="",F{r}=""),"",E{r}-F{r})',
+        "H": f'=IF(OR(E{r}="",E{r}=0),"",G{r}/E{r})',
+        "I": f'=IF(OR(C{r}="",G{r}=""),"",C{r}+G{r})',
+    }
+
+
+def repair_garden_grove_formulas(ws, through_day: int = 31) -> list[str]:
+    """Overwrite missing, hardcoded, or wrong-row D/E/G/H/I on GG day rows.
+
+    Prior damage copied day-5 formulas onto days 1–4 and left days 11/14 blank.
+    Always restore the self-row template for every day row in the month sheet.
+    """
+    changed = []
+    last = min(31, max(1, through_day))
+    for day in range(1, last + 1):
+        r = HDR + day
+        # Skip trailing template spacer row with no date formula
+        if ws[f"A{r}"].value in (None, ""):
+            continue
+        for col, formula in garden_grove_day_formulas(r).items():
+            cur = ws[f"{col}{r}"].value
+            if cur == formula:
+                continue
+            if isinstance(cur, str) and cur.startswith("=") and _formula_refs_own_row(cur, r):
+                # Already a valid self-row formula (may differ slightly in IF shape)
+                continue
+            ws[f"{col}{r}"] = formula
+            kind = "missing" if cur in (None, "") else ("hardcoded" if not (isinstance(cur, str) and cur.startswith("=")) else "wrong-row")
+            changed.append(f"{col}{r}={kind}")
+    return changed
+
+
 def fill_garden_grove(ws, day, vals):
     r = HDR + day
     changed = []
@@ -592,16 +648,14 @@ def fill_garden_grove(ws, day, vals):
         if ws[f"{col}{r}"].value in (None, ""):
             ws[f"{col}{r}"] = val
             changed.append(f"{col}={val}")
-    for col, formula in {
-        "D": f'=IF(OR(B{r}="",B{r}=0),"",C{r}/B{r})',
-        "E": f'=IF(J{r}="","",J{r}-N(K{r})-N(L{r})-N(M{r})-N(N{r})-N(O{r}))',
-        "G": f'=IF(OR(E{r}="",F{r}=""),"",E{r}-F{r})',
-        "H": f'=IF(OR(E{r}="",E{r}=0),"",G{r}/E{r})',
-        "I": f'=IF(OR(C{r}="",G{r}=""),"",C{r}+G{r})',
-    }.items():
-        if ws[f"{col}{r}"].value in (None, ""):
-            ws[f"{col}{r}"] = formula
-            changed.append(f"{col}=formula")
+    for col, formula in garden_grove_day_formulas(r).items():
+        cur = ws[f"{col}{r}"].value
+        if cur == formula:
+            continue
+        if isinstance(cur, str) and cur.startswith("=") and _formula_refs_own_row(cur, r):
+            continue
+        ws[f"{col}{r}"] = formula
+        changed.append(f"{col}=formula")
     if has_sales_row(ws, r) and cell_empty(ws[f"F{r}"].value):
         ws[f"F{r}"] = 0
         changed.append(f"F{r}=0")
@@ -764,6 +818,16 @@ def main():
 
         filled = []
         skipped_no_pdf = []
+        formula_repairs: list[str] = []
+        if key == "42399" and ws is not None:
+            # Full month rows: damaged GG sheets had wrong-row / missing D–I
+            formula_repairs = repair_garden_grove_formulas(ws, 31)
+            if formula_repairs:
+                print(
+                    f"  formula repair: {formula_repairs[:16]}"
+                    f"{'...' if len(formula_repairs) > 16 else ''}"
+                )
+
         for day in miss:
             if key == "42048":
                 if ws is None or ws[f"B{2 + day}"].value not in (None, ""):
@@ -800,14 +864,20 @@ def main():
             if ch:
                 filled.append(day)
 
-        changed = bool(filled or purch_zeros)
+        changed = bool(filled or purch_zeros or formula_repairs)
         if changed and not args.dry_run:
             wb.save(local)
             upload_file(server, local.read_bytes())
-            print(f"  UPLOADED filled={filled} purchases0={len(purch_zeros)}")
+            print(
+                f"  UPLOADED filled={filled} purchases0={len(purch_zeros)} "
+                f"formula_repairs={len(formula_repairs)}"
+            )
         elif changed:
             wb.save(local)
-            print(f"  DRY-RUN saved filled={filled} purchases0={len(purch_zeros)}")
+            print(
+                f"  DRY-RUN saved filled={filled} purchases0={len(purch_zeros)} "
+                f"formula_repairs={len(formula_repairs)}"
+            )
         else:
             print("  nothing uploaded")
         report.append(
@@ -815,6 +885,7 @@ def main():
                 "store": key,
                 "filled": filled,
                 "purchases_zeroed": purch_zeros,
+                "formula_repairs": formula_repairs,
                 "skipped_no_pdf": skipped_no_pdf,
                 "file": meta["name"],
             }
