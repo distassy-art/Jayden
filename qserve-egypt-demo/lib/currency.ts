@@ -3,13 +3,13 @@
 export const CURRENCIES = ["EGP", "USD", "AED", "SAR", "QAR", "KWD"] as const;
 export type Currency = (typeof CURRENCIES)[number];
 
-export const CURRENCY_META: Record<Currency, { ar: string; en: string; decimals: number }> = {
-  EGP: { ar: "جنيه مصري", en: "Egyptian pound", decimals: 0 },
-  USD: { ar: "دولار", en: "US dollar", decimals: 2 },
-  AED: { ar: "درهم إماراتي", en: "UAE dirham", decimals: 2 },
-  SAR: { ar: "ريال سعودي", en: "Saudi riyal", decimals: 2 },
-  QAR: { ar: "ريال قطري", en: "Qatari riyal", decimals: 2 },
-  KWD: { ar: "دينار كويتي", en: "Kuwaiti dinar", decimals: 3 },
+export const CURRENCY_META: Record<Currency, { ar: string; en: string; decimals: number; cc: string; flag: string }> = {
+  EGP: { ar: "جنيه مصري", en: "Egyptian pound", decimals: 0, cc: "eg", flag: "🇪🇬" },
+  USD: { ar: "دولار", en: "US dollar", decimals: 2, cc: "us", flag: "🇺🇸" },
+  AED: { ar: "درهم إماراتي", en: "UAE dirham", decimals: 2, cc: "ae", flag: "🇦🇪" },
+  SAR: { ar: "ريال سعودي", en: "Saudi riyal", decimals: 2, cc: "sa", flag: "🇸🇦" },
+  QAR: { ar: "ريال قطري", en: "Qatari riyal", decimals: 2, cc: "qa", flag: "🇶🇦" },
+  KWD: { ar: "دينار كويتي", en: "Kuwaiti dinar", decimals: 3, cc: "kw", flag: "🇰🇼" },
 };
 
 /** USD → currency, same-day 16 Sep 2026 (open.er-api). Used if live fetch fails. */

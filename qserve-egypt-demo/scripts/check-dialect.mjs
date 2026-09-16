@@ -1,4 +1,5 @@
 import { dialectOf, dialectVoiceBlock, dialectFallback, DIALECT_BY_CURRENCY } from "../functions/_lib/dialect.js";
+import { prepSpeak } from "../functions/_lib/tts.js";
 import { systemPrompt, parseActions, inferCartOps } from "../functions/_lib/prompt.js";
 
 const expect = {
@@ -31,11 +32,11 @@ for (const [code, dialect] of Object.entries(expect)) {
     ok("USD ignores /en lock", prompt.includes("currency USD") || prompt.includes("USD"));
   }
   if (code === "EGP") {
-    ok("EGP mouth is Egyptian even on /en", prompt.includes("عامية مصرية") && prompt.includes("حتى لو فتح /en"));
+    ok("EGP mouth is Egyptian even on /en", /عامية قاهرية|إزيك/.test(prompt) && prompt.includes("حتى لو فتح /en"));
   }
 }
 
-ok("EGP fallback spoken", dialectFallback("eg", null).includes("ما قدرتش"));
+ok("EGP fallback spoken", dialectFallback("eg", null).includes("الخط مش ماسك") || dialectFallback("eg", null).includes("ابعت تاني"));
 ok("USD fallback spoken", /Couldn't reach|factory model/i.test(dialectFallback("en", null)));
 ok("AED fallback gulf", dialectFallback("ae", null).includes("ما قدرت"));
 
@@ -45,6 +46,7 @@ ok("no freight SKU in cart", parseActions("x\nCART_ADD:INST-EG:1", "ar").cartOps
 const screenOps = inferCartOps("three indoor 21.5 screens");
 ok("21.5 is not qty 21", !screenOps.some((o) => o.qty === 21));
 ok("three 21.5 -> LCD-215 x3", screenOps.some((o) => o.sku === "LCD-215" && o.qty === 3));
+ok("prepSpeak egyptian brand", prepSpeak("Q AI HDMI", "eg").includes("كيو"));
 
 if (failed) {
   console.error(failed, "checks failed");

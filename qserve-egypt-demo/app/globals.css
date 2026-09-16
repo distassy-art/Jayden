@@ -79,48 +79,115 @@ body {
 .currency-bar {
   display: flex;
   align-items: center;
-  gap: 0.7rem;
-  padding: 0.4rem 1rem;
+  justify-content: flex-start;
+  position: relative;
+  padding: 0.35rem 1rem;
+  background: #0b1b33;
+  color: #fffdf8;
+  z-index: 60;
+}
+
+.currency-only {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 1.85rem;
+  padding: 0 0.65rem;
+  border: 2px solid #fffdf8;
+  border-radius: 0.35rem;
+  background: #fffdf8;
+  color: #0b1b33;
+  font-family: var(--font-money), "IBM Plex Sans", Inter, system-ui, sans-serif;
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.currency-only-code {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.currency-only-caret {
+  font-size: 0.7rem;
+  line-height: 1;
+}
+
+.currency-menu {
+  position: absolute;
+  top: calc(100% - 2px);
+  inset-inline-start: 1rem;
+  min-width: 16rem;
+  margin: 0;
+  padding: 0.35rem;
+  list-style: none;
+  background: #fffdf8;
+  color: #0b1b33;
+  border: 2px solid #0b1b33;
+  border-radius: 0.6rem;
+  box-shadow: 0 12px 32px rgba(11, 27, 51, 0.28);
+  z-index: 70;
+}
+
+.currency-menu button {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+  padding: 0.45rem 0.55rem;
+  border: 0;
+  border-radius: 0.4rem;
+  background: transparent;
+  color: #0b1b33;
+  font-family: var(--font-money), "IBM Plex Sans", Inter, system-ui, sans-serif;
+  text-align: start;
+}
+
+.currency-menu button:hover,
+.currency-menu button:focus-visible {
   background: #0b1b33;
   color: #fffdf8;
 }
 
-.currency-bar-label {
-  font-family: var(--font-money), "IBM Plex Sans", Inter, system-ui, sans-serif;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #fffdf8;
-  white-space: nowrap;
+.currency-flag-wrap {
+  position: relative;
+  width: 22px;
+  height: 16px;
+  flex-shrink: 0;
 }
 
-.currency-switch {
+.currency-flag {
+  display: block;
+  width: 22px;
+  height: 16px;
+  object-fit: cover;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(11, 27, 51, 0.2);
+  position: relative;
+  z-index: 1;
+  background: #ddd;
+}
+
+.currency-flag-emoji {
+  position: absolute;
+  inset: 0;
   display: flex;
-  flex: 1;
-  flex-wrap: wrap;
-  gap: 0.3rem;
-  font-family: var(--font-money), "IBM Plex Sans", Inter, system-ui, sans-serif;
-}
-
-.currency-switch button {
-  font-family: inherit;
-  font-size: 0.82rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  min-width: 3.35rem;
-  height: 1.95rem;
-  padding: 0 0.5rem;
-  border-radius: 0.35rem;
-  border: 2px solid #fffdf8;
-  background: transparent;
-  color: #fffdf8;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
   line-height: 1;
 }
 
-.currency-switch button.is-on {
-  background: #fffdf8;
-  color: #0b1b33;
+.currency-menu-code {
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  min-width: 2.6rem;
+}
+
+.currency-menu-name {
+  font-size: 0.78rem;
+  font-weight: 600;
+  opacity: 0.85;
 }
 
 .money {
