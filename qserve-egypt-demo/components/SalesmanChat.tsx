@@ -71,8 +71,8 @@ export function SalesmanChat() {
   }
 
   function greetVoice(fromTap = false) {
+    unlockSpeech();
     if (fromTap) {
-      unlockSpeech();
       setVoiceBlocked(false);
     }
     stopVoice.current();
@@ -141,6 +141,7 @@ export function SalesmanChat() {
       return;
     }
     sending.current = true;
+    unlockSpeech();
     try {
       sessionStorage.setItem("qserve-need", t);
     } catch {

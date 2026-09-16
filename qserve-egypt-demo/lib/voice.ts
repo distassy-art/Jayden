@@ -14,7 +14,12 @@ type Rec = {
 };
 
 let audioCtx: AudioContext | null = null;
-let voicesReady: Promise<void> | null = null;
+let voicesReady: Promise<SpeechSynthesisVoice[]> | null = null;
+let unlockedAudio: HTMLAudioElement | null = null;
+let currentAudio: HTMLAudioElement | null = null;
+
+const SILENT_MP3 =
+  "data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAABhgC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAAYYoeg6XAAAAAAD/+1DEAAAH8YF7YRAAAK5uGteEAAAAnQCR//uQxAAA";
 
 function recognitionCtor(): RecCtor | null {
   if (typeof window === "undefined") return null;
@@ -36,21 +41,28 @@ function stopBrowserSpeak() {
 }
 
 function warmVoices() {
-  if (typeof window === "undefined" || !window.speechSynthesis) return Promise.resolve();
+  if (typeof window === "undefined" || !window.speechSynthesis) return Promise.resolve([] as SpeechSynthesisVoice[]);
   if (voicesReady) return voicesReady;
   voicesReady = new Promise((resolve) => {
-    const done = () => resolve();
+    const finish = () => resolve(window.speechSynthesis.getVoices() || []);
     const have = window.speechSynthesis.getVoices();
     if (have.length) {
-      done();
+      finish();
       return;
     }
-    const timer = window.setTimeout(done, 600);
+    const started = Date.now();
+    const timer = window.setInterval(() => {
+      const now = window.speechSynthesis.getVoices();
+        if (now.length || Date.now() - started > 500) {
+        window.clearInterval(timer);
+        finish();
+      }
+    }, 80);
     window.speechSynthesis.addEventListener(
       "voiceschanged",
       () => {
-        window.clearTimeout(timer);
-        done();
+        window.clearInterval(timer);
+        finish();
       },
       { once: true },
     );
@@ -68,10 +80,46 @@ export function unlockSpeech() {
   }
   void warmVoices();
   try {
+    if (!unlockedAudio) {
+      unlockedAudio = new Audio(SILENT_MP3);
+      unlockedAudio.volume = 0.01;
+    }
+    unlockedAudio.currentTime = 0;
+    void unlockedAudio.play().then(
+      () => {
+        try {
+          unlockedAudio?.pause();
+          if (unlockedAudio) unlockedAudio.currentTime = 0;
+        } catch {
+          /* ignore */
+        }
+      },
+      () => {},
+    );
+  } catch {
+    /* ignore */
+  }
+  try {
     const AC = window.AudioContext || (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
     if (AC) {
       audioCtx = audioCtx || new AC();
       void audioCtx.resume();
+      const buf = audioCtx.createBuffer(1, 1, 22050);
+      const src = audioCtx.createBufferSource();
+      src.buffer = buf;
+      src.connect(audioCtx.destination);
+      src.start(0);
+    }
+  } catch {
+    /* ignore */
+  }
+  try {
+    if (window.speechSynthesis) {
+      const kick = new SpeechSynthesisUtterance(" ");
+      kick.volume = 0;
+      kick.rate = 1;
+      kick.lang = "ar-EG";
+      window.speechSynthesis.speak(kick);
     }
   } catch {
     /* ignore */
@@ -145,15 +193,33 @@ function pickVoice(dialect: Dialect) {
   return voices.find((v) => /arab/i.test(v.name) || v.lang.toLowerCase().startsWith("ar")) || null;
 }
 
-function speakBrowser(text: string, dialect: Dialect, onStart?: () => void, onEnd?: () => void) {
+function stopAudio() {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.src = "";
+    currentAudio = null;
+  }
+}
+
+function hasEgyptianVoice(voices: SpeechSynthesisVoice[]) {
+  return voices.some((v) => {
+    const hay = `${v.lang} ${v.name}`.toLowerCase();
+    return hay.includes("ar-eg") || hay.includes("egypt") || hay.includes("hoda") || hay.includes("salma");
+  });
+}
+
+function hasArabicVoice(voices: SpeechSynthesisVoice[]) {
+  return voices.some((v) => v.lang.toLowerCase().startsWith("ar") || /arab/i.test(v.name));
+}
+
+function speakBrowser(text: string, dialect: Dialect, onStart?: () => void, onEnd?: () => void): { stop: () => void; started: Promise<boolean> } {
   if (!window.speechSynthesis) {
-    onEnd?.();
-    return () => {};
+    return { stop() {}, started: Promise.resolve(false) };
   }
   const ui = DIALECT_UI[dialect] || DIALECT_UI.eg;
   const u = new SpeechSynthesisUtterance(text);
   u.lang = dialect === "eg" ? "ar-EG" : ui.bcp47;
-  u.rate = dialect === "eg" ? 1.04 : dialect === "en" ? 1 : 1.02;
+  u.rate = dialect === "eg" ? 1.02 : dialect === "en" ? 1 : 1.0;
   u.pitch = 1;
   const voice = pickVoice(dialect);
   if (voice) {
@@ -161,24 +227,100 @@ function speakBrowser(text: string, dialect: Dialect, onStart?: () => void, onEn
     if (voice.lang) u.lang = voice.lang;
   }
   let finished = false;
+  let started = false;
+  let abandoned = false;
+  let startResolve: (ok: boolean) => void = () => {};
+  const startedP = new Promise<boolean>((resolve) => {
+    startResolve = resolve;
+  });
   const done = () => {
     if (finished) return;
     finished = true;
+    startResolve(started);
     onEnd?.();
   };
-  u.onstart = () => onStart?.();
-  u.onend = done;
-  u.onerror = done;
-  window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(u);
-  const watchdog = window.setTimeout(() => {
-    if (!window.speechSynthesis.speaking && !window.speechSynthesis.pending) done();
-  }, 1800);
-  return () => {
-    window.clearTimeout(watchdog);
-    window.speechSynthesis.cancel();
+  u.onstart = () => {
+    if (abandoned) return;
+    started = true;
+    startResolve(true);
+    onStart?.();
+  };
+  u.onend = () => {
+    if (abandoned && !started) return;
     done();
   };
+  u.onerror = () => {
+    if (abandoned && !started) {
+      startResolve(false);
+      return;
+    }
+    if (!started) startResolve(false);
+    else done();
+  };
+  try {
+    window.speechSynthesis.resume();
+    window.speechSynthesis.speak(u);
+  } catch {
+    startResolve(false);
+  }
+  window.setTimeout(() => {
+    if (!started) startResolve(false);
+  }, 900);
+  return {
+    started: startedP,
+    stop() {
+      abandoned = true;
+      try {
+        window.speechSynthesis.cancel();
+      } catch {
+        /* ignore */
+      }
+      if (started) done();
+      else startResolve(false);
+    },
+  };
+}
+
+async function playServerTts(text: string, dialect: Dialect, onStart?: () => void, onEnd?: () => void) {
+  const res = await fetch("/api/tts", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ text, dialect }),
+  });
+  if (!res.ok) throw new Error("tts http");
+  const buf = await res.arrayBuffer();
+  if (buf.byteLength < 200) throw new Error("tts empty");
+  const url = URL.createObjectURL(new Blob([buf], { type: res.headers.get("content-type") || "audio/mpeg" }));
+  return await new Promise<() => void>((resolve, reject) => {
+    const audio = new Audio(url);
+    currentAudio = audio;
+    let finished = false;
+    const done = () => {
+      if (finished) return;
+      finished = true;
+      URL.revokeObjectURL(url);
+      if (currentAudio === audio) currentAudio = null;
+      onEnd?.();
+    };
+    audio.onplay = () => onStart?.();
+    audio.onended = done;
+    audio.onerror = () => {
+      done();
+      reject(new Error("play"));
+    };
+    void audio.play().then(
+      () => {
+        resolve(() => {
+          audio.pause();
+          done();
+        });
+      },
+      (err) => {
+        done();
+        reject(err);
+      },
+    );
+  });
 }
 
 export function speakText(text: string, dialect: Dialect, onStart?: () => void, onEnd?: () => void) {
@@ -191,21 +333,85 @@ export function speakText(text: string, dialect: Dialect, onStart?: () => void, 
     onEnd?.();
     return () => {};
   }
+  stopAudio();
   stopBrowserSpeak();
   let cancelled = false;
   let stopInner: () => void = () => {};
-  void warmVoices().then(() => {
+  let ended = false;
+  const finish = () => {
+    if (ended) return;
+    ended = true;
+    onEnd?.();
+  };
+  void (async () => {
+    const voices = await warmVoices();
     if (cancelled) {
-      onEnd?.();
+      finish();
       return;
     }
-    stopInner = speakBrowser(said, dialect, onStart, onEnd);
-  });
+    const preferBrowser =
+      dialect === "en"
+        ? voices.some((v) => v.lang.toLowerCase().startsWith("en"))
+        : dialect === "eg"
+          ? hasEgyptianVoice(voices)
+          : hasArabicVoice(voices) || hasEgyptianVoice(voices);
+    if (preferBrowser && window.speechSynthesis) {
+      const browser = speakBrowser(
+        said,
+        dialect,
+        () => {
+          if (!cancelled) onStart?.();
+        },
+        () => {
+          if (!cancelled) finish();
+        },
+      );
+      stopInner = browser.stop;
+      const started = await browser.started;
+      if (started || cancelled) return;
+      browser.stop();
+    }
+    if (cancelled) {
+      finish();
+      return;
+    }
+    try {
+      stopInner = await playServerTts(
+        said,
+        dialect,
+        () => {
+          if (!cancelled) onStart?.();
+        },
+        () => {
+          if (!cancelled) finish();
+        },
+      );
+    } catch {
+      if (cancelled) {
+        finish();
+        return;
+      }
+      const retry = speakBrowser(
+        said,
+        dialect,
+        () => {
+          if (!cancelled) onStart?.();
+        },
+        () => {
+          if (!cancelled) finish();
+        },
+      );
+      stopInner = retry.stop;
+      const ok = await retry.started;
+      if (!ok) finish();
+    }
+  })();
   return () => {
     cancelled = true;
     stopInner();
+    stopAudio();
     stopBrowserSpeak();
-    onEnd?.();
+    finish();
   };
 }
 
