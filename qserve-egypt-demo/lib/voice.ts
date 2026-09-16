@@ -374,7 +374,7 @@ async function playViaContext(buf: ArrayBuffer, onStart?: () => void, onEnd?: ()
       };
       src.onended = done;
       onStart?.();
-      src.start(0);
+      src.start();
       const tick = () => {
         const v = currentRms();
         if (v > peakRms) peakRms = v;
