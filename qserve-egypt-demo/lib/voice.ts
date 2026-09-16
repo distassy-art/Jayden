@@ -89,6 +89,7 @@ function publishDebug() {
     lastStarted,
     lastDuration,
     peakRms,
+    playerTime: speechPlayer ? speechPlayer.currentTime : 0,
     rms,
   };
 }
@@ -408,22 +409,33 @@ async function playViaElement(buf: ArrayBuffer, mime: string, onStart?: () => vo
   publishDebug();
   return await new Promise<() => void>((resolve, reject) => {
     let finished = false;
+    let startedPlay = false;
     const done = () => {
       if (finished) return;
       finished = true;
       URL.revokeObjectURL(url);
       onEnd?.();
     };
-    audio.onplay = () => onStart?.();
+    audio.onplay = () => {
+      lastDuration = Number.isFinite(audio.duration) ? audio.duration : lastDuration;
+      onStart?.();
+      publishDebug();
+    };
     audio.onended = done;
     audio.onerror = () => {
       lastError = "element-error";
       publishDebug();
+      if (!startedPlay) {
+        URL.revokeObjectURL(url);
+        reject(new Error("play"));
+        return;
+      }
       done();
-      reject(new Error("play"));
     };
-    const tryPlay = () =>
-      audio.play().then(
+    const tryPlay = () => {
+      if (startedPlay || finished) return;
+      startedPlay = true;
+      void audio.play().then(
         () => {
           publishDebug();
           resolve(() => {
@@ -437,18 +449,21 @@ async function playViaElement(buf: ArrayBuffer, mime: string, onStart?: () => vo
         },
         (err) => {
           lastError = String(err);
+          startedPlay = false;
           publishDebug();
-          done();
+          URL.revokeObjectURL(url);
           reject(err);
         },
       );
-    if (audio.readyState >= 2) void tryPlay();
-    else {
-      audio.oncanplay = () => void tryPlay();
-      window.setTimeout(() => {
-        if (audio.paused) void tryPlay();
-      }, 400);
+    };
+    audio.oncanplaythrough = () => tryPlay();
+    audio.oncanplay = () => tryPlay();
+    try {
+      audio.load();
+    } catch {
+      /* ignore */
     }
+    window.setTimeout(() => tryPlay(), 500);
   });
 }
 
@@ -465,11 +480,11 @@ async function playServerTts(text: string, dialect: Dialect, onStart?: () => voi
   if (buf.byteLength < 200) throw new Error("tts empty");
   const mime = res.headers.get("content-type") || "audio/mpeg";
   try {
-    return await playViaContext(buf, onStart, onEnd);
+    return await playViaElement(buf, mime, onStart, onEnd);
   } catch (e) {
     lastError = String(e);
     publishDebug();
-    return await playViaElement(buf, mime, onStart, onEnd);
+    return await playViaContext(buf, onStart, onEnd);
   }
 }
 
