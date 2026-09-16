@@ -55,7 +55,8 @@ ok("eg forbids MSA news", dialectVoiceBlock("eg").includes("فصحى") && dialec
 const chatSrc = fs.readFileSync(new URL("../components/SalesmanChat.tsx", import.meta.url), "utf8");
 const voiceSrc = fs.readFileSync(new URL("../lib/voice.ts", import.meta.url), "utf8");
 const aiSrc = fs.readFileSync(new URL("../netlify/functions/ai.ts", import.meta.url), "utf8");
-ok("client posts /api/ai", chatSrc.includes('fetch("/api/ai"'));
+const aiClientSrc = fs.readFileSync(new URL("../lib/ai-client.ts", import.meta.url), "utf8");
+ok("client posts /api/ai", aiClientSrc.includes('fetch("/api/ai"') && chatSrc.includes("postSalesmanAi"));
 ok("client does not post /api/chat", !chatSrc.includes('fetch("/api/chat"'));
 ok(
   "voice unlocks audio then falls back to /api/tts",
@@ -67,9 +68,17 @@ ok(
     voiceSrc.includes("createOscillator") &&
     voiceSrc.includes("playsinline") &&
     voiceSrc.includes("spokenClauses") &&
-    voiceSrc.includes("prefetchSpeak"),
+    voiceSrc.includes("prefetchSpeak") &&
+    voiceSrc.includes("firstClauseReady") &&
+    voiceSrc.includes("createReplySpeaker") &&
+    !/function boot\(\) \{[\s\S]{0,180}rec\?\.abort/.test(voiceSrc),
 );
-ok("gemini 2.5 flash-lite", aiSrc.includes("gemini-2.5-flash-lite") && aiSrc.includes("GoogleGenAI"));
+ok("client streams /api/ai and does not pause mic on send", chatSrc.includes("postSalesmanAi") && chatSrc.includes("beginListen()") && !chatSrc.includes("listenCtl.current.pause()"));
+ok("one Talk dock, wanderer has no Talk chip", chatSrc.includes("qai-talk-dock") && (chatSrc.match(/<TalkButton/g) || []).length === 1);
+
+const wanderSrc = fs.readFileSync(new URL("../components/QaiWanderer.tsx", import.meta.url), "utf8");
+ok("wanderer walks without TalkButton", wanderSrc.includes("qai-wander") && !wanderSrc.includes("TalkButton") && !wanderSrc.includes("onTalk"));
+ok("gemini 2.0/2.5 flash-lite stream", aiSrc.includes("gemini-2.0-flash-lite") && aiSrc.includes("gemini-2.5-flash-lite") && aiSrc.includes("generateContentStream") && aiSrc.includes("text/event-stream"));
 ok("no grok pin", !aiSrc.toLowerCase().includes("grok"));
 ok("empty GoogleGenAI constructor", aiSrc.includes("new GoogleGenAI({})"));
 ok("does not set provider keys", !/GEMINI_API_KEY\s*=/.test(aiSrc) && !/OPENAI_API_KEY\s*=/.test(aiSrc) && !aiSrc.includes("apiKey:"));

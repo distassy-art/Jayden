@@ -7,7 +7,7 @@
     "build": "next build && node scripts/pages-indexes.mjs",
     "start": "next start",
     "lint": "eslint",
-    "check:dialect": "node scripts/check-dialect.mjs"
+    "check:dialect": "node scripts/check-dialect.mjs && node scripts/check-ai-function.mjs"
   },
   "dependencies": {
     "@google/genai": "^2.22.0",

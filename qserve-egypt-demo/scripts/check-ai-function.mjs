@@ -16,6 +16,8 @@ const src = readFileSync(new URL("../netlify/functions/ai.ts", import.meta.url),
 ok("path /api/ai", src.includes('path: "/api/ai"'));
 ok("default export", /export default async/.test(src));
 ok("model gemini-2.5-flash-lite", src.includes("gemini-2.5-flash-lite"));
+ok("faster gemini-2.0-flash-lite first", src.includes("gemini-2.0-flash-lite") && src.indexOf("gemini-2.0-flash-lite") < src.indexOf("gemini-2.5-flash-lite"));
+ok("streams generateContentStream", src.includes("generateContentStream") && src.includes("text/event-stream"));
 ok("GoogleGenAI empty", src.includes("new GoogleGenAI({})"));
 ok("no grok", !/grok/i.test(src));
 ok("no user apiKey", !/apiKey\s*:/.test(src));

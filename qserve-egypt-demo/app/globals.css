@@ -967,10 +967,7 @@ body {
 }
 
 .qai-wander-talk {
-  pointer-events: auto;
-  margin-top: 0.35rem;
-  width: max-content;
-  max-width: 12.5rem;
+  display: none;
 }
 
 .qai-talk-btn {
@@ -1094,7 +1091,8 @@ body {
 .qai-talk-dock {
   position: fixed;
   z-index: 60;
-  inset-inline-start: 1rem;
+  left: 1rem;
+  right: auto;
   bottom: 1rem;
   width: min(16.5rem, calc(100vw - 2rem));
   pointer-events: auto;

@@ -5,7 +5,6 @@ import { kbBySku, thumbFor } from "@/lib/product-db";
 import { openCartDrawer } from "@/lib/cart";
 import { DIALECT_UI, type Dialect } from "@/lib/dialect";
 import { QaiMascot } from "./QaiMascot";
-import { TalkButton } from "./TalkButton";
 
 type Pose = "idle" | "walk" | "point" | "grab" | "haul" | "drop";
 type Spot = { x: number; y: number };
@@ -45,22 +44,16 @@ export function QaiWanderer({
   dialect,
   open,
   talking,
-  listening,
-  voiceBlocked,
   hello,
   onOpen,
   onDismiss,
-  onTalk,
 }: {
   dialect: Dialect;
   open: boolean;
   talking: boolean;
-  listening: boolean;
-  voiceBlocked: boolean;
   hello: string;
   onOpen: () => void;
   onDismiss: () => void;
-  onTalk: () => void;
 }) {
   const ui = DIALECT_UI[dialect] || DIALECT_UI.eg;
   const box = useRef<HTMLDivElement>(null);
@@ -178,9 +171,6 @@ export function QaiWanderer({
         />
       </button>
       {!open && <span className="qai-wander-tag">Q AI</span>}
-      <div className="qai-wander-talk" dir={ui.rtl ? "rtl" : "ltr"}>
-        <TalkButton dialect={dialect} listening={listening} blocked={voiceBlocked} onClick={onTalk} />
-      </div>
       {open && <p className="qai-wander-bubble">{hello}</p>}
     </div>
   );

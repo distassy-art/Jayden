@@ -6,10 +6,19 @@ import { applyOps, getCart, openCartDrawer } from "@/lib/cart";
 import { useMoney } from "@/lib/currency";
 import { DIALECT_UI, dialectOf } from "@/lib/dialect";
 import { greeterLine, isProductPath } from "@/lib/product-db";
+import { postSalesmanAi } from "@/lib/ai-client";
 import { lookedAt, postJson, sessionId } from "@/lib/track";
 import { useBarePath, useLocale } from "@/lib/use-locale";
 import { inferPartner, inferShipId, getPartnerInstall, getShipId, setPartnerInstall, setShipId, type ShipId } from "@/lib/shipping";
-import { prefetchSpeak, speakText, startListen, unlockSpeech, voiceSupported, type ListenCtl } from "@/lib/voice";
+import {
+  createReplySpeaker,
+  prefetchSpeak,
+  speakText,
+  startListen,
+  unlockSpeech,
+  voiceSupported,
+  type ListenCtl,
+} from "@/lib/voice";
 import { QaiWanderer } from "./QaiWanderer";
 import { TalkButton } from "./TalkButton";
 
@@ -53,6 +62,9 @@ export function SalesmanChat() {
   const sending = useRef(false);
   const msgsRef = useRef<Msg[]>([]);
   const listeningRef = useRef(false);
+  const listenLive = useRef(false);
+  const speakingRef = useRef(false);
+  const echoUntil = useRef(0);
   const queueRef = useRef<string[]>([]);
   const dialectRef = useRef(dialect);
   dialectRef.current = dialect;
@@ -63,11 +75,19 @@ export function SalesmanChat() {
   const helloRef = useRef(hello);
   helloRef.current = hello;
 
+  function markSpeaking(on: boolean) {
+    speakingRef.current = on;
+    setSpeaking(on);
+    if (!on) echoUntil.current = Date.now() + 550;
+  }
+
   function stopAllVoice() {
+    listenLive.current = false;
     listenCtl.current.stop();
     queueRef.current = [];
     stopVoice.current();
     listeningRef.current = false;
+    speakingRef.current = false;
     setListening(false);
     setSpeaking(false);
   }
@@ -78,14 +98,13 @@ export function SalesmanChat() {
       setVoiceBlocked(false);
     }
     stopVoice.current();
-    listenCtl.current.pause();
     prefetchSpeak(hello, dialectRef.current);
-    setSpeaking(true);
+    markSpeaking(true);
     stopVoice.current = speakText(
       hello,
       dialectRef.current,
       () => {
-        setSpeaking(true);
+        markSpeaking(true);
         setVoiceBlocked(false);
         try {
           sessionStorage.setItem(HEARD_KEY, "1");
@@ -94,8 +113,7 @@ export function SalesmanChat() {
         }
       },
       () => {
-        setSpeaking(false);
-        if (listeningRef.current) beginListen();
+        markSpeaking(false);
       },
     );
   }
@@ -175,12 +193,18 @@ export function SalesmanChat() {
     setMsgs(history);
     setInput("");
     setBusy(true);
-    listenCtl.current.pause();
+    stopVoice.current();
+    const speaker = createReplySpeaker(
+      () => dialectRef.current,
+      {
+        onStart: () => markSpeaking(true),
+        onEnd: () => markSpeaking(false),
+      },
+    );
+    stopVoice.current = () => speaker.stop();
     try {
-      const res = await fetch("/api/ai", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
+      const data = await postSalesmanAi(
+        {
           sessionId: sessionId(),
           locale,
           currency: money.currency,
@@ -189,72 +213,52 @@ export function SalesmanChat() {
           cart: getCart(),
           shipId: getShipId(),
           partner: getPartnerInstall(),
-        }),
-      });
-      const data = await res.json().catch(() => ({}));
+        },
+        (acc) => speaker.push(acc),
+      );
       const reply = String(data.reply || ui.failReply);
       const next = [...history, { role: "assistant" as const, text: reply }];
       msgsRef.current = next;
       setMsgs(next);
-      stopVoice.current();
-      setSpeaking(true);
-      const spoken = new Promise<void>((resolve) => {
-        stopVoice.current = speakText(
-          reply,
-          dialectRef.current,
-          () => setSpeaking(true),
-          () => {
-            setSpeaking(false);
-            resolve();
-          },
-        );
-      });
+      speaker.finish(reply);
       if (data.shipId) setShipId(data.shipId as ShipId);
       if (typeof data.partner === "boolean") setPartnerInstall(data.partner);
       if (Array.isArray(data.cartOps) && data.cartOps.length) await applyOps(data.cartOps);
       if (data.showCart || (Array.isArray(data.cartOps) && data.cartOps.length) || data.shipId) openCartDrawer();
       postJson("/api/visit", { path: fullPath, locale, lookedAt: lookedAt(fullPath), source: viaVoice ? "voice" : "chat" });
-      if (data.navigate) setTimeout(() => router.push(data.navigate), 900);
-      await spoken;
+      const nextPath = data.navigate;
+      if (nextPath) setTimeout(() => router.push(nextPath), 900);
     } catch {
       const fail = ui.failConn;
       const next = [...history, { role: "assistant" as const, text: fail }];
       msgsRef.current = next;
       setMsgs(next);
-      setSpeaking(true);
-      await new Promise<void>((resolve) => {
-        stopVoice.current = speakText(
-          fail,
-          dialectRef.current,
-          () => setSpeaking(true),
-          () => {
-            setSpeaking(false);
-            resolve();
-          },
-        );
-      });
+      speaker.finish(fail);
     } finally {
       setBusy(false);
       sending.current = false;
-      if (listeningRef.current) listenCtl.current.resume();
       const queued = queueRef.current.shift();
       if (queued) void send(queued, true);
     }
   }
 
   function beginListen() {
-    listenCtl.current.stop();
+    unlockSpeech();
     listeningRef.current = true;
     setListening(true);
     setVoiceHint(ui.listen);
+    if (listenLive.current) return;
+    listenLive.current = true;
     listenCtl.current = startListen(dialectRef.current, {
       onPartial: (p) => setInput(p),
       onFinal: (text) => {
         setInput("");
         void send(text, true);
       },
+      ignoreFinal: () => speakingRef.current || Date.now() < echoUntil.current,
       onError: (code) => {
         if (code !== "not-allowed") return;
+        listenLive.current = false;
         listenCtl.current.stop();
         listeningRef.current = false;
         setListening(false);
@@ -268,6 +272,7 @@ export function SalesmanChat() {
     setOpen(true);
     setVoiceBlocked(false);
     if (listeningRef.current) {
+      listenLive.current = false;
       listenCtl.current.stop();
       queueRef.current = [];
       listeningRef.current = false;
@@ -281,9 +286,7 @@ export function SalesmanChat() {
       greetVoice(true);
       return;
     }
-    listeningRef.current = true;
-    setListening(true);
-    setVoiceHint(ui.listen);
+    beginListen();
     greetVoice(true);
   }
 
@@ -299,12 +302,9 @@ export function SalesmanChat() {
         dialect={dialect}
         open={open}
         talking={talking}
-        listening={listening}
-        voiceBlocked={voiceBlocked}
         hello={hello}
         onOpen={openAgent}
         onDismiss={dismiss}
-        onTalk={toggleTalk}
       />
       {open && (
         <div className="qai-chat-dock glass" dir={ui.rtl ? "rtl" : "ltr"}>
@@ -328,8 +328,7 @@ export function SalesmanChat() {
             <div ref={end} />
           </div>
           <div className="border-t border-navy/10 p-2">
-            <TalkButton dialect={dialect} listening={listening} blocked={voiceBlocked} disabled={busy && !listening} size="lg" onClick={toggleTalk} />
-            {voiceHint && <p className="mt-1 px-1 text-[11px] font-bold text-navy/70">{voiceHint}</p>}
+            {voiceHint && <p className="px-1 text-[11px] font-bold text-navy/70">{voiceHint}</p>}
           </div>
           <form
             className="flex gap-2 border-t border-navy/10 p-2"

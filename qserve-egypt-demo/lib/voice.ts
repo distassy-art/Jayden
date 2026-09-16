@@ -232,6 +232,16 @@ export function spokenClauses(text: string, dialect: Dialect) {
   return (parts.length ? parts : [said]).slice(0, 2).map((p) => p.slice(0, 140));
 }
 
+export function firstClauseReady(text: string, dialect: Dialect) {
+  const clauses = spokenClauses(text, dialect);
+  if (!clauses.length) return "";
+  if (clauses.length > 1) return clauses[0];
+  const first = clauses[0];
+  if (/[.!?؟]/.test(first) && first.replace(/\s/g, "").length >= 4) return first;
+  if (first.length >= 18) return first;
+  return "";
+}
+
 const ttsCache = new Map<string, Promise<ArrayBuffer>>();
 
 function ttsKey(text: string, dialect: Dialect) {
@@ -633,6 +643,74 @@ export function speakWelcome(text: string, dialect: Dialect) {
   return speakText(text, dialect);
 }
 
+export function createReplySpeaker(
+  getDialect: () => Dialect,
+  hooks: { onStart?: () => void; onEnd?: () => void },
+) {
+  let stopInner = () => {};
+  let started = false;
+  let rest = "";
+  let firstEnded = false;
+  let ended = false;
+  let streamDone = false;
+  const finish = () => {
+    if (ended) return;
+    ended = true;
+    hooks.onEnd?.();
+  };
+  const playRest = () => {
+    if (ended) return;
+    const piece = rest.trim();
+    rest = "";
+    if (piece) {
+      stopInner = speakText(piece, getDialect(), undefined, () => finish());
+      return;
+    }
+    if (streamDone) finish();
+  };
+  return {
+    push(text: string) {
+      if (ended) return;
+      const dialect = getDialect();
+      const clauses = spokenClauses(text, dialect);
+      if (clauses.length > 1) rest = clauses.slice(1).join(" ");
+      if (started) return;
+      const first = firstClauseReady(text, dialect);
+      if (!first) return;
+      started = true;
+      stopInner = speakText(first, dialect, hooks.onStart, () => {
+        firstEnded = true;
+        playRest();
+      });
+    },
+    finish(text?: string) {
+      if (ended) return;
+      streamDone = true;
+      if (text) this.push(text);
+      if (!started) {
+        const dialect = getDialect();
+        const said = spokenClauses(text || "", dialect).join(" ") || String(text || "").trim();
+        if (!said) {
+          finish();
+          return;
+        }
+        started = true;
+        stopInner = speakText(said, dialect, hooks.onStart, () => finish());
+        return;
+      }
+      if (firstEnded) playRest();
+    },
+    stop() {
+      stopInner();
+      rest = "";
+      started = true;
+      firstEnded = true;
+      streamDone = true;
+      finish();
+    },
+  };
+}
+
 export type ListenCtl = {
   stop: () => void;
   pause: () => void;
@@ -645,6 +723,7 @@ export function startListen(
     onFinal: (text: string) => void;
     onPartial?: (text: string) => void;
     onError?: (code: string) => void;
+    ignoreFinal?: () => boolean;
   },
 ): ListenCtl {
   const Ctor = recognitionCtor();
@@ -655,18 +734,15 @@ export function startListen(
   }
   const RecEngine = Ctor;
   let wanted = true;
-  let paused = false;
+  let muted = false;
   let rec: Rec | null = null;
   let restartTimer = 0;
+  let watchTimer = 0;
+  let lastFinalAt = 0;
 
   function boot() {
-    if (!wanted || paused) return;
+    if (!wanted || rec) return;
     window.clearTimeout(restartTimer);
-    try {
-      rec?.abort();
-    } catch {
-      /* ignore */
-    }
     const next = new RecEngine();
     rec = next;
     let seen = 0;
@@ -674,7 +750,7 @@ export function startListen(
     next.interimResults = true;
     next.continuous = true;
     next.onresult = (ev) => {
-      if (!wanted || paused) return;
+      if (!wanted) return;
       let interim = "";
       const fresh: string[] = [];
       for (let i = 0; i < ev.results.length; i += 1) {
@@ -688,36 +764,50 @@ export function startListen(
         seen = i + 1;
         if (piece.trim()) fresh.push(piece.trim());
       }
+      if (muted || handlers.ignoreFinal?.()) {
+        if (interim) handlers.onPartial?.(interim);
+        return;
+      }
       if (interim) handlers.onPartial?.(interim);
       const text = fresh.join(" ").replace(/\s+/g, " ").trim();
-      if (text) handlers.onFinal(text);
+      if (!text) return;
+      const now = Date.now();
+      if (now - lastFinalAt < 400) return;
+      lastFinalAt = now;
+      handlers.onFinal(text);
     };
     next.onerror = (ev) => {
       const code = String(ev.error || "error");
-      if (code === "no-speech" || code === "aborted") return;
       if (code === "not-allowed" || code === "service-not-allowed") {
         wanted = false;
         handlers.onError?.(code);
+        return;
       }
+      // no-speech / network / aborted: keep the session — onend restarts.
     };
     next.onend = () => {
       if (rec === next) rec = null;
-      if (!wanted || paused) return;
-      restartTimer = window.setTimeout(boot, 80);
+      if (!wanted) return;
+      restartTimer = window.setTimeout(boot, 60);
     };
     try {
       next.start();
     } catch {
-      restartTimer = window.setTimeout(boot, 160);
+      rec = null;
+      restartTimer = window.setTimeout(boot, 120);
     }
   }
 
   boot();
+  watchTimer = window.setInterval(() => {
+    if (wanted && !rec) boot();
+  }, 900);
   return {
     stop() {
       wanted = false;
-      paused = false;
+      muted = false;
       window.clearTimeout(restartTimer);
+      window.clearInterval(watchTimer);
       try {
         rec?.stop();
       } catch {
@@ -730,23 +820,12 @@ export function startListen(
       rec = null;
     },
     pause() {
-      paused = true;
-      window.clearTimeout(restartTimer);
-      try {
-        rec?.stop();
-      } catch {
-        try {
-          rec?.abort();
-        } catch {
-          /* ignore */
-        }
-      }
-      rec = null;
+      muted = true;
     },
     resume() {
       if (!wanted) return;
-      paused = false;
-      boot();
+      muted = false;
+      if (!rec) boot();
     },
   };
 }
