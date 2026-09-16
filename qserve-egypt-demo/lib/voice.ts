@@ -202,50 +202,120 @@ export function speakWelcome(text: string, dialect: Dialect) {
   return speakText(text, dialect);
 }
 
+export type ListenCtl = {
+  stop: () => void;
+  pause: () => void;
+  resume: () => void;
+};
+
 export function startListen(
   dialect: Dialect,
   handlers: {
     onFinal: (text: string) => void;
     onPartial?: (text: string) => void;
     onError?: (code: string) => void;
-    onEnd?: () => void;
   },
-) {
+): ListenCtl {
   const Ctor = recognitionCtor();
+  const noop: ListenCtl = { stop() {}, pause() {}, resume() {} };
   if (!Ctor) {
     handlers.onError?.("no-stt");
-    handlers.onEnd?.();
-    return () => {};
+    return noop;
   }
-  const rec = new Ctor();
-  rec.lang = (DIALECT_UI[dialect] || DIALECT_UI.eg).bcp47;
-  rec.interimResults = true;
-  rec.continuous = false;
-  rec.onresult = (ev) => {
-    let interim = "";
-    let finalText = "";
-    for (let i = 0; i < ev.results.length; i += 1) {
-      const row = ev.results[i];
-      const piece = row[0]?.transcript || "";
-      if (row.isFinal) finalText += piece;
-      else interim += piece;
-    }
-    if (interim) handlers.onPartial?.(interim);
-    if (finalText.trim()) handlers.onFinal(finalText.trim());
-  };
-  rec.onerror = (ev) => handlers.onError?.(String(ev.error || "error"));
-  rec.onend = () => handlers.onEnd?.();
-  try {
-    rec.start();
-  } catch {
-    handlers.onError?.("start-failed");
-    handlers.onEnd?.();
-  }
-  return () => {
+  const RecEngine = Ctor;
+  let wanted = true;
+  let paused = false;
+  let rec: Rec | null = null;
+  let restartTimer = 0;
+
+  function boot() {
+    if (!wanted || paused) return;
+    window.clearTimeout(restartTimer);
     try {
-      rec.stop();
+      rec?.abort();
     } catch {
-      rec.abort();
+      /* ignore */
     }
+    const next = new RecEngine();
+    rec = next;
+    let seen = 0;
+    next.lang = (DIALECT_UI[dialect] || DIALECT_UI.eg).bcp47;
+    next.interimResults = true;
+    next.continuous = true;
+    next.onresult = (ev) => {
+      if (!wanted || paused) return;
+      let interim = "";
+      const fresh: string[] = [];
+      for (let i = 0; i < ev.results.length; i += 1) {
+        const row = ev.results[i];
+        const piece = row[0]?.transcript || "";
+        if (!row.isFinal) {
+          interim += piece;
+          continue;
+        }
+        if (i < seen) continue;
+        seen = i + 1;
+        if (piece.trim()) fresh.push(piece.trim());
+      }
+      if (interim) handlers.onPartial?.(interim);
+      const text = fresh.join(" ").replace(/\s+/g, " ").trim();
+      if (text) handlers.onFinal(text);
+    };
+    next.onerror = (ev) => {
+      const code = String(ev.error || "error");
+      if (code === "no-speech" || code === "aborted") return;
+      if (code === "not-allowed" || code === "service-not-allowed") {
+        wanted = false;
+        handlers.onError?.(code);
+      }
+    };
+    next.onend = () => {
+      if (rec === next) rec = null;
+      if (!wanted || paused) return;
+      restartTimer = window.setTimeout(boot, 80);
+    };
+    try {
+      next.start();
+    } catch {
+      restartTimer = window.setTimeout(boot, 160);
+    }
+  }
+
+  boot();
+  return {
+    stop() {
+      wanted = false;
+      paused = false;
+      window.clearTimeout(restartTimer);
+      try {
+        rec?.stop();
+      } catch {
+        try {
+          rec?.abort();
+        } catch {
+          /* ignore */
+        }
+      }
+      rec = null;
+    },
+    pause() {
+      paused = true;
+      window.clearTimeout(restartTimer);
+      try {
+        rec?.stop();
+      } catch {
+        try {
+          rec?.abort();
+        } catch {
+          /* ignore */
+        }
+      }
+      rec = null;
+    },
+    resume() {
+      if (!wanted) return;
+      paused = false;
+      boot();
+    },
   };
 }

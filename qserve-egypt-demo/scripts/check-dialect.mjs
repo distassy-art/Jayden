@@ -47,6 +47,7 @@ const screenOps = inferCartOps("three indoor 21.5 screens");
 ok("21.5 is not qty 21", !screenOps.some((o) => o.qty === 21));
 ok("three 21.5 -> LCD-215 x3", screenOps.some((o) => o.sku === "LCD-215" && o.qty === 3));
 ok("prepSpeak egyptian brand", prepSpeak("Q AI HDMI", "eg").includes("كيو"));
+ok("eg copy stay-on", dialectVoiceBlock("eg").includes("إزيك"));
 
 if (failed) {
   console.error(failed, "checks failed");

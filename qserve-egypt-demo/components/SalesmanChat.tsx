@@ -9,7 +9,7 @@ import { greeterLine, isProductPath } from "@/lib/product-db";
 import { lookedAt, postJson, sessionId } from "@/lib/track";
 import { useBarePath, useLocale } from "@/lib/use-locale";
 import { inferPartner, inferShipId, getPartnerInstall, getShipId, setPartnerInstall, setShipId, type ShipId } from "@/lib/shipping";
-import { speakText, startListen, unlockSpeech, voiceSupported } from "@/lib/voice";
+import { speakText, startListen, unlockSpeech, voiceSupported, type ListenCtl } from "@/lib/voice";
 import { QaiWanderer } from "./QaiWanderer";
 import { TalkButton } from "./TalkButton";
 
@@ -49,16 +49,23 @@ export function SalesmanChat() {
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const end = useRef<HTMLDivElement>(null);
   const stopVoice = useRef<() => void>(() => {});
-  const stopListen = useRef<() => void>(() => {});
+  const listenCtl = useRef<ListenCtl>({ stop() {}, pause() {}, resume() {} });
   const sending = useRef(false);
+  const msgsRef = useRef<Msg[]>([]);
+  const listeningRef = useRef(false);
+  const queueRef = useRef<string[]>([]);
   const dialectRef = useRef(dialect);
   dialectRef.current = dialect;
+  msgsRef.current = msgs;
+  listeningRef.current = listening;
   const fullPath = locale === "en" ? (path === "/" ? "/en" : `/en${path}`) : path;
   const hello = greeterLine(path, dialect);
 
   function stopAllVoice() {
-    stopListen.current();
+    listenCtl.current.stop();
+    queueRef.current = [];
     stopVoice.current();
+    listeningRef.current = false;
     setListening(false);
     setSpeaking(false);
   }
@@ -69,6 +76,7 @@ export function SalesmanChat() {
       setVoiceBlocked(false);
     }
     stopVoice.current();
+    listenCtl.current.pause();
     setSpeaking(true);
     stopVoice.current = speakText(
       hello,
@@ -82,7 +90,10 @@ export function SalesmanChat() {
           /* ignore */
         }
       },
-      () => setSpeaking(false),
+      () => {
+        setSpeaking(false);
+        if (listeningRef.current) listenCtl.current.resume();
+      },
     );
   }
 
@@ -124,7 +135,11 @@ export function SalesmanChat() {
 
   async function send(text: string, viaVoice = false) {
     const t = text.trim();
-    if (!t || sending.current) return;
+    if (!t) return;
+    if (sending.current) {
+      queueRef.current.push(t);
+      return;
+    }
     sending.current = true;
     try {
       sessionStorage.setItem("qserve-need", t);
@@ -136,10 +151,12 @@ export function SalesmanChat() {
     const partnerGuess = inferPartner(t);
     if (partnerGuess !== null) setPartnerInstall(partnerGuess);
 
-    const history = [...msgs, { role: "user" as const, text: t }];
+    const history = [...msgsRef.current, { role: "user" as const, text: t }];
+    msgsRef.current = history;
     setMsgs(history);
     setInput("");
     setBusy(true);
+    listenCtl.current.pause();
     try {
       const res = await fetch("/api/chat", {
         method: "POST",
@@ -157,10 +174,22 @@ export function SalesmanChat() {
       });
       const data = await res.json().catch(() => ({}));
       const reply = String(data.reply || ui.failReply);
-      setMsgs([...history, { role: "assistant", text: reply }]);
+      const next = [...history, { role: "assistant" as const, text: reply }];
+      msgsRef.current = next;
+      setMsgs(next);
       stopVoice.current();
       setSpeaking(true);
-      stopVoice.current = speakText(reply, dialectRef.current, () => setSpeaking(true), () => setSpeaking(false));
+      await new Promise<void>((resolve) => {
+        stopVoice.current = speakText(
+          reply,
+          dialectRef.current,
+          () => setSpeaking(true),
+          () => {
+            setSpeaking(false);
+            resolve();
+          },
+        );
+      });
       if (data.shipId) setShipId(data.shipId as ShipId);
       if (typeof data.partner === "boolean") setPartnerInstall(data.partner);
       if (Array.isArray(data.cartOps) && data.cartOps.length) await applyOps(data.cartOps);
@@ -169,47 +198,62 @@ export function SalesmanChat() {
       if (data.navigate) setTimeout(() => router.push(data.navigate), 900);
     } catch {
       const fail = ui.failConn;
-      setMsgs([...history, { role: "assistant", text: fail }]);
-      speakText(fail, dialectRef.current);
+      const next = [...history, { role: "assistant" as const, text: fail }];
+      msgsRef.current = next;
+      setMsgs(next);
+      await new Promise<void>((resolve) => {
+        stopVoice.current = speakText(fail, dialectRef.current, undefined, resolve);
+      });
     } finally {
       setBusy(false);
       sending.current = false;
+      if (listeningRef.current) listenCtl.current.resume();
+      const queued = queueRef.current.shift();
+      if (queued) void send(queued, true);
     }
+  }
+
+  function beginListen() {
+    listenCtl.current.stop();
+    listeningRef.current = true;
+    setListening(true);
+    setVoiceHint(ui.listen);
+    listenCtl.current = startListen(dialectRef.current, {
+      onPartial: (p) => setInput(p),
+      onFinal: (text) => {
+        setInput("");
+        void send(text, true);
+      },
+      onError: (code) => {
+        if (code !== "not-allowed") return;
+        listenCtl.current.stop();
+        listeningRef.current = false;
+        setListening(false);
+        setVoiceHint(ui.micAllow);
+      },
+    });
   }
 
   function toggleTalk() {
     unlockSpeech();
     setOpen(true);
-    const support = voiceSupported();
-    if (listening) {
-      stopListen.current();
+    setVoiceBlocked(false);
+    if (listeningRef.current) {
+      listenCtl.current.stop();
+      queueRef.current = [];
+      listeningRef.current = false;
       setListening(false);
+      setVoiceHint(ui.speakHint);
       return;
     }
-    if (voiceBlocked) greetVoice(true);
+    const support = voiceSupported();
     if (!support.stt) {
       setVoiceHint(ui.noStt);
-      if (voiceBlocked) greetVoice(true);
+      greetVoice(true);
       return;
     }
-    stopVoice.current();
-    setListening(true);
-    setVoiceHint(ui.listen);
-    stopListen.current = startListen(dialectRef.current, {
-      onPartial: (p) => setInput(p),
-      onFinal: (text) => {
-        setListening(false);
-        setInput("");
-        send(text, true);
-      },
-      onError: (code) => {
-        setListening(false);
-        if (code === "not-allowed") setVoiceHint(ui.micAllow);
-        else if (code === "no-speech") setVoiceHint(ui.noSpeech);
-        else setVoiceHint(ui.micFail);
-      },
-      onEnd: () => setListening(false),
-    });
+    beginListen();
+    greetVoice(true);
   }
 
   const talking = busy || speaking;
@@ -249,7 +293,7 @@ export function SalesmanChat() {
             <div ref={end} />
           </div>
           <div className="border-t border-navy/10 p-2">
-            <TalkButton dialect={dialect} listening={listening} blocked={voiceBlocked} disabled={busy} size="lg" onClick={toggleTalk} />
+            <TalkButton dialect={dialect} listening={listening} blocked={voiceBlocked} disabled={busy && !listening} size="lg" onClick={toggleTalk} />
             {voiceHint && <p className="mt-1 px-1 text-[11px] font-bold text-navy/70">{voiceHint}</p>}
           </div>
           <form

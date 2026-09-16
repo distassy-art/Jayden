@@ -755,9 +755,11 @@ body {
 }
 
 .qai-talk-btn.is-listen {
-  background: #b42318;
+  background: #c62828;
   color: #fffdf8;
-  animation: qai-mic-pulse 0.85s ease-in-out infinite;
+  border-color: #7f1111;
+  box-shadow: 0 0 0 4px rgba(198, 40, 40, 0.38), 0 8px 22px rgba(198, 40, 40, 0.35);
+  animation: qai-mic-pulse 0.7s ease-in-out infinite;
 }
 
 .qai-talk-btn.is-blocked {
@@ -775,6 +777,30 @@ body {
 .qai-talk-copy strong {
   font-size: 0.95rem;
   letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.qai-mic-on-dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 999px;
+  background: #fffdf8;
+  box-shadow: 0 0 0 4px rgba(255, 253, 248, 0.28);
+  animation: qai-mic-dot 0.7s ease-in-out infinite;
+}
+
+@keyframes qai-mic-dot {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.75);
+  }
 }
 
 .qai-talk-copy em {

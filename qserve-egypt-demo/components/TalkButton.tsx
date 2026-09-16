@@ -27,7 +27,7 @@ export function TalkButton({
       onClick={onClick}
       disabled={disabled}
       aria-pressed={listening}
-      aria-label={ui.aria}
+      aria-label={listening ? ui.stop : ui.aria}
     >
       <span className="qai-mic-icon" aria-hidden>
         {listening ? (
@@ -41,7 +41,10 @@ export function TalkButton({
         )}
       </span>
       <span className="qai-talk-copy">
-        <strong>{label}</strong>
+        <strong>
+          {listening ? <span className="qai-mic-on-dot" /> : null}
+          {label}
+        </strong>
         <em>{hint}</em>
       </span>
     </button>
