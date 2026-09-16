@@ -63,6 +63,10 @@ ok("no grok pin", !aiSrc.toLowerCase().includes("grok"));
 ok("empty GoogleGenAI constructor", aiSrc.includes("new GoogleGenAI({})"));
 ok("does not set provider keys", !/GEMINI_API_KEY\s*=/.test(aiSrc) && !/OPENAI_API_KEY\s*=/.test(aiSrc) && !aiSrc.includes("apiKey:"));
 
+const mascotSrc = fs.readFileSync(new URL("../components/QaiMascot.tsx", import.meta.url), "utf8");
+ok("mascot is a figure not the logo jpg", !mascotSrc.includes("official-logo.jpg") && mascotSrc.includes("qai-figure"));
+ok("mascot has walk limbs and mouse", mascotSrc.includes("qai-leg") && mascotSrc.includes("qai-os-mouse") && mascotSrc.includes("qai-mouth"));
+
 if (failed) {
   console.error(failed, "checks failed");
   process.exit(1);
