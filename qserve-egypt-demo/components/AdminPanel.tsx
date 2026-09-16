@@ -96,7 +96,10 @@ export function AdminPanel() {
       <form onSubmit={onLogin} className="glass mx-auto mt-16 max-w-md rounded-3xl p-8">
         <h1 className="text-3xl font-black text-navy">الموظفين / Staff</h1>
         <p className="mt-2 text-sm text-navy/70">هذه الصفحة ليست للمتسوقين. زيارات الموقع والمحادثات تظهر بعد الدخول.</p>
-        <input type="password" className="field" value={pw} onChange={(e) => setPw(e.target.value)} placeholder="كلمة المرور" />
+        <p className="mt-3 rounded-2xl bg-void px-3 py-2 text-sm font-bold text-navy">
+          Demo password: <code dir="ltr">qserve-staff</code>
+        </p>
+        <input type="password" className="field" value={pw} onChange={(e) => setPw(e.target.value)} placeholder="qserve-staff" />
         {err && <p className="mt-2 text-sm font-bold text-red-700">{err}</p>}
         <button className="btn-go mt-4 w-full" type="submit">
           دخول

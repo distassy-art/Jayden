@@ -43,6 +43,9 @@ export function Header() {
           <Link href={href("/products")} className="hover:text-cyan">
             {t.products}
           </Link>
+          <Link href={href("/cart")} className="hover:text-cyan">
+            {locale === "en" ? "Cart page" : "صفحة السلة"}
+          </Link>
           <Link href={href("/maintenance")} className="hover:text-cyan">
             {locale === "en" ? "Care" : "صيانة"}
           </Link>
@@ -60,6 +63,9 @@ export function Header() {
           </Link>
         </nav>
         <div className="flex shrink-0 items-center gap-2">
+          <Link href={href("/admin")} className="hidden text-xs font-bold text-navy/60 hover:text-gold sm:inline">
+            {locale === "en" ? "Staff / admin" : "موظفين"}
+          </Link>
           <CartButton />
           <LangSwitch />
           <span className="hidden sm:inline">
@@ -93,6 +99,12 @@ export function Header() {
             ))}
           <Link href={href("/products")} className="block py-2" onClick={() => setOpen(false)}>
             {t.products}
+          </Link>
+          <Link href={href("/cart")} className="block py-2" onClick={() => setOpen(false)}>
+            {locale === "en" ? "Cart page" : "صفحة السلة"}
+          </Link>
+          <Link href={href("/admin")} className="block py-2" onClick={() => setOpen(false)}>
+            {locale === "en" ? "Staff / admin" : "موظفين / admin"}
           </Link>
           <Link href={href("/maintenance")} className="block py-2" onClick={() => setOpen(false)}>
             {locale === "en" ? "Care" : "صيانة"}

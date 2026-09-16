@@ -39,7 +39,10 @@ export function Footer() {
         </ul>
       </div>
       <p className="border-t border-navy/10 py-4 text-center text-xs text-navy/50">
-        {t.footerLegal} · <Link href={href("/privacy")}>{t.privacy}</Link> · <Link href={href("/terms")}>{t.terms}</Link>
+        {t.footerLegal} · <Link href={href("/products")}>{t.products}</Link> ·{" "}
+        <Link href={href("/cart")}>{locale === "en" ? "Cart" : "السلة"}</Link> ·{" "}
+        <Link href={href("/admin")}>{locale === "en" ? "Staff / admin" : "موظفين"}</Link> ·{" "}
+        <Link href={href("/privacy")}>{t.privacy}</Link> · <Link href={href("/terms")}>{t.terms}</Link>
       </p>
     </footer>
   );
