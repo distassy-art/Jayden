@@ -22,7 +22,9 @@ let speechPlayer: HTMLAudioElement | null = null;
 let ctxSource: AudioBufferSourceNode | null = null;
 let lastError = "";
 let lastBytes = 0;
+let lastDuration = 0;
 let lastStarted = "";
+let peakRms = 0;
 let voicesReady: Promise<SpeechSynthesisVoice[]> | null = null;
 
 const SILENT_WAV =
@@ -85,6 +87,8 @@ function publishDebug() {
     lastError,
     lastBytes,
     lastStarted,
+    lastDuration,
+    peakRms,
     rms,
   };
 }
@@ -350,7 +354,9 @@ async function playViaContext(buf: ArrayBuffer, onStart?: () => void, onEnd?: ()
   await ctx.resume();
   if (ctx.state !== "running") throw new Error("ctx suspended");
   const decoded = await ctx.decodeAudioData(buf.slice(0));
+  lastDuration = decoded.duration;
   lastStarted = "context";
+  peakRms = 0;
   publishDebug();
   return await new Promise<() => void>((resolve, reject) => {
     try {
@@ -369,6 +375,12 @@ async function playViaContext(buf: ArrayBuffer, onStart?: () => void, onEnd?: ()
       src.onended = done;
       onStart?.();
       src.start(0);
+      const tick = () => {
+        const v = currentRms();
+        if (v > peakRms) peakRms = v;
+        if (ctxSource === src) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
       publishDebug();
       resolve(() => {
         try {
