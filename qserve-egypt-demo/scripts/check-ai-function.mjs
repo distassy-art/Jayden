@@ -31,6 +31,8 @@ const parsed = parseActions("حاضر. هحط التلاتة في السلة.\nC
 ok("spoken reply kept", parsed.reply.includes("حاضر"));
 ok("cart add parsed", parsed.cartOps.some((o) => o.sku === "LCD-215" && o.qty === 3));
 ok("show cart", parsed.showCart);
+const capped = parseActions("إزيك يا باشا. تمام. شاشة 21.5. دي لمس. عايز واحدة ولا اتنين؟", "ar");
+ok("spoken cap 2 sentences", (capped.reply.match(/[.!?؟]/g) || []).length <= 2 && /عايز واحدة/.test(capped.reply));
 
 if (failed) {
   console.error(failed, "checks failed");

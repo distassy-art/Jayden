@@ -104,7 +104,17 @@ export function parseActions(text, locale) {
     navigate = navigate.slice(3) || "/";
   }
   if (cartOps.length) showCart = true;
-  return { reply: cleaned.replace(/\n{3,}/g, "\n\n").trim(), cartOps, navigate, showCart, shipId, partner };
+  const parts = String(cleaned || "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .split(/(?<=[.!?؟])\s+/)
+    .filter(Boolean);
+  let reply = parts.join(" ");
+  if (parts.length > 2) {
+    const q = parts.find((p) => /[?؟]/.test(p));
+    reply = [parts[0], q && q !== parts[0] ? q : parts[1]].filter(Boolean).join(" ");
+  }
+  return { reply, cartOps, navigate, showCart, shipId, partner };
 }
 
 function arabicQty(text) {
