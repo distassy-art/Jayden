@@ -14,13 +14,19 @@ type Rec = {
 };
 
 let audioCtx: AudioContext | null = null;
-let voicesReady: Promise<SpeechSynthesisVoice[]> | null = null;
+let masterGain: GainNode | null = null;
+let analyser: AnalyserNode | null = null;
+let keepAliveOsc: OscillatorNode | null = null;
+let keepAliveGain: GainNode | null = null;
 let speechPlayer: HTMLAudioElement | null = null;
 let ctxSource: AudioBufferSourceNode | null = null;
-let unlockPromise: Promise<void> | null = null;
+let lastError = "";
+let lastBytes = 0;
+let lastStarted = "";
+let voicesReady: Promise<SpeechSynthesisVoice[]> | null = null;
 
-const SILENT_MP3 =
-  "data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAABhgC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAAYYoeg6XAAAAAAD/+1DEAAAH8YF7YRAAAK5uGteEAAAAnQCR//uQxAAA";
+const SILENT_WAV =
+  "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA";
 
 function recognitionCtor(): RecCtor | null {
   if (typeof window === "undefined") return null;
@@ -55,9 +61,65 @@ function ensurePlayer() {
     speechPlayer = new Audio();
     speechPlayer.preload = "auto";
     speechPlayer.setAttribute("playsinline", "true");
+    speechPlayer.setAttribute("webkit-playsinline", "true");
     speechPlayer.crossOrigin = "anonymous";
   }
   return speechPlayer;
+}
+
+function publishDebug() {
+  if (typeof window === "undefined") return;
+  const rms = currentRms();
+  (window as Window & { __qaiVoice?: unknown }).__qaiVoice = {
+    ctx: audioCtx?.state || "none",
+    keepAlive: Boolean(keepAliveOsc),
+    playerPaused: speechPlayer ? speechPlayer.paused : null,
+    lastError,
+    lastBytes,
+    lastStarted,
+    rms,
+  };
+}
+
+function currentRms() {
+  if (!analyser) return 0;
+  const buf = new Uint8Array(analyser.fftSize);
+  analyser.getByteTimeDomainData(buf);
+  let sum = 0;
+  for (let i = 0; i < buf.length; i += 1) {
+    const v = (buf[i] - 128) / 128;
+    sum += v * v;
+  }
+  return Math.sqrt(sum / buf.length);
+}
+
+function armContext() {
+  const ctx = getAudioContext();
+  if (!ctx) return null;
+  void ctx.resume();
+  if (!masterGain) {
+    masterGain = ctx.createGain();
+    masterGain.gain.value = 1;
+    analyser = ctx.createAnalyser();
+    analyser.fftSize = 256;
+    masterGain.connect(analyser);
+    analyser.connect(ctx.destination);
+  }
+  if (!keepAliveOsc) {
+    keepAliveGain = ctx.createGain();
+    keepAliveGain.gain.value = 0.00008;
+    keepAliveOsc = ctx.createOscillator();
+    keepAliveOsc.frequency.value = 18;
+    keepAliveOsc.connect(keepAliveGain);
+    keepAliveGain.connect(masterGain);
+    keepAliveOsc.start();
+  }
+  ctx.onstatechange = () => {
+    if (ctx.state === "suspended") void ctx.resume();
+    publishDebug();
+  };
+  publishDebug();
+  return ctx;
 }
 
 function warmVoices() {
@@ -94,24 +156,6 @@ function warmVoices() {
   return voicesReady;
 }
 
-function kickContext() {
-  const ctx = getAudioContext();
-  if (!ctx) return;
-  void ctx.resume();
-  try {
-    const buf = ctx.createBuffer(1, Math.max(1, Math.floor(ctx.sampleRate * 0.05)), ctx.sampleRate);
-    const src = ctx.createBufferSource();
-    src.buffer = buf;
-    const gain = ctx.createGain();
-    gain.gain.value = 0.0001;
-    src.connect(gain);
-    gain.connect(ctx.destination);
-    src.start(0);
-  } catch {
-    /* ignore */
-  }
-}
-
 export function unlockSpeech() {
   if (typeof window === "undefined") return;
   try {
@@ -120,53 +164,29 @@ export function unlockSpeech() {
     /* ignore */
   }
   void warmVoices();
-  kickContext();
+  const ctx = armContext();
+  if (ctx && ctx.state !== "running") void ctx.resume();
   const player = ensurePlayer();
   if (player) {
     try {
       player.muted = false;
       player.volume = 1;
-      if (!player.src) player.src = SILENT_MP3;
-      player.currentTime = 0;
-      if (!unlockPromise) {
-        unlockPromise = player.play().then(
-          () => {
-            try {
-              player.pause();
-              player.currentTime = 0;
-            } catch {
-              /* ignore */
-            }
-          },
-          () => {},
-        );
-      } else {
-        void player.play().then(
-          () => {
-            try {
-              player.pause();
-            } catch {
-              /* ignore */
-            }
-          },
-          () => {},
-        );
-      }
-    } catch {
-      /* ignore */
+      player.loop = true;
+      if (!player.src) player.src = SILENT_WAV;
+      void player.play().then(
+        () => {
+          publishDebug();
+        },
+        () => {
+          lastError = "unlock-play-blocked";
+          publishDebug();
+        },
+      );
+    } catch (e) {
+      lastError = String(e);
     }
   }
-  try {
-    if (window.speechSynthesis) {
-      const kick = new SpeechSynthesisUtterance(" ");
-      kick.volume = 0;
-      kick.rate = 1;
-      kick.lang = "ar-EG";
-      window.speechSynthesis.speak(kick);
-    }
-  } catch {
-    /* ignore */
-  }
+  publishDebug();
 }
 
 export function prepSpeak(text: string, dialect: Dialect) {
@@ -236,7 +256,7 @@ function pickVoice(dialect: Dialect) {
   return voices.find((v) => /arab/i.test(v.name) || v.lang.toLowerCase().startsWith("ar")) || null;
 }
 
-function stopAudio() {
+function stopSpeechSource() {
   if (ctxSource) {
     try {
       ctxSource.stop();
@@ -245,21 +265,6 @@ function stopAudio() {
     }
     ctxSource = null;
   }
-  if (speechPlayer) {
-    try {
-      speechPlayer.pause();
-      speechPlayer.currentTime = 0;
-    } catch {
-      /* ignore */
-    }
-  }
-}
-
-function hasEgyptianVoice(voices: SpeechSynthesisVoice[]) {
-  return voices.some((v) => {
-    const hay = `${v.lang} ${v.name}`.toLowerCase();
-    return hay.includes("ar-eg") || hay.includes("egypt") || hay.includes("hoda") || hay.includes("salma");
-  });
 }
 
 function speakBrowser(text: string, dialect: Dialect, onStart?: () => void, onEnd?: () => void): { stop: () => void; started: Promise<boolean> } {
@@ -332,17 +337,20 @@ function speakBrowser(text: string, dialect: Dialect, onStart?: () => void, onEn
 }
 
 async function playViaContext(buf: ArrayBuffer, onStart?: () => void, onEnd?: () => void) {
-  const ctx = getAudioContext();
+  const ctx = armContext();
   if (!ctx) throw new Error("no ctx");
   await ctx.resume();
   if (ctx.state !== "running") throw new Error("ctx suspended");
   const decoded = await ctx.decodeAudioData(buf.slice(0));
+  lastStarted = "context";
+  publishDebug();
   return await new Promise<() => void>((resolve, reject) => {
     try {
+      stopSpeechSource();
       const src = ctx.createBufferSource();
       ctxSource = src;
       src.buffer = decoded;
-      src.connect(ctx.destination);
+      src.connect(masterGain || ctx.destination);
       let finished = false;
       const done = () => {
         if (finished) return;
@@ -353,6 +361,7 @@ async function playViaContext(buf: ArrayBuffer, onStart?: () => void, onEnd?: ()
       src.onended = done;
       onStart?.();
       src.start(0);
+      publishDebug();
       resolve(() => {
         try {
           src.stop();
@@ -368,12 +377,15 @@ async function playViaContext(buf: ArrayBuffer, onStart?: () => void, onEnd?: ()
 }
 
 async function playViaElement(buf: ArrayBuffer, mime: string, onStart?: () => void, onEnd?: () => void) {
+  const audio = ensurePlayer();
+  if (!audio) throw new Error("no player");
   const url = URL.createObjectURL(new Blob([buf], { type: mime || "audio/mpeg" }));
-  const audio = ensurePlayer() || new Audio();
-  speechPlayer = audio;
-  audio.src = url;
+  audio.loop = false;
   audio.muted = false;
   audio.volume = 1;
+  audio.src = url;
+  lastStarted = "element";
+  publishDebug();
   return await new Promise<() => void>((resolve, reject) => {
     let finished = false;
     const done = () => {
@@ -385,25 +397,38 @@ async function playViaElement(buf: ArrayBuffer, mime: string, onStart?: () => vo
     audio.onplay = () => onStart?.();
     audio.onended = done;
     audio.onerror = () => {
+      lastError = "element-error";
+      publishDebug();
       done();
       reject(new Error("play"));
     };
-    void audio.play().then(
-      () => {
-        resolve(() => {
-          try {
-            audio.pause();
-          } catch {
-            /* ignore */
-          }
+    const tryPlay = () =>
+      audio.play().then(
+        () => {
+          publishDebug();
+          resolve(() => {
+            try {
+              audio.pause();
+            } catch {
+              /* ignore */
+            }
+            done();
+          });
+        },
+        (err) => {
+          lastError = String(err);
+          publishDebug();
           done();
-        });
-      },
-      (err) => {
-        done();
-        reject(err);
-      },
-    );
+          reject(err);
+        },
+      );
+    if (audio.readyState >= 2) void tryPlay();
+    else {
+      audio.oncanplay = () => void tryPlay();
+      window.setTimeout(() => {
+        if (audio.paused) void tryPlay();
+      }, 400);
+    }
   });
 }
 
@@ -415,11 +440,15 @@ async function playServerTts(text: string, dialect: Dialect, onStart?: () => voi
   });
   if (!res.ok) throw new Error("tts http");
   const buf = await res.arrayBuffer();
+  lastBytes = buf.byteLength;
+  publishDebug();
   if (buf.byteLength < 200) throw new Error("tts empty");
   const mime = res.headers.get("content-type") || "audio/mpeg";
   try {
     return await playViaContext(buf, onStart, onEnd);
-  } catch {
+  } catch (e) {
+    lastError = String(e);
+    publishDebug();
     return await playViaElement(buf, mime, onStart, onEnd);
   }
 }
@@ -434,8 +463,9 @@ export function speakText(text: string, dialect: Dialect, onStart?: () => void, 
     onEnd?.();
     return () => {};
   }
-  stopAudio();
+  stopSpeechSource();
   stopBrowserSpeak();
+  armContext();
   let cancelled = false;
   let stopInner: () => void = () => {};
   let ended = false;
@@ -445,9 +475,6 @@ export function speakText(text: string, dialect: Dialect, onStart?: () => void, 
     onEnd?.();
   };
   void (async () => {
-    kickContext();
-    // Arabic Web Speech is often silent (empty getVoices / autoplay). Play /api/tts
-    // through the unlocked AudioContext so every Gemini reply is actually audible.
     const voicesNow = window.speechSynthesis?.getVoices() || [];
     const canUseEnglishBrowser = dialect === "en" && voicesNow.some((v) => v.lang.toLowerCase().startsWith("en"));
     if (canUseEnglishBrowser) {
@@ -481,12 +508,13 @@ export function speakText(text: string, dialect: Dialect, onStart?: () => void, 
           if (!cancelled) finish();
         },
       );
-    } catch {
+    } catch (e) {
+      lastError = String(e);
+      publishDebug();
       if (cancelled) {
         finish();
         return;
       }
-      void warmVoices();
       const retry = speakBrowser(
         said,
         dialect,
@@ -505,7 +533,7 @@ export function speakText(text: string, dialect: Dialect, onStart?: () => void, 
   return () => {
     cancelled = true;
     stopInner();
-    stopAudio();
+    stopSpeechSource();
     stopBrowserSpeak();
     finish();
   };

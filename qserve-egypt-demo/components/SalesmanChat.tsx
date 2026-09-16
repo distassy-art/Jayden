@@ -92,7 +92,7 @@ export function SalesmanChat() {
       },
       () => {
         setSpeaking(false);
-        if (listeningRef.current) listenCtl.current.resume();
+        if (listeningRef.current) beginListen();
       },
     );
   }
@@ -262,7 +262,9 @@ export function SalesmanChat() {
       greetVoice(true);
       return;
     }
-    beginListen();
+    listeningRef.current = true;
+    setListening(true);
+    setVoiceHint(ui.listen);
     greetVoice(true);
   }
 

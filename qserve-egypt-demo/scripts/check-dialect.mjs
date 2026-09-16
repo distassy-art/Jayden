@@ -64,6 +64,7 @@ ok(
     voiceSrc.includes("ar-EG") &&
     voiceSrc.includes("voiceschanged") &&
     voiceSrc.includes("decodeAudioData") &&
+    voiceSrc.includes("createOscillator") &&
     voiceSrc.includes("playsinline"),
 );
 ok("gemini 2.5 flash", aiSrc.includes("gemini-2.5-flash") && aiSrc.includes("GoogleGenAI"));
