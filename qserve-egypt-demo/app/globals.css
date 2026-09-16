@@ -659,15 +659,77 @@ body {
   line-height: 1;
 }
 
-.qai-wander-tag {
-  pointer-events: none;
-  margin-top: 0.15rem;
+.qai-wander-talk {
+  pointer-events: auto;
+  margin-top: 0.35rem;
+  width: max-content;
+  max-width: 12.5rem;
+}
+
+.qai-talk-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  width: 100%;
+  min-height: 2.7rem;
+  padding: 0.4rem 0.75rem;
   border-radius: 999px;
-  background: #0b1b33;
-  color: #fffdf8;
-  font-size: 0.7rem;
+  background: #d4af37;
+  color: #0b1b33;
+  font-family: var(--font-money), "IBM Plex Sans", Inter, system-ui, sans-serif;
   font-weight: 800;
-  padding: 0.12rem 0.45rem;
+  box-shadow: 0 8px 22px rgba(11, 27, 51, 0.28);
+  border: 2px solid #0b1b33;
+}
+
+.qai-talk-btn-lg {
+  min-height: 3.1rem;
+  font-size: 1.05rem;
+}
+
+.qai-talk-btn.is-listen {
+  background: #b42318;
+  color: #fffdf8;
+  animation: qai-mic-pulse 0.85s ease-in-out infinite;
+}
+
+.qai-talk-btn.is-blocked {
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.55);
+}
+
+.qai-talk-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.15;
+  text-align: start;
+}
+
+.qai-talk-copy strong {
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+}
+
+.qai-talk-copy em {
+  font-style: normal;
+  font-size: 0.68rem;
+  font-weight: 700;
+  opacity: 0.85;
+}
+
+.qai-mic-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+@keyframes qai-mic-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.04);
+  }
 }
 
 .qai-wander-bubble {

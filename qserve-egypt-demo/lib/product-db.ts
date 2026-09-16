@@ -38,40 +38,83 @@ export function thumbFor(sku: string, category = "") {
   return "/photos/queue-display.webp";
 }
 
-export function greeterLine(path: string, ar: boolean) {
+import type { Dialect } from "./dialect";
+
+export function greeterLine(path: string, dialect: Dialect = "eg") {
   const p = path.toLowerCase();
-  if (p.includes("face"))
-    return ar
-      ? "أهلاً، معك خدمة عملاء كيوسيرف. التعرف على الوجه خط مستقل — موافقة مكتوبة حسب قانون حماية البيانات. بوابة، كيوسك زيارات، ولا جهاز جداري للموظفين؟"
-      : "Hi — face recognition is its own line, with written consent under PDPL. Gate, visitor kiosk, or a staff wall terminal?";
-  if (p.includes("maintenance") || p.includes("repair"))
-    return ar
-      ? "أهلاً. الجهاز واقف دلوقتي، ولا محتاج عقد صيانة سنوي للفرع؟ ساعاتنا سبت–خميس 9–6، مش 24/7."
-      : "Hi. Is a device down now, or do you need an annual care contract? Hours Sat–Thu 9–6 — not 24/7.";
-  if (p.includes("insight") || p.includes("software"))
-    return ar
-      ? "أهلاً. كيوسيرف بصيرة إضافة مخصّصة لفرعكم بعد الأجهزة. بنك، مستشفى، ولا جهة حكومية؟"
-      : "Hi. كيوسيرف بصيرة is a per-client add-on after hardware. Bank, hospital, or government?";
-  if (p.includes("queuing") || p.includes("انتظار"))
-    return ar
-      ? "أهلاً، معك المبيعات. فرع جديد ولا نظام مركّب؟ كام شباك؟ أقدر أحط الباقة وعقد الصيانة في السلة قدامك."
-      : "Hi — new branch or an installed system? How many windows? I can put the pack and AMC in the cart as you answer.";
-  if (p.includes("kiosk") || p.includes("self-service"))
-    return ar
-      ? "أهلاً. كيوسك جديد، ولا الشاشة/الطابعة وقفت؟ لو شاشات: كام واحدة، 21.5 ولا 15.6، و analog HDMI؟"
-      : "Hi. New kiosk, or is the screen/printer down? For screens: how many, 21.5 or 15.6, and HDMI?";
-  if (p.includes("nurses") || p.includes("nurse"))
-    return ar
-      ? "أهلاً. تركيب نداء ممرضات، ولا سلك/زر باظ؟ أقدر أضيف القطع للسلة وأعرض عقد المستشفى."
-      : "Hi. New nurse-call, or a dead cord/button? I can add spares to the cart and offer the hospital SLA.";
-  if (p.includes("products") || p.includes("lcd") || p.includes("cab-") || p.includes("wifi"))
-    return ar
-      ? "أهلاً. شاشات، كابلات HDMI/كات6، ولا واي فاي للفرع؟ قولي العدد والمقاس وأنا أعلم السلة قدامك سطراً سطراً."
-      : "Hi. Screens, HDMI/Cat6, or branch Wi-Fi? Tell me qty and size — I’ll fill the cart line by line in front of you.";
-  return ar
-    ? "أهلاً، معك خدمة عملاء Q AI. اكتب احتياجك: نظام، شاشات، كابلات، صيانة، بصيرة، أو تعرف وجه."
-    : "Hi — Q AI at QServe AI Egypt. Tell me what you need: a system, screens, cables, care contract, Basira, or face recognition.";
+  const pack = GREET[dialect] || GREET.eg;
+  if (p.includes("face")) return pack.face;
+  if (p.includes("maintenance") || p.includes("repair")) return pack.care;
+  if (p.includes("insight") || p.includes("software")) return pack.soft;
+  if (p.includes("queuing") || p.includes("انتظار")) return pack.queue;
+  if (p.includes("kiosk") || p.includes("self-service")) return pack.kiosk;
+  if (p.includes("nurses") || p.includes("nurse")) return pack.nurse;
+  if (p.includes("products") || p.includes("lcd") || p.includes("cab-") || p.includes("wifi")) return pack.catalog;
+  return pack.home;
 }
+
+const GREET: Record<Dialect, Record<string, string>> = {
+  eg: {
+    home: "أهلاً، معاك Q AI من مصنع القاهرة الجديدة. عايز نظام، شاشات، كابلات، صيانة، بصيرة، ولا تعرف وجه؟",
+    face: "أهلاً. التعرف على الوجه خط لوحده وموافقة مكتوبة. بوابة، كيوسك زيارات، ولا جهاز جداري للموظفين؟",
+    care: "أهلاً. الجهاز واقف دلوقتي، ولا محتاج عقد صيانة سنوي للفرع؟ ساعاتنا سبت–خميس 9–6، مش 24/7.",
+    soft: "أهلاً. كيوسيرف بصيرة إضافة على فرعكم بعد الأجهزة. بنك، مستشفى، ولا جهة حكومية؟",
+    queue: "أهلاً، معاك المبيعات. فرع جديد ولا نظام مركّب؟ كام شباك؟ أحط الباقة والعقد في السلة قدامك.",
+    kiosk: "أهلاً. كيوسك جديد، ولا الشاشة وقفت؟ لو شاشات: كام واحدة، 21.5 ولا 15.6، وفي HDMI؟",
+    nurse: "أهلاً. تركيب نداء ممرضات، ولا سلك باظ؟ أضيف القطع للسلة وأعرض عقد المستشفى.",
+    catalog: "أهلاً. شاشات، HDMI وكات6، ولا واي فاي؟ قولي العدد والمقاس وأنا أعلم السلة قدامك.",
+  },
+  ae: {
+    home: "هلا، معاك Q AI من مصنع القاهرة. تبي نظام، شاشات، كابلات، صيانة، ولا تعرف وجه؟",
+    face: "هلا. التعرف على الوجه خط لحاله وموافقة مكتوبة. بوابة، كيوسك زيارات، ولا جهاز جداري؟",
+    care: "هلا. الجهاز واقف الحين، ولا تبي عقد صيانة سنوي؟ الدوام سبت–خميس 9–6، مو 24/7.",
+    soft: "هلا. كيوسيرف بصيرة إضافة لفرعكم بعد الأجهزة. بنك، مستشفى، ولا جهة حكومية؟",
+    queue: "هلا، معاك المبيعات. فرع جديد ولا نظام مركّب؟ كم شباك؟ أحط الباقة والعقد في السلة.",
+    kiosk: "هلا. كيوسك جديد، ولا الشاشة وقفت؟ إذا شاشات: كم واحدة، 21.5 أو 15.6، وفي HDMI؟",
+    nurse: "هلا. تركيب نداء ممرضات، ولا سلك خربان؟ أضيف القطع وأسعّر عقد المستشفى.",
+    catalog: "هلا. شاشات، HDMI وكات6، ولا واي فاي؟ قل لي العدد والقياس وأنا أعبي السلة قدامك.",
+  },
+  sa: {
+    home: "هلا والله، معاك Q AI من مصنع القاهرة الجديدة. تبي نظام، شاشات، كابلات، صيانة، ولا تعرف وجه؟",
+    face: "هلا. التعرف على الوجه خط لحاله وموافقة مكتوبة. بوابة، كيوسك زيارات، ولا جهاز جداري؟",
+    care: "هلا. الجهاز واقف الحين، ولا تبي عقد صيانة سنوي؟ الدوام سبت–خميس 9–6، مو 24/7.",
+    soft: "هلا. كيوسيرف بصيرة إضافة لفرعكم بعد الأجهزة. بنك، مستشفى، ولا جهة حكومية؟",
+    queue: "هلا، معاك المبيعات. فرع جديد ولا نظام مركّب؟ كم شباك؟ أحط الباقة والعقد في السلة.",
+    kiosk: "هلا. كيوسك جديد، ولا الشاشة وقفت؟ إذا شاشات: كم واحدة، 21.5 أو 15.6، وفي HDMI؟",
+    nurse: "هلا. تركيب نداء ممرضات، ولا سلك خربان؟ أضيف القطع وأسعّر عقد المستشفى.",
+    catalog: "هلا. شاشات، HDMI وكات6، ولا واي فاي؟ قل لي العدد والمقاس وأنا أحطها في السلة قدامك.",
+  },
+  qa: {
+    home: "هلا، معاك Q AI من المصنع في القاهرة. تبي نظام، شاشات، كابلات، صيانة، ولا تعرف وجه؟",
+    face: "هلا. التعرف على الوجه خط لحاله وموافقة مكتوبة. بوابة، كيوسك زيارات، ولا جهاز جداري؟",
+    care: "هلا. الجهاز واقف الحين، ولا تبي عقد صيانة؟ الدوام سبت–خميس 9–6، مو 24/7.",
+    soft: "هلا. كيوسيرف بصيرة إضافة لفرعكم بعد الأجهزة. بنك، مستشفى، ولا جهة حكومية؟",
+    queue: "هلا. فرع جديد ولا نظام مركّب؟ كم شباك؟ أحط الباقة في السلة قدامك.",
+    kiosk: "هلا. كيوسك جديد، ولا الشاشة وقفت؟ كم شاشة، 21.5 أو 15.6، وفي HDMI؟",
+    nurse: "هلا. تركيب نداء ممرضات، ولا سلك خربان؟ أضيف القطع للسلة.",
+    catalog: "هلا. شاشات، HDMI وكات6، ولا واي فاي؟ قل العدد والقياس وأنا أعبي السلة.",
+  },
+  kw: {
+    home: "هلا، شلونك؟ معاك Q AI من مصنع القاهرة. تبي نظام، شاشات، كابلات، صيانة، ولا تعرف وجه؟",
+    face: "هلا. التعرف على الوجه خط لحاله وموافقة مكتوبة. بوابة، كيوسك زيارات، ولا جهاز جداري؟",
+    care: "هلا. الجهاز واقف الحين، ولا تبي عقد صيانة سنوي؟ الدوام سبت–خميس 9–6، مو 24/7.",
+    soft: "هلا. كيوسيرف بصيرة إضافة لفرعكم بعد الأجهزة. بنك، مستشفى، ولا جهة حكومية؟",
+    queue: "هلا. فرع جديد ولا نظام مركّب؟ كم شباك؟ أحط الباقة والعقد بالسلة.",
+    kiosk: "هلا. كيوسك جديد، ولا الشاشة وقفت؟ كم شاشة، 21.5 أو 15.6، وفي HDMI؟",
+    nurse: "هلا. تركيب نداء ممرضات، ولا سلك بايظ؟ أضيف القطع للسلة.",
+    catalog: "هلا. شاشات، HDMI وكات6، ولا واي فاي؟ قل العدد والقياس وأنا أحطها بالسلة قدامك.",
+  },
+  en: {
+    home: "Hey — Q AI at the New Cairo factory. What do you need: a system, screens, cables, care, Basira, or face recognition?",
+    face: "Hey — face recognition is its own line, with written consent. Gate, visitor kiosk, or a staff wall terminal?",
+    care: "Hey. Is a device down now, or do you need an annual care contract? Hours Sat–Thu 9–6 — not 24/7.",
+    soft: "Hey. كيوسيرف بصيرة is a per-client add-on after hardware. Bank, hospital, or government?",
+    queue: "Hey — new branch or an installed system? How many windows? I'll put the pack and AMC in the cart as you answer.",
+    kiosk: "Hey. New kiosk, or is the screen down? For screens: how many, 21.5 or 15.6, and HDMI?",
+    nurse: "Hey. New nurse-call, or a dead cord? I can add spares and quote the hospital SLA.",
+    catalog: "Hey. Screens, HDMI/Cat6, or branch Wi-Fi? Tell me qty and size — I'll fill the cart in front of you.",
+  },
+};
 
 export const PRODUCT_PATHS = new Set([
   "/queuing-system",

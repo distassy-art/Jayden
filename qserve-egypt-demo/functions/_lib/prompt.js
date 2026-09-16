@@ -1,7 +1,13 @@
 import { inferPartner, SHIP_IDS } from "./ship.js";
+import { dialectOf, dialectVoiceBlock } from "./dialect.js";
 
 export function systemPrompt(locale, pagePath, hits, webNote, ctx = {}) {
-  const ar = locale !== "en";
+  const dialect = dialectOf(ctx.currency || "EGP");
+  const mouthEn = dialect === "en";
+  const ar = !mouthEn;
+  const voice = dialectVoiceBlock(dialect);
+  const siteLang = locale === "en" ? "en" : "ar";
+  const currency = ctx.currency || "EGP";
   const hitBlock = (hits || [])
     .map((h) => {
       const price =
@@ -26,7 +32,11 @@ export function systemPrompt(locale, pagePath, hits, webNote, ctx = {}) {
   if (ar) {
     return `أنت موظف خدمة عملاء ومبيعات في «QServe AI Egypt» (كيو سيرف AI مصر). الاسم المختصر Q AI. مصنع في القاهرة الجديدة. هاتف +20 122 799 3999. هذا تجريبي qserve-egypt-demo.pages.dev وليس yallastore.com.
 
-أسلوب: بائع خدمة عملاء بشري. فقرة قصيرة ثم سؤال واحد واضح. ليست توستات — عندما تضيف صنفاً أظهر السلة (SHOW_CART).
+${voice}
+
+لغة أزرار الموقع والصفحات: ${siteLang}. فمك مقفول على عملة الزائر ${currency} — حتى لو فتح /en. أوامر NAV تتبع لغة الصفحة (${siteLang}) لا لهجة الفم.
+
+أسلوب: بائع بشري. فقرة قصيرة ثم سؤال واحد. ليست توستات — عندما تضيف صنفاً أظهر السلة (SHOW_CART).
 
 طريقة البيع: افهم الحاجة → اسأل التفاصيل الناقصة → أضف سطراً للسلة بعد كل إجابة كافية → اسأل التالي.
 مثال شاشات: اسأل العدد، المقاس (15.6 / 21.5 / عدّاد 3 أرقام)، داخلي أم خارجي، HDMI أو VGA، وواي فاي إن لم توجد شبكة. بعد «3 شاشات 21.5 داخلية» أضف LCD-215 بالكمية ثم اسأل الكابلات. بعد «HDMI» أضف CAB-HDMI-5 بنفس العدد. بعد الواي فاي أضف WIFI-AP. ثم اعرض عقد AMC-STD في السلة كبند عرض سعر.
@@ -71,6 +81,10 @@ NAV:/path
   }
 
   return `You are QServe AI Egypt (Q AI) customer service and sales. Factory in New Cairo. +20 122 799 3999. Demo qserve-egypt-demo.pages.dev, not yallastore.com.
+
+${voice}
+
+Site chrome language is ${siteLang} (buttons and pages). Your mouth follows visitor currency ${currency}. If they are on Arabic pages but currency is USD, still speak English. NAV paths follow site language (${siteLang}), not the mouth dialect.
 
 Tone: human sales associate. Short paragraph then one question. Not toasts — when you add a line, SHOW_CART so they watch the cart fill.
 

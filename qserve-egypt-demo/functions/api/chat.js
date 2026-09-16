@@ -41,9 +41,12 @@ export async function onRequestPost({ request, env }) {
   const { systemPrompt, parseActions, inferCartOps, extractPhone, pickKind } = await import("../_lib/prompt.js");
   const { inferShipId, inferPartner } = await import("../_lib/ship.js");
   const { searchKb, webFallback, bySku } = await import("../_lib/kb.js");
+  const { dialectOf, dialectFallback } = await import("../_lib/dialect.js");
 
   const body = await request.json().catch(() => ({}));
   const locale = body.locale === "en" ? "en" : "ar";
+  const currency = String(body.currency || "EGP").toUpperCase();
+  const dialect = dialectOf(currency);
   const pagePath = String(body.path || "/").slice(0, 200);
   const sessionId = String(body.sessionId || crypto.randomUUID()).slice(0, 80);
   const incoming = Array.isArray(body.messages) ? body.messages.slice(-16) : [];
@@ -58,7 +61,7 @@ export async function onRequestPost({ request, env }) {
   }
 
   const llmMessages = [
-    { role: "system", content: systemPrompt(locale, pagePath, hits, webNote, { shipId: body.shipId || "", partner: Boolean(body.partner) }) },
+    { role: "system", content: systemPrompt(locale, pagePath, hits, webNote, { shipId: body.shipId || "", partner: Boolean(body.partner), currency }) },
     ...incoming.map((m) => ({
       role: m.role === "assistant" || m.role === "bot" ? "assistant" : "user",
       content: String(m.text || m.content || "").slice(0, 2500),
@@ -87,18 +90,8 @@ export async function onRequestPost({ request, env }) {
 
   if (!raw) {
     const top = hits[0];
-    if (top) {
-      raw =
-        locale === "en"
-          ? `${top.nameEn}: ${top.descEn} I can add ${top.sku} to the cart.`
-          : `${top.nameAr}: ${top.descAr} أقدر أضيف ${top.sku} للسلة.`;
-      raw += `\nCART_ADD:${top.sku}:1\nNAV:${top.page}`;
-    } else {
-      raw =
-        locale === "en"
-          ? "I could not reach the factory model. Try again or WhatsApp +20 122 799 3999."
-          : "تعذّر الوصول للمساعد. أعد الإرسال أو واتساب +20 122 799 3999.";
-    }
+    raw = dialectFallback(dialect, top);
+    if (top) raw += `\nCART_ADD:${top.sku}:1\nNAV:${top.page}`;
   }
 
   const parsed = parseActions(raw, locale);

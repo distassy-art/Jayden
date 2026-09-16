@@ -3,7 +3,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { kbBySku, thumbFor } from "@/lib/product-db";
 import { openCartDrawer } from "@/lib/cart";
+import { DIALECT_UI, type Dialect } from "@/lib/dialect";
 import { QaiMascot } from "./QaiMascot";
+import { TalkButton } from "./TalkButton";
 
 type Pose = "idle" | "walk" | "point" | "grab" | "haul" | "drop";
 type Spot = { x: number; y: number };
@@ -40,20 +42,27 @@ function productTargets(need: string) {
 }
 
 export function QaiWanderer({
-  ar,
+  dialect,
   open,
   talking,
+  listening,
+  voiceBlocked,
   hello,
   onOpen,
   onDismiss,
+  onTalk,
 }: {
-  ar: boolean;
+  dialect: Dialect;
   open: boolean;
   talking: boolean;
+  listening: boolean;
+  voiceBlocked: boolean;
   hello: string;
   onOpen: () => void;
   onDismiss: () => void;
+  onTalk: () => void;
 }) {
+  const ui = DIALECT_UI[dialect] || DIALECT_UI.eg;
   const box = useRef<HTMLDivElement>(null);
   const [spot, setSpot] = useState<Spot>({ x: 24, y: 180 });
   const [facing, setFacing] = useState<"left" | "right">("left");
@@ -151,11 +160,11 @@ export function QaiWanderer({
       style={{ left: spot.x, top: spot.y, width: size + (open ? 8 : 0) }}
     >
       {open && (
-        <button type="button" className="qai-wander-x" aria-label={ar ? "إغلاق المساعد" : "Close assistant"} onClick={onDismiss}>
+        <button type="button" className="qai-wander-x" aria-label={ui.close} onClick={onDismiss}>
           ×
         </button>
       )}
-      <button type="button" className="qai-wander-hit" onClick={onOpen} aria-label={ar ? "كيو AI" : "Q AI"}>
+      <button type="button" className="qai-wander-hit" onClick={onOpen} aria-label="Q AI">
         <QaiMascot
           size={open ? "lg" : "sm"}
           talking={talking}
@@ -165,10 +174,13 @@ export function QaiWanderer({
           facing={facing}
           haul={pose === "haul"}
           heldThumb={held}
-          label={ar ? "كيو AI" : "Q AI"}
+          label="Q AI"
         />
       </button>
       {!open && <span className="qai-wander-tag">Q AI</span>}
+      <div className="qai-wander-talk" dir={ui.rtl ? "rtl" : "ltr"}>
+        <TalkButton dialect={dialect} listening={listening} blocked={voiceBlocked} onClick={onTalk} />
+      </div>
       {open && <p className="qai-wander-bubble">{hello}</p>}
     </div>
   );
