@@ -342,6 +342,8 @@ class S2K:
         site: str,
         extra: dict | None = None,
     ) -> requests.Response:
+        import time
+
         q = [
             f"rpt={quote(rpt, safe='')}",
             f"id={sid}",
@@ -354,7 +356,20 @@ class S2K:
             for k, v in extra.items():
                 q.append(f"{quote(str(k))}={quote(str(v), safe='')}")
         url = "https://store.s2kprime.com/report?" + "&".join(q)
-        return s.get(url, timeout=180)
+        last_err: Exception | None = None
+        for attempt in range(4):
+            try:
+                return s.get(url, timeout=180)
+            except (requests.exceptions.ConnectionError, requests.exceptions.Timeout) as e:
+                last_err = e
+                wait = 4 * (2**attempt)
+                print(
+                    f"  S2K pull retry {attempt + 1}/4 after {type(e).__name__}; sleep {wait}s",
+                    flush=True,
+                )
+                time.sleep(wait)
+        assert last_err is not None
+        raise last_err
 
 
 def is_pdf(content: bytes, min_len: int = 3000) -> bool:
@@ -362,11 +377,31 @@ def is_pdf(content: bytes, min_len: int = 3000) -> bool:
 
 
 def daily_book_has_sales(content: bytes) -> bool:
-    """Reject empty Daily Book shells (S2K returns ~20KB PDFs with no Station Total)."""
+    """Reject empty Daily Book shells (S2K returns PDFs with headers but no sales).
+
+    Text is usually compressed inside the PDF, so we cannot grep raw bytes.
+    Prefer a quick pdfplumber extract; fall back to size heuristics.
+    """
     if not is_pdf(content, min_len=5000):
         return False
-    # Real reports always include per-station totals; empty shells do not.
-    return b"Station Total" in content
+    # Empty shells seen ~20KB; real single-store ~32KB+; BD multi ~100KB+.
+    # Still open short files — a sparse day can be mid-size.
+    try:
+        import io
+
+        import pdfplumber
+
+        with pdfplumber.open(io.BytesIO(content)) as pdf:
+            text = "\n".join((p.extract_text() or "") for p in pdf.pages[:3])
+        if "Station Total" in text:
+            return True
+        # Truly empty shells have Fuel Sales headers but no grade lines / totals
+        if "Unleaded" in text or "Diesel" in text:
+            return True
+        return False
+    except Exception:
+        # If we cannot parse, allow upload when clearly larger than empty shells
+        return len(content) >= 28000
 
 
 def existing_daily_names(sp: SharePoint, folder_rel: str) -> set[str]:

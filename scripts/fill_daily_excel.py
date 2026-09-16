@@ -351,18 +351,27 @@ def ensure_pdf(meta: dict, year: int, month: int, day: int) -> Path | None:
     else:
         server = f"{ROOT}/{bd_pdf_folder}/{name}"
         local = PDF_DIR / f"bd_{name}"
+
+    def _pdf_has_sales(data: bytes) -> bool:
+        if len(data) < 5000 or not data.startswith(b"%PDF"):
+            return False
+        try:
+            import io
+
+            with pdfplumber.open(io.BytesIO(data)) as pdf:
+                text = "\n".join((p.extract_text() or "") for p in pdf.pages[:3])
+            return "Station Total" in text or "Unleaded" in text or "Diesel" in text
+        except Exception:
+            return len(data) >= 28000
+
     if local.exists() and local.stat().st_size > 20000:
         data = local.read_bytes()
-        # Empty S2K shells are ~20KB and lack Station Total — force re-download.
-        if b"Station Total" in data:
+        if _pdf_has_sales(data):
             return local
         local.unlink(missing_ok=True)
     try:
         data = download_file(server)
-        if len(data) < 5000 or not data.startswith(b"%PDF"):
-            print(f"  PDF bad {server} bytes={len(data)}")
-            return None
-        if b"Station Total" not in data:
+        if not _pdf_has_sales(data):
             print(f"  PDF empty shell {local.name} bytes={len(data)}")
             return None
         local.write_bytes(data)
