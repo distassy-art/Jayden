@@ -15,8 +15,9 @@ type Rec = {
 
 let audioCtx: AudioContext | null = null;
 let voicesReady: Promise<SpeechSynthesisVoice[]> | null = null;
-let unlockedAudio: HTMLAudioElement | null = null;
-let currentAudio: HTMLAudioElement | null = null;
+let speechPlayer: HTMLAudioElement | null = null;
+let ctxSource: AudioBufferSourceNode | null = null;
+let unlockPromise: Promise<void> | null = null;
 
 const SILENT_MP3 =
   "data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAABhgC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAAYYoeg6XAAAAAAD/+1DEAAAH8YF7YRAAAK5uGteEAAAAnQCR//uQxAAA";
@@ -40,6 +41,25 @@ function stopBrowserSpeak() {
   }
 }
 
+function getAudioContext() {
+  if (typeof window === "undefined") return null;
+  const AC = window.AudioContext || (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+  if (!AC) return null;
+  audioCtx = audioCtx || new AC();
+  return audioCtx;
+}
+
+function ensurePlayer() {
+  if (typeof window === "undefined") return null;
+  if (!speechPlayer) {
+    speechPlayer = new Audio();
+    speechPlayer.preload = "auto";
+    speechPlayer.setAttribute("playsinline", "true");
+    speechPlayer.crossOrigin = "anonymous";
+  }
+  return speechPlayer;
+}
+
 function warmVoices() {
   if (typeof window === "undefined" || !window.speechSynthesis) return Promise.resolve([] as SpeechSynthesisVoice[]);
   if (voicesReady) return voicesReady;
@@ -53,7 +73,7 @@ function warmVoices() {
     const started = Date.now();
     const timer = window.setInterval(() => {
       const now = window.speechSynthesis.getVoices();
-        if (now.length || Date.now() - started > 500) {
+      if (now.length || Date.now() - started > 1200) {
         window.clearInterval(timer);
         finish();
       }
@@ -61,14 +81,35 @@ function warmVoices() {
     window.speechSynthesis.addEventListener(
       "voiceschanged",
       () => {
-        window.clearInterval(timer);
-        finish();
+        const now = window.speechSynthesis.getVoices();
+        if (now.length) {
+          window.clearInterval(timer);
+          finish();
+        }
       },
       { once: true },
     );
     void window.speechSynthesis.getVoices();
   });
   return voicesReady;
+}
+
+function kickContext() {
+  const ctx = getAudioContext();
+  if (!ctx) return;
+  void ctx.resume();
+  try {
+    const buf = ctx.createBuffer(1, Math.max(1, Math.floor(ctx.sampleRate * 0.05)), ctx.sampleRate);
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    const gain = ctx.createGain();
+    gain.gain.value = 0.0001;
+    src.connect(gain);
+    gain.connect(ctx.destination);
+    src.start(0);
+  } catch {
+    /* ignore */
+  }
 }
 
 export function unlockSpeech() {
@@ -79,39 +120,41 @@ export function unlockSpeech() {
     /* ignore */
   }
   void warmVoices();
-  try {
-    if (!unlockedAudio) {
-      unlockedAudio = new Audio(SILENT_MP3);
-      unlockedAudio.volume = 0.01;
+  kickContext();
+  const player = ensurePlayer();
+  if (player) {
+    try {
+      player.muted = false;
+      player.volume = 1;
+      if (!player.src) player.src = SILENT_MP3;
+      player.currentTime = 0;
+      if (!unlockPromise) {
+        unlockPromise = player.play().then(
+          () => {
+            try {
+              player.pause();
+              player.currentTime = 0;
+            } catch {
+              /* ignore */
+            }
+          },
+          () => {},
+        );
+      } else {
+        void player.play().then(
+          () => {
+            try {
+              player.pause();
+            } catch {
+              /* ignore */
+            }
+          },
+          () => {},
+        );
+      }
+    } catch {
+      /* ignore */
     }
-    unlockedAudio.currentTime = 0;
-    void unlockedAudio.play().then(
-      () => {
-        try {
-          unlockedAudio?.pause();
-          if (unlockedAudio) unlockedAudio.currentTime = 0;
-        } catch {
-          /* ignore */
-        }
-      },
-      () => {},
-    );
-  } catch {
-    /* ignore */
-  }
-  try {
-    const AC = window.AudioContext || (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-    if (AC) {
-      audioCtx = audioCtx || new AC();
-      void audioCtx.resume();
-      const buf = audioCtx.createBuffer(1, 1, 22050);
-      const src = audioCtx.createBufferSource();
-      src.buffer = buf;
-      src.connect(audioCtx.destination);
-      src.start(0);
-    }
-  } catch {
-    /* ignore */
   }
   try {
     if (window.speechSynthesis) {
@@ -194,10 +237,21 @@ function pickVoice(dialect: Dialect) {
 }
 
 function stopAudio() {
-  if (currentAudio) {
-    currentAudio.pause();
-    currentAudio.src = "";
-    currentAudio = null;
+  if (ctxSource) {
+    try {
+      ctxSource.stop();
+    } catch {
+      /* ignore */
+    }
+    ctxSource = null;
+  }
+  if (speechPlayer) {
+    try {
+      speechPlayer.pause();
+      speechPlayer.currentTime = 0;
+    } catch {
+      /* ignore */
+    }
   }
 }
 
@@ -206,10 +260,6 @@ function hasEgyptianVoice(voices: SpeechSynthesisVoice[]) {
     const hay = `${v.lang} ${v.name}`.toLowerCase();
     return hay.includes("ar-eg") || hay.includes("egypt") || hay.includes("hoda") || hay.includes("salma");
   });
-}
-
-function hasArabicVoice(voices: SpeechSynthesisVoice[]) {
-  return voices.some((v) => v.lang.toLowerCase().startsWith("ar") || /arab/i.test(v.name));
 }
 
 function speakBrowser(text: string, dialect: Dialect, onStart?: () => void, onEnd?: () => void): { stop: () => void; started: Promise<boolean> } {
@@ -265,7 +315,7 @@ function speakBrowser(text: string, dialect: Dialect, onStart?: () => void, onEn
   }
   window.setTimeout(() => {
     if (!started) startResolve(false);
-  }, 900);
+  }, 400);
   return {
     started: startedP,
     stop() {
@@ -281,25 +331,55 @@ function speakBrowser(text: string, dialect: Dialect, onStart?: () => void, onEn
   };
 }
 
-async function playServerTts(text: string, dialect: Dialect, onStart?: () => void, onEnd?: () => void) {
-  const res = await fetch("/api/tts", {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({ text, dialect }),
-  });
-  if (!res.ok) throw new Error("tts http");
-  const buf = await res.arrayBuffer();
-  if (buf.byteLength < 200) throw new Error("tts empty");
-  const url = URL.createObjectURL(new Blob([buf], { type: res.headers.get("content-type") || "audio/mpeg" }));
+async function playViaContext(buf: ArrayBuffer, onStart?: () => void, onEnd?: () => void) {
+  const ctx = getAudioContext();
+  if (!ctx) throw new Error("no ctx");
+  await ctx.resume();
+  if (ctx.state !== "running") throw new Error("ctx suspended");
+  const decoded = await ctx.decodeAudioData(buf.slice(0));
   return await new Promise<() => void>((resolve, reject) => {
-    const audio = new Audio(url);
-    currentAudio = audio;
+    try {
+      const src = ctx.createBufferSource();
+      ctxSource = src;
+      src.buffer = decoded;
+      src.connect(ctx.destination);
+      let finished = false;
+      const done = () => {
+        if (finished) return;
+        finished = true;
+        if (ctxSource === src) ctxSource = null;
+        onEnd?.();
+      };
+      src.onended = done;
+      onStart?.();
+      src.start(0);
+      resolve(() => {
+        try {
+          src.stop();
+        } catch {
+          /* ignore */
+        }
+        done();
+      });
+    } catch (err) {
+      reject(err);
+    }
+  });
+}
+
+async function playViaElement(buf: ArrayBuffer, mime: string, onStart?: () => void, onEnd?: () => void) {
+  const url = URL.createObjectURL(new Blob([buf], { type: mime || "audio/mpeg" }));
+  const audio = ensurePlayer() || new Audio();
+  speechPlayer = audio;
+  audio.src = url;
+  audio.muted = false;
+  audio.volume = 1;
+  return await new Promise<() => void>((resolve, reject) => {
     let finished = false;
     const done = () => {
       if (finished) return;
       finished = true;
       URL.revokeObjectURL(url);
-      if (currentAudio === audio) currentAudio = null;
       onEnd?.();
     };
     audio.onplay = () => onStart?.();
@@ -311,7 +391,11 @@ async function playServerTts(text: string, dialect: Dialect, onStart?: () => voi
     void audio.play().then(
       () => {
         resolve(() => {
-          audio.pause();
+          try {
+            audio.pause();
+          } catch {
+            /* ignore */
+          }
           done();
         });
       },
@@ -321,6 +405,23 @@ async function playServerTts(text: string, dialect: Dialect, onStart?: () => voi
       },
     );
   });
+}
+
+async function playServerTts(text: string, dialect: Dialect, onStart?: () => void, onEnd?: () => void) {
+  const res = await fetch("/api/tts", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ text, dialect }),
+  });
+  if (!res.ok) throw new Error("tts http");
+  const buf = await res.arrayBuffer();
+  if (buf.byteLength < 200) throw new Error("tts empty");
+  const mime = res.headers.get("content-type") || "audio/mpeg";
+  try {
+    return await playViaContext(buf, onStart, onEnd);
+  } catch {
+    return await playViaElement(buf, mime, onStart, onEnd);
+  }
 }
 
 export function speakText(text: string, dialect: Dialect, onStart?: () => void, onEnd?: () => void) {
@@ -344,18 +445,12 @@ export function speakText(text: string, dialect: Dialect, onStart?: () => void, 
     onEnd?.();
   };
   void (async () => {
-    const voices = await warmVoices();
-    if (cancelled) {
-      finish();
-      return;
-    }
-    const preferBrowser =
-      dialect === "en"
-        ? voices.some((v) => v.lang.toLowerCase().startsWith("en"))
-        : dialect === "eg"
-          ? hasEgyptianVoice(voices)
-          : hasArabicVoice(voices) || hasEgyptianVoice(voices);
-    if (preferBrowser && window.speechSynthesis) {
+    kickContext();
+    // Arabic Web Speech is often silent (empty getVoices / autoplay). Play /api/tts
+    // through the unlocked AudioContext so every Gemini reply is actually audible.
+    const voicesNow = window.speechSynthesis?.getVoices() || [];
+    const canUseEnglishBrowser = dialect === "en" && voicesNow.some((v) => v.lang.toLowerCase().startsWith("en"));
+    if (canUseEnglishBrowser) {
       const browser = speakBrowser(
         said,
         dialect,
@@ -367,7 +462,7 @@ export function speakText(text: string, dialect: Dialect, onStart?: () => void, 
         },
       );
       stopInner = browser.stop;
-      const started = await browser.started;
+      const started = await Promise.race([browser.started, new Promise<boolean>((r) => window.setTimeout(() => r(false), 400))]);
       if (started || cancelled) return;
       browser.stop();
     }
@@ -391,6 +486,7 @@ export function speakText(text: string, dialect: Dialect, onStart?: () => void, 
         finish();
         return;
       }
+      void warmVoices();
       const retry = speakBrowser(
         said,
         dialect,

@@ -1,6 +1,7 @@
 "use client";
 
 import { DIALECT_UI, type Dialect } from "@/lib/dialect";
+import { unlockSpeech } from "@/lib/voice";
 
 export function TalkButton({
   dialect,
@@ -24,6 +25,7 @@ export function TalkButton({
     <button
       type="button"
       className={`qai-talk-btn ${size === "lg" ? "qai-talk-btn-lg" : ""} ${listening ? "is-listen" : ""} ${blocked ? "is-blocked" : ""}`}
+      onPointerDown={() => unlockSpeech()}
       onClick={onClick}
       disabled={disabled}
       aria-pressed={listening}

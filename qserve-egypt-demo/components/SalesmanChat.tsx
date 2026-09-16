@@ -202,8 +202,17 @@ export function SalesmanChat() {
       const next = [...history, { role: "assistant" as const, text: fail }];
       msgsRef.current = next;
       setMsgs(next);
+      setSpeaking(true);
       await new Promise<void>((resolve) => {
-        stopVoice.current = speakText(fail, dialectRef.current, undefined, resolve);
+        stopVoice.current = speakText(
+          fail,
+          dialectRef.current,
+          () => setSpeaking(true),
+          () => {
+            setSpeaking(false);
+            resolve();
+          },
+        );
       });
     } finally {
       setBusy(false);
@@ -299,8 +308,10 @@ export function SalesmanChat() {
           </div>
           <form
             className="flex gap-2 border-t border-navy/10 p-2"
+            onPointerDown={() => unlockSpeech()}
             onSubmit={(e) => {
               e.preventDefault();
+              unlockSpeech();
               send(input, false);
             }}
           >

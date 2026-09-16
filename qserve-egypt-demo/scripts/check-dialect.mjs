@@ -57,7 +57,15 @@ const voiceSrc = fs.readFileSync(new URL("../lib/voice.ts", import.meta.url), "u
 const aiSrc = fs.readFileSync(new URL("../netlify/functions/ai.ts", import.meta.url), "utf8");
 ok("client posts /api/ai", chatSrc.includes('fetch("/api/ai"'));
 ok("client does not post /api/chat", !chatSrc.includes('fetch("/api/chat"'));
-ok("voice unlocks audio then falls back to /api/tts", voiceSrc.includes("unlockSpeech") && voiceSrc.includes("/api/tts") && voiceSrc.includes("ar-EG") && voiceSrc.includes("voiceschanged"));
+ok(
+  "voice unlocks audio then falls back to /api/tts",
+  voiceSrc.includes("unlockSpeech") &&
+    voiceSrc.includes("/api/tts") &&
+    voiceSrc.includes("ar-EG") &&
+    voiceSrc.includes("voiceschanged") &&
+    voiceSrc.includes("decodeAudioData") &&
+    voiceSrc.includes("playsinline"),
+);
 ok("gemini 2.5 flash", aiSrc.includes("gemini-2.5-flash") && aiSrc.includes("GoogleGenAI"));
 ok("no grok pin", !aiSrc.toLowerCase().includes("grok"));
 ok("empty GoogleGenAI constructor", aiSrc.includes("new GoogleGenAI({})"));
