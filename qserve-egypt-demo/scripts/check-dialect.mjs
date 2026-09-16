@@ -78,7 +78,7 @@ ok("one Talk dock, wanderer has no Talk chip", chatSrc.includes("qai-talk-dock")
 
 const wanderSrc = fs.readFileSync(new URL("../components/QaiWanderer.tsx", import.meta.url), "utf8");
 ok("wanderer walks without TalkButton", wanderSrc.includes("qai-wander") && !wanderSrc.includes("TalkButton") && !wanderSrc.includes("onTalk"));
-ok("gemini 2.0/2.5 flash-lite stream", aiSrc.includes("gemini-2.0-flash-lite") && aiSrc.includes("gemini-2.5-flash-lite") && aiSrc.includes("generateContentStream") && aiSrc.includes("text/event-stream"));
+ok("gemini 2.5 flash-lite stream", aiSrc.includes("gemini-2.5-flash-lite") && aiSrc.includes("generateContentStream") && aiSrc.includes("text/event-stream"));
 ok("no grok pin", !aiSrc.toLowerCase().includes("grok"));
 ok("empty GoogleGenAI constructor", aiSrc.includes("new GoogleGenAI({})"));
 ok("does not set provider keys", !/GEMINI_API_KEY\s*=/.test(aiSrc) && !/OPENAI_API_KEY\s*=/.test(aiSrc) && !aiSrc.includes("apiKey:"));

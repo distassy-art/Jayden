@@ -7,7 +7,7 @@ import { inferPartner, inferShipId } from "../../functions/_lib/ship.js";
 import { addVisit, upsertLead } from "../../functions/_lib/store.js";
 import { corsHeaders, json, optionsOk, storeEnv } from "./_shared/http";
 
-const MODELS = ["gemini-2.0-flash-lite", "gemini-2.5-flash-lite"] as const;
+const MODELS = ["gemini-2.5-flash-lite"] as const;
 
 type ChatMsg = { role?: string; text?: string; content?: string };
 
