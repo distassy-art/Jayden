@@ -25,6 +25,8 @@ import {
 } from "./lib/parse.ts";
 import { sampleSeed } from "./lib/seed.ts";
 import { scansForDay, scansForMonth } from "./lib/scans.ts";
+import { pullPlan } from "./lib/s2k-schedule.ts";
+import { runScheduledPull } from "./lib/s2k-pull.ts";
 
 const JSON_HEADERS = {
   "content-type": "application/json; charset=utf-8",
@@ -34,6 +36,9 @@ const JSON_HEADERS = {
 export default {
   async fetch(request, env): Promise<Response> {
     const url = new URL(request.url);
+    if (url.pathname === "/__scheduled") {
+      return json({ ok: false, error: "not_found" }, 404);
+    }
     if (!url.pathname.startsWith("/api/")) {
       const res = await env.ASSETS.fetch(request);
       const path = url.pathname;
@@ -64,6 +69,41 @@ export default {
       );
       return json({ ok: false, error: "server_error" }, 500);
     }
+  },
+  async scheduled(controller, env): Promise<void> {
+    const plan = pullPlan(controller.scheduledTime);
+    if (!plan.dates.length) {
+      console.log(JSON.stringify({ level: "info", event: "s2k_pull_skip", ...plan }));
+      controller.noRetry();
+      return;
+    }
+    const run = await runScheduledPull(env, plan);
+    let saved = 0;
+    for (const row of run.results) {
+      if (row.skipped || row.filled === 0) continue;
+      await saveDayFields(env.DB, row.station, row.day, { s2k: row.s2k });
+      saved += 1;
+    }
+    console.log(
+      JSON.stringify({
+        level: run.ok ? "info" : "error",
+        event: "s2k_pull",
+        cron: controller.cron,
+        plan,
+        saved,
+        results: run.results.map((row) => ({
+          station: row.station,
+          day: row.day,
+          tso: row.tso,
+          storeName: row.storeName,
+          tranref: row.tranref,
+          filled: row.filled,
+          skipped: row.skipped,
+        })),
+        errors: run.errors,
+      }),
+    );
+    if (!run.ok) throw new Error(run.errors.join(";") || "s2k_pull_failed");
   },
 } satisfies ExportedHandler<Env>;
 
