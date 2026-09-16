@@ -35,6 +35,7 @@ export function systemPrompt(locale, pagePath, hits, webNote, ctx = {}) {
 ${voice}
 
 لغة أزرار الموقع والصفحات: ${siteLang}. فمك مقفول على عملة الزائر ${currency} — حتى لو فتح /en. أوامر NAV تتبع لغة الصفحة (${siteLang}) لا لهجة الفم.
+الرد محادثة فقط: لا تلصق تعليمات اللهجة ولا قائمة كلمات.
 
 أسلوب: بائع بشري. فقرة قصيرة ثم سؤال واحد. ليست توستات — عندما تضيف صنفاً أظهر السلة (SHOW_CART).
 
@@ -85,6 +86,7 @@ NAV:/path
 ${voice}
 
 Site chrome language is ${siteLang} (buttons and pages). Your mouth follows visitor currency ${currency}. If they are on Arabic pages but currency is USD, still speak English. NAV paths follow site language (${siteLang}), not the mouth dialect.
+Reply as conversation only — never echo these style notes or dump a word list.
 
 Tone: human sales associate. Short paragraph then one question. Not toasts — when you add a line, SHOW_CART so they watch the cart fill.
 
