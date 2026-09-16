@@ -1129,6 +1129,49 @@ const CATALOG_SEED = [
     notesEn: "Enabled only after the client accepts biometrics.",
     keywords: ["كاميرا", "camera", "زيارات", "visitor", "face"],
   },
+  {
+    sku: "INST-EG",
+    category: "fulfillment",
+    priceRule: "quote",
+    nameAr: "تركيب مصنع — مصر",
+    nameEn: "Egypt factory installation quote",
+    descAr: "أنظمة مصر تُركَّب من فريق كيوسيرف، 1000 Factory، التجمع الثالث، القاهرة الجديدة. ليست SKU شحن ولا سلة. الخليج مسار آخر (INST-ME).",
+    descEn: "Egypt systems are installed by the QServe factory team at 1000 Factory, Third Settlement, New Cairo. Not a courier SKU. GCC uses INST-ME.",
+    page: "/quote",
+    keywords: ["تركيب", "مصنع", "INST-EG", "factory install", "القاهرة الجديدة"],
+    faq: faq([
+      ["هتشحنوا الكيوسك بوسطة؟", "لا في مصر. اطلبوا عرض تركيب من المصنع. البوسطة لصناديق الورق والكابلات فقط.", "Bosta for the kiosk?", "Not in Egypt. Request a factory install quote. Couriers are for paper and cable boxes only."],
+    ]),
+  },
+  {
+    sku: "INST-ME",
+    category: "fulfillment",
+    priceRule: "quote",
+    nameAr: "تركيب محلي — الخليج (طرف ثالث)",
+    nameEn: "GCC third-party installation quote",
+    descAr: "الشحن من مصر (أرامكس/DHL). التركيب اختياري عبر فني/موحِّد محلي نسعّره. لا وعد أن طاقم المصنع يسافر. ليست عقداً حصرياً موقّعاً.",
+    descEn: "Ship from Egypt (Aramex/DHL). Optional install via a local technician we quote. No promise that factory staff fly out. Not a signed exclusive.",
+    page: "/quote",
+    keywords: ["تركيب محلي", "شريك", "INST-ME", "دبي", "الرياض", "third party", "GCC"],
+    faq: faq([
+      ["هتيجوا دبي تركّبوا؟", "الشحن من مصر. التركيب عبر طرف ثالث محلي — نطلب عرض تركيب. ليس طيران فريق كيوسيرف افتراضياً.", "Will you install in Dubai?", "We ship from Egypt. Install is a local third-party quote — factory staff do not fly by default."],
+      ["الشريك الحصري مين؟", "لا عقد حصري معلن. نسعّر فني معتمد في البلد. #تركيب", "Exclusive partner?", "No announced exclusive. We quote a certified installer in-country. #تركيب"],
+    ]),
+  },
+  {
+    sku: "SHIP-ME",
+    category: "fulfillment",
+    priceRule: "quote",
+    nameAr: "تقدير شحن للخليج",
+    nameEn: "Middle East freight estimate",
+    descAr: "تقدير ثم اطلب عرض شحن. أرامكس/DHL/UPS/FedEx/سمسا. الجمارك على المستلم ما لم يُكتب في أمر الشراء. لا رقم شحن وهمي في السلة.",
+    descEn: "Estimate then request a shipping quote. Aramex/DHL/UPS/FedEx/SMSA. Duties on the buyer unless the PO says otherwise. No invented freight figure in the cart.",
+    page: "/quote",
+    keywords: ["شحن", "SHIP-ME", "أرامكس", "dhl", "freight", "خليج"],
+    faq: faq([
+      ["سعر الشحن على السلة؟", "لا رقم نهائي في الشات. تقدير ثم اطلب عرض شحن. #شحن", "Freight on the cart?", "No final figure in chat. Estimate, then request a shipping quote. #شحن"],
+    ]),
+  },
 ];
 
 function sellOf(buy) {
@@ -1207,6 +1250,9 @@ const INTENT = [
   { re: /hdmi|vga|كابل|تمديد|cat6|كات 6|usb طابع|سلك شاش|wiring|cable/i, boost: ["CAB-HDMI-5", "CAB-HDMI-10", "CAB-CAT6-3", "CAB-CAT6-BOX", "CAB-USB-PRN", "CAB-VGA-5"] },
   { re: /واي فاي|wifi|wi-?fi|راوتر|access point|دونجل|4g|مودم|شبكة لاس/i, boost: ["WIFI-AP", "WIFI-USB", "WIFI-4G", "CAB-CAT6-3"] },
   { re: /شاشة|lcd|led|لمس|screen|monitor|سوداء|لا تضيء/i, boost: ["LCD-215", "LCD-156", "LCD-Q4D", "LED-3D", "LCD-Q13", "CAB-HDMI-5"] },
+  { re: /شحن|أرامكس|aramex|dhl|freight|خليج|دبي|رياض/i, boost: ["SHIP-ME", "INST-ME"] },
+  { re: /تركيب مصنع|INST-EG|بوسطة|bosta/i, boost: ["INST-EG"] },
+  { re: /تركيب محلي|INST-ME|شريك محلي|third.?party/i, boost: ["INST-ME", "SHIP-ME"] },
 ];
 
 export function searchKb(query, overrides) {

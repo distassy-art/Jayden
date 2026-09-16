@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { site, skuProducts, systems } from "@/lib/content";
+import { site, systems } from "@/lib/content";
 import { enCopy } from "@/lib/en-copy";
 import { ui, localizedHref } from "@/lib/i18n";
 import { useLocale } from "@/lib/use-locale";
 import { BrandLockup } from "./BrandLockup";
 import { CartButton } from "./CartDrawer";
+import { CurrencySwitch } from "./CurrencySwitch";
 import { LangSwitch } from "./LangSwitch";
 
 export function Header() {
@@ -20,6 +21,7 @@ export function Header() {
 
   return (
     <header className="border-b border-navy/10 bg-paper/95 backdrop-blur">
+      <CurrencySwitch />
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2">
         <Link href={href("/")} className="shrink-0" aria-label={`${site.brandEn} ${site.brandAr}`}>
           <BrandLockup />
@@ -63,9 +65,6 @@ export function Header() {
           </Link>
         </nav>
         <div className="flex shrink-0 items-center gap-2">
-          <Link href={href("/admin")} className="hidden text-xs font-bold text-navy/60 hover:text-gold sm:inline">
-            {locale === "en" ? "Staff / admin" : "موظفين"}
-          </Link>
           <CartButton />
           <LangSwitch />
           <span className="hidden sm:inline">
@@ -102,9 +101,6 @@ export function Header() {
           </Link>
           <Link href={href("/cart")} className="block py-2" onClick={() => setOpen(false)}>
             {locale === "en" ? "Cart page" : "صفحة السلة"}
-          </Link>
-          <Link href={href("/admin")} className="block py-2" onClick={() => setOpen(false)}>
-            {locale === "en" ? "Staff / admin" : "موظفين / admin"}
           </Link>
           <Link href={href("/maintenance")} className="block py-2" onClick={() => setOpen(false)}>
             {locale === "en" ? "Care" : "صيانة"}

@@ -1,26 +1,40 @@
 "use client";
 
 type Size = "sm" | "md" | "lg";
+type Pose = "idle" | "walk" | "point" | "grab" | "haul" | "drop";
 
 export function QaiMascot({
   size = "lg",
   talking = false,
   enter = false,
   idle = true,
+  pose = "idle",
+  facing = "right",
+  haul = false,
+  heldThumb = "",
   label = "Q AI",
 }: {
   size?: Size;
   talking?: boolean;
   enter?: boolean;
   idle?: boolean;
+  pose?: Pose;
+  facing?: "left" | "right";
+  haul?: boolean;
+  heldThumb?: string;
   label?: string;
 }) {
+  const walking = pose === "walk" || pose === "haul";
   const cls = [
     "qai-puppet",
     `qai-${size}`,
-    idle ? "is-idle" : "",
+    `qai-pose-${pose}`,
+    facing === "left" ? "is-left" : "is-right",
+    idle && !walking ? "is-idle" : "",
+    walking ? "is-walk" : "",
     enter ? "is-enter" : "",
     talking ? "is-talking" : "",
+    haul ? "is-haul" : "",
   ]
     .filter(Boolean)
     .join(" ");
@@ -35,6 +49,14 @@ export function QaiMascot({
       <span className="qai-mouth" aria-hidden />
       <span className="qai-arm qai-arm-l" aria-hidden />
       <span className="qai-arm qai-arm-r" aria-hidden />
+      {heldThumb ? <img src={heldThumb} alt="" className="qai-held" /> : null}
+      {haul || pose === "haul" ? (
+        <span className="qai-mini-cart" aria-hidden>
+          <span className="qai-mini-basket" />
+          <span className="qai-mini-wheel qai-mini-wheel-l" />
+          <span className="qai-mini-wheel qai-mini-wheel-r" />
+        </span>
+      ) : null}
       <span className="qai-mouse-drag" aria-hidden>
         <span className="qai-gold-hand" />
         <svg className="qai-os-mouse" viewBox="0 0 32 32" width="28" height="28">

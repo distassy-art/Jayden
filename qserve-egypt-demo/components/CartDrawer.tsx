@@ -4,35 +4,45 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { site } from "@/lib/content";
 import { localizedHref } from "@/lib/i18n";
-import { moneyPair, USD_TO_EGP, useCart, whatsappCartText } from "@/lib/cart";
+import { useCart, whatsappCartText } from "@/lib/cart";
 import { useLocale } from "@/lib/use-locale";
+import { useMoney } from "@/lib/currency";
+import { catalogWeightKg, quoteOnlyHint, useShip } from "@/lib/shipping";
+import { MoneyText } from "./MoneyText";
+import { FulfillmentCta, ShipPicker } from "./ShipPicker";
 
 function Totals({ catalogUsd, quoteCount, ar }: { catalogUsd: number; quoteCount: number; ar: boolean }) {
-  const pair = moneyPair(catalogUsd, ar);
+  const money = useMoney();
+  const { group, option } = useShip();
+  const cart = useCart();
+  const kg = catalogWeightKg(cart.hydrated);
   return (
     <div className="cart-totals">
       <div className="flex justify-between text-sm">
         <span>{ar ? "المجموع الفرعي (كتالوج 2×)" : "Subtotal (catalog 2×)"}</span>
-        <span className="text-end font-extrabold">
-          <span dir="ltr">{pair.usdLabel}</span>
-          <span className="mt-0.5 block text-xs font-bold text-navy/60">{pair.egpLabel}</span>
-        </span>
+        <MoneyText usd={catalogUsd} ar={ar} className="text-end text-sm" />
       </div>
       <div className="mt-2 flex justify-between text-sm">
         <span>{ar ? "عقد صيانة / بنود عرض" : "AMC / quote lines"}</span>
-        <span className="font-bold text-cyan">{quoteCount ? (ar ? `${quoteCount} بند — يُسعَّر في العرض` : `${quoteCount} line(s) — priced on quote`) : ar ? "—" : "—"}</span>
+        <span className="font-bold text-cyan">{quoteCount ? (ar ? `${quoteCount} بند — يُسعَّر في العرض` : `${quoteCount} line(s) — priced on quote`) : "—"}</span>
       </div>
+      <div className="mt-2 flex justify-between text-sm">
+        <span>{ar ? "شحن / تركيب" : "Freight / install"}</span>
+        <span className="text-end text-xs font-bold text-cyan">{ar ? "تقدير — ليس في الإجمالي" : "Estimate — not in the total"}</span>
+      </div>
+      {kg > 0 && (
+        <p className="money mt-1 text-[11px] text-navy/55" dir="ltr">
+          {ar ? "وزن تقديري" : "Est. weight"} {kg} kg
+        </p>
+      )}
+      <p className="mt-2 text-[11px] leading-5 text-navy/60">{quoteOnlyHint(cart.hydrated, ar, group)}</p>
       <div className="mt-3 flex justify-between border-t border-navy/10 pt-3 text-base font-black">
         <span>{ar ? "الإجمالي الظاهر" : "Visible total"}</span>
-        <span className="text-end">
-          <span dir="ltr">{pair.usdLabel}</span>
-          <span className="mt-0.5 block text-xs font-bold text-cyan">{pair.egpLabel}</span>
-        </span>
+        <MoneyText usd={catalogUsd} ar={ar} className="text-end text-base" />
       </div>
-      <p className="mt-2 text-[10px] leading-4 text-navy/50">
-        {ar
-          ? `تقدير تجريبي ${USD_TO_EGP} ج.م/دولار — الفاتورة بسعر التحويل يوم التحصيل. بنود العرض ليست في الإجمالي.`
-          : `Demo FX ${USD_TO_EGP} EGP/USD — invoice uses the rate on collection day. Quote lines are not in the total.`}
+      <p className="money mt-2 text-[11px] leading-4 text-navy/55" dir="ltr">
+        {money.note(ar)}
+        {option ? ` · ${ar ? option.ar : option.en}` : ""}
       </p>
     </div>
   );
@@ -91,12 +101,11 @@ export function CartDrawer() {
                 <p className="text-xs font-bold text-cyan">{ar ? "طلب عرض سعر" : "Quote line"}</p>
               ) : (
                 <p className="text-xs font-bold">
-                  <span dir="ltr">USD {Number(l.item.sellUsd).toFixed(2)}</span>
+                  <MoneyText usd={Number(l.item.sellUsd)} ar={ar} className="text-xs" />
                   {" × "}
                   {l.qty}
                   {" = "}
-                  <span dir="ltr">{moneyPair(l.lineUsd || 0, ar).usdLabel}</span>
-                  <span className="ms-1 text-navy/55">{moneyPair(l.lineUsd || 0, ar).egpLabel}</span>
+                  <MoneyText usd={l.lineUsd || 0} ar={ar} className="text-xs" />
                 </p>
               )}
               <div className="mt-1 flex items-center gap-2">
@@ -123,10 +132,12 @@ export function CartDrawer() {
             {ar ? "أضف عقد صيانة سنوي (AMC-STD) — يُحسب كعرض سعر تحت الإجمالي" : "Add annual care (AMC-STD) — counted as a quote line under the total"}
           </button>
         )}
+        {cart.hydrated.length > 0 && <ShipPicker hydrated={cart.hydrated} ar={ar} />}
       </div>
       <div className="border-t border-navy/10 p-4">
         <Totals catalogUsd={cart.catalogUsd} quoteCount={cart.quotes.length} ar={ar} />
-        <a className="btn-go mt-3 w-full" href={wa} target="_blank" rel="noreferrer">
+        <FulfillmentCta hydrated={cart.hydrated} ar={ar} />
+        <a className="btn-ghost mt-2 w-full !py-2 text-sm" href={wa} target="_blank" rel="noreferrer">
           {ar ? "إرسال السلة واتساب" : "Send cart on WhatsApp"}
         </a>
         <Link href={href("/quote")} className="btn-ghost mt-2 w-full" onClick={() => setOpen(false)}>
@@ -160,7 +171,11 @@ export function CartPageView() {
   return (
     <div className="mesh mx-auto max-w-3xl px-4 py-12">
       <h1 className="text-4xl font-black text-navy">{ar ? "السلة" : "Cart"}</h1>
-      <p className="mt-2 text-navy/70">{ar ? "نفس السلة التي يملأها المساعد. غيّر الكمية يتحسب الإجمالي فوراً." : "The same cart the associate fills. Qty changes recalc the total immediately."}</p>
+      <p className="mt-2 text-navy/70">
+        {ar
+          ? "نفس السلة التي يملأها المساعد. مصر = عرض تركيب فريق كيوسيرف. الشرق الأوسط = شحن من مصر + تركيب شريك محلي اختياري."
+          : "The same cart the associate fills. Egypt = QServe own-team install quote. Middle East = ship from Egypt + optional local-partner install quote."}
+      </p>
       <div className="mt-6 space-y-3">
         {cart.hydrated.length === 0 && <p className="glass rounded-3xl p-6">{ar ? "السلة فاضية." : "Cart is empty."}</p>}
         {cart.hydrated.map((l) => (
@@ -182,13 +197,19 @@ export function CartPageView() {
                 </button>
               </div>
             </div>
-            <p className="text-sm font-black">{l.quote ? (ar ? "عرض سعر" : "Quote") : moneyPair(l.lineUsd || 0, ar).usdLabel}</p>
+            <p className="text-sm font-black">{l.quote ? (ar ? "عرض سعر" : "Quote") : <MoneyText usd={l.lineUsd || 0} ar={ar} />}</p>
           </div>
         ))}
       </div>
+      {cart.hydrated.length > 0 && (
+        <div className="mt-6">
+          <ShipPicker hydrated={cart.hydrated} ar={ar} />
+        </div>
+      )}
       <div className="glass mt-6 rounded-3xl p-6">
         <Totals catalogUsd={cart.catalogUsd} quoteCount={cart.quotes.length} ar={ar} />
-        <a className="btn-go mt-4 inline-flex" href={wa} target="_blank" rel="noreferrer">
+        <FulfillmentCta hydrated={cart.hydrated} ar={ar} />
+        <a className="btn-ghost mt-3 inline-flex" href={wa} target="_blank" rel="noreferrer">
           {ar ? "واتساب بالسلة" : "WhatsApp the cart"}
         </a>
       </div>

@@ -6,6 +6,7 @@ import { enCopy } from "@/lib/en-copy";
 import { ui } from "@/lib/i18n";
 import { postJson, sessionId } from "@/lib/track";
 import { useLocale } from "@/lib/use-locale";
+import { SHIP_OPTIONS, setPartnerInstall, setShipId, useShip } from "@/lib/shipping";
 
 type Props = { defaultSystem?: string };
 
@@ -21,6 +22,7 @@ export function QuoteForm({ defaultSystem = "" }: Props) {
   const [phone, setPhone] = useState("");
   const [org, setOrg] = useState("");
   const [city, setCity] = useState("");
+  const { shipId, group, partner } = useShip();
 
   useEffect(() => {
     const q = new URLSearchParams(window.location.search);
@@ -72,6 +74,10 @@ export function QuoteForm({ defaultSystem = "" }: Props) {
       sector,
       count ? `${t.count}: ${count}` : "",
       city ? `${t.city}: ${city}` : "",
+      shipId ? `${ar ? "الوجهة" : "Destination"}: ${SHIP_OPTIONS.find((o) => o.id === shipId)?.[ar ? "ar" : "en"]}` : "",
+      group === "egypt" ? (ar ? "INST-EG عرض تركيب مصنع #تركيب" : "INST-EG factory install quote #تركيب") : "",
+      group === "me" ? (ar ? "SHIP-ME تقدير ثم عرض شحن #شحن" : "SHIP-ME estimate then shipping quote #شحن") : "",
+      group === "me" && partner ? (ar ? "INST-ME عرض تركيب محلي #تركيب" : "INST-ME local-partner install quote #تركيب") : "",
       message ? `${t.details}: ${message}` : "",
     ]
       .filter(Boolean)
@@ -139,6 +145,26 @@ export function QuoteForm({ defaultSystem = "" }: Props) {
           <input name="city" className="field" value={city} onChange={(e) => setCity(e.target.value)} />
         </label>
       </div>
+      <fieldset className="rounded-2xl border border-navy/10 bg-void p-3">
+        <legend className="text-sm font-black">{ar ? "الوجهة" : "Destination"}</legend>
+        {SHIP_OPTIONS.map((o) => (
+          <label key={o.id} className="mt-1 flex items-center gap-2 text-sm">
+            <input type="radio" name="dest" checked={shipId === o.id} onChange={() => setShipId(o.id)} />
+            {ar ? `${o.groupAr} — ${o.ar}` : `${o.groupEn} — ${o.en}`}
+          </label>
+        ))}
+        {group === "me" && (
+          <label className="mt-3 flex items-start gap-2 text-sm font-bold">
+            <input type="checkbox" className="mt-1" checked={partner} onChange={(e) => setPartnerInstall(e.target.checked)} />
+            <span>
+              {ar ? "اطلب عرض تركيب محلي (INST-ME)" : "Request local install quote (INST-ME)"}
+              <span className="mt-0.5 block text-[11px] font-semibold text-navy/60">
+                {ar ? "شريك محلي — ليس فني كيوسيرف في الخليج." : "Local partner — not QServe staff on-site in the GCC."}
+              </span>
+            </span>
+          </label>
+        )}
+      </fieldset>
       <label className="block text-sm font-bold">
         {t.details}
         <textarea name="message" rows={4} className="field" />

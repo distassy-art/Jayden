@@ -2,6 +2,7 @@
 
 import { useSyncExternalStore } from "react";
 import { kbBySku, thumbFor, type KbItem } from "./product-db";
+import { formatMoney } from "./currency";
 
 export type CartLine = { sku: string; qty: number };
 const KEY = "qserve-cart-v1";
@@ -45,7 +46,7 @@ export function addLine(sku: string, qty = 1) {
   else lines = [...lines, { sku, qty: n }];
   emit();
   if (typeof window !== "undefined") {
-    window.dispatchEvent(new CustomEvent("qserve:cart-add", { detail: { sku, qty: n } }));
+    window.dispatchEvent(new CustomEvent("qserve:cart-add", { detail: { sku, qty: n, thumb: thumbFor(sku) } }));
     openCartDrawer();
   }
 }
@@ -100,13 +101,11 @@ export function hydrate(list: CartLine[]): HydratedLine[] {
     .filter(Boolean) as HydratedLine[];
 }
 
-export const USD_TO_EGP = 48;
-
 export function moneyPair(usd: number, ar: boolean) {
-  const egp = usd * USD_TO_EGP;
+  const label = formatMoney(usd, ar);
   return {
-    usdLabel: `USD ${usd.toFixed(2)}`,
-    egpLabel: ar ? `≈ ${egp.toLocaleString("ar-EG")} ج.م` : `≈ EGP ${egp.toLocaleString("en-US")}`,
+    usdLabel: label,
+    egpLabel: label,
   };
 }
 
@@ -127,10 +126,10 @@ export function whatsappCartText(hydrated: HydratedLine[], ar: boolean) {
   const head = ar ? "طلب من سلة QServe AI Egypt (تجريبي)" : "QServe AI Egypt cart request (demo)";
   const rows = hydrated.map((l) => {
     const name = ar ? l.item.nameAr : l.item.nameEn;
-    const price = l.quote ? (ar ? "طلب عرض سعر" : "quote") : `$${l.lineUsd?.toFixed(2)}`;
+    const price = l.quote ? (ar ? "طلب عرض سعر" : "quote") : formatMoney(l.lineUsd || 0, ar);
     return `${l.qty}× ${l.sku} ${name} — ${price}`;
   });
   const total = hydrated.reduce((s, l) => s + (l.lineUsd || 0), 0);
-  const foot = ar ? `كتالوج 2× ≈ $${total.toFixed(2)} (بدون بنود العرض)` : `Catalog 2× ≈ $${total.toFixed(2)} (quote lines extra)`;
+  const foot = ar ? `كتالوج 2× ≈ ${formatMoney(total, ar)} (بدون بنود العرض)` : `Catalog 2× ≈ ${formatMoney(total, ar)} (quote lines extra)`;
   return [head, ...rows, foot].join("\n");
 }

@@ -41,8 +41,13 @@ export function Footer() {
       <p className="border-t border-navy/10 py-4 text-center text-xs text-navy/50">
         {t.footerLegal} · <Link href={href("/products")}>{t.products}</Link> ·{" "}
         <Link href={href("/cart")}>{locale === "en" ? "Cart" : "السلة"}</Link> ·{" "}
-        <Link href={href("/admin")}>{locale === "en" ? "Staff / admin" : "موظفين"}</Link> ·{" "}
         <Link href={href("/privacy")}>{t.privacy}</Link> · <Link href={href("/terms")}>{t.terms}</Link>
+        <Link
+          href={href("/admin")}
+          className="ms-1 inline-block text-[9px] font-normal leading-none text-navy/[0.18] no-underline hover:text-navy/40"
+        >
+          ·
+        </Link>
       </p>
     </footer>
   );

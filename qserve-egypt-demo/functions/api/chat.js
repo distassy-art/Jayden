@@ -39,6 +39,7 @@ function hitPublic(h) {
 export async function onRequestPost({ request, env }) {
   const { json, upsertLead, addVisit, getKbOverrides } = await import("../_lib/store.js");
   const { systemPrompt, parseActions, inferCartOps, extractPhone, pickKind } = await import("../_lib/prompt.js");
+  const { inferShipId, inferPartner } = await import("../_lib/ship.js");
   const { searchKb, webFallback, bySku } = await import("../_lib/kb.js");
 
   const body = await request.json().catch(() => ({}));
@@ -57,7 +58,7 @@ export async function onRequestPost({ request, env }) {
   }
 
   const llmMessages = [
-    { role: "system", content: systemPrompt(locale, pagePath, hits, webNote) },
+    { role: "system", content: systemPrompt(locale, pagePath, hits, webNote, { shipId: body.shipId || "", partner: Boolean(body.partner) }) },
     ...incoming.map((m) => ({
       role: m.role === "assistant" || m.role === "bot" ? "assistant" : "user",
       content: String(m.text || m.content || "").slice(0, 2500),
@@ -101,12 +102,15 @@ export async function onRequestPost({ request, env }) {
   }
 
   const parsed = parseActions(raw, locale);
-  let cartOps = parsed.cartOps;
-  const inferred = inferCartOps(userText).filter((op) => bySku(op.sku, overrides) && !cartOps.some((c) => c.sku === op.sku && c.op === op.op));
+  let cartOps = parsed.cartOps.filter((op) => !["INST-EG", "INST-ME", "SHIP-ME"].includes(op.sku));
+  const inferred = inferCartOps(userText).filter((op) => bySku(op.sku, overrides) && !cartOps.some((c) => c.sku === op.sku && c.op === op.op) && !["INST-EG", "INST-ME", "SHIP-ME"].includes(op.sku));
   cartOps = cartOps.concat(inferred);
   const showCart = parsed.showCart || cartOps.length > 0;
   const navigate = parsed.navigate;
   const reply = parsed.reply;
+  const shipId = parsed.shipId || inferShipId(userText) || String(body.shipId || "");
+  const inferredPartner = inferPartner(userText);
+  const partner = parsed.partner != null ? parsed.partner : inferredPartner != null ? inferredPartner : Boolean(body.partner);
   const phone = extractPhone(userText) || String(body.phone || "");
   const kind = pickKind(userText + " " + reply);
   const recommended = hits.map((h) => h.sku);
@@ -147,6 +151,8 @@ export async function onRequestPost({ request, env }) {
     navigate: navigate || "",
     cartOps,
     showCart,
+    shipId,
+    partner,
     cart,
     hits: hits.map(hitPublic),
     model: model || "",

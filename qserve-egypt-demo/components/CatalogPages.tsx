@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { CartPageView } from "@/components/CartDrawer";
 import { CatalogCard, FaqList, FxNote } from "@/components/KbBits";
+import { MoneyText } from "@/components/MoneyText";
 import { addLine } from "@/lib/cart";
 import { kbBySku, kbOnPage, kbPublic, thumbFor, type KbItem } from "@/lib/product-db";
 import { localizedHref } from "@/lib/i18n";
@@ -87,7 +88,9 @@ export function SkuView({ sku }: { sku: string }) {
         <p className="font-mono text-xs text-gold">{item.sku}</p>
         <h1 className="mt-1 text-4xl font-black text-navy">{ar ? item.nameAr : item.nameEn}</h1>
         <p className="mt-3 leading-8 text-navy/75">{ar ? item.descAr : item.descEn}</p>
-        <p className="mt-4 text-lg font-black">{quote ? (ar ? "يُسعَّر في العرض" : "Priced on quote") : `USD ${Number(item.sellUsd).toFixed(2)}`}</p>
+        <p className="mt-4 text-lg font-black">
+          {quote ? (ar ? "يُسعَّر في العرض" : "Priced on quote") : <MoneyText usd={Number(item.sellUsd)} ar={ar} className="text-2xl" />}
+        </p>
         <FxNote ar={ar} />
         <button type="button" className="btn-go mt-5" onClick={() => addLine(item.sku, 1)}>
           {ar ? "أضف للسلة" : "Add to cart"}

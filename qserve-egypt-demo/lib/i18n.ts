@@ -86,7 +86,7 @@ export const ui = {
       "خرائط تفاعلية",
       "إضافة برمجية للفرع",
     ],
-    chips: ["مصنع في القاهرة الجديدة", "ضمان سنتين + قطع غيار محلية", "تركيب مجاني حسب العرض", "دعم هندسي متخصص"],
+    chips: ["مصنع في القاهرة الجديدة", "ضمان سنتين + قطع غيار محلية", "تركيب فريق كيوسيرف داخل مصر حسب العرض", "دعم هندسي متخصص"],
     quotePageTitle: "طلب عرض سعر",
     quotePageBody: "QServe AI Egypt — واتساب + هاتف مطلوب. السلة ثم عرض سعر، لا كارت.",
     name: "الاسم",
@@ -172,7 +172,7 @@ export const ui = {
     chips: [
       "Factory in New Cairo",
       "2-year warranty + local spares",
-      "Installation per quote",
+      "QServe installs in Egypt per quote",
       "Specialist engineering support",
     ],
     quotePageTitle: "Request a quote",

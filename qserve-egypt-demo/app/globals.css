@@ -76,6 +76,63 @@ body {
   transform: translateY(-2px);
 }
 
+.currency-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.4rem 1rem;
+  background: #0b1b33;
+  color: #fffdf8;
+}
+
+.currency-bar-label {
+  font-family: var(--font-money), "IBM Plex Sans", Inter, system-ui, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fffdf8;
+  white-space: nowrap;
+}
+
+.currency-switch {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  font-family: var(--font-money), "IBM Plex Sans", Inter, system-ui, sans-serif;
+}
+
+.currency-switch button {
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  min-width: 3.35rem;
+  height: 1.95rem;
+  padding: 0 0.5rem;
+  border-radius: 0.35rem;
+  border: 2px solid #fffdf8;
+  background: transparent;
+  color: #fffdf8;
+  line-height: 1;
+}
+
+.currency-switch button.is-on {
+  background: #fffdf8;
+  color: #0b1b33;
+}
+
+.money {
+  font-family: var(--font-money), "IBM Plex Sans", Inter, system-ui, sans-serif;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: 0.02em;
+  color: #0b1b33;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+}
+
 .field {
   width: 100%;
   margin-top: 0.4rem;
@@ -550,4 +607,167 @@ body {
   100% {
     transform: translate(8px, 10px) rotate(-12deg);
   }
+}
+
+.qai-wander {
+  position: fixed;
+  z-index: 47;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  transition:
+    left 2.7s cubic-bezier(0.4, 0.12, 0.2, 1),
+    top 2.7s cubic-bezier(0.4, 0.12, 0.2, 1);
+}
+
+.qai-wander.is-hop {
+  animation: qai-hop 0.55s ease;
+}
+
+@keyframes qai-hop {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  40% {
+    transform: translateY(-28px) scale(1.04);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+.qai-wander-hit,
+.qai-wander-x {
+  pointer-events: auto;
+}
+
+.qai-wander-x {
+  position: absolute;
+  top: -0.35rem;
+  inset-inline-end: -0.35rem;
+  z-index: 3;
+  display: inline-flex;
+  height: 2.2rem;
+  width: 2.2rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #0b1b33;
+  color: #fffdf8;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.qai-wander-tag {
+  pointer-events: none;
+  margin-top: 0.15rem;
+  border-radius: 999px;
+  background: #0b1b33;
+  color: #fffdf8;
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 0.12rem 0.45rem;
+}
+
+.qai-wander-bubble {
+  pointer-events: none;
+  margin-top: 0.3rem;
+  max-width: 14rem;
+  border-radius: 1rem;
+  background: #fffdf8;
+  border: 1px solid rgba(11, 27, 51, 0.12);
+  color: #0b1b33;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.45;
+  padding: 0.45rem 0.6rem;
+  box-shadow: 0 8px 20px rgba(11, 27, 51, 0.12);
+}
+
+.qai-chat-dock {
+  position: fixed;
+  z-index: 46;
+  right: 1rem;
+  bottom: 1rem;
+  display: flex;
+  height: min(28rem, 62vh);
+  width: min(22rem, calc(100vw - 2rem));
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 1.5rem;
+}
+
+.qai-puppet.is-left {
+  transform: scaleX(-1);
+}
+
+.qai-puppet.is-walk .qai-leg-l,
+.qai-puppet.is-walk .qai-leg-r {
+  animation: qai-step 0.28s ease-in-out infinite;
+}
+
+.qai-pose-point .qai-arm-r {
+  animation: none;
+  transform: rotate(48deg) scale(1.25);
+}
+
+.qai-pose-grab .qai-arm-l,
+.qai-pose-grab .qai-arm-r {
+  animation: none;
+  transform: rotate(-25deg) translateY(8px);
+}
+
+.qai-held {
+  position: absolute;
+  z-index: 6;
+  left: 8%;
+  top: 58%;
+  width: 34%;
+  height: 22%;
+  object-fit: cover;
+  border-radius: 0.4rem;
+  border: 2px solid #d4af37;
+  box-shadow: 0 4px 0 #0b1b33;
+}
+
+.qai-mini-cart {
+  position: absolute;
+  z-index: 1;
+  left: -28%;
+  bottom: 6%;
+  width: 42%;
+  height: 28%;
+}
+
+.qai-mini-basket {
+  position: absolute;
+  inset: 0 8% 28% 8%;
+  border: 3px solid #0b1b33;
+  border-radius: 0.2rem 0.2rem 0.45rem 0.45rem;
+  background: #d4af37;
+}
+
+.qai-mini-wheel {
+  position: absolute;
+  bottom: 0;
+  width: 28%;
+  height: 32%;
+  border-radius: 50%;
+  background: #0b1b33;
+  border: 2px solid #d4af37;
+}
+
+.qai-mini-wheel-l {
+  left: 10%;
+}
+
+.qai-mini-wheel-r {
+  right: 10%;
+}
+
+.qai-pointed {
+  outline: 3px solid #d4af37;
+  outline-offset: 4px;
+  box-shadow: 0 0 0 6px rgba(212, 175, 55, 0.25);
 }
