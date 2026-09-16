@@ -222,7 +222,40 @@ export function prepSpeak(text: string, dialect: Dialect) {
     .trim()
     .split(/(?<=[.!?؟])\s+/)
     .filter(Boolean);
-  return clauses.slice(0, 2).join(" ").slice(0, 280);
+  return clauses.slice(0, 2).join(" ").slice(0, 220);
+}
+
+export function spokenClauses(text: string, dialect: Dialect) {
+  const said = prepSpeak(text, dialect);
+  if (!said) return [] as string[];
+  const parts = said.split(/(?<=[.!?؟])\s+/).filter(Boolean);
+  return (parts.length ? parts : [said]).slice(0, 2).map((p) => p.slice(0, 140));
+}
+
+const ttsCache = new Map<string, Promise<ArrayBuffer>>();
+
+function ttsKey(text: string, dialect: Dialect) {
+  return `${dialect}:${text}`;
+}
+
+async function fetchTts(text: string, dialect: Dialect) {
+  const res = await fetch("/api/tts", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ text, dialect }),
+  });
+  if (!res.ok) throw new Error("tts http");
+  const buf = await res.arrayBuffer();
+  if (buf.byteLength < 200) throw new Error("tts empty");
+  return buf;
+}
+
+export function prefetchSpeak(text: string, dialect: Dialect) {
+  if (typeof window === "undefined") return;
+  const first = spokenClauses(text, dialect)[0];
+  if (!first) return;
+  const key = ttsKey(first, dialect);
+  if (!ttsCache.has(key)) ttsCache.set(key, fetchTts(first, dialect));
 }
 
 function scoreVoice(voice: SpeechSynthesisVoice, dialect: Dialect) {
@@ -468,17 +501,13 @@ async function playViaElement(buf: ArrayBuffer, mime: string, onStart?: () => vo
 }
 
 async function playServerTts(text: string, dialect: Dialect, onStart?: () => void, onEnd?: () => void) {
-  const res = await fetch("/api/tts", {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({ text, dialect }),
-  });
-  if (!res.ok) throw new Error("tts http");
-  const buf = await res.arrayBuffer();
+  const key = ttsKey(text, dialect);
+  const pending = ttsCache.get(key) || fetchTts(text, dialect);
+  ttsCache.set(key, pending);
+  const buf = await pending;
   lastBytes = buf.byteLength;
   publishDebug();
-  if (buf.byteLength < 200) throw new Error("tts empty");
-  const mime = res.headers.get("content-type") || "audio/mpeg";
+  const mime = "audio/mpeg";
   try {
     return await playViaElement(buf, mime, onStart, onEnd);
   } catch (e) {
@@ -493,14 +522,18 @@ export function speakText(text: string, dialect: Dialect, onStart?: () => void, 
     onEnd?.();
     return () => {};
   }
-  const said = prepSpeak(text, dialect);
-  if (!said) {
+  const parts = spokenClauses(text, dialect);
+  if (!parts.length) {
     onEnd?.();
     return () => {};
   }
   stopSpeechSource();
   stopBrowserSpeak();
   armContext();
+  if (parts[1]) {
+    const key = ttsKey(parts[1], dialect);
+    if (!ttsCache.has(key)) ttsCache.set(key, fetchTts(parts[1], dialect));
+  }
   let cancelled = false;
   let stopInner: () => void = () => {};
   let ended = false;
@@ -510,60 +543,82 @@ export function speakText(text: string, dialect: Dialect, onStart?: () => void, 
     onEnd?.();
   };
   void (async () => {
-    const voicesNow = window.speechSynthesis?.getVoices() || [];
-    const canUseEnglishBrowser = dialect === "en" && voicesNow.some((v) => v.lang.toLowerCase().startsWith("en"));
-    if (canUseEnglishBrowser) {
-      const browser = speakBrowser(
-        said,
-        dialect,
-        () => {
-          if (!cancelled) onStart?.();
-        },
-        () => {
-          if (!cancelled) finish();
-        },
-      );
-      stopInner = browser.stop;
-      const started = await Promise.race([browser.started, new Promise<boolean>((r) => window.setTimeout(() => r(false), 400))]);
-      if (started || cancelled) return;
-      browser.stop();
-    }
-    if (cancelled) {
-      finish();
-      return;
-    }
-    try {
-      stopInner = await playServerTts(
-        said,
-        dialect,
-        () => {
-          if (!cancelled) onStart?.();
-        },
-        () => {
-          if (!cancelled) finish();
-        },
-      );
-    } catch (e) {
-      lastError = String(e);
-      publishDebug();
+    for (let i = 0; i < parts.length; i += 1) {
       if (cancelled) {
         finish();
         return;
       }
-      const retry = speakBrowser(
-        said,
-        dialect,
-        () => {
-          if (!cancelled) onStart?.();
-        },
-        () => {
-          if (!cancelled) finish();
-        },
-      );
-      stopInner = retry.stop;
-      const ok = await retry.started;
-      if (!ok) finish();
+      const piece = parts[i];
+      const startedAt = i === 0 ? onStart : undefined;
+      const voicesNow = window.speechSynthesis?.getVoices() || [];
+      const canUseEnglishBrowser = dialect === "en" && voicesNow.some((v) => v.lang.toLowerCase().startsWith("en"));
+      let played = false;
+      if (canUseEnglishBrowser) {
+        const browser = speakBrowser(
+          piece,
+          dialect,
+          () => {
+            if (!cancelled) startedAt?.();
+          },
+          () => {},
+        );
+        stopInner = browser.stop;
+        const started = await Promise.race([browser.started, new Promise<boolean>((r) => window.setTimeout(() => r(false), 400))]);
+        if (cancelled) {
+          browser.stop();
+          finish();
+          return;
+        }
+        if (started) {
+          played = true;
+          await new Promise<void>((resolve) => {
+            const prev = browser.stop;
+            stopInner = () => {
+              prev();
+              resolve();
+            };
+            window.setTimeout(resolve, Math.min(8000, piece.length * 80 + 1200));
+          });
+        } else browser.stop();
+      }
+      if (!played) {
+        try {
+          await new Promise<void>((resolve, reject) => {
+            void playServerTts(
+              piece,
+              dialect,
+              () => {
+                if (!cancelled) startedAt?.();
+              },
+              () => resolve(),
+            ).then(
+              (stop) => {
+                stopInner = () => {
+                  stop();
+                  resolve();
+                };
+              },
+              reject,
+            );
+          });
+        } catch (e) {
+          lastError = String(e);
+          publishDebug();
+          if (i === parts.length - 1) {
+            const retry = speakBrowser(piece, dialect, () => {
+              if (!cancelled) startedAt?.();
+            }, () => {});
+            stopInner = retry.stop;
+            const ok = await retry.started;
+            if (!ok && i === 0) {
+              finish();
+              return;
+            }
+          }
+        }
+      }
     }
+    finish();
   })();
   return () => {
     cancelled = true;

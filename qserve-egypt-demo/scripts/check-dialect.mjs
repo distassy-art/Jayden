@@ -65,9 +65,11 @@ ok(
     voiceSrc.includes("voiceschanged") &&
     voiceSrc.includes("decodeAudioData") &&
     voiceSrc.includes("createOscillator") &&
-    voiceSrc.includes("playsinline"),
+    voiceSrc.includes("playsinline") &&
+    voiceSrc.includes("spokenClauses") &&
+    voiceSrc.includes("prefetchSpeak"),
 );
-ok("gemini 2.5 flash", aiSrc.includes("gemini-2.5-flash") && aiSrc.includes("GoogleGenAI"));
+ok("gemini 2.5 flash-lite", aiSrc.includes("gemini-2.5-flash-lite") && aiSrc.includes("GoogleGenAI"));
 ok("no grok pin", !aiSrc.toLowerCase().includes("grok"));
 ok("empty GoogleGenAI constructor", aiSrc.includes("new GoogleGenAI({})"));
 ok("does not set provider keys", !/GEMINI_API_KEY\s*=/.test(aiSrc) && !/OPENAI_API_KEY\s*=/.test(aiSrc) && !aiSrc.includes("apiKey:"));

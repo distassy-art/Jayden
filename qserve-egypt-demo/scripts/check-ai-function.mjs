@@ -15,7 +15,7 @@ function ok(name, cond, extra = "") {
 const src = readFileSync(new URL("../netlify/functions/ai.ts", import.meta.url), "utf8");
 ok("path /api/ai", src.includes('path: "/api/ai"'));
 ok("default export", /export default async/.test(src));
-ok("model gemini-2.5-flash", src.includes('"gemini-2.5-flash"'));
+ok("model gemini-2.5-flash-lite", src.includes("gemini-2.5-flash-lite"));
 ok("GoogleGenAI empty", src.includes("new GoogleGenAI({})"));
 ok("no grok", !/grok/i.test(src));
 ok("no user apiKey", !/apiKey\s*:/.test(src));

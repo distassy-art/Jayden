@@ -76,7 +76,7 @@ export default async (req: Request) => {
   const body = (await req.json().catch(() => ({}))) as { text?: string; dialect?: string; currency?: string };
   const dialect = String(body.dialect || "").toLowerCase();
   const lang = LANG[dialect] || (String(body.currency || "").toUpperCase() === "USD" ? "en-US" : "ar-EG");
-  const text = String(body.text || "").replace(/\s+/g, " ").trim().slice(0, 900);
+  const text = String(body.text || "").replace(/\s+/g, " ").trim().slice(0, 160);
   if (!text) return json({ error: "empty" }, 400);
   try {
     const bytes = await googleSpeak(text, lang);

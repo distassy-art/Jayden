@@ -1280,7 +1280,7 @@ export function searchKb(query, overrides) {
     .map((p) => ({ ...p, score: scores.get(p.sku) || 0 }))
     .filter((p) => p.score > 0)
     .sort((a, b) => b.score - a.score)
-    .slice(0, 8);
+    .slice(0, 3);
 }
 
 export function bySku(sku, overrides) {

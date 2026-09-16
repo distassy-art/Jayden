@@ -9,7 +9,7 @@ import { greeterLine, isProductPath } from "@/lib/product-db";
 import { lookedAt, postJson, sessionId } from "@/lib/track";
 import { useBarePath, useLocale } from "@/lib/use-locale";
 import { inferPartner, inferShipId, getPartnerInstall, getShipId, setPartnerInstall, setShipId, type ShipId } from "@/lib/shipping";
-import { speakText, startListen, unlockSpeech, voiceSupported, type ListenCtl } from "@/lib/voice";
+import { prefetchSpeak, speakText, startListen, unlockSpeech, voiceSupported, type ListenCtl } from "@/lib/voice";
 import { QaiWanderer } from "./QaiWanderer";
 import { TalkButton } from "./TalkButton";
 
@@ -60,6 +60,8 @@ export function SalesmanChat() {
   listeningRef.current = listening;
   const fullPath = locale === "en" ? (path === "/" ? "/en" : `/en${path}`) : path;
   const hello = greeterLine(path, dialect);
+  const helloRef = useRef(hello);
+  helloRef.current = hello;
 
   function stopAllVoice() {
     listenCtl.current.stop();
@@ -77,6 +79,7 @@ export function SalesmanChat() {
     }
     stopVoice.current();
     listenCtl.current.pause();
+    prefetchSpeak(hello, dialectRef.current);
     setSpeaking(true);
     stopVoice.current = speakText(
       hello,
@@ -115,7 +118,10 @@ export function SalesmanChat() {
   }, [hello, dialect]);
 
   useEffect(() => {
-    const arm = () => unlockSpeech();
+    const arm = () => {
+      unlockSpeech();
+    prefetchSpeak(helloRef.current, dialectRef.current);
+    };
     window.addEventListener("pointerdown", arm, true);
     window.addEventListener("touchstart", arm, true);
     window.addEventListener("keydown", arm, true);
@@ -192,7 +198,7 @@ export function SalesmanChat() {
       setMsgs(next);
       stopVoice.current();
       setSpeaking(true);
-      await new Promise<void>((resolve) => {
+      const spoken = new Promise<void>((resolve) => {
         stopVoice.current = speakText(
           reply,
           dialectRef.current,
@@ -209,6 +215,7 @@ export function SalesmanChat() {
       if (data.showCart || (Array.isArray(data.cartOps) && data.cartOps.length) || data.shipId) openCartDrawer();
       postJson("/api/visit", { path: fullPath, locale, lookedAt: lookedAt(fullPath), source: viaVoice ? "voice" : "chat" });
       if (data.navigate) setTimeout(() => router.push(data.navigate), 900);
+      await spoken;
     } catch {
       const fail = ui.failConn;
       const next = [...history, { role: "assistant" as const, text: fail }];

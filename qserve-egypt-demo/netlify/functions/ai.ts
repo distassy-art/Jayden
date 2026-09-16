@@ -7,7 +7,7 @@ import { inferPartner, inferShipId } from "../../functions/_lib/ship.js";
 import { addVisit, upsertLead } from "../../functions/_lib/store.js";
 import { json, optionsOk, storeEnv } from "./_shared/http";
 
-const MODEL = "gemini-2.5-flash";
+const MODELS = ["gemini-2.5-flash-lite", "gemini-flash-lite-latest", "gemini-2.5-flash"] as const;
 
 type ChatMsg = { role?: string; text?: string; content?: string };
 
@@ -31,7 +31,7 @@ function hitPublic(h: Record<string, unknown>) {
 function toGeminiContents(incoming: ChatMsg[]) {
   const rows: { role: "user" | "model"; parts: { text: string }[] }[] = [];
   for (const m of incoming) {
-    const text = String(m.text || m.content || "").slice(0, 2500).trim();
+    const text = String(m.text || m.content || "").slice(0, 400).trim();
     if (!text) continue;
     const role: "user" | "model" = m.role === "assistant" || m.role === "bot" || m.role === "model" ? "model" : "user";
     const last = rows[rows.length - 1];
@@ -68,14 +68,17 @@ export default async (req: Request, _context: Context) => {
   const dialect = dialectOf(currency);
   const pagePath = String(body.path || "/").slice(0, 200);
   const sessionId = String(body.sessionId || crypto.randomUUID()).slice(0, 80);
-  const incoming = Array.isArray(body.messages) ? (body.messages as ChatMsg[]).slice(-16) : [];
+  const incoming = Array.isArray(body.messages) ? (body.messages as ChatMsg[]).slice(-6) : [];
   const lastUser = [...incoming].reverse().find((m) => m.role === "user") || {};
   const userText = String(lastUser.text || lastUser.content || "");
 
-  let hits = searchKb(userText, {});
+  const hits = searchKb(userText, {}).slice(0, 3);
   let webNote = "";
-  if (hits.length === 0 || (hits[0] && hits[0].score < 4)) {
-    webNote = await webFallback(userText);
+  if (!hits.length) {
+    webNote = await Promise.race([
+      webFallback(userText),
+      new Promise<string>((resolve) => setTimeout(() => resolve(""), 350)),
+    ]).catch(() => "");
   }
 
   const prompt = systemPrompt(locale, pagePath, hits, webNote, {
@@ -89,20 +92,28 @@ export default async (req: Request, _context: Context) => {
   let error = "";
   try {
     // Empty constructor: Netlify AI Gateway injects GEMINI_API_KEY + GOOGLE_GEMINI_BASE_URL.
-    // Do not set those yourself — a user key bypasses the gateway.
     const ai = new GoogleGenAI({});
-    const out = await ai.models.generateContent({
-      model: MODEL,
-      contents: toGeminiContents(incoming),
-      config: {
-        systemInstruction: prompt,
-        maxOutputTokens: 280,
-        temperature: 0.9,
-        thinkingConfig: { thinkingBudget: 0 },
-      },
-    });
-    raw = geminiText(out);
-    if (raw) model = MODEL;
+    for (const candidate of MODELS) {
+      try {
+        const out = await ai.models.generateContent({
+          model: candidate,
+          contents: toGeminiContents(incoming),
+          config: {
+            systemInstruction: prompt,
+            maxOutputTokens: 96,
+            temperature: 0.7,
+            thinkingConfig: { thinkingBudget: 0 },
+          },
+        });
+        raw = geminiText(out);
+        if (raw) {
+          model = candidate;
+          break;
+        }
+      } catch (e) {
+        error = String(e && typeof e === "object" && "message" in e ? (e as Error).message : e);
+      }
+    }
   } catch (e) {
     error = String(e && typeof e === "object" && "message" in e ? (e as Error).message : e);
   }
@@ -150,7 +161,7 @@ export default async (req: Request, _context: Context) => {
     text: String(m.text || m.content || ""),
   }));
 
-  await upsertLead(env, sessionId, {
+  void upsertLead(env, sessionId, {
     name: String(body.name || "").slice(0, 80),
     phone,
     org: String(body.org || "").slice(0, 120),
@@ -165,7 +176,7 @@ export default async (req: Request, _context: Context) => {
     cart,
     transcript,
   });
-  await addVisit(env, { path: pagePath, locale, lookedAt: kind, source: "chat" });
+  void addVisit(env, { path: pagePath, locale, lookedAt: kind, source: "chat" });
 
   return json({
     reply,
