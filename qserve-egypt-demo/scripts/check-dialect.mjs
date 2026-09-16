@@ -75,6 +75,7 @@ ok("does not set provider keys", !/GEMINI_API_KEY\s*=/.test(aiSrc) && !/OPENAI_A
 const mascotSrc = fs.readFileSync(new URL("../components/QaiMascot.tsx", import.meta.url), "utf8");
 ok("mascot is a figure not the logo jpg", !mascotSrc.includes("official-logo.jpg") && mascotSrc.includes("qai-figure"));
 ok("mascot has walk limbs and mouse", mascotSrc.includes("qai-leg") && mascotSrc.includes("qai-os-mouse") && mascotSrc.includes("qai-mouth"));
+ok("fixed talk dock for unlock", chatSrc.includes("qai-talk-dock") && chatSrc.includes("qai-speaker"));
 
 if (failed) {
   console.error(failed, "checks failed");

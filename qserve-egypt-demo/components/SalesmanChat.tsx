@@ -115,6 +115,18 @@ export function SalesmanChat() {
   }, [hello, dialect]);
 
   useEffect(() => {
+    const arm = () => unlockSpeech();
+    window.addEventListener("pointerdown", arm, true);
+    window.addEventListener("touchstart", arm, true);
+    window.addEventListener("keydown", arm, true);
+    return () => {
+      window.removeEventListener("pointerdown", arm, true);
+      window.removeEventListener("touchstart", arm, true);
+      window.removeEventListener("keydown", arm, true);
+    };
+  }, []);
+
+  useEffect(() => {
     end.current?.scrollIntoView({ behavior: "smooth" });
   }, [msgs, open, busy]);
 
@@ -272,6 +284,10 @@ export function SalesmanChat() {
 
   return (
     <>
+      <audio id="qai-speaker" preload="auto" hidden />
+      <div className="qai-talk-dock" dir={ui.rtl ? "rtl" : "ltr"}>
+        <TalkButton dialect={dialect} listening={listening} blocked={voiceBlocked} disabled={busy && !listening} size="lg" onClick={toggleTalk} />
+      </div>
       <QaiWanderer
         dialect={dialect}
         open={open}

@@ -57,13 +57,21 @@ function getAudioContext() {
 
 function ensurePlayer() {
   if (typeof window === "undefined") return null;
-  if (!speechPlayer) {
-    speechPlayer = new Audio();
-    speechPlayer.preload = "auto";
+  if (speechPlayer) return speechPlayer;
+  const existing = document.getElementById("qai-speaker");
+  if (existing instanceof HTMLAudioElement) {
+    speechPlayer = existing;
     speechPlayer.setAttribute("playsinline", "true");
     speechPlayer.setAttribute("webkit-playsinline", "true");
+    speechPlayer.preload = "auto";
     speechPlayer.crossOrigin = "anonymous";
+    return speechPlayer;
   }
+  speechPlayer = new Audio();
+  speechPlayer.preload = "auto";
+  speechPlayer.setAttribute("playsinline", "true");
+  speechPlayer.setAttribute("webkit-playsinline", "true");
+  speechPlayer.crossOrigin = "anonymous";
   return speechPlayer;
 }
 
