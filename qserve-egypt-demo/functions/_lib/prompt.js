@@ -175,13 +175,14 @@ export function parseActions(text, locale) {
 }
 
 function arabicQty(text) {
-  const n = Number((String(text).match(/(\d{1,3})/) || [])[1] || 0);
+  const t = String(text).replace(/15\.?6|21\.?5|10\.?1|32(?:\s*(?:inch|"|بوص))?/gi, " ");
+  const n = Number((t.match(/(\d{1,3})/) || [])[1] || 0);
   if (n >= 1 && n <= 200) return n;
-  if (/خمس(ة|ه)/.test(text)) return 5;
-  if (/اربع|أربع/.test(text)) return 4;
-  if (/ثلاث/.test(text)) return 3;
-  if (/اتنين|اثنين/.test(text)) return 2;
-  if (/واحد/.test(text)) return 1;
+  if (/(خمس(ة|ه)|five)/i.test(t)) return 5;
+  if (/(اربع|أربع|four)/i.test(t)) return 4;
+  if (/(ثلاث|three)/i.test(t)) return 3;
+  if (/(اتنين|اثنين|two)/i.test(t)) return 2;
+  if (/(واحد|one)/i.test(t)) return 1;
   return 0;
 }
 

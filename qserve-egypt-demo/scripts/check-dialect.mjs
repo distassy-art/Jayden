@@ -1,5 +1,5 @@
 import { dialectOf, dialectVoiceBlock, dialectFallback, DIALECT_BY_CURRENCY } from "../functions/_lib/dialect.js";
-import { systemPrompt, parseActions } from "../functions/_lib/prompt.js";
+import { systemPrompt, parseActions, inferCartOps } from "../functions/_lib/prompt.js";
 
 const expect = {
   EGP: "eg",
@@ -42,6 +42,9 @@ ok("AED fallback gulf", dialectFallback("ae", null).includes("ما قدرت"));
 const parsed = parseActions("هلا\nCART_ADD:LCD-215:2\nSHOW_CART\nNAV:/products", "en");
 ok("NAV follows site locale en", parsed.navigate === "/en/products");
 ok("no freight SKU in cart", parseActions("x\nCART_ADD:INST-EG:1", "ar").cartOps.length === 0);
+const screenOps = inferCartOps("three indoor 21.5 screens");
+ok("21.5 is not qty 21", !screenOps.some((o) => o.qty === 21));
+ok("three 21.5 -> LCD-215 x3", screenOps.some((o) => o.sku === "LCD-215" && o.qty === 3));
 
 if (failed) {
   console.error(failed, "checks failed");
