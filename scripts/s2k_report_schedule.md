@@ -6,8 +6,9 @@ All times are **America/Los_Angeles** (Pacific). Cron for cloud timers uses UTC 
 |-----|------|---------|---------------------|
 | **DLY + DPT** | None Fuel Invoice Total (**View Type Expand** / `Toggle=1`) + DailyAPInvoice (**Group By Department** / `GroupBy=1`). Upload latest MTD file; delete older `*dly*` / `*dpt*` in that month folder. | Wed **8:00 AM**, Sun **4:00 AM** | `0 15 * * 3`, `0 11 * * 0` |
 | **Daily Book Summary** | `DailyTotal+Summary` with `ShowCost=1`. One PDF per business day (day-behind). Accumulate; do not delete prior days. | **Every day 2:00 PM** | `0 21 * * *` |
-| **Daily Excel update** | Fill missing days in each client `* Daily.xlsx` from Daily Book Summary PDFs via `scripts/update_daily_excels.py` (gas vol/profit, c-store total, tax/scratch/lotto/card). Leave Net Purchases alone. | Mon / Wed / Fri / Sun **8:00 AM** | `0 15 * * 1,3,5,0` |
+| **Daily Excel update** | Fill missing days in each client `* Daily.xlsx` from Daily Book Summary PDFs via `scripts/fill_daily_excel.py` (then `fill_daily_excel_secondary.py`). Restore blank/wrong-row margin formulas (Garden Grove D–I self-row repair). Leave Net Purchases alone when already filled. | Mon / Wed / Fri / Sun **8:00 AM** | `0 15 * * 1,3,5,0` |
 | **Financial Audit fill** | Fill all client `* Financial Audit.xlsx` S2K columns from Daily Book Summary PDFs via `scripts/fill_financial_audit_from_s2k.py --all --upload`. Always leave 2 days behind. Wired into the **Sun** run of the Daily Excel timer (same cron; after Daily.xlsx). | **Sun ~8:00 AM** (with Daily Excel) | `0 15 * * 1,3,5,0` (Sun only for Financial) |
+| **Daily Book gap audit** | Same Mon/Wed/Fri/Sun Excel timer: download each `* Daily.xlsx`, report missing days through yesterday PT, fill blanks from PDFs, repair damaged formula rows, upload. Reject empty Daily Book PDF shells (no `Station Total`). | Mon / Wed / Fri / Sun **8:00 AM** | (same Excel timer) |
 
 ## Audit workbooks (vendor vs financial)
 

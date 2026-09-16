@@ -352,11 +352,18 @@ def ensure_pdf(meta: dict, year: int, month: int, day: int) -> Path | None:
         server = f"{ROOT}/{bd_pdf_folder}/{name}"
         local = PDF_DIR / f"bd_{name}"
     if local.exists() and local.stat().st_size > 20000:
-        return local
+        data = local.read_bytes()
+        # Empty S2K shells are ~20KB and lack Station Total — force re-download.
+        if b"Station Total" in data:
+            return local
+        local.unlink(missing_ok=True)
     try:
         data = download_file(server)
         if len(data) < 5000 or not data.startswith(b"%PDF"):
             print(f"  PDF bad {server} bytes={len(data)}")
+            return None
+        if b"Station Total" not in data:
+            print(f"  PDF empty shell {local.name} bytes={len(data)}")
             return None
         local.write_bytes(data)
         print(f"  downloaded {local.name} ({len(data)} bytes)")
