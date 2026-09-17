@@ -37,8 +37,10 @@ def main() -> None:
             errors.append(f"{slug} meta mismatch: {desc!r}")
         if not title.startswith("كيوسيرف QServe"):
             errors.append(f"{slug} title must lead with كيوسيرف QServe")
-        if "BDC Egypt" in title:
-            errors.append(f"{slug} title must not use BDC Egypt as brand")
+        visible = re.sub(r"<link rel=\"canonical\"[^>]*>", "", html)
+        visible = re.sub(r"<[^>]+>", " ", visible)
+        if re.search(r"BDC|bdcegypt", visible, re.I):
+            errors.append(f"{slug} visible text still has BDC/bdcegypt")
         if "qserveai.com" in html.lower():
             errors.append(f"{slug} mentions qserveai.com")
         ht = (ROOT / slug / ".htaccess").read_text(encoding="utf-8")
