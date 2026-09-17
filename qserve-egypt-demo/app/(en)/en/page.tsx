@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     "en",
     "/en",
     `Demo | ${site.brandEn}`,
-    `Interactive demo — ${site.brandEn} queue and nurse-call factory. Not the live website.`,
+    `Interactive demo — ${site.brandEn} queue and nurse-call systems.`,
   ),
   title: { absolute: `Demo | ${site.brandEn}` },
 };

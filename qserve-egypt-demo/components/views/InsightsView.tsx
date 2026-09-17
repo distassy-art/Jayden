@@ -1,9 +1,8 @@
 "use client";
 
-import Link from "next/link";
+import { QuoteWaButton } from "@/components/QuoteWaButton";
 import { useState } from "react";
 import { dashboards, insightsCopy, sectors, type Sector } from "@/lib/insights-demo";
-import { localizedHref } from "@/lib/i18n";
 import { useLocale } from "@/lib/use-locale";
 
 export function InsightsView() {
@@ -12,7 +11,6 @@ export function InsightsView() {
   const t = insightsCopy[locale];
   const [sector, setSector] = useState<Sector>("bank");
   const d = dashboards[sector];
-  const href = (p: string) => localizedHref(locale, p);
 
   return (
     <div className="mesh">
@@ -21,12 +19,10 @@ export function InsightsView() {
         <h1 className="mt-2 max-w-3xl text-4xl font-black text-navy sm:text-5xl">{t.title}</h1>
         <p className="mt-4 max-w-3xl text-lg leading-9 text-navy/75">{t.body}</p>
         <div className="mt-6 flex flex-wrap gap-3">
-          <Link href={`${href("/quote")}?pack=plus&system=queuing-system`} className="btn-go">
-            {t.plus}
-          </Link>
-          <Link href={`${href("/quote")}?pack=hardware&system=queuing-system`} className="btn-ghost">
+          <QuoteWaButton product={ar ? "أجهزة + كيوسيرف بصيرة" : "Hardware + Qserve Basira"}>{t.plus}</QuoteWaButton>
+          <QuoteWaButton className="btn-ghost" product={ar ? "أجهزة فقط" : "Hardware only"}>
             {t.hardware}
-          </Link>
+          </QuoteWaButton>
         </div>
       </section>
 

@@ -34,7 +34,6 @@ export function Footer() {
               {site.phoneDisplay}
             </a>
           </li>
-          <li>{site.email}</li>
           <li>{t.address}</li>
         </ul>
       </div>

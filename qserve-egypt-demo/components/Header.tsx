@@ -8,8 +8,8 @@ import { ui, localizedHref } from "@/lib/i18n";
 import { useLocale } from "@/lib/use-locale";
 import { BrandLockup } from "./BrandLockup";
 import { CartButton } from "./CartDrawer";
-import { CurrencySwitch } from "./CurrencySwitch";
 import { LangSwitch } from "./LangSwitch";
+import { QuoteWaButton } from "./QuoteWaButton";
 
 export function Header() {
   const locale = useLocale();
@@ -21,7 +21,6 @@ export function Header() {
 
   return (
     <header className="border-b border-navy/10 bg-paper/95 backdrop-blur">
-      <CurrencySwitch />
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2">
         <Link href={href("/")} className="shrink-0" aria-label={`${site.brandEn} ${site.brandAr}`}>
           <BrandLockup />
@@ -68,9 +67,7 @@ export function Header() {
           <CartButton />
           <LangSwitch />
           <span className="hidden sm:inline">
-            <Link href={href("/quote")} className="btn-go py-2 text-sm">
-              {t.quote}
-            </Link>
+            <QuoteWaButton className="btn-go py-2 text-sm">{t.quote}</QuoteWaButton>
           </span>
           <button
             type="button"
@@ -117,9 +114,12 @@ export function Header() {
           <Link href={href("/contact")} className="block py-2" onClick={() => setOpen(false)}>
             {t.contact}
           </Link>
-          <Link href={href("/quote")} className="btn-go mt-3 block text-center" onClick={() => setOpen(false)}>
+          <QuoteWaButton
+            className="btn-go mt-3 block text-center"
+            onClick={() => setOpen(false)}
+          >
             {t.quote}
-          </Link>
+          </QuoteWaButton>
         </div>
       )}
     </header>

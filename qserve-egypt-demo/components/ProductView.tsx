@@ -1,11 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import { site } from "@/lib/content";
 import { localizedProduct } from "@/lib/en-copy";
-import { ui, localizedHref } from "@/lib/i18n";
+import { ui } from "@/lib/i18n";
 import { useLocale } from "@/lib/use-locale";
 import { kbOnPage } from "@/lib/product-db";
+import { QuoteWaButton } from "./QuoteWaButton";
 import { CatalogCard, FaqList } from "./KbBits";
 import { QuoteForm } from "./QuoteForm";
 import type { Product } from "@/lib/content";
@@ -14,7 +14,6 @@ export function ProductView({ product }: { product: Product }) {
   const locale = useLocale();
   const t = ui[locale];
   const p = localizedProduct(product, locale);
-  const href = (path: string) => localizedHref(locale, path);
   const related = kbOnPage(`/${product.slug}`);
   return (
     <article className="mesh">
@@ -24,22 +23,10 @@ export function ProductView({ product }: { product: Product }) {
           <h1 className="mt-2 text-4xl font-black leading-snug text-navy sm:text-5xl">{p.h1}</h1>
           <p className="mt-4 text-lg leading-8 text-navy/75">{p.summary}</p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <Link href={href("/quote")} className="btn-go">
-              {t.quote}
-            </Link>
-            <a href={site.whatsapp} className="btn-ghost">
-              {t.whatsapp}
-            </a>
+            <QuoteWaButton product={p.h1}>{t.quote}</QuoteWaButton>
             <a href={`tel:${site.phoneTel}`} dir="ltr" className="btn-ghost">
               {site.phoneDisplay}
             </a>
-          </div>
-          <div className="mt-5 flex flex-wrap gap-2">
-            {t.chips.map((c) => (
-              <span key={c} className="rounded-full bg-white px-3 py-1 text-xs font-bold text-cyan">
-                {c}
-              </span>
-            ))}
           </div>
         </div>
         <img src={p.image} alt={p.imageAlt} className="h-80 w-full rounded-3xl object-cover glow-ring" />

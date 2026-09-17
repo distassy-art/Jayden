@@ -21,7 +21,7 @@ function hitPublic(h: Record<string, unknown>) {
     descAr: h.descAr,
     descEn: h.descEn,
     page: h.page,
-    sellUsd: h.priceRule === "catalog-2x" ? h.sellUsd : null,
+    sellUsd: null,
     unitAr: h.unitAr || "بند",
     unitEn: h.unitEn || "line",
     score: h.score,

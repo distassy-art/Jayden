@@ -24,12 +24,11 @@ export function ContactView() {
             <p className="font-bold" dir="ltr">
               {site.phoneDisplay}
             </p>
-            <p className="mt-2">{site.email}</p>
             <p className="mt-2 text-sm text-navy/70">{t.address}</p>
             <p className="mt-2 text-sm text-cyan">{t.hours}</p>
             <p className="text-sm text-navy/60">{t.hoursOff}</p>
           </div>
-          <iframe title="Qserve Egypt factory" src={mapSrc} className="h-72 w-full rounded-3xl border-0" loading="lazy" />
+          <iframe title="QServe AI" src={mapSrc} className="h-72 w-full rounded-3xl border-0" loading="lazy" />
         </div>
       </div>
     </div>

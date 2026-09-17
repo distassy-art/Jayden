@@ -4,11 +4,6 @@ export type Dialect = "eg" | "ae" | "sa" | "qa" | "kw" | "en";
 
 export const DIALECT_BY_CURRENCY: Record<Currency, Dialect> = {
   EGP: "eg",
-  AED: "ae",
-  SAR: "sa",
-  QAR: "qa",
-  KWD: "kw",
-  USD: "en",
 };
 
 export type DialectUi = {

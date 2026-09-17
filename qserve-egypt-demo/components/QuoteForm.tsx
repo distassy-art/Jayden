@@ -6,6 +6,7 @@ import { enCopy } from "@/lib/en-copy";
 import { ui } from "@/lib/i18n";
 import { postJson, sessionId } from "@/lib/track";
 import { useLocale } from "@/lib/use-locale";
+import { quoteWhatsAppUrl, saveQuoteContact } from "@/lib/quote-wa";
 import { SHIP_OPTIONS, setPartnerInstall, setShipId, useShip } from "@/lib/shipping";
 
 type Props = { defaultSystem?: string };
@@ -61,11 +62,13 @@ export function QuoteForm({ defaultSystem = "" }: Props) {
       kind: "quote",
       locale,
       path: locale === "en" ? "/en/quote" : "/quote",
-      summary: packLabel,
+      summary: `#سعر ${packLabel}`.slice(0, 500),
       transcript: [{ role: "user", text: message || packLabel }],
     });
+    saveQuoteContact({ name, phone, email: "" });
     const text = [
-      ar ? `طلب عرض سعر — كيوسيرف مصر` : `Quote request — Qserve Egypt`,
+      ar ? "طلب عرض سعر — QServe AI" : "Quote request — QServe AI",
+      "#سعر",
       `${t.name}: ${name}`,
       `${t.phone}: ${phone}`,
       org ? `${t.org}: ${org}` : "",
@@ -75,15 +78,14 @@ export function QuoteForm({ defaultSystem = "" }: Props) {
       count ? `${t.count}: ${count}` : "",
       city ? `${t.city}: ${city}` : "",
       shipId ? `${ar ? "الوجهة" : "Destination"}: ${SHIP_OPTIONS.find((o) => o.id === shipId)?.[ar ? "ar" : "en"]}` : "",
-      group === "egypt" ? (ar ? "INST-EG عرض تركيب مصنع #تركيب" : "INST-EG factory install quote #تركيب") : "",
+      group === "egypt" ? (ar ? "INST-EG عرض تركيب QServe AI #تركيب" : "INST-EG QServe AI install quote #تركيب") : "",
       group === "me" ? (ar ? "SHIP-ME تقدير ثم عرض شحن #شحن" : "SHIP-ME estimate then shipping quote #شحن") : "",
       group === "me" && partner ? (ar ? "INST-ME عرض تركيب محلي #تركيب" : "INST-ME local-partner install quote #تركيب") : "",
       message ? `${t.details}: ${message}` : "",
     ]
       .filter(Boolean)
       .join("\n");
-    window.open(`${site.whatsapp}?text=${encodeURIComponent(text)}`, "_blank", "noopener,noreferrer");
-    setSent(true);
+    window.location.href = quoteWhatsAppUrl(text);
   }
 
   if (sent) {

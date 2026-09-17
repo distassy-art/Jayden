@@ -123,13 +123,10 @@ export function useCart() {
 }
 
 export function whatsappCartText(hydrated: HydratedLine[], ar: boolean) {
-  const head = ar ? "طلب من سلة QServe AI Egypt (تجريبي)" : "QServe AI Egypt cart request (demo)";
+  const head = ar ? "طلب عرض سعر — QServe AI" : "Quote request — QServe AI";
   const rows = hydrated.map((l) => {
     const name = ar ? l.item.nameAr : l.item.nameEn;
-    const price = l.quote ? (ar ? "طلب عرض سعر" : "quote") : formatMoney(l.lineUsd || 0, ar);
-    return `${l.qty}× ${l.sku} ${name} — ${price}`;
+    return `${l.qty}× ${l.sku} ${name}`;
   });
-  const total = hydrated.reduce((s, l) => s + (l.lineUsd || 0), 0);
-  const foot = ar ? `كتالوج 2× ≈ ${formatMoney(total, ar)} (بدون بنود العرض)` : `Catalog 2× ≈ ${formatMoney(total, ar)} (quote lines extra)`;
-  return [head, ...rows, foot].join("\n");
+  return [head, "#سعر", ...rows].join("\n");
 }

@@ -1,10 +1,9 @@
-# Qserve Egypt demo (local only)
+# QServe AI Egypt demo
 
-Arabic RTL demo of the merged Yalla Store + BDC catalog, branded **Qserve Egypt / كيوسيرف مصر**.
+Interactive Arabic RTL demo of **QServe AI**.
 
-- Intended production URL (not deployed): https://www.yallastore.com
-- Do **not** deploy this to production from this demo pass.
-- Logo: `public/brand/qserve-wordmark.png` (logo 1)
+- Live: https://qserve-ai-egypt-demo.netlify.app
+- Do **not** deploy this onto any other production host.
 
 ```bash
 cd qserve-egypt-demo
@@ -12,4 +11,4 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:3000 (also http://127.0.0.1:3000). Product routes such as `/queuing-system` return HTML.
+Open http://localhost:3000.

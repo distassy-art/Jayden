@@ -25,7 +25,7 @@ const hits = searchKb("LCD-215");
 ok("kb finds LCD", hits.some((h) => h.sku === "LCD-215"));
 const prompt = systemPrompt("ar", "/", hits, "", { currency: "EGP" });
 ok("prompt cairo fillers", /إزيك/.test(prompt) && /حاضر/.test(prompt) && /معلش/.test(prompt));
-ok("prompt spoken cap", /جملتين/.test(prompt));
+ok("prompt written cap", /جملتين/.test(prompt));
 ok("prompt not news MSA instruction dump only", /عامية قاهرية|عامية مصرية/.test(prompt));
 
 const parsed = parseActions("حاضر. هحط التلاتة في السلة.\nCART_ADD:LCD-215:3\nSHOW_CART", "ar");

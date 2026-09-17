@@ -1,12 +1,9 @@
 "use client";
 
-import { useMoney } from "@/lib/currency";
-
-export function MoneyText({ usd, ar, className = "" }: { usd: number; ar: boolean; className?: string }) {
-  const money = useMoney();
+export function MoneyText({ ar, className = "" }: { usd?: number; ar: boolean; className?: string }) {
   return (
-    <span className={`money ${className}`} dir="ltr">
-      {money.format(usd, ar)}
+    <span className={`money ${className}`}>
+      {ar ? "طلب عرض سعر" : "Request quote"}
     </span>
   );
 }

@@ -3,15 +3,6 @@ import { prepSpeak } from "../functions/_lib/tts.js";
 import { systemPrompt, parseActions, inferCartOps } from "../functions/_lib/prompt.js";
 import fs from "node:fs";
 
-const expect = {
-  EGP: "eg",
-  AED: "ae",
-  SAR: "sa",
-  QAR: "qa",
-  KWD: "kw",
-  USD: "en",
-};
-
 let failed = 0;
 function ok(name, cond, extra = "") {
   if (!cond) {
@@ -22,24 +13,15 @@ function ok(name, cond, extra = "") {
   }
 }
 
-for (const [code, dialect] of Object.entries(expect)) {
-  ok(`map ${code}`, dialectOf(code) === dialect && DIALECT_BY_CURRENCY[code] === dialect);
-  const block = dialectVoiceBlock(dialect);
-  ok(`voice block ${code}`, typeof block === "string" && block.length > 40);
-  const prompt = systemPrompt("en", "/", [], "", { currency: code });
-  ok(`prompt has dialect ${code}`, prompt.includes(block.slice(0, 24)));
-  if (code === "USD") {
-    ok("USD mouth is English", /spoken English/i.test(prompt) && !prompt.includes("عامية مصرية"));
-    ok("USD ignores /en lock", prompt.includes("currency USD") || prompt.includes("USD"));
-  }
-  if (code === "EGP") {
-    ok("EGP mouth is Egyptian even on /en", /عامية قاهرية|إزيك/.test(prompt) && prompt.includes("حتى لو فتح /en"));
-  }
-}
-
+ok("map EGP", dialectOf("EGP") === "eg" && DIALECT_BY_CURRENCY.EGP === "eg");
+const block = dialectVoiceBlock("eg");
+ok("voice block EGP", typeof block === "string" && block.length > 40);
+const prompt = systemPrompt("en", "/", [], "", { currency: "EGP" });
+ok("prompt has dialect EGP", prompt.includes(block.slice(0, 24)));
+ok("EGP mouth is Egyptian even on /en", /عامية قاهرية|إزيك/.test(prompt) && prompt.includes("حتى لو فتح /en"));
+ok("prompt is QServe AI not Cairo factory", /QServe AI/.test(prompt) && !/القاهرة الجديدة/.test(prompt) && !/New Cairo/.test(prompt));
+ok("prompt quote only", !/USD \(2×\)/.test(prompt));
 ok("EGP fallback spoken", dialectFallback("eg", null).includes("الخط مش ماسك") || dialectFallback("eg", null).includes("ابعت تاني"));
-ok("USD fallback spoken", /Couldn't reach|factory model/i.test(dialectFallback("en", null)));
-ok("AED fallback gulf", dialectFallback("ae", null).includes("ما قدرت"));
 
 const parsed = parseActions("هلا\nCART_ADD:LCD-215:2\nSHOW_CART\nNAV:/products", "en");
 ok("NAV follows site locale en", parsed.navigate === "/en/products");
@@ -49,44 +31,37 @@ ok("21.5 is not qty 21", !screenOps.some((o) => o.qty === 21));
 ok("three 21.5 -> LCD-215 x3", screenOps.some((o) => o.sku === "LCD-215" && o.qty === 3));
 ok("prepSpeak egyptian brand", prepSpeak("Q AI HDMI", "eg").includes("كيو"));
 ok("eg copy stay-on", dialectVoiceBlock("eg").includes("إزيك"));
-ok("eg cairo salesman", /بائع شارع|عامية مصرية/.test(dialectVoiceBlock("eg")));
+ok("eg cairo salesman", /عامية مصرية/.test(dialectVoiceBlock("eg")));
 ok("eg forbids MSA news", dialectVoiceBlock("eg").includes("فصحى") && dialectVoiceBlock("eg").includes("معلش"));
 
 const chatSrc = fs.readFileSync(new URL("../components/SalesmanChat.tsx", import.meta.url), "utf8");
-const voiceSrc = fs.readFileSync(new URL("../lib/voice.ts", import.meta.url), "utf8");
+const homeSrc = fs.readFileSync(new URL("../components/HomePage.tsx", import.meta.url), "utf8");
+const headerSrc = fs.readFileSync(new URL("../components/Header.tsx", import.meta.url), "utf8");
+const brandSrc = fs.readFileSync(new URL("../components/BrandLockup.tsx", import.meta.url), "utf8");
+const currencySrc = fs.readFileSync(new URL("../lib/currency.ts", import.meta.url), "utf8");
+const i18nSrc = fs.readFileSync(new URL("../lib/i18n.ts", import.meta.url), "utf8");
+const contentSrc = fs.readFileSync(new URL("../lib/content.ts", import.meta.url), "utf8");
+const quoteSrc = fs.readFileSync(new URL("../lib/quote-wa.ts", import.meta.url), "utf8");
+const chromeSrc = fs.readFileSync(new URL("../components/PublicChrome.tsx", import.meta.url), "utf8");
 const aiSrc = fs.readFileSync(new URL("../netlify/functions/ai.ts", import.meta.url), "utf8");
 const aiClientSrc = fs.readFileSync(new URL("../lib/ai-client.ts", import.meta.url), "utf8");
+
 ok("client posts /api/ai", aiClientSrc.includes('fetch("/api/ai"') && chatSrc.includes("postSalesmanAi"));
 ok("client does not post /api/chat", !chatSrc.includes('fetch("/api/chat"'));
-ok(
-  "voice unlocks audio then falls back to /api/tts",
-  voiceSrc.includes("unlockSpeech") &&
-    voiceSrc.includes("/api/tts") &&
-    voiceSrc.includes("ar-EG") &&
-    voiceSrc.includes("voiceschanged") &&
-    voiceSrc.includes("decodeAudioData") &&
-    voiceSrc.includes("createOscillator") &&
-    voiceSrc.includes("playsinline") &&
-    voiceSrc.includes("spokenClauses") &&
-    voiceSrc.includes("prefetchSpeak") &&
-    voiceSrc.includes("firstClauseReady") &&
-    voiceSrc.includes("createReplySpeaker") &&
-    !/function boot\(\) \{[\s\S]{0,180}rec\?\.abort/.test(voiceSrc),
-);
-ok("client streams /api/ai and does not pause mic on send", chatSrc.includes("postSalesmanAi") && chatSrc.includes("beginListen()") && !chatSrc.includes("listenCtl.current.pause()"));
-ok("one Talk dock, wanderer has no Talk chip", chatSrc.includes("qai-talk-dock") && (chatSrc.match(/<TalkButton/g) || []).length === 1);
-
-const wanderSrc = fs.readFileSync(new URL("../components/QaiWanderer.tsx", import.meta.url), "utf8");
-ok("wanderer walks without TalkButton", wanderSrc.includes("qai-wander") && !wanderSrc.includes("TalkButton") && !wanderSrc.includes("onTalk"));
+ok("text-only launch, no Talk dock", chatSrc.includes("qai-text-launch") && !chatSrc.includes("qai-talk-dock") && !chatSrc.includes("TalkButton"));
+ok("no wanderer on public chrome", !chromeSrc.includes("QaiWanderer") && !chatSrc.includes("QaiWanderer"));
+ok("wordmark not robot badge", brandSrc.includes("qserve-logo-wordmark.png") && !brandSrc.includes("official-logo.jpg"));
+ok("EGP only", currencySrc.includes('CURRENCIES = ["EGP"]') && !headerSrc.includes("CurrencySwitch"));
+ok("quote opens WhatsApp with #سعر", quoteSrc.includes("#سعر") && quoteSrc.includes("window.location.href") && headerSrc.includes("QuoteWaButton"));
+ok("homepage has no factory chips", !homeSrc.includes("t.chips") && !homeSrc.includes("ProductStories"));
+ok("homepage has no stories block", !homeSrc.includes("قصص الأنظمة") && !homeSrc.includes("storiesKicker"));
+ok("no story-to-quote CTA", !i18nSrc.includes("حوّل القصة لعرض سعر") && !i18nSrc.includes("Turn this into a quote"));
+ok("no yallastore.com", !i18nSrc.toLowerCase().includes("yallastore") && !contentSrc.toLowerCase().includes("yallastore") && !homeSrc.toLowerCase().includes("yallastore"));
+ok("demo origin is netlify", i18nSrc.includes("qserve-ai-egypt-demo.netlify.app"));
 ok("gemini 2.5 flash-lite stream", aiSrc.includes("gemini-2.5-flash-lite") && aiSrc.includes("generateContentStream") && aiSrc.includes("text/event-stream"));
 ok("no grok pin", !aiSrc.toLowerCase().includes("grok"));
 ok("empty GoogleGenAI constructor", aiSrc.includes("new GoogleGenAI({})"));
 ok("does not set provider keys", !/GEMINI_API_KEY\s*=/.test(aiSrc) && !/OPENAI_API_KEY\s*=/.test(aiSrc) && !aiSrc.includes("apiKey:"));
-
-const mascotSrc = fs.readFileSync(new URL("../components/QaiMascot.tsx", import.meta.url), "utf8");
-ok("mascot is a figure not the logo jpg", !mascotSrc.includes("official-logo.jpg") && mascotSrc.includes("qai-figure"));
-ok("mascot has walk limbs and mouse", mascotSrc.includes("qai-leg") && mascotSrc.includes("qai-os-mouse") && mascotSrc.includes("qai-mouth"));
-ok("fixed talk dock for unlock", chatSrc.includes("qai-talk-dock") && chatSrc.includes("qai-speaker"));
 
 if (failed) {
   console.error(failed, "checks failed");

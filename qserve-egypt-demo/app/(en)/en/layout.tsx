@@ -22,18 +22,18 @@ export const metadata: Metadata = {
     default: `Demo | ${site.brandEn}`,
     template: `Demo | %s | ${site.shortEn}`,
   },
-  description: `Interactive QServe AI Egypt demo — not the live website.`,
+  description: `Interactive QServe AI demo — not the live website.`,
   robots: { index: false, follow: false },
-  icons: { icon: "/brand/qserve-ai-official-logo.jpg" },
+  icons: { icon: "/brand/qserve-logo-wordmark.png" },
   alternates: hreflang("/en"),
 };
 
 const orgJson = JSON.stringify({
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: "QServe AI Egypt",
-  alternateName: ["Q AI", "كيو سيرف AI مصر"],
-  description: "New Cairo factory — queue, kiosk, nurse-call. Demo only.",
+  name: "QServe AI",
+  alternateName: ["QServe AI", "كيو سيرف AI"],
+  description: "QServe AI — queue, kiosk, nurse-call. Demo only.",
 });
 
 export default function EnglishLayout({ children }: { children: React.ReactNode }) {

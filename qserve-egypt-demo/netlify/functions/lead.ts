@@ -10,6 +10,7 @@ export default async (req: Request) => {
   const row = await upsertLead(storeEnv(), sessionId, {
     name: String(body.name || "").slice(0, 80),
     phone: String(body.phone || "").slice(0, 40),
+    email: String(body.email || "").slice(0, 120),
     org: String(body.org || "").slice(0, 120),
     city: String(body.city || "").slice(0, 80),
     interest: String(body.interest || "").slice(0, 80),
@@ -17,6 +18,7 @@ export default async (req: Request) => {
     locale: body.locale === "en" ? "en" : "ar",
     path: String(body.path || "").slice(0, 200),
     summary: String(body.summary || "").slice(0, 500),
+    cart: Array.isArray(body.cart) ? body.cart.slice(0, 80) : [],
     transcript: Array.isArray(body.transcript) ? body.transcript.slice(-40) : [],
   });
   return json({ ok: true, sessionId: row.sessionId });

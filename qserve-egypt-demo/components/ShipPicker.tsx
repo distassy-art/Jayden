@@ -34,7 +34,7 @@ export function fulfillmentQuoteBody(
   const dest = destLabel(shipId, ar);
   const rows = cartRows(hydrated, ar);
   const heads: Record<typeof kind, [string, string]> = {
-    "INST-EG": ["طلب عرض تركيب INST-EG — مصنع القاهرة الجديدة #تركيب", "Install quote INST-EG — New Cairo factory #تركيب"],
+    "INST-EG": ["طلب عرض تركيب INST-EG — QServe AI #تركيب", "Install quote INST-EG — QServe AI #تركيب"],
     "SHIP-ME": ["تقدير ثم طلب عرض شحن SHIP-ME #شحن", "Estimate then shipping quote SHIP-ME #شحن"],
     "INST-ME": ["طلب عرض تركيب محلي INST-ME — شريك/فني معتمد #تركيب", "Local-partner install quote INST-ME #تركيب"],
     "SHIP-EG": ["تقدير ثم طلب عرض شحن داخل مصر #شحن", "Estimate then Egypt shipping quote #شحن"],
@@ -43,19 +43,19 @@ export function fulfillmentQuoteBody(
   const policy =
     kind === "INST-EG"
       ? ar
-        ? "فريق كيوسيرف، 1000 Factory، التجمع الثالث، القاهرة الجديدة. ليست SKU توصيل ولا بوسطة للكيوسك."
-        : "QServe factory team, 1000 Factory, Third Settlement, New Cairo. Not a courier SKU — no Bosta for kiosks."
+        ? "فريق QServe AI. ليست SKU توصيل ولا بوسطة للكيوسك."
+        : "QServe AI team. Not a courier SKU — no Bosta for kiosks."
       : kind === "INST-ME"
         ? ar
-          ? "الشحن من مصر. التركيب عبر طرف ثالث محلي نسعّره. لا وعد أن طاقم المصنع يسافر."
-          : "We ship from Egypt. Install is a third-party local quote. Factory staff do not fly out."
+          ? "الشحن من مصر. التركيب عبر طرف ثالث محلي نسعّره. لا وعد أن طاقم QServe AI يسافر."
+          : "We ship from Egypt. Install is a third-party local quote. QServe AI staff do not fly out."
         : kind === "SHIP-ME"
           ? ar
             ? "تقدير فقط — لا رقم شحن وهمي. أرامكس/DHL/UPS/FedEx/سمسا. الجمارك على المستلم ما لم يُكتب في أمر الشراء."
             : "Estimate only — no invented freight figure. Aramex/DHL/UPS/FedEx/SMSA. Duties on the buyer unless the PO says otherwise."
           : ar
-            ? "تقدير بعد الوزن والمدينة. القاهرة الكبرى غالباً فان المصنع. لا رقم ج.م مخترع."
-            : "Estimate after weight and city. Greater Cairo is usually the factory van. No invented EGP freight.";
+            ? "تقدير بعد الوزن والمدينة. لا رقم ج.م مخترع."
+            : "Estimate after weight and city. No invented EGP freight.";
   return [
     head,
     `${ar ? "الوجهة" : "Destination"}: ${dest}`,
@@ -100,11 +100,11 @@ export function ShipPicker({ hydrated, ar }: { hydrated: HydratedLine[]; ar: boo
 
       {group === "egypt" && systems.length > 0 && (
         <div className="mt-3 rounded-xl border border-gold/30 bg-white p-3">
-          <p className="text-sm font-black text-navy">{ar ? "INST-EG · عرض تركيب مصنع" : "INST-EG · factory install quote"}</p>
+          <p className="text-sm font-black text-navy">{ar ? "INST-EG · عرض تركيب QServe AI" : "INST-EG · QServe AI install quote"}</p>
           <p className="mt-1 text-xs leading-5 text-navy/70">
             {ar
-              ? "فريق كيوسيرف، القاهرة الجديدة. ليست SKU توصيل."
-              : "QServe factory team, New Cairo. Not a courier SKU."}
+              ? "فريق QServe AI. ليست SKU توصيل."
+              : "QServe AI team. Not a courier SKU."}
           </p>
         </div>
       )}
@@ -114,8 +114,8 @@ export function ShipPicker({ hydrated, ar }: { hydrated: HydratedLine[]; ar: boo
           <p className="text-sm font-black text-navy">{ar ? "تقدير" : "Estimate"}</p>
           <p className="mt-1 text-xs leading-5 text-navy/70">
             {ar
-              ? `بعد الوزن (${kg || "—"} kg) والمدينة. القاهرة الكبرى غالباً فان المصنع. لا رقم شحن في السلة.`
-              : `After weight (${kg || "—"} kg) and city. Greater Cairo is usually the factory van. No freight figure in the cart.`}
+              ? `بعد الوزن (${kg || "—"} kg) والمدينة. لا رقم شحن في السلة.`
+              : `After weight (${kg || "—"} kg) and city. No freight figure in the cart.`}
           </p>
         </div>
       )}
@@ -135,8 +135,8 @@ export function ShipPicker({ hydrated, ar }: { hydrated: HydratedLine[]; ar: boo
                 {ar ? "تركيب بواسطة شريك محلي (INST-ME)" : "Install by local partner (INST-ME)"}
                 <span className="mt-0.5 block text-[11px] font-semibold text-navy/60">
                   {ar
-                    ? "عرض سعر فقط — ليس حجز فني. فريق المصنع لا يسافر."
-                    : "Quote only — not a booked technician. Factory staff do not fly out."}
+                    ? "عرض سعر فقط — ليس حجز فني. فريق QServe AI لا يسافر."
+                    : "Quote only — not a booked technician. QServe AI staff do not fly out."}
                 </span>
               </span>
             </label>
@@ -149,18 +149,19 @@ export function ShipPicker({ hydrated, ar }: { hydrated: HydratedLine[]; ar: boo
   );
 }
 
-function QuoteLink({ body, subject, label, mailWord, primary }: { body: string; subject: string; label: string; mailWord: string; primary?: boolean }) {
+function QuoteLink({ body, label, primary }: { body: string; label: string; primary?: boolean }) {
   const wa = `${site.whatsapp}?text=${encodeURIComponent(body)}`;
-  const mail = `mailto:${site.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   return (
-    <div className="grid gap-2">
-      <a className={`${primary ? "btn-go" : "btn-ghost"} w-full !py-2 text-sm`} href={wa} target="_blank" rel="noreferrer">
-        {label} — WhatsApp
-      </a>
-      <a className="btn-ghost w-full !py-2 text-sm" href={mail}>
-        {label} — {mailWord}
-      </a>
-    </div>
+    <a
+      className={`${primary ? "btn-go" : "btn-ghost"} w-full !py-2 text-sm`}
+      href={wa}
+      onClick={(e) => {
+        e.preventDefault();
+        window.location.href = wa;
+      }}
+    >
+      {label}
+    </a>
   );
 }
 
@@ -175,7 +176,7 @@ export function FulfillmentCta({ hydrated, ar }: { hydrated: HydratedLine[]; ar:
     const body = fulfillmentQuoteBody("INST-EG", hydrated, shipId, ar);
     return (
       <div className="mt-2">
-        <QuoteLink body={body} subject={ar ? "اطلب عرض تركيب INST-EG" : "Request install quote INST-EG"} label={ar ? "اطلب عرض تركيب" : "Request install quote"} mailWord={ar ? "إيميل" : "email"} primary />
+        <QuoteLink body={body} label={ar ? "طلب عرض سعر" : "Request a quote"} primary />
       </div>
     );
   }
@@ -185,7 +186,7 @@ export function FulfillmentCta({ hydrated, ar }: { hydrated: HydratedLine[]; ar:
     return (
       <div className="mt-2">
         <p className="mb-2 text-[11px] font-bold text-navy/60">{ar ? "تقدير — ثم:" : "Estimate — then:"}</p>
-        <QuoteLink body={body} subject={ar ? "اطلب عرض شحن" : "Request shipping quote"} label={ar ? "اطلب عرض شحن" : "Request shipping quote"} mailWord={ar ? "إيميل" : "email"} primary />
+        <QuoteLink body={body} label={ar ? "طلب عرض سعر" : "Request a quote"} primary />
       </div>
     );
   }
@@ -196,9 +197,9 @@ export function FulfillmentCta({ hydrated, ar }: { hydrated: HydratedLine[]; ar:
     return (
       <div className="mt-2 space-y-3">
         <p className="text-[11px] font-bold text-navy/60">{ar ? "تقدير — ثم:" : "Estimate — then:"}</p>
-        <QuoteLink body={shipBody} subject={ar ? "اطلب عرض شحن SHIP-ME" : "Request shipping quote SHIP-ME"} label={ar ? "اطلب عرض شحن" : "Request shipping quote"} mailWord={ar ? "إيميل" : "email"} primary />
+        <QuoteLink body={shipBody} label={ar ? "طلب عرض سعر" : "Request a quote"} primary />
         {systems && partner && (
-          <QuoteLink body={instBody} subject={ar ? "اطلب عرض تركيب محلي INST-ME" : "Request local install quote INST-ME"} label={ar ? "اطلب عرض تركيب محلي" : "Request local install quote"} mailWord={ar ? "إيميل" : "email"} />
+          <QuoteLink body={instBody} label={ar ? "طلب عرض سعر" : "Request a quote"} />
         )}
       </div>
     );

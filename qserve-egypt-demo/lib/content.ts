@@ -1,15 +1,15 @@
 export const site = {
-  brandAr: "كيو سيرف AI مصر",
-  brandEn: "QServe AI Egypt",
-  shortAr: "كيو AI",
-  shortEn: "Q AI",
-  factoryLineAr: "مصنع القاهرة الجديدة",
-  factoryLineEn: "New Cairo factory",
-  domain: "https://www.yallastore.com",
+  brandAr: "كيو سيرف AI",
+  brandEn: "QServe AI",
+  shortAr: "كيو سيرف AI",
+  shortEn: "QServe AI",
+  factoryLineAr: "QServe AI",
+  factoryLineEn: "QServe AI",
+  domain: "https://qserve-ai-egypt-demo.netlify.app",
   phoneDisplay: "+20 122 799 3999",
   phoneTel: "+201227993999",
   whatsapp: "https://wa.me/201227993999",
-  email: "info@yallastore.com",
+  email: "",
   addressAr:
     "المنطقة الصناعية - منطقة 1000 مصنع، التجمع الثالث، القاهرة الجديدة، القاهرة، مصر",
   addressEn: "1000 Factory, Third Settlement, New Cairo, Cairo, Egypt",
@@ -48,7 +48,7 @@ export const products: Product[] = [
     summary:
       "نظام متكامل لإدارة الطوابير وتحسين تدفق العملاء في البنوك والمستشفيات والجهات الحكومية — تصنيع محلي بمعايير دولية.",
     paragraphs: [
-      "يعد مصنع كيوسيرف مصر أحد مصانع أنظمة انتظار العملاء في مصر التي تعتمد عليها المؤسسات لتحسين تجربة الخدمة وتنظيم تدفق العملاء داخل الفروع. يوفر النظام حلولاً متكاملة تشمل أجهزة طباعة التذاكر، شاشات انتظار العملاء، وحدات الاستدعاء، أجهزة كيوسك، وأنظمة تقارير تحليلية.",
+      "QServe AI يصمّم أنظمة انتظار العملاء التي تعتمد عليها المؤسسات لتحسين تجربة الخدمة وتنظيم تدفق العملاء داخل الفروع. يوفر النظام حلولاً متكاملة تشمل أجهزة طباعة التذاكر، شاشات انتظار العملاء، وحدات الاستدعاء، أجهزة كيوسك، وأنظمة تقارير تحليلية.",
       "يساعد نظام استدعاء العملاء على تقليل وقت الانتظار وتحسين توزيع العملاء على الموظفين بشكل عادل ومنظم، كما يوفّر تقارير تفصيلية توضّح متوسط زمن الخدمة وعدد العملاء يومياً، مما يمكّن الإدارة من اتخاذ قرارات مستنيرة لتحسين الكفاءة التشغيلية.",
     ],
     bullets: [
@@ -302,9 +302,4 @@ export const sectors = [
   { id: "corp", name: "شركات ومؤسسات", examples: ["نقابة الصيادلة", "IKEA", "Jumia"] },
 ];
 
-export const trustChips = [
-  "مصنع في القاهرة الجديدة",
-  "ضمان سنتين + قطع غيار محلية",
-  "تركيب مجاني حسب العرض",
-  "دعم هندسي متخصص",
-];
+export const trustChips: string[] = [];

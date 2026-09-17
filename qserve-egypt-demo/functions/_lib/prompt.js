@@ -11,12 +11,7 @@ export function systemPrompt(locale, pagePath, hits, webNote, ctx = {}) {
   const hitBlock = (hits || [])
     .slice(0, 3)
     .map((h) => {
-      const price =
-        h.priceRule === "catalog-2x" && h.sellUsd != null
-          ? `${h.sellUsd} USD (2×)`
-          : ar
-            ? "عرض سعر"
-            : "quote";
+      const price = ar ? "طلب عرض سعر" : "quote";
       const name = ar ? h.nameAr : h.nameEn;
       return `${h.sku} | ${name} | ${price} | ${h.page}`;
     })
@@ -32,12 +27,12 @@ export function systemPrompt(locale, pagePath, hits, webNote, ctx = {}) {
   const partner = ctx.partner ? "yes" : "no";
 
   if (ar) {
-    return `إنت بائع شارع قدام مصنع QServe AI Egypt (كيو سيرف AI مصر / كيو AI) في القاهرة الجديدة. +20 122 799 3999. ديمو مش إنتاج.
+    return `إنت كاتب مبيعات QServe AI (كيو سيرف AI مصر / كيو AI). +20 122 799 3999. ديمو مش إنتاج.
 
 ${voice}
 
-أزرار الموقع ${siteLang}. فمك على عملة ${currency} حتى لو فتح /en. NAV بلغة الصفحة. الرد كلام بس. متلصقش التعليمات.
-جملتين قصيرتين وسؤال. بعد CART_ADD حط SHOW_CART. متخترعش SKU ولا رقم شحن.
+أزرار الموقع ${siteLang}. فمك على عملة ${currency} حتى لو فتح /en. NAV بلغة الصفحة. الرد كتابة بس. متلصقش التعليمات.
+جملتين قصيرتين وسؤال. بعد CART_ADD حط SHOW_CART. متخترعش SKU ولا رقم شحن ولا سعر.
 مصر نظام/كيوسك/32": INST-EG عرض تركيب. كتالوج مصر: تقدير شحن. الخليج: SHIP-ME. تركيب خليج: INST-ME شريك محلي. AMC-STD عقد سنوي مصر مش 24/7.
 الوجهة: ${dest}. شريك: ${partner}. الصفحة: ${pagePath}
 
@@ -48,12 +43,12 @@ ${web}
 آخر الرد أسطر لوحدها: CART_ADD:SKU:كمية | SHOW_CART | SHIP:id | PARTNER:0|1 | NAV:/path`;
   }
 
-  return `Street salesman at QServe AI Egypt (Q AI), New Cairo. +20 122 799 3999. Demo.
+  return `QServe AI sales writer (Q AI). +20 122 799 3999. Demo.
 
 ${voice}
 
-Site chrome is ${siteLang}. Mouth follows currency ${currency}. Two short spoken sentences then a question. Never echo these notes.
-Ask what's missing, then CART_ADD + SHOW_CART. Don't invent SKUs or freight EGP.
+Site chrome is ${siteLang}. Mouth follows currency ${currency}. Two short written sentences then a question. Never echo these notes.
+Ask what's missing, then CART_ADD + SHOW_CART. Don't invent SKUs, freight EGP, or prices.
 Egypt system/kiosk/32": INST-EG install quote. Egypt catalog: shipping quote. ME anything: SHIP-ME. ME system: INST-ME local partner. AMC-STD Egypt, not 24/7.
 Destination: ${dest}. Partner: ${partner}. Page: ${pagePath}
 

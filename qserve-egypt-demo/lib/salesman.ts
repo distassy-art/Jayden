@@ -180,8 +180,8 @@ export function nextTurn(locale: Locale, text: string, prev: Slots, pagePath: st
     if (!slots.phone && /عرض سعر|quote|واتساب/.test(low)) {
       return {
         reply: ar
-          ? "تمام. للعرض نحتاج موبايل للتواصل من المصنع. ابعت رقمك، ومعاه المدينة وعدد الشبابيك أو الأسرة لو جاهز."
-          : "Sure. A quote needs a mobile number so the factory can call. Please send your phone, plus city and window/bed count if you have them.",
+          ? "تمام. للعرض نحتاج موبايل عشان نفتح واتساب. ابعت رقمك، ومعاه المدينة وعدد الشبابيك أو الأسرة لو جاهز."
+          : "Sure. A quote needs a mobile number so we can open WhatsApp. Please send your phone, plus city and window/bed count if you have them.",
         slots,
         chips: [],
       };

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { QuoteWaButton } from "@/components/QuoteWaButton";
 import { systems } from "@/lib/content";
 import { localizedProduct } from "@/lib/en-copy";
 import { ui, localizedHref } from "@/lib/i18n";
@@ -19,12 +20,10 @@ export function ProductStories() {
     <section className="mx-auto max-w-6xl px-4 py-16">
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="text-sm font-extrabold text-cyan">{t.storiesKicker}</p>
-          <h2 className="mt-1 text-3xl font-black text-navy sm:text-4xl">{t.storiesTitle}</h2>
+          <p className="text-sm font-extrabold text-cyan">{t.systems}</p>
+          <h2 className="mt-1 text-3xl font-black text-navy sm:text-4xl">{t.systems}</h2>
         </div>
-        <Link href={href("/quote")} className="btn-go">
-          {t.storiesCta}
-        </Link>
+        <QuoteWaButton>{t.quote}</QuoteWaButton>
       </div>
       <div className="-mx-4 flex snap-x gap-4 overflow-x-auto px-4 pb-4">
         {systems.map((p) => {
@@ -62,9 +61,9 @@ export function ProductStories() {
             <Link href={href(`/${current.slug}`)} className="btn-go">
               {t.openSystem}
             </Link>
-            <Link href={href("/quote")} className="btn-ghost">
+            <QuoteWaButton className="btn-ghost" product={current.h1}>
               {t.askQuote}
-            </Link>
+            </QuoteWaButton>
           </div>
         </div>
       </div>

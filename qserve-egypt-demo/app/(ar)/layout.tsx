@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   },
   description: `عرض تجريبي تفاعلي لـ ${site.brandAr} — ليس الموقع الحي.`,
   robots: { index: false, follow: false },
-  icons: { icon: "/brand/qserve-ai-official-logo.jpg" },
+  icons: { icon: "/brand/qserve-logo-wordmark.png" },
   alternates: hreflang("/"),
 };
 
@@ -33,7 +33,7 @@ const orgJson = JSON.stringify({
   "@type": "Organization",
   name: "QServe AI Egypt",
   alternateName: ["Q AI", "كيو سيرف AI مصر", "كيو AI"],
-  description: "New Cairo factory — queue, kiosk, nurse-call. Demo only.",
+  description: "QServe AI — queue, kiosk, nurse-call. Demo only.",
 });
 
 export default function ArabicLayout({ children }: { children: React.ReactNode }) {

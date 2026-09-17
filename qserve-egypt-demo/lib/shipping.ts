@@ -71,20 +71,20 @@ export function quoteOnlyHint(hydrated: HydratedLine[], ar: boolean, group: "egy
   if (group === "me") {
     return ar
       ? systems
-        ? "الشحن من مصر (أرامكس / DHL…) تقدير فقط — اطلب عرض شحن. تركيب محلي اختياري عبر شريك نسعّره. فريق المصنع لا يسافر."
+        ? "الشحن من مصر (أرامكس / DHL…) تقدير فقط — اطلب عرض شحن. تركيب محلي اختياري عبر شريك نسعّره. فريق QServe AI لا يسافر."
         : "الشحن من مصر تقدير فقط — اطلب عرض شحن. الجمارك على المستلم ما لم يُكتب غير ذلك."
       : systems
-        ? "Freight from Egypt is an estimate only — request a shipping quote. Optional local-partner install quote. Factory staff do not fly out."
+        ? "Freight from Egypt is an estimate only — request a shipping quote. Optional local-partner install quote. QServe AI staff do not fly out."
         : "Freight from Egypt is an estimate only — request a shipping quote. Duties on the buyer unless the PO says otherwise.";
   }
   if (systems) {
     return ar
-      ? "التوصيل هنا تركيب من مصنع كيوسيرف في القاهرة الجديدة — اطلب عرض تركيب. ليست شركة شحن."
-      : "This is a New Cairo factory installation quotation — request an install quote. Not a courier SKU.";
+      ? "التوصيل هنا تركيب من QServe AI — اطلب عرض تركيب. ليست شركة شحن."
+      : "This is a QServe AI installation quotation — request an install quote. Not a courier SKU.";
   }
   return ar
-    ? "تقدير الشحن داخل مصر بعد الوزن والمدينة — اطلب عرض شحن. القاهرة الكبرى غالباً فان المصنع."
-    : "Egypt catalog freight is an estimate after weight and city — request a shipping quote. Greater Cairo is usually the factory van.";
+    ? "تقدير الشحن داخل مصر بعد الوزن والمدينة — اطلب عرض شحن."
+    : "Egypt catalog freight is an estimate after weight and city — request a shipping quote.";
 }
 
 export function catalogWeightKg(hydrated: HydratedLine[]) {

@@ -15,13 +15,6 @@ export function AboutView() {
         <span className="mt-2 block text-2xl text-cyan">{locale === "en" ? site.brandAr : site.brandEn}</span>
       </h1>
       <p className="mt-6 text-lg leading-9 text-navy/75">{t.aboutBody}</p>
-      <ul className="mt-8 grid gap-2 sm:grid-cols-2">
-        {t.chips.map((c) => (
-          <li key={c} className="glass rounded-2xl px-4 py-3 font-bold">
-            {c}
-          </li>
-        ))}
-      </ul>
       <p className="mt-8 text-sm text-navy/60">{t.address}</p>
     </div>
   );
