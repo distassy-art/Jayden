@@ -44,6 +44,7 @@ const quoteSrc = fs.readFileSync(new URL("../lib/quote-wa.ts", import.meta.url),
 const chromeSrc = fs.readFileSync(new URL("../components/PublicChrome.tsx", import.meta.url), "utf8");
 const liveSrc = fs.readFileSync(new URL("../components/LiveQueue.tsx", import.meta.url), "utf8");
 const footerSrc = fs.readFileSync(new URL("../components/Footer.tsx", import.meta.url), "utf8");
+const aboutSrc = fs.readFileSync(new URL("../components/views/AboutView.tsx", import.meta.url), "utf8");
 const aiSrc = fs.readFileSync(new URL("../netlify/functions/ai.ts", import.meta.url), "utf8");
 
 ok("no public AI chat", !chromeSrc.includes("SalesmanChat") && !chromeSrc.includes("qai-text-launch") && !homeSrc.includes("qai-text-launch") && !headerSrc.includes("SalesmanChat"));
@@ -62,7 +63,10 @@ ok("chrome has no cart drawer", !chromeSrc.includes("CartDrawer"));
 ok("footer no factory branding", !footerSrc.includes("1000") && !footerSrc.includes("t.address"));
 ok("no 1000 factory copy", !i18nSrc.includes("1000 مصنع") && !contentSrc.includes("1000 مصنع") && !i18nSrc.includes("1000 Factory"));
 ok("no story-to-quote CTA", !i18nSrc.includes("حوّل القصة لعرض سعر") && !i18nSrc.includes("Turn this into a quote"));
-ok("no yallastore.com", !i18nSrc.toLowerCase().includes("yallastore") && !contentSrc.toLowerCase().includes("yallastore") && !homeSrc.toLowerCase().includes("yallastore"));
+ok("about is a company story", aboutSrc.includes("aboutH1") && aboutSrc.includes("aboutEgyptTitle") && aboutSrc.includes("aboutMeTitle") && aboutSrc.includes("QuoteWaButton"));
+ok("about no yallastore or shop", !aboutSrc.toLowerCase().includes("yallastore") && !aboutSrc.includes("/products") && !aboutSrc.includes("/cart") && !aboutSrc.includes("SalesmanChat"));
+ok("header links about", headerSrc.includes('href("/about")') && i18nSrc.includes("عن كيوسيرف"));
+ok("no yallastore.com", !i18nSrc.toLowerCase().includes("yallastore") && !contentSrc.toLowerCase().includes("yallastore") && !homeSrc.toLowerCase().includes("yallastore") && !aboutSrc.toLowerCase().includes("yallastore"));
 ok("demo origin is netlify", i18nSrc.includes("qserve-ai-egypt-demo.netlify.app"));
 ok("gemini 2.5 flash-lite stream", aiSrc.includes("gemini-2.5-flash-lite") && aiSrc.includes("generateContentStream") && aiSrc.includes("text/event-stream"));
 ok("no grok pin", !aiSrc.toLowerCase().includes("grok"));
