@@ -596,11 +596,23 @@ def delete_older_mtd(
         )
 
 
-def run_dly_dpt(target: date, kinds: set[str] | None = None) -> dict:
+def run_dly_dpt(
+    target: date,
+    kinds: set[str] | None = None,
+    only: set[str] | None = None,
+) -> dict:
     kinds = kinds or {"dly", "dpt"}
     if not kinds.issubset({"dly", "dpt"}):
         raise SystemExit(f"Invalid kinds {kinds}; expected subset of dly,dpt")
     stores, bd = build_store_map(target)
+    if only:
+        stores = [
+            row
+            for row in stores
+            if any(tok in row[0] for tok in only)
+        ]
+        if not stores:
+            raise SystemExit(f"No STORE_DEFS matched --only {sorted(only)}")
     month_start = date(target.year, target.month, 1)
     end = month_end(target)
     dly_name = f"{stamp(target)}dly.pdf"
@@ -621,7 +633,8 @@ def run_dly_dpt(target: date, kinds: set[str] | None = None) -> dict:
 
     print(
         f"{'+'.join(sorted(kinds)).upper()} through {target} ({month_folder(target)}) "
-        f"-> {', '.join(kind_names[k] for k in sorted(kinds))}",
+        f"-> {', '.join(kind_names[k] for k in sorted(kinds))}"
+        + (f" only={','.join(sorted(only))}" if only else ""),
         flush=True,
     )
 
@@ -697,71 +710,80 @@ def run_dly_dpt(target: date, kinds: set[str] | None = None) -> dict:
                 key,
             )
 
-    # Big Daddy central multi-store
-    print(f"\n=== BD_central (hotmail -121) ===", flush=True)
-    try:
-        s, sid, meta_u = s2k.sessionid_for("hotmail", -121)
-        stores_csv = meta_u.get("stores") or ""
-        if not stores_csv:
-            raise RuntimeError("no stores list on BD account -121")
-    except Exception as e:
-        results["failed"].append({"client": "BD_central", "op": "login", "error": str(e)})
-        print(f"  LOGIN FAIL {e}", flush=True)
-        stores_csv = ""
+    # Big Daddy central multi-store — skip when --only is a per-store client
+    # (HB / Db / Placentia). BD multi-store report includes every BD site and
+    # must not be mixed into a single-store refresh.
+    run_bd = only is None
+    if only and any(tok.upper().startswith("BD") for tok in only):
+        run_bd = True
 
-    if stores_csv:
-        print(f"  stores={stores_csv}", flush=True)
-        local = OUT_DIR / "BD_central"
-        local.mkdir(exist_ok=True)
-        for kind in sorted(kinds):
-            name = kind_names[kind]
-            folder_key = kind
-            cfg = REPORTS[kind]
-            folder = bd[folder_key]
-            folder_rel = f"{DOCS_CLIENTS}/{folder}"
-            rr = s2k.pull(
-                s,
-                sid,
-                cfg["rpt"],
-                month_start.isoformat(),
-                end.isoformat(),
-                stores_csv,
-                cfg["extra"] or None,
-            )
-            if not is_pdf(rr.content, min_len=5000):
-                results["failed"].append(
-                    {
-                        "client": "BD_central",
-                        "file": name,
-                        "op": "pull",
-                        "status": rr.status_code,
-                        "bytes": len(rr.content),
-                    }
+    if run_bd:
+        print(f"\n=== BD_central (hotmail -121) ===", flush=True)
+        try:
+            s, sid, meta_u = s2k.sessionid_for("hotmail", -121)
+            stores_csv = meta_u.get("stores") or ""
+            if not stores_csv:
+                raise RuntimeError("no stores list on BD account -121")
+        except Exception as e:
+            results["failed"].append({"client": "BD_central", "op": "login", "error": str(e)})
+            print(f"  LOGIN FAIL {e}", flush=True)
+            stores_csv = ""
+
+        if stores_csv:
+            print(f"  stores={stores_csv}", flush=True)
+            local = OUT_DIR / "BD_central"
+            local.mkdir(exist_ok=True)
+            for kind in sorted(kinds):
+                name = kind_names[kind]
+                folder_key = kind
+                cfg = REPORTS[kind]
+                folder = bd[folder_key]
+                folder_rel = f"{DOCS_CLIENTS}/{folder}"
+                rr = s2k.pull(
+                    s,
+                    sid,
+                    cfg["rpt"],
+                    month_start.isoformat(),
+                    end.isoformat(),
+                    stores_csv,
+                    cfg["extra"] or None,
                 )
-                print(
-                    f"  FAIL {kind} {rr.status_code} {len(rr.content)}",
-                    flush=True,
-                )
-                continue
-            path = local / name
-            path.write_bytes(rr.content)
-            results["pulled"].append(str(path))
-            print(f"  pulled {kind} {len(rr.content)} bytes", flush=True)
-            up_ok, msg = sp.upload(folder_rel, name, rr.content)
-            print(f"  upload {kind} -> {up_ok} {msg}", flush=True)
-            entry = {
-                "client": "BD_central",
-                "file": name,
-                "op": "upload",
-                "ok": up_ok,
-                "msg": msg,
-                "folder": folder,
-            }
-            (results["uploaded"] if up_ok else results["failed"]).append(entry)
-            if up_ok:
-                delete_older_mtd(
-                    sp, folder_rel, {name}, kind, results, "BD_central"
-                )
+                if not is_pdf(rr.content, min_len=5000):
+                    results["failed"].append(
+                        {
+                            "client": "BD_central",
+                            "file": name,
+                            "op": "pull",
+                            "status": rr.status_code,
+                            "bytes": len(rr.content),
+                        }
+                    )
+                    print(
+                        f"  FAIL {kind} {rr.status_code} {len(rr.content)}",
+                        flush=True,
+                    )
+                    continue
+                path = local / name
+                path.write_bytes(rr.content)
+                results["pulled"].append(str(path))
+                print(f"  pulled {kind} {len(rr.content)} bytes", flush=True)
+                up_ok, msg = sp.upload(folder_rel, name, rr.content)
+                print(f"  upload {kind} -> {up_ok} {msg}", flush=True)
+                entry = {
+                    "client": "BD_central",
+                    "file": name,
+                    "op": "upload",
+                    "ok": up_ok,
+                    "msg": msg,
+                    "folder": folder,
+                }
+                (results["uploaded"] if up_ok else results["failed"]).append(entry)
+                if up_ok:
+                    delete_older_mtd(
+                        sp, folder_rel, {name}, kind, results, "BD_central"
+                    )
+    else:
+        print("\n=== BD_central skipped (--only per-store; no multi-site pull) ===", flush=True)
 
     out = {
         "target": target.isoformat(),
@@ -809,6 +831,13 @@ def main(argv: list[str] | None = None) -> int:
         default="dly,dpt",
         help="Comma-separated report kinds to pull: dly, dpt (default: both)",
     )
+    p.add_argument(
+        "--only",
+        type=str,
+        default=None,
+        help="Comma-separated store tokens matching STORE_DEFS keys "
+        "(e.g. 42179). Skips Big Daddy multi-site pull.",
+    )
     args = p.parse_args(argv)
 
     if args.through:
@@ -817,6 +846,9 @@ def main(argv: list[str] | None = None) -> int:
         target = datetime.now(PT).date() - timedelta(days=1)
 
     kinds = {k.strip().lower() for k in args.kinds.split(",") if k.strip()}
+    only = None
+    if args.only:
+        only = {k.strip() for k in args.only.split(",") if k.strip()}
     stores, bd = build_store_map(target)
     if args.map_only:
         print("Store map:")
@@ -826,13 +858,14 @@ def main(argv: list[str] | None = None) -> int:
         print("Reports:", REPORTS)
         print("Mode:", args.mode)
         print("Kinds:", sorted(kinds))
+        print("Only:", sorted(only) if only else None)
         return 0
 
     if args.mode == "daily":
         out = run_daily(target)
         return 1 if out["failed"] else 0
 
-    out = run_dly_dpt(target, kinds=kinds)
+    out = run_dly_dpt(target, kinds=kinds, only=only)
     return 1 if out["failed"] else 0
 
 
