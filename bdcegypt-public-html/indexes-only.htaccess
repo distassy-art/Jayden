@@ -1,0 +1,16 @@
+# Merge into existing public_html/.htaccess.
+# Index hiding only. No host redirects.
+
+Options -Indexes
+
+<IfModule mod_authz_core.c>
+  <FilesMatch "^__next">
+    Require all denied
+  </FilesMatch>
+</IfModule>
+<IfModule !mod_authz_core.c>
+  <FilesMatch "^__next">
+    Order allow,deny
+    Deny from all
+  </FilesMatch>
+</IfModule>
