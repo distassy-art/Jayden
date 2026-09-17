@@ -20,59 +20,70 @@
   from = "/products"
   to = "/"
   status = 301
+  force = true
 
 [[redirects]]
   from = "/products/*"
   to = "/"
   status = 301
+  force = true
 
 [[redirects]]
   from = "/cart"
   to = "/"
   status = 301
+  force = true
 
 [[redirects]]
   from = "/cart/*"
   to = "/"
   status = 301
+  force = true
 
 [[redirects]]
   from = "/face-recognition"
   to = "/"
   status = 301
+  force = true
 
 [[redirects]]
   from = "/face-recognition/*"
   to = "/"
   status = 301
+  force = true
 
 [[redirects]]
   from = "/en/products"
   to = "/en"
   status = 301
+  force = true
 
 [[redirects]]
   from = "/en/products/*"
   to = "/en"
   status = 301
+  force = true
 
 [[redirects]]
   from = "/en/cart"
   to = "/en"
   status = 301
+  force = true
 
 [[redirects]]
   from = "/en/cart/*"
   to = "/en"
   status = 301
+  force = true
 
 [[redirects]]
   from = "/en/face-recognition"
   to = "/en"
   status = 301
+  force = true
 
 [[redirects]]
   from = "/en/face-recognition/*"
   to = "/en"
   status = 301
-
+  force = true

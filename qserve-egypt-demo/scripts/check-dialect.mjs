@@ -34,7 +34,6 @@ ok("eg copy stay-on", dialectVoiceBlock("eg").includes("إزيك"));
 ok("eg cairo salesman", /عامية مصرية/.test(dialectVoiceBlock("eg")));
 ok("eg forbids MSA news", dialectVoiceBlock("eg").includes("فصحى") && dialectVoiceBlock("eg").includes("معلش"));
 
-const chatSrc = fs.readFileSync(new URL("../components/SalesmanChat.tsx", import.meta.url), "utf8");
 const homeSrc = fs.readFileSync(new URL("../components/HomePage.tsx", import.meta.url), "utf8");
 const headerSrc = fs.readFileSync(new URL("../components/Header.tsx", import.meta.url), "utf8");
 const brandSrc = fs.readFileSync(new URL("../components/BrandLockup.tsx", import.meta.url), "utf8");
@@ -46,12 +45,10 @@ const chromeSrc = fs.readFileSync(new URL("../components/PublicChrome.tsx", impo
 const liveSrc = fs.readFileSync(new URL("../components/LiveQueue.tsx", import.meta.url), "utf8");
 const footerSrc = fs.readFileSync(new URL("../components/Footer.tsx", import.meta.url), "utf8");
 const aiSrc = fs.readFileSync(new URL("../netlify/functions/ai.ts", import.meta.url), "utf8");
-const aiClientSrc = fs.readFileSync(new URL("../lib/ai-client.ts", import.meta.url), "utf8");
 
-ok("client posts /api/ai", aiClientSrc.includes('fetch("/api/ai"') && chatSrc.includes("postSalesmanAi"));
-ok("client does not post /api/chat", !chatSrc.includes('fetch("/api/chat"'));
-ok("text-only launch, no Talk dock", chatSrc.includes("qai-text-launch") && !chatSrc.includes("qai-talk-dock") && !chatSrc.includes("TalkButton"));
-ok("no wanderer on public chrome", !chromeSrc.includes("QaiWanderer") && !chatSrc.includes("QaiWanderer"));
+ok("no public AI chat", !chromeSrc.includes("SalesmanChat") && !chromeSrc.includes("qai-text-launch") && !homeSrc.includes("qai-text-launch") && !headerSrc.includes("SalesmanChat"));
+ok("client does not post /api/chat", !homeSrc.includes('fetch("/api/chat"') && !chromeSrc.includes('fetch("/api/chat"'));
+ok("no wanderer or talk dock", !chromeSrc.includes("QaiWanderer") && !chromeSrc.includes("TalkButton") && !homeSrc.includes("QaiWanderer"));
 ok("wordmark not robot badge", brandSrc.includes("qserve-logo-wordmark.png") && !brandSrc.includes("official-logo.jpg"));
 ok("EGP only", currencySrc.includes('CURRENCIES = ["EGP"]') && !headerSrc.includes("CurrencySwitch"));
 ok("quote opens WhatsApp with #سعر", quoteSrc.includes("#سعر") && quoteSrc.includes("window.location.href") && headerSrc.includes("QuoteWaButton"));
