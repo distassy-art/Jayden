@@ -100,6 +100,18 @@ python3 scripts/rebuild_daily_open_month.py --month 2026-09 \
 Confirm `https://smartsolutionsai.us/data/daily_september.json` and
 `https://smartsolutionsai.us/new/api/data/daily-open.json` share the same
 `through` (and neither lists La Mesa `42642`).
+
+**Deploy note:** `smartsolutions-site` owns the domain; `smartsolutions-admin`
+owns only `/new` and `/new/*`. After any `wrangler deploy` of the site, confirm
+`/new/` still returns 200 (not a 302 to `/`). If `/new` breaks, redeploy admin:
+
+```
+cd site-v2 && npx wrangler deploy --env live
+```
+
+A site deploy can also replace `data/daily_september.json` with an older copy —
+always re-run `rebuild_daily_open_month.py` into that checkout before deploying
+when open-month days changed.
 6. Spot-check https://smartsolutionsai.us/yearly.html and https://smartsolutionsai.us/new/ (owner session) if a browser is available.
 
 Skip Store Services workbooks. Merge is additive by date/month; do not wipe other stations.
