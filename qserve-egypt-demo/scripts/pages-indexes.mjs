@@ -9,7 +9,7 @@ for (const name of ["robots.txt", "sitemap.xml", "_headers", "_redirects", "_rou
 }
 writeFileSync(
   join(root, "_routes.json"),
-  `${JSON.stringify({ version: 1, include: ["/api/*"], exclude: ["/sitemap.xml", "/robots.txt", "/_next/*"] }, null, 2)}\n`,
+  `${JSON.stringify({ version: 1, include: ["/api/*", "/sitemap.xml", "/sitemap.xml/", "/robots.txt", "/robots.txt/"], exclude: ["/_next/*"] }, null, 2)}\n`,
 );
 
 function walk(dir) {

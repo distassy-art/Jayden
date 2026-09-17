@@ -88,7 +88,7 @@ const robotsSrc = fs.readFileSync(new URL("../public/robots.txt", import.meta.ur
 const sitemapSrc = fs.readFileSync(new URL("../public/sitemap.xml", import.meta.url), "utf8");
 ok("robots allows crawl and points sitemap at www", robotsSrc.includes("Allow: /") && robotsSrc.includes("Sitemap: https://www.qserveai.com/sitemap.xml") && !robotsSrc.toLowerCase().includes("yallastore") && !/^Disallow: \/?\s*$/m.test(robotsSrc));
 ok("sitemap locs are www.qserveai.com", sitemapSrc.includes("<loc>https://www.qserveai.com/</loc>") && sitemapSrc.includes("https://www.qserveai.com/en/") && !sitemapSrc.toLowerCase().includes("yallastore") && !sitemapSrc.includes("pages.dev") && !sitemapSrc.includes("New Cairo"));
-ok("pages functions skip sitemap and robots", fs.readFileSync(new URL("../public/_routes.json", import.meta.url), "utf8").includes('"/sitemap.xml"') && fs.readFileSync(new URL("../public/_routes.json", import.meta.url), "utf8").includes('"/api/*"'));
+ok("pages functions serve sitemap and robots", fs.readFileSync(new URL("../public/_routes.json", import.meta.url), "utf8").includes('"/sitemap.xml"') && fs.readFileSync(new URL("../functions/_middleware.js", import.meta.url), "utf8").includes("SITEMAP_XML") && fs.readFileSync(new URL("../functions/_lib/seo-files.js", import.meta.url), "utf8").includes("https://www.qserveai.com/") && !fs.readFileSync(new URL("../functions/_lib/seo-files.js", import.meta.url), "utf8").toLowerCase().includes("yallastore"));
 ok("gemini 2.5 flash-lite stream", aiSrc.includes("gemini-2.5-flash-lite") && aiSrc.includes("generateContentStream") && aiSrc.includes("text/event-stream"));
 ok("no grok pin", !aiSrc.toLowerCase().includes("grok"));
 ok("empty GoogleGenAI constructor", aiSrc.includes("new GoogleGenAI({})"));
