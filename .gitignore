@@ -1,1 +1,4 @@
 scripts/__pycache__/
+cloudflare/scan-ingest/station-tokens.local.json
+cloudflare/scan-ingest/station-tokens.local.json
+station-uploader/__pycache__/
