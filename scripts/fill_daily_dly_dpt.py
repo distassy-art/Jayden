@@ -342,6 +342,8 @@ class S2K:
         site: str,
         extra: dict | None = None,
     ) -> requests.Response:
+        import time
+
         q = [
             f"rpt={quote(rpt, safe='')}",
             f"id={sid}",
@@ -354,15 +356,61 @@ class S2K:
             for k, v in extra.items():
                 q.append(f"{quote(str(k))}={quote(str(v), safe='')}")
         url = "https://store.s2kprime.com/report?" + "&".join(q)
-        return s.get(url, timeout=180)
+        last_err: Exception | None = None
+        for attempt in range(4):
+            try:
+                return s.get(url, timeout=180)
+            except (requests.exceptions.ConnectionError, requests.exceptions.Timeout) as e:
+                last_err = e
+                wait = 4 * (2**attempt)
+                print(
+                    f"  S2K pull retry {attempt + 1}/4 after {type(e).__name__}; sleep {wait}s",
+                    flush=True,
+                )
+                time.sleep(wait)
+        assert last_err is not None
+        raise last_err
 
 
 def is_pdf(content: bytes, min_len: int = 3000) -> bool:
     return content[:4] == b"%PDF" and len(content) > min_len
 
 
+def daily_book_has_sales(content: bytes) -> bool:
+    """Reject empty Daily Book shells (S2K returns PDFs with headers but no sales).
+
+    Text is usually compressed inside the PDF, so we cannot grep raw bytes.
+    Prefer a quick pdfplumber extract; fall back to size heuristics.
+    """
+    if not is_pdf(content, min_len=5000):
+        return False
+    # Empty shells seen ~20KB; real single-store ~32KB+; BD multi ~100KB+.
+    # Still open short files — a sparse day can be mid-size.
+    try:
+        import io
+
+        import pdfplumber
+
+        with pdfplumber.open(io.BytesIO(content)) as pdf:
+            text = "\n".join((p.extract_text() or "") for p in pdf.pages[:3])
+        if "Station Total" in text:
+            return True
+        # Truly empty shells have Fuel Sales headers but no grade lines / totals
+        if "Unleaded" in text or "Diesel" in text:
+            return True
+        return False
+    except Exception:
+        # If we cannot parse, allow upload when clearly larger than empty shells
+        return len(content) >= 28000
+
+
 def existing_daily_names(sp: SharePoint, folder_rel: str) -> set[str]:
     return {f["Name"].lower() for f in sp.list_files(folder_rel)}
+
+
+def existing_daily_index(sp: SharePoint, folder_rel: str) -> dict[str, dict]:
+    """Map lowercase filename -> SharePoint file metadata (Name, UniqueId, Length)."""
+    return {f["Name"].lower(): f for f in sp.list_files(folder_rel)}
 
 
 def run_daily(target: date) -> dict:
@@ -380,6 +428,7 @@ def run_daily(target: date) -> dict:
         "skipped": [],
         "failed": [],
         "pulled": [],
+        "recycled_empty": [],
     }
 
     days: list[date] = []
@@ -390,9 +439,72 @@ def run_daily(target: date) -> dict:
 
     print(
         f"Daily Book Summary through {target} ({month_folder(target)}); "
-        f"days={days[0]}..{days[-1]} (skip existing)",
+        f"days={days[0]}..{days[-1]} (skip existing; recycle empty shells)",
         flush=True,
     )
+
+    def handle_day(client_key: str, s, sid, site_or_stores, folder: str, folder_rel: str, local: Path, have: dict[str, dict], day: date) -> None:
+        name = f"{stamp(day)}.pdf"
+        key_l = name.lower()
+        if key_l in have:
+            meta = have[key_l]
+            length = int(meta.get("Length") or 0)
+            # Empty shells are ~20KB; real single-store ~32KB+, BD multi ~100KB+
+            if length >= 28000:
+                print(f"  skip {name} (exists {length}b)", flush=True)
+                results["skipped"].append(
+                    {"client": client_key, "file": name, "folder": folder}
+                )
+                return
+            ok, code = sp.recycle(meta["UniqueId"])
+            print(f"  recycle empty {name} ({length}b) -> {ok} {code}", flush=True)
+            results["recycled_empty"].append(
+                {"client": client_key, "file": name, "bytes": length, "ok": ok}
+            )
+            if not ok:
+                results["failed"].append(
+                    {"client": client_key, "file": name, "op": "recycle_empty", "code": code}
+                )
+                return
+        rr = s2k.pull(
+            s,
+            sid,
+            cfg["rpt"],
+            day.isoformat(),
+            day.isoformat(),
+            site_or_stores,
+            cfg["extra"] or None,
+        )
+        if not daily_book_has_sales(rr.content):
+            results["failed"].append(
+                {
+                    "client": client_key,
+                    "file": name,
+                    "op": "pull_empty",
+                    "status": rr.status_code,
+                    "bytes": len(rr.content),
+                }
+            )
+            print(
+                f"  EMPTY/FAIL {name} {rr.status_code} {len(rr.content)}b (no Station Total)",
+                flush=True,
+            )
+            return
+        path = local / name
+        path.write_bytes(rr.content)
+        results["pulled"].append(str(path))
+        print(f"  pulled {name} {len(rr.content)} bytes", flush=True)
+        up_ok, msg = sp.upload(folder_rel, name, rr.content)
+        print(f"  upload {name} -> {up_ok} {msg}", flush=True)
+        entry = {
+            "client": client_key,
+            "file": name,
+            "op": "upload",
+            "ok": up_ok,
+            "msg": msg,
+            "folder": folder,
+        }
+        (results["uploaded"] if up_ok else results["failed"]).append(entry)
 
     for key, group, acc, site, folder in stores:
         print(f"\n=== {key} daily ({group} acc={acc} site={site}) ===", flush=True)
@@ -406,54 +518,9 @@ def run_daily(target: date) -> dict:
             print(f"  LOGIN FAIL {e}", flush=True)
             continue
 
-        have = existing_daily_names(sp, folder_rel)
+        have = existing_daily_index(sp, folder_rel)
         for day in days:
-            name = f"{stamp(day)}.pdf"
-            if name.lower() in have:
-                print(f"  skip {name} (exists)", flush=True)
-                results["skipped"].append(
-                    {"client": key, "file": name, "folder": folder}
-                )
-                continue
-            rr = s2k.pull(
-                s,
-                sid,
-                cfg["rpt"],
-                day.isoformat(),
-                day.isoformat(),
-                site,
-                cfg["extra"] or None,
-            )
-            if not is_pdf(rr.content):
-                results["failed"].append(
-                    {
-                        "client": key,
-                        "file": name,
-                        "op": "pull",
-                        "status": rr.status_code,
-                        "bytes": len(rr.content),
-                    }
-                )
-                print(
-                    f"  FAIL {name} {rr.status_code} {len(rr.content)}",
-                    flush=True,
-                )
-                continue
-            path = local / name
-            path.write_bytes(rr.content)
-            results["pulled"].append(str(path))
-            print(f"  pulled {name} {len(rr.content)} bytes", flush=True)
-            up_ok, msg = sp.upload(folder_rel, name, rr.content)
-            print(f"  upload {name} -> {up_ok} {msg}", flush=True)
-            entry = {
-                "client": key,
-                "file": name,
-                "op": "upload",
-                "ok": up_ok,
-                "msg": msg,
-                "folder": folder,
-            }
-            (results["uploaded"] if up_ok else results["failed"]).append(entry)
+            handle_day(key, s, sid, site, folder, folder_rel, local, have, day)
 
     print("\n=== BD_central daily (hotmail -121) ===", flush=True)
     try:
@@ -474,54 +541,9 @@ def run_daily(target: date) -> dict:
         folder_rel = f"{DOCS_CLIENTS}/{folder}"
         local = OUT_DIR / "BD_central"
         local.mkdir(exist_ok=True)
-        have = existing_daily_names(sp, folder_rel)
+        have = existing_daily_index(sp, folder_rel)
         for day in days:
-            name = f"{stamp(day)}.pdf"
-            if name.lower() in have:
-                print(f"  skip {name} (exists)", flush=True)
-                results["skipped"].append(
-                    {"client": "BD_central", "file": name, "folder": folder}
-                )
-                continue
-            rr = s2k.pull(
-                s,
-                sid,
-                cfg["rpt"],
-                day.isoformat(),
-                day.isoformat(),
-                stores_csv,
-                cfg["extra"] or None,
-            )
-            if not is_pdf(rr.content, min_len=5000):
-                results["failed"].append(
-                    {
-                        "client": "BD_central",
-                        "file": name,
-                        "op": "pull",
-                        "status": rr.status_code,
-                        "bytes": len(rr.content),
-                    }
-                )
-                print(
-                    f"  FAIL {name} {rr.status_code} {len(rr.content)}",
-                    flush=True,
-                )
-                continue
-            path = local / name
-            path.write_bytes(rr.content)
-            results["pulled"].append(str(path))
-            print(f"  pulled {name} {len(rr.content)} bytes", flush=True)
-            up_ok, msg = sp.upload(folder_rel, name, rr.content)
-            print(f"  upload {name} -> {up_ok} {msg}", flush=True)
-            entry = {
-                "client": "BD_central",
-                "file": name,
-                "op": "upload",
-                "ok": up_ok,
-                "msg": msg,
-                "folder": folder,
-            }
-            (results["uploaded"] if up_ok else results["failed"]).append(entry)
+            handle_day("BD_central", s, sid, stores_csv, folder, folder_rel, local, have, day)
 
     out = {
         "mode": "daily",
@@ -531,6 +553,7 @@ def run_daily(target: date) -> dict:
         "skipped": results["skipped"],
         "failed": results["failed"],
         "pulled": results["pulled"],
+        "recycled_empty": results["recycled_empty"],
     }
     daily_result = Path("/tmp/s2k/exports/daily_book_run_result.json")
     daily_result.parent.mkdir(parents=True, exist_ok=True)
@@ -538,6 +561,7 @@ def run_daily(target: date) -> dict:
     print(
         f"\nDONE daily uploaded={len(out['uploaded'])} "
         f"skipped={len(out['skipped'])} failed={len(out['failed'])} "
+        f"recycled_empty={len(out['recycled_empty'])} "
         f"-> {daily_result}",
         flush=True,
     )
