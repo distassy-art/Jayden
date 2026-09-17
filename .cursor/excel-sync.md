@@ -89,7 +89,18 @@ node scripts/publish-books.mjs --file stations.json
 (`publish-books.mjs` accepts `stations[]` or legacy `patches[]` and always posts to `books`.)
 
 4. GET overlay again (and `/new/api/books-overlay`) and confirm each store’s `days` through the target date.
-5. Spot-check https://smartsolutionsai.us/yearly.html and https://smartsolutionsai.us/new/ (owner session) if a browser is available.
+5. Rebuild and deploy `/data/daily_september.json` so `/new` MTD shows the same through-date. Overlay publish alone does **not** update admin `daily-open`:
+
+```
+python3 scripts/rebuild_daily_open_month.py --month 2026-09 \
+  --out /path/to/smartsolutions-site/data/daily_september.json
+# then in that checkout: bash scripts/build-cf-dist.sh && npx wrangler deploy
+```
+
+Confirm `https://smartsolutionsai.us/data/daily_september.json` and
+`https://smartsolutionsai.us/new/api/data/daily-open.json` share the same
+`through` (and neither lists La Mesa `42642`).
+6. Spot-check https://smartsolutionsai.us/yearly.html and https://smartsolutionsai.us/new/ (owner session) if a browser is available.
 
 Skip Store Services workbooks. Merge is additive by date/month; do not wipe other stations.
 
