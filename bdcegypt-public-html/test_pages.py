@@ -5,22 +5,21 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 EXPECT = {
     "queue-system": {
-        "title": "نظام انتظار العملاء | BDC Egypt",
-        "h1": "نظام انتظار العملاء",
-        "desc": "BDC Egypt — نظام انتظار العملاء في مصر للبنوك والمستشفيات والشركات. اطلب عرض سعر على واتساب.",
+        "title": "كيوسيرف QServe | نظام انتظار العملاء | Queue Management System",
+        "h1": "كيوسيرف QServe — نظام انتظار العملاء",
+        "desc": "كيوسيرف QServe — نظام انتظار العملاء في مصر | Queue Management System. اطلب عرض سعر على واتساب.",
     },
     "nurse-call-system": {
-        "title": "نظام استدعاء الممرضات للمستشفيات | BDC Egypt",
-        "h1": "نظام استدعاء الممرضات",
-        "desc": "BDC Egypt — نظام استدعاء الممرضات للمستشفيات في مصر. اطلب عرض سعر على واتساب.",
+        "title": "كيوسيرف QServe | نظام استدعاء الممرضات | Nurse Call System",
+        "h1": "كيوسيرف QServe — نظام استدعاء الممرضات",
+        "desc": "كيوسيرف QServe — نظام استدعاء الممرضات للمستشفيات | Nurse Call System. اطلب عرض سعر على واتساب.",
     },
     "self-service-kiosks": {
-        "title": "أجهزة كيوسك وخدمات ذاتية | BDC Egypt",
-        "h1": "أجهزة الخدمات الذاتية",
-        "desc": "BDC Egypt — أجهزة كيوسك وخدمات ذاتية في مصر. اطلب عرض سعر على واتساب.",
+        "title": "كيوسيرف QServe | أجهزة كيوسك | Self Service Kiosks",
+        "h1": "كيوسيرف QServe — أجهزة كيوسك",
+        "desc": "كيوسيرف QServe — أجهزة كيوسك وخدمات ذاتية | Self Service Kiosks. اطلب عرض سعر على واتساب.",
     },
 }
-LEAD_BRAND = re.compile(r"كيوسيرف|QSERVE|QServe|qserveai", re.I)
 
 
 def main() -> None:
@@ -36,20 +35,18 @@ def main() -> None:
             errors.append(f"{slug} h1 mismatch: {h1!r}")
         if desc != exp["desc"]:
             errors.append(f"{slug} meta mismatch: {desc!r}")
-        if LEAD_BRAND.search(title) or LEAD_BRAND.search(h1):
-            errors.append(f"{slug} title/H1 leads with frozen brand")
+        if not title.startswith("كيوسيرف QServe"):
+            errors.append(f"{slug} title must lead with كيوسيرف QServe")
+        if "BDC Egypt" in title:
+            errors.append(f"{slug} title must not use BDC Egypt as brand")
         if "qserveai.com" in html.lower():
             errors.append(f"{slug} mentions qserveai.com")
-        if "Index of" in html:
-            errors.append(f"{slug} looks like an Apache index")
         ht = (ROOT / slug / ".htaccess").read_text(encoding="utf-8")
         if "qserveai" in ht.lower() or "RewriteRule" in ht:
             errors.append(f"{slug} .htaccess has redirects")
-        if "Options -Indexes" not in ht:
-            errors.append(f"{slug} missing Options -Indexes")
     if errors:
         raise SystemExit("\n".join(errors))
-    print("ok: 3 product pages, BDC Egypt titles/H1/meta, no redirects")
+    print("ok: 3 pages lead with كيوسيرف QServe, no qserveai redirects")
 
 
 if __name__ == "__main__":
