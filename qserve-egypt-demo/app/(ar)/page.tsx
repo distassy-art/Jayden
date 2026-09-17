@@ -1,11 +1,22 @@
 import type { Metadata } from "next";
 import { HomePage } from "@/components/HomePage";
-import { site } from "@/lib/content";
 import { pageMeta } from "@/lib/page-meta";
 
+const TITLE = "كيوسيرف | نظام انتظار العملاء في مصر";
+const DESC =
+  "كيوسيرف على www.qserveai.com: كيوسك وتذكرة وشاشات انتظار للبنوك والمستشفيات والجهات. اطلب عرض سعر على واتساب.";
+
 export const metadata: Metadata = {
-  ...pageMeta("ar", "/", `عرض تجريبي | ${site.brandAr} ${site.brandEn}`, `عرض تجريبي — ${site.brandAr} لأنظمة الانتظار واستدعاء الممرضات.`),
-  title: { absolute: `عرض تجريبي | ${site.brandAr} ${site.brandEn}` },
+  ...pageMeta("ar", "/", TITLE, DESC),
+  title: { absolute: TITLE },
+  description: DESC,
+  openGraph: {
+    title: TITLE,
+    description: DESC,
+    locale: "ar_EG",
+    url: "https://www.qserveai.com/",
+    siteName: "كيوسيرف",
+  },
 };
 
 export default function Page() {

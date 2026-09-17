@@ -1,9 +1,10 @@
-# QServe AI Egypt demo
+# كيوسيرف — نظام انتظار العملاء في مصر
 
-Interactive Arabic RTL demo of **QServe AI**.
+Public Arabic-first site for **كيوسيرف / QServe**. Quote on WhatsApp only.
 
-- Live: https://qserve-egypt-demo.pages.dev
-- Custom domain (Mina): `qserveai.com` / `www.qserveai.com` on this Pages project.
+- Live Pages: https://qserve-egypt-demo.pages.dev
+- Canonical: https://www.qserveai.com
+- English: https://www.qserveai.com/en
 - Do **not** deploy this onto yallastore.com.
 
 ```bash

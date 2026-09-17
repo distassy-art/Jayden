@@ -5,8 +5,8 @@ import { pageMeta } from "@/lib/page-meta";
 export const metadata: Metadata = pageMeta(
   "en",
   "/en/about",
-  "About QServe AI",
-  "QServe AI quotes queue, nurse-call, and kiosk systems for Egypt and the Middle East on WhatsApp.",
+  "About QServe",
+  "QServe on www.qserveai.com: queue management system Egypt, nurse call system Egypt, and self service kiosk Egypt. Quote on WhatsApp.",
 );
 
 export default function AboutPage() {

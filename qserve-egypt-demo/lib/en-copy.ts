@@ -6,16 +6,16 @@ type Copy = Pick<Product, "nav" | "title" | "h1" | "meta" | "kicker" | "summary"
 export const enCopy: Record<string, Copy> = {
   "queuing-system": {
     nav: "Queue management",
-    title: "Qserve Egypt queue management system",
-    h1: "Queue management — Qserve Egypt",
-    meta: "Egyptian-made queue system: tickets, displays, call pads, kiosks and reports for banks, hospitals and government.",
-    kicker: "Queue Management System Egypt",
-    summary: "End-to-end queue flow for banks, hospitals and government — local manufacturing, international specs.",
+    title: "Queue management system Egypt | QServe",
+    h1: "Queue management system Egypt",
+    meta: "QServe queue management system Egypt: tickets, waiting displays, call pads, kiosks and reports for banks, hospitals and government.",
+    kicker: "Queue management system Egypt",
+    summary: "Queue management system Egypt: ticket, waiting displays, and counter call — banks, hospitals, and government.",
     paragraphs: [
       "Qserve Egypt builds queue systems that branches actually run: ticket printers, waiting-room displays, agent consoles, kiosks and analytics.",
       "Fair routing cuts wait time and gives management daily reports on service time and ticket volume.",
     ],
-    bullets: ["Smart auto-queue", "High-brightness LED displays", "Wait time down up to 50%", "Touch kiosks", "Self-service and payments", "Bank, hospital and government packs"],
+    bullets: ["Smart auto-queue", "High-brightness LED displays", "Waiting-room customer displays", "Touch kiosks", "Self-service and payments", "Bank, hospital and government packs"],
     components: [
       { title: "Ticket dispenser", text: "Issue numbers by service, print or kiosk selection." },
       { title: "Customer displays", text: "Now-serving number, counter and Arabic voice." },
@@ -26,11 +26,11 @@ export const enCopy: Record<string, Copy> = {
   },
   "nurses-call-system": {
     nav: "Nurse call",
-    title: "Qserve Egypt nurse call for hospitals",
-    h1: "Nurse call — Qserve Egypt",
-    meta: "Nurse call with bedside buttons, nurse-station displays and fast wireless response.",
-    kicker: "Nurse Call System",
-    summary: "Healthcare response that reaches the bed faster in hospitals and clinics.",
+    title: "Nurse call system Egypt | QServe",
+    h1: "Nurse call system Egypt",
+    meta: "Nurse call system Egypt for hospitals: bedside buttons, nurse-station displays, bed-to-station response.",
+    kicker: "Nurse call system Egypt",
+    summary: "Nurse call system Egypt for hospitals: bedside call to the nurse-station screen.",
     paragraphs: [
       "Bedside buttons, corridor displays and medical consoles link the patient to the nurse station.",
       "Used in wards, ICU and clinics with normal vs urgent priorities.",
@@ -45,11 +45,11 @@ export const enCopy: Record<string, Copy> = {
   },
   "self-service-kiosks": {
     nav: "Self-service kiosks",
-    title: "Self-service kiosks | Qserve Egypt",
-    h1: "Self-service kiosks — Qserve Egypt",
-    meta: "Bank, food-order, government and hotel kiosks from Qserve Egypt.",
-    kicker: "Self Service Kiosks",
-    summary: "Touch kiosks for banks, hotels, restaurants and government.",
+    title: "Self service kiosk Egypt | QServe",
+    h1: "Self service kiosk Egypt",
+    meta: "Self service kiosk Egypt from QServe: ticket, inquiry, or order and pay.",
+    kicker: "Self service kiosk Egypt",
+    summary: "Self service kiosk Egypt: ticket, inquiry, or order and pay at the branch door.",
     paragraphs: ["Banking, food order, government inquiry and hotel check-in — integrated with queue and payments."],
     bullets: ["Touch screens", "Card/e-pay", "Restaurant, bank, government", "Queue integration"],
     components: [

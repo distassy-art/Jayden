@@ -5,8 +5,8 @@ import { pageMeta } from "@/lib/page-meta";
 export const metadata: Metadata = pageMeta(
   "ar",
   "/about",
-  "عن كيوسيرف | QServe AI",
-  "كيوسيرف لأنظمة انتظار العملاء واستدعاء الممرضات والكيوسك. عرض سعر لمصر والشرق الأوسط على واتساب.",
+  "عن كيوسيرف",
+  "كيوسيرف على www.qserveai.com: نظام انتظار العملاء، شاشات انتظار، استدعاء الممرضات، وكيوسك. اطلب عرض سعر على واتساب.",
 );
 
 export default function AboutPage() {

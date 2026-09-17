@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Sans, Tajawal } from "next/font/google";
 import { SiteShell } from "@/components/SiteShell";
-import { site } from "@/lib/content";
 import { DEMO_ORIGIN, hreflang } from "@/lib/i18n";
 import "../globals.css";
 
@@ -19,11 +18,12 @@ const plex = IBM_Plex_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL(DEMO_ORIGIN),
   title: {
-    default: `عرض تجريبي | ${site.brandAr}`,
-    template: `عرض تجريبي | %s | ${site.shortAr}`,
+    default: "كيوسيرف | نظام انتظار العملاء في مصر",
+    template: "%s | كيوسيرف",
   },
-  description: `عرض تجريبي تفاعلي لـ ${site.brandAr} — ليس الموقع الحي.`,
-  robots: { index: false, follow: false },
+  description:
+    "كيوسيرف على www.qserveai.com: كيوسك وتذكرة وشاشات انتظار للبنوك والمستشفيات والجهات. اطلب عرض سعر على واتساب.",
+  robots: { index: true, follow: true },
   icons: { icon: "/brand/qserve-logo-wordmark.png" },
   alternates: hreflang("/"),
 };
@@ -31,9 +31,10 @@ export const metadata: Metadata = {
 const orgJson = JSON.stringify({
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: "QServe AI Egypt",
-  alternateName: ["Q AI", "كيو سيرف AI مصر", "كيو AI"],
-  description: "QServe AI — queue, kiosk, nurse-call. Demo only.",
+  name: "كيوسيرف",
+  alternateName: ["كيو سيرف", "QServe", "QSERVE", "كيوسيرف مصر"],
+  url: "https://www.qserveai.com",
+  description: "كيوسيرف — نظام انتظار العملاء في مصر. كيوسك وشاشات انتظار واستدعاء الممرضات.",
 });
 
 export default function ArabicLayout({ children }: { children: React.ReactNode }) {

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Sans, Tajawal } from "next/font/google";
 import { SiteShell } from "@/components/SiteShell";
-import { site } from "@/lib/content";
 import { DEMO_ORIGIN, hreflang } from "@/lib/i18n";
 import "../../globals.css";
 
@@ -19,11 +18,12 @@ const plex = IBM_Plex_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL(DEMO_ORIGIN),
   title: {
-    default: `Demo | ${site.brandEn}`,
-    template: `Demo | %s | ${site.shortEn}`,
+    default: "QServe | Queue management system Egypt",
+    template: "%s | QServe",
   },
-  description: `Interactive QServe AI demo — not the live website.`,
-  robots: { index: false, follow: false },
+  description:
+    "QServe (QSERVE) in Egypt: queue management system Egypt, nurse call system Egypt, and self service kiosk Egypt. Quote on WhatsApp.",
+  robots: { index: true, follow: true },
   icons: { icon: "/brand/qserve-logo-wordmark.png" },
   alternates: hreflang("/en"),
 };
@@ -31,9 +31,10 @@ export const metadata: Metadata = {
 const orgJson = JSON.stringify({
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: "QServe AI",
-  alternateName: ["QServe AI", "كيو سيرف AI"],
-  description: "QServe AI — queue, kiosk, nurse-call. Demo only.",
+  name: "QServe",
+  alternateName: ["QSERVE", "كيوسيرف", "كيو سيرف", "كيوسيرف مصر"],
+  url: "https://www.qserveai.com",
+  description: "QServe — queue management system Egypt, nurse call, and self-service kiosks.",
 });
 
 export default function EnglishLayout({ children }: { children: React.ReactNode }) {

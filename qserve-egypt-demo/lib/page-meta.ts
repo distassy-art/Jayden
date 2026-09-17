@@ -4,10 +4,11 @@ import { localizedProduct } from "./en-copy";
 import { hreflang, type Locale } from "./i18n";
 
 export function pageMeta(locale: Locale, path: string, title: string, description?: string): Metadata {
+  const admin = path === "/admin" || path === "/en/admin";
   return {
     title,
     description,
-    robots: { index: false, follow: false },
+    robots: admin ? { index: false, follow: false } : { index: true, follow: true },
     alternates: hreflang(path),
   };
 }
@@ -21,9 +22,9 @@ export function productMetadata(slug: string, locale: Locale): Metadata {
   if (!product) return {};
   const p = localizedProduct(product, locale);
   return {
-    title: { absolute: locale === "en" ? `Demo | ${p.title}` : `عرض تجريبي | ${p.title}` },
+    title: { absolute: locale === "en" ? `${p.title} | QServe` : `${p.title}` },
     description: p.meta,
-    robots: { index: false, follow: false },
+    robots: { index: true, follow: true },
     alternates: hreflang(locale === "en" ? `/en/${slug}` : `/${slug}`),
     openGraph: {
       title: p.title,

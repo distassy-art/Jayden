@@ -40,10 +40,8 @@ export function HomePage() {
       <section className="mx-auto grid max-w-6xl items-center gap-12 px-4 py-14 lg:grid-cols-2 lg:py-20">
         <div>
           <p className="text-sm font-extrabold tracking-[0.22em] text-cyan">{t.heroKicker}</p>
-          <h1 className="mt-3 text-4xl font-black leading-[1.15] text-navy sm:text-6xl">
-            {t.heroTitle}
-            <span className="mt-2 block text-cyan">{t.heroAccent}</span>
-          </h1>
+          <h1 className="mt-3 text-4xl font-black leading-[1.15] text-navy sm:text-6xl">{t.heroTitle}</h1>
+          <p className="mt-3 max-w-xl text-lg font-bold text-cyan">{t.heroAccent}</p>
           <p className="mt-5 max-w-xl text-lg leading-8 text-navy/75">{t.heroBody}</p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <QuoteWaButton>{t.quoteNow}</QuoteWaButton>

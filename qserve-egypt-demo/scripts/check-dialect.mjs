@@ -46,6 +46,10 @@ const liveSrc = fs.readFileSync(new URL("../components/LiveQueue.tsx", import.me
 const footerSrc = fs.readFileSync(new URL("../components/Footer.tsx", import.meta.url), "utf8");
 const aboutSrc = fs.readFileSync(new URL("../components/views/AboutView.tsx", import.meta.url), "utf8");
 const aiSrc = fs.readFileSync(new URL("../netlify/functions/ai.ts", import.meta.url), "utf8");
+const arHomeSrc = fs.readFileSync(new URL("../app/(ar)/page.tsx", import.meta.url), "utf8");
+const enHomeSrc = fs.readFileSync(new URL("../app/(en)/en/page.tsx", import.meta.url), "utf8");
+const arLayoutSrc = fs.readFileSync(new URL("../app/(ar)/layout.tsx", import.meta.url), "utf8");
+const publicCopy = `${i18nSrc}\n${contentSrc}\n${homeSrc}\n${aboutSrc}\n${arHomeSrc}\n${enHomeSrc}`;
 
 ok("no public AI chat", !chromeSrc.includes("SalesmanChat") && !chromeSrc.includes("qai-text-launch") && !homeSrc.includes("qai-text-launch") && !headerSrc.includes("SalesmanChat"));
 ok("client does not post /api/chat", !homeSrc.includes('fetch("/api/chat"') && !chromeSrc.includes('fetch("/api/chat"'));
@@ -67,7 +71,19 @@ ok("about is a company story", aboutSrc.includes("aboutH1") && aboutSrc.includes
 ok("about no yallastore or shop", !aboutSrc.toLowerCase().includes("yallastore") && !aboutSrc.includes("/products") && !aboutSrc.includes("/cart") && !aboutSrc.includes("SalesmanChat"));
 ok("header links about", headerSrc.includes('href("/about")') && i18nSrc.includes("عن كيوسيرف"));
 ok("no yallastore.com", !i18nSrc.toLowerCase().includes("yallastore") && !contentSrc.toLowerCase().includes("yallastore") && !homeSrc.toLowerCase().includes("yallastore") && !aboutSrc.toLowerCase().includes("yallastore"));
-ok("demo origin is pages.dev", i18nSrc.includes("qserve-egypt-demo.pages.dev") && !i18nSrc.toLowerCase().includes("yallastore"));
+ok("demo origin is www.qserveai.com", i18nSrc.includes('DEMO_ORIGIN = "https://www.qserveai.com"') && !i18nSrc.toLowerCase().includes("yallastore"));
+ok("arabic home title", arHomeSrc.includes("كيوسيرف | نظام انتظار العملاء في مصر"));
+ok("arabic home h1", i18nSrc.includes('heroTitle: "كيوسيرف — نظام انتظار العملاء في مصر"') && homeSrc.includes("{t.heroTitle}") && !homeSrc.includes("{t.heroTitle}{"));
+ok("english home title", enHomeSrc.includes("QServe | Queue management system Egypt"));
+ok("english home h1", i18nSrc.includes('heroTitle: "QServe — queue management system Egypt"'));
+ok("kept brand terms", i18nSrc.includes("كيوسيرف") && i18nSrc.includes("كيو سيرف") && i18nSrc.includes("QServe") && i18nSrc.includes("QSERVE") && i18nSrc.includes("كيوسيرف مصر"));
+ok("kept queue terms", i18nSrc.includes("نظام انتظار العملاء") && i18nSrc.includes("انظمة انتظار العملاء") && i18nSrc.includes("في مصر") && i18nSrc.includes("شاشات انتظار"));
+ok("kept nurse and kiosk", i18nSrc.includes("استدعاء الممرضات") && i18nSrc.includes("كيوسك") && i18nSrc.includes("أجهزة الخدمات الذاتية"));
+ok("kept english variants", i18nSrc.includes("queue management system Egypt") && i18nSrc.includes("nurse call system Egypt") && i18nSrc.includes("self service kiosk Egypt"));
+ok("no Q-Lite names", !/Q-Lite|Q-Plus|Q-Premium/i.test(publicCopy));
+ok("no New Cairo on public pages", !/New Cairo|القاهرة الجديدة/.test(`${i18nSrc}\n${homeSrc}\n${aboutSrc}\n${arHomeSrc}`));
+ok("organization json كيوسيرف", arLayoutSrc.includes('name: "كيوسيرف"') && arLayoutSrc.includes("https://www.qserveai.com"));
+ok("whatsapp quote cta", quoteSrc.includes("#سعر") && homeSrc.includes("QuoteWaButton") && headerSrc.includes("QuoteWaButton"));
 ok("gemini 2.5 flash-lite stream", aiSrc.includes("gemini-2.5-flash-lite") && aiSrc.includes("generateContentStream") && aiSrc.includes("text/event-stream"));
 ok("no grok pin", !aiSrc.toLowerCase().includes("grok"));
 ok("empty GoogleGenAI constructor", aiSrc.includes("new GoogleGenAI({})"));

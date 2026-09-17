@@ -1,2 +1,8 @@
 User-agent: *
-Disallow: /
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /en/admin
+Disallow: /en/admin/
+
+Sitemap: https://www.qserveai.com/sitemap.xml
