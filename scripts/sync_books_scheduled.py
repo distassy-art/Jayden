@@ -626,6 +626,12 @@ def main() -> None:
     stations = strip_open_months(stations, closed)
     print(f"publishing {len(stations)} stations (months closed through {closed})")
     publish(stations, dry_run=args.dry_run)
+    if not args.dry_run:
+        print(
+            "next: rebuild admin daily-open from overlay, then wrangler-deploy "
+            "smartsolutions-site data/daily_september.json "
+            "(python3 scripts/rebuild_daily_open_month.py --month YYYY-MM --out …)"
+        )
 
 
 if __name__ == "__main__":
