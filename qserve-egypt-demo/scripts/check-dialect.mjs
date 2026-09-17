@@ -67,7 +67,7 @@ ok("about is a company story", aboutSrc.includes("aboutH1") && aboutSrc.includes
 ok("about no yallastore or shop", !aboutSrc.toLowerCase().includes("yallastore") && !aboutSrc.includes("/products") && !aboutSrc.includes("/cart") && !aboutSrc.includes("SalesmanChat"));
 ok("header links about", headerSrc.includes('href("/about")') && i18nSrc.includes("عن كيوسيرف"));
 ok("no yallastore.com", !i18nSrc.toLowerCase().includes("yallastore") && !contentSrc.toLowerCase().includes("yallastore") && !homeSrc.toLowerCase().includes("yallastore") && !aboutSrc.toLowerCase().includes("yallastore"));
-ok("demo origin is netlify", i18nSrc.includes("qserve-ai-egypt-demo.netlify.app"));
+ok("demo origin is pages.dev", i18nSrc.includes("qserve-egypt-demo.pages.dev") && !i18nSrc.toLowerCase().includes("yallastore"));
 ok("gemini 2.5 flash-lite stream", aiSrc.includes("gemini-2.5-flash-lite") && aiSrc.includes("generateContentStream") && aiSrc.includes("text/event-stream"));
 ok("no grok pin", !aiSrc.toLowerCase().includes("grok"));
 ok("empty GoogleGenAI constructor", aiSrc.includes("new GoogleGenAI({})"));

@@ -5,7 +5,7 @@ export const site = {
   shortEn: "QServe AI",
   factoryLineAr: "QServe AI",
   factoryLineEn: "QServe AI",
-  domain: "https://qserve-ai-egypt-demo.netlify.app",
+  domain: "https://qserve-egypt-demo.pages.dev",
   phoneDisplay: "+20 122 799 3999",
   phoneTel: "+201227993999",
   whatsapp: "https://wa.me/201227993999",

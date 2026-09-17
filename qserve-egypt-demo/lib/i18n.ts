@@ -1,6 +1,6 @@
 export type Locale = "ar" | "en";
 
-export const DEMO_ORIGIN = "https://qserve-ai-egypt-demo.netlify.app";
+export const DEMO_ORIGIN = "https://qserve-egypt-demo.pages.dev";
 
 export function isEnPath(pathname: string) {
   return pathname === "/en" || pathname.startsWith("/en/");

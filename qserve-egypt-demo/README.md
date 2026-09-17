@@ -2,8 +2,9 @@
 
 Interactive Arabic RTL demo of **QServe AI**.
 
-- Live: https://qserve-ai-egypt-demo.netlify.app
-- Do **not** deploy this onto any other production host.
+- Live: https://qserve-egypt-demo.pages.dev
+- Custom domain (Mina): `qserveai.com` / `www.qserveai.com` on this Pages project.
+- Do **not** deploy this onto yallastore.com.
 
 ```bash
 cd qserve-egypt-demo
