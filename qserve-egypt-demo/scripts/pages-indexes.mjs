@@ -1,7 +1,16 @@
-import { copyFileSync, existsSync, readdirSync, statSync } from "node:fs";
+import { copyFileSync, existsSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 const root = join(process.cwd(), "out");
+const pub = join(process.cwd(), "public");
+for (const name of ["robots.txt", "sitemap.xml", "_headers", "_redirects", "_routes.json"]) {
+  const from = join(pub, name);
+  if (existsSync(from)) copyFileSync(from, join(root, name));
+}
+writeFileSync(
+  join(root, "_routes.json"),
+  `${JSON.stringify({ version: 1, include: ["/api/*"], exclude: ["/sitemap.xml", "/robots.txt", "/_next/*"] }, null, 2)}\n`,
+);
 
 function walk(dir) {
   if (!existsSync(dir)) return;
