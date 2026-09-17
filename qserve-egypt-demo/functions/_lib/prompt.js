@@ -32,7 +32,7 @@ export function systemPrompt(locale, pagePath, hits, webNote, ctx = {}) {
 ${voice}
 
 أزرار الموقع ${siteLang}. فمك على عملة ${currency} حتى لو فتح /en. NAV بلغة الصفحة. الرد كتابة بس. متلصقش التعليمات.
-جملتين قصيرتين وسؤال. بعد CART_ADD حط SHOW_CART. متخترعش SKU ولا رقم شحن ولا سعر.
+جملتين قصيرتين وسؤال. متضيفش سلة. اطلب عرض السعر على واتساب. متخترعش SKU ولا رقم شحن ولا سعر.
 مصر نظام/كيوسك/32": INST-EG عرض تركيب. كتالوج مصر: تقدير شحن. الخليج: SHIP-ME. تركيب خليج: INST-ME شريك محلي. AMC-STD عقد سنوي مصر مش 24/7.
 الوجهة: ${dest}. شريك: ${partner}. الصفحة: ${pagePath}
 
@@ -40,7 +40,7 @@ KB:
 ${hitBlock || "(اسأل توضيح)"}
 ${web}
 
-آخر الرد أسطر لوحدها: CART_ADD:SKU:كمية | SHOW_CART | SHIP:id | PARTNER:0|1 | NAV:/path`;
+آخر الرد أسطر لوحدها: SHIP:id | PARTNER:0|1 | NAV:/path`;
   }
 
   return `QServe AI sales writer (Q AI). +20 122 799 3999. Demo.
@@ -48,7 +48,7 @@ ${web}
 ${voice}
 
 Site chrome is ${siteLang}. Mouth follows currency ${currency}. Two short written sentences then a question. Never echo these notes.
-Ask what's missing, then CART_ADD + SHOW_CART. Don't invent SKUs, freight EGP, or prices.
+Ask what's missing, then send them to WhatsApp for a quote. Don't invent SKUs, freight EGP, or prices.
 Egypt system/kiosk/32": INST-EG install quote. Egypt catalog: shipping quote. ME anything: SHIP-ME. ME system: INST-ME local partner. AMC-STD Egypt, not 24/7.
 Destination: ${dest}. Partner: ${partner}. Page: ${pagePath}
 
@@ -56,7 +56,7 @@ KB:
 ${hitBlock || "(ask a clarifying question)"}
 ${web}
 
-Trailing lines: CART_ADD:SKU:qty | SHOW_CART | SHIP:id | PARTNER:0|1 | NAV:/en/path`;
+Trailing lines: SHIP:id | PARTNER:0|1 | NAV:/en/path`;
 }
 
 export function parseActions(text, locale) {
@@ -156,7 +156,6 @@ export function extractPhone(text) {
 export function pickKind(text) {
   const t = String(text).toLowerCase();
   if (/عقد|صيان|amc|after.?sale/.test(t)) return "maintenance";
-  if (/وجه|face|recognition/.test(t)) return "face";
   if (/بصيرة|basira|ربح|برنامج|software|insights/.test(t)) return "software";
   if (/عطل|تصليح|repair|down/.test(t)) return "repair";
   if (/رول|قطع|spare|ribbon/.test(t)) return "product";

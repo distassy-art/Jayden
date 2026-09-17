@@ -4,9 +4,7 @@ import { site } from "@/lib/content";
 import { localizedProduct } from "@/lib/en-copy";
 import { ui } from "@/lib/i18n";
 import { useLocale } from "@/lib/use-locale";
-import { kbOnPage } from "@/lib/product-db";
 import { QuoteWaButton } from "./QuoteWaButton";
-import { CatalogCard, FaqList } from "./KbBits";
 import { QuoteForm } from "./QuoteForm";
 import type { Product } from "@/lib/content";
 
@@ -14,7 +12,6 @@ export function ProductView({ product }: { product: Product }) {
   const locale = useLocale();
   const t = ui[locale];
   const p = localizedProduct(product, locale);
-  const related = kbOnPage(`/${product.slug}`);
   return (
     <article className="mesh">
       <div className="mx-auto grid max-w-6xl items-center gap-8 px-4 py-12 lg:grid-cols-2">
@@ -54,17 +51,6 @@ export function ProductView({ product }: { product: Product }) {
             </li>
           ))}
         </ul>
-        {related.length > 0 && (
-          <section>
-            <h2 className="text-2xl font-black text-navy">{locale === "en" ? "Add from this page" : "أضف من هذه الصفحة"}</h2>
-            <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {related.map((item) => (
-                <CatalogCard key={item.sku} item={item} ar={locale === "ar"} />
-              ))}
-            </div>
-            <FaqList item={related[0]} ar={locale === "ar"} />
-          </section>
-        )}
         <div className="glass grid gap-8 rounded-3xl p-6 lg:grid-cols-2 lg:p-10">
           <div>
             <h2 className="text-2xl font-black text-navy">{t.askThis}</h2>

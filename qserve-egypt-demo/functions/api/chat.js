@@ -91,7 +91,7 @@ export async function onRequestPost({ request, env }) {
   if (!raw) {
     const top = hits[0];
     raw = dialectFallback(dialect, top);
-    if (top) raw += `\nCART_ADD:${top.sku}:1\nNAV:${top.page}`;
+    if (top) raw += `\nNAV:${top.page}`;
   }
 
   const parsed = parseActions(raw, locale);

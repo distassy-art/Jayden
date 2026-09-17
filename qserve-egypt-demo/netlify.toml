@@ -15,3 +15,64 @@
   command = "npm run dev"
   targetPort = 3000
   framework = "#custom"
+
+[[redirects]]
+  from = "/products"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/products/*"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/cart"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/cart/*"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/face-recognition"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/face-recognition/*"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/en/products"
+  to = "/en"
+  status = 301
+
+[[redirects]]
+  from = "/en/products/*"
+  to = "/en"
+  status = 301
+
+[[redirects]]
+  from = "/en/cart"
+  to = "/en"
+  status = 301
+
+[[redirects]]
+  from = "/en/cart/*"
+  to = "/en"
+  status = 301
+
+[[redirects]]
+  from = "/en/face-recognition"
+  to = "/en"
+  status = 301
+
+[[redirects]]
+  from = "/en/face-recognition/*"
+  to = "/en"
+  status = 301
+

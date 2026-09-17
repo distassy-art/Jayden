@@ -53,7 +53,7 @@ export function lineNeedsInstall(line: HydratedLine) {
   const sku = line.sku.toUpperCase();
   const cat = line.item.category;
   if (["INST-EG", "INST-ME", "SHIP-ME"].includes(sku)) return false;
-  if (cat === "system" || cat === "face-recognition" || cat === "software") return true;
+  if (cat === "system" || cat === "software") return true;
   if (sku.startsWith("LCD") || sku.startsWith("LED") || sku.startsWith("FACE") || sku.startsWith("CLK") || sku.startsWith("KSK")) return true;
   return false;
 }

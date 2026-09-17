@@ -1,7 +1,6 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { CartDrawer } from "@/components/CartDrawer";
 import { SalesmanChat } from "@/components/SalesmanChat";
 import { VisitBeacon } from "@/components/VisitBeacon";
 import { WhatsAppDock } from "@/components/WhatsAppDock";
@@ -13,7 +12,6 @@ export function PublicChrome() {
   return (
     <>
       <VisitBeacon />
-      <CartDrawer />
       <SalesmanChat />
       <WhatsAppDock />
     </>

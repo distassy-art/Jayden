@@ -10,14 +10,13 @@ export const site = {
   phoneTel: "+201227993999",
   whatsapp: "https://wa.me/201227993999",
   email: "",
-  addressAr:
-    "المنطقة الصناعية - منطقة 1000 مصنع، التجمع الثالث، القاهرة الجديدة، القاهرة، مصر",
-  addressEn: "1000 Factory, Third Settlement, New Cairo, Cairo, Egypt",
+  addressAr: "القاهرة، مصر",
+  addressEn: "Cairo, Egypt",
   hours: "السبت — الخميس: 9:00 صباحاً — 6:00 مساءً",
   hoursOff: "الجمعة: عطلة",
   facebook: "https://www.facebook.com/profile.php?id=100063568914604",
   youtube: "https://www.youtube.com/watch?v=DneFcbLK6rA",
-  mapQuery: "1000 Factory Third Settlement New Cairo Egypt",
+  mapQuery: "Cairo Egypt",
 } as const;
 
 export type Product = {

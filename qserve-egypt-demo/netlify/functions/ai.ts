@@ -134,7 +134,7 @@ export default async (req: Request, _context: Context) => {
       if (!raw) {
         const top = hits[0];
         raw = dialectFallback(dialect, top);
-        if (top) raw += `\nCART_ADD:${top.sku}:1\nNAV:${top.page}`;
+        if (top) raw += `\nNAV:${top.page}`;
         send({ delta: raw });
       }
 

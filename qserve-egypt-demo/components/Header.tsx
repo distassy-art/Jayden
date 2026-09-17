@@ -7,7 +7,6 @@ import { enCopy } from "@/lib/en-copy";
 import { ui, localizedHref } from "@/lib/i18n";
 import { useLocale } from "@/lib/use-locale";
 import { BrandLockup } from "./BrandLockup";
-import { CartButton } from "./CartDrawer";
 import { LangSwitch } from "./LangSwitch";
 import { QuoteWaButton } from "./QuoteWaButton";
 
@@ -21,11 +20,11 @@ export function Header() {
 
   return (
     <header className="border-b border-navy/10 bg-paper/95 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
         <Link href={href("/")} className="shrink-0" aria-label={`${site.brandEn} ${site.brandAr}`}>
           <BrandLockup />
         </Link>
-        <nav className="hidden items-center gap-4 text-sm font-bold lg:flex">
+        <nav className="hidden items-center gap-6 text-sm font-bold lg:flex">
           <Link href={href("/")} className="hover:text-cyan">
             {t.home}
           </Link>
@@ -33,7 +32,7 @@ export function Header() {
             <button type="button" className="hover:text-cyan">
               {t.systems}
             </button>
-            <div className="invisible absolute start-0 top-full z-20 min-w-64 rounded-2xl border border-navy/10 bg-white py-2 opacity-0 shadow-xl group-hover:visible group-hover:opacity-100">
+            <div className="invisible absolute start-0 top-full z-20 min-w-64 rounded-2xl border border-navy/10 bg-paper py-2 opacity-0 shadow-xl group-hover:visible group-hover:opacity-100">
               {systems.map((p) => (
                 <Link key={p.slug} href={href(`/${p.slug}`)} className="block px-4 py-2 hover:bg-void hover:text-cyan">
                   {label(p.slug, p.nav)}
@@ -41,18 +40,6 @@ export function Header() {
               ))}
             </div>
           </div>
-          <Link href={href("/products")} className="hover:text-cyan">
-            {t.products}
-          </Link>
-          <Link href={href("/cart")} className="hover:text-cyan">
-            {locale === "en" ? "Cart page" : "صفحة السلة"}
-          </Link>
-          <Link href={href("/maintenance")} className="hover:text-cyan">
-            {locale === "en" ? "Care" : "صيانة"}
-          </Link>
-          <Link href={href("/insights")} className="hover:text-cyan">
-            {t.software}
-          </Link>
           <Link href={href("/projects")} className="hover:text-cyan">
             {t.projects}
           </Link>
@@ -64,7 +51,6 @@ export function Header() {
           </Link>
         </nav>
         <div className="flex shrink-0 items-center gap-2">
-          <CartButton />
           <LangSwitch />
           <span className="hidden sm:inline">
             <QuoteWaButton className="btn-go py-2 text-sm">{t.quote}</QuoteWaButton>
@@ -93,18 +79,6 @@ export function Header() {
                 {label(p.slug, p.nav)}
               </Link>
             ))}
-          <Link href={href("/products")} className="block py-2" onClick={() => setOpen(false)}>
-            {t.products}
-          </Link>
-          <Link href={href("/cart")} className="block py-2" onClick={() => setOpen(false)}>
-            {locale === "en" ? "Cart page" : "صفحة السلة"}
-          </Link>
-          <Link href={href("/maintenance")} className="block py-2" onClick={() => setOpen(false)}>
-            {locale === "en" ? "Care" : "صيانة"}
-          </Link>
-          <Link href={href("/insights")} className="block py-2" onClick={() => setOpen(false)}>
-            {t.software}
-          </Link>
           <Link href={href("/projects")} className="block py-2" onClick={() => setOpen(false)}>
             {t.projects}
           </Link>
@@ -114,10 +88,7 @@ export function Header() {
           <Link href={href("/contact")} className="block py-2" onClick={() => setOpen(false)}>
             {t.contact}
           </Link>
-          <QuoteWaButton
-            className="btn-go mt-3 block text-center"
-            onClick={() => setOpen(false)}
-          >
+          <QuoteWaButton className="btn-go mt-3 block text-center" onClick={() => setOpen(false)}>
             {t.quote}
           </QuoteWaButton>
         </div>

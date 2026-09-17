@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { applyOps, getCart, openCartDrawer } from "@/lib/cart";
 import { DIALECT_UI } from "@/lib/dialect";
 import { greeterLine } from "@/lib/product-db";
 import { postSalesmanAi } from "@/lib/ai-client";
@@ -85,7 +84,6 @@ export function SalesmanChat() {
           currency: "EGP",
           path: fullPath,
           messages: history,
-          cart: getCart(),
           shipId: getShipId(),
           partner: getPartnerInstall(),
         },
@@ -102,11 +100,9 @@ export function SalesmanChat() {
       setMsgs(next);
       if (data.shipId) setShipId(data.shipId as ShipId);
       if (typeof data.partner === "boolean") setPartnerInstall(data.partner);
-      if (Array.isArray(data.cartOps) && data.cartOps.length) await applyOps(data.cartOps);
-      if (data.showCart || (Array.isArray(data.cartOps) && data.cartOps.length) || data.shipId) openCartDrawer();
       postJson("/api/visit", { path: fullPath, locale, lookedAt: lookedAt(fullPath), source: "chat" });
       const nextPath = data.navigate;
-      if (nextPath) setTimeout(() => router.push(nextPath), 900);
+      if (nextPath && !/\/(products|cart|face-recognition)/.test(nextPath)) setTimeout(() => router.push(nextPath), 900);
     } catch {
       const fail = ui.failConn;
       const next = [...history, { role: "assistant" as const, text: fail }];

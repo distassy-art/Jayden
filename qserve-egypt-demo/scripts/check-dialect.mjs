@@ -43,6 +43,8 @@ const i18nSrc = fs.readFileSync(new URL("../lib/i18n.ts", import.meta.url), "utf
 const contentSrc = fs.readFileSync(new URL("../lib/content.ts", import.meta.url), "utf8");
 const quoteSrc = fs.readFileSync(new URL("../lib/quote-wa.ts", import.meta.url), "utf8");
 const chromeSrc = fs.readFileSync(new URL("../components/PublicChrome.tsx", import.meta.url), "utf8");
+const liveSrc = fs.readFileSync(new URL("../components/LiveQueue.tsx", import.meta.url), "utf8");
+const footerSrc = fs.readFileSync(new URL("../components/Footer.tsx", import.meta.url), "utf8");
 const aiSrc = fs.readFileSync(new URL("../netlify/functions/ai.ts", import.meta.url), "utf8");
 const aiClientSrc = fs.readFileSync(new URL("../lib/ai-client.ts", import.meta.url), "utf8");
 
@@ -55,6 +57,13 @@ ok("EGP only", currencySrc.includes('CURRENCIES = ["EGP"]') && !headerSrc.includ
 ok("quote opens WhatsApp with #سعر", quoteSrc.includes("#سعر") && quoteSrc.includes("window.location.href") && headerSrc.includes("QuoteWaButton"));
 ok("homepage has no factory chips", !homeSrc.includes("t.chips") && !homeSrc.includes("ProductStories"));
 ok("homepage has no stories block", !homeSrc.includes("قصص الأنظمة") && !homeSrc.includes("storiesKicker"));
+ok("homepage has no ticker junk", !homeSrc.includes("t.ticker") && !homeSrc.includes("marquee-track") && !homeSrc.includes("✦"));
+ok("homepage systems quote tiles", homeSrc.includes("systems.map") && homeSrc.includes("softwareAddOn") && homeSrc.includes("QuoteWaButton"));
+ok("queue preview not try-kiosk", liveSrc.includes("queuePreview") && !liveSrc.includes("tryKiosk") && !liveSrc.includes("takeTicket") && !liveSrc.includes("جرّب الكيوسك"));
+ok("header has no shop", !headerSrc.includes("/products") && !headerSrc.includes("/cart") && !headerSrc.includes("CartButton"));
+ok("chrome has no cart drawer", !chromeSrc.includes("CartDrawer"));
+ok("footer no factory branding", !footerSrc.includes("1000") && !footerSrc.includes("t.address"));
+ok("no 1000 factory copy", !i18nSrc.includes("1000 مصنع") && !contentSrc.includes("1000 مصنع") && !i18nSrc.includes("1000 Factory"));
 ok("no story-to-quote CTA", !i18nSrc.includes("حوّل القصة لعرض سعر") && !i18nSrc.includes("Turn this into a quote"));
 ok("no yallastore.com", !i18nSrc.toLowerCase().includes("yallastore") && !contentSrc.toLowerCase().includes("yallastore") && !homeSrc.toLowerCase().includes("yallastore"));
 ok("demo origin is netlify", i18nSrc.includes("qserve-ai-egypt-demo.netlify.app"));

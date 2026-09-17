@@ -6,6 +6,7 @@ import { enCopy } from "@/lib/en-copy";
 import { ui, localizedHref } from "@/lib/i18n";
 import { useLocale } from "@/lib/use-locale";
 import { BrandLockup } from "./BrandLockup";
+import { QuoteWaButton } from "./QuoteWaButton";
 
 export function Footer() {
   const locale = useLocale();
@@ -17,7 +18,7 @@ export function Footer() {
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 md:grid-cols-3">
         <div>
           <BrandLockup size="footer" />
-          <p className="text-sm leading-7 text-navy/70">{t.footerBlurb}</p>
+          <p className="mt-3 text-sm leading-7 text-navy/70">{t.footerBlurb}</p>
         </div>
         <ul className="space-y-2 text-sm">
           {systems.slice(0, 6).map((p) => (
@@ -28,19 +29,19 @@ export function Footer() {
             </li>
           ))}
         </ul>
-        <ul className="space-y-2 text-sm text-navy/70">
+        <ul className="space-y-3 text-sm text-navy/70">
           <li>
-            <a href={`tel:${site.phoneTel}`} dir="ltr">
+            <a href={`tel:${site.phoneTel}`} dir="ltr" className="font-bold text-navy">
               {site.phoneDisplay}
             </a>
           </li>
-          <li>{t.address}</li>
+          <li>
+            <QuoteWaButton className="btn-go !px-4 !py-2 text-sm">{t.whatsapp}</QuoteWaButton>
+          </li>
         </ul>
       </div>
       <p className="border-t border-navy/10 py-4 text-center text-xs text-navy/50">
-        {t.footerLegal} · <Link href={href("/products")}>{t.products}</Link> ·{" "}
-        <Link href={href("/cart")}>{locale === "en" ? "Cart" : "السلة"}</Link> ·{" "}
-        <Link href={href("/privacy")}>{t.privacy}</Link> · <Link href={href("/terms")}>{t.terms}</Link>
+        {t.footerLegal} · <Link href={href("/privacy")}>{t.privacy}</Link> · <Link href={href("/terms")}>{t.terms}</Link>
         <Link
           href={href("/admin")}
           className="ms-1 inline-block text-[9px] font-normal leading-none text-navy/[0.18] no-underline hover:text-navy/40"
