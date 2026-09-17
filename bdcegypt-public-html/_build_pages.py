@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build product index.html from the live Next metadata (titles/H1 unchanged)."""
+"""Build product index.html with BDC Egypt titles/H1/meta (no QServe lead)."""
 
 from pathlib import Path
 
@@ -9,12 +9,12 @@ PAGES = [
     {
         "dir": "queue-system",
         "canonical": "https://bdcegypt.com/queue-system",
-        "title": "مصنع شاشات نظام انتظار العملاء في مصر كيوسيرف | Queue Management System Egypt Qserve Kiosk",
-        "description": "كيوسيرف QSERVE تقدم حلول تقنية متكاملة في مصر تشمل نظام انتظار مصنع نظام انتظار العملاء في مصرو نوفر جميع انظمه و شاشات انتظار العملاء كيوسيرف",
-        "keywords": "شاشات انتظار العملاء,نظام انتظار العملاء,كيوسيرف,QServe,نظام انتظار العملاء كيوسيرف,جهاز انتظار العملاء,انظمة انتظار العملاء في مصر,Queue Management System,Egypt,Qmatic,نظام النداء الالي,عرض أرقام الانتظار",
-        "h1": "نظام انتظار العملاء في مصر",
+        "title": "نظام انتظار العملاء | BDC Egypt",
+        "description": "BDC Egypt — نظام انتظار العملاء في مصر للبنوك والمستشفيات والشركات. اطلب عرض سعر على واتساب.",
+        "keywords": "نظام انتظار العملاء,شاشات انتظار العملاء,انظمة انتظار العملاء في مصر,BDC Egypt,جهاز انتظار العملاء,عرض أرقام الانتظار",
+        "h1": "نظام انتظار العملاء",
         "lead": "أفضل حلول إدارة الطوابير للبنوك والمستشفيات والشركات",
-        "sub": "Queue Management System Egypt qserve",
+        "sub": "BDC Egypt",
         "hero": "/photo/queue-system-egypt-bank-real-installation.webp",
         "body": """
 <p class="text-xl text-gray-600 leading-relaxed mb-10">حلولاً متكاملة تشمل أجهزة طباعة التذاكر، شاشات انتظار العملاء، وحدات استدعاء، أجهزة كيوسك وأنظمة تقارير تحليلية متقدمة.</p>
@@ -27,12 +27,12 @@ PAGES = [
     {
         "dir": "nurse-call-system",
         "canonical": "https://bdcegypt.com/nurse-call-system",
-        "title": " مصنع نظام استدعاء الممرضات في مصر| Nurse Call System Egypt",
-        "description": "نظام استدعاء الممرضات للمستشفيات في مصر يوفر سرعة استجابة عالية وتحسين مستوى الرعاية الصحية باستخدام أحدث تقنيات Nurse Call System Egypt.",
-        "keywords": "نظام استدعاء الممرضات,جهاز استدعاء الممرضات,انظمة استدعاء الممرضات,Nurse Call System Egypt,نظام نداء الممرضات,نظام استدعاء المستشفيات,Nurse Call System,نظام رعاية المرضى,QSERVE",
-        "h1": "نظام استدعاء الممرضات للمستشفيات في مصر",
-        "lead": "Nurse Call System متطور يرفع مستوى الرعاية الصحية ويحسن سرعة الاستجابة لحالات المرضى",
-        "sub": "نظام استدعاء الممرضات (Nurse Call System)",
+        "title": "نظام استدعاء الممرضات للمستشفيات | BDC Egypt",
+        "description": "BDC Egypt — نظام استدعاء الممرضات للمستشفيات في مصر. اطلب عرض سعر على واتساب.",
+        "keywords": "نظام استدعاء الممرضات,جهاز استدعاء الممرضات,انظمة استدعاء الممرضات,BDC Egypt,نظام نداء الممرضات,نظام استدعاء المستشفيات",
+        "h1": "نظام استدعاء الممرضات",
+        "lead": "نظام للمستشفيات يرفع مستوى الرعاية ويحسن سرعة الاستجابة لحالات المرضى",
+        "sub": "BDC Egypt",
         "hero": "/photo/nurse%20call%20systems.jpeg",
         "body": """
 <p class="text-xl text-gray-600 leading-relaxed mb-10">يتكون نظام استدعاء الممرضات من عدة مكونات أساسية تعمل معًا لضمان عمل النظام بكفاءة وتقديم الاستجابة السريعة.</p>
@@ -45,12 +45,12 @@ PAGES = [
     {
         "dir": "self-service-kiosks",
         "canonical": "https://bdcegypt.com/self-service-kiosks",
-        "title": "أجهزة الخدمات الذاتية  كيوسك في مصر  | Self Service Kiosks Egypt",
-        "description": "أفضل أجهزة الخدمات الذاتية في مصر شاشات تاتش تفاعلية للدفع الذاتي وطلب الطعام والخدمات البنكية والحكومية.",
-        "keywords": "أجهزة الخدمات الذاتية,Self Service Kiosks Egypt,شاشة تاتش,شاشة لمسية تفاعلية,جهاز دفع ذاتي,جهاز طلب طعام,QSERVE,مصر,أجهزة كيوسك,جهاز كيوسك,Kiosk touch screen",
-        "h1": "أجهزة الخدمات الذاتية في مصر",
+        "title": "أجهزة كيوسك وخدمات ذاتية | BDC Egypt",
+        "description": "BDC Egypt — أجهزة كيوسك وخدمات ذاتية في مصر. اطلب عرض سعر على واتساب.",
+        "keywords": "أجهزة كيوسك,أجهزة الخدمات الذاتية,شاشة تاتش,شاشة لمسية تفاعلية,جهاز دفع ذاتي,BDC Egypt,جهاز كيوسك",
+        "h1": "أجهزة الخدمات الذاتية",
         "lead": "حلول شاشات تاتش تفاعلية للدفع الذاتي وطلب الطعام والخدمات البنكية والحكومية",
-        "sub": "أجهزة الخدمات الذاتية (Self Service Kiosks)",
+        "sub": "BDC Egypt",
         "hero": "/photo/self-service-kiosks-egypt-bank-branch.webp",
         "body": """
 <p class="text-xl text-gray-600 leading-relaxed mb-10">تعمل هذه الأجهزة على تمكين العملاء من إتمام معاملاتهم وطلب خدماتهم بشكل مستقل دون الحاجة إلى موظف، مما يُقلل وقت الانتظار ويرفع كفاءة الخدمة.</p>
@@ -126,7 +126,7 @@ def page_html(p: dict) -> str:
 <div class="container mx-auto px-4">
 <div class="grid md:grid-cols-3 gap-8 mb-8">
 <div>
-<h3 class="text-2xl font-bold mb-4 text-red-600">لماذا كيوسيرف QSERVE؟</h3>
+<h3 class="text-2xl font-bold mb-4 text-red-600">لماذا BDC Egypt؟</h3>
 <ul class="list-disc text-gray-400">
 <li>حلول مصممة خصيصًا للسوق المصري</li>
 <li>خبرة في أنظمة انتظار العملاء وشاشات الانتظار</li>
@@ -147,7 +147,7 @@ def page_html(p: dict) -> str:
 <p class="text-gray-400">السبت - الخميس: 9:00 صباحاً - 6:00 مساءً<br/>الجمعة: عطلة</p>
 </div>
 </div>
-<p class="border-t border-gray-800 pt-8 text-center text-gray-400">© 2026 QSERVE جميع الحقوق محفوظة.</p>
+<p class="border-t border-gray-800 pt-8 text-center text-gray-400">© 2026 BDC Egypt جميع الحقوق محفوظة.</p>
 </div>
 </footer>
 </div>

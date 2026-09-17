@@ -8,7 +8,7 @@ This environment has no cPanel, FTP, or SSH to SuperSonic (ports 21/22/2082/2083
 
 ## Files
 
-Copy into the matching folders (do not replace `public_html/index.html`):
+SEO zip (`media/bdcegypt-pages-seo.zip`): extract inside `public_html`. Titles/H1/meta are **BDC Egypt**. Do not replace home `index.html` or `sitemap.xml`.
 
 - `queue-system/index.html`
 - `queue-system/.htaccess`
