@@ -52,7 +52,6 @@ STATIONS: dict[str, str] = {
     "42399": "Garden Grove",
     "42438": "Vista",
     "42439": "Lamb",
-    "42642": "La Mesa",
     "42674": "Tustin",
     "extramile": "ExtraMile",
 }
