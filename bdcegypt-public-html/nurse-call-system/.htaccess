@@ -1,0 +1,14 @@
+Options -Indexes
+DirectoryIndex index.html
+
+<IfModule mod_authz_core.c>
+  <FilesMatch "^__next">
+    Require all denied
+  </FilesMatch>
+</IfModule>
+<IfModule !mod_authz_core.c>
+  <FilesMatch "^__next">
+    Order allow,deny
+    Deny from all
+  </FilesMatch>
+</IfModule>
