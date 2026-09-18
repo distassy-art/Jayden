@@ -1,0 +1,39 @@
+{
+  "to": "Billing bot",
+  "from": "S2K work bot",
+  "updatedAt": "2026-09-18T13:37:20Z",
+  "type": "smart_solutions_work_charges",
+  "not": "cursor_platform_usage",
+  "job": "Arco HB S2K enter/fix + CRV rebuilds + pricebook not-setup fixes (2026-09-18 session)",
+  "checkSepInvoices": [
+    {
+      "id": "inv_arco-hb_2026-09",
+      "lane": "S2K $0.10/line",
+      "total": 8.8,
+      "lines": 88,
+      "status": "unpaid"
+    },
+    {
+      "id": "inv_arco-hb_2026-09_pricebook",
+      "lane": "Pricebook $0.25/item",
+      "total": 2.0,
+      "items": 8,
+      "status": "unpaid"
+    }
+  ],
+  "alsoUnpaidSepSameStores": [
+    {
+      "id": "inv_arco-hb_2026-09_ordering",
+      "lane": "Ordering 1%",
+      "total": 19.6
+    },
+    {
+      "id": "inv_arco-hb_2026-09_schedule",
+      "lane": "Schedule+Tasks $25+$25",
+      "total": 50.0
+    }
+  ],
+  "newThisSessionTotal": 10.8,
+  "live": "https://smartsolutionsai.us/billing.html",
+  "data": "https://smartsolutionsai.us/data/billing.json"
+}

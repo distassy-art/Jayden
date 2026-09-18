@@ -1,11 +1,23 @@
-# Grok Bot Billing — standing charge rule
+# How bots charge (Billing bot)
 
-After S2K enter/fix for **Arco Db (#42352)**, **Arco HB (#42179)**, and **Arco Placentia (#42004)**:
+Bots send **Smart Solutions work charges** to the Billing bot.  
+Not Cursor tokens / seats / compute.
 
-1. Add billable lines to `smartsolutionsai.us` billing at **$0.10/line** (`s2k_per_line`).
-2. Hand the invoice queue to **Grok Bot Billing** to charge (ACH/card on file).
-3. Do not invent amounts. Mark paid on the site only after payment clears.
+## Locked lanes
+| Lane | Rate |
+|------|------|
+| Ordering | 1% of order totals |
+| S2K | $0.10 / billable line |
+| Pricebook | $0.25 / item added/fixed |
+| Schedule | $25 / month |
+| Tasks | $25 / month |
 
-Handoff drop folder (OneDrive): `GrokBot-Billing/`
+Reports / filing / audits / hourly are **not locked** — do not charge those yet.
+
+## Flow
+1. Do the client work.
+2. Add an invoice under a locked lane on `smartsolutionsai.us` billing.
+3. Tell Billing bot the **job** + invoice ids to check on Sep invoices.
+4. Billing bot charges the client from those invoices.
 
 Live: https://smartsolutionsai.us/billing.html
