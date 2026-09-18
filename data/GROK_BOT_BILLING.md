@@ -1,6 +1,8 @@
 # How bots charge (Billing bot)
 
-Bots send **Smart Solutions work charges** to the Billing bot.  
+Bots send **Smart Solutions work charges** to the Billing bot via **OneDrive only** (`GrokBot-Billing/`).  
+Do **not** email charge handoffs.
+
 Not Cursor tokens / seats / compute.
 
 ## Locked lanes
@@ -17,7 +19,8 @@ Reports / filing / audits / hourly are **not locked** — do not charge those ye
 ## Flow
 1. Do the client work.
 2. Add an invoice under a locked lane on `smartsolutionsai.us` billing.
-3. Tell Billing bot the **job** + invoice ids to check on Sep invoices.
-4. Billing bot charges the client from those invoices.
+3. Drop job + invoice ids in OneDrive `GrokBot-Billing/`.
+4. Billing bot charges the client from those Sep invoices.
 
-Live: https://smartsolutionsai.us/billing.html
+Live: https://smartsolutionsai.us/billing.html  
+OneDrive: `GrokBot-Billing/`
