@@ -1,0 +1,321 @@
+{
+  "updatedAt": "2026-09-18T06:10:31Z",
+  "instruction": "Hand all billable agent/S2K work to Grok Bot Billing to charge clients.",
+  "payment": {
+    "payableTo": "Smart Solutions AI LLC",
+    "bank": "U.S. Bank",
+    "routing": "122235821",
+    "account": "157554413391"
+  },
+  "items": [
+    {
+      "id": "inv_arco-db_2026-09",
+      "client": "Arco Db",
+      "ownerClient": "Farsai Inc",
+      "month": "2026-09",
+      "kind": "s2k_per_line",
+      "total": 15.1,
+      "billableLines": 53,
+      "rate": 0.1,
+      "description": "September 2026 S2K invoicing for Arco Db (#42352): $0.10 per billable line (entered/fixed). Harbor 200847996/997 excluded (no line counts). Already-matched verify-only tickets excluded.",
+      "lines": [
+        {
+          "store": "42352",
+          "date": "2026-09-01",
+          "vendor": "UNITED EXPRESS",
+          "invoice": "29692",
+          "amount": 496.2,
+          "sourceAmount": 496.2,
+          "billableLines": 3,
+          "unitCost": 0.1,
+          "fee": 0.3,
+          "description": "S2K enter/fix \u00b7 3 billable lines \u00d7 $0.10"
+        },
+        {
+          "store": "42352",
+          "date": "2026-08-09",
+          "vendor": "KADI",
+          "invoice": "0809022602",
+          "amount": 423.77,
+          "sourceAmount": 423.77,
+          "billableLines": 6,
+          "unitCost": 0.1,
+          "fee": 0.6,
+          "description": "S2K fixed-in-Sep \u00b7 6 billable lines \u00d7 $0.10"
+        },
+        {
+          "store": "42352",
+          "date": "2026-09-02",
+          "vendor": "7UP",
+          "invoice": "5130303634",
+          "amount": 1064.47,
+          "sourceAmount": 1064.47,
+          "billableLines": 1,
+          "unitCost": 0.1,
+          "fee": 0.1,
+          "description": "S2K enter/fix \u00b7 1 billable line \u00d7 $0.10"
+        },
+        {
+          "store": "42352",
+          "date": "2026-09-02",
+          "vendor": "NORTHSTAR",
+          "invoice": "90092624501",
+          "amount": 539.33,
+          "sourceAmount": 539.33,
+          "billableLines": 9,
+          "unitCost": 0.1,
+          "fee": 0.9,
+          "description": "S2K enter/fix \u00b7 9 billable lines \u00d7 $0.10"
+        },
+        {
+          "store": "42352",
+          "date": "2026-09-02",
+          "vendor": "FRITO LAY",
+          "invoice": "05298806",
+          "amount": 520.95,
+          "sourceAmount": 520.95,
+          "billableLines": 34,
+          "unitCost": 0.1,
+          "fee": 3.4,
+          "description": "S2K enter/fix \u00b7 34 billable lines \u00d7 $0.10"
+        },
+        {
+          "store": "42352",
+          "date": "2026-09-07",
+          "vendor": "FRITO LAY",
+          "invoice": "06204930",
+          "amount": 337.49,
+          "sourceAmount": 337.49,
+          "billableLines": 31,
+          "unitCost": 0.1,
+          "fee": 3.1,
+          "diff": 0,
+          "pendingBillableLines": false,
+          "description": "S2K enter/fix \u00b7 31 billable lines \u00d7 $0.10"
+        },
+        {
+          "store": "42352",
+          "vendor": "UNITED EXPRESS",
+          "invoice": "29713",
+          "date": "2026-09-07",
+          "amount": 498.0,
+          "sourceAmount": 498.0,
+          "billableLines": 14,
+          "unitCost": 0.1,
+          "fee": 1.4,
+          "diff": 0,
+          "pendingBillableLines": false,
+          "description": "S2K enter/fix \u00b7 14 billable lines \u00d7 $0.10"
+        },
+        {
+          "store": "42352",
+          "date": "2026-09-08",
+          "vendor": "KICKPOWER",
+          "invoice": "1042077001",
+          "amount": 242.07,
+          "sourceAmount": 242.07,
+          "billableLines": 8,
+          "unitCost": 0.1,
+          "fee": 0.8,
+          "diff": 0,
+          "aliasVendor": "Singtech",
+          "description": "S2K enter/fix \u00b7 Kickpower/Singtech \u00b7 8 billable lines \u00d7 $0.10"
+        },
+        {
+          "store": "42352",
+          "date": "2026-09-08",
+          "vendor": "REPAIRS",
+          "invoice": "38445",
+          "amount": 2808.12,
+          "sourceAmount": 2808.12,
+          "billableLines": 3,
+          "unitCost": 0.1,
+          "fee": 0.3,
+          "diff": 0,
+          "aliasVendor": "Universal Nozzle",
+          "description": "S2K enter/fix \u00b7 Repairs/Universal Nozzle \u00b7 3 billable lines \u00d7 $0.10"
+        },
+        {
+          "store": "42352",
+          "date": "2026-09-05",
+          "vendor": "PEPSICO BEVERAGE SALES LLC",
+          "invoice": "33499007",
+          "amount": 1226.2,
+          "sourceAmount": 1226.2,
+          "billableLines": 42,
+          "unitCost": 0.1,
+          "fee": 4.2,
+          "diff": 0,
+          "aliasVendor": "Pepsi",
+          "description": "S2K enter/fix \u00b7 Pepsi itemized expand \u00b7 42 billable lines \u00d7 $0.10 (not 2-line rollup)"
+        }
+      ],
+      "clientEmails": [
+        "owner@farsai"
+      ],
+      "status": "unpaid"
+    },
+    {
+      "id": "inv_arco-placentia_2026-09",
+      "client": "Arco Placentia",
+      "ownerClient": "Arco Placentia",
+      "month": "2026-09",
+      "kind": "s2k_per_line",
+      "total": 0.7,
+      "billableLines": 7,
+      "rate": 0.1,
+      "description": "September 2026 S2K invoicing for Arco Placentia (#42004): $0.10 per billable line (entered/fixed). Verify-only / already-matched tickets excluded.",
+      "lines": [
+        {
+          "store": "42004",
+          "date": "2026-09-04",
+          "vendor": "RED BULL",
+          "invoice": "2036980320",
+          "amount": -2.28,
+          "sourceAmount": -2.28,
+          "billableLines": 1,
+          "unitCost": 0.1,
+          "fee": 0.1,
+          "description": "S2K enter/fix \u00b7 return \u00b7 1 billable line \u00d7 $0.10"
+        },
+        {
+          "store": "42004",
+          "date": "2026-09-02",
+          "vendor": "STRAUB",
+          "invoice": "1829788",
+          "amount": 1564.4,
+          "sourceAmount": 1564.4,
+          "billableLines": 1,
+          "unitCost": 0.1,
+          "fee": 0.1,
+          "description": "S2K enter/fix \u00b7 1 billable line \u00d7 $0.10"
+        },
+        {
+          "store": "42004",
+          "date": "2026-09-02",
+          "vendor": "STRAUB",
+          "invoice": "1829789",
+          "amount": 210.84,
+          "sourceAmount": 210.84,
+          "billableLines": 1,
+          "unitCost": 0.1,
+          "fee": 0.1,
+          "description": "S2K penny Diff fix \u00b7 1 billable line \u00d7 $0.10"
+        },
+        {
+          "store": "42004",
+          "date": "2026-09-02",
+          "vendor": "HARBOR",
+          "invoice": "200848685",
+          "amount": 2554.15,
+          "sourceAmount": 2554.15,
+          "billableLines": 1,
+          "unitCost": 0.1,
+          "fee": 0.1,
+          "description": "S2K penny Diff fix \u00b7 1 billable line \u00d7 $0.10"
+        },
+        {
+          "store": "42004",
+          "date": "2026-09-02",
+          "vendor": "FRITO LAY",
+          "invoice": "05227580",
+          "amount": 254.59,
+          "sourceAmount": 254.59,
+          "billableLines": 1,
+          "unitCost": 0.1,
+          "fee": 0.1,
+          "description": "S2K penny Diff fix \u00b7 1 billable line \u00d7 $0.10"
+        },
+        {
+          "store": "42004",
+          "date": "2026-09-03",
+          "vendor": "PEPSI",
+          "invoice": "32692111",
+          "amount": 2766.98,
+          "sourceAmount": 2766.98,
+          "billableLines": 1,
+          "unitCost": 0.1,
+          "fee": 0.1,
+          "description": "S2K penny Diff fix \u00b7 listing #32692111 \u00b7 1 billable line \u00d7 $0.10"
+        },
+        {
+          "store": "42004",
+          "date": "2026-09-04",
+          "vendor": "FRITO LAY",
+          "invoice": "05852035",
+          "amount": 463.85,
+          "sourceAmount": 463.85,
+          "billableLines": 1,
+          "unitCost": 0.1,
+          "fee": 0.1,
+          "description": "S2K penny Diff fix \u00b7 1 billable line \u00d7 $0.10"
+        }
+      ],
+      "clientEmails": [
+        "arcoplacentia@gmail.com"
+      ],
+      "status": "unpaid"
+    },
+    {
+      "id": "inv_arco-hb_2026-09",
+      "client": "Arco HB",
+      "ownerClient": "Farsai Inc",
+      "month": "2026-09",
+      "kind": "s2k_per_line",
+      "total": 8.8,
+      "billableLines": 88,
+      "rate": 0.1,
+      "description": "September 2026 S2K invoicing for Arco HB (#42179): $0.10 per billable line (entered/fixed). Harbor 100974963/964 + Red Bull 2037776045 CRV rebuilds.",
+      "lines": [
+        {
+          "store": "42179",
+          "date": "2026-09-17",
+          "vendor": "HARBOR DIST",
+          "invoice": "100974963",
+          "amount": 2845.55,
+          "sourceAmount": 2845.55,
+          "billableLines": 60,
+          "unitCost": 0.1,
+          "fee": 6.0,
+          "description": "S2K enter/fix \u00b7 CRV item-99 rebuild to match scan \u00b7 60 billable lines \u00d7 $0.10"
+        },
+        {
+          "store": "42179",
+          "date": "2026-09-17",
+          "vendor": "HARBOR DIST",
+          "invoice": "100974964",
+          "amount": 881.07,
+          "sourceAmount": 881.07,
+          "billableLines": 9,
+          "unitCost": 0.1,
+          "fee": 0.9,
+          "description": "S2K enter/fix \u00b7 CRV item-99 rebuild + liquor not-setup \u00b7 9 billable lines \u00d7 $0.10"
+        },
+        {
+          "store": "42179",
+          "date": "2026-09-16",
+          "vendor": "RED BULL",
+          "invoice": "2037776045",
+          "amount": 1234.56,
+          "sourceAmount": 1234.56,
+          "billableLines": 19,
+          "unitCost": 0.1,
+          "fee": 1.9,
+          "description": "S2K enter/fix \u00b7 CRV item-99 rebuild to match scan \u00b7 19 billable lines \u00d7 $0.10"
+        }
+      ],
+      "clientEmails": [
+        "farsai2@aol.com",
+        "farsai42@gmail.com",
+        "seanfarsai@aol.com"
+      ],
+      "status": "unpaid"
+    }
+  ],
+  "totals": {
+    "Arco Db": 15.1,
+    "Arco Placentia": 0.7,
+    "Arco HB": 8.8
+  },
+  "grandTotal": 24.6
+}

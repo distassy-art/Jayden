@@ -1,0 +1,41 @@
+HANDOFF → Grok Bot Billing — charge these Smart Solutions invoices
+
+Standing rule: after S2K enter/fix for Arco Db / HB / Placentia, add to smartsolutionsai.us billing, then hand to Grok Bot Billing to charge at $0.10/billable line.
+
+Queue updated: 2026-09-18T06:10:31Z
+Grand total to charge (S2K per-line Sep): $24.60
+
+- inv_arco-db_2026-09 · Arco Db · $15.10 · 53 lines · September 2026 S2K invoicing for Arco Db (#42352): $0.10 per billable line (entered/fixed). Harbor 200847996/997 exclude
+    2026-09-01 UNITED EXPRESS inv 29692 · 3 lines · fee $0.3
+    2026-08-09 KADI inv 0809022602 · 6 lines · fee $0.6
+    2026-09-02 7UP inv 5130303634 · 1 lines · fee $0.1
+    2026-09-02 NORTHSTAR inv 90092624501 · 9 lines · fee $0.9
+    2026-09-02 FRITO LAY inv 05298806 · 34 lines · fee $3.4
+    2026-09-07 FRITO LAY inv 06204930 · 31 lines · fee $3.1
+    2026-09-07 UNITED EXPRESS inv 29713 · 14 lines · fee $1.4
+    2026-09-08 KICKPOWER inv 1042077001 · 8 lines · fee $0.8
+    2026-09-08 REPAIRS inv 38445 · 3 lines · fee $0.3
+    2026-09-05 PEPSICO BEVERAGE SALES LLC inv 33499007 · 42 lines · fee $4.2
+- inv_arco-placentia_2026-09 · Arco Placentia · $0.70 · 7 lines · September 2026 S2K invoicing for Arco Placentia (#42004): $0.10 per billable line (entered/fixed). Verify-only / already
+    2026-09-04 RED BULL inv 2036980320 · 1 lines · fee $0.1
+    2026-09-02 STRAUB inv 1829788 · 1 lines · fee $0.1
+    2026-09-02 STRAUB inv 1829789 · 1 lines · fee $0.1
+    2026-09-02 HARBOR inv 200848685 · 1 lines · fee $0.1
+    2026-09-02 FRITO LAY inv 05227580 · 1 lines · fee $0.1
+    2026-09-03 PEPSI inv 32692111 · 1 lines · fee $0.1
+    2026-09-04 FRITO LAY inv 05852035 · 1 lines · fee $0.1
+- inv_arco-hb_2026-09 · Arco HB · $8.80 · 88 lines · September 2026 S2K invoicing for Arco HB (#42179): $0.10 per billable line (entered/fixed). Harbor 100974963/964 + Red B
+    2026-09-17 HARBOR DIST inv 100974963 · 60 lines · fee $6.0
+    2026-09-17 HARBOR DIST inv 100974964 · 9 lines · fee $0.9
+    2026-09-16 RED BULL inv 2037776045 · 19 lines · fee $1.9
+
+Pay to / ACH deposit:
+  Payable to: Smart Solutions AI LLC
+  Bank: U.S. Bank
+  Routing: 122235821
+  Account: 157554413391
+
+Live billing: https://smartsolutionsai.us/billing.html
+Invoice data: https://smartsolutionsai.us/data/billing.json
+
+Action for Billing Bot: charge each unpaid invoice above (ACH/card per client on file). Mark paid on site when cleared. Do not invent amounts.
