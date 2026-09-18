@@ -4,7 +4,7 @@ import { pageMeta } from "@/lib/page-meta";
 
 const TITLE = "كيوسيرف | نظام انتظار العملاء في مصر";
 const DESC =
-  "كيوسيرف على www.qserveai.com: كيوسك وتذكرة وشاشات انتظار للبنوك والمستشفيات والجهات. اطلب عرض سعر على واتساب.";
+  "كيوسيرف على www.qserveai.com: كيوسك وتذكرة وشاشات انتظار للبنوك والمستشفيات والجهات.";
 
 export const metadata: Metadata = {
   ...pageMeta("ar", "/", TITLE, DESC),

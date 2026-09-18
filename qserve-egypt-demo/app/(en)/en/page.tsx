@@ -4,7 +4,7 @@ import { pageMeta } from "@/lib/page-meta";
 
 const TITLE = "QServe | Queue management system Egypt";
 const DESC =
-  "QServe (QSERVE) in Egypt: queue management system Egypt, nurse call system Egypt, and self service kiosk Egypt. Quote on WhatsApp.";
+  "QServe (QSERVE) in Egypt: queue management system Egypt, nurse call system Egypt, and self service kiosk Egypt.";
 
 export const metadata: Metadata = {
   ...pageMeta("en", "/en", TITLE, DESC),

@@ -28,6 +28,15 @@ export function ProductView({ product }: { product: Product }) {
         </div>
         <img src={p.image} alt={p.imageAlt} className="h-80 w-full rounded-3xl object-cover glow-ring" />
       </div>
+      {product.slug === "queuing-system" && (
+        <div className="mx-auto grid max-w-6xl grid-cols-2 gap-3 px-4 pb-4 sm:grid-cols-4">
+          {t.queuePillars.map((label) => (
+            <div key={label} className="glass rounded-2xl px-4 py-5 text-center">
+              <p className="text-xl font-black text-navy">{label}</p>
+            </div>
+          ))}
+        </div>
+      )}
       <div className="mx-auto max-w-6xl space-y-8 px-4 pb-16">
         {p.paragraphs.map((para) => (
           <p key={para} className="max-w-3xl leading-8 text-navy/75">

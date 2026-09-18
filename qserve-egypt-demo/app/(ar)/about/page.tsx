@@ -6,7 +6,7 @@ export const metadata: Metadata = pageMeta(
   "ar",
   "/about",
   "عن كيوسيرف",
-  "كيوسيرف على www.qserveai.com: نظام انتظار العملاء، شاشات انتظار، استدعاء الممرضات، وكيوسك. اطلب عرض سعر على واتساب.",
+  "كيوسيرف على www.qserveai.com: نظام انتظار العملاء، شاشات انتظار، استدعاء الممرضات، وكيوسك.",
 );
 
 export default function AboutPage() {

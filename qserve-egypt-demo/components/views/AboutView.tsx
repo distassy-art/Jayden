@@ -21,7 +21,6 @@ export function AboutView() {
         <p className="text-sm font-extrabold tracking-[0.22em] text-cyan">{t.aboutKicker}</p>
         <h1 className="mt-3 max-w-4xl text-4xl font-black leading-[1.2] text-navy sm:text-5xl">{t.aboutH1}</h1>
         <p className="mt-5 max-w-3xl text-lg leading-8 text-navy/75">{t.aboutLead}</p>
-        <p className="mt-4 max-w-3xl leading-8 text-navy/70">{t.aboutStory}</p>
         <div className="mt-8 flex flex-wrap items-center gap-3">
           <QuoteWaButton>{t.quote}</QuoteWaButton>
           <a href={`tel:${site.phoneTel}`} className="btn-ghost" dir="ltr">

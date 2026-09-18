@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     template: "%s | QServe",
   },
   description:
-    "QServe (QSERVE) in Egypt: queue management system Egypt, nurse call system Egypt, and self service kiosk Egypt. Quote on WhatsApp.",
+    "QServe (QSERVE) in Egypt: queue management system Egypt, nurse call system Egypt, and self service kiosk Egypt.",
   robots: { index: true, follow: true },
   icons: { icon: "/brand/qserve-logo-wordmark.png" },
   alternates: hreflang("/en"),

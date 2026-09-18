@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     template: "%s | كيوسيرف",
   },
   description:
-    "كيوسيرف على www.qserveai.com: كيوسك وتذكرة وشاشات انتظار للبنوك والمستشفيات والجهات. اطلب عرض سعر على واتساب.",
+    "كيوسيرف على www.qserveai.com: كيوسك وتذكرة وشاشات انتظار للبنوك والمستشفيات والجهات.",
   robots: { index: true, follow: true },
   icons: { icon: "/brand/qserve-logo-wordmark.png" },
   alternates: hreflang("/"),
