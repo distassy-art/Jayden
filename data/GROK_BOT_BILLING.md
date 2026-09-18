@@ -1,26 +1,26 @@
 # How bots charge (Billing bot)
 
-Bots send **Smart Solutions work charges** to the Billing bot via **OneDrive only** (`GrokBot-Billing/`).  
-Do **not** email charge handoffs.
+Add invoices **directly on the website Billing section** (`smartsolutionsai.us` → `data/billing.json`), same cards as Ordering / S2K / Schedule.
+
+Do **not** email charge handoffs. OneDrive `GrokBot-Billing/` is optional only.
 
 Not Cursor tokens / seats / compute.
 
 ## Locked lanes
-| Lane | Rate |
-|------|------|
-| Ordering | 1% of order totals |
-| S2K | $0.10 / billable line |
-| Pricebook | $0.25 / item added/fixed |
-| Schedule | $25 / month |
-| Tasks | $25 / month |
+| Lane | Rate | Invoice `kind` |
+|------|------|----------------|
+| Ordering | 1% of order totals | `ordering_pct` |
+| S2K | $0.10 / billable line | `s2k_per_line` |
+| Pricebook | $0.25 / item | `pricebook_per_item` |
+| Schedule | $25 / month | `schedule_tasks` |
+| Tasks | $25 / month | `schedule_tasks` |
 
 Reports / filing / audits / hourly are **not locked** — do not charge those yet.
 
 ## Flow
 1. Do the client work.
-2. Add an invoice under a locked lane on `smartsolutionsai.us` billing.
-3. Drop job + invoice ids in OneDrive `GrokBot-Billing/`.
-4. Billing bot charges the client from those Sep invoices.
+2. Append an invoice object under the right client/month (same shape as existing Sep invoices).
+3. Deploy `billing.json` (assets + KV).
+4. Billing bot charges from those Sep invoices on the site.
 
-Live: https://smartsolutionsai.us/billing.html  
-OneDrive: `GrokBot-Billing/`
+Live: https://smartsolutionsai.us/billing.html
