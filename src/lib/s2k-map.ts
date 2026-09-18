@@ -2,7 +2,8 @@ import type { S2kValues } from "./calendar.ts";
 import { emptyS2k } from "./calendar.ts";
 import { parseLines, type NamedLookup, type S2kLine, type S2kTran } from "./s2k-client.ts";
 
-const GALLON_GRADES = new Set(["Diesel #2", "Unleaded-Premium", "Unleaded-Regular"]);
+/** Field 1 Close only — not field 6. Mid is not in Close. */
+const CLOSE_GRADES = new Set(["Diesel #2", "Unleaded-Premium", "Unleaded-Regular"]);
 const DIESEL_GRADE = "Diesel #2";
 const FIELD2_LABELS = new Set(["Non-Integrated Fuel", "Non Fuel Integrated"]);
 const FIELD3_LABELS = new Set(["Propane Exchanges", "Propane Exchange"]);
@@ -59,12 +60,12 @@ export function mapSeventeen(
   const rt0 = linesOf(trans, siteId, "rt", 0);
   const s2k = emptyS2k();
 
-  s2k[0] = sumNamed(fuel10, names.fuels, GALLON_GRADES, closeQty, 4);
+  s2k[0] = sumNamed(fuel10, names.fuels, CLOSE_GRADES, closeQty, 4);
   s2k[1] = sumNamed(category0, names.depts, FIELD2_LABELS, lineAmount, 2);
   s2k[2] = sumNamed(category0, names.depts, FIELD3_LABELS, lineAmount, 2);
   s2k[3] = sumNamed(rt0, names.mops, new Set(["SAFEDROP"]), lineAmount, 2);
   s2k[4] = sumNamed(fuel0, names.fuels, new Set([DIESEL_GRADE]), qtyAdj, 4);
-  s2k[5] = sumNamed(fuel0, names.fuels, GALLON_GRADES, qtyAdj, 4);
+  s2k[5] = sumFuelSalesQty(fuel0, names.fuels);
   s2k[6] = fuelProfit(fuel0);
   s2k[7] = netCstore(category0, names.depts);
   s2k[8] = sumNamed(category0, names.depts, TAX_LABELS, lineAmount, 2);
@@ -95,6 +96,21 @@ function linesOf(trans: S2kTran[], siteId: number, type: string, trantype: numbe
     out.push(...parseLines(row.lines));
   }
   return out;
+}
+
+/** Field 6: Fuel Sales Sales Qty of every named grade on that day's table, including Mid. */
+function sumFuelSalesQty(lines: S2kLine[], fuels: Map<number, string>): number | null {
+  let sum = 0;
+  let found = false;
+  for (const line of lines) {
+    const label = fuels.get(Number(line.varid));
+    if (!label) continue;
+    const value = qtyAdj(line);
+    if (value == null) continue;
+    found = true;
+    sum += value;
+  }
+  return found ? roundTo(sum, 4) : null;
 }
 
 function sumNamed(

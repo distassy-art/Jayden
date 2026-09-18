@@ -83,8 +83,8 @@ test("maps the 17 fields from Daily Book labels and skips missing ones instead o
   assert.equal(s2k[1], 31.75);
   assert.equal(s2k[2], null, "propane label missing → skip, not 0");
   assert.equal(s2k[3], 14877);
-  assert.equal(s2k[4], 191.031);
-  assert.equal(s2k[5], 6546.143);
+  assert.equal(s2k[4], 191.031, "field 5 is Diesel #2 only");
+  assert.equal(s2k[5], 7021.933, "field 6 is every Fuel Sales grade including Mid");
   assert.equal(s2k[8], 299.71, "Tax 4 missing → Tax 1 only");
   assert.equal(s2k[9], 491);
   assert.equal(s2k[10], 6787);
@@ -99,7 +99,7 @@ test("maps the 17 fields from Daily Book labels and skips missing ones instead o
   assert.ok(hasDailyBook(trans, 387));
 });
 
-test("does not use LOTTO PAYOUT, mid-grade gallons, or a missing PAYOUT as 0", () => {
+test("field 6 includes Mid when the row exists; does not use LOTTO PAYOUT or a missing PAYOUT as 0", () => {
   const trans: S2kTran[] = [
     tran("fuel", 0, [
       { varid: 2, qty: 100, amount: 500, tax: 0, cal_wcost: 2, charge: 0 },
@@ -108,12 +108,23 @@ test("does not use LOTTO PAYOUT, mid-grade gallons, or a missing PAYOUT as 0", (
     tran("rt", 0, [{ varid: -32, amount: 999 }]),
   ];
   const s2k = mapSeventeen(trans, 387, names);
-  assert.equal(s2k[4], null);
-  assert.equal(s2k[5], 10);
+  assert.equal(s2k[4], null, "field 5 stays blank without Diesel #2");
+  assert.equal(s2k[5], 110, "Mid + Regular Sales Qty");
   assert.equal(s2k[11], null, "LOTTO PAYOUT is not field 12");
   assert.equal(s2k[14], null, "missing PAYOUT stays blank");
   assert.equal(s2k[16], null);
   assert.equal(s2k.filter((v) => v != null).length, 3);
+});
+
+test("field 6 skips unnamed Fuel Sales grades instead of inventing 0", () => {
+  const trans: S2kTran[] = [
+    tran("fuel", 0, [
+      { varid: 1, qty: 10, amount: 50, tax: 1, cal_wcost: 2, charge: 0 },
+      { varid: 99, qty: 999, amount: 1, tax: 0, cal_wcost: 1, charge: 0 },
+    ]),
+  ];
+  const s2k = mapSeventeen(trans, 387, names);
+  assert.equal(s2k[5], 10);
 });
 
 test("PAYOUT $0.00 is stored because the label exists", () => {
