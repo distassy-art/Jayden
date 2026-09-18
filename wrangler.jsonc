@@ -1,0 +1,30 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // S2K Prime login: secrets S2K_USERNAME and S2K_PASSWORD via wrangler secret put only. Never git.
+  "name": "farsai-calendar",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-13",
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": ["/", "/index.html", "/app.js", "/styles.css", "/api/*"],
+    "not_found_handling": "single-page-application"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "farsai-calendar",
+      "database_id": "36f0d80f-1a8d-4e56-bf09-071f41de15d8",
+      "migrations_dir": "migrations"
+    }
+  ],
+  // UTC hours covering Pacific 10:00 and 12:00 in both PDT and PST.
+  // The scheduled handler checks America/Los_Angeles; it does not assume an offset.
+  "triggers": {
+    "crons": ["0 17 * * *", "0 18 * * *", "0 19 * * *", "0 20 * * *"]
+  }
+}
