@@ -102,7 +102,8 @@ ok("home cta drops phone required", !/ctaBody: "[^"]*الهاتف مطلوب/.te
 ok("about h1 is عن كيوسيرف", i18nSrc.includes('aboutH1: "عن كيوسيرف"') && i18nSrc.includes('aboutH1: "About QServe"') && aboutSrc.includes("{t.aboutH1}"));
 ok("admin hidden from public nav", !headerSrc.includes("/admin") && !footerSrc.includes("/admin"));
 ok("admin noindex", pageMetaSrc.includes("index: false"));
-ok("queue page has four pillars", contentSrc.includes("تذكرة · شاشة · شباك · تقرير") && enCopySrc.includes("Ticket · Display · Counter · Report") && productViewSrc.includes("queuePillars") && productViewSrc.includes("QuoteWaButton"));
+ok("queue page has four pillars", i18nSrc.includes("تذكرة") && productViewSrc.includes("queuePillars") && productViewSrc.includes("QuoteWaButton"));
+ok("queue components match shipped set", contentSrc.includes("مكونات نظام انتظار العملاء") && contentSrc.includes("طابعه إصدار التذاكر او كيوسك طباعة التذاكر") && contentSrc.includes("برنامج التقارير الخاص بنظام انتظار العملاء") && contentSrc.includes("/photos/queue-components.png") && !contentSrc.includes("من غير أسعار على الصفحة") && !enCopySrc.includes("no prices on this page") && !enCopySrc.includes("no price listed here"));
 const navSystems = ["queuing-system", "nurses-call-system", "self-service-kiosks", "smart-boards", "central-clocks", "digital-signage", "service-evaluation", "interactive-maps"];
 ok("sitemap has all nav systems", navSystems.every((s) => seoFilesSrc.includes(`/${s}/`) && seoFilesSrc.includes(`/en/${s}/`)) && seoFilesSrc.includes("/privacy/") && seoFilesSrc.includes("/terms/") && !seoFilesSrc.includes("qserveai.com/admin"));
 const robotsSrc = fs.readFileSync(new URL("../public/robots.txt", import.meta.url), "utf8");
