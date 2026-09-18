@@ -84,6 +84,8 @@ ok("no Q-Lite names", !/Q-Lite|Q-Plus|Q-Premium/i.test(publicCopy));
 ok("no New Cairo on public pages", !/New Cairo|القاهرة الجديدة/.test(`${i18nSrc}\n${homeSrc}\n${aboutSrc}\n${arHomeSrc}`));
 ok("organization json كيوسيرف", arLayoutSrc.includes('name: "كيوسيرف"') && arLayoutSrc.includes("https://www.qserveai.com"));
 ok("whatsapp quote cta", quoteSrc.includes("#سعر") && homeSrc.includes("QuoteWaButton") && headerSrc.includes("QuoteWaButton"));
+ok("home copy drops no-prices line", !i18nSrc.includes("كل بند طلب عرض سعر على واتساب، بدون أسعار على الموقع") && !i18nSrc.includes("every line is a WhatsApp quote, no prices on the site."));
+ok("home cta drops phone required", !/ctaBody: "[^"]*الهاتف مطلوب/.test(i18nSrc) && !/ctaBody: "[^"]*Phone is required/.test(i18nSrc));
 const robotsSrc = fs.readFileSync(new URL("../public/robots.txt", import.meta.url), "utf8");
 const sitemapSrc = fs.readFileSync(new URL("../public/sitemap.xml", import.meta.url), "utf8");
 ok("robots allows crawl and points sitemap at www", robotsSrc.includes("Allow: /") && robotsSrc.includes("Sitemap: https://www.qserveai.com/sitemap.xml") && !robotsSrc.toLowerCase().includes("yallastore") && !/^Disallow: \/?\s*$/m.test(robotsSrc));

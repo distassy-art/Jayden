@@ -55,7 +55,7 @@ export const ui = {
     heroBody:
       "كيوسيرف (كيو سيرف / QServe) في مصر يركّب نظام انتظار العملاء وشاشات انتظار، استدعاء الممرضات، وكيوسك / أجهزة الخدمات الذاتية. انظمة انتظار العملاء في مصر للبنوك والمستشفيات والجهات — اطلب عرض سعر على واتساب.",
     systemsTitle: "الأنظمة",
-    systemsBody: "انظمة انتظار العملاء، شاشات انتظار، استدعاء الممرضات، وكيوسك في مصر — كل بند طلب عرض سعر على واتساب، بدون أسعار على الموقع.",
+    systemsBody: "انظمة انتظار العملاء، شاشات انتظار، استدعاء الممرضات، وكيوسك في مصر.",
     softwareAddOn: "إضافة برمجية",
     softwareTileBody: "إضافة برمجية للفرع بعد الأجهزة: تقارير وتشغيل حسب البنك أو المستشفى أو الجهة.",
     queuePreview: "شاشة الانتظار",
@@ -65,7 +65,7 @@ export const ui = {
     openSystem: "تفاصيل النظام",
     askQuote: "طلب عرض سعر",
     ctaTitle: "فرع جديد؟ مستشفى؟ جهة حكومية؟",
-    ctaBody: "كيوسيرف مصر يرد بدراسة وعرض سعر على واتساب. الهاتف مطلوب.",
+    ctaBody: "كيوسيرف مصر يرد بدراسة وعرض سعر على واتساب.",
     startQuote: "ابدأ طلب العرض",
     seeInstalls: "شوف التركيبات",
     footerBlurb: "كيوسيرف — نظام انتظار العملاء في مصر. كيوسك وشاشات انتظار واستدعاء الممرضات. طلب عرض سعر على واتساب.",
@@ -157,7 +157,7 @@ export const ui = {
     heroBody:
       "QServe (QSERVE) in Egypt installs a queue management system Egypt, waiting displays, a nurse call system Egypt, and self service kiosk Egypt. Request a quote on WhatsApp.",
     systemsTitle: "Systems",
-    systemsBody: "Queue management, nurse call, and self-service kiosks in Egypt — every line is a WhatsApp quote, no prices on the site.",
+    systemsBody: "Queue management, nurse call, and self-service kiosks in Egypt.",
     softwareAddOn: "Software add-on",
     softwareTileBody: "A branch software add-on after hardware: reports and operations for banks, hospitals, or government.",
     queuePreview: "Queue display",
@@ -167,7 +167,7 @@ export const ui = {
     openSystem: "System details",
     askQuote: "Request a quote",
     ctaTitle: "New branch? Hospital? Government site?",
-    ctaBody: "QServe Egypt replies with a survey and quote on WhatsApp. Phone is required.",
+    ctaBody: "QServe Egypt replies with a survey and quote on WhatsApp.",
     startQuote: "Start a quote",
     seeInstalls: "See installations",
     footerBlurb:
