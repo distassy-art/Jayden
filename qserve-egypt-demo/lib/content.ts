@@ -12,14 +12,11 @@ export const site = {
   email: "info@bdcegypt.com",
   addressAr: "المنطقة الصناعية - منطقة 1000 مصنع, التجمع الثالث, القاهرة الجديدة, القاهرة",
   addressEn: "Industrial zone - 1000 Factory, Third Settlement, New Cairo, Cairo",
-  addressAlexAr: "كامب شيزار، الإسكندرية",
-  addressAlexEn: "Camp Sheizar (Camp Caesar), Alexandria",
   hours: "السبت — الخميس: 9:00 صباحاً — 6:00 مساءً",
   hoursOff: "الجمعة: عطلة",
   facebook: "https://www.facebook.com/profile.php?id=100063568914604",
   youtube: "https://www.youtube.com/watch?v=DneFcbLK6rA",
   mapQuery: "المنطقة الصناعية منطقة 1000 مصنع التجمع الثالث القاهرة الجديدة",
-  mapQueryAlex: "Camp Caesar Alexandria Egypt",
 } as const;
 
 export type Product = {
