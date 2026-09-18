@@ -23,25 +23,6 @@ export const enCopy: Record<string, Copy> = {
     ],
     imageAlt: "QServe queue management system components",
   },
-  "nurses-call-system": {
-    nav: "Nurse call",
-    title: "Nurse call system Egypt | QServe",
-    h1: "Nurse call system Egypt",
-    meta: "Nurse call system Egypt for hospitals: bedside buttons, nurse-station displays, bed-to-station response.",
-    kicker: "Nurse call system Egypt",
-    summary: "Nurse call system Egypt for hospitals: bedside call to the nurse-station screen.",
-    paragraphs: [
-      "Bedside buttons, corridor displays and medical consoles link the patient to the nurse station.",
-      "Used in wards, ICU and clinics with normal vs urgent priorities.",
-    ],
-    bullets: ["Fast wireless call", "Nurse-station screens", "Urgent room alerts", "International quality match", "Local install and spares"],
-    components: [
-      { title: "Bedside button", text: "Patient call with urgent flag." },
-      { title: "Nurse station", text: "Room, status and wait time." },
-      { title: "Control panel", text: "Priorities and daily response reports." },
-    ],
-    imageAlt: "Qserve Egypt nurse-call system",
-  },
   "self-service-kiosks": {
     nav: "Self-service kiosks",
     title: "Self service kiosk Egypt | QServe",

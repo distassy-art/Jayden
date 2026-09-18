@@ -104,7 +104,9 @@ ok("admin hidden from public nav", !headerSrc.includes("/admin") && !footerSrc.i
 ok("admin noindex", pageMetaSrc.includes("index: false"));
 ok("queue page has four pillars", i18nSrc.includes("تذكرة") && productViewSrc.includes("queuePillars") && productViewSrc.includes("QuoteWaButton"));
 ok("queue components match shipped set", contentSrc.includes("مكونات نظام انتظار العملاء") && contentSrc.includes("طابعه إصدار التذاكر او كيوسك طباعة التذاكر") && contentSrc.includes("برنامج التقارير الخاص بنظام انتظار العملاء") && contentSrc.includes("/photos/queue-components.png") && !contentSrc.includes("من غير أسعار على الصفحة") && !enCopySrc.includes("no prices on this page") && !enCopySrc.includes("no price listed here"));
-const navSystems = ["queuing-system", "nurses-call-system", "self-service-kiosks", "smart-boards", "central-clocks", "digital-signage", "service-evaluation", "interactive-maps"];
+ok("no bed-to-station copy", !i18nSrc.includes("نداء من السرير إلى شاشة المحطة") && !i18nSrc.includes("bed-to-station") && !i18nSrc.includes("bedside call to the nurse-station") && !contentSrc.includes("نداء من السرير إلى شاشة المحطة") && !enCopySrc.includes("bed-to-station") && !enCopySrc.includes("bedside call to the nurse-station"));
+ok("nurses-call page unlisted", !headerSrc.includes("nurses-call-system") && !aboutSrc.includes("nurses-call-system") && !seoFilesSrc.includes("/nurses-call-system/") && !contentSrc.includes('slug: "nurses-call-system"'));
+const navSystems = ["queuing-system", "self-service-kiosks", "smart-boards", "central-clocks", "digital-signage", "service-evaluation", "interactive-maps"];
 ok("sitemap has all nav systems", navSystems.every((s) => seoFilesSrc.includes(`/${s}/`) && seoFilesSrc.includes(`/en/${s}/`)) && seoFilesSrc.includes("/privacy/") && seoFilesSrc.includes("/terms/") && !seoFilesSrc.includes("qserveai.com/admin"));
 const robotsSrc = fs.readFileSync(new URL("../public/robots.txt", import.meta.url), "utf8");
 const sitemapSrc = seoFilesSrc;

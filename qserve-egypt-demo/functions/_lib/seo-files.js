@@ -17,8 +17,6 @@ const NAV_PATHS = [
   "/en/terms/",
   "/queuing-system/",
   "/en/queuing-system/",
-  "/nurses-call-system/",
-  "/en/nurses-call-system/",
   "/self-service-kiosks/",
   "/en/self-service-kiosks/",
   "/smart-boards/",

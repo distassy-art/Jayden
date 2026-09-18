@@ -11,7 +11,6 @@ export function AboutView() {
   const href = (p: string) => localizedHref(locale, p);
   const work = [
     { key: "queue", image: "/photos/queue-bank.webp", href: "/queuing-system", title: t.aboutQueueTitle, body: t.aboutQueueBody },
-    { key: "nurse", image: "/photos/nurse-call.jpeg", href: "/nurses-call-system", title: t.aboutNurseTitle, body: t.aboutNurseBody },
     { key: "kiosk", image: "/photos/kiosk-bank.webp", href: "/self-service-kiosks", title: t.aboutKioskTitle, body: t.aboutKioskBody },
   ];
 
