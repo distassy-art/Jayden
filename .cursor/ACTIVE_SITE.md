@@ -1,15 +1,21 @@
 # Active site (canonical)
 
-**Use this site only:**
-- Path: `/tmp/jayden-admin/site-v2` (symlink: `/workspace/smartsolutions-site`)
-- Live URL: **https://smartsolutionsai.us/new/**
-- Worker: `smartsolutions-admin` (`npx wrangler deploy --env live`)
-- Preview: `smartsolutions-admin-preview`
+Mina’s current site is the live root. There is **no `/new` or `/new1`** anymore (those redirect away).
 
-**Do not use / do not deploy again:**
-- `/tmp/ss-site` · Worker `smartsolutions-site` · root `https://smartsolutionsai.us/` (old site)
+**Use this site only:**
+- Live URL: **https://smartsolutionsai.us/**
+- App / Billing: **https://smartsolutionsai.us/app** (Billing tab)
+- UI worker: `ss-unified-proto`
+- API + `/data/*` worker: `ss-api` (KV `SS_MGR` / `SS_BOOKS`)
+
+**Do not use:**
+- `/new` · `/new1` · `/tmp/jayden-admin/site-v2` · worker `smartsolutions-admin`
+- Old worker name `smartsolutions-site` (removed from the account)
 
 ## Billing
-New site Billing page reads company billing via `/api/billing` (proxied).
-To add invoices: **upsert KV key `billing` only** (union by invoice id, never delete).
-Do **not** run `wrangler deploy` on the old `smartsolutions-site` worker.
+Billing UI: https://smartsolutionsai.us/app → **Billing**
+Static feed: `/data/billing.json` (served by `ss-api`)
+Live merge / fees / paid status: `/api/billing` (KV key `billing` on `SS_MGR`)
+
+To add invoices: **`python3 scripts/billing_upsert.py`** → KV upsert only (union by invoice id, **never delete**).
+Do **not** deploy `smartsolutions-admin` or anything under `/new`.

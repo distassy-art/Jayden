@@ -3,7 +3,9 @@
 **Always stay on Smart Solutions.** Use EV Buzz only if the user explicitly says to.
 
 - OneDrive: `minamorcos@smartsolutionsai26.onmicrosoft.com` (`Documents/Clients`)
-- Live site: **https://smartsolutionsai.us** (Cloudflare Worker `smartsolutions-site`, KV `ss-books`)
+- **Active site:** **https://smartsolutionsai.us/** (UI `ss-unified-proto`, API/data `ss-api`) — no `/new` or `/new1`
+- App / Billing: https://smartsolutionsai.us/app
+- Books data KV: `ss-books` on `ss-api`
 - EV Buzz / `sales@evbuzzapp.com` / charging stations: off-limits unless the user says to go there.
 
 ## Schedule
@@ -126,19 +128,10 @@ Bump cache-bust query params on `owner.js` / `mgr-dash.js` (`stations.json`,
 `fuel.json`, `profit.json`, `daily_september.json`, `manager.json`) when those
 files change so browsers do not keep a HIT of the old roster.
 
-**Deploy note:** `smartsolutions-site` owns the domain; `smartsolutions-admin`
-owns only `/new` and `/new/*`. After any `wrangler deploy` of the site, confirm
-`/new/` still returns 200 (not a 302 to `/`). If `/new` breaks, redeploy admin:
+**Deploy note:** Live UI is `ss-unified-proto` at **https://smartsolutionsai.us/** (app at `/app`).
+API and `/data/*` are `ss-api`. Paths `/new` and `/new1` redirect away — do not deploy `smartsolutions-admin`.
 
-```
-cd site-v2 && npx wrangler deploy --env live
-```
-
-A site deploy can also replace `data/daily_september.json` with an older copy —
-always re-run `rebuild_daily_open_month.py` into that checkout before deploying
-when open-month days changed. Prefer **https://smartsolutionsai.us/new/** for
-owner/admin books; the root portal is legacy and will show stale stations if
-the roster JSONs were not scrubbed.
+Prefer **https://smartsolutionsai.us/app** for owner/admin books and Billing.
 6. Spot-check https://smartsolutionsai.us/yearly.html and https://smartsolutionsai.us/new/ (owner session) if a browser is available.
 
 Skip Store Services workbooks. Merge is additive by date/month; do not wipe other stations.

@@ -1,9 +1,11 @@
 # How bots charge (Billing bot)
 
-Work on the **new site only**: https://smartsolutionsai.us/new/  
-Do **not** deploy or edit the old root site (`smartsolutions-site` / `/tmp/ss-site`).
+Work on the **current live site only:** https://smartsolutionsai.us/  
+App Billing: https://smartsolutionsai.us/app  
 
-Add invoices by **KV upsert** (shared `billing` key). Bot adds and you also add — **do not delete**.
+There is **no `/new` or `/new1`**. Do not deploy `smartsolutions-admin` / site-v2.
+
+Add invoices by **KV upsert** (shared `billing` key on `ss-api` / `SS_MGR`). Bot adds and you also add — **do not delete**.
 
 Do **not** email charge handoffs. OneDrive `GrokBot-Billing/` is optional only.
 
@@ -19,7 +21,7 @@ Do **not** email charge handoffs. OneDrive `GrokBot-Billing/` is optional only.
 ## Flow
 1. Do the client work.
 2. Upsert invoice(s) with `scripts/billing_upsert.py` (KV only).
-3. Billing shows under **Billing** on https://smartsolutionsai.us/new/
+3. Billing shows under **Billing** on https://smartsolutionsai.us/app
 4. Billing bot charges from those Sep invoices.
 
 Helper: `python3 scripts/billing_upsert.py < invoice.json`

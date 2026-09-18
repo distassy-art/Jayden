@@ -1,18 +1,29 @@
 #!/usr/bin/env python3
-"""Upsert invoices into shared billing KV. Never deletes. Never deploys old site."""
+"""Upsert invoices into shared billing KV for the live site Billing page.
+
+Active site: https://smartsolutionsai.us/ (app Billing tab)
+Workers: ss-unified-proto (UI) + ss-api (API/data, SS_MGR KV)
+Never deletes invoices. Do not deploy /new or smartsolutions-admin.
+"""
 import json, sys, subprocess, os
 from copy import deepcopy
 from datetime import datetime, timezone
 
 NS = "750cc39750864d5e8adec86a21c1e21d"
-# Scratch dir for wrangler cwd only — NOT the old site tree for deploys
-WRANGLER_CWD = os.environ.get("SS_WRANGLER_CWD", "/tmp/ss-site")
+ACTIVE_SITE = "https://smartsolutionsai.us/"
+ACTIVE_BILLING = "https://smartsolutionsai.us/app"
+# Neutral cwd + pinned wrangler v3 (KV get/put flags).
+WRANGLER_CWD = os.environ.get("SS_WRANGLER_CWD", "/tmp")
+WRANGLER = ["npx", "--yes", "wrangler@3.114.15"]
+
+def _wrangler(*args, check=True):
+    return subprocess.run(
+        [*WRANGLER, *args],
+        cwd=WRANGLER_CWD, capture_output=True, text=True, check=check,
+    )
 
 def load_kv():
-    r = subprocess.run(
-        ["npx", "wrangler", "kv:key", "get", "billing", f"--namespace-id={NS}"],
-        cwd=WRANGLER_CWD, capture_output=True, text=True, check=True,
-    )
+    r = _wrangler("kv:key", "get", "billing", f"--namespace-id={NS}")
     return json.loads(r.stdout)
 
 def merge_invoices(*lists):
@@ -47,17 +58,22 @@ def upsert(new_invoices, fees_patch=None):
     proto.update({
         "neverDeleteInvoices": True,
         "mergeRule": "union_by_invoice_id",
-        "activeSite": "https://smartsolutionsai.us/new/",
+        "activeSite": ACTIVE_SITE,
+        "activeBilling": ACTIVE_BILLING,
+        "noNewPath": True,
         "noOldSiteDeploy": True,
+        "how": "Upsert invoices into KV billing for https://smartsolutionsai.us/app Billing. Do not use /new.",
         "updatedAt": now,
     })
     path = "/tmp/billing_kv_upsert.json"
     json.dump(out, open(path, "w"), indent=2)
-    subprocess.run(
-        ["npx", "wrangler", "kv:key", "put", "billing", f"--path={path}", f"--namespace-id={NS}"],
-        cwd=WRANGLER_CWD, check=True,
+    _wrangler(
+        "kv:key", "put", "billing", f"--path={path}", f"--namespace-id={NS}",
     )
-    print(f"KV upserted {len(new_invoices)}; total invoices {len(out['invoices'])} (no old-site deploy)")
+    print(
+        f"KV upserted {len(new_invoices)}; total invoices {len(out['invoices'])} "
+        f"(activeSite={ACTIVE_SITE}; no old-site deploy)"
+    )
     return out
 
 if __name__ == "__main__":
