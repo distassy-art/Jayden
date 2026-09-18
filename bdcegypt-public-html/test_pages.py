@@ -8,6 +8,19 @@ EXPECT = {
     "nurse-call-system": "كيوسيرف | نظام استدعاء الممرضات في مصر | QServe",
     "self-service-kiosks": "كيوسيرف | كيوسك في مصر | QServe",
 }
+NEED = [
+    "+20 122 799 3999",
+    "info@bdcegypt.com",
+    "التجمع الثالث",
+    "القاهرة الجديدة",
+    "منطقة 10000",
+    "الاسم",
+    "الرسالة",
+    "إرسال",
+    "Facebook",
+    "YouTube",
+    "WhatsApp",
+]
 
 
 def main() -> None:
@@ -20,12 +33,13 @@ def main() -> None:
             errors.append(f"{slug} title mismatch: {title!r}")
         if not h1.startswith("كيوسيرف QServe"):
             errors.append(f"{slug} H1 must lead with كيوسيرف QServe")
-        visible = re.sub(r"<link rel=\"canonical\"[^>]*>", "", html)
-        visible = re.sub(r"<[^>]+>", " ", visible)
-        if re.search(r"BDC|bdcegypt", visible, re.I):
-            errors.append(f"{slug} visible text still has BDC/bdcegypt")
+        if "BDC Egypt" in title or "BDC Egypt" in h1:
+            errors.append(f"{slug} title/H1 has BDC Egypt")
         if "qserveai.com" in html.lower():
             errors.append(f"{slug} mentions qserveai.com")
+        for bit in NEED:
+            if bit not in html:
+                errors.append(f"{slug} missing {bit!r}")
         ht = (ROOT / slug / ".htaccess").read_text(encoding="utf-8")
         if "RewriteRule" in ht:
             errors.append(f"{slug} .htaccess has redirects")
