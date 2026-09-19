@@ -26,25 +26,27 @@ export const enCopy: Record<string, Copy> = {
   "nurse-call-system": {
     nav: "Nurse call system",
     title: "Nurse call system Egypt | QServe",
-    h1: "Nurse call system",
-    meta: "QServe nurse call system Egypt: call, nurse station, and fast response inside the medical site.",
+    h1: "Nurse call system components",
+    meta: "QServe nurse call system components: call units, display panel, control unit, and alarm devices.",
     kicker: "QServe",
     summary: "A nurse call system for hospitals and clinics",
-    paragraphs: [],
-    bullets: [],
+    paragraphs: [
+      "The nurse call system is made of several core parts that work together so the system runs well and staff can answer fast. Here are the main parts of this system:",
+    ],
+    bullets: [
+      "Fast response in emergencies",
+      "A clear improvement in patient care",
+      "Less stress on medical staff",
+      "Close follow-up of patients around the clock",
+      "Automatic logging of call and response times",
+      "Fewer medical errors from delay",
+      "Better patient and family satisfaction with the service",
+    ],
     components: [
-      {
-        title: "How the system works",
-        text: "The QServe nurse call system is made of core parts that work together so the medical site runs well and staff can answer fast.",
-      },
-      {
-        title: "Nurse-station alerts",
-        text: "Installed in the nurses’ room, it shows notices when a patient calls — so staff see the alert at once and respond.",
-      },
-      {
-        title: "Why it matters",
-        text: "In a hospital every second counts. The QServe nurse call system helps cut response time and raise safety inside the medical site, which lowers complications from delayed help.",
-      },
+      { title: "Call units", text: "Fitted beside the patient bed or in the bathroom, so the patient can ask for help." },
+      { title: "Display panel", text: "Fitted in the nurses’ room, and shows alerts when a patient calls." },
+      { title: "Control unit", text: "Used to manage the system and set response priorities." },
+      { title: "Alarm devices", text: "Sound or light alerts to notify nurses." },
     ],
     imageAlt: "QServe — nurse call system · NURSE CALL SYSTEM",
   },
