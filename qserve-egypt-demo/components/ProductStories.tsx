@@ -37,7 +37,7 @@ export function ProductStories() {
                 active === p.slug ? "border-cyan glow-ring" : "border-navy/10"
               }`}
             >
-              <img src={p.image} alt="" className="absolute inset-0 h-full w-full object-cover" />
+              <img src={p.cardImage || p.image} alt="" className="absolute inset-0 h-full w-full object-cover" />
               <span className="absolute inset-0 bg-gradient-to-t from-void via-void/40 to-transparent" />
               <span className="absolute inset-x-0 bottom-0 p-4 font-extrabold">{loc.nav}</span>
             </button>
@@ -45,7 +45,7 @@ export function ProductStories() {
         })}
       </div>
       <div className="glass mt-6 grid items-center gap-8 rounded-3xl p-6 lg:grid-cols-2">
-        <img src={current.image} alt={current.imageAlt} className="h-64 w-full rounded-2xl object-cover" />
+        <img src={current.cardImage || current.image} alt={current.imageAlt} className="h-64 w-full rounded-2xl object-cover" />
         <div>
           <p className="text-xs font-bold tracking-widest text-cyan">{current.kicker}</p>
           <h3 className="mt-2 text-3xl font-black text-navy">{current.h1}</h3>

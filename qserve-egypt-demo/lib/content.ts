@@ -32,6 +32,7 @@ export type Product = {
   bullets: string[];
   components: { title: string; text: string }[];
   image: string;
+  cardImage?: string;
   imageAlt: string;
 };
 
@@ -56,6 +57,7 @@ export const products: Product[] = [
       { title: "برنامج التقارير الخاص بنظام انتظار العملاء", text: "لوحة تحكم تحليلية تظهر متوسط زمن الخدمة، عدد العملاء، وأداء الموظفين." },
     ],
     image: "/photos/queue-components.png",
+    cardImage: "/photos/queue-bank.webp",
     imageAlt: "مكونات نظام انتظار العملاء كيوسيرف QServe",
   },
   {
@@ -84,6 +86,7 @@ export const products: Product[] = [
       },
     ],
     image: "/photos/nurse-call-banner.png",
+    cardImage: "/photos/nurse-call-product-card.png",
     imageAlt: "كيوسيرف QServe — نظام استدعاء الممرضات · NURSE CALL SYSTEM",
   },
   {

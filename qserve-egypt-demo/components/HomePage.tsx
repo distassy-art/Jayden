@@ -19,7 +19,7 @@ export function HomePage() {
         nav: p.nav,
         kicker: p.kicker,
         summary: p.summary,
-        image: p.image,
+        image: p.cardImage || p.image,
         imageAlt: p.imageAlt,
         h1: p.h1,
       };
