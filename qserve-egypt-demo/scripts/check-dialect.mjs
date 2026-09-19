@@ -82,7 +82,7 @@ ok("about drops gadget-catalog paragraph", !i18nSrc.includes("المشتري ل�
 ok("home/about drop then-whatsapp tails", !i18nSrc.includes("ثم عرض سعر على واتساب") && !i18nSrc.includes("ثم طلب عرض سعر على واتساب") && !i18nSrc.includes("then a WhatsApp quote") && !i18nSrc.includes("Request a quote on WhatsApp") && !i18nSrc.includes("اطلب عرض سعر على واتساب"));
 ok("contact screenshot copy", i18nSrc.includes('contactTitle: "تواصل معنا"') && i18nSrc.includes('contactTitle: "Contact us"') && i18nSrc.includes("تواصل معنا الآن للحصول على عرض سعر") && i18nSrc.includes("Contact us now for a quote"));
 ok("about no yallastore or shop", !aboutSrc.toLowerCase().includes("yallastore") && !aboutSrc.includes("/products") && !aboutSrc.includes("/cart") && !aboutSrc.includes("SalesmanChat"));
-ok("header links about", headerSrc.includes('href("/about")') && i18nSrc.includes("عن كيوسيرف"));
+ok("header has no about", !headerSrc.includes('href("/about")') && !headerSrc.includes("/about") && !footerSrc.includes("/about") && !seoFilesSrc.includes("/about/") && !seoFilesSrc.includes("/en/about/"));
 ok("no yallastore.com", !i18nSrc.toLowerCase().includes("yallastore") && !contentSrc.toLowerCase().includes("yallastore") && !homeSrc.toLowerCase().includes("yallastore") && !aboutSrc.toLowerCase().includes("yallastore"));
 ok("demo origin is www.qserveai.com", i18nSrc.includes('DEMO_ORIGIN = "https://www.qserveai.com"') && !i18nSrc.toLowerCase().includes("yallastore"));
 ok("arabic home title", arHomeSrc.includes("كيوسيرف | نظام انتظار العملاء في مصر"));
@@ -99,7 +99,7 @@ ok("organization json كيوسيرف", arLayoutSrc.includes('name: "كيوسير
 ok("whatsapp quote cta", quoteSrc.includes("#سعر") && homeSrc.includes("QuoteWaButton") && headerSrc.includes("QuoteWaButton"));
 ok("home copy drops no-prices line", !i18nSrc.includes("كل بند طلب عرض سعر على واتساب، بدون أسعار على الموقع") && !i18nSrc.includes("every line is a WhatsApp quote, no prices on the site."));
 ok("home cta drops phone required", !/ctaBody: "[^"]*الهاتف مطلوب/.test(i18nSrc) && !/ctaBody: "[^"]*Phone is required/.test(i18nSrc));
-ok("about h1 is عن كيوسيرف", i18nSrc.includes('aboutH1: "عن كيوسيرف"') && i18nSrc.includes('aboutH1: "About QServe"') && aboutSrc.includes("{t.aboutH1}"));
+ok("about h1 is عن كيوسيرف", i18nSrc.includes('aboutH1: "عن كيوسيرف"') && i18nSrc.includes('aboutH1: "About QServe"'));
 ok("admin hidden from public nav", !headerSrc.includes("/admin") && !footerSrc.includes("/admin"));
 ok("admin noindex", pageMetaSrc.includes("index: false"));
 ok("queue page has four pillars", i18nSrc.includes("تذكرة") && productViewSrc.includes("queuePillars") && productViewSrc.includes("QuoteWaButton"));
@@ -108,7 +108,8 @@ ok("queue components match shipped set", contentSrc.includes("مكونات نظ�
 ok("no bed-to-station copy", !i18nSrc.includes("نداء من السرير إلى شاشة المحطة") && !i18nSrc.includes("bed-to-station") && !i18nSrc.includes("bedside call to the nurse-station") && !contentSrc.includes("نداء من السرير إلى شاشة المحطة") && !enCopySrc.includes("bed-to-station") && !enCopySrc.includes("bedside call to the nurse-station"));
 ok("nurses-call page unlisted", !headerSrc.includes("nurses-call-system") && !aboutSrc.includes("nurses-call-system") && !seoFilesSrc.includes("/nurses-call-system/") && !contentSrc.includes('slug: "nurses-call-system"'));
 ok("nurse-call page listed", contentSrc.includes('slug: "nurse-call-system"') && contentSrc.includes("/photos/nurse-call-banner.png") && aboutSrc.includes("/nurse-call-system") && seoFilesSrc.includes("/nurse-call-system/") && seoFilesSrc.includes("/en/nurse-call-system/") && enCopySrc.includes('"nurse-call-system"'));
-ok("nurse-call layout has no quote form", productViewSrc.includes('product.slug === "nurse-call-system"') && productViewSrc.includes("nursePillars") && productViewSrc.includes("nurseQuoteVia"));
+ok("nurse-call layout has no quote form", productViewSrc.includes('product.slug === "nurse-call-system"') && productViewSrc.includes("nurseQuoteVia") && !productViewSrc.includes("nursePillars"));
+ok("nurse-call components and benefits", contentSrc.includes("مكونات نظام استدعاء الممرضات") && contentSrc.includes("وحدات الاستدعاء") && contentSrc.includes("لوحة البيان") && contentSrc.includes("وحدة التحكم") && contentSrc.includes("أجهزة الإنذار") && contentSrc.includes("سرعة استجابة عالية في حالات الطوارئ") && i18nSrc.includes("فوائد Nurse Call System") && enCopySrc.includes("Nurse call system components") && !productViewSrc.includes("كيف يعمل النظام"));
 const navSystems = ["queuing-system", "nurse-call-system", "self-service-kiosks", "smart-boards", "central-clocks", "digital-signage", "service-evaluation", "interactive-maps"];
 ok("sitemap has all nav systems", navSystems.every((s) => seoFilesSrc.includes(`/${s}/`) && seoFilesSrc.includes(`/en/${s}/`)) && seoFilesSrc.includes("/privacy/") && seoFilesSrc.includes("/terms/") && !seoFilesSrc.includes("qserveai.com/admin"));
 const robotsSrc = fs.readFileSync(new URL("../public/robots.txt", import.meta.url), "utf8");

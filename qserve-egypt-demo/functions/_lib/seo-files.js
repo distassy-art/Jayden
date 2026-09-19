@@ -3,8 +3,6 @@ const LASTMOD = "2026-09-18";
 const NAV_PATHS = [
   "/",
   "/en/",
-  "/about/",
-  "/en/about/",
   "/contact/",
   "/en/contact/",
   "/quote/",

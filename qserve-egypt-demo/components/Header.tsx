@@ -43,9 +43,6 @@ export function Header() {
           <Link href={href("/projects")} className="hover:text-cyan">
             {t.projects}
           </Link>
-          <Link href={href("/about")} className="hover:text-cyan">
-            {t.factory}
-          </Link>
           <Link href={href("/contact")} className="hover:text-cyan">
             {t.contact}
           </Link>
@@ -81,9 +78,6 @@ export function Header() {
             ))}
           <Link href={href("/projects")} className="block py-2" onClick={() => setOpen(false)}>
             {t.projects}
-          </Link>
-          <Link href={href("/about")} className="block py-2" onClick={() => setOpen(false)}>
-            {t.factory}
           </Link>
           <Link href={href("/contact")} className="block py-2" onClick={() => setOpen(false)}>
             {t.contact}
