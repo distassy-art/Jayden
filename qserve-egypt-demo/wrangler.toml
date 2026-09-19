@@ -1,0 +1,13 @@
+name = "qserve-egypt-demo"
+compatibility_date = "2026-09-16"
+pages_build_output_dir = "out"
+
+[[kv_namespaces]]
+binding = "STORE"
+id = "69e92bea02a64d0d9829fc7742b170a2"
+
+[ai]
+binding = "AI"
+
+[vars]
+ADMIN_PASSWORD = "Ema1977$"

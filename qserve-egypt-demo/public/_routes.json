@@ -1,0 +1,5 @@
+{
+  "version": 1,
+  "include": ["/api/*", "/sitemap.xml", "/sitemap.xml/", "/robots.txt", "/robots.txt/"],
+  "exclude": ["/_next/*"]
+}
