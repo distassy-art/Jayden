@@ -21,7 +21,7 @@ export type Turn = { reply: string; slots: Slots; chips: Chip[]; navigate?: stri
 
 const SYSTEMS: { keys: RegExp; slug: string; ar: string; en: string }[] = [
   { keys: /انتظار|طابور|queue|bank queue/, slug: "queuing-system", ar: "نظام انتظار العملاء", en: "queue management" },
-  { keys: /ممر|مستشفى|nurse|hospital/, slug: "nurses-call-system", ar: "استدعاء الممرضات", en: "nurse call" },
+  { keys: /ممر|مستشفى|nurse|hospital/, slug: "nurse-call-system", ar: "استدعاء الممرضات", en: "nurse call" },
   { keys: /كيوسك|kiosk/, slug: "self-service-kiosks", ar: "الكيوسك", en: "self-service kiosks" },
 ];
 

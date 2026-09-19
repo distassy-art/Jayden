@@ -103,6 +103,7 @@ const GREET: Record<Dialect, Record<string, string>> = {
 
 export const PRODUCT_PATHS = new Set([
   "/queuing-system",
+  "/nurse-call-system",
   "/self-service-kiosks",
   "/smart-boards",
   "/central-clocks",

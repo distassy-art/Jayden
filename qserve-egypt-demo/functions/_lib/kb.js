@@ -75,7 +75,7 @@ export const PRODUCTS = [
     nameEn: "Nurse-call system",
     descAr: "أزرار سرير، شدّاد حمّام، لمبات ممر، ومحطة تمريض. عرض سعر وتركيب في المستشفى.",
     descEn: "Bed buttons, bathroom pulls, corridor lamps and nurse station. Quoted and installed on site.",
-    page: "/nurses-call-system",
+    page: "/nurse-call-system",
     keywords: ["ممرضات", "سرير", "مستشفى", "عيادة", "nurse", "call", "ward"],
     faq: faq([
       ["كود بلو؟", "لا نعلنه إلا إذا كان الجهاز يدعمه فعلاً. نركّز على النداء العادي والعاجل.", "Code blue?", "We do not advertise it unless the installed hardware really does it."],

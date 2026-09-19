@@ -23,6 +23,31 @@ export const enCopy: Record<string, Copy> = {
     ],
     imageAlt: "QServe queue management system components",
   },
+  "nurse-call-system": {
+    nav: "Nurse call system",
+    title: "Nurse call system Egypt | QServe",
+    h1: "Nurse call system",
+    meta: "QServe nurse call system Egypt: call, nurse station, and fast response inside the medical site.",
+    kicker: "QServe",
+    summary: "A nurse call system for hospitals and clinics",
+    paragraphs: [],
+    bullets: [],
+    components: [
+      {
+        title: "How the system works",
+        text: "The QServe nurse call system is made of core parts that work together so the medical site runs well and staff can answer fast.",
+      },
+      {
+        title: "Nurse-station alerts",
+        text: "Installed in the nurses’ room, it shows notices when a patient calls — so staff see the alert at once and respond.",
+      },
+      {
+        title: "Why it matters",
+        text: "In a hospital every second counts. The QServe nurse call system helps cut response time and raise safety inside the medical site, which lowers complications from delayed help.",
+      },
+    ],
+    imageAlt: "QServe — nurse call system · NURSE CALL SYSTEM",
+  },
   "self-service-kiosks": {
     nav: "Self-service kiosks",
     title: "Self service kiosk Egypt | QServe",

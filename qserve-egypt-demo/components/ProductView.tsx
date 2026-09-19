@@ -58,6 +58,45 @@ export function ProductView({ product }: { product: Product }) {
     );
   }
 
+  if (product.slug === "nurse-call-system") {
+    return (
+      <article className="mesh">
+        <div className="mx-auto max-w-6xl px-4 py-12 lg:py-16">
+          <img
+            src={p.image}
+            alt={p.imageAlt}
+            className="w-full rounded-3xl bg-white object-contain shadow-[0_8px_28px_rgba(11,27,51,0.08)]"
+          />
+          <h1 className="sr-only">{p.h1}</h1>
+          <div className="mt-6 flex flex-wrap items-center gap-3">
+            <QuoteWaButton product={p.h1}>{t.quote}</QuoteWaButton>
+            <a href={site.whatsapp} target="_blank" rel="noopener noreferrer" dir="ltr" className="btn-ghost">
+              {site.phoneDisplay}
+            </a>
+          </div>
+          <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-3">
+            {t.nursePillars.map((label) => (
+              <div key={label} className="glass rounded-2xl px-4 py-5 text-center">
+                <p className="text-xl font-black text-navy">{label}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-8 space-y-4">
+            {p.components.map((c) => (
+              <section key={c.title} className="glass rounded-3xl p-5 sm:p-6">
+                <h2 className="text-lg font-black text-teal sm:text-xl">{c.title}</h2>
+                <p className="mt-2 text-sm leading-7 text-navy/70 sm:text-base">{c.text}</p>
+              </section>
+            ))}
+          </div>
+          <div className="mt-10">
+            <QuoteWaButton product={p.h1}>{t.nurseQuoteVia}</QuoteWaButton>
+          </div>
+        </div>
+      </article>
+    );
+  }
+
   return (
     <article className="mesh">
       <div className="mx-auto grid max-w-6xl items-center gap-8 px-4 py-12 lg:grid-cols-2">
