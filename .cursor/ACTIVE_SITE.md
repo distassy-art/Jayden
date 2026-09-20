@@ -17,5 +17,9 @@ Billing UI: https://smartsolutionsai.us/app → **Billing**
 Static feed: `/data/billing.json` (served by `ss-api`)
 Live merge / fees / paid status: `/api/billing` (KV key `billing` on `SS_MGR`)
 
+**Stripe payment processing fees** (shown on Billing):
+- ACH / e-check: **0.8%** (cap **$5**)
+- Debit card or credit card: **2.9% + $0.30**
+
 To add invoices: **`python3 scripts/billing_upsert.py`** → KV upsert only (union by invoice id, **never delete**).
 Do **not** deploy `smartsolutions-admin` or anything under `/new`.
