@@ -20,3 +20,14 @@ See `scripts/fill_daily_dly_dpt.py` for S2K logins, site IDs, and OneDrive folde
 - **Wednesday 8:00 AM**: DLY/DPT and Daily Excel both run — run DLY/DPT first, then Excel.
 - **Sunday**: DLY/DPT at 4:00 AM; Excel at 8:00 AM.
 - Day-behind rule: as of calendar day D, pull through end of D−1.
+
+## Soft staging (expired FedAuth)
+
+When SharePoint digest returns 403, pull from S2K without uploading:
+
+```bash
+python3 scripts/fill_daily_dly_dpt.py --stage-dir /tmp/s2k/exports/stage --through YYYY-MM-DD
+python3 scripts/fill_daily_dly_dpt.py --mode daily --stage-dir /tmp/s2k/exports/stage --through YYYY-MM-DD
+```
+
+Then upload each `od_path` from `upload_manifest.json` via Graph or Onedrive MCP `create_or_update_file` (≤1 MB). Recycle older `*dly*`/`*dpt*` after the new MTD files land.
