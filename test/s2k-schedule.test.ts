@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 import { addCalendarDays, pacificClock } from "../src/lib/pacific.ts";
-import { pullPlan, S2K_CRONS } from "../src/lib/s2k-schedule.ts";
+import { pullPlan, S2K_CRONS, isBlankOnlyRetry } from "../src/lib/s2k-schedule.ts";
 
 function atPacific(isoDay: string, hour: number, minute = 0): Date {
   // Walk UTC until America/Los_Angeles shows the requested civil time.
@@ -59,11 +59,34 @@ test("Monday noon Pacific pulls Friday, Saturday, Sunday — never Monday", () =
   assert.ok(!plan.dates.includes("2026-09-21"));
 });
 
-test("other hours including Wednesday noon do not pull", () => {
+test("Monday 18:00 Pacific retries Friday, Saturday, Sunday — never Monday", () => {
+  const plan = pullPlan(atPacific("2026-09-21", 18));
+  assert.equal(plan.action, "weekend");
+  assert.equal(plan.reason, "monday_evening_retry_fri_sat_sun");
+  assert.equal(isBlankOnlyRetry(plan), true);
+  assert.equal(isBlankOnlyRetry({ reason: "monday_noon_fri_sat_sun" }), false);
+  assert.deepEqual(plan.dates, ["2026-09-18", "2026-09-19", "2026-09-20"]);
+  assert.ok(!plan.dates.includes("2026-09-21"));
+});
+
+test("delayed Monday noon still pulls when scheduledTime is a few minutes late", () => {
+  const plan = pullPlan(atPacific("2026-09-21", 12, 10));
+  assert.deepEqual(plan.dates, ["2026-09-18", "2026-09-19", "2026-09-20"]);
+  assert.deepEqual(pullPlan(atPacific("2026-09-21", 12, 14)).dates, [
+    "2026-09-18",
+    "2026-09-19",
+    "2026-09-20",
+  ]);
+  assert.deepEqual(pullPlan(atPacific("2026-09-21", 12, 15)).dates, []);
+});
+
+test("other hours including Wednesday noon and Tuesday evening do not pull", () => {
   assert.deepEqual(pullPlan(atPacific("2026-09-16", 9)).dates, []);
   assert.deepEqual(pullPlan(atPacific("2026-09-16", 11)).dates, []);
   assert.deepEqual(pullPlan(atPacific("2026-09-16", 12)).dates, []);
   assert.equal(pullPlan(atPacific("2026-09-16", 12)).reason, "noon_not_monday");
+  assert.equal(pullPlan(atPacific("2026-09-22", 18)).reason, "evening_not_monday");
+  assert.equal(pullPlan(atPacific("2026-09-16", 13)).reason, "not_10_or_noon_or_evening");
 });
 
 test("DST-safe: 10am PDT is 17:00 UTC and 10am PST is 18:00 UTC", () => {
@@ -80,11 +103,15 @@ test("DST-safe: 10am PDT is 17:00 UTC and 10am PST is 18:00 UTC", () => {
   const pstMondayTen = atPacific("2026-11-02", 10);
   assert.equal(pstMondayTen.toISOString(), "2026-11-02T18:00:00.000Z");
   assert.deepEqual(pullPlan(pstMondayTen).dates, []);
+
+  const pstMondayEvening = atPacific("2026-11-02", 18);
+  assert.equal(pstMondayEvening.toISOString(), "2026-11-03T02:00:00.000Z");
+  assert.deepEqual(pullPlan(pstMondayEvening).dates, ["2026-10-30", "2026-10-31", "2026-11-01"]);
 });
 
 test("catch-up dates never include the current Pacific calendar day", () => {
   const today = pacificClock(Date.now()).iso;
-  for (const hour of [10, 12]) {
+  for (const hour of [10, 12, 18]) {
     const plan = pullPlan(atPacific(today, hour));
     assert.ok(!plan.dates.includes(today), `${today} ${hour}:00 leaked today`);
   }

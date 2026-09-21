@@ -52,6 +52,6 @@ export function addCalendarDays(iso: string, delta: number): string {
 }
 
 export function weekdayIndex(weekday: string): number {
-  const idx = WEEKDAYS.indexOf(weekday as (typeof WEEKDAYS)[number]);
-  return idx;
+  const short = weekday.slice(0, 3);
+  return WEEKDAYS.indexOf(short as (typeof WEEKDAYS)[number]);
 }

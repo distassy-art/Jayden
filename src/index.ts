@@ -25,7 +25,7 @@ import {
 } from "./lib/parse.ts";
 import { sampleSeed } from "./lib/seed.ts";
 import { scansForDay, scansForMonth } from "./lib/scans.ts";
-import { pullPlan } from "./lib/s2k-schedule.ts";
+import { pullPlan, isBlankOnlyRetry } from "./lib/s2k-schedule.ts";
 import { runScheduledPull } from "./lib/s2k-pull.ts";
 
 const JSON_HEADERS = {
@@ -77,13 +77,21 @@ export default {
       controller.noRetry();
       return;
     }
-    const run = await runScheduledPull(env, plan);
+    const blankOnly = isBlankOnlyRetry(plan);
     let saved = 0;
-    for (const row of run.results) {
-      if (row.skipped || row.filled === 0) continue;
+    let skippedFilled = 0;
+    const run = await runScheduledPull(env, plan, async (row) => {
+      if (row.skipped || row.filled === 0) return;
+      if (blankOnly) {
+        const existing = await getDay(env.DB, row.station, row.day);
+        if (existing && filledCount(existing.s2k) > 0) {
+          skippedFilled += 1;
+          return;
+        }
+      }
       await saveDayFields(env.DB, row.station, row.day, { s2k: row.s2k });
       saved += 1;
-    }
+    });
     console.log(
       JSON.stringify({
         level: run.ok ? "info" : "error",
@@ -91,6 +99,7 @@ export default {
         cron: controller.cron,
         plan,
         saved,
+        skippedFilled,
         results: run.results.map((row) => ({
           station: row.station,
           day: row.day,
@@ -103,7 +112,9 @@ export default {
         errors: run.errors,
       }),
     );
-    if (!run.ok) throw new Error(run.errors.join(";") || "s2k_pull_failed");
+    // Afternoon cron is the retry. Do not throw — Cloudflare retries would re-POST
+    // days a fill worker may already be writing, and 1pm Pacific is a skip hour.
+    controller.noRetry();
   },
 } satisfies ExportedHandler<Env>;
 

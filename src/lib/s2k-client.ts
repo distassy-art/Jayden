@@ -1,6 +1,7 @@
 import type { Station } from "./calendar.ts";
 
 const S2K_ORIGIN = "https://store.s2kprime.com";
+const S2K_REQUEST_TIMEOUT_MS = 25_000;
 
 export type S2kStationCfg = {
   station: Station;
@@ -166,6 +167,7 @@ export class S2kClient {
       method: "POST",
       headers,
       body: JSON.stringify(body),
+      signal: AbortSignal.timeout(S2K_REQUEST_TIMEOUT_MS),
     });
     this.captureCookies(res);
     const text = await res.text();

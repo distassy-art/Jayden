@@ -29,6 +29,7 @@ export type PullRunResult = {
 export async function runScheduledPull(
   env: { S2K_USERNAME?: string; S2K_PASSWORD?: string },
   plan: PullPlan,
+  onDay?: (row: PullDayResult) => Promise<void>,
 ): Promise<PullRunResult> {
   const errors: string[] = [];
   const results: PullDayResult[] = [];
@@ -69,7 +70,9 @@ export async function runScheduledPull(
     for (const day of plan.dates) {
       try {
         const trans = await client.dailyBook(cfg.siteId, day);
-        results.push(mapStationDay(confirmed, day, trans, names));
+        const row = mapStationDay(confirmed, day, trans, names);
+        results.push(row);
+        if (onDay) await onDay(row);
       } catch (err) {
         errors.push(`${cfg.station}:${day}:${errMessage(err)}`);
       }

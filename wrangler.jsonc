@@ -22,9 +22,12 @@
       "migrations_dir": "migrations"
     }
   ],
-  // UTC hours covering Pacific 10:00 and 12:00 in both PDT and PST.
+  // UTC hours covering Pacific 10:00, 12:00, and Monday 18:00 in both PDT and PST.
   // The scheduled handler checks America/Los_Angeles; it does not assume an offset.
   "triggers": {
-    "crons": ["0 17 * * *", "0 18 * * *", "0 19 * * *", "0 20 * * *"]
+    "crons": ["0 17,18,19,20 * * *", "0 1,2 * * *"]
+  },
+  "limits": {
+    "cpu_ms": 300000
   }
 }
