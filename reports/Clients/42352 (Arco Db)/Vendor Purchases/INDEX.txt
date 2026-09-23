@@ -1,0 +1,6 @@
+Vendor Purchases
+Report: Non-Fuel Invoice Summary by Station/Vendor
+Group By: Vendor | Expand All
+
+Client: 42352 (Arco Db)
+Status: Jan-Sep 2026 PDFs in this folder

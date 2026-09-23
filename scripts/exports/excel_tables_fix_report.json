@@ -1,0 +1,120 @@
+{
+  "42004": {
+    "ok": true,
+    "changes": 0,
+    "sample": [],
+    "sep_days": 21
+  },
+  "42021": {
+    "ok": true,
+    "changes": 1,
+    "sample": [
+      "September 2026!dept day18 filled 5/6"
+    ],
+    "sep_days": 21
+  },
+  "42048": {
+    "ok": true,
+    "changes": 21,
+    "sample": [
+      "Display!F9=6028.96",
+      "Display!F10=1437.8",
+      "Display!F11=2955.87",
+      "Display!F12=13739.92",
+      "Display!F13=394.95",
+      "Display!F14=0",
+      "Display!F15=413.8",
+      "Display!F16=4552.71",
+      "Display!F17=103.54",
+      "Display!F18=-11.45",
+      "Display!F19=4476.81",
+      "Display!F20=427.66",
+      "Display!F21=0",
+      "Display!F22=2177.81",
+      "Display!F23=8218.21",
+      "Display!F24=67.5",
+      "Display!F25=-67.55",
+      "Display!F26=5673.42",
+      "Display!F27=0",
+      "Display!F28=0",
+      "Display!F29=724.04"
+    ],
+    "sep_days": 21
+  },
+  "42098": {
+    "ok": true,
+    "changes": 0,
+    "sample": [],
+    "sep_days": 21
+  },
+  "42179": {
+    "ok": true,
+    "changes": 0,
+    "sample": [],
+    "sep_days": 21
+  },
+  "42279": {
+    "ok": true,
+    "changes": 0,
+    "sample": [],
+    "sep_days": 21
+  },
+  "42280": {
+    "ok": true,
+    "changes": 1,
+    "sample": [
+      "September 2026!dept day14 filled 5/10"
+    ],
+    "sep_days": 21
+  },
+  "42281": {
+    "ok": true,
+    "changes": 1,
+    "sample": [
+      "September 2026!dept day20 filled 8/10"
+    ],
+    "sep_days": 21
+  },
+  "42282": {
+    "ok": true,
+    "changes": 3,
+    "sample": [
+      "September 2026!dept day17 filled 9/10",
+      "September 2026!dept day18 filled 4/10",
+      "September 2026!dept day19 filled 9/10"
+    ],
+    "sep_days": 21
+  },
+  "42352": {
+    "ok": true,
+    "changes": 0,
+    "sample": [],
+    "sep_days": 21
+  },
+  "42399": {
+    "ok": true,
+    "changes": 1,
+    "sample": [
+      "September 2026!dept day21 filled 10/10"
+    ],
+    "sep_days": 21
+  },
+  "42438": {
+    "ok": true,
+    "changes": 0,
+    "sample": [],
+    "sep_days": 21
+  },
+  "42439": {
+    "ok": true,
+    "changes": 0,
+    "sample": [],
+    "sep_days": 21
+  },
+  "42674": {
+    "ok": true,
+    "changes": 0,
+    "sample": [],
+    "sep_days": 21
+  }
+}
