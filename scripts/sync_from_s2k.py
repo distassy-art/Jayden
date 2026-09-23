@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-"""S2K Daily + DLY/DPT PDFs → smartsolutionsai.us books + Daily Excel (Excel is output only).
+"""S2K Daily + DLY/DPT PDFs → fill Daily Excel (and optional publish).
 
-Source of truth is S2K reports (SoftSP/OneDrive stage), not Excel:
+For website open-month MTD, Excel is source of truth — prefer sync_from_excel.py.
+This script fills Excel from S2K reports (SoftSP/OneDrive stage):
   - Daily Book Summary → gas + c-store sales components
   - DLY (None Fuel Invoice Total, expand) → Net Daily Purchases by Inv Date
   - DPT (DailyAPInvoice, by dept) staged alongside DLY for audit (MTD cost)
