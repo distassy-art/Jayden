@@ -1,0 +1,423 @@
+{
+  "42004": {
+    "deduct": [
+      "California Lottery",
+      "Amazon",
+      "Emgiss",
+      "HDZ Land",
+      "K Hasmat",
+      "Lottery",
+      "Lotto",
+      "Prudential",
+      "Lottery California",
+      "Lottery Ca"
+    ],
+    "add": [
+      "Marathon Oil",
+      "Lottery",
+      "Lotto",
+      "California Lottery",
+      "Lottery California",
+      "Lottery Ca"
+    ]
+  },
+  "42021": {
+    "deduct": [
+      "Aldi",
+      "California Lottery",
+      "Cont Supply",
+      "Garden",
+      "Gas Cards",
+      "Gas Expense",
+      "Joseph",
+      "Robert",
+      "Universal",
+      "Lunch",
+      "Lottery",
+      "Lotto",
+      "Lottery California",
+      "Lottery Ca"
+    ],
+    "add": [
+      "Inventory Adj",
+      "Marathon",
+      "Lottery",
+      "Lotto",
+      "California Lottery",
+      "Lottery California",
+      "Lottery Ca"
+    ]
+  },
+  "42048": {
+    "deduct": [
+      "California Lottery",
+      "Chris Haney",
+      "CNS Nozzle",
+      "Fjs Ref",
+      "Francois",
+      "Gas Card",
+      "GAS Expense",
+      "Inventory Eddie",
+      "John Lenore",
+      "Lunch",
+      "Tom Olson",
+      "Optima",
+      "Walmart",
+      "Lottery",
+      "Lotto",
+      "Lottery California",
+      "Lottery Ca"
+    ],
+    "add": [
+      "Lottery",
+      "Lotto",
+      "California Lottery",
+      "Lottery California",
+      "Lottery Ca"
+    ]
+  },
+  "42098": {
+    "deduct": [
+      "Bookkeeper",
+      "california lottery",
+      "Gardner",
+      "Gas Cards",
+      "Gas Expense",
+      "Home Depot",
+      "Lottery California",
+      "Lunch",
+      "Maintenance",
+      "Mcafee",
+      "New Image",
+      "Lottery",
+      "Lotto",
+      "Lottery Ca"
+    ],
+    "add": [
+      "Lottery",
+      "Lotto",
+      "California Lottery",
+      "Lottery California",
+      "Lottery Ca"
+    ]
+  },
+  "42179": {
+    "deduct": [
+      "universal",
+      "smart",
+      "owner gas",
+      "owner",
+      "Maintenance",
+      "Gardner",
+      "Bonus",
+      "Lottery",
+      "Lotto",
+      "California Lottery",
+      "Lottery California",
+      "Lottery Ca"
+    ],
+    "add": [
+      "Marathon",
+      "Lottery",
+      "Lotto",
+      "California Lottery",
+      "Lottery California",
+      "Lottery Ca"
+    ]
+  },
+  "42279": {
+    "deduct": [
+      "uber",
+      "pump test",
+      "lunch",
+      "Yes Air",
+      "inventory done",
+      "Second Chance",
+      "Customer Good Will",
+      "Amy",
+      "Gas Card",
+      "Gas Expense",
+      "NET PURCHASE RULE",
+      "Net Purchases = total positive invoices \u2212 positive amounts for vendors in column A. Negative invoices equal zero; column B vendors are excluded.",
+      "Example",
+      "Daily purchase total",
+      "Deduct-vendor amounts",
+      "Ignored add-vendor amounts",
+      "Net purchases",
+      "Column B vendors do not change net purchases",
+      "Lottery",
+      "Lotto",
+      "California Lottery",
+      "Lottery California",
+      "Lottery Ca"
+    ],
+    "add": [
+      "Ignore / Do Not Add",
+      "marathon",
+      "inventory adj",
+      "Koval",
+      "Amount",
+      "Ignored",
+      "Lottery",
+      "Lotto",
+      "California Lottery",
+      "Lottery California",
+      "Lottery Ca"
+    ]
+  },
+  "42280": {
+    "deduct": [
+      "terminx",
+      "second chance",
+      "pump test",
+      "ideal lub",
+      "I c window",
+      "gas expense",
+      "francois",
+      "customer good",
+      "boss glass",
+      "I . C clearly",
+      "home depot",
+      "gas card",
+      "csecond chance",
+      "Lottery",
+      "Lotto",
+      "California Lottery",
+      "Lottery California",
+      "Lottery Ca"
+    ],
+    "add": [
+      "marathon",
+      "inventory adj",
+      "Lottery",
+      "Lotto",
+      "California Lottery",
+      "Lottery California",
+      "Lottery Ca"
+    ]
+  },
+  "42281": {
+    "deduct": [
+      "wired up",
+      "pump test",
+      "inventory done",
+      "ideal lub",
+      "home depot",
+      "gas expense",
+      "gas card",
+      "customer",
+      "absolute app",
+      "Lottery",
+      "Lotto",
+      "California Lottery",
+      "Lottery California",
+      "Lottery Ca"
+    ],
+    "add": [
+      "marathon",
+      "inventory adj",
+      "Lottery",
+      "Lotto",
+      "California Lottery",
+      "Lottery California",
+      "Lottery Ca"
+    ]
+  },
+  "42282": {
+    "deduct": [
+      "Wired Up",
+      "Window",
+      "Walmart",
+      "Sherwin",
+      "Sectran",
+      "Power Wash",
+      "Lunch",
+      "Lowes",
+      "Inventory Done",
+      "Ideal Lubri",
+      "Home Depot",
+      "Gas Expense",
+      "Gas Card",
+      "Gas Cards",
+      "Customer Good will",
+      "PURCHASE RULES",
+      "Workflow",
+      "Add Back",
+      "Result",
+      "July source",
+      "August source",
+      "Gas Expense; Pump Test",
+      "Employee Cash Advance",
+      "Gas Expense; Window; Power Wash",
+      "Lottery",
+      "Lotto",
+      "California Lottery",
+      "Lottery California",
+      "Lottery Ca"
+    ],
+    "add": [
+      "Marathon",
+      "Inventory Adj",
+      "Subtract all matching vendors listed in column A.",
+      "Marathon and Inventory Adj values are retained for audit only and do not affect net purchases.",
+      "If Total Purchases is negative, Net Purchases = $0; otherwise Net Purchases = Total Purchases - Deduct Vendors.",
+      "07/01\u201307/31 invoice summaries supplied with this workbook update.",
+      "08/01\u201308/31/2026 Non-Fuel Invoice Summary, station #42282; imported 09/04/2026.",
+      "Lottery",
+      "Lotto",
+      "California Lottery",
+      "Lottery California",
+      "Lottery Ca"
+    ]
+  },
+  "42352": {
+    "deduct": [
+      "Bonus",
+      "Cash Advance",
+      "cintas",
+      "Cox Compliance",
+      "Lottery",
+      "Lotto",
+      "Mina",
+      "Mina Gas",
+      "New Image",
+      "Produce",
+      "repair",
+      "Supplies",
+      "Marathon",
+      "California Lottery",
+      "Lottery California",
+      "Lottery Ca"
+    ],
+    "add": [
+      "Lottery",
+      "Lotto",
+      "California Lottery",
+      "Lottery California",
+      "Lottery Ca"
+    ]
+  },
+  "42399": {
+    "deduct": [
+      "Winchell",
+      "Vons",
+      "Vodek",
+      "Universal nozzle",
+      "Robert",
+      "Police",
+      "New Image",
+      "Lunch",
+      "KL AC",
+      "Home Depot",
+      "Fuel All",
+      "Francois",
+      "Customer",
+      "Cesar",
+      "California Lottery",
+      "ALERT ELECTRICAL",
+      "NEW IMAGE PROPERTY",
+      "PUMP TEST",
+      "SOURCE NORTH AMERICA",
+      "VENEGAS DISTRIBUTION INC",
+      "Lottery",
+      "Lotto",
+      "Lottery California",
+      "Lottery Ca"
+    ],
+    "add": [
+      "Marathon",
+      "Inventory Adj",
+      "Lottery",
+      "Lotto",
+      "California Lottery",
+      "Lottery California",
+      "Lottery Ca"
+    ]
+  },
+  "42438": {
+    "deduct": [
+      "Wired Up",
+      "Walmart",
+      "Pump Test",
+      "Pizza Hut",
+      "Lunch",
+      "Ideal Lubri",
+      "I C Clearly",
+      "Home Depot",
+      "Gas Expense",
+      "Gas Card",
+      "Fire Pro",
+      "CVS",
+      "Customer",
+      "Lottery",
+      "Lotto",
+      "California Lottery",
+      "Lottery California",
+      "Lottery Ca"
+    ],
+    "add": [
+      "Marathon",
+      "Inventory Adj",
+      "Lottery",
+      "Lotto",
+      "California Lottery",
+      "Lottery California",
+      "Lottery Ca"
+    ]
+  },
+  "42439": {
+    "deduct": [
+      "Wired Up",
+      "Wages",
+      "Pump",
+      "Lunch",
+      "IC Clearly",
+      "Home Depot",
+      "Fuel Allowance",
+      "Fire Pro",
+      "Customer",
+      "Cash Adv",
+      "Advance",
+      "Lottery",
+      "Lotto",
+      "California Lottery",
+      "Lottery California",
+      "Lottery Ca"
+    ],
+    "add": [
+      "Marathon",
+      "Inventory Adj",
+      "Lottery",
+      "Lotto",
+      "California Lottery",
+      "Lottery California",
+      "Lottery Ca"
+    ]
+  },
+  "42674": {
+    "deduct": [
+      "Brandon",
+      "David Tarango",
+      "Francois",
+      "Home Depot",
+      "KL Air",
+      "Lottery Ca",
+      "Malou",
+      "Smart & Final",
+      "Universal",
+      "Lottery",
+      "Lotto",
+      "California Lottery",
+      "Lottery California"
+    ],
+    "add": [
+      "Inventory",
+      "Marathon",
+      "Lottery",
+      "Lotto",
+      "California Lottery",
+      "Lottery California",
+      "Lottery Ca"
+    ]
+  }
+}

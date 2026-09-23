@@ -8,10 +8,14 @@ Source of truth is S2K reports (SoftSP/OneDrive stage), not Excel:
 
 Day math (non-fuel):
   sales = cstore_total - tax1 - tax4 - scratch - lotto - card
-  purch = sum(DLY Inv Total for that Inv Date / TSO); 0 when DLY seen and no invoices that day
+  purch = sum(DLY Inv Total by Inv Date) EXCLUDING Deduct-sheet vendors
+         (always exclude Lotto/Lottery); blank amount→0; negative→0
   store_profit = sales - purch
   margin = store_profit / sales when sales else None
   total_profit = gas_profit + store_profit
+
+Deduct vendor lists are read from each client's Daily.xlsx Deduct sheet and
+cached in scripts/deduct_vendors_by_store.json.
 
 Do not invent numbers. Empty Daily Book shells (no Station Total) are skipped.
 
@@ -209,8 +213,19 @@ def parse_bd_pdf(path: Path, tso: str) -> dict[str, Any] | None:
 
 
 _DLY_LINE_RE = re.compile(
-    r"TSO #(\d+)\s+#\d+\s+\S+\s+(\d{2}/\d{2}/\d{2})\s+\$?([\-\d,]+\.\d{2})"
+    r"TSO #(\d+)\s+#\d+\s+(\S+)\s+(\d{2}/\d{2}/\d{2})(?:\s+\$?([\-\d,]+\.\d{2}))?"
 )
+_VENDOR_HDR_RE = re.compile(
+    r"^(.+?)\s+\$[\-\d,]+\.\d{2}\s+\$[\-\d,]+\.\d{2}\s+\$[\-\d,]+\.\d{2}"
+)
+_SKIP_LINE_RE = re.compile(
+    r"^(Non-Fuel|Last updated|Station Inv|Grouped by|^\d+ of \d+|^\d+ Station|"
+    r"\d{1,2}/\d{1,2}/\d{4}|TSO_)",
+    re.I,
+)
+_LOTTERY_RE = re.compile(r"\b(lotto|lottery)\b", re.I)
+
+DEDUCT_VENDORS_PATH = Path(__file__).resolve().parent / "deduct_vendors_by_store.json"
 
 
 def inv_date_to_iso(mdy: str) -> str:
@@ -218,41 +233,134 @@ def inv_date_to_iso(mdy: str) -> str:
     return f"20{yy}-{mm}-{dd}"
 
 
-def parse_dly_purchases(path: Path, tso: str | None = None) -> dict[str, float]:
-    """Sum Inv Total by Inv Date for one TSO (or all lines when tso filters).
+def norm_vendor(name: str) -> str:
+    s = re.sub(r"[^a-z0-9]+", " ", str(name).lower())
+    return re.sub(r"\s+", " ", s).strip()
 
-    DLY expand (None Fuel Invoice Total) is the Net Daily Purchases source.
+
+def load_deduct_maps(
+    path: Path = DEDUCT_VENDORS_PATH,
+) -> dict[str, dict[str, list[str]]]:
+    if not path.exists():
+        print(f"warn: no deduct vendor map at {path}", flush=True)
+        return {}
+    return json.loads(path.read_text())
+
+
+def is_lottery_vendor(vendor: str) -> bool:
+    return bool(_LOTTERY_RE.search(vendor or ""))
+
+
+def vendor_is_deduct(vendor: str, deduct_names: list[str]) -> bool:
+    """True if DLY vendor matches a Deduct-sheet name (fuzzy contains)."""
+    if not vendor:
+        return False
+    if is_lottery_vendor(vendor):
+        return True
+    nv = norm_vendor(vendor)
+    if not nv:
+        return False
+    for d in deduct_names:
+        nd = norm_vendor(d)
+        if not nd or len(nd) < 3:
+            continue
+        if nv == nd or nd in nv or nv in nd:
+            return True
+    return False
+
+
+def invoice_amount(raw: str | None) -> float:
+    """Blank/missing → 0; negative → 0 (Excel Valid Amount / treat-as-$0)."""
+    if raw is None or str(raw).strip() == "":
+        return 0.0
+    amt = money(raw)
+    if amt is None:
+        return 0.0
+    if amt < 0:
+        return 0.0
+    return float(amt)
+
+
+def iter_dly_invoices(text: str):
+    """Yield (tso, iso_date, vendor, amount) from DLY expand text."""
+    vendor = ""
+    for line in text.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        if _SKIP_LINE_RE.match(line):
+            continue
+        m = _DLY_LINE_RE.match(line)
+        if m:
+            sid, _inv, dt, amt_s = m.group(1), m.group(2), m.group(3), m.group(4)
+            yield sid, inv_date_to_iso(dt), vendor, invoice_amount(amt_s)
+            continue
+        # Vendor header (keeps across page breaks until next header)
+        if line.startswith("TSO #") or line.startswith("Grand Total"):
+            continue
+        hm = _VENDOR_HDR_RE.match(line)
+        if hm:
+            vendor = hm.group(1).strip()
+            continue
+        # Soft vendor-only header (rare)
+        if not line.startswith("TSO") and "$" not in line and len(line) < 60:
+            # ignore bare page noise
+            pass
+
+
+def parse_dly_purchases(
+    path: Path,
+    tso: str | None = None,
+    deduct_names: list[str] | None = None,
+) -> dict[str, float]:
+    """Net Daily Purchases from DLY: include invoices not on Deduct list.
+
+    - Lotto / Lottery always excluded
+    - Deduct-sheet vendors excluded (per client Excel)
+    - Missing Inv Total → 0; negative Inv Total → 0
     """
     text = pdf_text(path)
+    deduct_names = deduct_names or []
     by_day: dict[str, float] = defaultdict(float)
-    for m in _DLY_LINE_RE.finditer(text):
-        sid, dt, amt_s = m.group(1), m.group(2), m.group(3)
+    skipped = included = 0
+    for sid, iso_d, vendor, amt in iter_dly_invoices(text):
         if tso and sid != tso:
             continue
-        amt = money(amt_s)
-        if amt is None:
+        if vendor_is_deduct(vendor, deduct_names):
+            skipped += 1
             continue
-        by_day[inv_date_to_iso(dt)] += amt
+        by_day[iso_d] += amt
+        included += 1
+    print(
+        f"    invoices include={included} deduct_skip={skipped} "
+        f"vendor_days={len(by_day)}",
+        flush=True,
+    )
     return {k: round(v, 2) for k, v in by_day.items()}
 
 
-def parse_dly_purchases_multi(path: Path) -> dict[str, dict[str, float]]:
-    """BD central DLY → {tso: {iso_date: purch}}."""
+def parse_dly_purchases_multi(
+    path: Path,
+    deduct_by_sid: dict[str, list[str]],
+) -> dict[str, dict[str, float]]:
+    """BD central DLY → {tso: {iso_date: purch}} with per-store Deduct lists."""
     text = pdf_text(path)
     by: dict[str, dict[str, float]] = defaultdict(lambda: defaultdict(float))
-    for m in _DLY_LINE_RE.finditer(text):
-        sid, dt, amt_s = m.group(1), m.group(2), m.group(3)
-        amt = money(amt_s)
-        if amt is None:
+    for sid, iso_d, vendor, amt in iter_dly_invoices(text):
+        deduct = deduct_by_sid.get(sid) or deduct_by_sid.get(str(sid)) or []
+        # Always apply global lottery exclude even if map missing
+        if vendor_is_deduct(vendor, deduct):
             continue
-        by[sid][inv_date_to_iso(dt)] += amt
+        by[sid][iso_d] += amt
     return {sid: {d: round(v, 2) for d, v in days.items()} for sid, days in by.items()}
 
 
 def load_purchases_from_dly_stages(
     stage_dirs: list[Path],
+    deduct_maps: dict[str, dict[str, list[str]]] | None = None,
 ) -> dict[str, dict[str, float]]:
     """Return {station_id: {iso_date: purch}} from staged *dly.pdf files."""
+    deduct_maps = deduct_maps if deduct_maps is not None else load_deduct_maps()
     out: dict[str, dict[str, float]] = {}
     for root in stage_dirs:
         if not root.is_dir():
@@ -264,31 +372,39 @@ def load_purchases_from_dly_stages(
             if not dlys:
                 continue
             latest = dlys[-1]
-            # Single-store folders
             matched_single = None
             for sid, needle in SINGLE_STORE_FOLDERS.items():
                 if needle in d.name:
                     matched_single = sid
                     break
             if matched_single:
-                days = parse_dly_purchases(latest, matched_single)
+                deduct = (deduct_maps.get(matched_single) or {}).get("deduct") or []
+                print(
+                    f"  DLY {matched_single}: {latest.name} deduct_vendors={len(deduct)}",
+                    flush=True,
+                )
+                days = parse_dly_purchases(latest, matched_single, deduct)
                 out[matched_single] = days
                 print(
-                    f"  DLY {matched_single}: {latest.name} days={len(days)} "
+                    f"  DLY {matched_single}: days={len(days)} "
                     f"total={round(sum(days.values()), 2)}",
                     flush=True,
                 )
                 continue
-            # BD central multi
             if "PDF__dly__" in d.name or "/dly/" in d.name.replace("__", "/"):
-                multi = parse_dly_purchases_multi(latest)
+                deduct_by_sid = {
+                    sid: (meta.get("deduct") or [])
+                    for sid, meta in deduct_maps.items()
+                }
+                multi = parse_dly_purchases_multi(latest, deduct_by_sid)
                 for sid, days in multi.items():
                     if sid not in STATIONS or sid in SKIP_IDS:
                         continue
                     out[sid] = days
                     print(
                         f"  DLY {sid}: {latest.name} days={len(days)} "
-                        f"total={round(sum(days.values()), 2)}",
+                        f"total={round(sum(days.values()), 2)} "
+                        f"deduct={len(deduct_by_sid.get(sid) or [])}",
                         flush=True,
                     )
     return out
