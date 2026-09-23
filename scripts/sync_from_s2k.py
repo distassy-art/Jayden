@@ -599,8 +599,20 @@ def template_formulas(ws, day: int) -> dict[str, str]:
     return {}
 
 
+def _is_formula_cell(val) -> bool:
+    if isinstance(val, str) and val.startswith("="):
+        return True
+    # openpyxl ArrayFormula
+    return type(val).__name__ == "ArrayFormula"
+
+
 def fill_standard_sheet(
-    ws, day: int, raw: dict, cols: dict[str, str], purch: float | None = None
+    ws,
+    day: int,
+    raw: dict,
+    cols: dict[str, str],
+    purch: float | None = None,
+    force_purch: bool = False,
 ) -> list[str]:
     r = HDR + day
     changed: list[str] = []
@@ -627,9 +639,13 @@ def fill_standard_sheet(
         changed.append(f"{cell}={val}")
     if purch is not None and "purchases" in cols:
         cell = f"{cols['purchases']}{r}"
-        if ws[cell].value in (None, ""):
+        cur = ws[cell].value
+        if cur in (None, "") or (force_purch and _is_formula_cell(cur)):
             ws[cell] = purch
             changed.append(f"{cell}={purch}")
+        elif force_purch and isinstance(cur, (int, float)) and abs(float(cur) - float(purch)) > 0.02:
+            ws[cell] = purch
+            changed.append(f"{cell}={purch}(overwrite)")
     for col, formula in template_formulas(ws, day).items():
         if ws[f"{col}{r}"].value in (None, ""):
             ws[f"{col}{r}"] = formula
@@ -637,7 +653,13 @@ def fill_standard_sheet(
     return changed
 
 
-def fill_workbook(path: Path, sid: str, through: date, days: list[dict]) -> dict:
+def fill_workbook(
+    path: Path,
+    sid: str,
+    through: date,
+    days: list[dict],
+    force_purch: bool = False,
+) -> dict:
     if openpyxl is None:
         return {"ok": False, "error": "openpyxl missing"}
     sheet = month_sheet_name(through)
@@ -653,8 +675,6 @@ def fill_workbook(path: Path, sid: str, through: date, days: list[dict]) -> dict
         if sid == "42048" and "September Calculations" in wb.sheetnames:
             ws = wb["September Calculations"]
             r = 2 + day
-            if ws[f"B{r}"].value not in (None, ""):
-                continue
             tax_sum = sum(
                 float(raw.get(k) or 0.0)
                 for k in ("tax1", "tax4", "scratch", "lotto", "card")
@@ -673,11 +693,23 @@ def fill_workbook(path: Path, sid: str, through: date, days: list[dict]) -> dict
                 "N": raw.get("lotto", 0.0),
                 "O": raw.get("card", 0.0),
             }
+            # Skip full-row fill when gas already present unless force_purch on F
+            gas_filled = ws[f"B{r}"].value not in (None, "")
             ch = []
             for col, val in mapping.items():
                 if val is None:
                     continue
-                if ws[f"{col}{r}"].value in (None, ""):
+                cur = ws[f"{col}{r}"].value
+                if col == "F" and force_purch and purch is not None:
+                    if cur in (None, "") or _is_formula_cell(cur) or (
+                        isinstance(cur, (int, float)) and abs(float(cur) - float(purch)) > 0.02
+                    ):
+                        ws[f"{col}{r}"] = purch
+                        ch.append(f"F{r}")
+                    continue
+                if gas_filled:
+                    continue
+                if cur in (None, ""):
                     ws[f"{col}{r}"] = val
                     ch.append(f"{col}{r}")
             if ch:
@@ -694,12 +726,24 @@ def fill_workbook(path: Path, sid: str, through: date, days: list[dict]) -> dict
         if ws[f"{gas_col}{HDR + day}"].value not in (None, ""):
             if purch is not None and cols.get("purchases"):
                 pcell = f"{cols['purchases']}{HDR + day}"
-                if ws[pcell].value in (None, ""):
+                cur = ws[pcell].value
+                if cur in (None, "") or (
+                    force_purch
+                    and (
+                        _is_formula_cell(cur)
+                        or (
+                            isinstance(cur, (int, float))
+                            and abs(float(cur) - float(purch)) > 0.02
+                        )
+                    )
+                ):
                     ws[pcell] = purch
                     filled_days.append(day)
                     notes.append(f"day{day}:purch={purch}")
             continue
-        ch = fill_standard_sheet(ws, day, raw, cols, purch=purch)
+        ch = fill_standard_sheet(
+            ws, day, raw, cols, purch=purch, force_purch=force_purch
+        )
         if ch:
             filled_days.append(day)
             notes.append(f"day{day}:{len(ch)}cells")
@@ -801,6 +845,11 @@ def main() -> None:
         help="Directory with {id}_daily.xlsx files",
     )
     ap.add_argument(
+        "--force-purch",
+        action="store_true",
+        help="Overwrite formula/stale Net Daily Purchases (F) with DLY purch",
+    )
+    ap.add_argument(
         "--out-json",
         default="/tmp/s2k/exports/sync_from_s2k_result.json",
     )
@@ -833,7 +882,13 @@ def main() -> None:
             if not xlsx.exists():
                 excel_report.append({"id": sid, "ok": False, "error": f"missing {xlsx}"})
                 continue
-            rep = fill_workbook(xlsx, sid, through, st["_days_with_raw"])
+            rep = fill_workbook(
+                xlsx,
+                sid,
+                through,
+                st["_days_with_raw"],
+                force_purch=args.force_purch,
+            )
             excel_report.append({"id": sid, **rep})
             print(f"  excel {sid}: filled={rep.get('filled_days')}", flush=True)
 
