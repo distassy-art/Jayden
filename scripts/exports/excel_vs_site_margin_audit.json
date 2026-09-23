@@ -1,0 +1,182 @@
+{
+  "through_site": "2026-09-21",
+  "source": "books-excel-0921-day",
+  "scope": "day_2026-09-21",
+  "stores": [
+    {
+      "id": "42004",
+      "name": "Arco Placentia",
+      "excel_margin_pct": -219.56,
+      "site_margin_pct": -219.56,
+      "delta_pp": 0.0,
+      "excel_sales": 3272.66,
+      "excel_purch": 10458.18,
+      "site_sales": 3272.66,
+      "site_purch": 10458.18,
+      "match": true
+    },
+    {
+      "id": "42021",
+      "name": "Westminster",
+      "excel_margin_pct": -190.35,
+      "site_margin_pct": -190.35,
+      "delta_pp": 0.0,
+      "excel_sales": 1809.2,
+      "excel_purch": 5253.08,
+      "site_sales": 1809.2,
+      "site_purch": 5253.08,
+      "match": true
+    },
+    {
+      "id": "42048",
+      "name": "San Diego",
+      "excel_margin_pct": 82.06,
+      "site_margin_pct": 82.06,
+      "delta_pp": 0.0,
+      "excel_sales": 4035.9,
+      "excel_purch": 724.04,
+      "site_sales": 4035.9,
+      "site_purch": 724.04,
+      "match": true
+    },
+    {
+      "id": "42098",
+      "name": "Brookhurst 75",
+      "excel_margin_pct": -296.66,
+      "site_margin_pct": -296.66,
+      "delta_pp": 0.0,
+      "excel_sales": 2522.25,
+      "excel_purch": 10004.78,
+      "site_sales": 2522.25,
+      "site_purch": 10004.78,
+      "match": true
+    },
+    {
+      "id": "42179",
+      "name": "Arco HB",
+      "excel_margin_pct": -51.55,
+      "site_margin_pct": -51.55,
+      "delta_pp": 0.0,
+      "excel_sales": 4612.63,
+      "excel_purch": 6990.67,
+      "site_sales": 4612.63,
+      "site_purch": 6990.67,
+      "match": true
+    },
+    {
+      "id": "42279",
+      "name": "Koval",
+      "excel_margin_pct": -42.38,
+      "site_margin_pct": -42.38,
+      "delta_pp": 0.0,
+      "excel_sales": 3789.37,
+      "excel_purch": 5395.28,
+      "site_sales": 3789.37,
+      "site_purch": 5395.28,
+      "match": true
+    },
+    {
+      "id": "42280",
+      "name": "Spring Mtn",
+      "excel_margin_pct": 63.85,
+      "site_margin_pct": 63.85,
+      "delta_pp": 0.0,
+      "excel_sales": 2913.93,
+      "excel_purch": 1053.25,
+      "site_sales": 2913.93,
+      "site_purch": 1053.25,
+      "match": true
+    },
+    {
+      "id": "42281",
+      "name": "Charleston",
+      "excel_margin_pct": 64.31,
+      "site_margin_pct": 64.31,
+      "delta_pp": 0.0,
+      "excel_sales": 2126.03,
+      "excel_purch": 758.85,
+      "site_sales": 2126.03,
+      "site_purch": 758.85,
+      "match": true
+    },
+    {
+      "id": "42282",
+      "name": "Oakey Las Vegas Blvd",
+      "excel_margin_pct": 100.0,
+      "site_margin_pct": 100.0,
+      "delta_pp": 0.0,
+      "excel_sales": 926.96,
+      "excel_purch": 0.0,
+      "site_sales": 926.96,
+      "site_purch": 0.0,
+      "match": true
+    },
+    {
+      "id": "42352",
+      "name": "Arco Db",
+      "excel_margin_pct": 44.76,
+      "site_margin_pct": 44.76,
+      "delta_pp": 0.0,
+      "excel_sales": 3366.05,
+      "excel_purch": 1859.35,
+      "site_sales": 3366.05,
+      "site_purch": 1859.35,
+      "match": true
+    },
+    {
+      "id": "42399",
+      "name": "Garden Grove",
+      "excel_margin_pct": -153.4,
+      "site_margin_pct": -153.4,
+      "delta_pp": 0.0,
+      "excel_sales": 3620.27,
+      "excel_purch": 9173.82,
+      "site_sales": 3620.27,
+      "site_purch": 9173.82,
+      "match": true
+    },
+    {
+      "id": "42438",
+      "name": "Vista",
+      "excel_margin_pct": 97.12,
+      "site_margin_pct": 97.12,
+      "delta_pp": 0.0,
+      "excel_sales": 2772.59,
+      "excel_purch": 79.85,
+      "site_sales": 2772.59,
+      "site_purch": 79.85,
+      "match": true
+    },
+    {
+      "id": "42439",
+      "name": "Lamb",
+      "excel_margin_pct": -57.44,
+      "site_margin_pct": -57.44,
+      "delta_pp": 0.0,
+      "excel_sales": 2181.24,
+      "excel_purch": 3434.06,
+      "site_sales": 2181.24,
+      "site_purch": 3434.06,
+      "match": true
+    },
+    {
+      "id": "42674",
+      "name": "Tustin",
+      "excel_margin_pct": -75.44,
+      "site_margin_pct": -75.44,
+      "delta_pp": 0.0,
+      "excel_sales": 2842.14,
+      "excel_purch": 4986.21,
+      "site_sales": 2842.14,
+      "site_purch": 4986.21,
+      "match": true
+    }
+  ],
+  "summary": {
+    "day": "2026-09-21",
+    "sales_ok": 14,
+    "purch_ok": 14,
+    "total": 14,
+    "writes": []
+  }
+}
