@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import subprocess
 import sys
 from datetime import date, datetime, timezone
@@ -31,6 +32,14 @@ except ImportError as exc:  # pragma: no cover
     raise SystemExit("openpyxl required: pip install openpyxl") from exc
 
 REPO = Path(__file__).resolve().parents[1]
+DATE_FORMULA_RE = re.compile(
+    r"^=\s*DATE\s*\(\s*(\d{4})\s*,\s*(\d{1,2})\s*,\s*(\d{1,2})\s*\)\s*$",
+    re.IGNORECASE,
+)
+# ='September 2026 Source'!E3  or  ='Sheet Name'!E3
+SHEET_REF_RE = re.compile(
+    r"^=\s*(?:'([^']+)'|([A-Za-z0-9_ ]+))\s*!\s*([A-Za-z]+)(\d+)\s*$"
+)
 
 STORE_FILES = {
     "42004": ("Arco Placentia", "Arco Placentia Daily.xlsx"),
@@ -50,7 +59,7 @@ STORE_FILES = {
 }
 
 
-def find_month_sheet(wb, month: str) -> str | None:
+def _month_name(month: str) -> str:
     year, mo = month.split("-")
     names = {
         "01": "january",
@@ -66,13 +75,43 @@ def find_month_sheet(wb, month: str) -> str | None:
         "11": "november",
         "12": "december",
     }
-    want = names[mo]
+    return names[mo]
+
+
+def find_month_sheet(wb, month: str) -> str | None:
+    year, mo = month.split("-")
+    want = _month_name(month)
     for name in wb.sheetnames:
         low = name.strip().lower()
         if low == f"{want} {year}" or low == want:
             return name
     for name in wb.sheetnames:
         if want in name.lower() and "calc" not in name.lower():
+            return name
+    return None
+
+
+def find_month_calc_sheet(wb, month: str) -> str | None:
+    """San Diego-style books keep the daily table on '{Month} Calculations'."""
+    want = _month_name(month)
+    for name in wb.sheetnames:
+        low = name.strip().lower()
+        if want in low and "calc" in low:
+            return name
+    return None
+
+
+def find_month_source_sheet(wb, month: str) -> str | None:
+    """Some Big Daddy books keep values on '{Month} YYYY Source'."""
+    year, _mo = month.split("-")
+    want = _month_name(month)
+    for name in wb.sheetnames:
+        low = name.strip().lower()
+        if want in low and "source" in low and year in low:
+            return name
+    for name in wb.sheetnames:
+        low = name.strip().lower()
+        if want in low and "source" in low:
             return name
     return None
 
@@ -85,6 +124,12 @@ def parse_date(v):
     if isinstance(v, date):
         return v
     s = str(v).strip()
+    m = DATE_FORMULA_RE.match(s)
+    if m:
+        try:
+            return date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
+        except ValueError:
+            return None
     for fmt in ("%Y-%m-%d", "%m/%d/%Y", "%m/%d/%y"):
         try:
             return datetime.strptime(s[:10], fmt).date()
@@ -103,7 +148,10 @@ def find_daily_header(ws):
             texts[c] = str(v).strip().lower()
         has_date = any(t == "date" for t in texts.values())
         has_sales = any("c-store sales" in t for t in texts.values())
-        has_purch = any("net daily purchases" in t for t in texts.values())
+        has_purch = any(
+            "net daily purchases" in t or t.startswith("net purchases")
+            for t in texts.values()
+        )
         if not (has_date and has_sales and has_purch):
             continue
         m = {}
@@ -116,7 +164,7 @@ def find_daily_header(ws):
                 m["gas_profit"] = c
             elif "c-store sales" in t:
                 m["sales"] = c
-            elif "net daily purchases" in t:
+            elif "net daily purchases" in t or t.startswith("net purchases"):
                 m["purch"] = c
             elif t.startswith("store profit"):
                 m["store_profit"] = c
@@ -124,6 +172,8 @@ def find_daily_header(ws):
                 m["margin"] = c
             elif t.startswith("total profit"):
                 m["total_profit"] = c
+            elif "c-store total" in t:
+                m["cstore_total"] = c
         return r, m
     return None, {}
 
@@ -137,21 +187,88 @@ def num(v):
         return None
 
 
+def _col_letters_to_idx(letters: str) -> int:
+    n = 0
+    for ch in letters.upper():
+        n = n * 26 + (ord(ch) - ord("A") + 1)
+    return n
+
+
+def resolve_numeric(wb, wb_f, sn: str, row: int, col: int, cols: dict | None = None):
+    """data_only value, else cross-sheet ref, else C-Store Total − deductions."""
+    ws = wb[sn]
+    ws_f = wb_f[sn]
+    v = num(ws.cell(row, col).value)
+    if v is not None:
+        return v
+    raw = ws_f.cell(row, col).value
+    if raw is None:
+        return None
+    if not isinstance(raw, str):
+        return num(raw)
+    s = raw.strip()
+    m = SHEET_REF_RE.match(s)
+    if m:
+        ref_sheet = m.group(1) or m.group(2)
+        ref_col = _col_letters_to_idx(m.group(3))
+        ref_row = int(m.group(4))
+        if ref_sheet in wb.sheetnames:
+            return num(wb[ref_sheet].cell(ref_row, ref_col).value)
+        return None
+    # Reconstruct C-Store Sales from Total − tax/lottery/etc. columns.
+    if cols and col == cols.get("sales"):
+        total_col = cols.get("cstore_total") or 10
+        total = num(ws.cell(row, total_col).value)
+        if total is None:
+            return None
+        end = cols.get("total_profit")
+        if end is None or end <= total_col:
+            end = total_col + 6
+        for c in range(total_col + 1, end):
+            part = num(ws.cell(row, c).value)
+            if part is not None:
+                total -= part
+        return total
+    return None
+
+
+def pick_daily_sheet(wb, wb_f, month: str):
+    """Prefer Source (cached values), then Calculations, then open-month sheet."""
+    candidates = []
+    src = find_month_source_sheet(wb, month)
+    if src:
+        candidates.append(src)
+    calc = find_month_calc_sheet(wb, month)
+    if calc:
+        candidates.append(calc)
+    main = find_month_sheet(wb, month)
+    if main:
+        candidates.append(main)
+    for sn in candidates:
+        hr, cols = find_daily_header(wb_f[sn])
+        if hr and cols.get("date") and cols.get("sales"):
+            return sn, hr, cols
+    return main, None, {}
+
+
 def extract_station(path: Path, sid: str, name: str, fname: str, month: str) -> dict:
     wb = openpyxl.load_workbook(path, data_only=True)
-    sn = find_month_sheet(wb, month)
+    wb_f = openpyxl.load_workbook(path, data_only=False)
+    sn, hr, cols = pick_daily_sheet(wb, wb_f, month)
     if not sn:
         raise SystemExit(f"{sid} {name}: no sheet for {month} in {path}")
-    ws = wb[sn]
-    hr, cols = find_daily_header(ws)
     if not hr or not cols.get("date") or not cols.get("sales"):
         raise SystemExit(f"{sid} {name}: daily header not found on {sn}")
+    ws = wb[sn]
+    ws_f = wb_f[sn]
     year_i, mo_i = map(int, month.split("-"))
     days = []
     seen = set()
     blank_streak = 0
     for r in range(hr + 1, hr + 1 + 31):
         dt = parse_date(ws.cell(r, cols["date"]).value)
+        if dt is None:
+            dt = parse_date(ws_f.cell(r, cols["date"]).value)
         if not dt or dt.year != year_i or dt.month != mo_i:
             blank_streak += 1
             if blank_streak >= 3 and days:
@@ -160,10 +277,38 @@ def extract_station(path: Path, sid: str, name: str, fname: str, month: str) -> 
         iso = dt.isoformat()
         if iso in seen:
             continue
-        sales = num(ws.cell(r, cols["sales"]).value)
-        purch = num(ws.cell(r, cols["purch"]).value) if cols.get("purch") else None
-        gas_vol = num(ws.cell(r, cols["gas_vol"]).value) if cols.get("gas_vol") else None
-        gas_profit = num(ws.cell(r, cols["gas_profit"]).value) if cols.get("gas_profit") else None
+        sales = resolve_numeric(wb, wb_f, sn, r, cols["sales"], cols)
+        purch = (
+            resolve_numeric(wb, wb_f, sn, r, cols["purch"], cols)
+            if cols.get("purch")
+            else None
+        )
+        # Prefer main-sheet purch when Source purch is blank/0 but main has activity fills.
+        if (purch is None or purch == 0) and sn != find_month_sheet(wb, month):
+            main = find_month_sheet(wb, month)
+            if main and main != sn:
+                mhr, mcols = find_daily_header(wb_f[main])
+                if mhr and mcols.get("purch"):
+                    # Align by date on main sheet.
+                    for mr in range(mhr + 1, mhr + 1 + 31):
+                        mdt = parse_date(wb[main].cell(mr, mcols["date"]).value) or parse_date(
+                            wb_f[main].cell(mr, mcols["date"]).value
+                        )
+                        if mdt and mdt.isoformat() == iso:
+                            mp = resolve_numeric(wb, wb_f, main, mr, mcols["purch"], mcols)
+                            if mp is not None:
+                                purch = mp
+                            break
+        gas_vol = (
+            resolve_numeric(wb, wb_f, sn, r, cols["gas_vol"], cols)
+            if cols.get("gas_vol")
+            else None
+        )
+        gas_profit = (
+            resolve_numeric(wb, wb_f, sn, r, cols["gas_profit"], cols)
+            if cols.get("gas_profit")
+            else None
+        )
         if sales is None:
             blank_streak += 1
             if blank_streak >= 3 and days:
@@ -175,23 +320,25 @@ def extract_station(path: Path, sid: str, name: str, fname: str, month: str) -> 
         if sales == 0 and purch == 0 and not (gas_vol and gas_vol != 0):
             continue
         store_profit = (
-            num(ws.cell(r, cols["store_profit"]).value)
+            resolve_numeric(wb, wb_f, sn, r, cols["store_profit"], cols)
             if cols.get("store_profit")
-            else (sales - purch)
+            else None
         )
+        if store_profit is None:
+            store_profit = sales - purch
         margin = (
-            num(ws.cell(r, cols["margin"]).value)
+            resolve_numeric(wb, wb_f, sn, r, cols["margin"], cols)
             if cols.get("margin")
-            else ((sales - purch) / sales if sales else None)
+            else None
         )
         if margin is not None and abs(margin) > 1.5:
             margin = margin / 100.0
         if margin is None and sales:
             margin = (sales - purch) / sales
-        if store_profit is None:
-            store_profit = sales - purch
         total_profit = (
-            num(ws.cell(r, cols["total_profit"]).value) if cols.get("total_profit") else None
+            resolve_numeric(wb, wb_f, sn, r, cols["total_profit"], cols)
+            if cols.get("total_profit")
+            else None
         )
         days.append(
             {
