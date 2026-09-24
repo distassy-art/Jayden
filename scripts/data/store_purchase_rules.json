@@ -1,0 +1,428 @@
+{
+  "rule": {
+    "summary": "Net Purchases = positive SoftSP invoice amounts for non-excluded vendors; negatives \u2192 $0; Deduct-list excluded; empty day \u2192 null.",
+    "negative_invoices": "zero",
+    "empty_day": "null"
+  },
+  "stores": {
+    "Arco Db Daily.xlsx": {
+      "store_id": "Arco Db Daily.xlsx",
+      "source_file": "Arco Db Daily.xlsx",
+      "exclude_vendors": [
+        "Bonus",
+        "Cash Advance",
+        "cintas",
+        "Cox Compliance",
+        "Lottery",
+        "Lotto",
+        "Mina",
+        "Mina Gas",
+        "New Image",
+        "Produce",
+        "repair",
+        "Supplies",
+        "Marathon"
+      ],
+      "add_back_vendors": [],
+      "ignore_vendors": [],
+      "col_b_mode": "none",
+      "negative_invoices": "zero",
+      "empty_day": "null",
+      "notes": []
+    },
+    "Arco HB Daily.xlsx": {
+      "store_id": "Arco HB Daily.xlsx",
+      "source_file": "Arco HB Daily.xlsx",
+      "exclude_vendors": [
+        "universal",
+        "smart",
+        "owner gas",
+        "owner",
+        "Maintenance",
+        "Gardner",
+        "Bonus"
+      ],
+      "add_back_vendors": [
+        "Marathon"
+      ],
+      "ignore_vendors": [],
+      "col_b_mode": "add",
+      "negative_invoices": "zero",
+      "empty_day": "null",
+      "notes": []
+    },
+    "Arco Placentia Daily.xlsx": {
+      "store_id": "Arco Placentia Daily.xlsx",
+      "source_file": "Arco Placentia Daily.xlsx",
+      "exclude_vendors": [
+        "California Lottery",
+        "Amazon",
+        "Emgiss",
+        "HDZ Land",
+        "K Hasmat",
+        "Lottery",
+        "Lotto",
+        "Prudential"
+      ],
+      "add_back_vendors": [
+        "Marathon Oil"
+      ],
+      "ignore_vendors": [],
+      "col_b_mode": "add",
+      "negative_invoices": "zero",
+      "empty_day": "null",
+      "notes": []
+    },
+    "Brookhurst 75 Daily.xlsx": {
+      "store_id": "Brookhurst 75 Daily.xlsx",
+      "source_file": "Brookhurst 75 Daily.xlsx",
+      "exclude_vendors": [
+        "Bookkeeper",
+        "california lottery",
+        "Gardner",
+        "Gas Cards",
+        "Gas Expense",
+        "Home Depot",
+        "Lottery California",
+        "Lunch",
+        "Maintenance",
+        "Mcafee",
+        "New Image",
+        "Lotto"
+      ],
+      "add_back_vendors": [],
+      "ignore_vendors": [],
+      "col_b_mode": "ignore",
+      "negative_invoices": "zero",
+      "empty_day": "null",
+      "notes": [
+        "negative_rule: Treat as $0"
+      ]
+    },
+    "Charleston Daily.xlsx": {
+      "store_id": "Charleston Daily.xlsx",
+      "source_file": "Charleston Daily.xlsx",
+      "exclude_vendors": [
+        "wired up",
+        "pump test",
+        "inventory done",
+        "ideal lub",
+        "home depot",
+        "gas expense",
+        "gas card",
+        "customer",
+        "absolute app"
+      ],
+      "add_back_vendors": [
+        "marathon",
+        "inventory adj"
+      ],
+      "ignore_vendors": [],
+      "col_b_mode": "add",
+      "negative_invoices": "zero",
+      "empty_day": "null",
+      "notes": []
+    },
+    "ExtraMile Daily.xlsx": {
+      "store_id": "ExtraMile Daily.xlsx",
+      "source_file": "ExtraMile Daily.xlsx",
+      "exclude_vendors": [
+        "Bonus",
+        "Cash Advance",
+        "cintas",
+        "Cox Compliance",
+        "Lottery",
+        "Lotto",
+        "Mina",
+        "Mina Gas",
+        "New Image",
+        "Produce",
+        "repair",
+        "Supplies"
+      ],
+      "add_back_vendors": [],
+      "ignore_vendors": [],
+      "col_b_mode": "none",
+      "negative_invoices": "zero",
+      "empty_day": "null",
+      "notes": []
+    },
+    "Garden Grove Daily.xlsx": {
+      "store_id": "Garden Grove Daily.xlsx",
+      "source_file": "Garden Grove Daily.xlsx",
+      "exclude_vendors": [
+        "Winchell",
+        "Vons",
+        "Vodek",
+        "Universal nozzle",
+        "Robert",
+        "Police",
+        "New Image",
+        "Lunch",
+        "KL AC",
+        "Home Depot",
+        "Fuel All",
+        "Francois",
+        "Customer",
+        "Cesar",
+        "California Lottery",
+        "ALERT ELECTRICAL",
+        "NEW IMAGE PROPERTY",
+        "PUMP TEST",
+        "SOURCE NORTH AMERICA",
+        "VENEGAS DISTRIBUTION INC",
+        "Lotto",
+        "Lottery California"
+      ],
+      "add_back_vendors": [
+        "Marathon",
+        "Inventory Adj"
+      ],
+      "ignore_vendors": [],
+      "col_b_mode": "add",
+      "negative_invoices": "zero",
+      "empty_day": "null",
+      "notes": []
+    },
+    "Koval Daily.xlsx": {
+      "store_id": "Koval Daily.xlsx",
+      "source_file": "Koval Daily.xlsx",
+      "exclude_vendors": [
+        "uber",
+        "pump test",
+        "lunch",
+        "Yes Air",
+        "inventory done",
+        "Second Chance",
+        "Customer Good Will",
+        "Amy",
+        "Gas Card",
+        "Gas Expense"
+      ],
+      "add_back_vendors": [],
+      "ignore_vendors": [
+        "marathon",
+        "inventory adj",
+        "Koval"
+      ],
+      "col_b_mode": "ignore",
+      "negative_invoices": "zero",
+      "empty_day": "null",
+      "notes": [
+        "NET PURCHASE RULE",
+        "Net Purchases = total positive invoices \u2212 positive amounts for vendors in column A. Negative invoices equal zero; column B vendors are excluded.",
+        "Net purchases",
+        "Column B vendors do not change net purchases"
+      ]
+    },
+    "Lamb Daily.xlsx": {
+      "store_id": "Lamb Daily.xlsx",
+      "source_file": "Lamb Daily.xlsx",
+      "exclude_vendors": [
+        "Wired Up",
+        "Wages",
+        "Pump",
+        "Lunch",
+        "IC Clearly",
+        "Home Depot",
+        "Fuel Allowance",
+        "Fire Pro",
+        "Customer",
+        "Cash Adv",
+        "Advance",
+        "TOTAL"
+      ],
+      "add_back_vendors": [
+        "Marathon",
+        "Inventory Adj"
+      ],
+      "ignore_vendors": [],
+      "col_b_mode": "add",
+      "negative_invoices": "zero",
+      "empty_day": "null",
+      "notes": []
+    },
+    "Oakey Las Vegas Blvd Daily.xlsx": {
+      "store_id": "Oakey Las Vegas Blvd Daily.xlsx",
+      "source_file": "Oakey Las Vegas Blvd Daily.xlsx",
+      "exclude_vendors": [
+        "Wired Up",
+        "Window",
+        "Walmart",
+        "Sherwin",
+        "Sectran",
+        "Power Wash",
+        "Lunch",
+        "Lowes",
+        "Inventory Done",
+        "Ideal Lubri",
+        "Home Depot",
+        "Gas Expense",
+        "Gas Card",
+        "Gas Cards",
+        "Customer Good will",
+        "Gas Expense; Pump Test",
+        "Employee Cash Advance",
+        "Gas Expense; Window; Power Wash"
+      ],
+      "add_back_vendors": [
+        "Marathon",
+        "Inventory Adj"
+      ],
+      "ignore_vendors": [],
+      "col_b_mode": "add",
+      "negative_invoices": "zero",
+      "empty_day": "null",
+      "notes": []
+    },
+    "Paradise Daily.xlsx": {
+      "store_id": "Paradise Daily.xlsx",
+      "source_file": "Paradise Daily.xlsx",
+      "exclude_vendors": [],
+      "add_back_vendors": [
+        "Inventory Adj"
+      ],
+      "ignore_vendors": [],
+      "col_b_mode": "add",
+      "negative_invoices": "zero",
+      "empty_day": "null",
+      "notes": []
+    },
+    "San Diego Daily.xlsx": {
+      "store_id": "San Diego Daily.xlsx",
+      "source_file": "San Diego Daily.xlsx",
+      "exclude_vendors": [
+        "California Lottery",
+        "Chris Haney",
+        "CNS Nozzle",
+        "Fjs Ref",
+        "Francois",
+        "Gas Card",
+        "GAS Expense",
+        "Inventory Eddie",
+        "John Lenore",
+        "Lunch",
+        "Tom Olson",
+        "Optima",
+        "Walmart",
+        "Lotto",
+        "Lottery California"
+      ],
+      "add_back_vendors": [],
+      "ignore_vendors": [],
+      "col_b_mode": "none",
+      "negative_invoices": "zero",
+      "empty_day": "null",
+      "notes": []
+    },
+    "Spring Mtn Daily.xlsx": {
+      "store_id": "Spring Mtn Daily.xlsx",
+      "source_file": "Spring Mtn Daily.xlsx",
+      "exclude_vendors": [
+        "terminx",
+        "second chance",
+        "pump test",
+        "ideal lub",
+        "I c window",
+        "gas expense",
+        "francois",
+        "customer good",
+        "boss glass",
+        "I . C clearly",
+        "home depot",
+        "gas card",
+        "csecond chance"
+      ],
+      "add_back_vendors": [
+        "marathon",
+        "inventory adj"
+      ],
+      "ignore_vendors": [],
+      "col_b_mode": "add",
+      "negative_invoices": "zero",
+      "empty_day": "null",
+      "notes": []
+    },
+    "Tustin Daily.xlsx": {
+      "store_id": "Tustin Daily.xlsx",
+      "source_file": "Tustin Daily.xlsx",
+      "exclude_vendors": [
+        "Brandon",
+        "David Tarango",
+        "Francois",
+        "Home Depot",
+        "KL Air",
+        "Lottery Ca",
+        "Malou",
+        "Smart & Final",
+        "Universal",
+        "Lotto",
+        "California Lottery"
+      ],
+      "add_back_vendors": [
+        "Inventory",
+        "Marathon"
+      ],
+      "ignore_vendors": [],
+      "col_b_mode": "add",
+      "negative_invoices": "zero",
+      "empty_day": "null",
+      "notes": []
+    },
+    "Vista Daily.xlsx": {
+      "store_id": "Vista Daily.xlsx",
+      "source_file": "Vista Daily.xlsx",
+      "exclude_vendors": [
+        "Wired Up",
+        "Walmart",
+        "Pump Test",
+        "Pizza Hut",
+        "Lunch",
+        "Ideal Lubri",
+        "I C Clearly",
+        "Home Depot",
+        "Gas Expense",
+        "Gas Card",
+        "Fire Pro",
+        "CVS",
+        "Customer"
+      ],
+      "add_back_vendors": [
+        "Marathon",
+        "Inventory Adj"
+      ],
+      "ignore_vendors": [],
+      "col_b_mode": "add",
+      "negative_invoices": "zero",
+      "empty_day": "null",
+      "notes": []
+    },
+    "Westminster Daily.xlsx": {
+      "store_id": "Westminster Daily.xlsx",
+      "source_file": "Westminster Daily.xlsx",
+      "exclude_vendors": [
+        "Aldi",
+        "California Lottery",
+        "Cont Supply",
+        "Garden",
+        "Gas Cards",
+        "Gas Expense",
+        "Joseph",
+        "Robert",
+        "Universal",
+        "Lunch",
+        "Lotto",
+        "Lottery California"
+      ],
+      "add_back_vendors": [
+        "Inventory Adj",
+        "Marathon"
+      ],
+      "ignore_vendors": [],
+      "col_b_mode": "add",
+      "negative_invoices": "zero",
+      "empty_day": "null",
+      "notes": []
+    }
+  }
+}
