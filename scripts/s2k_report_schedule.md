@@ -1,5 +1,7 @@
 # S2K report pull schedule
 
+**Which reports & why:** see `scripts/s2k_reports_game_plan.md`.
+
 All times are **America/Los_Angeles** (Pacific). Cron for cloud timers uses UTC (PDT = UTC−7, PST = UTC−8).
 
 | Job | What | Pacific | Cron (PDT / UTC−7) |
