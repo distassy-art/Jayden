@@ -6,7 +6,36 @@
 
 **SoT chain:** SoftSP PDFs → fill Daily Excel → `sync_from_excel.py` → Cloudflare books overlay → website MTD.
 
-Related: `scripts/s2k_report_schedule.md` (timers), `scripts/fill_daily_dly_dpt.py` (pull params).
+Related: `scripts/s2k_report_schedule.md` (timers), `scripts/fill_daily_dly_dpt.py` / `scripts/pull_s2k_reports.py` (pull CLI).
+
+---
+
+## How we implement (code)
+
+| Step | Where |
+|------|-------|
+| SoftSP login + PDF pull | `scripts/fill_daily_dly_dpt.py` → class `S2K` (`store.s2kprime.com/report?rpt=…`) |
+| Report registry (kind → rpt / dates / folder) | `REPORTS` dict in same file |
+| OneDrive upload / recycle | class `SharePoint` (FedAuth cookies `/tmp/od_cookies.json`) |
+| CLI | `python3 scripts/pull_s2k_reports.py --show\|--list\|--kinds …\|--phase N` |
+| Excel fill (Phase 0 only) | separate agent jobs reading Daily / DLY PDFs into `* Daily.xlsx` |
+| Website | `sync_from_excel.py` → Cloudflare books overlay (Excel SoT) |
+
+**Show destinations (no pull):**
+
+```bash
+python3 scripts/pull_s2k_reports.py --show --phase 0
+python3 scripts/pull_s2k_reports.py --show --kinds bos,recon --only 42352
+python3 scripts/pull_s2k_reports.py --list
+```
+
+**Pull for real:**
+
+```bash
+python3 scripts/pull_s2k_reports.py --mode daily          # Phase 0 daily
+python3 scripts/pull_s2k_reports.py --kinds dly,dpt       # Phase 0 DLY+DPT
+python3 scripts/pull_s2k_reports.py --phase 1 --only 42352  # validate pack, Arco Db
+```
 
 ---
 
