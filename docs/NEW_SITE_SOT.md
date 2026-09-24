@@ -17,6 +17,16 @@
 ## Rejected / OLD (do not put on `/`)
 1. "Better profit by controlling the buy" (navy/cyan marketing-old)
 2. site-v2 SPA boot ("An AI store manager for fuel and convenience sites", `#0b2545`, `id="app"`)
+3. App-zip “Controlling your store got easier with AI” (navy/cyan; OneDrive Aug 23 zips)
+
+## OneDrive — archives only (do not restore as live home)
+Ice-blue `#1e6bff` / `ss-home-restore` / `fb-carousel` home is **not** stored on OneDrive.
+These OneDrive paths are **old** and must not be redeployed as `/`:
+- `Documents/website/smartsolutionsai-2026-09-*.tar.gz` → Better profit index
+- `Documents/Smart Solutions — archived websites/smartsolutions-site-OLD-CLOUDFLARE-archive-20260924.tar.gz` → same Better profit snapshot
+- `Documents/Smart Solutions Ai App/Smart-Solutions-AI-app*.zip` → older “Controlling your store…” login home
+
+Canonical source for the new home: **live** `https://smartsolutionsai.us/` (+ local mirror below).
 
 ## Local mirror
 - Live snapshot: `/tmp/ss-new-live/`
