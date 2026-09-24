@@ -58,6 +58,7 @@
     "Arco Placentia Daily.xlsx": {
       "store_id": "Arco Placentia Daily.xlsx",
       "source_file": "Arco Placentia Daily.xlsx",
+      "client_id": "42004",
       "exclude_vendors": [
         "California Lottery",
         "Amazon",
@@ -66,7 +67,10 @@
         "K Hasmat",
         "Lottery",
         "Lotto",
-        "Prudential"
+        "Prudential",
+        "Sectran",
+        "Store Supplies",
+        "Universal"
       ],
       "add_back_vendors": [
         "Marathon Oil"
@@ -75,7 +79,9 @@
       "col_b_mode": "add",
       "negative_invoices": "zero",
       "empty_day": "null",
-      "notes": []
+      "notes": [
+        "2026-09-24 review: also deduct Sectran, Store Supplies, Universal. 09/08 Excel F $9,759.42 is wrong — leave blank (no SoftSP). MTD through 09/23 = $58,547.56"
+      ]
     },
     "Brookhurst 75 Daily.xlsx": {
       "store_id": "Brookhurst 75 Daily.xlsx",
