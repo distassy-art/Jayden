@@ -483,13 +483,24 @@ def rebuild_and_deploy_daily_open(month: str) -> None:
             str(dest),
         ]
     )
-    # Mirror into ss-site checkouts when present
-    for mirror in (
+    # Stamp so wrangler always treats the asset as changed (avoids silent skip
+    # when a prior deploy already uploaded an identical through-date payload,
+    # then a later deploy of an older cf-dist rolled the site back).
+    if dest.exists():
+        doc = json.loads(dest.read_text())
+        doc["built_at"] = datetime.now(timezone.utc).isoformat()
+        dest.write_text(json.dumps(doc, indent=2) + "\n")
+    # Mirror into every local checkout that might be wrangler-deployed later
+    mirrors = (
         Path("/tmp/ss-site/data/daily_september.json"),
         Path("/tmp/ss-site/cf-dist/data/daily_september.json"),
-    ):
+        Path("/tmp/ss-unified-proto/assets/data/daily_september.json"),
+        Path("/tmp/ss-unified-restore/assets/data/daily_september.json"),
+    )
+    for mirror in mirrors:
         if mirror.parent.exists() and dest.exists():
             shutil.copy2(dest, mirror)
+            print(f"mirrored → {mirror}", flush=True)
     if not (SS_API_DIR / "wrangler.jsonc").exists() and not (
         SS_API_DIR / "wrangler.toml"
     ).exists():
