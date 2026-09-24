@@ -1,0 +1,4 @@
+{
+  "name": "Jayden S2K report tooling",
+  "install": "bash .cursor/install.sh"
+}

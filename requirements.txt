@@ -1,0 +1,5 @@
+# Python dependencies for the Jayden S2K report tooling (scripts/).
+# Pinned to versions validated in the Cloud Agent environment.
+pdfplumber==0.11.10
+openpyxl==3.1.5
+requests==2.34.2

@@ -1,0 +1,10 @@
+# Python virtual environment
+.venv/
+__pycache__/
+*.pyc
+
+# Local runtime/export scratch used by the SoftSP pull scripts
+/tmp/s2k/
+
+# Editor / OS cruft
+.DS_Store
