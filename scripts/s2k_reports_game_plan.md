@@ -1,0 +1,125 @@
+# S2K SoftSP reports — game plan
+
+**Goal:** Know which of SoftSP’s ~262 reports we actually pull, why, and in what order — so Excel stays SoT for the site and we don’t invent numbers.
+
+**Login:** SoftSP `store.s2kprime.com` (gmail / hotmail / Placentia groups — see `fill_daily_dly_dpt.py`).
+
+**SoT chain:** SoftSP PDFs → fill Daily Excel → `sync_from_excel.py` → Cloudflare books overlay → website MTD.
+
+Related: `scripts/s2k_report_schedule.md` (timers), `scripts/fill_daily_dly_dpt.py` (pull params).
+
+---
+
+## Phase 0 — Always on (already automated)
+
+These three feed Excel and the weekly books sync. Do not skip.
+
+| # | SoftSP report | `rpt=` id | Why we need it | Cadence | Output |
+|---|---------------|-----------|----------------|---------|--------|
+| 1 | **Daily Book Summary** | `DailyTotal+Summary` (+ `ShowCost=1`) | Day-behind sales, gas vol/profit, c-store total, tax/lottery pieces that become Excel **C-Store Sales** and related daily cells. | Every day **2:00 PM PT** | Accumulate `MMDDYYYY.pdf` per store / BD PDF daily folder |
+| 2 | **Non-Fuel Invoice Summary by Station/Vendor** | `None Fuel Invoice Total` (`None+Fuel+Invoice+Total`) | MTD non-fuel AP → Excel **Net Daily Purchases**. | Wed **8:00 AM**, Sun **4:00 AM** | Latest `*dly.pdf` only (delete older in month) |
+| 3 | **Non-Fuel Invoices by Vendor/Dept** | `DailyAPInvoice` | Collapsed vendor/dept purchase rollup; audit Deduct + DLY; Financial Audit leave-2 Sundays. | Wed **8:00 AM**, Sun **4:00 AM** | Latest `*dpt.pdf` only (delete older in month) |
+
+**After pulls:** Mon/Wed/Fri/Sun fill Daily Excel from Daily (+ DLY purch when available) → publish site via Excel sync.
+
+**Rule:** blank SoftSP / blank Excel day = skip (no invented numbers). Day-behind: as of calendar day D, Excel through D−1 when SoftSP has Station Total.
+
+---
+
+## Phase 1 — Validation layer (favorites + quick checks)
+
+Use when Daily Book / Excel look wrong, SoftSP NonFuel was edited, or margin swings.
+
+| SoftSP report | `rpt=` id | Why | When |
+|---------------|-----------|-----|------|
+| **Daily BOS Sales and Receipts** | `DailyBosSales` | Already favorited. POS/BOS sales+receipts vs Daily Book sales. | Any day Excel ≠ SoftSP feel |
+| **Daily Report** | `DailyReconciliation` | Already favorited. Cash/shift recon day view. | Cash O/S or shift disputes |
+| **Daily Report-Fuel** | `DailyTotal+Summary-Fuel` | Fuel-only companion to Daily Book. | Fuel gallons/profit mismatch |
+| **Daily Sales Summary By Department** | `Daily+Sales+Summary+By+Department` | Dept sales for Top10 / dept Excel tables. | Filling or auditing dept rows |
+| **Non-Fuel Invoice Full Detail** | `NonFuelInvoiceFull` | Line-level invoices when SoftSP NonFuel ADD/EDIT / scan match needs proof. | Arco Db (and peers) NonFuel billing sessions |
+
+---
+
+## Phase 2 — Fuel ops (separate from non-fuel DLY)
+
+Non-fuel DLY does **not** cover gas BOLs. Pull these when fuel Excel columns or tank O/S matter.
+
+| SoftSP report | `rpt=` id | Why | When |
+|---------------|-----------|-----|------|
+| **Fuel Sales by Grade (w/ Profit/Margin)** | `Fuel+Sales+By+Grade` | Grade-level gallons, $ and margin for fuel KPIs. | Weekly fuel review / site fuel cards |
+| **Fuel Purchase Invoices** | `FuelRecDetail` | Fuel vendor invoices / deliveries. | Fuel purch audit (not NonFuel SoftSP) |
+| **Fuel Inventory Daily** | `Monthly+Fuel+Inventory+Detail` | Tank book vs stick / O/S. | Inventory Sundays or large O/S |
+| **Fuel Profit Analysis** | `Fuel+Profit+Analysis+Report` | Station fuel P&L snap. | Month-end or owner ask |
+
+---
+
+## Phase 3 — Owner / month-end pack
+
+| SoftSP report | `rpt=` id | Why | When |
+|---------------|-----------|-----|------|
+| **Key Performance Indicator** | `KeyPerformIndicator` | Compact station KPI pack. | Month-end / owner brief |
+| **Station Period Summary** | `Station+Period+Summary+Report` | Period rollup vs Excel MTD. | Month close |
+| **Sales Tax Summary** | `Sales+Tax+Summary+Report` | Tax filings / audit. | Month-end tax |
+| **Tax Report on C-Store Sales** | `CStore+Sales+(Tax)` | C-store tax cross-check. | Tax variance |
+| **AP Aging** | `apaging` | Vendor payables aging. | Pay-run / month-end |
+| **Vendor Account Status** | `vendoraccountstatus` | Vendor balance status. | Vendor disputes |
+
+---
+
+## Phase 4 — Merch / SKU (optional, on demand)
+
+Only when Mina asks for merch deep-dives — not part of daily Excel→site.
+
+- **SKU Sales Detail By Station/Department** (`SKU+Detail`)
+- **SKU Sales Margin by Department** (`Department+Margin+Report`)
+- **Best Selling SKU by Station** (`Top+SKU+Detail+By+Station`)
+- **Purchase Vs Sales** (`Purchase+Vs+Sales+Report`)
+- **Bought But Never Sold** / **Slow Movement SKU** — shrink & ordering
+
+---
+
+## Explicitly out of scope (for now)
+
+| Category | Why skip |
+|----------|----------|
+| **BP Report** group duplicates | Same data as core reports; BP-branded labels only |
+| **Wholesale / BOL / Jobber** (group 9) | Only if we run wholesale fuel hauling ops |
+| **Site Inspection** | Not financial Excel inputs |
+| Deep **SKU price list / pack size** tooling | Pricebook project, not Daily Excel |
+| Most **EFT credit-batch** detail | Unless card settlement disputes |
+
+---
+
+## Weekly operating rhythm
+
+```
+Sun 04:00  DLY + DPT pull → OD
+Sun        Financial Audit leave-2 (when scheduled) using DPT/Excel
+Mon/Wed/Fri/Sun  Fill Daily Excel from Daily (+ DLY purch)
+Wed 08:00  DLY + DPT pull → OD
+Daily 14:00  Daily Book Summary → OD (accumulate)
+Wed/Sun 10:00  Excel → site books sync (--min-month current)
+As needed  Phase 1–3 reports for variances / fuel / month-end
+```
+
+---
+
+## Decision rule (what to pull)
+
+1. **Need website MTD / Excel daily rows?** → Phase 0 only.  
+2. **Sales or purch look wrong?** → Phase 1 (BOS + Daily Report + Full Detail).  
+3. **Fuel gallons / tank / fuel $?** → Phase 2 (not DLY).  
+4. **Owner / tax / AP question?** → Phase 3.  
+5. **SKU / merch?** → Phase 4 on request only.
+
+---
+
+## SoftSP favorites (account)
+
+Pinned today: `DailyReconciliation`, `DailyBosSales`, `DailyTotal+Summary` — aligns with Phase 0 #1 + Phase 1.
+
+---
+
+## Catalog note
+
+Full SoftSP catalog (~262 reports, 17 groups) was extracted from SoftSP `reportList` (2026-09-24). This game plan is the **subset we commit to using**, not the full menu.
