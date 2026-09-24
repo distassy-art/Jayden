@@ -363,7 +363,7 @@ def extract_station(path: Path, sid: str, name: str, fname: str, month: str) -> 
     }
 
 
-def resolve_path(xlsx_dir: Path, sid: str, fname: str) -> Path:
+def resolve_path(xlsx_dir: Path, sid: str, fname: str) -> Path | None:
     candidates = [
         xlsx_dir / f"{sid}_daily.xlsx",
         xlsx_dir / fname,
@@ -372,7 +372,7 @@ def resolve_path(xlsx_dir: Path, sid: str, fname: str) -> Path:
     for c in candidates:
         if c.exists():
             return c
-    raise SystemExit(f"missing Excel for {sid}: tried {[str(c) for c in candidates]}")
+    return None
 
 
 def summarize(stations: list[dict]) -> None:
@@ -402,6 +402,13 @@ def main() -> None:
     stations = []
     for sid, (name, fname) in STORE_FILES.items():
         path = resolve_path(xlsx_dir, sid, fname)
+        if path is None:
+            print(
+                f"missing Excel for {sid} {name} "
+                f"(tried {[str(xlsx_dir / f) for f in (f'{sid}_daily.xlsx', fname)]}); "
+                "keeping existing overlay days"
+            )
+            continue
         st = extract_station(path, sid, name, fname, args.month)
         if not st["days"]:
             print(f"skip empty {sid} {name} (keep existing overlay days)")
