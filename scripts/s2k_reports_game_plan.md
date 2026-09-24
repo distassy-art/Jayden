@@ -49,11 +49,23 @@ These three feed Excel and the weekly books sync. Do not skip.
 | 2 | **Non-Fuel Invoice Summary by Station/Vendor** | `None Fuel Invoice Total` (`None+Fuel+Invoice+Total`) | MTD non-fuel AP → Excel **Net Daily Purchases**. | Wed **8:00 AM**, Sun **4:00 AM** | Latest `*dly.pdf` only (delete older in month) |
 | 3 | **Non-Fuel Invoices by Vendor/Dept** | `DailyAPInvoice` | Collapsed vendor/dept purchase rollup; audit Deduct + DLY; Financial Audit leave-2 Sundays. | Wed **8:00 AM**, Sun **4:00 AM** | Latest `*dpt.pdf` only (delete older in month) |
 
-**After pulls:** Mon/Wed/Fri/Sun fill Daily Excel from Daily (+ DLY purch when available) → publish site via Excel sync.
+**After pulls:** Always pull **DLY + DPT** together. Then fill Daily Excel from Daily Book sales + **DLY invoices × Excel Deduct rules** → Net Daily Purchases (column F). DPT is kept for dept/vendor audit (and Financial Audit leave-2); F is always overwritten from DLY+Deduct (empty countable day → blank, never leftover formula). Then `sync_from_excel.py --publish`.
+
+```bash
+python3 scripts/pull_s2k_reports.py --kinds dly,dpt
+python3 scripts/fill_daily_excel_from_softsp.py \
+  --xlsx-dir /path/to/Daily.xlsx \
+  --pdf-dir /path/to/daily_pdfs \
+  --dly-dir /tmp/s2k/exports/dly_dpt_run \
+  --days 2026-09-22,2026-09-23 \
+  --out-dir /tmp/books_fill \
+  --refresh-rules --purchases-all-dly-days
+python3 scripts/sync_from_excel.py --xlsx-dir /tmp/books_fill --month 2026-09 --publish
+```
 
 ### Net Daily Purchases rule (Excel ``Deduct`` sheet)
 
-We do **not** dump SoftSP vendor totals into Excel. Per store:
+We do **not** dump SoftSP vendor totals into Excel. Purchases come from SoftSP **DLY** (dated invoice expand) + **DPT** pulled for audit, applying each store's Deduct sheet:
 
 | SoftSP invoice | Treatment |
 |----------------|-----------|
@@ -62,7 +74,7 @@ We do **not** dump SoftSP vendor totals into Excel. Per store:
 | Vendor on col B "Ignore" | **Ignored** (same as excluded) |
 | Vendor on col B "Add" (Marathon / Inventory Adj, …) | **Add back** positive amount |
 | All other positive invoices | **Include** |
-| No countable invoices that day | **null** — leave Net Daily Purchases blank (not 0) |
+| No countable invoices that day | **null** — blank Net Daily Purchases (not 0; clear any old formula) |
 
 Canonical text (Koval Deduct): *Net Purchases = total positive invoices − positive amounts for vendors in column A. Negative invoices equal zero; column B vendors are excluded.*
 
@@ -71,9 +83,9 @@ python3 scripts/store_purchase_rules.py --from-excel /path/to/Daily.xlsx/folder 
 python3 scripts/store_purchase_rules.py --show --store 42352 --demo
 ```
 
-Snapshot: `scripts/data/store_purchase_rules.json`. Apply via `StorePurchaseRule.apply` / `apply_invoices()` when filling Net Daily Purchases from DLY.
+Snapshot: `scripts/data/store_purchase_rules.json`. Apply via `apply_invoices()` in `fill_daily_excel_from_softsp.py` — **purchases always refresh** after every SoftSP DLY/DPT pull.
 
-**Rule:** blank SoftSP / blank Excel day = skip (no invented numbers). Day-behind: as of calendar day D, Excel through D−1 when SoftSP has Station Total.
+**Rule:** blank SoftSP / blank Excel day = skip sales (no invented numbers). Purchases still clear/overwrite from Deduct nets. Day-behind: as of calendar day D, Excel through D−1 when SoftSP has Station Total.
 
 ---
 
@@ -146,7 +158,7 @@ Only when Mina asks for merch deep-dives — not part of daily Excel→site.
 ```
 Sun 04:00  DLY + DPT pull → OD
 Sun        Financial Audit leave-2 (when scheduled) using DPT/Excel
-Mon/Wed/Fri/Sun  Fill Daily Excel from Daily (+ DLY purch)
+Mon/Wed/Fri/Sun  Fill Daily Excel (sales + DLY×Deduct purch always) → OD → publish
 Wed 08:00  DLY + DPT pull → OD
 Daily 14:00  Daily Book Summary → OD (accumulate)
 Wed/Sun 10:00  Excel → site books sync (--min-month current)
