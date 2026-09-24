@@ -14,6 +14,7 @@ Phases 1–4 (on demand / month-end) — see REPORTS registry + game plan:
 
 Schedule: scripts/s2k_report_schedule.md
 Game plan: scripts/s2k_reports_game_plan.md
+Purchase rule: scripts/store_purchase_rules.py (Excel Deduct → Net Daily Purchases)
 
 Requires:
   - S2K logins from /tmp/s2k/creds/Client-logins.xlsx sheet ``s2k``

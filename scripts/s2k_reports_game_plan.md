@@ -51,6 +51,28 @@ These three feed Excel and the weekly books sync. Do not skip.
 
 **After pulls:** Mon/Wed/Fri/Sun fill Daily Excel from Daily (+ DLY purch when available) → publish site via Excel sync.
 
+### Net Daily Purchases rule (Excel ``Deduct`` sheet)
+
+We do **not** dump SoftSP vendor totals into Excel. Per store:
+
+| SoftSP invoice | Treatment |
+|----------------|-----------|
+| Vendor on Deduct col A | **Excluded** — not a purchase |
+| Negative amount | **$0** — never reduces the day |
+| Vendor on col B "Ignore" | **Ignored** (same as excluded) |
+| Vendor on col B "Add" (Marathon / Inventory Adj, …) | **Add back** positive amount |
+| All other positive invoices | **Include** |
+| No countable invoices that day | **null** — leave Net Daily Purchases blank (not 0) |
+
+Canonical text (Koval Deduct): *Net Purchases = total positive invoices − positive amounts for vendors in column A. Negative invoices equal zero; column B vendors are excluded.*
+
+```bash
+python3 scripts/store_purchase_rules.py --from-excel /path/to/Daily.xlsx/folder --write
+python3 scripts/store_purchase_rules.py --show --store 42352 --demo
+```
+
+Snapshot: `scripts/data/store_purchase_rules.json`. Apply via `StorePurchaseRule.apply` / `apply_invoices()` when filling Net Daily Purchases from DLY.
+
 **Rule:** blank SoftSP / blank Excel day = skip (no invented numbers). Day-behind: as of calendar day D, Excel through D−1 when SoftSP has Station Total.
 
 ---
