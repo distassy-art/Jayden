@@ -61,6 +61,7 @@ python3 scripts/fill_daily_excel_from_softsp.py \
   --out-dir /tmp/books_fill \
   --refresh-rules --purchases-all-dly-days
 python3 scripts/sync_from_excel.py --xlsx-dir /tmp/books_fill --month 2026-09 --publish
+# publishes books overlay AND rebuilds/deploys /data/daily_september.json (MTD through)
 ```
 
 ### Net Daily Purchases rule (Excel ``Deduct`` sheet)

@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
-"""Publish open-month daily rows from Daily Excel → Cloudflare books overlay.
+"""Publish open-month daily rows from Daily Excel → Cloudflare books overlay
+**and** rebuild ``/data/daily_september.json`` (admin MTD "through" date).
 
 Excel Daily.xlsx September sheets are the source of truth for website MTD
-(store sales / purch / margin). After publish, open-month MTD is served from
-the books overlay via Cloudflare Workers:
+(store sales / purch / margin). After publish:
 
-  - ss-api:           GET /api/daily-open  (and /data/daily_september.json)
-  - ss-unified-proto: proxies /data/daily_september.json → /api/daily-open
+  1. POST stations → Netlify books overlay (KV)
+  2. Rebuild ``daily_september.json`` from that overlay
+  3. Deploy ss-api assets so ``/data/daily_september.json`` matches
+
+Skipping step 2–3 leaves the UI stuck on an older ``through`` date even when
+the books overlay already has newer days.
 
 Usage:
   python3 scripts/sync_from_excel.py \\
@@ -20,7 +24,9 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
+import shutil
 import subprocess
 import sys
 from datetime import date, datetime, timezone
@@ -40,6 +46,11 @@ DATE_FORMULA_RE = re.compile(
 SHEET_REF_RE = re.compile(
     r"^=\s*(?:'([^']+)'|([A-Za-z0-9_ ]+))\s*!\s*([A-Za-z]+)(\d+)\s*$"
 )
+
+# ss-api checkout used to deploy /data/daily_september.json (override with env)
+SS_API_DIR = Path(
+    os.environ.get("SS_API_DEPLOY_DIR", "/tmp/ss-api-deploy")
+).expanduser()
 
 STORE_FILES = {
     "42004": ("Arco Placentia", "Arco Placentia Daily.xlsx"),
@@ -439,9 +450,55 @@ def main() -> None:
     cmd = ["node", str(REPO / "scripts/publish-books.mjs"), "--file", str(out)]
     print(" ".join(cmd), flush=True)
     subprocess.check_call(cmd)
+    print("Published to Cloudflare books overlay.", flush=True)
+
+    # Overlay alone is not enough — rebuild + deploy daily_september.json
+    # so /new MTD "through" matches Excel (otherwise UI stays on old date).
+    rebuild_and_deploy_daily_open(args.month)
+
+
+def rebuild_and_deploy_daily_open(month: str) -> None:
+    """Rebuild /data/daily_september.json from live overlay and wrangler-deploy ss-api."""
+    rebuild = REPO / "scripts" / "rebuild_daily_open_month.py"
+    if not rebuild.exists():
+        print(f"WARN missing {rebuild}; skip daily_september rebuild", flush=True)
+        return
+    dest = SS_API_DIR / "cf-dist" / "data" / "daily_september.json"
+    if not (SS_API_DIR / "wrangler.jsonc").exists() and not (
+        SS_API_DIR / "wrangler.toml"
+    ).exists():
+        print(
+            f"WARN ss-api deploy dir missing ({SS_API_DIR}); "
+            "wrote rebuild only to /tmp — set SS_API_DEPLOY_DIR",
+            flush=True,
+        )
+        dest = Path(f"/tmp/daily_september_{month}.json")
+    subprocess.check_call(
+        [
+            sys.executable,
+            str(rebuild),
+            "--month",
+            month,
+            "--out",
+            str(dest),
+        ]
+    )
+    # Mirror into ss-site checkouts when present
+    for mirror in (
+        Path("/tmp/ss-site/data/daily_september.json"),
+        Path("/tmp/ss-site/cf-dist/data/daily_september.json"),
+    ):
+        if mirror.parent.exists() and dest.exists():
+            shutil.copy2(dest, mirror)
+    if not (SS_API_DIR / "wrangler.jsonc").exists() and not (
+        SS_API_DIR / "wrangler.toml"
+    ).exists():
+        return
+    print(f"npx wrangler deploy (cwd={SS_API_DIR})", flush=True)
+    subprocess.check_call(["npx", "wrangler", "deploy"], cwd=str(SS_API_DIR))
     print(
-        "Published to Cloudflare books overlay. "
-        "MTD is live via /api/daily-open (ss-api) and proxied on ss-unified-proto.",
+        f"Deployed ss-api /data/daily_september.json for {month}. "
+        "MTD through-date is live on /data/daily_september.json.",
         flush=True,
     )
 
