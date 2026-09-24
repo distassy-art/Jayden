@@ -1,0 +1,3227 @@
+{
+  "month": "2026-09",
+  "through": "2026-09-23",
+  "rule": "Same for all clients: SoftSP DLY dated invoices \u00d7 Excel Deduct (exclude A, negatives\u21920, add-back B). Empty countable day \u2192 blank F.",
+  "note": "Placentia 09/08 cleared (nothing). Review nets below; say add/deduct per day or per client.",
+  "clients": [
+    {
+      "id": "42352",
+      "name": "Arco Db",
+      "exclude": [
+        "Bonus",
+        "Cash Advance",
+        "cintas",
+        "Cox Compliance",
+        "Lottery",
+        "Lotto",
+        "Mina",
+        "Mina Gas",
+        "New Image",
+        "Produce",
+        "repair",
+        "Supplies",
+        "Marathon"
+      ],
+      "add_back": [],
+      "ignore": [],
+      "invoice_count": 92,
+      "sum": 78484.75,
+      "days": [
+        {
+          "date": "2026-09-01",
+          "net": 8646.35,
+          "excel_F": 8646.35
+        },
+        {
+          "date": "2026-09-02",
+          "net": 9477.49,
+          "excel_F": 9477.49
+        },
+        {
+          "date": "2026-09-03",
+          "net": 4258.99,
+          "excel_F": 4258.99
+        },
+        {
+          "date": "2026-09-04",
+          "net": 14150.78,
+          "excel_F": 14150.78
+        },
+        {
+          "date": "2026-09-05",
+          "net": 1226.2,
+          "excel_F": 1226.2
+        },
+        {
+          "date": "2026-09-06",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-07",
+          "net": 835.49,
+          "excel_F": 835.49
+        },
+        {
+          "date": "2026-09-08",
+          "net": 6886.99,
+          "excel_F": 6886.99
+        },
+        {
+          "date": "2026-09-09",
+          "net": 3169.3,
+          "excel_F": 3169.3
+        },
+        {
+          "date": "2026-09-10",
+          "net": 208.45,
+          "excel_F": 208.45
+        },
+        {
+          "date": "2026-09-11",
+          "net": 4348.27,
+          "excel_F": 4348.27
+        },
+        {
+          "date": "2026-09-12",
+          "net": 1179.58,
+          "excel_F": 1179.58
+        },
+        {
+          "date": "2026-09-13",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-14",
+          "net": 953.16,
+          "excel_F": 953.16
+        },
+        {
+          "date": "2026-09-15",
+          "net": 4626.49,
+          "excel_F": 4626.49
+        },
+        {
+          "date": "2026-09-16",
+          "net": 2847.13,
+          "excel_F": 2847.13
+        },
+        {
+          "date": "2026-09-17",
+          "net": 361.11,
+          "excel_F": 361.11
+        },
+        {
+          "date": "2026-09-18",
+          "net": 5698.47,
+          "excel_F": 5698.47
+        },
+        {
+          "date": "2026-09-19",
+          "net": 888.85,
+          "excel_F": 888.85
+        },
+        {
+          "date": "2026-09-20",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-21",
+          "net": 1859.35,
+          "excel_F": 1859.35
+        },
+        {
+          "date": "2026-09-22",
+          "net": 4259.91,
+          "excel_F": 4259.91
+        },
+        {
+          "date": "2026-09-23",
+          "net": 2602.39,
+          "excel_F": 2602.39
+        }
+      ]
+    },
+    {
+      "id": "42179",
+      "name": "Arco HB",
+      "exclude": [
+        "universal",
+        "smart",
+        "owner gas",
+        "owner",
+        "Maintenance",
+        "Gardner",
+        "Bonus"
+      ],
+      "add_back": [
+        "Marathon"
+      ],
+      "ignore": [],
+      "invoice_count": 101,
+      "sum": 77249.93,
+      "days": [
+        {
+          "date": "2026-09-01",
+          "net": 432.56,
+          "excel_F": 432.56,
+          "lines": [
+            {
+              "vendor": "BON APETIT",
+              "amount": 382.2,
+              "kind": "include",
+              "toward_net": 382.2
+            },
+            {
+              "vendor": "BROTHERS DISTRIBUTION",
+              "amount": 50.36,
+              "kind": "include",
+              "toward_net": 50.36
+            },
+            {
+              "vendor": "OWNERS GAS",
+              "amount": 137.47,
+              "kind": "exclude",
+              "toward_net": 0.0
+            }
+          ]
+        },
+        {
+          "date": "2026-09-02",
+          "net": 3208.87,
+          "excel_F": 3208.87,
+          "lines": [
+            {
+              "vendor": "COCA COLA",
+              "amount": 2071.12,
+              "kind": "include",
+              "toward_net": 2071.12
+            },
+            {
+              "vendor": "OWNERS GAS",
+              "amount": 103.23,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "RED BULL",
+              "amount": 1058.76,
+              "kind": "include",
+              "toward_net": 1058.76
+            },
+            {
+              "vendor": "SUIVILLIAN",
+              "amount": 78.99,
+              "kind": "include",
+              "toward_net": 78.99
+            }
+          ]
+        },
+        {
+          "date": "2026-09-03",
+          "net": 5713.71,
+          "excel_F": 5713.71,
+          "lines": [
+            {
+              "vendor": "CMARK",
+              "amount": 5000.71,
+              "kind": "include",
+              "toward_net": 5000.71
+            },
+            {
+              "vendor": "CMARK",
+              "amount": 697.74,
+              "kind": "include",
+              "toward_net": 697.74
+            },
+            {
+              "vendor": "CMARK",
+              "amount": 15.26,
+              "kind": "include",
+              "toward_net": 15.26
+            },
+            {
+              "vendor": "MARATHON",
+              "amount": -1447.46,
+              "kind": "add_back",
+              "toward_net": 0.0
+            }
+          ]
+        },
+        {
+          "date": "2026-09-04",
+          "net": 3485.56,
+          "excel_F": 3485.56,
+          "lines": [
+            {
+              "vendor": "CMARK",
+              "amount": -21.98,
+              "kind": "include",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "FRITO LAY",
+              "amount": 464.18,
+              "kind": "include",
+              "toward_net": 464.18
+            },
+            {
+              "vendor": "HARBOR DIST",
+              "amount": 361.13,
+              "kind": "include",
+              "toward_net": 361.13
+            },
+            {
+              "vendor": "HARBOR DIST",
+              "amount": 2660.25,
+              "kind": "include",
+              "toward_net": 2660.25
+            },
+            {
+              "vendor": "OWNERS GAS",
+              "amount": 52.27,
+              "kind": "exclude",
+              "toward_net": 0.0
+            }
+          ]
+        },
+        {
+          "date": "2026-09-05",
+          "net": null,
+          "excel_F": null,
+          "lines": []
+        },
+        {
+          "date": "2026-09-06",
+          "net": null,
+          "excel_F": null,
+          "lines": [
+            {
+              "vendor": "OWNER",
+              "amount": 300.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "OWNERS GAS",
+              "amount": 145.17,
+              "kind": "exclude",
+              "toward_net": 0.0
+            }
+          ]
+        },
+        {
+          "date": "2026-09-07",
+          "net": 5286.2,
+          "excel_F": 5286.2,
+          "lines": [
+            {
+              "vendor": "CMARK",
+              "amount": 4571.99,
+              "kind": "include",
+              "toward_net": 4571.99
+            },
+            {
+              "vendor": "CMARK",
+              "amount": 246.67,
+              "kind": "include",
+              "toward_net": 246.67
+            },
+            {
+              "vendor": "CMARK",
+              "amount": 15.26,
+              "kind": "include",
+              "toward_net": 15.26
+            },
+            {
+              "vendor": "FRITO LAY",
+              "amount": 452.28,
+              "kind": "include",
+              "toward_net": 452.28
+            },
+            {
+              "vendor": "SMART FINAL",
+              "amount": 52.81,
+              "kind": "exclude",
+              "toward_net": 0.0
+            }
+          ]
+        },
+        {
+          "date": "2026-09-08",
+          "net": 751.69,
+          "excel_F": 751.69,
+          "lines": [
+            {
+              "vendor": "BIMBO",
+              "amount": 227.24,
+              "kind": "include",
+              "toward_net": 227.24
+            },
+            {
+              "vendor": "BON APETIT",
+              "amount": 484.44,
+              "kind": "include",
+              "toward_net": 484.44
+            },
+            {
+              "vendor": "BROTHERS DISTRIBUTION",
+              "amount": 40.01,
+              "kind": "include",
+              "toward_net": 40.01
+            },
+            {
+              "vendor": "OWNERS GAS",
+              "amount": 93.3,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "OWNERS GAS",
+              "amount": 50.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            }
+          ]
+        },
+        {
+          "date": "2026-09-09",
+          "net": 18756.84,
+          "excel_F": 18756.84,
+          "lines": [
+            {
+              "vendor": "DOWNEY",
+              "amount": 283.46,
+              "kind": "include",
+              "toward_net": 283.46
+            },
+            {
+              "vendor": "DOWNEY",
+              "amount": 1379.86,
+              "kind": "include",
+              "toward_net": 1379.86
+            },
+            {
+              "vendor": "HARBOR DIST",
+              "amount": 1699.45,
+              "kind": "include",
+              "toward_net": 1699.45
+            },
+            {
+              "vendor": "HARBOR DIST",
+              "amount": 244.04,
+              "kind": "include",
+              "toward_net": 244.04
+            },
+            {
+              "vendor": "JANITOR SUPPLIES",
+              "amount": 521.51,
+              "kind": "include",
+              "toward_net": 521.51
+            },
+            {
+              "vendor": "MAINTENANCE",
+              "amount": 65.87,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "MARATHON",
+              "amount": 12705.0,
+              "kind": "add_back",
+              "toward_net": 12705.0
+            },
+            {
+              "vendor": "OWNERS GAS",
+              "amount": 43.16,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "RED BULL",
+              "amount": 994.71,
+              "kind": "include",
+              "toward_net": 994.71
+            },
+            {
+              "vendor": "STRUAB DIST",
+              "amount": 928.81,
+              "kind": "include",
+              "toward_net": 928.81
+            },
+            {
+              "vendor": "UNIVERSAL NOZZLE",
+              "amount": 919.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            }
+          ]
+        },
+        {
+          "date": "2026-09-10",
+          "net": 5318.12,
+          "excel_F": 5318.12,
+          "lines": [
+            {
+              "vendor": "7 UP",
+              "amount": 1492.78,
+              "kind": "include",
+              "toward_net": 1492.78
+            },
+            {
+              "vendor": "CMARK",
+              "amount": 15.26,
+              "kind": "include",
+              "toward_net": 15.26
+            },
+            {
+              "vendor": "CMARK",
+              "amount": 109.52,
+              "kind": "include",
+              "toward_net": 109.52
+            },
+            {
+              "vendor": "CMARK",
+              "amount": 979.3,
+              "kind": "include",
+              "toward_net": 979.3
+            },
+            {
+              "vendor": "CMARK",
+              "amount": 2703.36,
+              "kind": "include",
+              "toward_net": 2703.36
+            },
+            {
+              "vendor": "CMARK",
+              "amount": 17.9,
+              "kind": "include",
+              "toward_net": 17.9
+            }
+          ]
+        },
+        {
+          "date": "2026-09-11",
+          "net": 3541.83,
+          "excel_F": 3541.83,
+          "lines": [
+            {
+              "vendor": "DENNYS APPLIANCE",
+              "amount": 250.0,
+              "kind": "include",
+              "toward_net": 250.0
+            },
+            {
+              "vendor": "FERRELLGAS",
+              "amount": 890.18,
+              "kind": "include",
+              "toward_net": 890.18
+            },
+            {
+              "vendor": "FRITO LAY",
+              "amount": 334.38,
+              "kind": "include",
+              "toward_net": 334.38
+            },
+            {
+              "vendor": "OWNERS GAS",
+              "amount": 92.61,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "OWNERS GAS",
+              "amount": 51.28,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "PEPSI",
+              "amount": 2067.27,
+              "kind": "include",
+              "toward_net": 2067.27
+            },
+            {
+              "vendor": "STRUAB DIST",
+              "amount": -74.21,
+              "kind": "include",
+              "toward_net": 0.0
+            }
+          ]
+        },
+        {
+          "date": "2026-09-12",
+          "net": null,
+          "excel_F": null,
+          "lines": [
+            {
+              "vendor": "OWNERS GAS",
+              "amount": 129.46,
+              "kind": "exclude",
+              "toward_net": 0.0
+            }
+          ]
+        },
+        {
+          "date": "2026-09-13",
+          "net": null,
+          "excel_F": null,
+          "lines": [
+            {
+              "vendor": "OWNERS GAS",
+              "amount": 122.04,
+              "kind": "exclude",
+              "toward_net": 0.0
+            }
+          ]
+        },
+        {
+          "date": "2026-09-14",
+          "net": 6397.27,
+          "excel_F": 6397.27,
+          "lines": [
+            {
+              "vendor": "BIMBO",
+              "amount": 88.94,
+              "kind": "include",
+              "toward_net": 88.94
+            },
+            {
+              "vendor": "BON APETIT",
+              "amount": 344.0,
+              "kind": "include",
+              "toward_net": 344.0
+            },
+            {
+              "vendor": "CMARK",
+              "amount": 4806.29,
+              "kind": "include",
+              "toward_net": 4806.29
+            },
+            {
+              "vendor": "CMARK",
+              "amount": 390.81,
+              "kind": "include",
+              "toward_net": 390.81
+            },
+            {
+              "vendor": "CMARK",
+              "amount": 280.8,
+              "kind": "include",
+              "toward_net": 280.8
+            },
+            {
+              "vendor": "CMARK",
+              "amount": 15.26,
+              "kind": "include",
+              "toward_net": 15.26
+            },
+            {
+              "vendor": "FRITO LAY",
+              "amount": 471.17,
+              "kind": "include",
+              "toward_net": 471.17
+            },
+            {
+              "vendor": "MAINTENANCE",
+              "amount": 972.74,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "OWNERS GAS",
+              "amount": 51.3,
+              "kind": "exclude",
+              "toward_net": 0.0
+            }
+          ]
+        },
+        {
+          "date": "2026-09-15",
+          "net": 38.86,
+          "excel_F": 38.86,
+          "lines": [
+            {
+              "vendor": "BROTHERS DISTRIBUTION",
+              "amount": 38.86,
+              "kind": "include",
+              "toward_net": 38.86
+            },
+            {
+              "vendor": "CMARK",
+              "amount": -9.23,
+              "kind": "include",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "MAINTENANCE",
+              "amount": 95.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "MARATHON",
+              "amount": -263.99,
+              "kind": "add_back",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "SMART FINAL",
+              "amount": 57.98,
+              "kind": "exclude",
+              "toward_net": 0.0
+            }
+          ]
+        },
+        {
+          "date": "2026-09-16",
+          "net": 3083.97,
+          "excel_F": 3083.97,
+          "lines": [
+            {
+              "vendor": "COCA COLA",
+              "amount": 1699.9,
+              "kind": "include",
+              "toward_net": 1699.9
+            },
+            {
+              "vendor": "RED BULL",
+              "amount": 1234.56,
+              "kind": "include",
+              "toward_net": 1234.56
+            },
+            {
+              "vendor": "SUIVILLIAN",
+              "amount": 149.51,
+              "kind": "include",
+              "toward_net": 149.51
+            }
+          ]
+        },
+        {
+          "date": "2026-09-17",
+          "net": 8585.65,
+          "excel_F": 8585.65,
+          "lines": [
+            {
+              "vendor": "CMARK",
+              "amount": 4354.17,
+              "kind": "include",
+              "toward_net": 4354.17
+            },
+            {
+              "vendor": "CMARK",
+              "amount": 190.63,
+              "kind": "include",
+              "toward_net": 190.63
+            },
+            {
+              "vendor": "CMARK",
+              "amount": 46.97,
+              "kind": "include",
+              "toward_net": 46.97
+            },
+            {
+              "vendor": "CMARK",
+              "amount": 15.26,
+              "kind": "include",
+              "toward_net": 15.26
+            },
+            {
+              "vendor": "ELITE CELL",
+              "amount": 252.0,
+              "kind": "include",
+              "toward_net": 252.0
+            },
+            {
+              "vendor": "HARBOR DIST",
+              "amount": 2845.55,
+              "kind": "include",
+              "toward_net": 2845.55
+            },
+            {
+              "vendor": "HARBOR DIST",
+              "amount": 881.07,
+              "kind": "include",
+              "toward_net": 881.07
+            },
+            {
+              "vendor": "OWNERS GAS",
+              "amount": 81.51,
+              "kind": "exclude",
+              "toward_net": 0.0
+            }
+          ]
+        },
+        {
+          "date": "2026-09-18",
+          "net": 2920.72,
+          "excel_F": 2920.72,
+          "lines": [
+            {
+              "vendor": "FRITO LAY",
+              "amount": 323.12,
+              "kind": "include",
+              "toward_net": 323.12
+            },
+            {
+              "vendor": "MAINTENANCE",
+              "amount": 4000.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "OWNER",
+              "amount": 300.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "OWNERS GAS",
+              "amount": 55.15,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "PEPSI",
+              "amount": 2597.6,
+              "kind": "include",
+              "toward_net": 2597.6
+            }
+          ]
+        },
+        {
+          "date": "2026-09-19",
+          "net": 173.54,
+          "excel_F": 173.54,
+          "lines": [
+            {
+              "vendor": "FERRELLGAS",
+              "amount": 173.54,
+              "kind": "include",
+              "toward_net": 173.54
+            },
+            {
+              "vendor": "OWNERS GAS",
+              "amount": 126.11,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "OWNERS GAS",
+              "amount": 93.39,
+              "kind": "exclude",
+              "toward_net": 0.0
+            }
+          ]
+        },
+        {
+          "date": "2026-09-20",
+          "net": null,
+          "excel_F": null,
+          "lines": []
+        },
+        {
+          "date": "2026-09-21",
+          "net": 6990.67,
+          "excel_F": 6990.67,
+          "lines": [
+            {
+              "vendor": "BIMBO",
+              "amount": 194.23,
+              "kind": "include",
+              "toward_net": 194.23
+            },
+            {
+              "vendor": "BON APETIT",
+              "amount": 620.56,
+              "kind": "include",
+              "toward_net": 620.56
+            },
+            {
+              "vendor": "CMARK",
+              "amount": 1087.2,
+              "kind": "include",
+              "toward_net": 1087.2
+            },
+            {
+              "vendor": "CMARK",
+              "amount": 4153.54,
+              "kind": "include",
+              "toward_net": 4153.54
+            },
+            {
+              "vendor": "CMARK",
+              "amount": 15.26,
+              "kind": "include",
+              "toward_net": 15.26
+            },
+            {
+              "vendor": "FRITO LAY",
+              "amount": 513.31,
+              "kind": "include",
+              "toward_net": 513.31
+            },
+            {
+              "vendor": "MAINTENANCE",
+              "amount": 500.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "MAINTENANCE",
+              "amount": 1000.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "STONE BREWING",
+              "amount": 406.57,
+              "kind": "include",
+              "toward_net": 406.57
+            }
+          ]
+        },
+        {
+          "date": "2026-09-22",
+          "net": 36.8,
+          "excel_F": 36.8,
+          "lines": [
+            {
+              "vendor": "BROTHERS DISTRIBUTION",
+              "amount": 36.8,
+              "kind": "include",
+              "toward_net": 36.8
+            },
+            {
+              "vendor": "OWNERS GAS",
+              "amount": 85.21,
+              "kind": "exclude",
+              "toward_net": 0.0
+            }
+          ]
+        },
+        {
+          "date": "2026-09-23",
+          "net": 2527.07,
+          "excel_F": 2527.07,
+          "lines": [
+            {
+              "vendor": "COCA COLA",
+              "amount": 1478.99,
+              "kind": "include",
+              "toward_net": 1478.99
+            },
+            {
+              "vendor": "FERRELLGAS",
+              "amount": 1048.08,
+              "kind": "include",
+              "toward_net": 1048.08
+            },
+            {
+              "vendor": "SMART FINAL",
+              "amount": 58.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "42004",
+      "name": "Arco Placentia",
+      "exclude": [
+        "California Lottery",
+        "Amazon",
+        "Emgiss",
+        "HDZ Land",
+        "K Hasmat",
+        "Lottery",
+        "Lotto",
+        "Prudential"
+      ],
+      "add_back": [
+        "Marathon Oil"
+      ],
+      "ignore": [],
+      "invoice_count": 90,
+      "sum": 60314.1,
+      "days": [
+        {
+          "date": "2026-09-01",
+          "net": 91.36,
+          "excel_F": 91.36,
+          "lines": [
+            {
+              "vendor": "BIMBO BAKERIES",
+              "amount": 91.36,
+              "kind": "include",
+              "toward_net": 91.36
+            },
+            {
+              "vendor": "CALIFORNIA LOTTERY",
+              "amount": 300.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "CALIFORNIA LOTTERY",
+              "amount": 900.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "CALIFORNIA LOTTERY",
+              "amount": 500.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "CALIFORNIA LOTTERY",
+              "amount": 500.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "CALIFORNIA LOTTERY",
+              "amount": 400.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "CALIFORNIA LOTTERY",
+              "amount": 500.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "CALIFORNIA LOTTERY",
+              "amount": 400.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "CALIFORNIA LOTTERY",
+              "amount": 200.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "CALIFORNIA LOTTERY",
+              "amount": 600.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "STRAUB",
+              "amount": -22.8,
+              "kind": "include",
+              "toward_net": 0.0
+            }
+          ]
+        },
+        {
+          "date": "2026-09-02",
+          "net": 4954.98,
+          "excel_F": 4954.98,
+          "lines": [
+            {
+              "vendor": "FRITO LAY",
+              "amount": 254.59,
+              "kind": "include",
+              "toward_net": 254.59
+            },
+            {
+              "vendor": "HARBOR",
+              "amount": 2554.15,
+              "kind": "include",
+              "toward_net": 2554.15
+            },
+            {
+              "vendor": "ONE-STOP DISTRIBUTION",
+              "amount": 371.0,
+              "kind": "include",
+              "toward_net": 371.0
+            },
+            {
+              "vendor": "STRAUB",
+              "amount": 1564.4,
+              "kind": "include",
+              "toward_net": 1564.4
+            },
+            {
+              "vendor": "STRAUB",
+              "amount": 210.84,
+              "kind": "include",
+              "toward_net": 210.84
+            },
+            {
+              "vendor": "STRAUB",
+              "amount": -22.8,
+              "kind": "include",
+              "toward_net": 0.0
+            }
+          ]
+        },
+        {
+          "date": "2026-09-03",
+          "net": 6912.04,
+          "excel_F": 6912.04,
+          "lines": [
+            {
+              "vendor": "CALIFORNIA LOTTERY",
+              "amount": 500.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "CALIFORNIA LOTTERY",
+              "amount": 500.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "COCA-COLA REFRESHMENTS",
+              "amount": 4145.06,
+              "kind": "include",
+              "toward_net": 4145.06
+            },
+            {
+              "vendor": "PEPSI",
+              "amount": -45.39,
+              "kind": "include",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "PEPSI",
+              "amount": 2766.98,
+              "kind": "include",
+              "toward_net": 2766.98
+            }
+          ]
+        },
+        {
+          "date": "2026-09-04",
+          "net": 1241.95,
+          "excel_F": 1241.95,
+          "lines": [
+            {
+              "vendor": "CALIFORNIA LOTTERY",
+              "amount": 400.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "CALIFORNIA LOTTERY",
+              "amount": 900.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "FRITO LAY",
+              "amount": 463.85,
+              "kind": "include",
+              "toward_net": 463.85
+            },
+            {
+              "vendor": "RED BULL",
+              "amount": 778.1,
+              "kind": "include",
+              "toward_net": 778.1
+            },
+            {
+              "vendor": "RED BULL",
+              "amount": -2.28,
+              "kind": "include",
+              "toward_net": 0.0
+            }
+          ]
+        },
+        {
+          "date": "2026-09-05",
+          "net": null,
+          "excel_F": null,
+          "lines": [
+            {
+              "vendor": "LOTTERY",
+              "amount": 446.29,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "LOTTO",
+              "amount": 821.2,
+              "kind": "exclude",
+              "toward_net": 0.0
+            }
+          ]
+        },
+        {
+          "date": "2026-09-06",
+          "net": 269.18,
+          "excel_F": 269.18,
+          "lines": [
+            {
+              "vendor": "FRITO LAY",
+              "amount": 269.18,
+              "kind": "include",
+              "toward_net": 269.18
+            }
+          ]
+        },
+        {
+          "date": "2026-09-07",
+          "net": 8949.62,
+          "excel_F": 8949.62,
+          "lines": [
+            {
+              "vendor": "CMARK",
+              "amount": 8285.7,
+              "kind": "include",
+              "toward_net": 8285.7
+            },
+            {
+              "vendor": "CMARK",
+              "amount": 15.26,
+              "kind": "include",
+              "toward_net": 15.26
+            },
+            {
+              "vendor": "CMARK",
+              "amount": 124.76,
+              "kind": "include",
+              "toward_net": 124.76
+            },
+            {
+              "vendor": "UNITED EXPRESS PRODUCTS",
+              "amount": 523.9,
+              "kind": "include",
+              "toward_net": 523.9
+            }
+          ]
+        },
+        {
+          "date": "2026-09-08",
+          "net": null,
+          "excel_F": 9759.42,
+          "lines": []
+        },
+        {
+          "date": "2026-09-09",
+          "net": 2942.9,
+          "excel_F": 2942.9,
+          "lines": [
+            {
+              "vendor": "BIMBO BAKERIES",
+              "amount": 156.91,
+              "kind": "include",
+              "toward_net": 156.91
+            },
+            {
+              "vendor": "HARBOR",
+              "amount": 2228.45,
+              "kind": "include",
+              "toward_net": 2228.45
+            },
+            {
+              "vendor": "HARBOR",
+              "amount": 92.94,
+              "kind": "include",
+              "toward_net": 92.94
+            },
+            {
+              "vendor": "SUNSET DISTRIBUTION",
+              "amount": 464.6,
+              "kind": "include",
+              "toward_net": 464.6
+            }
+          ]
+        },
+        {
+          "date": "2026-09-10",
+          "net": 1016.76,
+          "excel_F": 1016.76,
+          "lines": [
+            {
+              "vendor": "PEPSI",
+              "amount": 1016.76,
+              "kind": "include",
+              "toward_net": 1016.76
+            }
+          ]
+        },
+        {
+          "date": "2026-09-11",
+          "net": 3596.27,
+          "excel_F": 3596.27,
+          "lines": [
+            {
+              "vendor": "7UP",
+              "amount": 1395.23,
+              "kind": "include",
+              "toward_net": 1395.23
+            },
+            {
+              "vendor": "CALIFORNIA LOTTERY",
+              "amount": 600.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "CALIFORNIA LOTTERY",
+              "amount": 0.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "FRITO LAY",
+              "amount": 635.37,
+              "kind": "include",
+              "toward_net": 635.37
+            },
+            {
+              "vendor": "RED BULL",
+              "amount": 856.12,
+              "kind": "include",
+              "toward_net": 856.12
+            },
+            {
+              "vendor": "SECTRAN SECRITY",
+              "amount": 640.38,
+              "kind": "include",
+              "toward_net": 640.38
+            },
+            {
+              "vendor": "STORE SUPPLIES",
+              "amount": 69.17,
+              "kind": "include",
+              "toward_net": 69.17
+            }
+          ]
+        },
+        {
+          "date": "2026-09-12",
+          "net": null,
+          "excel_F": null,
+          "lines": []
+        },
+        {
+          "date": "2026-09-13",
+          "net": 245.1,
+          "excel_F": 245.1,
+          "lines": [
+            {
+              "vendor": "FRITO LAY",
+              "amount": 245.1,
+              "kind": "include",
+              "toward_net": 245.1
+            }
+          ]
+        },
+        {
+          "date": "2026-09-14",
+          "net": 6199.84,
+          "excel_F": 6199.84,
+          "lines": [
+            {
+              "vendor": "CMARK",
+              "amount": 5579.28,
+              "kind": "include",
+              "toward_net": 5579.28
+            },
+            {
+              "vendor": "CMARK",
+              "amount": 15.26,
+              "kind": "include",
+              "toward_net": 15.26
+            },
+            {
+              "vendor": "CMARK",
+              "amount": 271.78,
+              "kind": "include",
+              "toward_net": 271.78
+            },
+            {
+              "vendor": "KADI ENTERPRISES INC",
+              "amount": 333.52,
+              "kind": "include",
+              "toward_net": 333.52
+            }
+          ]
+        },
+        {
+          "date": "2026-09-15",
+          "net": 1382.48,
+          "excel_F": 1382.48,
+          "lines": [
+            {
+              "vendor": "BIMBO BAKERIES",
+              "amount": 341.48,
+              "kind": "include",
+              "toward_net": 341.48
+            },
+            {
+              "vendor": "CALIFORNIA LOTTERY",
+              "amount": 500.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "CALIFORNIA LOTTERY",
+              "amount": 200.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "CALIFORNIA LOTTERY",
+              "amount": 500.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "CALIFORNIA LOTTERY",
+              "amount": 500.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "UNIVERSAL NOZZLE",
+              "amount": 1041.0,
+              "kind": "include",
+              "toward_net": 1041.0
+            }
+          ]
+        },
+        {
+          "date": "2026-09-16",
+          "net": 4325.1,
+          "excel_F": 4325.1,
+          "lines": [
+            {
+              "vendor": "FRITO LAY",
+              "amount": 266.39,
+              "kind": "include",
+              "toward_net": 266.39
+            },
+            {
+              "vendor": "HARBOR",
+              "amount": 2224.25,
+              "kind": "include",
+              "toward_net": 2224.25
+            },
+            {
+              "vendor": "HARBOR",
+              "amount": 151.26,
+              "kind": "include",
+              "toward_net": 151.26
+            },
+            {
+              "vendor": "ONE-STOP DISTRIBUTION",
+              "amount": 635.25,
+              "kind": "include",
+              "toward_net": 635.25
+            },
+            {
+              "vendor": "STRAUB",
+              "amount": 75.5,
+              "kind": "include",
+              "toward_net": 75.5
+            },
+            {
+              "vendor": "STRAUB",
+              "amount": 972.45,
+              "kind": "include",
+              "toward_net": 972.45
+            }
+          ]
+        },
+        {
+          "date": "2026-09-17",
+          "net": 3314.78,
+          "excel_F": 3314.78,
+          "lines": [
+            {
+              "vendor": "COCA-COLA REFRESHMENTS",
+              "amount": 1178.62,
+              "kind": "include",
+              "toward_net": 1178.62
+            },
+            {
+              "vendor": "NORTHSTAR COLD",
+              "amount": 675.29,
+              "kind": "include",
+              "toward_net": 675.29
+            },
+            {
+              "vendor": "PEPSI",
+              "amount": 1460.87,
+              "kind": "include",
+              "toward_net": 1460.87
+            }
+          ]
+        },
+        {
+          "date": "2026-09-18",
+          "net": 1621.31,
+          "excel_F": 1621.31,
+          "lines": [
+            {
+              "vendor": "FRITO LAY",
+              "amount": 432.73,
+              "kind": "include",
+              "toward_net": 432.73
+            },
+            {
+              "vendor": "KICK POWER",
+              "amount": 258.56,
+              "kind": "include",
+              "toward_net": 258.56
+            },
+            {
+              "vendor": "RED BULL",
+              "amount": 914.03,
+              "kind": "include",
+              "toward_net": 914.03
+            },
+            {
+              "vendor": "STORE SUPPLIES",
+              "amount": 15.99,
+              "kind": "include",
+              "toward_net": 15.99
+            }
+          ]
+        },
+        {
+          "date": "2026-09-19",
+          "net": null,
+          "excel_F": null,
+          "lines": [
+            {
+              "vendor": "K HASMAT SERVICES",
+              "amount": 99.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "K HASMAT SERVICES",
+              "amount": 99.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            }
+          ]
+        },
+        {
+          "date": "2026-09-20",
+          "net": 55.23,
+          "excel_F": 55.23,
+          "lines": [
+            {
+              "vendor": "FRITO LAY",
+              "amount": 55.23,
+              "kind": "include",
+              "toward_net": 55.23
+            },
+            {
+              "vendor": "MARATHON",
+              "amount": -280.15,
+              "kind": "add_back",
+              "toward_net": 0.0
+            }
+          ]
+        },
+        {
+          "date": "2026-09-21",
+          "net": 10458.18,
+          "excel_F": 10458.18,
+          "lines": [
+            {
+              "vendor": "CALIFORNIA LOTTERY",
+              "amount": 500.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "CALIFORNIA LOTTERY",
+              "amount": 400.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "CALIFORNIA LOTTERY",
+              "amount": 600.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "CMARK",
+              "amount": 9975.66,
+              "kind": "include",
+              "toward_net": 9975.66
+            },
+            {
+              "vendor": "CMARK",
+              "amount": 15.26,
+              "kind": "include",
+              "toward_net": 15.26
+            },
+            {
+              "vendor": "SUNSET DISTRIBUTION",
+              "amount": 63.22,
+              "kind": "include",
+              "toward_net": 63.22
+            },
+            {
+              "vendor": "SUNSET DISTRIBUTION",
+              "amount": 404.04,
+              "kind": "include",
+              "toward_net": 404.04
+            }
+          ]
+        },
+        {
+          "date": "2026-09-22",
+          "net": 905.52,
+          "excel_F": 905.52,
+          "lines": [
+            {
+              "vendor": "7UP",
+              "amount": 666.87,
+              "kind": "include",
+              "toward_net": 666.87
+            },
+            {
+              "vendor": "BIMBO BAKERIES",
+              "amount": 238.65,
+              "kind": "include",
+              "toward_net": 238.65
+            }
+          ]
+        },
+        {
+          "date": "2026-09-23",
+          "net": 1831.5,
+          "excel_F": 1831.5,
+          "lines": [
+            {
+              "vendor": "CALIFORNIA LOTTERY",
+              "amount": 1200.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "CALIFORNIA LOTTERY",
+              "amount": 400.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "CALIFORNIA LOTTERY",
+              "amount": 1200.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "CALIFORNIA LOTTERY",
+              "amount": 200.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "CALIFORNIA LOTTERY",
+              "amount": 300.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "CALIFORNIA LOTTERY",
+              "amount": 500.0,
+              "kind": "exclude",
+              "toward_net": 0.0
+            },
+            {
+              "vendor": "HARBOR",
+              "amount": 1831.5,
+              "kind": "include",
+              "toward_net": 1831.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "42098",
+      "name": "Brookhurst 75",
+      "exclude": [
+        "Bookkeeper",
+        "california lottery",
+        "Gardner",
+        "Gas Cards",
+        "Gas Expense",
+        "Home Depot",
+        "Lottery California",
+        "Lunch",
+        "Maintenance",
+        "Mcafee",
+        "New Image",
+        "Lotto"
+      ],
+      "add_back": [],
+      "ignore": [],
+      "invoice_count": 97,
+      "sum": 53414.39,
+      "days": [
+        {
+          "date": "2026-09-01",
+          "net": 3977.7,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-02",
+          "net": 3485.25,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-03",
+          "net": 1026.06,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-04",
+          "net": 1487.2,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-05",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-06",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-07",
+          "net": 6212.48,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-08",
+          "net": 1633.3,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-09",
+          "net": 979.67,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-10",
+          "net": 428.02,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-11",
+          "net": 487.47,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-12",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-13",
+          "net": 15.0,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-14",
+          "net": 13680.25,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-15",
+          "net": 496.34,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-16",
+          "net": 5652.48,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-17",
+          "net": 455.98,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-18",
+          "net": 2269.51,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-19",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-20",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-21",
+          "net": 10004.78,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-22",
+          "net": 217.64,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-23",
+          "net": 905.26,
+          "excel_F": null
+        }
+      ]
+    },
+    {
+      "id": "42281",
+      "name": "Charleston",
+      "exclude": [
+        "wired up",
+        "pump test",
+        "inventory done",
+        "ideal lub",
+        "home depot",
+        "gas expense",
+        "gas card",
+        "customer",
+        "absolute app"
+      ],
+      "add_back": [
+        "marathon",
+        "inventory adj"
+      ],
+      "ignore": [],
+      "invoice_count": 97,
+      "sum": 50048.73,
+      "days": [
+        {
+          "date": "2026-09-01",
+          "net": 3321.61,
+          "excel_F": 3321.61
+        },
+        {
+          "date": "2026-09-02",
+          "net": 2518.77,
+          "excel_F": 2518.77
+        },
+        {
+          "date": "2026-09-03",
+          "net": 525.25,
+          "excel_F": 525.25
+        },
+        {
+          "date": "2026-09-04",
+          "net": 3528.55,
+          "excel_F": 3528.55
+        },
+        {
+          "date": "2026-09-05",
+          "net": 150.29,
+          "excel_F": 150.29
+        },
+        {
+          "date": "2026-09-06",
+          "net": 398.14,
+          "excel_F": 398.14
+        },
+        {
+          "date": "2026-09-07",
+          "net": 472.84,
+          "excel_F": 472.84
+        },
+        {
+          "date": "2026-09-08",
+          "net": 5868.81,
+          "excel_F": 5868.81
+        },
+        {
+          "date": "2026-09-09",
+          "net": 1255.2,
+          "excel_F": 1255.2
+        },
+        {
+          "date": "2026-09-10",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-11",
+          "net": 6787.96,
+          "excel_F": 6787.96
+        },
+        {
+          "date": "2026-09-12",
+          "net": 259.38,
+          "excel_F": 259.38
+        },
+        {
+          "date": "2026-09-13",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-14",
+          "net": 812.38,
+          "excel_F": 812.38
+        },
+        {
+          "date": "2026-09-15",
+          "net": 3328.82,
+          "excel_F": 3328.82
+        },
+        {
+          "date": "2026-09-16",
+          "net": 4436.66,
+          "excel_F": 4436.66
+        },
+        {
+          "date": "2026-09-17",
+          "net": 191.89,
+          "excel_F": 191.89
+        },
+        {
+          "date": "2026-09-18",
+          "net": 5595.29,
+          "excel_F": 5595.29
+        },
+        {
+          "date": "2026-09-19",
+          "net": 137.63,
+          "excel_F": 137.63
+        },
+        {
+          "date": "2026-09-20",
+          "net": 172.09,
+          "excel_F": 172.09
+        },
+        {
+          "date": "2026-09-21",
+          "net": 758.85,
+          "excel_F": 758.85
+        },
+        {
+          "date": "2026-09-22",
+          "net": 4700.03,
+          "excel_F": 4700.03
+        },
+        {
+          "date": "2026-09-23",
+          "net": 4828.29,
+          "excel_F": 4828.29
+        }
+      ]
+    },
+    {
+      "id": "42399",
+      "name": "Garden Grove",
+      "exclude": [
+        "Winchell",
+        "Vons",
+        "Vodek",
+        "Universal nozzle",
+        "Robert",
+        "Police",
+        "New Image",
+        "Lunch",
+        "KL AC",
+        "Home Depot",
+        "Fuel All",
+        "Francois",
+        "Customer",
+        "Cesar",
+        "California Lottery",
+        "ALERT ELECTRICAL",
+        "NEW IMAGE PROPERTY",
+        "PUMP TEST",
+        "SOURCE NORTH AMERICA",
+        "VENEGAS DISTRIBUTION INC",
+        "Lotto",
+        "Lottery California"
+      ],
+      "add_back": [
+        "Marathon",
+        "Inventory Adj"
+      ],
+      "ignore": [],
+      "invoice_count": 128,
+      "sum": 68078.17,
+      "days": [
+        {
+          "date": "2026-09-01",
+          "net": 518.35,
+          "excel_F": 518.35
+        },
+        {
+          "date": "2026-09-02",
+          "net": 2862.12,
+          "excel_F": 2862.12
+        },
+        {
+          "date": "2026-09-03",
+          "net": 5189.33,
+          "excel_F": 5189.33
+        },
+        {
+          "date": "2026-09-04",
+          "net": 3899.55,
+          "excel_F": 3899.55
+        },
+        {
+          "date": "2026-09-05",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-06",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-07",
+          "net": 5328.69,
+          "excel_F": 5328.69
+        },
+        {
+          "date": "2026-09-08",
+          "net": 580.0,
+          "excel_F": 580.0
+        },
+        {
+          "date": "2026-09-09",
+          "net": 1390.4,
+          "excel_F": 1390.4
+        },
+        {
+          "date": "2026-09-10",
+          "net": 9513.9,
+          "excel_F": 9513.9
+        },
+        {
+          "date": "2026-09-11",
+          "net": 5821.74,
+          "excel_F": 5821.74
+        },
+        {
+          "date": "2026-09-12",
+          "net": 500.0,
+          "excel_F": 500.0
+        },
+        {
+          "date": "2026-09-13",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-14",
+          "net": 7214.5,
+          "excel_F": 7214.5
+        },
+        {
+          "date": "2026-09-15",
+          "net": 2219.54,
+          "excel_F": 2219.54
+        },
+        {
+          "date": "2026-09-16",
+          "net": 2942.4,
+          "excel_F": 2942.4
+        },
+        {
+          "date": "2026-09-17",
+          "net": 6209.24,
+          "excel_F": 6209.24
+        },
+        {
+          "date": "2026-09-18",
+          "net": 4201.31,
+          "excel_F": 4201.31
+        },
+        {
+          "date": "2026-09-19",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-20",
+          "net": 113.38,
+          "excel_F": 113.38
+        },
+        {
+          "date": "2026-09-21",
+          "net": 9173.82,
+          "excel_F": 9173.82
+        },
+        {
+          "date": "2026-09-22",
+          "net": 399.9,
+          "excel_F": 399.9
+        },
+        {
+          "date": "2026-09-23",
+          "net": null,
+          "excel_F": null
+        }
+      ]
+    },
+    {
+      "id": "42279",
+      "name": "Koval",
+      "exclude": [
+        "uber",
+        "pump test",
+        "lunch",
+        "Yes Air",
+        "inventory done",
+        "Second Chance",
+        "Customer Good Will",
+        "Amy",
+        "Gas Card",
+        "Gas Expense"
+      ],
+      "add_back": [],
+      "ignore": [
+        "marathon",
+        "inventory adj",
+        "Koval"
+      ],
+      "invoice_count": 157,
+      "sum": 53192.21,
+      "days": [
+        {
+          "date": "2026-09-01",
+          "net": 808.96,
+          "excel_F": 808.96
+        },
+        {
+          "date": "2026-09-02",
+          "net": 3003.76,
+          "excel_F": 3003.76
+        },
+        {
+          "date": "2026-09-03",
+          "net": 4801.39,
+          "excel_F": 4801.39
+        },
+        {
+          "date": "2026-09-04",
+          "net": 620.0,
+          "excel_F": 620.0
+        },
+        {
+          "date": "2026-09-05",
+          "net": 193.84,
+          "excel_F": 193.84
+        },
+        {
+          "date": "2026-09-06",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-07",
+          "net": 2759.17,
+          "excel_F": 2759.17
+        },
+        {
+          "date": "2026-09-08",
+          "net": 125.35,
+          "excel_F": 125.35
+        },
+        {
+          "date": "2026-09-09",
+          "net": 3007.85,
+          "excel_F": 3007.85
+        },
+        {
+          "date": "2026-09-10",
+          "net": 9857.66,
+          "excel_F": 9857.66
+        },
+        {
+          "date": "2026-09-11",
+          "net": 181.95,
+          "excel_F": 181.95
+        },
+        {
+          "date": "2026-09-12",
+          "net": 152.69,
+          "excel_F": 152.69
+        },
+        {
+          "date": "2026-09-13",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-14",
+          "net": 4840.23,
+          "excel_F": 4840.23
+        },
+        {
+          "date": "2026-09-15",
+          "net": 1960.17,
+          "excel_F": 1960.17
+        },
+        {
+          "date": "2026-09-16",
+          "net": 4942.73,
+          "excel_F": 4942.73
+        },
+        {
+          "date": "2026-09-17",
+          "net": 7055.97,
+          "excel_F": 7055.97
+        },
+        {
+          "date": "2026-09-18",
+          "net": 380.13,
+          "excel_F": 380.13
+        },
+        {
+          "date": "2026-09-19",
+          "net": 270.67,
+          "excel_F": 270.67
+        },
+        {
+          "date": "2026-09-20",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-21",
+          "net": 5395.28,
+          "excel_F": 5395.28
+        },
+        {
+          "date": "2026-09-22",
+          "net": 320.13,
+          "excel_F": 320.13
+        },
+        {
+          "date": "2026-09-23",
+          "net": 2514.28,
+          "excel_F": 2514.28
+        }
+      ]
+    },
+    {
+      "id": "42439",
+      "name": "Lamb",
+      "exclude": [
+        "Wired Up",
+        "Wages",
+        "Pump",
+        "Lunch",
+        "IC Clearly",
+        "Home Depot",
+        "Fuel Allowance",
+        "Fire Pro",
+        "Customer",
+        "Cash Adv",
+        "Advance",
+        "TOTAL"
+      ],
+      "add_back": [
+        "Marathon",
+        "Inventory Adj"
+      ],
+      "ignore": [],
+      "invoice_count": 114,
+      "sum": 58524.86,
+      "days": [
+        {
+          "date": "2026-09-01",
+          "net": 7536.01,
+          "excel_F": 7536.01
+        },
+        {
+          "date": "2026-09-02",
+          "net": 1251.11,
+          "excel_F": 1251.11
+        },
+        {
+          "date": "2026-09-03",
+          "net": 1799.97,
+          "excel_F": 1799.97
+        },
+        {
+          "date": "2026-09-04",
+          "net": 2564.23,
+          "excel_F": 2564.23
+        },
+        {
+          "date": "2026-09-05",
+          "net": 3596.75,
+          "excel_F": 3596.75
+        },
+        {
+          "date": "2026-09-06",
+          "net": 231.35,
+          "excel_F": 231.35
+        },
+        {
+          "date": "2026-09-07",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-08",
+          "net": 3871.41,
+          "excel_F": 3871.41
+        },
+        {
+          "date": "2026-09-09",
+          "net": 586.38,
+          "excel_F": 586.38
+        },
+        {
+          "date": "2026-09-10",
+          "net": 2065.53,
+          "excel_F": 2065.53
+        },
+        {
+          "date": "2026-09-11",
+          "net": 6744.9,
+          "excel_F": 6744.9
+        },
+        {
+          "date": "2026-09-12",
+          "net": 488.84,
+          "excel_F": 488.84
+        },
+        {
+          "date": "2026-09-13",
+          "net": 304.35,
+          "excel_F": 304.35
+        },
+        {
+          "date": "2026-09-14",
+          "net": 612.91,
+          "excel_F": 612.91
+        },
+        {
+          "date": "2026-09-15",
+          "net": 8335.4,
+          "excel_F": 8335.4
+        },
+        {
+          "date": "2026-09-16",
+          "net": 2831.58,
+          "excel_F": 2831.58
+        },
+        {
+          "date": "2026-09-17",
+          "net": 1153.01,
+          "excel_F": 1153.01
+        },
+        {
+          "date": "2026-09-18",
+          "net": 5227.25,
+          "excel_F": 5227.25
+        },
+        {
+          "date": "2026-09-19",
+          "net": 521.22,
+          "excel_F": 521.22
+        },
+        {
+          "date": "2026-09-20",
+          "net": 324.72,
+          "excel_F": 324.72
+        },
+        {
+          "date": "2026-09-21",
+          "net": 3434.06,
+          "excel_F": 3434.06
+        },
+        {
+          "date": "2026-09-22",
+          "net": 5013.53,
+          "excel_F": 5013.53
+        },
+        {
+          "date": "2026-09-23",
+          "net": 30.35,
+          "excel_F": 30.35
+        }
+      ]
+    },
+    {
+      "id": "42282",
+      "name": "Oakey Las Vegas Blvd",
+      "exclude": [
+        "Wired Up",
+        "Window",
+        "Walmart",
+        "Sherwin",
+        "Sectran",
+        "Power Wash",
+        "Lunch",
+        "Lowes",
+        "Inventory Done",
+        "Ideal Lubri",
+        "Home Depot",
+        "Gas Expense",
+        "Gas Card",
+        "Gas Cards",
+        "Customer Good will",
+        "Gas Expense; Pump Test",
+        "Employee Cash Advance",
+        "Gas Expense; Window; Power Wash"
+      ],
+      "add_back": [
+        "Marathon",
+        "Inventory Adj"
+      ],
+      "ignore": [],
+      "invoice_count": 53,
+      "sum": 22062.87,
+      "days": [
+        {
+          "date": "2026-09-01",
+          "net": 2860.55,
+          "excel_F": 2860.55
+        },
+        {
+          "date": "2026-09-02",
+          "net": 1325.43,
+          "excel_F": 1325.43
+        },
+        {
+          "date": "2026-09-03",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-04",
+          "net": 2765.87,
+          "excel_F": 2765.87
+        },
+        {
+          "date": "2026-09-05",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-06",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-07",
+          "net": 97.56,
+          "excel_F": 97.56
+        },
+        {
+          "date": "2026-09-08",
+          "net": 2054.99,
+          "excel_F": 2054.99
+        },
+        {
+          "date": "2026-09-09",
+          "net": 684.2,
+          "excel_F": 684.2
+        },
+        {
+          "date": "2026-09-10",
+          "net": 361.89,
+          "excel_F": 361.89
+        },
+        {
+          "date": "2026-09-11",
+          "net": 2798.57,
+          "excel_F": 2798.57
+        },
+        {
+          "date": "2026-09-12",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-13",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-14",
+          "net": 428.58,
+          "excel_F": 428.58
+        },
+        {
+          "date": "2026-09-15",
+          "net": 2831.18,
+          "excel_F": 2831.18
+        },
+        {
+          "date": "2026-09-16",
+          "net": 1381.4,
+          "excel_F": 1381.4
+        },
+        {
+          "date": "2026-09-17",
+          "net": 24.45,
+          "excel_F": 24.45
+        },
+        {
+          "date": "2026-09-18",
+          "net": 1658.84,
+          "excel_F": 1658.84
+        },
+        {
+          "date": "2026-09-19",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-20",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-21",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-22",
+          "net": 2789.36,
+          "excel_F": 2789.36
+        },
+        {
+          "date": "2026-09-23",
+          "net": null,
+          "excel_F": null
+        }
+      ]
+    },
+    {
+      "id": "42048",
+      "name": "San Diego",
+      "exclude": [
+        "California Lottery",
+        "Chris Haney",
+        "CNS Nozzle",
+        "Fjs Ref",
+        "Francois",
+        "Gas Card",
+        "GAS Expense",
+        "Inventory Eddie",
+        "John Lenore",
+        "Lunch",
+        "Tom Olson",
+        "Optima",
+        "Walmart",
+        "Lotto",
+        "Lottery California"
+      ],
+      "add_back": [],
+      "ignore": [],
+      "invoice_count": 130,
+      "sum": 59507.87,
+      "days": [
+        {
+          "date": "2026-09-01",
+          "net": 5962.85,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-02",
+          "net": 1147.08,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-03",
+          "net": 2955.87,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-04",
+          "net": 6869.96,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-05",
+          "net": 394.95,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-06",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-07",
+          "net": 413.8,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-08",
+          "net": 4759.33,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-09",
+          "net": 106.47,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-10",
+          "net": 547.88,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-11",
+          "net": 6672.64,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-12",
+          "net": 427.66,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-13",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-14",
+          "net": 2114.64,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-15",
+          "net": 8168.76,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-16",
+          "net": 1840.15,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-17",
+          "net": 3262.0,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-18",
+          "net": 5673.42,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-19",
+          "net": 357.76,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-20",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-21",
+          "net": 724.04,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-22",
+          "net": 7108.61,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-23",
+          "net": null,
+          "excel_F": null
+        }
+      ]
+    },
+    {
+      "id": "42280",
+      "name": "Spring Mtn",
+      "exclude": [
+        "terminx",
+        "second chance",
+        "pump test",
+        "ideal lub",
+        "I c window",
+        "gas expense",
+        "francois",
+        "customer good",
+        "boss glass",
+        "I . C clearly",
+        "home depot",
+        "gas card",
+        "csecond chance"
+      ],
+      "add_back": [
+        "marathon",
+        "inventory adj"
+      ],
+      "ignore": [],
+      "invoice_count": 125,
+      "sum": 59596.84,
+      "days": [
+        {
+          "date": "2026-09-01",
+          "net": 3602.63,
+          "excel_F": 3602.63
+        },
+        {
+          "date": "2026-09-02",
+          "net": 3963.69,
+          "excel_F": 3963.69
+        },
+        {
+          "date": "2026-09-03",
+          "net": 7143.73,
+          "excel_F": 7143.73
+        },
+        {
+          "date": "2026-09-04",
+          "net": 3193.11,
+          "excel_F": 3193.11
+        },
+        {
+          "date": "2026-09-05",
+          "net": 5215.54,
+          "excel_F": 5215.54
+        },
+        {
+          "date": "2026-09-06",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-07",
+          "net": 614.88,
+          "excel_F": 614.88
+        },
+        {
+          "date": "2026-09-08",
+          "net": 4104.07,
+          "excel_F": 4104.07
+        },
+        {
+          "date": "2026-09-09",
+          "net": 4322.51,
+          "excel_F": 4322.51
+        },
+        {
+          "date": "2026-09-10",
+          "net": 1581.86,
+          "excel_F": 1581.86
+        },
+        {
+          "date": "2026-09-11",
+          "net": 4578.13,
+          "excel_F": 4578.13
+        },
+        {
+          "date": "2026-09-12",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-13",
+          "net": 33.33,
+          "excel_F": 33.33
+        },
+        {
+          "date": "2026-09-14",
+          "net": 602.81,
+          "excel_F": 602.81
+        },
+        {
+          "date": "2026-09-15",
+          "net": 4152.14,
+          "excel_F": 4152.14
+        },
+        {
+          "date": "2026-09-16",
+          "net": 4342.92,
+          "excel_F": 4342.92
+        },
+        {
+          "date": "2026-09-17",
+          "net": 1604.07,
+          "excel_F": 1604.07
+        },
+        {
+          "date": "2026-09-18",
+          "net": 2985.23,
+          "excel_F": 2985.23
+        },
+        {
+          "date": "2026-09-19",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-20",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-21",
+          "net": 1053.25,
+          "excel_F": 1053.25
+        },
+        {
+          "date": "2026-09-22",
+          "net": 3692.64,
+          "excel_F": 3692.64
+        },
+        {
+          "date": "2026-09-23",
+          "net": 2810.3,
+          "excel_F": 2810.3
+        }
+      ]
+    },
+    {
+      "id": "42674",
+      "name": "Tustin",
+      "exclude": [
+        "Brandon",
+        "David Tarango",
+        "Francois",
+        "Home Depot",
+        "KL Air",
+        "Lottery Ca",
+        "Malou",
+        "Smart & Final",
+        "Universal",
+        "Lotto",
+        "California Lottery"
+      ],
+      "add_back": [
+        "Inventory",
+        "Marathon"
+      ],
+      "ignore": [],
+      "invoice_count": 156,
+      "sum": 56967.73,
+      "days": [
+        {
+          "date": "2026-09-01",
+          "net": 960.99,
+          "excel_F": 960.99
+        },
+        {
+          "date": "2026-09-02",
+          "net": 2962.61,
+          "excel_F": 2962.61
+        },
+        {
+          "date": "2026-09-03",
+          "net": 8343.97,
+          "excel_F": 8343.97
+        },
+        {
+          "date": "2026-09-04",
+          "net": 962.65,
+          "excel_F": 962.65
+        },
+        {
+          "date": "2026-09-05",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-06",
+          "net": 188.86,
+          "excel_F": 188.86
+        },
+        {
+          "date": "2026-09-07",
+          "net": 159.0,
+          "excel_F": 159.0
+        },
+        {
+          "date": "2026-09-08",
+          "net": 3833.26,
+          "excel_F": 3833.26
+        },
+        {
+          "date": "2026-09-09",
+          "net": 668.4,
+          "excel_F": 668.4
+        },
+        {
+          "date": "2026-09-10",
+          "net": 8213.01,
+          "excel_F": 8213.01
+        },
+        {
+          "date": "2026-09-11",
+          "net": 2530.0,
+          "excel_F": 2530.0
+        },
+        {
+          "date": "2026-09-12",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-13",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-14",
+          "net": 3015.36,
+          "excel_F": 3015.36
+        },
+        {
+          "date": "2026-09-15",
+          "net": 826.82,
+          "excel_F": 826.82
+        },
+        {
+          "date": "2026-09-16",
+          "net": 4988.68,
+          "excel_F": 4988.68
+        },
+        {
+          "date": "2026-09-17",
+          "net": 10219.72,
+          "excel_F": 10219.72
+        },
+        {
+          "date": "2026-09-18",
+          "net": 616.71,
+          "excel_F": 616.71
+        },
+        {
+          "date": "2026-09-19",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-20",
+          "net": 100.58,
+          "excel_F": 100.58
+        },
+        {
+          "date": "2026-09-21",
+          "net": 4986.21,
+          "excel_F": 4986.21
+        },
+        {
+          "date": "2026-09-22",
+          "net": 1217.05,
+          "excel_F": 1217.05
+        },
+        {
+          "date": "2026-09-23",
+          "net": 2173.85,
+          "excel_F": 2173.85
+        }
+      ]
+    },
+    {
+      "id": "42438",
+      "name": "Vista",
+      "exclude": [
+        "Wired Up",
+        "Walmart",
+        "Pump Test",
+        "Pizza Hut",
+        "Lunch",
+        "Ideal Lubri",
+        "I C Clearly",
+        "Home Depot",
+        "Gas Expense",
+        "Gas Card",
+        "Fire Pro",
+        "CVS",
+        "Customer"
+      ],
+      "add_back": [
+        "Marathon",
+        "Inventory Adj"
+      ],
+      "ignore": [],
+      "invoice_count": 105,
+      "sum": 60516.42,
+      "days": [
+        {
+          "date": "2026-09-01",
+          "net": 6643.81,
+          "excel_F": 6643.81
+        },
+        {
+          "date": "2026-09-02",
+          "net": 3656.57,
+          "excel_F": 3656.57
+        },
+        {
+          "date": "2026-09-03",
+          "net": 412.42,
+          "excel_F": 412.42
+        },
+        {
+          "date": "2026-09-04",
+          "net": 3329.25,
+          "excel_F": 3329.25
+        },
+        {
+          "date": "2026-09-05",
+          "net": 3810.17,
+          "excel_F": 3810.17
+        },
+        {
+          "date": "2026-09-06",
+          "net": 623.78,
+          "excel_F": 623.78
+        },
+        {
+          "date": "2026-09-07",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-08",
+          "net": 4042.05,
+          "excel_F": 4042.05
+        },
+        {
+          "date": "2026-09-09",
+          "net": 1828.58,
+          "excel_F": 1828.58
+        },
+        {
+          "date": "2026-09-10",
+          "net": 2593.42,
+          "excel_F": 2593.42
+        },
+        {
+          "date": "2026-09-11",
+          "net": 6256.27,
+          "excel_F": 6256.27
+        },
+        {
+          "date": "2026-09-12",
+          "net": 181.84,
+          "excel_F": 181.84
+        },
+        {
+          "date": "2026-09-13",
+          "net": 538.11,
+          "excel_F": 538.11
+        },
+        {
+          "date": "2026-09-14",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-15",
+          "net": 7107.24,
+          "excel_F": 7107.24
+        },
+        {
+          "date": "2026-09-16",
+          "net": 3270.63,
+          "excel_F": 3270.63
+        },
+        {
+          "date": "2026-09-17",
+          "net": 1488.25,
+          "excel_F": 1488.25
+        },
+        {
+          "date": "2026-09-18",
+          "net": 4627.33,
+          "excel_F": 4627.33
+        },
+        {
+          "date": "2026-09-19",
+          "net": 3031.56,
+          "excel_F": 3031.56
+        },
+        {
+          "date": "2026-09-20",
+          "net": 607.95,
+          "excel_F": 607.95
+        },
+        {
+          "date": "2026-09-21",
+          "net": 79.85,
+          "excel_F": 79.85
+        },
+        {
+          "date": "2026-09-22",
+          "net": 6275.55,
+          "excel_F": 6275.55
+        },
+        {
+          "date": "2026-09-23",
+          "net": 111.79,
+          "excel_F": 111.79
+        }
+      ]
+    },
+    {
+      "id": "42021",
+      "name": "Westminster",
+      "exclude": [
+        "Aldi",
+        "California Lottery",
+        "Cont Supply",
+        "Garden",
+        "Gas Cards",
+        "Gas Expense",
+        "Joseph",
+        "Robert",
+        "Universal",
+        "Lunch",
+        "Lotto",
+        "Lottery California"
+      ],
+      "add_back": [
+        "Inventory Adj",
+        "Marathon"
+      ],
+      "ignore": [],
+      "invoice_count": 86,
+      "sum": 23872.17,
+      "days": [
+        {
+          "date": "2026-09-01",
+          "net": 758.21,
+          "excel_F": 758.21
+        },
+        {
+          "date": "2026-09-02",
+          "net": 909.64,
+          "excel_F": 909.64
+        },
+        {
+          "date": "2026-09-03",
+          "net": 651.01,
+          "excel_F": 651.01
+        },
+        {
+          "date": "2026-09-04",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-05",
+          "net": 3083.92,
+          "excel_F": 3083.92
+        },
+        {
+          "date": "2026-09-06",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-07",
+          "net": 5569.8,
+          "excel_F": 5569.8
+        },
+        {
+          "date": "2026-09-08",
+          "net": 287.46,
+          "excel_F": 287.46
+        },
+        {
+          "date": "2026-09-09",
+          "net": 619.39,
+          "excel_F": 619.39
+        },
+        {
+          "date": "2026-09-10",
+          "net": 20.22,
+          "excel_F": 20.22
+        },
+        {
+          "date": "2026-09-11",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-12",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-13",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-14",
+          "net": 5887.02,
+          "excel_F": 5887.02
+        },
+        {
+          "date": "2026-09-15",
+          "net": 129.82,
+          "excel_F": 129.82
+        },
+        {
+          "date": "2026-09-16",
+          "net": 115.96,
+          "excel_F": 115.96
+        },
+        {
+          "date": "2026-09-17",
+          "net": 6.9,
+          "excel_F": 6.9
+        },
+        {
+          "date": "2026-09-18",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-19",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-20",
+          "net": null,
+          "excel_F": null
+        },
+        {
+          "date": "2026-09-21",
+          "net": 5253.08,
+          "excel_F": 5253.08
+        },
+        {
+          "date": "2026-09-22",
+          "net": 579.74,
+          "excel_F": 579.74
+        },
+        {
+          "date": "2026-09-23",
+          "net": null,
+          "excel_F": null
+        }
+      ]
+    }
+  ]
+}
