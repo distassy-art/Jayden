@@ -16,7 +16,8 @@ Purchases (always updated when ``--dly-dir`` is set):
     invoice lines (``scripts/store_purchase_rules.py`` / Excel Deduct sheet).
   - DPT stays on disk for dept/vendor audit and Financial Audit leave-2;
     it does not replace dated DLY nets for F.
-  - Empty countable day → blank F (not 0, not leftover formula).
+  - Empty countable day → 0 in F (not blank). Blank F stops store-profit
+    formulas that test F="".
   - Sales cells stay fill-once; **purchases always refresh**.
 
 Usage:
@@ -336,12 +337,13 @@ def write_values(
             continue
         ws[cell] = val
         changed.append(f"{cell}={val}")
-    # Purchases: always overwrite when update_purch (None → blank, not leftover formula)
+    # Purchases: always overwrite when update_purch (no invoices → 0, not blank)
     purch_col = cols.get("purch") or "F"
     if update_purch or purch is not None:
         cell = f"{purch_col}{r}"
-        ws[cell] = purch
-        changed.append(f"{cell}=purch:{purch}")
+        shown = purch_for_excel(purch)
+        ws[cell] = shown
+        changed.append(f"{cell}=purch:{shown}")
     for col, formula in template_formulas(ws, day).items():
         if col == "F":
             continue
@@ -392,8 +394,9 @@ def fill_brookhurst(
             src[f"{col}{sr}"] = val
             changed.append(f"src!{col}{sr}={val}")
     if update_purch or purch is not None:
-        src[f"F{sr}"] = purch
-        changed.append(f"src!F{sr}=purch:{purch}")
+        shown = purch_for_excel(purch)
+        src[f"F{sr}"] = shown
+        changed.append(f"src!F{sr}=purch:{shown}")
         ws[f"F{mr}"] = f"='September 2026 Source'!F{sr}"
         changed.append(f"F{mr}->src purch")
     for col, formula in {
@@ -447,8 +450,9 @@ def fill_garden_grove(
             ws[f"{col}{r}"] = val
             changed.append(f"{col}={val}")
     if update_purch or purch is not None:
-        ws[f"F{r}"] = purch
-        changed.append(f"F=purch:{purch}")
+        shown = purch_for_excel(purch)
+        ws[f"F{r}"] = shown
+        changed.append(f"F=purch:{shown}")
     extras = {
         "D": f'=IF(OR(B{r}="",B{r}=0),"",C{r}/B{r})',
         "E": f'=IF(J{r}="","",J{r}-N(K{r})-N(L{r})-N(M{r})-N(N{r})-N(O{r}))',
@@ -491,8 +495,9 @@ def fill_san_diego(
             ws[f"{col}{r}"] = val
             changed.append(f"{col}{r}={val}")
     if update_purch or purch is not None:
-        ws[f"F{r}"] = purch
-        changed.append(f"F{r}=purch:{purch}")
+        shown = purch_for_excel(purch)
+        ws[f"F{r}"] = shown
+        changed.append(f"F{r}=purch:{shown}")
     return changed
 
 
@@ -531,27 +536,39 @@ def fill_store(
     return write_values(ws, day, vals, cols, purch=purch, update_purch=update_purch)
 
 
+def purch_for_excel(purch: float | None) -> float:
+    """No countable purchases is 0 so store-profit formulas keep running.
+
+    Several September sheets use IF(F=\"\",\"\",E-F) or ISNUMBER(F). A blank
+    F makes that day profit blank even when sales are filled.
+    """
+    if purch is None:
+        return 0
+    return purch
+
+
 def write_purch_only(wb, sid: str, day: int, purch: float | None) -> list[str]:
-    """Always overwrite Net Daily Purchases (None → blank). Sales untouched."""
+    """Always overwrite Net Daily Purchases (None → 0). Sales untouched."""
+    shown = purch_for_excel(purch)
     if sid == "42048":
         ws = wb["September Calculations"]
         r = 2 + day
-        ws[f"F{r}"] = purch
-        return [f"F{r}=purch:{purch}"]
+        ws[f"F{r}"] = shown
+        return [f"F{r}=purch:{shown}"]
     if sid == "42098":
         src = wb["September 2026 Source"]
         ws = wb["September 2026"]
         sr = 2 + day
         mr = HDR + day
-        src[f"F{sr}"] = purch
+        src[f"F{sr}"] = shown
         ws[f"F{mr}"] = f"='September 2026 Source'!F{sr}"
-        return [f"src!F{sr}=purch:{purch}"]
+        return [f"src!F{sr}=purch:{shown}"]
     ws = wb["September 2026"]
     cols = header_map(ws)
     col = cols.get("purch") or "F"
     r = HDR + day
-    ws[f"{col}{r}"] = purch
-    return [f"{col}{r}=purch:{purch}"]
+    ws[f"{col}{r}"] = shown
+    return [f"{col}{r}=purch:{shown}"]
 
 
 def parse_days_arg(raw: str) -> list[date]:
@@ -700,7 +717,7 @@ def main() -> None:
                 continue
             day_n = d.day
             purch = store_purch.get(d.isoformat())
-            # Missing key or Deduct-empty day → None → blank F when do_purch
+            # Missing key or Deduct-empty day → 0 in F when do_purch
 
             already = day_already_filled(wb, sid, day_n)
             pdf = pdf_dir / sub / pdf_stamp(d)
