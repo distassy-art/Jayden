@@ -260,17 +260,21 @@
         "Customer",
         "Cash Adv",
         "Advance",
-        "TOTAL"
-      ],
-      "add_back_vendors": [
+        "TOTAL",
+        "Second Chance",
+        "Inventory Adj",
         "Marathon",
-        "Inventory Adj"
+        "Family Dollar"
       ],
+      "add_back_vendors": [],
       "ignore_vendors": [],
-      "col_b_mode": "add",
+      "col_b_mode": "none",
       "negative_invoices": "zero",
       "empty_day": "null",
-      "notes": []
+      "notes": [
+        "2026-09-25 review: Marathon+Inventory Adj=$0; Second Chance, Family Dollar out. MTD through 09/23 = $58,171.11"
+      ],
+      "client_id": "42439"
     },
     "Oakey Las Vegas Blvd Daily.xlsx": {
       "store_id": "Oakey Las Vegas Blvd Daily.xlsx",
