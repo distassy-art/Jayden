@@ -187,8 +187,29 @@ def find_daily_header(ws):
                 m["total_profit"] = c
             elif "c-store total" in t:
                 m["cstore_total"] = c
+            elif _is_sales_deduct_header(t):
+                m.setdefault("sales_deduct", []).append(c)
         return r, m
     return None, {}
+
+
+def _is_sales_deduct_header(text: str) -> bool:
+    """Columns subtracted from C-Store Total to get C-Store Sales.
+
+    Invoice-audit columns (Positive Invoice, Legacy Add, Deduct Vendors)
+    sit beside these on Charleston and are not part of the sales formula.
+    """
+    t = text.strip().lower()
+    if any(skip in t for skip in ("invoice", "legacy", "deduct", "vendor", "purchase")):
+        return False
+    return (
+        t.startswith("tax 1")
+        or t.startswith("tax 4")
+        or "scratch" in t
+        or "lotto" in t
+        or "lottery" in t
+        or "card activation" in t
+    )
 
 
 def num(v):
@@ -234,14 +255,17 @@ def resolve_numeric(wb, wb_f, sn: str, row: int, col: int, cols: dict | None = N
         total = num(ws.cell(row, total_col).value)
         if total is None:
             return None
-        end = cols.get("total_profit")
-        if end is None or end <= total_col:
-            end = total_col + 6
-        for c in range(total_col + 1, end):
+        deduct_cols = cols.get("sales_deduct") or []
+        if not deduct_cols:
+            end = cols.get("total_profit")
+            if end is None or end <= total_col:
+                end = total_col + 6
+            deduct_cols = range(total_col + 1, end)
+        for c in deduct_cols:
             part = num(ws.cell(row, c).value)
             if part is not None:
                 total -= part
-        return total
+        return round(total, 2)
     return None
 
 
