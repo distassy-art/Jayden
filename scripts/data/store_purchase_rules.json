@@ -126,7 +126,9 @@
         "gas expense",
         "gas card",
         "customer",
-        "absolute app"
+        "absolute app",
+        "Second Chance",
+        "Fake Money"
       ],
       "add_back_vendors": [
         "marathon",
@@ -136,7 +138,10 @@
       "col_b_mode": "add",
       "negative_invoices": "zero",
       "empty_day": "null",
-      "notes": []
+      "notes": [
+        "2026-09-25 review: also deduct Second Chance, Fake Money. MTD through 09/23 = $49,618.73"
+      ],
+      "client_id": "42281"
     },
     "ExtraMile Daily.xlsx": {
       "store_id": "ExtraMile Daily.xlsx",
