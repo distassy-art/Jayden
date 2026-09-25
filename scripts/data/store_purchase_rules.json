@@ -298,7 +298,8 @@
         "Gas Expense; Pump Test",
         "Employee Cash Advance",
         "Gas Expense; Window; Power Wash",
-        "Western Bar"
+        "Western Bar",
+        "Goodwill"
       ],
       "add_back_vendors": [
         "Marathon",
@@ -309,7 +310,7 @@
       "negative_invoices": "zero",
       "empty_day": "null",
       "notes": [
-        "2026-09-25 review: Customer Good Will + Western Bar out. MTD through 09/23 = $21,935.37"
+        "2026-09-25 review: Customer Goodwill (SoftSP one-word) + Western Bar out. MTD through 09/23 = $21,928.23"
       ],
       "client_id": "42282"
     },
