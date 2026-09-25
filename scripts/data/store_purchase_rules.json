@@ -366,6 +366,7 @@
     "Spring Mtn Daily.xlsx": {
       "store_id": "Spring Mtn Daily.xlsx",
       "source_file": "Spring Mtn Daily.xlsx",
+      "client_id": "42280",
       "exclude_vendors": [
         "terminx",
         "second chance",
@@ -377,19 +378,24 @@
         "customer good",
         "boss glass",
         "I . C clearly",
+        "IC Clearly",
+        "Clearly",
         "home depot",
         "gas card",
-        "csecond chance"
+        "csecond chance",
+        "Marathon",
+        "Health"
       ],
       "add_back_vendors": [
-        "marathon",
         "inventory adj"
       ],
       "ignore_vendors": [],
       "col_b_mode": "add",
       "negative_invoices": "zero",
       "empty_day": "null",
-      "notes": []
+      "notes": [
+        "2026-09-25 review: Marathon out, Health out. MTD through 09/23 = $47,619.76"
+      ]
     },
     "Tustin Daily.xlsx": {
       "store_id": "Tustin Daily.xlsx",
