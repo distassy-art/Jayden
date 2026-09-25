@@ -80,7 +80,7 @@
       "negative_invoices": "zero",
       "empty_day": "null",
       "notes": [
-        "2026-09-24 review: also deduct Sectran, Store Supplies, Universal. 09/08 Excel F $9,759.42 is wrong — leave blank (no SoftSP). MTD through 09/23 = $58,547.56"
+        "2026-09-24 review: also deduct Sectran, Store Supplies, Universal. 09/08 Excel F $9,759.42 is wrong \u2014 leave blank (no SoftSP). MTD through 09/23 = $58,547.56"
       ]
     },
     "Brookhurst 75 Daily.xlsx": {
@@ -98,7 +98,10 @@
         "Maintenance",
         "Mcafee",
         "New Image",
-        "Lotto"
+        "Lotto",
+        "Pump Test",
+        "Sams Club",
+        "Backer"
       ],
       "add_back_vendors": [],
       "ignore_vendors": [],
@@ -106,8 +109,10 @@
       "negative_invoices": "zero",
       "empty_day": "null",
       "notes": [
-        "negative_rule: Treat as $0"
-      ]
+        "negative_rule: Treat as $0",
+        "2026-09-25 review: also deduct Pump Test, Sams Club, Backer. MTD through 09/23 = $52824.52"
+      ],
+      "client_id": "42098"
     },
     "Charleston Daily.xlsx": {
       "store_id": "Charleston Daily.xlsx",
