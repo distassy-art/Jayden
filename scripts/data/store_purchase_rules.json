@@ -192,17 +192,23 @@
         "SOURCE NORTH AMERICA",
         "VENEGAS DISTRIBUTION INC",
         "Lotto",
-        "Lottery California"
-      ],
-      "add_back_vendors": [
+        "Lottery California",
+        "Kl A/C",
         "Marathon",
-        "Inventory Adj"
+        "Amazon",
+        "Inventory Adj",
+        "BP Uniform",
+        "Sm Digital"
       ],
+      "add_back_vendors": [],
       "ignore_vendors": [],
-      "col_b_mode": "add",
+      "col_b_mode": "none",
       "negative_invoices": "zero",
       "empty_day": "null",
-      "notes": []
+      "notes": [
+        "2026-09-25 review: Marathon+Inventory Adj=$0; also Amazon, BP Uniform, Sm Digital, Alert Electrical, KL AC, Pump Test out. MTD through 09/23 = $66,336.96"
+      ],
+      "client_id": "42399"
     },
     "Koval Daily.xlsx": {
       "store_id": "Koval Daily.xlsx",
