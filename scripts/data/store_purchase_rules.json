@@ -331,28 +331,37 @@
       "store_id": "San Diego Daily.xlsx",
       "source_file": "San Diego Daily.xlsx",
       "exclude_vendors": [
-        "California Lottery",
-        "Chris Haney",
         "CNS Nozzle",
         "Fjs Ref",
-        "Francois",
         "Gas Card",
-        "GAS Expense",
         "Inventory Eddie",
-        "John Lenore",
-        "Lunch",
-        "Tom Olson",
-        "Optima",
+        "GAS Expense",
+        "Inventory Adj",
         "Walmart",
+        "Olson",
+        "Tom Olson",
+        "John Lenore",
+        "Chris",
+        "Lottery",
         "Lotto",
-        "Lottery California"
+        "California Lottery",
+        "Lottery California",
+        "Home Depot",
+        "Staples",
+        "Optima",
+        "Wages",
+        "Francois",
+        "Lunch"
       ],
       "add_back_vendors": [],
       "ignore_vendors": [],
       "col_b_mode": "none",
       "negative_invoices": "zero",
       "empty_day": "null",
-      "notes": []
+      "notes": [
+        "2026-09-25 review: gas expense, inv adj, walmart, tom olson, john lenore, chris, lottery, home depot, staples, optima, wages, francois, lunch out; CMARK in. MTD through 09/23 = $58,300.83"
+      ],
+      "client_id": "42048"
     },
     "Spring Mtn Daily.xlsx": {
       "store_id": "Spring Mtn Daily.xlsx",
