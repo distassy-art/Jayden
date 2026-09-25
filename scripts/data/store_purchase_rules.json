@@ -426,6 +426,7 @@
     "Vista Daily.xlsx": {
       "store_id": "Vista Daily.xlsx",
       "source_file": "Vista Daily.xlsx",
+      "client_id": "42438",
       "exclude_vendors": [
         "Wired Up",
         "Walmart",
@@ -439,17 +440,19 @@
         "Gas Card",
         "Fire Pro",
         "CVS",
-        "Customer"
+        "Customer",
+        "Marathon"
       ],
       "add_back_vendors": [
-        "Marathon",
         "Inventory Adj"
       ],
       "ignore_vendors": [],
       "col_b_mode": "add",
       "negative_invoices": "zero",
       "empty_day": "null",
-      "notes": []
+      "notes": [
+        "2026-09-25 review: Marathon out. MTD through 09/23 = $60,516.42"
+      ]
     },
     "Westminster Daily.xlsx": {
       "store_id": "Westminster Daily.xlsx",

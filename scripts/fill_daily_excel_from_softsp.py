@@ -639,8 +639,10 @@ def main() -> None:
             if only and sid not in only:
                 continue
             _name, _fname, _mode, _dsub, _tso, dly_sub = meta
-            rule = rules.get(sid) or load_deduct_from_workbook(
-                xlsx_dir / _fname, store_id=sid
+            rule = (
+                rules.get(sid)
+                or rules.get(_fname)
+                or load_deduct_from_workbook(xlsx_dir / _fname, store_id=sid)
             )
             if dly_sub == "BD_central":
                 if bd_inv is None:

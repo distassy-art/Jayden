@@ -262,12 +262,13 @@ def rules_to_json(rules: dict[str, StorePurchaseRule]) -> dict:
 
 
 def load_snapshot(path: Path = DEFAULT_SNAPSHOT) -> dict[str, StorePurchaseRule]:
+    """Load rules keyed by snapshot store key, source filename, and client_id."""
     data = json.loads(path.read_text())
     out: dict[str, StorePurchaseRule] = {}
     for sid, raw in (data.get("stores") or data).items():
         if not isinstance(raw, dict):
             continue
-        out[sid] = StorePurchaseRule(
+        rule = StorePurchaseRule(
             store_id=raw.get("store_id") or sid,
             source_file=raw.get("source_file") or "",
             exclude_vendors=list(raw.get("exclude_vendors") or []),
@@ -278,6 +279,14 @@ def load_snapshot(path: Path = DEFAULT_SNAPSHOT) -> dict[str, StorePurchaseRule]
             empty_day=raw.get("empty_day") or "null",
             notes=list(raw.get("notes") or []),
         )
+        out[sid] = rule
+        # Alias by Daily.xlsx filename and SoftSP client id when present
+        fname = (raw.get("source_file") or sid or "").strip()
+        if fname and fname not in out:
+            out[fname] = rule
+        cid = str(raw.get("client_id") or "").strip()
+        if cid and cid not in out:
+            out[cid] = rule
     return out
 
 
