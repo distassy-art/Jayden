@@ -223,7 +223,9 @@
         "Customer Good Will",
         "Amy",
         "Gas Card",
-        "Gas Expense"
+        "Gas Expense",
+        "Francois",
+        "Vons"
       ],
       "add_back_vendors": [],
       "ignore_vendors": [
@@ -238,8 +240,10 @@
         "NET PURCHASE RULE",
         "Net Purchases = total positive invoices \u2212 positive amounts for vendors in column A. Negative invoices equal zero; column B vendors are excluded.",
         "Net purchases",
-        "Column B vendors do not change net purchases"
-      ]
+        "Column B vendors do not change net purchases",
+        "2026-09-25 review: also deduct Francois, Vons. MTD through 09/23 = $53,107.67"
+      ],
+      "client_id": "42279"
     },
     "Lamb Daily.xlsx": {
       "store_id": "Lamb Daily.xlsx",
