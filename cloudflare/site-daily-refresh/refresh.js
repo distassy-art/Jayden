@@ -916,7 +916,11 @@ function ssSimplifyBilling(html) {
   html = html.slice(0, jsStart) + SS_BILLING_OWNER_JS + html.slice(jsEnd + jsEndMark.length);
   html = html.replace(
     'data-title="Billing" data-sub="Month tabs → full monthly statements per client. View, print/PDF, or email. Outstanding banner still shows unpaid."',
-    'data-title="Billing" data-sub="All clients for the month, then one client bill."'
+    'data-title="Billing" data-sub="Month totals, then one client bill."'
+  );
+  html = html.replace(
+    'data-title="Billing" data-sub="All clients for the month, then one client bill."',
+    'data-title="Billing" data-sub="Month totals, then one client bill."'
   );
   html = html.replace(
     '<div id="billingPricing" hidden style="margin-top:16px">',
