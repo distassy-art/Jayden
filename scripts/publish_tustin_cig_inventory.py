@@ -15,27 +15,163 @@ import base64
 import json
 import re
 import subprocess
-import sys
 import urllib.error
+import urllib.parse
 import urllib.request
+import uuid
 from decimal import Decimal, ROUND_HALF_UP
 from pathlib import Path
 
-REPO = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(Path(__file__).resolve().parent))
+ACCOUNT = "1ad267ec20bc187ad2fe348f66ed7acf"
+OAUTH_CLIENT = "54d11594-84e4-41aa-b438-e81b8fa78ee7"
+TOML = Path("/home/ubuntu/.config/.wrangler/config/default.toml")
 
-from apply_daily_site_refresh import (  # noqa: E402
-    ACCOUNT,
-    api,
-    binding_names,
-    current_version,
-    deploy_version,
-    encode_multipart,
-    extract_worker,
-    load_token,
-    node_check,
-    refresh_token,
-)
+
+def load_token() -> str:
+    text = TOML.read_text()
+    match = re.search(r'oauth_token\s*=\s*"([^"]+)"', text)
+    if not match:
+        raise SystemExit("wrangler oauth token missing")
+    return match.group(1)
+
+
+def refresh_token() -> str:
+    text = TOML.read_text()
+    refresh = re.search(r'refresh_token\s*=\s*"([^"]+)"', text)
+    if not refresh:
+        raise SystemExit("wrangler refresh token missing")
+    body = urllib.parse.urlencode(
+        {
+            "grant_type": "refresh_token",
+            "refresh_token": refresh.group(1),
+            "client_id": OAUTH_CLIENT,
+        }
+    ).encode()
+    req = urllib.request.Request(
+        "https://dash.cloudflare.com/oauth2/token",
+        data=body,
+        headers={"User-Agent": "ss-tustin-cig", "Content-Type": "application/x-www-form-urlencoded"},
+        method="POST",
+    )
+    with urllib.request.urlopen(req, timeout=60) as resp:
+        payload = json.loads(resp.read().decode())
+    token = payload.get("access_token")
+    new_refresh = payload.get("refresh_token") or refresh.group(1)
+    expires_in = int(payload.get("expires_in") or 3600)
+    if not token:
+        raise SystemExit("oauth refresh returned no access token")
+    from datetime import datetime, timedelta, timezone
+
+    exp = (datetime.now(timezone.utc) + timedelta(seconds=expires_in)).strftime("%Y-%m-%dT%H:%M:%S.000Z")
+    text = re.sub(r'oauth_token\s*=\s*"[^"]*"', f'oauth_token = "{token}"', text, count=1)
+    text = re.sub(r'refresh_token\s*=\s*"[^"]*"', f'refresh_token = "{new_refresh}"', text, count=1)
+    text = re.sub(r'expiration_time\s*=\s*"[^"]*"', f'expiration_time = "{exp}"', text, count=1)
+    TOML.write_text(text)
+    print(f"refreshed oauth token, expires {exp}", flush=True)
+    return token
+
+
+def api(token: str, method: str, url: str, data: bytes | None = None, headers: dict | None = None):
+    hdrs = {"Authorization": f"Bearer {token}", "User-Agent": "ss-tustin-cig"}
+    if headers:
+        hdrs.update(headers)
+    req = urllib.request.Request(url, data=data, headers=hdrs, method=method)
+    try:
+        with urllib.request.urlopen(req, timeout=180) as resp:
+            raw = resp.read()
+            return resp.status, resp.headers.get("content-type") or "", raw, resp.headers
+    except urllib.error.HTTPError as err:
+        raw = err.read()
+        if err.code == 401:
+            raise
+        raise SystemExit(f"{method} {url} -> {err.code} {raw[:400]!r}") from err
+
+
+def extract_worker(raw: bytes) -> str:
+    text = raw.decode("utf-8")
+    marker = 'name="worker.js"'
+    idx = text.find(marker)
+    if idx < 0:
+        raise SystemExit("worker.js part not found")
+    rest = text[idx:]
+    sep = rest.find("\r\n\r\n")
+    if sep < 0:
+        raise SystemExit("worker.js body not found")
+    body = rest[sep + 4 :]
+    end = body.rfind("\r\n--")
+    if end < 0:
+        raise SystemExit("worker.js end boundary not found")
+    return body[:end]
+
+
+def node_check(script: str, name: str) -> None:
+    path = Path(f"/tmp/{name}-check.js")
+    path.write_text(script)
+    subprocess.check_call(["node", "--check", str(path)])
+    print(f"node --check ok {name} bytes={path.stat().st_size}", flush=True)
+
+
+def encode_multipart(script: str, metadata: dict) -> tuple[bytes, str]:
+    boundary = "----sstustin" + uuid.uuid4().hex
+    meta = json.dumps(metadata).encode()
+    parts = [
+        f"--{boundary}\r\n".encode(),
+        b'Content-Disposition: form-data; name="metadata"\r\n',
+        b"Content-Type: application/json\r\n\r\n",
+        meta,
+        b"\r\n",
+        f"--{boundary}\r\n".encode(),
+        b'Content-Disposition: form-data; name="worker.js"; filename="worker.js"\r\n',
+        b"Content-Type: application/javascript+module\r\n\r\n",
+        script.encode(),
+        b"\r\n",
+        f"--{boundary}--\r\n".encode(),
+    ]
+    return b"".join(parts), boundary
+
+
+def current_version(token: str, name: str) -> str:
+    status, _ctype, raw, _headers = api(
+        token,
+        "GET",
+        f"https://api.cloudflare.com/client/v4/accounts/{ACCOUNT}/workers/scripts/{name}/deployments",
+    )
+    if status != 200:
+        raise SystemExit(f"deployments {name} {status}")
+    payload = json.loads(raw)
+    versions = ((payload.get("result") or {}).get("deployments") or [])[0]["versions"]
+    return versions[0]["version_id"]
+
+
+def deploy_version(token: str, name: str, version_id: str) -> None:
+    body = json.dumps(
+        {"strategy": "percentage", "versions": [{"percentage": 100, "version_id": version_id}]}
+    ).encode()
+    status, _ctype, raw, _headers = api(
+        token,
+        "POST",
+        f"https://api.cloudflare.com/client/v4/accounts/{ACCOUNT}/workers/scripts/{name}/deployments",
+        data=body,
+        headers={"Content-Type": "application/json"},
+    )
+    if status != 200:
+        raise SystemExit(f"deploy {name} {status} {raw[:400]!r}")
+    payload = json.loads(raw)
+    if not payload.get("success"):
+        raise SystemExit(f"deploy failed {name} {raw[:400]!r}")
+    print(f"deployed {name} {version_id}", flush=True)
+
+
+def binding_names(token: str, name: str) -> list[str]:
+    status, _ctype, raw, _headers = api(
+        token,
+        "GET",
+        f"https://api.cloudflare.com/client/v4/accounts/{ACCOUNT}/workers/scripts/{name}/settings",
+    )
+    if status != 200:
+        raise SystemExit(f"settings {name} {status}")
+    bindings = (json.loads(raw).get("result") or {}).get("bindings") or []
+    return sorted(f"{b.get('type')}:{b.get('name')}" for b in bindings)
 
 PDF_DIR_DEFAULT = Path("/tmp/tustin-cig")
 PREFIX = "/inventory/42674/2026-09-26"
