@@ -923,6 +923,10 @@ function ssSimplifyBilling(html) {
     'data-title="Billing" data-sub="Month totals, then one client bill."'
   );
   html = html.replace(
+    "billing: ['Billing', 'Month tabs → full monthly statements per client. View, print/PDF, or email.']",
+    "billing: ['Billing', 'Month totals, then one client bill.']"
+  );
+  html = html.replace(
     '<div id="billingPricing" hidden style="margin-top:16px">',
     '<details id="billingPricing" hidden style="margin-top:16px"><summary style="cursor:pointer;font-weight:750;margin:8px 0 12px">Service prices</summary>'
   );
