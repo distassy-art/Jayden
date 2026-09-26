@@ -403,9 +403,17 @@ async function ssServeDailySeptember(request, env) {
   return ssJsonResponse(daily, "books-overlay");
 }
 
+function ssPointManagerAtLiveBook(html) {
+  if (!html || html.indexOf("/site-manager.json") >= 0) return html;
+  return String(html)
+    .split("fetchJson('/data/manager.json' + q)").join("fetchJson('/site-manager.json' + q)")
+    .split('fetchJson("/data/manager.json" + q)').join('fetchJson("/site-manager.json" + q)');
+}
+
 async function ssServeSiteBooks(request, env, pathname) {
   if (!request || (request.method !== "GET" && request.method !== "HEAD")) return null;
-  var base = await ssReadAssetJson(env, request, pathname);
+  var assetPath = pathname === "/site-manager.json" ? "/data/manager.json" : pathname;
+  var base = await ssReadAssetJson(env, request, assetPath);
   if (!base) return null;
   var overlay = await ssReadBooksOverlay(env);
   if (!overlay || !overlay.stations) return null;
@@ -417,7 +425,7 @@ async function ssServeSiteBooks(request, env, pathname) {
     out = ssRefreshBudgetTargets(base, totals, daily);
   } else if (pathname === "/vendor-mix.json" || pathname === "/data/vendor-mix.json") {
     out = ssRefreshVendorMix(base, totals, daily);
-  } else if (pathname === "/data/manager.json" || pathname === "/manager.json") {
+  } else if (pathname === "/data/manager.json" || pathname === "/manager.json" || pathname === "/site-manager.json") {
     out = ssRefreshManager(base, totals, daily.through);
   } else {
     return null;

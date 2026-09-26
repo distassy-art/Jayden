@@ -47,11 +47,28 @@ PROTO_OLD = (
 )
 PROTO_NEW = (
     "    const p = url.pathname;\n"
-    '    if (p === "/budget-targets.json" || p === "/vendor-mix.json" || p === "/data/manager.json") {\n'
+    '    if (p === "/budget-targets.json" || p === "/vendor-mix.json" || p === "/data/manager.json" || p === "/site-manager.json") {\n'
     "      const refreshed = await ssServeSiteBooks(request, env, p);\n"
     "      if (refreshed) return refreshed;\n"
     "    }\n"
     '    if (p === "/api/send-order-to-manager" || p === "/api/send-order-to-manager/") {'
+)
+PROTO_HOOK_NARROW = (
+    '    if (p === "/budget-targets.json" || p === "/vendor-mix.json" || p === "/data/manager.json") {'
+)
+PROTO_HOOK_WIDE = (
+    '    if (p === "/budget-targets.json" || p === "/vendor-mix.json" || p === "/data/manager.json" || p === "/site-manager.json") {'
+)
+SHELL_OLD = (
+    "  const headers = noStoreHeaders({\n"
+    '    "Content-Type": "text/html; charset=utf-8",\n'
+    '    "X-SS-Shell-Source": source,'
+)
+SHELL_NEW = (
+    "  chosen = ssPointManagerAtLiveBook(chosen);\n"
+    "  const headers = noStoreHeaders({\n"
+    '    "Content-Type": "text/html; charset=utf-8",\n'
+    '    "X-SS-Shell-Source": source,'
 )
 
 WORKERS = {
@@ -165,7 +182,15 @@ def splice(script: str, cfg: dict) -> str:
         if cfg["hook_old"] not in script:
             raise SystemExit("hook site not found")
         script = script.replace(cfg["hook_old"], cfg["hook_new"], 1)
+    if name_needs_manager_path(script):
+        script = script.replace(PROTO_HOOK_NARROW, PROTO_HOOK_WIDE, 1)
+    if "ssPointManagerAtLiveBook(chosen)" not in script and SHELL_OLD in script:
+        script = script.replace(SHELL_OLD, SHELL_NEW, 1)
     return script
+
+
+def name_needs_manager_path(script: str) -> bool:
+    return PROTO_HOOK_NARROW in script and "/site-manager.json" not in script.split("async fetch", 1)[-1][:800]
 
 
 def node_check(script: str, name: str) -> None:
