@@ -4,14 +4,14 @@ GitHub is the order list. Update this repo. The files under `orders/ledger/` are
 
 ## When to start
 
-Start the moment that vendor’s due time arrives in America/Los_Angeles. Use the clock already on the calendar in `orders/ledger/order-calendar.json`.
+Start at 4:00 AM America/Los_Angeles on the due day so every store’s order for that vendor is on the GitHub list by 6:00 AM the same morning. Delivery days stay as they are in `orders/ledger/order-calendar.json`.
 
-| Vendor | Due | What to do |
-|---|---|---|
-| Harbor | Monday 6:00 PM PT | Build the Monday Harbor order for every store on the calendar. Brookhurst delivery is Tuesday. Every other store’s delivery is Wednesday. |
-| Coke | Wednesday 12:00 PM PT | Build the Wednesday Coke order. Save a My Coke draft only. Leave it unsubmitted. |
-| Pepsi | Thursday 6:00 PM PT | Build the Thursday Pepsi order. |
-| Core-Mark | Saturday, as soon as the day begins | Build the Saturday Core-Mark order for every store. Save the Customer First draft. Leave it unsubmitted until Mina confirms. |
+| Vendor | Due day | Ready by | What to do |
+|---|---|---|---|
+| Harbor | Monday | 6:00 AM PT | Build the Monday Harbor order for every store on the calendar. Brookhurst delivery is Tuesday. Every other store’s delivery is Wednesday. |
+| Coke | Wednesday | 6:00 AM PT | Build the Wednesday Coke order. Save a My Coke draft only. Leave it unsubmitted. |
+| Pepsi | Thursday | 6:00 AM PT | Build the Thursday Pepsi order. |
+| Core-Mark | Saturday | 6:00 AM PT | Build the Saturday Core-Mark order for every store. Save the Customer First draft. Leave it unsubmitted until Mina confirms. |
 
 Orders are sent from `orders@smartsolutionsai26.onmicrosoft.com`.
 
