@@ -193,6 +193,13 @@ def splice(script: str, cfg: dict) -> str:
     )
     if "ssSimplifyCommandCenter(chosen)" not in script and simple_old in script:
         script = script.replace(simple_old, simple_new, 1)
+    bill_old = "  chosen = ssSimplifyCommandCenter(chosen);\n"
+    bill_new = (
+        "  chosen = ssSimplifyCommandCenter(chosen);\n"
+        "  chosen = ssSimplifyBilling(chosen);\n"
+    )
+    if "ssSimplifyBilling(chosen)" not in script and bill_old in script:
+        script = script.replace(bill_old, bill_new, 1)
     return script
 
 
