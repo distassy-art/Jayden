@@ -1,0 +1,6 @@
+Vendor Purchases
+Report: Non-Fuel Invoice Summary by Station/Vendor
+Group By: Vendor | Expand All
+
+Client: ExtraMile
+Status: skipped for Non-Fuel Invoice pull

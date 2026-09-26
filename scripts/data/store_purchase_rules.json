@@ -1,0 +1,485 @@
+{
+  "rule": {
+    "summary": "Net Purchases = positive SoftSP invoice amounts for non-excluded vendors; negatives \u2192 $0; Deduct-list excluded; empty day \u2192 null.",
+    "negative_invoices": "zero",
+    "empty_day": "null"
+  },
+  "stores": {
+    "Arco Db Daily.xlsx": {
+      "store_id": "Arco Db Daily.xlsx",
+      "source_file": "Arco Db Daily.xlsx",
+      "exclude_vendors": [
+        "Bonus",
+        "Cash Advance",
+        "cintas",
+        "Cox Compliance",
+        "Lottery",
+        "Lotto",
+        "Mina",
+        "Mina Gas",
+        "New Image",
+        "Produce",
+        "repair",
+        "Supplies",
+        "Marathon"
+      ],
+      "add_back_vendors": [],
+      "ignore_vendors": [],
+      "col_b_mode": "none",
+      "negative_invoices": "zero",
+      "empty_day": "null",
+      "notes": []
+    },
+    "Arco HB Daily.xlsx": {
+      "store_id": "Arco HB Daily.xlsx",
+      "source_file": "Arco HB Daily.xlsx",
+      "client_id": "42179",
+      "exclude_vendors": [
+        "universal",
+        "smart",
+        "owner gas",
+        "owner",
+        "Maintenance",
+        "Gardner",
+        "Bonus",
+        "Marathon",
+        "Janitor",
+        "Dennys"
+      ],
+      "add_back_vendors": [],
+      "ignore_vendors": [],
+      "col_b_mode": "none",
+      "negative_invoices": "zero",
+      "empty_day": "null",
+      "notes": [
+        "2026-09-24 review: Marathon treat as $0 (not add-back); also deduct Janitor + Dennys. MTD through 09/23 = $63,773.42"
+      ]
+    },
+    "Arco Placentia Daily.xlsx": {
+      "store_id": "Arco Placentia Daily.xlsx",
+      "source_file": "Arco Placentia Daily.xlsx",
+      "client_id": "42004",
+      "exclude_vendors": [
+        "California Lottery",
+        "Amazon",
+        "Emgiss",
+        "HDZ Land",
+        "K Hasmat",
+        "Lottery",
+        "Lotto",
+        "Prudential",
+        "Sectran",
+        "Store Supplies",
+        "Universal"
+      ],
+      "add_back_vendors": [
+        "Marathon Oil"
+      ],
+      "ignore_vendors": [],
+      "col_b_mode": "add",
+      "negative_invoices": "zero",
+      "empty_day": "null",
+      "notes": [
+        "2026-09-24 review: also deduct Sectran, Store Supplies, Universal. 09/08 Excel F $9,759.42 is wrong \u2014 leave blank (no SoftSP). MTD through 09/23 = $58,547.56"
+      ]
+    },
+    "Brookhurst 75 Daily.xlsx": {
+      "store_id": "Brookhurst 75 Daily.xlsx",
+      "source_file": "Brookhurst 75 Daily.xlsx",
+      "exclude_vendors": [
+        "Bookkeeper",
+        "california lottery",
+        "Gardner",
+        "Gas Cards",
+        "Gas Expense",
+        "Home Depot",
+        "Lottery California",
+        "Lunch",
+        "Maintenance",
+        "Mcafee",
+        "New Image",
+        "Lotto",
+        "Pump Test",
+        "Sams Club",
+        "Backer"
+      ],
+      "add_back_vendors": [],
+      "ignore_vendors": [],
+      "col_b_mode": "ignore",
+      "negative_invoices": "zero",
+      "empty_day": "null",
+      "notes": [
+        "negative_rule: Treat as $0",
+        "2026-09-25 review: also deduct Pump Test, Sams Club, Backer. MTD through 09/23 = $52824.52"
+      ],
+      "client_id": "42098"
+    },
+    "Charleston Daily.xlsx": {
+      "store_id": "Charleston Daily.xlsx",
+      "source_file": "Charleston Daily.xlsx",
+      "exclude_vendors": [
+        "wired up",
+        "pump test",
+        "inventory done",
+        "ideal lub",
+        "home depot",
+        "gas expense",
+        "gas card",
+        "customer",
+        "absolute app",
+        "Second Chance",
+        "Fake Money"
+      ],
+      "add_back_vendors": [
+        "marathon",
+        "inventory adj"
+      ],
+      "ignore_vendors": [],
+      "col_b_mode": "add",
+      "negative_invoices": "zero",
+      "empty_day": "null",
+      "notes": [
+        "2026-09-25 review: also deduct Second Chance, Fake Money. MTD through 09/23 = $49,618.73"
+      ],
+      "client_id": "42281"
+    },
+    "ExtraMile Daily.xlsx": {
+      "store_id": "ExtraMile Daily.xlsx",
+      "source_file": "ExtraMile Daily.xlsx",
+      "exclude_vendors": [
+        "Bonus",
+        "Cash Advance",
+        "cintas",
+        "Cox Compliance",
+        "Lottery",
+        "Lotto",
+        "Mina",
+        "Mina Gas",
+        "New Image",
+        "Produce",
+        "repair",
+        "Supplies"
+      ],
+      "add_back_vendors": [],
+      "ignore_vendors": [],
+      "col_b_mode": "none",
+      "negative_invoices": "zero",
+      "empty_day": "null",
+      "notes": []
+    },
+    "Garden Grove Daily.xlsx": {
+      "store_id": "Garden Grove Daily.xlsx",
+      "source_file": "Garden Grove Daily.xlsx",
+      "exclude_vendors": [
+        "Winchell",
+        "Vons",
+        "Vodek",
+        "Universal nozzle",
+        "Robert",
+        "Police",
+        "New Image",
+        "Lunch",
+        "KL AC",
+        "Home Depot",
+        "Fuel All",
+        "Francois",
+        "Customer",
+        "Cesar",
+        "California Lottery",
+        "ALERT ELECTRICAL",
+        "NEW IMAGE PROPERTY",
+        "PUMP TEST",
+        "SOURCE NORTH AMERICA",
+        "VENEGAS DISTRIBUTION INC",
+        "Lotto",
+        "Lottery California",
+        "Kl A/C",
+        "Marathon",
+        "Amazon",
+        "Inventory Adj",
+        "BP Uniform",
+        "Sm Digital"
+      ],
+      "add_back_vendors": [],
+      "ignore_vendors": [],
+      "col_b_mode": "none",
+      "negative_invoices": "zero",
+      "empty_day": "null",
+      "notes": [
+        "2026-09-25 review: Marathon+Inventory Adj=$0; also Amazon, BP Uniform, Sm Digital, Alert Electrical, KL AC, Pump Test out. MTD through 09/23 = $66,336.96"
+      ],
+      "client_id": "42399"
+    },
+    "Koval Daily.xlsx": {
+      "store_id": "Koval Daily.xlsx",
+      "source_file": "Koval Daily.xlsx",
+      "exclude_vendors": [
+        "uber",
+        "pump test",
+        "lunch",
+        "Yes Air",
+        "inventory done",
+        "Second Chance",
+        "Customer Good Will",
+        "Amy",
+        "Gas Card",
+        "Gas Expense",
+        "Francois",
+        "Vons"
+      ],
+      "add_back_vendors": [],
+      "ignore_vendors": [
+        "marathon",
+        "inventory adj",
+        "Koval"
+      ],
+      "col_b_mode": "ignore",
+      "negative_invoices": "zero",
+      "empty_day": "null",
+      "notes": [
+        "NET PURCHASE RULE",
+        "Net Purchases = total positive invoices \u2212 positive amounts for vendors in column A. Negative invoices equal zero; column B vendors are excluded.",
+        "Net purchases",
+        "Column B vendors do not change net purchases",
+        "2026-09-25 review: also deduct Francois, Vons. MTD through 09/23 = $53,107.67"
+      ],
+      "client_id": "42279"
+    },
+    "Lamb Daily.xlsx": {
+      "store_id": "Lamb Daily.xlsx",
+      "source_file": "Lamb Daily.xlsx",
+      "exclude_vendors": [
+        "Wired Up",
+        "Wages",
+        "Pump",
+        "Lunch",
+        "IC Clearly",
+        "Home Depot",
+        "Fuel Allowance",
+        "Fire Pro",
+        "Customer",
+        "Cash Adv",
+        "Advance",
+        "TOTAL",
+        "Second Chance",
+        "Inventory Adj",
+        "Marathon",
+        "Family Dollar"
+      ],
+      "add_back_vendors": [],
+      "ignore_vendors": [],
+      "col_b_mode": "none",
+      "negative_invoices": "zero",
+      "empty_day": "null",
+      "notes": [
+        "2026-09-25 review: Marathon+Inventory Adj=$0; Second Chance, Family Dollar out. MTD through 09/23 = $58,171.11"
+      ],
+      "client_id": "42439"
+    },
+    "Oakey Las Vegas Blvd Daily.xlsx": {
+      "store_id": "Oakey Las Vegas Blvd Daily.xlsx",
+      "source_file": "Oakey Las Vegas Blvd Daily.xlsx",
+      "exclude_vendors": [
+        "Wired Up",
+        "Window",
+        "Walmart",
+        "Sherwin",
+        "Sectran",
+        "Power Wash",
+        "Lunch",
+        "Lowes",
+        "Inventory Done",
+        "Ideal Lubri",
+        "Home Depot",
+        "Gas Expense",
+        "Gas Card",
+        "Gas Cards",
+        "Customer Good will",
+        "Gas Expense; Pump Test",
+        "Employee Cash Advance",
+        "Gas Expense; Window; Power Wash",
+        "Western Bar",
+        "Goodwill"
+      ],
+      "add_back_vendors": [
+        "Marathon",
+        "Inventory Adj"
+      ],
+      "ignore_vendors": [],
+      "col_b_mode": "add",
+      "negative_invoices": "zero",
+      "empty_day": "null",
+      "notes": [
+        "2026-09-25 review: Customer Goodwill (SoftSP one-word) + Western Bar out. MTD through 09/23 = $21,928.23"
+      ],
+      "client_id": "42282"
+    },
+    "Paradise Daily.xlsx": {
+      "store_id": "Paradise Daily.xlsx",
+      "source_file": "Paradise Daily.xlsx",
+      "exclude_vendors": [],
+      "add_back_vendors": [
+        "Inventory Adj"
+      ],
+      "ignore_vendors": [],
+      "col_b_mode": "add",
+      "negative_invoices": "zero",
+      "empty_day": "null",
+      "notes": []
+    },
+    "San Diego Daily.xlsx": {
+      "store_id": "San Diego Daily.xlsx",
+      "source_file": "San Diego Daily.xlsx",
+      "exclude_vendors": [
+        "CNS Nozzle",
+        "Fjs Ref",
+        "Gas Card",
+        "Inventory Eddie",
+        "GAS Expense",
+        "Inventory Adj",
+        "Walmart",
+        "Olson",
+        "Tom Olson",
+        "John Lenore",
+        "Chris",
+        "Lottery",
+        "Lotto",
+        "California Lottery",
+        "Lottery California",
+        "Home Depot",
+        "Staples",
+        "Optima",
+        "Wages",
+        "Francois",
+        "Lunch"
+      ],
+      "add_back_vendors": [],
+      "ignore_vendors": [],
+      "col_b_mode": "none",
+      "negative_invoices": "zero",
+      "empty_day": "null",
+      "notes": [
+        "2026-09-25 review: gas expense, inv adj, walmart, tom olson, john lenore, chris, lottery, home depot, staples, optima, wages, francois, lunch out; CMARK in. MTD through 09/23 = $58,300.83"
+      ],
+      "client_id": "42048"
+    },
+    "Spring Mtn Daily.xlsx": {
+      "store_id": "Spring Mtn Daily.xlsx",
+      "source_file": "Spring Mtn Daily.xlsx",
+      "client_id": "42280",
+      "exclude_vendors": [
+        "terminx",
+        "second chance",
+        "pump test",
+        "ideal lub",
+        "I c window",
+        "gas expense",
+        "francois",
+        "customer good",
+        "boss glass",
+        "I . C clearly",
+        "IC Clearly",
+        "Clearly",
+        "home depot",
+        "gas card",
+        "csecond chance",
+        "Marathon",
+        "Health"
+      ],
+      "add_back_vendors": [
+        "inventory adj"
+      ],
+      "ignore_vendors": [],
+      "col_b_mode": "add",
+      "negative_invoices": "zero",
+      "empty_day": "null",
+      "notes": [
+        "2026-09-25 review: Marathon out, Health out; I.C. Clearly match fixed. MTD through 09/23 = $47,549.76"
+      ]
+    },
+    "Tustin Daily.xlsx": {
+      "store_id": "Tustin Daily.xlsx",
+      "source_file": "Tustin Daily.xlsx",
+      "exclude_vendors": [
+        "Brandon",
+        "David Tarango",
+        "Francois",
+        "Home Depot",
+        "KL Air",
+        "Lottery Ca",
+        "Malou",
+        "Smart & Final",
+        "Universal",
+        "Lotto",
+        "California Lottery"
+      ],
+      "add_back_vendors": [
+        "Inventory",
+        "Marathon"
+      ],
+      "ignore_vendors": [],
+      "col_b_mode": "add",
+      "negative_invoices": "zero",
+      "empty_day": "null",
+      "notes": []
+    },
+    "Vista Daily.xlsx": {
+      "store_id": "Vista Daily.xlsx",
+      "source_file": "Vista Daily.xlsx",
+      "client_id": "42438",
+      "exclude_vendors": [
+        "Wired Up",
+        "Walmart",
+        "Pump Test",
+        "Pizza Hut",
+        "Lunch",
+        "Ideal Lubri",
+        "I C Clearly",
+        "Home Depot",
+        "Gas Expense",
+        "Gas Card",
+        "Fire Pro",
+        "CVS",
+        "Customer",
+        "Marathon"
+      ],
+      "add_back_vendors": [
+        "Inventory Adj"
+      ],
+      "ignore_vendors": [],
+      "col_b_mode": "add",
+      "negative_invoices": "zero",
+      "empty_day": "null",
+      "notes": [
+        "2026-09-25 review: Marathon out. MTD through 09/23 = $60,516.42"
+      ]
+    },
+    "Westminster Daily.xlsx": {
+      "store_id": "Westminster Daily.xlsx",
+      "source_file": "Westminster Daily.xlsx",
+      "exclude_vendors": [
+        "Aldi",
+        "California Lottery",
+        "Cont Supply",
+        "Garden",
+        "Gas Cards",
+        "Gas Expense",
+        "Joseph",
+        "Robert",
+        "Universal",
+        "Lunch",
+        "Lotto",
+        "Lottery California"
+      ],
+      "add_back_vendors": [
+        "Inventory Adj",
+        "Marathon"
+      ],
+      "ignore_vendors": [],
+      "col_b_mode": "add",
+      "negative_invoices": "zero",
+      "empty_day": "null",
+      "notes": []
+    }
+  }
+}

@@ -1,0 +1,6 @@
+Vendor Purchases
+Report: Non-Fuel Invoice Summary by Station/Vendor
+Group By: Vendor | Expand All
+
+Client: 42004 (Arco Placentia)
+Status: no monthly PDFs yet (S2K login cannot switch into this TSO)

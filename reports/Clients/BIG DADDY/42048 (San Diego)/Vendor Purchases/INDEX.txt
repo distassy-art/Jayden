@@ -1,0 +1,6 @@
+Vendor Purchases
+Report: Non-Fuel Invoice Summary by Station/Vendor
+Group By: Vendor | Expand All
+
+Client: 42048 (San Diego)
+Status: no monthly PDFs yet

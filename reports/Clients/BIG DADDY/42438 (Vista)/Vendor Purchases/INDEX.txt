@@ -1,0 +1,6 @@
+Vendor Purchases
+Report: Non-Fuel Invoice Summary by Station/Vendor
+Group By: Vendor | Expand All
+
+Client: 42438 (Vista)
+Status: no monthly PDFs yet
