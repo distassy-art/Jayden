@@ -213,7 +213,7 @@ def splice(script: str, cfg: dict) -> str:
         + "      if (billingGuard) return billingGuard;\n"
         + "    }\n"
     )
-    if "ssGuardBilling(request, env2)" not in script and bill_guard_old in script:
+    if "const billingGuard = await ssGuardBilling" not in script and bill_guard_old in script:
         script = script.replace(bill_guard_old, bill_guard_new, 1)
     return script
 
