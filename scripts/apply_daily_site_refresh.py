@@ -186,6 +186,13 @@ def splice(script: str, cfg: dict) -> str:
         script = script.replace(PROTO_HOOK_NARROW, PROTO_HOOK_WIDE, 1)
     if "ssPointManagerAtLiveBook(chosen)" not in script and SHELL_OLD in script:
         script = script.replace(SHELL_OLD, SHELL_NEW, 1)
+    simple_old = "  chosen = ssPointManagerAtLiveBook(chosen);\n"
+    simple_new = (
+        "  chosen = ssPointManagerAtLiveBook(chosen);\n"
+        "  chosen = ssSimplifyCommandCenter(chosen);\n"
+    )
+    if "ssSimplifyCommandCenter(chosen)" not in script and simple_old in script:
+        script = script.replace(simple_old, simple_new, 1)
     return script
 
 
