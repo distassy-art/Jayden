@@ -781,7 +781,7 @@ var SS_BILLING_VIEW_HTML = [
   "@media(max-width:800px){.bill-easy-kpis{grid-template-columns:1fr}}",
   "</style>",
   '<div class="report-masthead" data-report-masthead="1"><div class="rm-left"><img class="rm-logo" src="/logo-on-light.png?v=20260923" alt="Smart Solutions AI"><div class="rm-text"><p class="rm-wordmark">Smart Solutions <span class="bw-ai">AI</span></p><h2 id="billOwnerTitle">Billing</h2><p class="rm-sub" id="billOwnerMeta">Month to date</p></div></div><div class="rm-right"><span class="rm-conf">CONFIDENTIAL — Smart Solutions AI</span></div></div>',
-  '<p class="lead bill-easy-lead" id="billEasyLead">Pick a month, then one client. The bill below is only that client.</p>',
+  '<p class="lead bill-easy-lead" id="billEasyLead">Pick a month, then one client. Saved charges stay on that bill. New charges are added. A paid bill is not changed back.</p>',
   '<div class="bill-month-tabs" id="billMonthTabs" role="tablist" aria-label="Billing months"></div>',
   '<div class="store-picker" style="margin:0 0 14px;max-width:360px">',
   '<label class="store-label" for="billClientPick">Client</label>',
@@ -793,7 +793,7 @@ var SS_BILLING_VIEW_HTML = [
   '<div class="cc-kpi"><span class="lbl">Paid</span><span class="val" id="billEasyPaid">—</span><span class="sub" id="billEasyPaidSub">Cleared this month</span></div>',
   "</div>",
   '<p class="bill-easy-situation" id="billEasySituation">Loading…</p>',
-  '<p class="hint" id="billOwnerHint">Choose a client to see the bill.</p>',
+  '<p class="hint" id="billOwnerHint">Choose a client to see the saved bill.</p>',
   '<div id="billClientWrap" hidden>',
   '<h3 class="bill-easy-h" id="billClientTitle">Client</h3>',
   '<p class="bill-easy-sentence" id="billClientSentence"></p>',
@@ -891,6 +891,7 @@ var SS_BILLING_OWNER_JS = [
   "          if (host) {",
   "            host._billBound = false;",
   "            host.innerHTML = clientSectionsHtml([chosen], { admin: role === 'admin', month: selectedMonth });",
+  "            host.querySelectorAll('.bill-paid[data-status=\"unpaid\"]').forEach(function (btn) { btn.remove(); });",
   "            bindMonthActions('billOwnerMonths', 'billOwnerDetail');",
   "            bindStatementActions(host, invs, selectedMonth);",
   "          }",
@@ -934,6 +935,157 @@ function ssSimplifyBilling(html) {
     "      </div>\n      <div id=\"billingManager\"",
     "      </details>\n      <div id=\"billingManager\""
   );
+  html = html.replace(
+    "'<button type=\"button\" class=\"btn ghost bill-paid\" data-id=\"' + tcEsc(inv.id) +\n                   '\" data-status=\"unpaid\" style=\"width:auto;padding:6px 10px;min-height:0\">Mark unpaid</button></td></tr>';",
+    "'Paid · saved</td></tr>';"
+  );
+  html = html.replace(
+    "actions += st === 'paid'\n                  ? ' <button type=\"button\" class=\"btn ghost bill-paid\" data-id=\"' + tcEsc(inv.id) +\n                    '\" data-status=\"unpaid\" style=\"width:auto;display:inline-block;padding:6px 10px;min-height:0\">Mark unpaid</button>'\n                  : ' <button type=\"button\" class=\"btn bill-paid\" data-id=\"' + tcEsc(inv.id) +\n                    '\" data-status=\"paid\" style=\"width:auto;display:inline-block;padding:6px 10px;min-height:0\">Mark paid</button>';",
+    "if (st !== 'paid') actions += ' <button type=\"button\" class=\"btn bill-paid\" data-id=\"' + tcEsc(inv.id) +\n                    '\" data-status=\"paid\" style=\"width:auto;display:inline-block;padding:6px 10px;min-height:0\">Mark paid</button>';"
+  );
+  html = html.replace(
+    "const status = t.getAttribute('data-status');\n              t.disabled = true;",
+    "const status = t.getAttribute('data-status');\n              if (status !== 'paid') { alert('A saved bill stays. You can mark it paid. You cannot change it back.'); return; }\n              t.disabled = true;"
+  );
+  html = html.replace(
+    "            (DATA.billing.invoices || []).forEach(function (inv) {\n              if (inv && by[inv.id]) {\n                inv.status = by[inv.id].status || inv.status;\n                inv.paidAt = by[inv.id].paidAt;\n              }\n            });\n            if (document.getElementById('view-billing') && document.getElementById('view-billing').classList.contains('on')) buildBilling();",
+    "            var local = DATA.billing.invoices || [];\n            var seen = {};\n            local.forEach(function (inv) {\n              if (!inv || !inv.id) return;\n              seen[inv.id] = true;\n              var live = by[inv.id];\n              if (!live) return;\n              var wasPaid = String(inv.status || '').toLowerCase() === 'paid';\n              var livePaid = String(live.status || '').toLowerCase() === 'paid';\n              if (livePaid || !wasPaid) {\n                if (live.status) inv.status = live.status;\n                if (livePaid) inv.paidAt = live.paidAt || inv.paidAt;\n              }\n              if (Array.isArray(live.lines) && live.lines.length) {\n                var have = {};\n                (inv.lines || []).forEach(function (l) { have[orderChargeLineKey(l)] = true; });\n                live.lines.forEach(function (l) {\n                  if (!l || have[orderChargeLineKey(l)]) return;\n                  if (!inv.lines) inv.lines = [];\n                  inv.lines.push(l);\n                });\n                var sum = Math.round(inv.lines.reduce(function (n, l) { return n + (Number(l.fee) || 0); }, 0) * 100) / 100;\n                if (sum > (Number(inv.total) || 0)) { inv.total = sum; inv.amount = sum; }\n              }\n            });\n            Object.keys(by).forEach(function (id) {\n              if (seen[id]) return;\n              var copy = Object.assign({}, by[id]);\n              delete copy.clientEmails;\n              local.push(copy);\n            });\n            if (document.getElementById('view-billing') && document.getElementById('view-billing').classList.contains('active')) buildBilling();"
+  );
   return html;
+}
+
+function ssBillingJson(status, obj) {
+  return new Response(JSON.stringify(obj), {
+    status: status,
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-store, no-cache, must-revalidate",
+      "X-SS-Data-Source": "billing-append"
+    }
+  });
+}
+
+function ssBillLineKey(line) {
+  var amt = line && (line.sourceAmount != null ? line.sourceAmount : line.amount);
+  return [
+    String((line && line.store) || ""),
+    String((line && (line.orderVendor || line.vendor)) || "").toLowerCase(),
+    Number(amt || 0).toFixed(2),
+    String((line && line.date) || "")
+  ].join("|");
+}
+
+function ssBillingIsAdmin(payload, request) {
+  var role = String((payload && payload.role) || request.headers.get("x-ss-role") || "").toLowerCase();
+  var email = String((payload && payload.email) || request.headers.get("x-ss-email") || "").toLowerCase();
+  if (role !== "admin" && role !== "owner") return false;
+  var id = email.split("@")[0];
+  var ok = { admin: 1, smartsolutionsai: 1, minamorcos: 1 };
+  return !!(ok[email] || ok[id]);
+}
+
+async function ssGuardBilling(request, env2) {
+  if (!request || request.method === "GET" || request.method === "HEAD" || request.method === "OPTIONS") return null;
+  if (request.method !== "POST") return null;
+  var payload = null;
+  try {
+    payload = await request.clone().json();
+  } catch (e) {
+    return null;
+  }
+  if (!payload || typeof payload !== "object") return null;
+  var action = String(payload.action || "").toLowerCase();
+  if (action === "set-status" && String(payload.status || "").toLowerCase() !== "paid") {
+    return ssBillingJson(400, { ok: false, error: "billing_append_only" });
+  }
+  if (action === "delete-expense" || action === "delete-fee" || action === "deletefee") {
+    return ssBillingJson(400, { ok: false, error: "billing_append_only" });
+  }
+  if (!ssBillingIsAdmin(payload, request)) return null;
+  if (action !== "set-status" && action !== "add-lines") return null;
+  var ns = env2 && env2.SS_MGR;
+  if (!ns || typeof readJson !== "function" || typeof writeJson !== "function") return null;
+  var prev = (await readJson(ns, "billing", null)) || {};
+  var now = new Date().toISOString();
+  var statuses = Object.assign({}, prev.statuses && typeof prev.statuses === "object" ? prev.statuses : {});
+  var invoices = Array.isArray(prev.invoices) ? prev.invoices.slice() : [];
+  if (action === "set-status") {
+    var id = String(payload.id || "");
+    if (!id) return ssBillingJson(400, { ok: false, error: "id_required" });
+    var already = statuses[id] && statuses[id].status === "paid" ? statuses[id].paidAt : null;
+    statuses[id] = { status: "paid", paidAt: already || now, updatedAt: now };
+    var slim = {
+      version: 2,
+      updatedAt: now,
+      statuses: statuses,
+      invoices: invoices,
+      expenses: Array.isArray(prev.expenses) ? prev.expenses : [],
+      fees: prev.fees && typeof prev.fees === "object" ? prev.fees : undefined
+    };
+    await writeJson(ns, "billing", slim);
+    return ssBillingJson(200, { ok: true, invoice: { id: id, status: "paid", paidAt: statuses[id].paidAt }, invoices: invoices.map(function (row) {
+      if (!row || !row.id || !statuses[row.id]) return row;
+      return Object.assign({}, row, { status: statuses[row.id].status, paidAt: statuses[row.id].paidAt });
+    }) });
+  }
+  var invoiceId = String(payload.id || (payload.invoice && payload.invoice.id) || "");
+  if (!invoiceId) return ssBillingJson(400, { ok: false, error: "id_required" });
+  var incoming = payload.invoice && typeof payload.invoice === "object" ? payload.invoice : {};
+  var incomingLines = Array.isArray(incoming.lines) ? incoming.lines : (Array.isArray(payload.lines) ? payload.lines : []);
+  var stored = null;
+  for (var i = 0; i < invoices.length; i++) {
+    if (invoices[i] && invoices[i].id === invoiceId) stored = invoices[i];
+  }
+  if (!stored) {
+    stored = {
+      id: invoiceId,
+      client: incoming.client || "",
+      month: incoming.month || "",
+      kind: incoming.kind || "",
+      description: incoming.description || "",
+      status: statuses[invoiceId] && statuses[invoiceId].status === "paid" ? "paid" : (incoming.status === "paid" ? "paid" : "unpaid"),
+      lines: [],
+      total: 0,
+      amount: 0
+    };
+    invoices.push(stored);
+  }
+  var have = {};
+  (stored.lines || []).forEach(function (line) { have[ssBillLineKey(line)] = true; });
+  if (!Array.isArray(stored.lines)) stored.lines = [];
+  incomingLines.forEach(function (line) {
+    if (!line || typeof line !== "object") return;
+    var key = ssBillLineKey(line);
+    if (have[key]) return;
+    have[key] = true;
+    var copy = Object.assign({}, line);
+    delete copy._ssNew;
+    delete copy.clientEmails;
+    stored.lines.push(copy);
+  });
+  var sum = 0;
+  stored.lines.forEach(function (line) { sum += Number(line && line.fee) || 0; });
+  sum = Math.round(sum * 100) / 100;
+  var prevTotal = Number(stored.total) || 0;
+  var asked = Number(incoming.total);
+  if (Number.isFinite(asked) && asked > prevTotal) prevTotal = asked;
+  if (sum > prevTotal) prevTotal = sum;
+  stored.total = prevTotal;
+  stored.amount = prevTotal;
+  stored.updatedAt = now;
+  if (stored.status === "paid" || (statuses[invoiceId] && statuses[invoiceId].status === "paid")) {
+    stored.status = "paid";
+    stored.paidAt = (statuses[invoiceId] && statuses[invoiceId].paidAt) || stored.paidAt || null;
+  }
+  var pack = {
+    version: 2,
+    updatedAt: now,
+    statuses: statuses,
+    invoices: invoices,
+    expenses: Array.isArray(prev.expenses) ? prev.expenses : [],
+    fees: prev.fees && typeof prev.fees === "object" ? prev.fees : undefined
+  };
+  await writeJson(ns, "billing", pack);
+  return ssBillingJson(200, { ok: true, invoice: { id: stored.id, status: stored.status, total: stored.total, lineCount: stored.lines.length } });
 }
 /* ss-daily-refresh-v1-end */

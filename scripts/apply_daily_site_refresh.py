@@ -200,6 +200,21 @@ def splice(script: str, cfg: dict) -> str:
     )
     if "ssSimplifyBilling(chosen)" not in script and bill_old in script:
         script = script.replace(bill_old, bill_new, 1)
+    bill_guard_old = (
+        '    if (path === "/data/daily_september.json") {\n'
+        "      const liveDaily = await ssServeDailySeptember(request, env2);\n"
+        "      if (liveDaily) return liveDaily;\n"
+        "    }\n"
+    )
+    bill_guard_new = (
+        bill_guard_old
+        + '    if (path === "/api/billing" || path === "/.netlify/functions/billing") {\n'
+        + "      const billingGuard = await ssGuardBilling(request, env2);\n"
+        + "      if (billingGuard) return billingGuard;\n"
+        + "    }\n"
+    )
+    if "ssGuardBilling(request, env2)" not in script and bill_guard_old in script:
+        script = script.replace(bill_guard_old, bill_guard_new, 1)
     return script
 
 
