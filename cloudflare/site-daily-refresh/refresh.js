@@ -544,8 +544,8 @@ function ssPageBuildCommandCenter() {
       var s = spendBy[id] || {};
       var sales = m.sales != null ? Number(m.sales) : 0;
       var profit = m.profit != null ? Number(m.profit) : 0;
-      var bought = (s.spent != null && Number.isFinite(Number(s.spent))) ? Number(s.spent) : dailyPurch(id);
-      if (bought == null) bought = 0;
+      var fromBook = dailyPurch(id);
+      var bought = fromBook != null ? fromBook : (s.spent != null && Number.isFinite(Number(s.spent)) ? Number(s.spent) : 0);
       var budget = (s.budget != null && Number(s.budget) > 0) ? Number(s.budget) : null;
       var left = budget != null ? (budget - bought) : null;
       var margin = sales > 0 ? (profit / sales) : null;
