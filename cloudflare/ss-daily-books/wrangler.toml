@@ -1,0 +1,14 @@
+# Additive worker. Does not replace ss-api, ss-unified-proto, or ss-app-shell.
+# It only answers /data/daily_september.json from the live books overlay.
+name = "ss-daily-books"
+main = "worker.js"
+compatibility_date = "2026-09-01"
+workers_dev = false
+
+[[routes]]
+pattern = "smartsolutionsai.us/data/daily_september.json*"
+zone_name = "smartsolutionsai.us"
+
+[[routes]]
+pattern = "www.smartsolutionsai.us/data/daily_september.json*"
+zone_name = "smartsolutionsai.us"
