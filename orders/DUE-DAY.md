@@ -4,7 +4,7 @@ GitHub is the order list. Update this repo. The files under `orders/ledger/` are
 
 ## When to start
 
-Start at 4:00 AM America/Los_Angeles on the due day so every store’s order for that vendor is on the GitHub list by 6:00 AM the same morning. Delivery days stay as they are in `orders/ledger/order-calendar.json`.
+Start at 2:00 AM America/Los_Angeles on the due day so every store’s order for that vendor is on the GitHub list by 6:00 AM the same morning. Delivery days stay as they are in `orders/ledger/order-calendar.json`.
 
 | Vendor | Due day | Ready by | What to do |
 |---|---|---|---|
