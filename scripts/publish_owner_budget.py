@@ -447,7 +447,7 @@ def orders_due_pairs():
         ),
         (
             '          root.innerHTML = ownerBlock + dueBoard + mainNumbers + storeBlock;\n          if (!ownerBlock) {\n            root.innerHTML = \'<div class="card panel orders-l1-section"><p class="hint" style="margin:12px">No paired AI vs manager rows yet.</p></div>\' + dueBoard + mainNumbers + storeBlock;\n          }\n',
-            '          var dueSplit = ordersDueSplitHtml(allClients, todayDue, tomorrowDue);\n          root.innerHTML = dueSplit + ownerBlock + dueBoard + mainNumbers + storeBlock;\n          if (!ownerBlock) {\n            root.innerHTML = dueSplit + \'<div class="card panel orders-l1-section"><p class="hint" style="margin:12px">No paired AI vs manager rows yet.</p></div>\' + dueBoard + mainNumbers + storeBlock;\n          }\n          try { ordersBindDueSplit(); } catch (eDueSplit) {}\n',
+            '          var dueSplit = ordersDueSplitHtml(allClients, todayDue, tomorrowDue);\n          root.innerHTML = dueSplit + ownerBlock + dueBoard + storeBlock;\n          if (!ownerBlock) {\n            root.innerHTML = dueSplit + dueBoard + storeBlock;\n          }\n          try { ordersBindDueSplit(); } catch (eDueSplit) {}\n',
         ),
         (
             '        const dueTodayCount = collectDueOrdersForDay(clients, todayDue).length;\n',
@@ -464,6 +464,18 @@ def orders_due_pairs():
         (
             '        root.innerHTML = summaryHtml + calendarHtml + dayDetail + tableHtml;\n',
             '        root.innerHTML = summaryHtml + calendarHtml + dayDetail + tableHtml;\n        try { ordersBindDueSplit(); } catch (eDueSplitL2) {}\n',
+        ),
+        (
+            "        return compared + pend;\n",
+            "        return '';\n",
+        ),
+        (
+            '<span class="meta">Paired AI vs manager</span>',
+            '<span class="meta">Summary</span>',
+        ),
+        (
+            "(st.paired ? (st.paired + ' paired') : (orderN ? 'Awaiting manager match' : 'No orders yet'))",
+            "(orderN ? (orderN + ' orders') : 'No orders yet')",
         ),
     ]
 
