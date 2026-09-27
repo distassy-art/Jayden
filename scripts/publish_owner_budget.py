@@ -181,8 +181,155 @@ def binding_names(token: str, name: str) -> list[str]:
     return sorted(f"{b.get('type')}:{b.get('name')}" for b in bindings)
 
 
+def active_pairs() -> list:
+    """Admin sees every station and one station. Budget and Command Center sit together."""
+    scope_from = (
+        "        if (ownerKey && ownerKey !== 'all') return ownerKey;\n"
+        "        if (typeof role !== 'undefined' && role !== 'admin' && typeof stationIdsForScope === 'function') {\n"
+        "          var scoped = stationIdsForScope().map(String).filter(function (id) { return id !== '42642'; });\n"
+        "          if (scoped.length === 1) return scoped[0];\n"
+        "          if (scoped.length) return '__scope__';\n"
+        "        }\n"
+        "        return '';"
+    )
+    scope_to = (
+        "        if (ownerKey && ownerKey !== 'all') return ownerKey;\n"
+        "        if (typeof stationIdsForScope === 'function') {\n"
+        "          var scoped = stationIdsForScope().map(String).filter(function (id) { return id !== '42642' && id !== 'demo'; });\n"
+        "          if (typeof role !== 'undefined' && role !== 'admin') {\n"
+        "            if (scoped.length === 1) return scoped[0];\n"
+        "            if (scoped.length) return '__scope__';\n"
+        "          } else if (!ownerKey || ownerKey === 'all') {\n"
+        "            return '__scope__';\n"
+        "          }\n"
+        "        }\n"
+        "        return '';"
+    )
+    label_from = (
+        "        if (k === '__scope__') {\n"
+        "          var n = (typeof stationIdsForScope === 'function') ? stationIdsForScope().length : 0;\n"
+        "          return n ? ('Your stations (' + n + ')') : 'Your stations';\n"
+        "        }"
+    )
+    label_to = (
+        "        if (k === '__scope__') {\n"
+        "          var ids = [];\n"
+        "          if (typeof role !== 'undefined' && role === 'admin' && typeof budgetClientList === 'function') {\n"
+        "            ids = budgetClientList().map(function (c) { return String(c.id); });\n"
+        "          } else if (typeof stationIdsForScope === 'function') {\n"
+        "            ids = stationIdsForScope().map(String);\n"
+        "          }\n"
+        "          ids = ids.filter(function (id) { return id !== '42642' && id !== 'demo'; });\n"
+        "          var scopeName = (typeof role !== 'undefined' && role === 'admin') ? 'All stations' : 'Your stations';\n"
+        "          return ids.length ? (scopeName + ' (' + ids.length + ')') : scopeName;\n"
+        "        }"
+    )
+    stores_from = (
+        "        if (raw === '__scope__') {\n"
+        "          storeIds = (typeof stationIdsForScope === 'function') ? stationIdsForScope().map(String) : [];\n"
+        "        } else if (looksLikeStore) {"
+    )
+    stores_to = (
+        "        if (raw === '__scope__') {\n"
+        "          if (typeof role !== 'undefined' && role === 'admin' && typeof budgetClientList === 'function') {\n"
+        "            storeIds = budgetClientList().map(function (c) { return String(c.id); });\n"
+        "          } else {\n"
+        "            storeIds = (typeof stationIdsForScope === 'function') ? stationIdsForScope().map(String) : [];\n"
+        "          }\n"
+        "          storeIds = storeIds.filter(function (id) { return id !== '42642' && id !== 'demo'; });\n"
+        "        } else if (looksLikeStore) {"
+    )
+    option_from = "((typeof role !== 'undefined' && role !== 'admin') ? 'All your stations' : 'Select a client…')"
+    option_to = "((typeof role !== 'undefined' && role !== 'admin') ? 'All your stations' : 'All stations')"
+    reset_from = "          } else if (sp && !sid && typeof role !== 'undefined' && role !== 'admin') {"
+    reset_to = "          } else if (sp && !sid) {"
+    lead_from = (
+        "        if (budgetLead && typeof role !== 'undefined' && role !== 'admin') {\n"
+        "          budgetLead.textContent = 'Your stations only. All stores shows every station you own. Pick one station to see that budget.';\n"
+        "        }"
+    )
+    lead_to = (
+        "        if (budgetLead && typeof role !== 'undefined' && role === 'admin') {\n"
+        "          budgetLead.textContent = 'All stations together. Pick one station to see that budget.';\n"
+        "        } else if (budgetLead && typeof role !== 'undefined' && role !== 'admin') {\n"
+        "          budgetLead.textContent = 'Your stations only. All stores shows every station you own. Pick one station to see that budget.';\n"
+        "        }"
+    )
+    swaps = [
+        (scope_from, scope_to),
+        (label_from, label_to),
+        (stores_from, stores_to),
+        (option_from, option_to),
+        (reset_from, reset_to),
+        (lead_from, lead_to),
+    ]
+    out = []
+    seen = {a: False for a, _b in swaps}
+    for old, new in PAIRS:
+        for src, dst in swaps:
+            if src in new:
+                new = new.replace(src, dst, 1)
+                seen[src] = True
+        out.append((old, new))
+    missing = [src[:48] for src, hit in seen.items() if not hit]
+    if missing:
+        raise SystemExit(f"owner budget pairs drifted: {missing}")
+    out.append((
+        "          <button type=\"button\" data-view=\"budget\" id=\"navBudget\" hidden>Budget</button>\n"
+        "        </div>\n"
+        "      </div>\n"
+        "      <div class=\"nav-group\" data-nav-group=\"control\">\n"
+        "        <span class=\"nav-group-label\">Control</span>\n"
+        "        <div class=\"nav-group-btns\">\n"
+        "          <button type=\"button\" data-view=\"inventory\" id=\"navInventory\">Inventory</button>\n"
+        "          <button type=\"button\" data-view=\"command\" id=\"navCommand\" hidden>Command Center</button>\n",
+        "          <button type=\"button\" data-view=\"budget\" id=\"navBudget\" hidden>Budget</button>\n"
+        "          <button type=\"button\" data-view=\"command\" id=\"navCommand\" hidden>Command Center</button>\n"
+        "        </div>\n"
+        "      </div>\n"
+        "      <div class=\"nav-group\" data-nav-group=\"control\">\n"
+        "        <span class=\"nav-group-label\">Control</span>\n"
+        "        <div class=\"nav-group-btns\">\n"
+        "          <button type=\"button\" data-view=\"inventory\" id=\"navInventory\">Inventory</button>\n",
+    ))
+    out.append((
+        "    .main-nav .nav-group:not(:has(button:not([hidden]))) { display: none; }\n",
+        "    .main-nav .nav-group:not(:has(button:not([hidden]))) { display: none; }\n"
+        "    .main-nav .nav-group[data-nav-group=\"money\"] .nav-group-btns { flex-wrap: nowrap; }\n",
+    ))
+    out.append((
+        "  var back = document.getElementById(\"commandBackAll\");\n"
+        "  if (back) {\n"
+        "    back.hidden = !!single;\n"
+        "    back.onclick = function () {\n"
+        "      _ccSelectedStoreId = null;\n"
+        "      buildCommandCenter();\n"
+        "    };\n"
+        "  }\n",
+        "  var back = document.getElementById(\"commandBackAll\");\n"
+        "  if (back) {\n"
+        "    var picker = document.getElementById(\"storePicker\");\n"
+        "    var multi = !!(picker && picker.options && picker.options.length > 1);\n"
+        "    back.hidden = !!single && !multi;\n"
+        "    back.textContent = (typeof role !== \"undefined\" && role === \"admin\") ? \"All clients\" : \"All your stations\";\n"
+        "    back.onclick = function () {\n"
+        "      _ccSelectedStoreId = null;\n"
+        "      var sp = document.getElementById(\"storePicker\");\n"
+        "      if (sp && Array.prototype.some.call(sp.options, function (o) { return o.value === \"all\"; })) {\n"
+        "        sp.value = \"all\";\n"
+        "        try { sessionStorage.setItem(\"ss_station\", \"all\"); } catch (eBack) {}\n"
+        "        sp.dispatchEvent(new Event(\"change\", { bubbles: true }));\n"
+        "        return;\n"
+        "      }\n"
+        "      buildCommandCenter();\n"
+        "    };\n"
+        "  }\n",
+    ))
+    return out
+
+
 def js_block() -> str:
-    encoded = json.dumps(PAIRS, ensure_ascii=True, separators=(",", ":"))
+    encoded = json.dumps(active_pairs(), ensure_ascii=True, separators=(",", ":"))
     return (
         BLOCK_START
         + "\nfunction ssOwnerBudget(html) {\n"
@@ -301,6 +448,9 @@ if (!out.includes('"stationId": "42674"')) process.exit(9);
 if (ssOwnerBudget(out) !== out) process.exit(10);
 if (!out.includes("return '__scope__'")) process.exit(11);
 if (!out.includes("All your stations")) process.exit(12);
+if (!out.includes("All stations together")) process.exit(13);
+if (!out.includes('id="navBudget" hidden>Budget</button>\\n          <button type="button" data-view="command"')) process.exit(14);
+if (out.includes('id="navInventory">Inventory</button>\\n          <button type="button" data-view="command"')) process.exit(15);
 fs.writeFileSync("/tmp/owner-budget-transformed.html", out);
 const open = out.lastIndexOf("<script>", out.indexOf("function buildBudget("));
 const close = out.indexOf("</script>", out.indexOf("function buildBudget("));
@@ -360,11 +510,15 @@ def confirm_previous_pages(stamp: str) -> None:
         "/* ss-owner-budget-applied */",
         "return '__scope__'",
         "All your stations",
+        "All stations together",
+        'id="navBudget" hidden>Budget</button>\n          <button type="button" data-view="command"',
     ):
         if marker not in html:
             raise SystemExit(f"live app lost {marker}")
     if "navBudget.hidden = !(role === 'admin');" in html:
         raise SystemExit("budget tab is still admin only")
+    if 'id="navInventory">Inventory</button>\n          <button type="button" data-view="command"' in html:
+        raise SystemExit("Command Center is still separated from Budget")
     _arco_headers, arco = fetch_live("/inventory/42352/2026-09-26/count.pdf")
     if not arco.startswith(b"%PDF"):
         raise SystemExit("Arco Db count PDF is no longer a PDF")
@@ -383,9 +537,19 @@ def main() -> None:
     args = parser.parse_args()
     block = js_block()
     _headers, html_bytes = fetch_live("/app.html?nocache=owner-budget-preflight")
-    html = html_bytes.decode("utf-8", "replace")
-    if "ss-tustin-cig-v1" not in html:
+    live_html = html_bytes.decode("utf-8", "replace")
+    if "ss-tustin-cig-v1" not in live_html:
         raise SystemExit("live app is missing the Tustin inventory page")
+    # The live page already includes this transform. Test against the shell
+    # from before it, which is what the worker still receives from assets.
+    html = live_html
+    if "/* ss-owner-budget-applied */" in live_html:
+        original = Path("/tmp/app-budget-tab.html")
+        if not original.exists():
+            raise SystemExit("pre-transform app shell is missing")
+        html = original.read_text()
+        if "/* ss-owner-budget-applied */" in html:
+            raise SystemExit("saved app shell is already transformed")
     transform_live_html(block, html)
     token = load_token()
     token, script = download_script(token)
