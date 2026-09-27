@@ -435,12 +435,60 @@ def budget_summary_pairs():
     ]
 
 
+def orders_due_pairs():
+    return [
+        (
+            '      function ordersDueBoardHtml(clients, today, tomorrow, opts) {\n',
+            '      /* ss-orders-due-v1 */\n      function ordersDueKpiButton(kind, count, dayIso) {\n        var label = kind === \'tomorrow\' ? \'Due tomorrow\' : \'Due today\';\n        return \'<button type="button" class="card kpi" data-orders-due-open="\' + kind + \'">\' +\n          \'<div class="kpi-label">\' + label + \'</div>\' +\n          \'<div class="kpi-value">\' + count + \'</div>\' +\n          \'<div class="kpi-context">\' + niceOrderDate(dayIso) + \'</div></button>\';\n      }\n      function ordersDueSplitHtml(clients, todayIso, tomorrowIso) {\n        var todayRows = collectDueOrdersForDay(clients, todayIso);\n        var tomorrowRows = collectDueOrdersForDay(clients, tomorrowIso);\n        return \'<div id="ordersDueSplit" hidden data-orders-due-split="1" class="card panel" style="padding:0;margin:0 0 14px;overflow:hidden">\' +\n          \'<style>button.card.kpi{appearance:none;-webkit-appearance:none;background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);border-radius:var(--radius);padding:14px 16px;text-align:left;cursor:pointer;font:inherit;color:inherit;width:100%}button.card.kpi:hover{outline:2px solid #8fb4d4}</style>\' +\n          \'<div class="section-head" style="padding:12px 14px;margin:0"><h2 style="margin:0">Due today and tomorrow</h2>\' +\n          \'<span class="meta">A finished order leaves this list, including one done early</span></div>\' +\n          \'<div class="order-due-days">\' +\n          dueDayPanelHtml(\'Due today\', todayIso, todayRows, true) +\n          dueDayPanelHtml(\'Due tomorrow\', tomorrowIso, tomorrowRows, true) +\n          \'</div></div>\';\n      }\n      function ordersBindDueSplit() {\n        var panel = document.getElementById(\'ordersDueSplit\');\n        document.querySelectorAll(\'[data-orders-due-open]\').forEach(function (btn) {\n          btn.onclick = function () {\n            if (!panel) return;\n            panel.hidden = !panel.hidden;\n            if (!panel.hidden) panel.scrollIntoView({ block: \'nearest\' });\n          };\n        });\n      }\n      function ordersDueBoardHtml(clients, today, tomorrow, opts) {\n',
+        ),
+        (
+            '            kpis.className = \'kpi-grid orders-kpi-grid orders-exec-strip\';\n            if (role === \'manager\') {\n              kpis.innerHTML =\n                \'<div class="card kpi"><div class="kpi-label">Due today</div><div class="kpi-value">\' + storesDue + \'</div><div class="kpi-context">\' + niceOrderDate(todayDue) + \'</div></div>\' +\n                \'<div class="card kpi"><div class="kpi-label">Stuck PDF</div><div class="kpi-value" style="color:#b42318">\' + stuckPdf + \'</div><div class="kpi-context">Missing / failed</div></div>\' +\n                \'<div class="card kpi"><div class="kpi-label">Stores</div><div class="kpi-value">\' + storeRows.length + \'</div><div class="kpi-context">Your scope</div></div>\';\n            } else {\n              kpis.innerHTML =\n                \'<div class="card kpi"><div class="kpi-label">AI ordered</div><div class="kpi-value">\' + orderMoney(totAiAll) + \'</div><div class="kpi-context">\' + monthKey + \' · all orders so far</div></div>\' +\n                \'<div class="card kpi"><div class="kpi-label">Manager $</div><div class="kpi-value">\' + orderMoney(totMgr) + \'</div><div class="kpi-context">Paired actual</div></div>\' +\n                \'<div class="card kpi"><div class="kpi-label">Variance</div><div class="kpi-value">\' + (totVar == null ? \'—\' : orderMoney(totVar)) + \'</div><div class="kpi-context">Mgr − AI · \' + pairedOrders + \' paired</div></div>\' +\n                \'<div class="card kpi"><div class="kpi-label">Due today</div><div class="kpi-value">\' + storesDue + \'</div><div class="kpi-context">\' + niceOrderDate(todayDue) + (stuckPdf ? (\' · \' + stuckPdf + \' stuck PDF\') : \'\') + \'</div></div>\';\n            }\n          }\n',
+            '            kpis.className = \'kpi-grid orders-kpi-grid\';\n            var tomorrowDueKpi = (function () {\n              var d = new Date(String(todayDue).slice(0, 10) + \'T12:00:00\');\n              if (isNaN(d.getTime())) d = new Date();\n              d.setDate(d.getDate() + 1);\n              return d.getFullYear() + \'-\' + String(d.getMonth() + 1).padStart(2, \'0\') + \'-\' + String(d.getDate()).padStart(2, \'0\');\n            })();\n            var dueTodayOrders = collectDueOrdersForDay(allClients, todayDue).length;\n            var dueTomorrowOrders = collectDueOrdersForDay(allClients, tomorrowDueKpi).length;\n            if (role === \'manager\') {\n              kpis.innerHTML =\n                ordersDueKpiButton(\'today\', dueTodayOrders, todayDue) +\n                ordersDueKpiButton(\'tomorrow\', dueTomorrowOrders, tomorrowDueKpi) +\n                \'<div class="card kpi"><div class="kpi-label">Stuck PDF</div><div class="kpi-value" style="color:#b42318">\' + stuckPdf + \'</div><div class="kpi-context">Missing / failed</div></div>\' +\n                \'<div class="card kpi"><div class="kpi-label">Stores</div><div class="kpi-value">\' + storeRows.length + \'</div><div class="kpi-context">Your scope</div></div>\';\n            } else {\n              kpis.innerHTML =\n                \'<div class="card kpi"><div class="kpi-label">AI ordered</div><div class="kpi-value">\' + orderMoney(totAiAll) + \'</div><div class="kpi-context">\' + monthKey + \' · all orders so far</div></div>\' +\n                \'<div class="card kpi"><div class="kpi-label">Manager $</div><div class="kpi-value">\' + orderMoney(totMgr) + \'</div><div class="kpi-context">Paired actual</div></div>\' +\n                \'<div class="card kpi"><div class="kpi-label">Variance</div><div class="kpi-value">\' + (totVar == null ? \'—\' : orderMoney(totVar)) + \'</div><div class="kpi-context">Mgr − AI · \' + pairedOrders + \' paired</div></div>\' +\n                ordersDueKpiButton(\'today\', dueTodayOrders, todayDue) +\n                ordersDueKpiButton(\'tomorrow\', dueTomorrowOrders, tomorrowDueKpi);\n            }\n          }\n',
+        ),
+        (
+            '          root.innerHTML = ownerBlock + dueBoard + mainNumbers + storeBlock;\n          if (!ownerBlock) {\n            root.innerHTML = \'<div class="card panel orders-l1-section"><p class="hint" style="margin:12px">No paired AI vs manager rows yet.</p></div>\' + dueBoard + mainNumbers + storeBlock;\n          }\n',
+            '          var dueSplit = ordersDueSplitHtml(allClients, todayDue, tomorrowDue);\n          root.innerHTML = dueSplit + ownerBlock + dueBoard + mainNumbers + storeBlock;\n          if (!ownerBlock) {\n            root.innerHTML = dueSplit + \'<div class="card panel orders-l1-section"><p class="hint" style="margin:12px">No paired AI vs manager rows yet.</p></div>\' + dueBoard + mainNumbers + storeBlock;\n          }\n          try { ordersBindDueSplit(); } catch (eDueSplit) {}\n',
+        ),
+        (
+            '        const dueTodayCount = collectDueOrdersForDay(clients, todayDue).length;\n',
+            "        const dueTodayCount = collectDueOrdersForDay(clients, todayDue).length;\n        var dueTomorrowIso = (function () {\n          var d = new Date(String(todayDue).slice(0, 10) + 'T12:00:00');\n          if (isNaN(d.getTime())) d = new Date();\n          d.setDate(d.getDate() + 1);\n          return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');\n        })();\n        var dueTomorrowCount = collectDueOrdersForDay(clients, dueTomorrowIso).length;\n",
+        ),
+        (
+            '          kpis.className = \'kpi-grid orders-kpi-grid orders-exec-strip\';\n          kpis.innerHTML =\n            \'<div class="card kpi"><div class="kpi-label">AI $</div><div class="kpi-value">\' + orderMoney(monthTotal) + \'</div><div class="kpi-context">\' + String(aimgr ? aimgr.aiCount : monthRows.length) + \' orders</div></div>\' +\n            \'<div class="card kpi"><div class="kpi-label">Manager $</div><div class="kpi-value">\' + orderMoney(mgrMonthTotal) + \'</div><div class="kpi-context">\' + String(aimgr ? aimgr.mgrCount : 0) + \' matched</div></div>\' +\n            \'<div class="card kpi"><div class="kpi-label">Variance</div><div class="kpi-value">\' + (aimgr && aimgr.variance != null ? orderMoney(aimgr.variance) : \'—\') + \'</div><div class="kpi-context">Mgr − AI · cut/add \' + (aimgr ? (aimgr.cutTotal + \'/\' + aimgr.addTotal) : \'—\') + \'</div></div>\' +\n            \'<div class="card kpi"><div class="kpi-label">Due today</div><div class="kpi-value">\' + dueTodayCount + \'</div><div class="kpi-context">\' + niceOrderDate(todayDue) + \'</div></div>\';\n        }\n',
+            '          kpis.className = \'kpi-grid orders-kpi-grid\';\n          kpis.innerHTML =\n            \'<div class="card kpi"><div class="kpi-label">AI $</div><div class="kpi-value">\' + orderMoney(monthTotal) + \'</div><div class="kpi-context">\' + String(aimgr ? aimgr.aiCount : monthRows.length) + \' orders</div></div>\' +\n            \'<div class="card kpi"><div class="kpi-label">Manager $</div><div class="kpi-value">\' + orderMoney(mgrMonthTotal) + \'</div><div class="kpi-context">\' + String(aimgr ? aimgr.mgrCount : 0) + \' matched</div></div>\' +\n            \'<div class="card kpi"><div class="kpi-label">Variance</div><div class="kpi-value">\' + (aimgr && aimgr.variance != null ? orderMoney(aimgr.variance) : \'—\') + \'</div><div class="kpi-context">Mgr − AI · cut/add \' + (aimgr ? (aimgr.cutTotal + \'/\' + aimgr.addTotal) : \'—\') + \'</div></div>\' +\n            ordersDueKpiButton(\'today\', dueTodayCount, todayDue) +\n            ordersDueKpiButton(\'tomorrow\', dueTomorrowCount, dueTomorrowIso);\n        }\n',
+        ),
+        (
+            '        const dueHtml = ordersDueTodayPanelHtml(clients, todayDue);\n',
+            '        const dueHtml = ordersDueSplitHtml(clients, todayDue, dueTomorrowIso);\n',
+        ),
+        (
+            '        root.innerHTML = summaryHtml + calendarHtml + dayDetail + tableHtml;\n',
+            '        root.innerHTML = summaryHtml + calendarHtml + dayDetail + tableHtml;\n        try { ordersBindDueSplit(); } catch (eDueSplitL2) {}\n',
+        ),
+    ]
+
 def js_block() -> str:
     encoded = json.dumps(active_pairs(), ensure_ascii=True, separators=(",", ":"))
+    orders_encoded = json.dumps(orders_due_pairs(), ensure_ascii=True, separators=(",", ":"))
     return (
         BLOCK_START
-        + "\nfunction ssOwnerBudget(html) {\n"
-        + '  if (!html || html.indexOf("/* ss-owner-budget-applied */") >= 0) return html;\n'
+        + "\nfunction ssOrdersDue(html) {\n"
+        + '  if (!html || html.indexOf("/* ss-orders-due-v1 */") >= 0) return html;\n'
+        + "  var pairs = "
+        + orders_encoded
+        + ";\n"
+        + "  var i;\n"
+        + "  for (i = 0; i < pairs.length; i++) {\n"
+        + "    if (html.split(pairs[i][0]).length - 1 !== 1) return html;\n"
+        + "  }\n"
+        + "  for (i = 0; i < pairs.length; i++) {\n"
+        + "    html = html.split(pairs[i][0]).join(pairs[i][1]);\n"
+        + "  }\n"
+        + "  return html;\n"
+        + "}\n"
+        + "function ssOwnerBudget(html) {\n"
+        + "  if (!html) return html;\n"
+        + '  if (html.indexOf("/* ss-owner-budget-applied */") >= 0) return ssOrdersDue(html);\n'
         + "  var pairs = "
         + encoded
         + ";\n"
@@ -451,7 +499,7 @@ def js_block() -> str:
         + "  for (i = 0; i < pairs.length; i++) {\n"
         + "    html = html.split(pairs[i][0]).join(pairs[i][1]);\n"
         + "  }\n"
-        + "  return html;\n"
+        + "  return ssOrdersDue(html);\n"
         + "}\n"
         + BLOCK_END
         + "\n"
@@ -564,7 +612,7 @@ def assert_views_are_siblings(html: str) -> None:
 
 
 def transform_live_html(block: str, html: str) -> str:
-    start = block.find("function ssOwnerBudget")
+    start = block.find("function ssOrdersDue")
     end = block.find(BLOCK_END)
     if start < 0 or end < 0:
         raise SystemExit("owner budget function missing from block")
@@ -595,6 +643,10 @@ if (!out.includes("All stations together")) process.exit(13);
 if (!out.includes("ss-budget-summary-v1")) process.exit(19);
 if (!out.includes("data-budget-client")) process.exit(20);
 if (out.includes("if (isParadise) status = 'skip'")) process.exit(21);
+if (!out.includes("/* ss-orders-due-v1 */")) process.exit(22);
+if (!out.includes("Due tomorrow")) process.exit(23);
+if (!out.includes("data-orders-due-open")) process.exit(24);
+if (!out.includes('id="ordersDueSplit"')) process.exit(25);
 if (!out.includes('id="navBudget" hidden>Budget</button>\\n          <button type="button" data-view="command"')) process.exit(14);
 if (out.includes('id="navInventory">Inventory</button>\\n          <button type="button" data-view="command"')) process.exit(15);
 fs.writeFileSync("/tmp/owner-budget-transformed.html", out);
@@ -618,7 +670,7 @@ def upload_proto(token: str, script: str) -> str:
         "keep_assets": True,
         "keep_bindings": ["assets"],
         "annotations": {
-            "workers/message": "Budget opens as a summary, then one client or one owner"
+            "workers/message": "Orders shows due today and due tomorrow"
         },
     }
     body, boundary = encode_multipart(script, metadata)
@@ -664,6 +716,10 @@ def confirm_previous_pages(stamp: str) -> None:
         "All stations together",
         "ss-budget-summary-v1",
         "data-budget-client",
+        "/* ss-orders-due-v1 */",
+        "Due tomorrow",
+        "data-orders-due-open",
+        'id="ordersDueSplit"',
         'id="navBudget" hidden>Budget</button>\n          <button type="button" data-view="command"',
         "</details>\n      </div>\n      <div id=\"billingManager\" hidden>",
     ):
@@ -694,6 +750,7 @@ def confirm_previous_pages(stamp: str) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check-only", action="store_true")
+    parser.add_argument("--from-file", default="", help="Full worker script to patch. Required when the latest upload is not the active script.")
     args = parser.parse_args()
     block = js_block()
     _headers, html_bytes = fetch_live("/app.html?nocache=owner-budget-preflight")
@@ -711,9 +768,16 @@ def main() -> None:
         if "/* ss-owner-budget-applied */" in html:
             raise SystemExit("saved app shell is already transformed")
     transform_live_html(block, html)
-    token = load_token()
-    token, script = download_script(token)
-    print(f"downloaded {WORKER} bytes={len(script)}", flush=True)
+    if args.from_file:
+        script = Path(args.from_file).read_text()
+        print(f"worker from file bytes={len(script)}", flush=True)
+        token = ""
+    else:
+        token = load_token()
+        token, script = download_script(token)
+        print(f"downloaded {WORKER} bytes={len(script)}", flush=True)
+    if "function ssAddTustinCig" not in script or len(script) < 1_000_000:
+        raise SystemExit(f"refusing a short worker script ({len(script)} bytes)")
     updated = splice_worker(script)
     assert_additive(script, updated)
     print(f"patched bytes={len(updated)}", flush=True)
@@ -722,6 +786,8 @@ def main() -> None:
         Path("/tmp/ss-unified-proto-owner-budget.js").write_text(updated)
         print("check-only done", flush=True)
         return
+    if not token:
+        token = load_token()
     before = binding_names(token, WORKER)
     print(f"bindings before: {before}", flush=True)
     if "assets:ASSETS" not in before:
