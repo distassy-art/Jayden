@@ -250,9 +250,9 @@ def active_pairs() -> list:
     )
     lead_to = (
         "        if (budgetLead && typeof role !== 'undefined' && role === 'admin') {\n"
-        "          budgetLead.textContent = 'All stations together. Pick one station to see that budget.';\n"
+        "          budgetLead.textContent = 'All stations together. Click an owner for that owner. Click a client for that store.';\n"
         "        } else if (budgetLead && typeof role !== 'undefined' && role !== 'admin') {\n"
-        "          budgetLead.textContent = 'Your stations only. All stores shows every station you own. Pick one station to see that budget.';\n"
+        "          budgetLead.textContent = 'Your stations. Click a client to see that store.';\n"
         "        }"
     )
     swaps = [
@@ -362,9 +362,77 @@ def active_pairs() -> list:
         "            });\n"
         "            if (bookFound) bookSpent = bookSum;\n"
         "          } catch (eBook) {}\n"
-        "          const spent = (bookSpent != null && hasBudget && id !== '42359') ? bookSpent : (mtd != null && Number.isFinite(mtd) ? mtd : 0);",
+        "          const spent = (id === '42359' && bookSpent != null) ? bookSpent : ((bookSpent != null && hasBudget) ? bookSpent : (mtd != null && Number.isFinite(mtd) ? mtd : 0));",
     ))
+    out.extend(budget_summary_pairs())
     return out
+
+
+
+def budget_summary_pairs():
+    return [
+        (
+            '        let sumMonth = 0;\n        let sumSpent = 0;\n        let hasMonth = false;\n        let hasSpent = false;\n        stations.forEach(function (s) {\n          const tgt = storeBudgetTarget(s.id);\n          const mix = storeVendorMix(s.id);\n          // Prefer vendor-mix month_purchase_budget so KPI "Month purchase budget"\n          // equals the sum of vendor "Month bud" (budget_month) columns.\n          let mb = null;\n          if (mix && mix.month_purchase_budget != null) mb = num(mix.month_purchase_budget);\n          else if (tgt && tgt.month_purchase_budget != null) mb = num(tgt.month_purchase_budget);\n          else if (stationMonthBudget(s).hasBudget) mb = stationMonthBudget(s).budget;\n          if (mb != null && Number.isFinite(mb) && mb > 0) { sumMonth += mb; hasMonth = true; }\n          const missingS2k = mix && mix.spend_source === "s2k_nonfuel_invoice_summary_missing";\n          if (!missingS2k) {\n            const mtdVend = mix && mix.mtd_total != null ? num(mix.mtd_total) : stationSpent(s);\n            sumSpent += num(mtdVend) || 0;\n            hasSpent = true;\n          }\n        });\n        const sumLeft = hasMonth && hasSpent ? (sumMonth - sumSpent) : null;\n        const scopeLbl = (stations[0] && (stations[0].name || clientName)) || clientName;\n        setBudgetKpis(hasMonth ? sumMonth : null, hasSpent ? sumSpent : null, sumLeft, weeksLeft, scopeLbl);\n\n        // One store → single clean table. Multi-store → section per store (still only 3 vendor columns).\n        if (stations.length === 1) {\n          const s = stations[0];\n          const name = s.name || (storeBudgetTarget(s.id) || {}).store || (\'#\' + s.id);\n          const vendors = topVendorsForStore(s.id);\n          if (panels) {\n            panels.innerHTML =\n              \'<div class="card table-wrap">\' +\n              \'<table class="data budget-vendor-table" aria-label="Top vendor budgets for \' + name + \'">\' +\n              \'<thead><tr><th>Vendor</th><th class="num">Mix %</th><th class="num">Month bud</th><th class="num">Purchases</th><th class="num">Actual</th><th class="num">Remaining</th></tr></thead>\' +\n              \'<tbody>\' + renderVendorRows(vendors, weeksLeft, name) + \'</tbody></table></div>\';\n          }\n          return;\n        }\n\n        const blocks = stations.map(function (s) {\n          const name = s.name || (storeBudgetTarget(s.id) || {}).store || (\'#\' + s.id);\n          const vendors = topVendorsForStore(s.id);\n          return \'<div class="budget-store-block">\' +\n            \'<h3>\' + name + \' <span class="muted">#\' + s.id + \'</span></h3>\' +\n            \'<div class="card table-wrap">\' +\n            \'<table class="data budget-vendor-table" aria-label="Top vendors \' + name + \'">\' +\n            \'<thead><tr><th>Vendor</th><th class="num">Mix %</th><th class="num">Month bud</th><th class="num">Purchases</th><th class="num">Actual</th><th class="num">Remaining</th></tr></thead>\' +\n            \'<tbody>\' + renderVendorRows(vendors, weeksLeft, name) + \'</tbody></table></div></div>\';\n        });\n        if (panels) panels.innerHTML = blocks.join(\'\') || \'<p class="muted">No vendor data.</p>\';\n      }\n\n\n',
+            '        function budgetDailyBook(storeId) {\n          var bookStations = (DATA.daily && DATA.daily.stations) || [];\n          var found = null;\n          bookStations.forEach(function (st) {\n            if (st && String(st.id) === String(storeId)) found = st;\n          });\n          if (!found) return null;\n          var sales = 0, purch = 0, last = 0;\n          (found.days || []).forEach(function (d) {\n            if (!d) return;\n            if (d.sales != null && Number.isFinite(Number(d.sales))) {\n              sales += Number(d.sales);\n              var dayNum = Number(String(d.date || \'\').slice(8, 10));\n              if (dayNum > last) last = dayNum;\n            }\n            if (d.purch != null && Number.isFinite(Number(d.purch))) purch += Number(d.purch);\n          });\n          var dimBook = 30;\n          try {\n            var sample = String((found.days && found.days[0] && found.days[0].date) || \'\');\n            var yy = Number(sample.slice(0, 4));\n            var mm = Number(sample.slice(5, 7));\n            if (yy && mm) dimBook = new Date(yy, mm, 0).getDate();\n          } catch (eDim) {}\n          var bookBudget = (last > 0 && sales > 0) ? (sales * dimBook / last * 0.6) : null;\n          return { sales: sales, spent: purch, budget: bookBudget };\n        }\n        function budgetStoreMoney(storeId) {\n          var mix = storeVendorMix(storeId);\n          var tgt = storeBudgetTarget(storeId);\n          var mb = null;\n          if (mix && mix.month_purchase_budget != null && num(mix.month_purchase_budget) > 0) mb = num(mix.month_purchase_budget);\n          else if (tgt && tgt.month_purchase_budget != null && num(tgt.month_purchase_budget) > 0) mb = num(tgt.month_purchase_budget);\n          var spent = null;\n          var missingS2k = mix && mix.spend_source === \'s2k_nonfuel_invoice_summary_missing\';\n          if (!missingS2k && mix && mix.mtd_total != null) spent = num(mix.mtd_total);\n          if (String(storeId) === \'42359\') {\n            var book = budgetDailyBook(storeId);\n            if (book) {\n              if (!(mb > 0) && book.budget > 0) mb = book.budget;\n              spent = book.spent;\n            }\n          }\n          return { budget: (mb > 0 ? mb : null), spent: spent };\n        }\n        function budgetEsc(text) {\n          return String(text || \'\').replace(/&/g, \'&amp;\').replace(/</g, \'&lt;\').replace(/"/g, \'&quot;\');\n        }\n        function budgetOwnerName(storeId) {\n          var meta = (typeof managerEmailByStation === \'function\') ? managerEmailByStation(storeId) : null;\n          return (meta && meta.owner) ? String(meta.owner) : \'\';\n        }\n        var forcedStore = /^\\d{4,}$/i.test(String(key)) || String(key) === \'extramile\';\n        var drill = window._budgetDrill || null;\n        if (forcedStore) drill = null;\n        var viewStations = stations.slice();\n        var mode = \'summary\';\n        if (forcedStore) {\n          mode = \'store\';\n        } else if (drill && drill.kind === \'store\') {\n          var pickedStore = stations.filter(function (s) { return String(s.id) === String(drill.id); });\n          if (pickedStore.length) { viewStations = pickedStore; mode = \'store\'; }\n          else { drill = null; window._budgetDrill = null; }\n        } else if (drill && drill.kind === \'owner\') {\n          var owned = stations.filter(function (s) { return budgetOwnerName(s.id) === String(drill.owner || \'\'); });\n          if (owned.length) { viewStations = owned; mode = \'owner\'; }\n          else { drill = null; window._budgetDrill = null; }\n        } else if (key && key !== \'__scope__\') {\n          mode = \'owner\';\n        }\n        function budgetMoneyRows(list) {\n          var month = 0, spent = 0, hasMonth = false, hasSpent = false;\n          list.forEach(function (s) {\n            var fig = budgetStoreMoney(s.id);\n            if (fig.budget != null) { month += fig.budget; hasMonth = true; }\n            if (fig.spent != null && Number.isFinite(fig.spent)) { spent += fig.spent; hasSpent = true; }\n          });\n          return {\n            month: hasMonth ? month : null,\n            spent: hasSpent ? spent : null,\n            left: (hasMonth && hasSpent) ? (month - spent) : null\n          };\n        }\n        var totals = budgetMoneyRows(viewStations);\n        var scopeLbl = clientName;\n        if (mode === \'store\' && viewStations[0]) scopeLbl = viewStations[0].name || clientName;\n        else if (mode === \'owner\') scopeLbl = (drill && drill.owner) || clientName;\n        setBudgetKpis(totals.month, totals.spent, totals.left, weeksLeft, scopeLbl);\n        if (budgetLead) {\n          if (mode === \'store\') budgetLead.textContent = (viewStations[0] && (viewStations[0].name || clientName) || clientName) + \'. Vendors, mix, and what is left.\';\n          else if (mode === \'owner\') budgetLead.textContent = scopeLbl + \'. Click a client to see that store.\';\n          else if (typeof role !== \'undefined\' && role === \'admin\') budgetLead.textContent = \'All stations together. Click an owner for that owner. Click a client for that store.\';\n          else budgetLead.textContent = \'Your stations. Click a client to see that store.\';\n        }\n        function budgetBackHtml(label) {\n          return \'<button type="button" class="btn ghost" id="budgetBack" style="margin:0 0 12px">\' + budgetEsc(label) + \'</button>\';\n        }\n        function renderStoreTable(s) {\n          var name = s.name || (storeBudgetTarget(s.id) || {}).store || (\'#\' + s.id);\n          var vendors = topVendorsForStore(s.id);\n          var body = renderVendorRows(vendors, weeksLeft, name);\n          if (String(s.id) === \'42359\' && !vendors.length) {\n            body = \'<tr><td colspan="6" class="muted">No vendor split on file. Month budget and purchases are from the daily book.</td></tr>\';\n          }\n          return \'<div class="card table-wrap">\' +\n            \'<table class="data budget-vendor-table" aria-label="Top vendor budgets for \' + budgetEsc(name) + \'">\' +\n            \'<thead><tr><th>Vendor</th><th class="num">Mix %</th><th class="num">Month bud</th><th class="num">Purchases</th><th class="num">Actual</th><th class="num">Remaining</th></tr></thead>\' +\n            \'<tbody>\' + body + \'</tbody></table></div>\';\n        }\n        function summaryTable(heads, rowsHtml, label) {\n          return \'<h3 class="cc-easy-h">\' + budgetEsc(heads.title) + \'</h3>\' +\n            \'<div class="card table-wrap"><table class="data budget-vendor-table" aria-label="\' + budgetEsc(label) + \'">\' +\n            \'<thead><tr>\' + heads.cols + \'</tr></thead><tbody>\' + rowsHtml + \'</tbody></table></div>\';\n        }\n        function moneyCell(n) {\n          return n == null ? \'—\' : money(n);\n        }\n        function leftCell(left) {\n          var cls = (left != null && left < 0) ? \' budget-remain-over\' : \'\';\n          return \'<td class="num\' + cls + \'">\' + moneyCell(left) + \'</td>\';\n        }\n        if (mode === \'store\' || (viewStations.length === 1 && mode !== \'owner\')) {\n          var only = viewStations[0];\n          var back = \'\';\n          if (mode === \'store\' && !forcedStore) {\n            back = budgetBackHtml((drill && drill.owner) ? drill.owner : \'All\');\n          }\n          if (panels) panels.innerHTML = \'<style id="ss-budget-summary-v1">tr[data-budget-client],tr[data-budget-owner]{cursor:pointer}tr[data-budget-client]:hover td,tr[data-budget-owner]:hover td{background:#f4f8fc}</style>\' + back + (only ? renderStoreTable(only) : \'\');\n          var backBtn = document.getElementById(\'budgetBack\');\n          if (backBtn) backBtn.onclick = function () {\n            if (drill && drill.owner) window._budgetDrill = { kind: \'owner\', owner: drill.owner };\n            else window._budgetDrill = null;\n            buildBudget();\n          };\n          return;\n        }\n        viewStations.sort(function (a, b) {\n          return String(a.name || a.id).localeCompare(String(b.name || b.id), undefined, { sensitivity: \'base\' });\n        });\n        var ownerBuckets = {};\n        viewStations.forEach(function (s) {\n          var ownerName = budgetOwnerName(s.id) || \'Owner\';\n          if (!ownerBuckets[ownerName]) ownerBuckets[ownerName] = [];\n          ownerBuckets[ownerName].push(s);\n        });\n        var ownerNames = Object.keys(ownerBuckets).sort(function (a, b) {\n          return a.localeCompare(b, undefined, { sensitivity: \'base\' });\n        });\n        var html = \'<style id="ss-budget-summary-v1">tr[data-budget-client],tr[data-budget-owner]{cursor:pointer}tr[data-budget-client]:hover td,tr[data-budget-owner]:hover td{background:#f4f8fc}</style>\';\n        if (mode === \'owner\') html += budgetBackHtml(\'All\');\n        if (mode === \'summary\' && ownerNames.length > 1) {\n          var ownerRows = ownerNames.map(function (ownerName) {\n            var fig = budgetMoneyRows(ownerBuckets[ownerName]);\n            return \'<tr data-budget-owner="\' + budgetEsc(ownerName) + \'">\' +\n              \'<td><strong>\' + budgetEsc(ownerName) + \'</strong></td>\' +\n              \'<td class="num">\' + ownerBuckets[ownerName].length + \'</td>\' +\n              \'<td class="num">\' + moneyCell(fig.month) + \'</td>\' +\n              \'<td class="num">\' + moneyCell(fig.spent) + \'</td>\' +\n              leftCell(fig.left) +\n              \'</tr>\';\n          }).join(\'\');\n          html += summaryTable({\n            title: \'Owners\',\n            cols: \'<th>Owner</th><th class="num">Stations</th><th class="num">Month budget</th><th class="num">Spent</th><th class="num">Remaining</th>\'\n          }, ownerRows, \'Owner budgets\');\n        }\n        var clientRows = viewStations.map(function (s) {\n          var fig = budgetStoreMoney(s.id);\n          var left = (fig.budget != null && fig.spent != null) ? (fig.budget - fig.spent) : null;\n          var name = s.name || (storeBudgetTarget(s.id) || {}).store || (\'#\' + s.id);\n          return \'<tr data-budget-client="\' + budgetEsc(s.id) + \'">\' +\n            \'<td><strong>\' + budgetEsc(name) + \'</strong> <span class="muted">#\' + budgetEsc(s.id) + \'</span></td>\' +\n            \'<td>\' + budgetEsc(budgetOwnerName(s.id)) + \'</td>\' +\n            \'<td class="num">\' + moneyCell(fig.budget) + \'</td>\' +\n            \'<td class="num">\' + moneyCell(fig.spent) + \'</td>\' +\n            leftCell(left) +\n            \'</tr>\';\n        }).join(\'\');\n        html += summaryTable({\n          title: mode === \'owner\' ? ((drill && drill.owner) || clientName) : \'Clients\',\n          cols: \'<th>Client</th><th>Owner</th><th class="num">Month budget</th><th class="num">Spent</th><th class="num">Remaining</th>\'\n        }, clientRows, \'Client budgets\');\n        if (panels) panels.innerHTML = html;\n        var backAll = document.getElementById(\'budgetBack\');\n        if (backAll) backAll.onclick = function () { window._budgetDrill = null; buildBudget(); };\n        if (panels) {\n          panels.querySelectorAll(\'[data-budget-owner]\').forEach(function (tr) {\n            tr.addEventListener(\'click\', function () {\n              window._budgetDrill = { kind: \'owner\', owner: tr.getAttribute(\'data-budget-owner\') || \'\' };\n              buildBudget();\n            });\n          });\n          panels.querySelectorAll(\'[data-budget-client]\').forEach(function (tr) {\n            tr.addEventListener(\'click\', function () {\n              window._budgetDrill = {\n                kind: \'store\',\n                id: tr.getAttribute(\'data-budget-client\') || \'\',\n                owner: mode === \'owner\' ? ((drill && drill.owner) || \'\') : \'\'\n              };\n              buildBudget();\n            });\n          });\n        }\n      }\n\n\n',
+        ),
+        (
+            "          const budget = mix.month_purchase_budget != null\n"
+            "            ? num(mix.month_purchase_budget)\n"
+            "            : (tgt.month_purchase_budget != null ? num(tgt.month_purchase_budget) : null);\n"
+            "          const mtd = mix.mtd_total != null\n"
+            "            ? num(mix.mtd_total)\n"
+            "            : (mix.excel_net_purchases_mtd != null ? num(mix.excel_net_purchases_mtd) : null);\n"
+            "          const hasBudget = budget != null && Number.isFinite(budget) && budget > 0;",
+            "          let budget = mix.month_purchase_budget != null\n"
+            "            ? num(mix.month_purchase_budget)\n"
+            "            : (tgt.month_purchase_budget != null ? num(tgt.month_purchase_budget) : null);\n"
+            "          if (id === '42359' && !(Number(budget) > 0)) {\n"
+            "            try {\n"
+            "              var pSt = null;\n"
+            "              ((DATA.daily && DATA.daily.stations) || []).forEach(function (st) {\n"
+            "                if (st && String(st.id) === '42359') pSt = st;\n"
+            "              });\n"
+            "              if (pSt) {\n"
+            "                var pSales = 0, pLast = 0;\n"
+            "                (pSt.days || []).forEach(function (d) {\n"
+            "                  if (!d || d.sales == null || !Number.isFinite(Number(d.sales))) return;\n"
+            "                  pSales += Number(d.sales);\n"
+            "                  var pDay = Number(String(d.date || '').slice(8, 10));\n"
+            "                  if (pDay > pLast) pLast = pDay;\n"
+            "                });\n"
+            "                if (pLast > 0 && pSales > 0) budget = pSales * (dim || 30) / pLast * 0.6;\n"
+            "              }\n"
+            "            } catch (eParadise) {}\n"
+            "          }\n"
+            "          const mtd = mix.mtd_total != null\n"
+            "            ? num(mix.mtd_total)\n"
+            "            : (mix.excel_net_purchases_mtd != null ? num(mix.excel_net_purchases_mtd) : null);\n"
+            "          const hasBudget = budget != null && Number.isFinite(budget) && budget > 0;",
+        ),
+        (
+            "          const yoySpike = !isParadise && yoy.has && yoy.pct != null && yoy.pct >= CC_YOY_SPIKE_PCT;",
+            "          const yoySpike = yoy.has && yoy.pct != null && yoy.pct >= CC_YOY_SPIKE_PCT;",
+        ),
+        (
+            "          if (isParadise) status = 'skip';\n"
+            "          else if (hasBudget && spent > budget) status = 'over';",
+            "          if (hasBudget && spent > budget) status = 'over';",
+        ),
+        (
+            "        if (sid === CC_PARADISE_SKIP) {\n"
+            "          return '<div class=\"cc-bad-cats\"><h5>Department budgets</h5><p class=\"cc-empty\">This store is not included in department alarms.</p></div>';\n"
+            "        }\n",
+            "",
+        ),
+        (
+            "        budget: ['Budget', 'One client — top vendors: mix %, spent MTD, remaining.'],",
+            "        budget: ['Budget', 'Summary for all, then one owner or one client.'],",
+        ),
+        (
+            'data-title="Budget" data-sub="One client (store) — vendors, mix %, spent, remaining."',
+            'data-title="Budget" data-sub="Summary for all, then one owner or one client."',
+        ),
+    ]
 
 
 def js_block() -> str:
@@ -524,6 +592,9 @@ if (ssOwnerBudget(out) !== out) process.exit(10);
 if (!out.includes("return '__scope__'")) process.exit(11);
 if (!out.includes("All your stations")) process.exit(12);
 if (!out.includes("All stations together")) process.exit(13);
+if (!out.includes("ss-budget-summary-v1")) process.exit(19);
+if (!out.includes("data-budget-client")) process.exit(20);
+if (out.includes("if (isParadise) status = 'skip'")) process.exit(21);
 if (!out.includes('id="navBudget" hidden>Budget</button>\\n          <button type="button" data-view="command"')) process.exit(14);
 if (out.includes('id="navInventory">Inventory</button>\\n          <button type="button" data-view="command"')) process.exit(15);
 fs.writeFileSync("/tmp/owner-budget-transformed.html", out);
@@ -547,7 +618,7 @@ def upload_proto(token: str, script: str) -> str:
         "keep_assets": True,
         "keep_bindings": ["assets"],
         "annotations": {
-            "workers/message": "Restore the original Command Center layout"
+            "workers/message": "Budget opens as a summary, then one client or one owner"
         },
     }
     body, boundary = encode_multipart(script, metadata)
@@ -574,8 +645,10 @@ def confirm_previous_pages(stamp: str) -> None:
     headers, html_bytes = fetch_live("/app.html?nocache=owner-budget-confirm")
     html = html_bytes.decode("utf-8", "replace")
     live_stamp = headers.get("X-SS-Shell-Stamp") or headers.get("x-ss-shell-stamp") or ""
-    if stamp and live_stamp != stamp:
-        raise SystemExit(f"shell stamp changed from {stamp} to {live_stamp}")
+    # The locked shell can advance (hb164 → hb165) while this transform is still
+    # on the page. Markers below decide whether the deploy stayed good.
+    if stamp and live_stamp and live_stamp != stamp:
+        print(f"shell stamp moved from {stamp} to {live_stamp}; checking markers", flush=True)
     for marker in (
         "function buildBudget(",
         "ss-billing-simple-v1",
@@ -589,6 +662,8 @@ def confirm_previous_pages(stamp: str) -> None:
         "return '__scope__'",
         "All your stations",
         "All stations together",
+        "ss-budget-summary-v1",
+        "data-budget-client",
         'id="navBudget" hidden>Budget</button>\n          <button type="button" data-view="command"',
         "</details>\n      </div>\n      <div id=\"billingManager\" hidden>",
     ):
@@ -596,6 +671,10 @@ def confirm_previous_pages(stamp: str) -> None:
             raise SystemExit(f"live app lost {marker}")
     if "ss-command-simple-v1" in html:
         raise SystemExit("Command Center is still the short three-number page")
+    if "if (isParadise) status = 'skip'" in html:
+        raise SystemExit("Paradise is still skipped")
+    if "ss-budget-summary-v1" not in html:
+        raise SystemExit("Budget summary is missing")
     if "navBudget.hidden = !(role === 'admin');" in html:
         raise SystemExit("budget tab is still admin only")
     if 'id="navInventory">Inventory</button>\n          <button type="button" data-view="command"' in html:
