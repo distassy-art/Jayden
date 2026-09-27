@@ -16,6 +16,7 @@ import base64
 import json
 import re
 import subprocess
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -854,7 +855,18 @@ console.log("js transform ok");
     try:
         if missing:
             raise SystemExit(f"bindings dropped {missing}")
-        confirm_previous_pages(stamp)
+        last_check = None
+        for attempt in range(6):
+            try:
+                confirm_previous_pages(stamp)
+                last_check = None
+                break
+            except SystemExit as err:
+                last_check = err
+                print(f"confirm attempt {attempt + 1} failed: {err}", flush=True)
+                time.sleep(2)
+        if last_check:
+            raise last_check
     except SystemExit:
         print("page check failed; rolling back", flush=True)
         deploy_version(token, "ss-unified-proto", previous)
