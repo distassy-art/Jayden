@@ -298,6 +298,10 @@ def active_pairs() -> list:
         "    .main-nav .nav-group[data-nav-group=\"money\"] .nav-group-btns { flex-wrap: nowrap; }\n",
     ))
     out.append((
+        "      </details>\n      <div id=\"billingManager\" hidden>",
+        "      </details>\n      </div>\n      <div id=\"billingManager\" hidden>",
+    ))
+    out.append((
         "  var back = document.getElementById(\"commandBackAll\");\n"
         "  if (back) {\n"
         "    back.hidden = !!single;\n"
@@ -423,6 +427,39 @@ def shell_stamp() -> str:
     return header_stamp or stamp
 
 
+def assert_views_are_siblings(html: str) -> None:
+    start = html.find('id="view-billing"')
+    end = html.find('id="view-budget"')
+    open_at = html.rfind("<div", 0, start)
+    region = html[open_at:end]
+    token = re.compile(r"<(/?)(style|script|div)\b([^>]*)>", re.I)
+    depth = 0
+    idx = 0
+    skip = None
+    while idx < len(region):
+        if skip:
+            found = region.lower().find(skip, idx)
+            if found < 0:
+                raise SystemExit("billing style or script is not closed")
+            idx = found + len(skip)
+            skip = None
+            continue
+        match = token.search(region, idx)
+        if not match:
+            break
+        closing, tag = bool(match.group(1)), match.group(2).lower()
+        idx = match.end()
+        if tag in ("style", "script") and not closing:
+            skip = "</" + tag + ">"
+            continue
+        if tag != "div":
+            continue
+        depth += -1 if closing else 1
+    if depth != 0:
+        raise SystemExit(f"Budget is still inside Billing (open divs {depth})")
+    print("budget view is outside billing", flush=True)
+
+
 def transform_live_html(block: str, html: str) -> str:
     start = block.find("function ssOwnerBudget")
     end = block.find(BLOCK_END)
@@ -460,6 +497,7 @@ console.log("js transform ok");
     )
     subprocess.check_call(["node", str(harness)])
     subprocess.check_call(["node", "--check", "/tmp/owner-budget-main.js"])
+    assert_views_are_siblings(Path("/tmp/owner-budget-transformed.html").read_text())
     print("transformed app script syntax ok", flush=True)
 
 
@@ -512,6 +550,7 @@ def confirm_previous_pages(stamp: str) -> None:
         "All your stations",
         "All stations together",
         'id="navBudget" hidden>Budget</button>\n          <button type="button" data-view="command"',
+        "</details>\n      </div>\n      <div id=\"billingManager\" hidden>",
     ):
         if marker not in html:
             raise SystemExit(f"live app lost {marker}")
