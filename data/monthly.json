@@ -1,6 +1,6 @@
 {
-  "as_of": "2026-09-11",
-  "rule": "closed months through August 2026",
+  "as_of": "2026-09-27",
+  "rule": "closed months through August 2026; Tustin 2025 remapped from Daily.xlsx + S2K fuel audit 2026-09-27",
   "stations": [
     {
       "id": "42004",
@@ -3112,311 +3112,78 @@
       }
     },
     {
-      "id": "42642",
-      "name": "La Mesa",
-      "months": {
-        "2025-01": {
-          "gas_vol": 120373.56,
-          "gas_profit": 75252.9,
-          "gas_margin": 0.6252,
-          "sales": 107006.26,
-          "purchases": 67338.88,
-          "store_profit": 39667.38,
-          "total_profit": 114920.28,
-          "store_margin": 0.3707,
-          "gas_sales": 551325.85
-        },
-        "2025-02": {
-          "gas_vol": 107454.39,
-          "gas_profit": 68402.59,
-          "gas_margin": 0.6366,
-          "sales": 97846.96,
-          "purchases": 61096.0,
-          "store_profit": 36750.96,
-          "total_profit": 105153.55,
-          "store_margin": 0.3756,
-          "gas_sales": 512404.63
-        },
-        "2025-03": {
-          "gas_vol": 123113.45,
-          "gas_profit": 61898.11,
-          "gas_margin": 0.5028,
-          "sales": 107167.89,
-          "purchases": 70658.0,
-          "store_profit": 36509.89,
-          "total_profit": 98408.0,
-          "store_margin": 0.3407,
-          "gas_sales": 572858.66
-        },
-        "2025-04": {
-          "gas_vol": 121393.08,
-          "gas_profit": 69160.1,
-          "gas_margin": 0.5697,
-          "sales": 114470.84,
-          "purchases": 67165.0,
-          "store_profit": 47305.84,
-          "total_profit": 116465.94,
-          "store_margin": 0.4133,
-          "gas_sales": 574105.79
-        },
-        "2025-05": {
-          "gas_vol": 128626.04,
-          "gas_profit": 80527.15,
-          "gas_margin": 0.6261,
-          "sales": 115019.17,
-          "purchases": 71634.0,
-          "store_profit": 43385.17,
-          "total_profit": 123912.32,
-          "store_margin": 0.3772,
-          "gas_sales": 604015.39
-        },
-        "2025-06": {
-          "gas_vol": 119730.68,
-          "gas_profit": 73335.02,
-          "gas_margin": 0.6125,
-          "sales": 116898.67,
-          "purchases": 79932.0,
-          "store_profit": 36966.67,
-          "total_profit": 110301.69,
-          "store_margin": 0.3162,
-          "gas_sales": 555675.26
-        },
-        "2025-07": {
-          "gas_vol": 124229.08,
-          "gas_profit": 62484.43,
-          "gas_margin": 0.503,
-          "sales": 131157.31,
-          "purchases": 75855.0,
-          "store_profit": 55302.31,
-          "store_margin": 0.4216,
-          "total_profit": 117786.74,
-          "gas_sales": 556690.26
-        },
-        "2026-01": {
-          "gas_vol": 106853.81,
-          "gas_profit": 27399.84,
-          "gas_margin": 0.2564,
-          "sales": 107066.37,
-          "purchases": 61804.21,
-          "store_profit": 45262.16,
-          "total_profit": 72662.0,
-          "store_margin": 0.4227,
-          "gas_sales": 432951.62
-        },
-        "2026-02": {
-          "gas_vol": 82690.62,
-          "gas_profit": 42210.94,
-          "gas_margin": 0.5105,
-          "sales": 98065.29,
-          "purchases": 67273.0,
-          "store_profit": 30792.29,
-          "total_profit": 73003.23,
-          "store_margin": 0.314,
-          "gas_sales": 370083.0
-        },
-        "2026-03": {
-          "gas_vol": 83856.0,
-          "gas_profit": 64669.2,
-          "gas_margin": 0.7712,
-          "sales": 123086.35,
-          "purchases": 71488.0,
-          "store_profit": 51598.35,
-          "total_profit": 116267.55,
-          "store_margin": 0.4192,
-          "gas_sales": 474708.13
-        },
-        "2026-04": {
-          "gas_vol": 90411.08,
-          "gas_profit": 62086.0,
-          "gas_margin": 0.6867,
-          "sales": 113550.38,
-          "purchases": 70595.0,
-          "store_profit": 42955.38,
-          "total_profit": 105041.38,
-          "store_margin": 0.3783,
-          "gas_sales": 557794.02
-        },
-        "2026-05": {
-          "gas_vol": 53905.71,
-          "gas_profit": 38548.4,
-          "gas_margin": 0.7151,
-          "sales": 107711.44,
-          "purchases": 69609.0,
-          "store_profit": 38102.44,
-          "total_profit": 76650.84,
-          "store_margin": 0.3537,
-          "gas_sales": 343336.07
-        },
-        "2026-06": {
-          "gas_vol": 77966.94,
-          "gas_profit": 46319.05,
-          "gas_margin": 0.5941,
-          "sales": 115267.13,
-          "purchases": 70717.0,
-          "store_profit": 44550.13,
-          "total_profit": 90869.18,
-          "store_margin": 0.3865,
-          "gas_sales": 458689.94
-        },
-        "2026-07": {
-          "gas_vol": 89361.02,
-          "gas_profit": 64084.67,
-          "gas_margin": 0.7171,
-          "sales": 127398.83,
-          "purchases": 79704.67,
-          "store_profit": 47694.16,
-          "store_margin": 0.3744,
-          "total_profit": 111778.83,
-          "gas_sales": 511409.57
-        },
-        "2025-08": {
-          "sales": 110477.62,
-          "purchases": 69523.0,
-          "store_profit": 40954.62,
-          "total_profit": 60204.34,
-          "store_margin": 0.3707,
-          "gas_vol": 33070.37,
-          "gas_profit": 19249.72,
-          "gas_margin": 0.5821,
-          "gas_sales": 157864.76
-        },
-        "2025-09": {
-          "sales": 103568.35,
-          "purchases": 65173.0,
-          "store_profit": 38395.35,
-          "total_profit": 56394.97,
-          "store_margin": 0.3707,
-          "gas_vol": 33266.08,
-          "gas_profit": 17999.62,
-          "gas_margin": 0.5411,
-          "gas_sales": 164205.14
-        },
-        "2025-10": {
-          "sales": 87723.8,
-          "purchases": 61391.0,
-          "store_profit": 26332.8,
-          "total_profit": 28424.59,
-          "store_margin": 0.3002,
-          "gas_vol": 2968.8,
-          "gas_profit": 2091.79,
-          "gas_margin": 0.7046,
-          "gas_sales": 14245.31
-        },
-        "2025-11": {
-          "sales": 99212.66,
-          "purchases": 61294.0,
-          "store_profit": 37918.66,
-          "total_profit": 65260.54,
-          "store_margin": 0.3822,
-          "gas_vol": 68696.59,
-          "gas_profit": 27341.88,
-          "gas_margin": 0.398,
-          "gas_sales": 316759.48
-        },
-        "2025-12": {
-          "sales": 103665.11,
-          "purchases": 72808.0,
-          "store_profit": 30857.11,
-          "total_profit": 56377.99,
-          "store_margin": 0.2977,
-          "gas_vol": 85053.46,
-          "gas_profit": 25520.88,
-          "gas_margin": 0.3001,
-          "gas_sales": 359568.9
-        },
-        "2026-08": {
-          "gas_vol": 78587.83,
-          "gas_profit": 55669.07,
-          "gas_margin": 0.7084,
-          "sales": 120682.81,
-          "purchases": 70960.39,
-          "store_profit": 49722.42,
-          "total_profit": 105391.49,
-          "store_margin": 0.412,
-          "gas_sales": 469261.18
-        }
-      }
-    },
-    {
       "id": "42674",
       "name": "Tustin",
       "months": {
         "2025-01": {
+          "sales": 83209.0,
+          "purchases": 59877.0,
+          "store_profit": 23332.0,
+          "store_margin": 0.2804,
           "gas_vol": 108543.76,
           "gas_profit": 36118.91,
           "gas_margin": 0.3328,
-          "sales": 217679.74,
-          "purchases": 140052.52,
-          "store_profit": 77627.22,
-          "total_profit": 153602.46,
-          "store_margin": 0.3566,
-          "gas_sales": 449576.36
+          "total_profit": 59450.91
         },
         "2025-02": {
+          "sales": 76811.0,
+          "purchases": 48811.0,
+          "store_profit": 28000.0,
+          "store_margin": 0.3645,
           "gas_vol": 101341.94,
           "gas_profit": 38088.9,
           "gas_margin": 0.3758,
-          "sales": 200850.63,
-          "purchases": 126034.34,
-          "store_profit": 74816.29,
-          "total_profit": 189033.46,
-          "store_margin": 0.3725,
-          "gas_sales": 451623.15
+          "total_profit": 66088.9
         },
         "2025-03": {
+          "sales": 91895.0,
+          "purchases": 59714.0,
+          "store_profit": 32181.0,
+          "store_margin": 0.3502,
           "gas_vol": 116954.62,
           "gas_profit": 46458.89,
           "gas_margin": 0.3972,
-          "sales": 225875.65,
-          "purchases": 158033.51,
-          "store_profit": 67842.14,
-          "total_profit": 194399.53,
-          "store_margin": 0.3004,
-          "gas_sales": 528667.35
+          "total_profit": 78639.89
         },
         "2025-04": {
+          "sales": 91724.0,
+          "purchases": 59622.0,
+          "store_profit": 32102.0,
+          "store_margin": 0.35,
           "gas_vol": 113623.87,
           "gas_profit": 45929.83,
           "gas_margin": 0.4042,
-          "sales": 232378.32,
-          "purchases": 163633.75,
-          "store_profit": 68744.57,
-          "total_profit": 186889.99,
-          "store_margin": 0.2958,
-          "gas_sales": 536500.62
+          "total_profit": 78031.83
         },
         "2025-05": {
+          "sales": 97708.0,
+          "purchases": 66657.0,
+          "store_profit": 31051.0,
+          "store_margin": 0.3178,
           "gas_vol": 114819.71,
           "gas_profit": 49448.07,
           "gas_margin": 0.4307,
-          "sales": 239875.99,
-          "purchases": 148750.24,
-          "store_profit": 91125.75,
-          "total_profit": 187532.62,
-          "store_margin": 0.3799,
-          "gas_sales": 526029.01
+          "total_profit": 80499.07
         },
         "2025-06": {
+          "sales": 93982.0,
+          "purchases": 67886.0,
+          "store_profit": 26095.0,
+          "store_margin": 0.2777,
           "gas_vol": 119635.21,
           "gas_profit": 28836.0,
           "gas_margin": 0.241,
-          "sales": 228505.17,
-          "purchases": 174909.32,
-          "store_profit": 53595.85,
-          "total_profit": 136792.11,
-          "store_margin": 0.2345,
-          "gas_sales": 496730.21
+          "total_profit": 54931.0
         },
         "2025-07": {
+          "sales": 98468.45,
+          "purchases": 68019.28,
+          "store_profit": 30449.17,
+          "store_margin": 0.3092,
           "gas_vol": 126192.78,
           "gas_profit": 38733.51,
           "gas_margin": 0.3069,
-          "sales": 243093.71,
-          "purchases": 166444.16,
-          "store_profit": 76649.55,
-          "store_margin": 0.3153,
-          "total_profit": 156163.38,
-          "gas_sales": 516673.29
+          "total_profit": 69182.68
         },
         "2026-01": {
           "gas_vol": 114689.6,
@@ -3496,59 +3263,54 @@
           "gas_sales": 434602.87
         },
         "2025-08": {
-          "sales": 244496.65,
-          "purchases": 153521.57,
-          "store_profit": 90975.08,
-          "total_profit": 167337.86,
-          "store_margin": 0.3721,
+          "sales": 100429.48,
+          "purchases": 62068.44,
+          "store_profit": 38361.04,
+          "store_margin": 0.382,
           "gas_vol": 120607.8,
           "gas_profit": 49108.39,
           "gas_margin": 0.4072,
-          "gas_sales": 510112.23
+          "total_profit": 87469.43
         },
         "2025-09": {
-          "sales": 225762.4,
-          "purchases": 180129.33,
-          "store_profit": 45633.07,
-          "total_profit": 127504.97,
-          "store_margin": 0.2021,
+          "sales": 96622.86,
+          "purchases": 66960.79,
+          "store_profit": 29662.07,
+          "store_margin": 0.307,
           "gas_vol": 114676.8,
           "gas_profit": 52265.28,
           "gas_margin": 0.4558,
-          "gas_sales": 516413.67
+          "total_profit": 81927.35
         },
         "2025-10": {
-          "sales": 227195.23,
-          "purchases": 159408.94,
-          "store_profit": 67786.29,
-          "total_profit": 154759.6,
-          "store_margin": 0.2984,
+          "sales": 95509.94,
+          "purchases": 65922.45,
+          "store_profit": 29587.49,
+          "store_margin": 0.3098,
           "gas_vol": 110635.25,
           "gas_profit": 51030.27,
           "gas_margin": 0.4612,
-          "gas_sales": 500381.83
+          "total_profit": 80617.76
         },
         "2025-11": {
-          "sales": 198747.47,
-          "purchases": 74813.46,
-          "store_profit": 123934.01,
-          "total_profit": 204278.53,
-          "store_margin": 0.6236,
+          "sales": 84747.28,
+          "purchases": 55500.71,
+          "store_profit": 29246.57,
+          "store_margin": 0.3451,
           "gas_vol": 110458.96,
           "gas_profit": 35948.45,
           "gas_margin": 0.3254,
-          "gas_sales": 491026.5
+          "total_profit": 65195.02
         },
         "2025-12": {
-          "sales": 196518.3,
-          "purchases": 112098.36,
-          "store_profit": 84419.94,
-          "total_profit": 166165.28,
-          "store_margin": 0.4296,
+          "sales": 88562.08,
+          "purchases": 66966.29,
+          "store_profit": 21595.79,
+          "store_margin": 0.2438,
           "gas_vol": 112366.64,
           "gas_profit": 32300.42,
           "gas_margin": 0.2875,
-          "gas_sales": 468815.32
+          "total_profit": 53896.21
         },
         "2026-08": {
           "gas_vol": 77383.47,
