@@ -4,7 +4,8 @@
 Live actions this script can take without Cloudflare:
   - Neutralize open months on the books overlay (Trends stops at last closed month).
 
-Fuel revenue (`gas_sales` on /data/monthly.json) needs a Cloudflare site deploy.
+Fuel revenue (`gas_sales` on /data/monthly.json) ships in this repo under `data/monthly.json`;
+deploy by committing here and publishing ss-api assets from the linked GitHub checkout (not direct Cloudflare upload from this script).
 This script refreshes data/monthly.json + data/fuel-sales-from-excel-2026.json from
 Client Monthly workbooks. Deploy with CLOUDFLARE_API_TOKEN when available:
 
@@ -330,13 +331,10 @@ def main() -> None:
         out = REPO / "data" / "monthly.json"
         out.write_text(json.dumps(monthly, indent=2))
         print(f"wrote {out}", flush=True)
-        if not (
-            os.environ.get("CLOUDFLARE_API_TOKEN") or os.environ.get("CF_API_TOKEN")
-        ):
-            print(
-                "CLOUDFLARE_API_TOKEN not set — live /data/monthly.json not deployed.",
-                flush=True,
-            )
+        print(
+            "Wrote data/monthly.json — commit and push to GitHub, then deploy ss-api assets.",
+            flush=True,
+        )
 
 
 if __name__ == "__main__":
