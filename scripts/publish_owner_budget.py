@@ -611,6 +611,31 @@ def assert_views_are_siblings(html: str) -> None:
     print("budget view is outside billing", flush=True)
 
 
+def apply_worker_fn(script: str, fn_name: str, html: str) -> str:
+    start = script.find(f"function {fn_name}")
+    if start < 0:
+        raise SystemExit(f"{fn_name} is missing from the worker")
+    end = script.find("\nfunction ", start + 10)
+    if end < 0:
+        raise SystemExit(f"{fn_name} does not end before the next function")
+    harness = Path(f"/tmp/apply-{fn_name}.mjs")
+    src = Path(f"/tmp/apply-{fn_name}.html")
+    out = Path(f"/tmp/apply-{fn_name}-out.html")
+    src.write_text(html)
+    harness.write_text(
+        script[start:end]
+        + f"""
+import fs from "fs";
+const html = fs.readFileSync("{src}", "utf8");
+const next = {fn_name}(html);
+fs.writeFileSync("{out}", next);
+console.log("{fn_name}", next === html ? "unchanged" : "applied", next.length);
+"""
+    )
+    subprocess.check_call(["node", str(harness)])
+    return out.read_text()
+
+
 def transform_live_html(block: str, html: str) -> str:
     start = block.find("function ssOrdersDue")
     end = block.find(BLOCK_END)
@@ -756,7 +781,7 @@ def main() -> None:
     _headers, html_bytes = fetch_live("/app.html?nocache=owner-budget-preflight")
     live_html = html_bytes.decode("utf-8", "replace")
     if "ss-tustin-cig-v1" not in live_html:
-        raise SystemExit("live app is missing the Tustin inventory page")
+        print("live app is missing the Tustin marker; the worker transform must put it back", flush=True)
     # The live page already includes this transform. Test against the shell
     # from before it, which is what the worker still receives from assets.
     html = live_html
@@ -767,6 +792,10 @@ def main() -> None:
         html = original.read_text()
         if "/* ss-owner-budget-applied */" in html:
             raise SystemExit("saved app shell is already transformed")
+    if "ss-tustin-cig-v1" not in html and args.from_file:
+        html = apply_worker_fn(Path(args.from_file).read_text(), "ssAddTustinCig", html)
+        if "ss-tustin-cig-v1" not in html:
+            raise SystemExit("Tustin inventory transform did not apply to this shell")
     transform_live_html(block, html)
     if args.from_file:
         script = Path(args.from_file).read_text()
