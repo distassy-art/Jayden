@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-"""Put the Tustin cigarette count on the Inventory page, the same way as Arco Db.
+"""Add the Tustin cigarette count on top of the live worker.
 
 The physical count is already saved in S2K (SKU Inventory CIG COUNT 09262026,
 transaction 28742). This script does not post another adjustment.
 
-It builds the count PDF and the quantity-on-hand change PDF, then patches the
-live ss-unified-proto script so station 42674 shows on Inventory and the PDFs
-open inline. Existing site assets stay in place.
+It downloads the worker that is live right now and only inserts the Tustin
+block. Every existing line stays. Budget, billing, Command Center, and the
+Arco Db count are checked before the new version is left in place. Site
+assets stay in place.
 """
 from __future__ import annotations
 
@@ -604,6 +605,25 @@ function ssAddTustinCig(html) {{
 """
 
 
+def without_block(script: str) -> str:
+    if BLOCK_START in script and BLOCK_END in script:
+        pre, _, tail = script.partition(BLOCK_START)
+        _, _, post = tail.partition(BLOCK_END)
+        return pre + post
+    return script
+
+
+def assert_additive(before: str, after: str) -> None:
+    """The publish may insert lines. It may not drop or rewrite a line that is already live."""
+    after_core = without_block(after)
+    missing = [line for line in without_block(before).splitlines() if line.strip() and line not in after_core]
+    if missing:
+        raise SystemExit(
+            f"publish would change {len(missing)} existing worker lines; first is {missing[0]!r}"
+        )
+    print(f"additive ok, existing lines kept ({len(without_block(before).splitlines())})", flush=True)
+
+
 def splice_worker(script: str, block: str) -> str:
     if BLOCK_START in script and BLOCK_END in script:
         pre, _, tail = script.partition(BLOCK_START)
@@ -659,6 +679,9 @@ def preflight_html(entry: dict) -> None:
         raise SystemExit("live shell did not accept the Tustin inventory entry")
     if "2938.42" not in out:
         raise SystemExit("Arco Db inventory entry is missing from the transformed shell")
+    for marker in ("function buildBudget(", "ss-billing-simple-v1", "ss-command-simple-v1"):
+        if marker not in out:
+            raise SystemExit(f"transformed shell lost {marker}")
     again = transform_html(out, entry)
     if again != out:
         raise SystemExit("Tustin inventory transform is not idempotent")
@@ -674,7 +697,7 @@ def upload_proto(token: str, script: str) -> str:
         "compatibility_flags": [],
         "keep_assets": True,
         "keep_bindings": ["assets"],
-        "annotations": {"workers/message": "Tustin cigarette count on the Inventory page"},
+        "annotations": {"workers/message": "Add Tustin cigarette count without replacing the live worker"},
     }
     body, boundary = encode_multipart(script, metadata)
     status, _ctype, raw, _headers = api(
@@ -694,6 +717,52 @@ def upload_proto(token: str, script: str) -> str:
         raise SystemExit("no version id")
     print(f"uploaded ss-unified-proto version {version_id}", flush=True)
     return version_id
+
+
+def fetch_live(path: str) -> tuple[dict, bytes]:
+    req = urllib.request.Request(
+        "https://smartsolutionsai.us" + path,
+        headers={"User-Agent": "ss-tustin-cig", "Cache-Control": "no-cache"},
+    )
+    with urllib.request.urlopen(req, timeout=60) as resp:
+        return dict(resp.headers), resp.read()
+
+
+def shell_stamp() -> str:
+    headers, body = fetch_live("/app.html?nocache=additive-stamp")
+    text = body.decode("utf-8", "replace")
+    match = re.search(r"DATA_STAMP = '([^']+)'", text)
+    stamp = match.group(1) if match else ""
+    header_stamp = headers.get("X-SS-Shell-Stamp") or headers.get("x-ss-shell-stamp") or ""
+    return header_stamp or stamp
+
+
+def confirm_previous_pages(stamp: str) -> None:
+    headers, html_bytes = fetch_live("/app.html?nocache=additive-confirm")
+    html = html_bytes.decode("utf-8", "replace")
+    live_stamp = headers.get("X-SS-Shell-Stamp") or headers.get("x-ss-shell-stamp") or ""
+    if stamp and live_stamp != stamp:
+        raise SystemExit(f"shell stamp changed from {stamp} to {live_stamp}")
+    for marker in (
+        "function buildBudget(",
+        "ss-billing-simple-v1",
+        "ss-command-simple-v1",
+        "2938.42",
+        "ss-tustin-cig-v1",
+        '"stationId": "42674"',
+    ):
+        if marker not in html:
+            raise SystemExit(f"live app lost {marker}")
+    _arco_headers, arco = fetch_live("/inventory/42352/2026-09-26/count.pdf")
+    if not arco.startswith(b"%PDF"):
+        raise SystemExit("Arco Db count PDF is no longer a PDF")
+    _tustin_headers, tustin = fetch_live("/inventory/42674/2026-09-26/count.pdf")
+    if not tustin.startswith(b"%PDF"):
+        raise SystemExit("Tustin count PDF is not being served")
+    _budget_headers, budget = fetch_live("/budget-targets.json?nocache=additive-confirm")
+    if b"71400" not in budget:
+        raise SystemExit("budget targets no longer include the Arco Db figure")
+    print(f"previous pages still present, shell {live_stamp or stamp}", flush=True)
 
 
 def main() -> None:
@@ -745,6 +814,7 @@ def main() -> None:
     token, script = download_script(token)
     print(f"downloaded ss-unified-proto bytes={len(script)}", flush=True)
     updated = splice_worker(script, js_block(args.pdf_dir, entry))
+    assert_additive(script, updated)
     print(f"patched bytes={len(updated)}", flush=True)
     node_check(updated, "ss-unified-proto-tustin")
     harness = Path("/tmp/tustin-cig-harness.mjs")
@@ -774,15 +844,21 @@ console.log("js transform ok");
     before = binding_names(token, "ss-unified-proto")
     print(f"bindings before: {before}", flush=True)
     previous = current_version(token, "ss-unified-proto")
+    stamp = shell_stamp()
+    print(f"shell stamp before {stamp}", flush=True)
     version_id = upload_proto(token, updated)
     deploy_version(token, "ss-unified-proto", version_id)
     after = binding_names(token, "ss-unified-proto")
     print(f"bindings after: {after}", flush=True)
     missing = [item for item in before if item not in after]
-    if missing:
-        print(f"BINDING MISMATCH missing {missing}; rolling back", flush=True)
+    try:
+        if missing:
+            raise SystemExit(f"bindings dropped {missing}")
+        confirm_previous_pages(stamp)
+    except SystemExit:
+        print("page check failed; rolling back", flush=True)
         deploy_version(token, "ss-unified-proto", previous)
-        raise SystemExit("rolled back ss-unified-proto")
+        raise
     print(json.dumps({"previous": previous, "uploaded": version_id}))
 
 
