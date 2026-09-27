@@ -329,6 +329,41 @@ def active_pairs() -> list:
         "    };\n"
         "  }\n",
     ))
+    out.append((
+        '<style id="ss-command-simple-v1">.cc-easy-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0 0 16px}.cc-easy-kpis .val{font-size:1.55rem}.cc-easy-lead{margin:0 0 8px}.cc-easy-situation{margin:0 0 16px;font-size:15px;line-height:1.45;color:var(--navy,#0b1f33)}.cc-easy-h{margin:0 0 8px;font-size:1.02rem;color:var(--navy,#0b1f33);font-weight:750}.cc-easy-table-wrap{overflow:auto;border:1px solid var(--line,#d7e1ea);border-radius:12px;background:#fff}.cc-easy-table{width:100%;border-collapse:collapse;font-size:14px}.cc-easy-table th{text-align:left;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted,#6b7c8f);padding:10px 12px;border-bottom:1px solid var(--line,#d7e1ea);background:#fafcfe}.cc-easy-table td{padding:11px 12px;border-bottom:1px solid #eef2f6;vertical-align:middle}.cc-easy-table th.num,.cc-easy-table td.num{text-align:right;font-variant-numeric:tabular-nums}.cc-easy-table tr[data-cc-client]{cursor:pointer}.cc-easy-table tr[data-cc-client]:hover td{background:#f4f8fc}.cc-easy-bad{color:#b42318;font-weight:750}.cc-easy-warn{color:#ad6b05;font-weight:750}.cc-easy-ok{color:#11875c;font-weight:750}.cc-easy-sentence{font-size:1.08rem;line-height:1.5;color:var(--navy,#0b1f33);margin:0 0 14px}.cc-easy-back{margin:0 0 12px}@media(max-width:800px){.cc-easy-kpis{grid-template-columns:1fr}}</style><p class="lead cc-easy-lead" id="commandLead">Month to date, in three numbers. Money is sales and store profit. Spending is what the store bought against its purchase budget. Margin is store profit divided by sales. The target margin is 40%.</p><p class="cc-easy-situation" id="commandSituation">Loading…</p><div class="cc-easy-kpis" id="commandSimpleKpis"><div class="cc-kpi" id="ccMoneyCard"><span class="lbl">Money</span><span class="val" id="ccMoneyVal">—</span><span class="sub" id="ccMoneySub">Store profit on sales</span></div><div class="cc-kpi" id="ccSpendCard"><span class="lbl">Spending</span><span class="val" id="ccSpendVal">—</span><span class="sub" id="ccSpendSub">Bought vs purchase budget</span></div><div class="cc-kpi" id="ccMarginCard"><span class="lbl">Margin</span><span class="val" id="ccMarginVal">—</span><span class="sub" id="ccMarginSub">Store profit ÷ sales · target 40%</span></div></div><div id="commandAllWrap"><h3 class="cc-easy-h">All clients</h3><div class="cc-easy-table-wrap" id="commandAllTable"><p class="cc-empty">Loading…</p></div><p class="hint" id="commandHint">Click a client to see that store only. Dollars are rounded. Paradise and ExtraMile have no purchase budget.</p>',
+        '<p class="lead" id="commandLead">C-store margin for every store — same MTD as Home (daily books vs 40% target, worst first), every overspending department across stores, plus purchase-budget and YoY pace. Open a store tab for that store’s department detail.</p>\n        <div class="cc-kpis" id="commandKpis">\n          <div class="cc-kpi" id="ccKpiStores"><span class="lbl">Stores</span><span class="val" id="ccValStores">—</span><span class="sub" id="ccSubStores">In scope</span></div>\n          <div class="cc-kpi margin" id="ccKpiMargin"><span class="lbl">C-store margin risk</span><span class="val" id="ccValMargin">—</span><span class="sub">Below 40% MTD target</span></div>\n          <div class="cc-kpi over" id="ccKpiOver"><span class="lbl">Over budget</span><span class="val" id="ccValOver">—</span><span class="sub">MTD spent &gt; month budget</span></div>\n          <div class="cc-kpi risk" id="ccKpiRisk"><span class="lbl">At risk (pace)</span><span class="val" id="ccValRisk">—</span><span class="sub">Pace projects over EOM</span></div>\n          <div class="cc-kpi spike" id="ccKpiSpike"><span class="lbl">Depts overspent</span><span class="val" id="ccValSpike">—</span><span class="sub">Every dept over purchase budget</span></div>\n        </div>\n\n        <div class="cc-alert-boards" id="commandAlertBoards">\n          <section class="cc-alert-board" id="commandMarginBoard" aria-label="C-store margin for every store">\n            <header>\n              <h3>C-store margin · every store</h3>\n              <span class="meta" id="commandMarginMeta">All stores · MTD vs 40%</span>\n            </header>\n            <div class="cc-alert-body" id="commandMarginBody"><p class="cc-empty">Loading…</p></div>\n          </section>\n          <section class="cc-alert-board" id="commandOverDeptBoard" aria-label="Every overspending department">\n            <header>\n              <h3>Every overspending department</h3>\n              <span class="meta" id="commandOverDeptMeta">All stores in scope</span>\n            </header>\n            <div class="cc-alert-body" id="commandOverDeptBody"><p class="cc-empty">Loading…</p></div>\n          </section>\n        </div>\n\n        <div class="cc-store-board" id="commandStoreBoard">\n          <div class="cc-store-board-head">\n            <h3 id="commandBoardTitle">Store detail</h3>\n            <span class="meta" id="commandTabsMeta">Attention-first tabs</span>\n          </div>\n          <div class="cc-tabs" id="commandTabs" role="tablist" aria-label="Stores by attention"></div>\n          <div class="cc-tab-panel" id="commandTabPanel" role="tabpanel"><p class="cc-empty">Loading…</p></div>\n        </div>\n\n        <div class="cc-yoy" id="commandYoyWrap">\n          <div class="cc-yoy-head">\n            <h3>Month YoY · purchases</h3>\n            <span class="meta" id="commandYoyMeta">MTD vs LY same-month pace</span>\n          </div>\n          <div class="cc-yoy-grid" id="commandYoyGrid"><p class="muted">Loading…</p></div>\n        </div>\n\n        <details class="cc-all-stores" id="ccAllStores">\n          <summary>All stores (compact)</summary>\n          <div class="card table-wrap" style="border:none;box-shadow:none;padding:0;margin:0">\n            <table class="data cc-table" aria-label="Command Center store performance">\n              <thead>\n                <tr>\n                  <th>Store</th>\n                  <th class="num">Purchases MTD</th>\n                  <th class="num">Budget</th>\n                  <th class="num">Remaining</th>\n                  <th class="num">Proj EOM</th>\n                  <th class="num">YoY</th>\n                  <th>Status</th>\n                </tr>\n              </thead>\n              <tbody id="commandBody">\n                <tr><td colspan="7" class="muted">Loading…</td></tr>\n              </tbody>\n            </table>\n          </div>\n        </details>\n        <p class="hint" id="commandHint">Open a store tab to see that store only: risk status, departments overspent, departments still within budget, and dollars left in each department budget.</p>',
+    ))
+    out.append((
+        'data-title="Command Center" data-sub="All clients, then one client: money, spending, and margin."',
+        'data-title="Command Center" data-sub="Category risk — budget, buy vs sell, margin."',
+    ))
+    out.append((
+        "        ids.forEach(function (sid) {\n"
+        "          const id = String(sid);\n"
+        "          if (idSet && !idSet[id]) return;",
+        "        ids.forEach(function (sid) {\n"
+        "          const id = String(sid);\n"
+        "          if (id === '42642' || id === '42073' || id === '42246' || id === '42793' || id === 'demo') return;\n"
+        "          if (idSet && !idSet[id]) return;",
+    ))
+    out.append((
+        "          const spent = mtd != null && Number.isFinite(mtd) ? mtd : 0;",
+        "          var bookSpent = null;\n"
+        "          try {\n"
+        "            var bookStations = (DATA.daily && DATA.daily.stations) || [];\n"
+        "            var bookSum = 0;\n"
+        "            var bookFound = false;\n"
+        "            bookStations.forEach(function (st) {\n"
+        "              if (!st || String(st.id) !== id) return;\n"
+        "              bookFound = true;\n"
+        "              (st.days || []).forEach(function (d) {\n"
+        "                if (d && d.purch != null && Number.isFinite(Number(d.purch))) bookSum += Number(d.purch);\n"
+        "              });\n"
+        "            });\n"
+        "            if (bookFound) bookSpent = bookSum;\n"
+        "          } catch (eBook) {}\n"
+        "          const spent = (bookSpent != null && hasBudget && id !== '42359') ? bookSpent : (mtd != null && Number.isFinite(mtd) ? mtd : 0);",
+    ))
     return out
 
 
@@ -480,7 +515,10 @@ if (!out.includes("function buildBudget(")) process.exit(4);
 if (!out.includes("2938.42")) process.exit(5);
 if (!out.includes("ss-tustin-cig-v1")) process.exit(6);
 if (!out.includes("ss-billing-simple-v1")) process.exit(7);
-if (!out.includes("ss-command-simple-v1")) process.exit(8);
+if (!out.includes('id="commandBody"')) process.exit(8);
+if (!out.includes("C-store margin for every store")) process.exit(16);
+if (out.includes("ss-command-simple-v1")) process.exit(17);
+if (!out.includes("id === '42073'")) process.exit(18);
 if (!out.includes('"stationId": "42674"')) process.exit(9);
 if (ssOwnerBudget(out) !== out) process.exit(10);
 if (!out.includes("return '__scope__'")) process.exit(11);
@@ -509,7 +547,7 @@ def upload_proto(token: str, script: str) -> str:
         "keep_assets": True,
         "keep_bindings": ["assets"],
         "annotations": {
-            "workers/message": "Show Budget and Command Center for each owner and station"
+            "workers/message": "Restore the original Command Center layout"
         },
     }
     body, boundary = encode_multipart(script, metadata)
@@ -541,7 +579,9 @@ def confirm_previous_pages(stamp: str) -> None:
     for marker in (
         "function buildBudget(",
         "ss-billing-simple-v1",
-        "ss-command-simple-v1",
+        'id="commandBody"',
+        "C-store margin for every store",
+        "id === '42073'",
         "2938.42",
         "ss-tustin-cig-v1",
         '"stationId": "42674"',
@@ -554,6 +594,8 @@ def confirm_previous_pages(stamp: str) -> None:
     ):
         if marker not in html:
             raise SystemExit(f"live app lost {marker}")
+    if "ss-command-simple-v1" in html:
+        raise SystemExit("Command Center is still the short three-number page")
     if "navBudget.hidden = !(role === 'admin');" in html:
         raise SystemExit("budget tab is still admin only")
     if 'id="navInventory">Inventory</button>\n          <button type="button" data-view="command"' in html:
