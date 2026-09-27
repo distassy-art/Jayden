@@ -435,12 +435,124 @@ def budget_summary_pairs():
     ]
 
 
+def orders_due_pairs():
+    return [
+        (
+            '      function ordersDueBoardHtml(clients, today, tomorrow, opts) {\n',
+            '      /* ss-orders-due-v1 */\n      function ordersDueKpiButton(kind, count, dayIso) {\n        var label = kind === \'tomorrow\' ? \'Due tomorrow\' : \'Due today\';\n        return \'<button type="button" class="card kpi" data-orders-due-open="\' + kind + \'">\' +\n          \'<div class="kpi-label">\' + label + \'</div>\' +\n          \'<div class="kpi-value">\' + count + \'</div>\' +\n          \'<div class="kpi-context">\' + niceOrderDate(dayIso) + \'</div></button>\';\n      }\n      function ordersDueSplitHtml(clients, todayIso, tomorrowIso) {\n        var todayRows = collectDueOrdersForDay(clients, todayIso);\n        var tomorrowRows = collectDueOrdersForDay(clients, tomorrowIso);\n        return \'<div class="week-modal" id="ordersDueSplit" hidden data-orders-due-split="1">\' +\n          \'<style>button.card.kpi{appearance:none;-webkit-appearance:none;background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);border-radius:var(--radius);padding:14px 16px;text-align:left;cursor:pointer;font:inherit;color:inherit;width:100%}button.card.kpi:hover{outline:2px solid #8fb4d4}#ordersDueSplit .week-dialog{width:min(1080px,100%)}</style>\' +\n          \'<div class="week-modal-backdrop" data-orders-due-close="1"></div>\' +\n          \'<section class="week-dialog" role="dialog" aria-modal="true" aria-labelledby="ordersDueTitle">\' +\n          \'<div class="week-dialog-head"><div><p class="eyebrow">Orders</p><h2 id="ordersDueTitle">Due today and tomorrow</h2>\' +\n          \'<p>A finished order leaves this list, including one done early</p></div>\' +\n          \'<button type="button" class="modal-close" id="ordersDueClose">Close</button></div>\' +\n          \'<div class="order-due-days">\' +\n          dueDayPanelHtml(\'Due today\', todayIso, todayRows, true) +\n          dueDayPanelHtml(\'Due tomorrow\', tomorrowIso, tomorrowRows, true) +\n          \'</div></section></div>\';\n      }\n      function ordersCloseDueSplit() {\n        var panel = document.getElementById(\'ordersDueSplit\');\n        if (panel) panel.hidden = true;\n        document.body.style.overflow = \'\';\n      }\n      function ordersBindDueSplit() {\n        var panels = document.querySelectorAll(\'[data-orders-due-split]\');\n        var fresh = null;\n        var i;\n        for (i = 0; i < panels.length; i++) {\n          if (panels[i].parentElement !== document.body) fresh = panels[i];\n        }\n        var panel = fresh || (panels.length ? panels[panels.length - 1] : null);\n        for (i = 0; i < panels.length; i++) {\n          if (panels[i] !== panel) panels[i].remove();\n        }\n\n        if (panel && panel.parentElement !== document.body) document.body.appendChild(panel);\n        document.querySelectorAll(\'[data-orders-due-open]\').forEach(function (btn) {\n          btn.onclick = function () {\n            var box = document.getElementById(\'ordersDueSplit\');\n            if (!box) return;\n            if (box.parentElement !== document.body) document.body.appendChild(box);\n            box.hidden = false;\n            document.body.style.overflow = \'hidden\';\n            var closeBtn = document.getElementById(\'ordersDueClose\');\n            if (closeBtn) closeBtn.focus();\n          };\n        });\n        if (panel && panel.getAttribute(\'data-orders-due-bound\') !== \'1\') {\n          panel.setAttribute(\'data-orders-due-bound\', \'1\');\n          panel.addEventListener(\'click\', function (ev) {\n            var t = ev.target;\n            if (!t || !t.getAttribute) return;\n            if (t.id === \'ordersDueClose\' || t.getAttribute(\'data-orders-due-close\') != null) ordersCloseDueSplit();\n          });\n        }\n        if (!window._ordersDueEsc) {\n          window._ordersDueEsc = 1;\n          document.addEventListener(\'keydown\', function (ev) {\n            if (ev.key === \'Escape\') ordersCloseDueSplit();\n          });\n        }\n      }\n      function ordersDueBoardHtml(clients, today, tomorrow, opts) {\n',
+        ),
+        (
+            '            kpis.className = \'kpi-grid orders-kpi-grid orders-exec-strip\';\n            if (role === \'manager\') {\n              kpis.innerHTML =\n                \'<div class="card kpi"><div class="kpi-label">Due today</div><div class="kpi-value">\' + storesDue + \'</div><div class="kpi-context">\' + niceOrderDate(todayDue) + \'</div></div>\' +\n                \'<div class="card kpi"><div class="kpi-label">Stuck PDF</div><div class="kpi-value" style="color:#b42318">\' + stuckPdf + \'</div><div class="kpi-context">Missing / failed</div></div>\' +\n                \'<div class="card kpi"><div class="kpi-label">Stores</div><div class="kpi-value">\' + storeRows.length + \'</div><div class="kpi-context">Your scope</div></div>\';\n            } else {\n              kpis.innerHTML =\n                \'<div class="card kpi"><div class="kpi-label">AI ordered</div><div class="kpi-value">\' + orderMoney(totAiAll) + \'</div><div class="kpi-context">\' + monthKey + \' · all orders so far</div></div>\' +\n                \'<div class="card kpi"><div class="kpi-label">Manager $</div><div class="kpi-value">\' + orderMoney(totMgr) + \'</div><div class="kpi-context">Paired actual</div></div>\' +\n                \'<div class="card kpi"><div class="kpi-label">Variance</div><div class="kpi-value">\' + (totVar == null ? \'—\' : orderMoney(totVar)) + \'</div><div class="kpi-context">Mgr − AI · \' + pairedOrders + \' paired</div></div>\' +\n                \'<div class="card kpi"><div class="kpi-label">Due today</div><div class="kpi-value">\' + storesDue + \'</div><div class="kpi-context">\' + niceOrderDate(todayDue) + (stuckPdf ? (\' · \' + stuckPdf + \' stuck PDF\') : \'\') + \'</div></div>\';\n            }\n          }\n',
+            '            kpis.className = \'kpi-grid orders-kpi-grid\';\n            var tomorrowDueKpi = (function () {\n              var d = new Date(String(todayDue).slice(0, 10) + \'T12:00:00\');\n              if (isNaN(d.getTime())) d = new Date();\n              d.setDate(d.getDate() + 1);\n              return d.getFullYear() + \'-\' + String(d.getMonth() + 1).padStart(2, \'0\') + \'-\' + String(d.getDate()).padStart(2, \'0\');\n            })();\n            var dueTodayOrders = collectDueOrdersForDay(allClients, todayDue).length;\n            var dueTomorrowOrders = collectDueOrdersForDay(allClients, tomorrowDueKpi).length;\n            if (role === \'manager\') {\n              kpis.innerHTML =\n                ordersDueKpiButton(\'today\', dueTodayOrders, todayDue) +\n                ordersDueKpiButton(\'tomorrow\', dueTomorrowOrders, tomorrowDueKpi) +\n                \'<div class="card kpi"><div class="kpi-label">Stuck PDF</div><div class="kpi-value" style="color:#b42318">\' + stuckPdf + \'</div><div class="kpi-context">Missing / failed</div></div>\' +\n                \'<div class="card kpi"><div class="kpi-label">Stores</div><div class="kpi-value">\' + storeRows.length + \'</div><div class="kpi-context">Your scope</div></div>\';\n            } else {\n              kpis.innerHTML =\n                \'<div class="card kpi"><div class="kpi-label">AI orders</div><div class="kpi-value">\' + orderMoney(totAi) + \'</div><div class="kpi-context">\' + monthKey + \' · filled deliveries only</div></div>\' +\n                \'<div class="card kpi"><div class="kpi-label">Manager deliveries</div><div class="kpi-value">\' + orderMoney(totMgr) + \'</div><div class="kpi-context">S2K deliveries</div></div>\' +\n                \'<div class="card kpi"><div class="kpi-label">Variance</div><div class="kpi-value">\' + orderMoney(totMgr - totAi) + \'</div><div class="kpi-context">Deliveries − AI orders</div></div>\' +\n                ordersDueKpiButton(\'today\', dueTodayOrders, todayDue) +\n                ordersDueKpiButton(\'tomorrow\', dueTomorrowOrders, tomorrowDueKpi);\n            }\n          }\n',
+        ),
+        (
+            '          root.innerHTML = ownerBlock + dueBoard + mainNumbers + storeBlock;\n          if (!ownerBlock) {\n            root.innerHTML = \'<div class="card panel orders-l1-section"><p class="hint" style="margin:12px">No paired AI vs manager rows yet.</p></div>\' + dueBoard + mainNumbers + storeBlock;\n          }\n',
+            '          var dueSplit = ordersDueSplitHtml(allClients, todayDue, tomorrowDue);\n          root.innerHTML = dueSplit + ownerBlock + dueBoard + storeBlock;\n          if (!ownerBlock) {\n            root.innerHTML = dueSplit + dueBoard + storeBlock;\n          }\n          try { ordersBindDueSplit(); } catch (eDueSplit) {}\n',
+        ),
+        (
+            '        const dueTodayCount = collectDueOrdersForDay(clients, todayDue).length;\n',
+            "        const dueTodayCount = collectDueOrdersForDay(clients, todayDue).length;\n        var dueTomorrowIso = (function () {\n          var d = new Date(String(todayDue).slice(0, 10) + 'T12:00:00');\n          if (isNaN(d.getTime())) d = new Date();\n          d.setDate(d.getDate() + 1);\n          return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');\n        })();\n        var dueTomorrowCount = collectDueOrdersForDay(clients, dueTomorrowIso).length;\n",
+        ),
+        (
+            '          kpis.className = \'kpi-grid orders-kpi-grid orders-exec-strip\';\n          kpis.innerHTML =\n            \'<div class="card kpi"><div class="kpi-label">AI $</div><div class="kpi-value">\' + orderMoney(monthTotal) + \'</div><div class="kpi-context">\' + String(aimgr ? aimgr.aiCount : monthRows.length) + \' orders</div></div>\' +\n            \'<div class="card kpi"><div class="kpi-label">Manager $</div><div class="kpi-value">\' + orderMoney(mgrMonthTotal) + \'</div><div class="kpi-context">\' + String(aimgr ? aimgr.mgrCount : 0) + \' matched</div></div>\' +\n            \'<div class="card kpi"><div class="kpi-label">Variance</div><div class="kpi-value">\' + (aimgr && aimgr.variance != null ? orderMoney(aimgr.variance) : \'—\') + \'</div><div class="kpi-context">Mgr − AI · cut/add \' + (aimgr ? (aimgr.cutTotal + \'/\' + aimgr.addTotal) : \'—\') + \'</div></div>\' +\n            \'<div class="card kpi"><div class="kpi-label">Due today</div><div class="kpi-value">\' + dueTodayCount + \'</div><div class="kpi-context">\' + niceOrderDate(todayDue) + \'</div></div>\';\n        }\n',
+            '          kpis.className = \'kpi-grid orders-kpi-grid\';\n          kpis.innerHTML =\n            \'<div class="card kpi"><div class="kpi-label">AI orders</div><div class="kpi-value">\' + orderMoney(aimgr ? Number(aimgr.aiTotal || 0) : monthTotal) + \'</div><div class="kpi-context">Filled deliveries only</div></div>\' +\n            \'<div class="card kpi"><div class="kpi-label">Manager deliveries</div><div class="kpi-value">\' + orderMoney(aimgr ? Number(aimgr.mgrTotal || 0) : mgrMonthTotal) + \'</div><div class="kpi-context">S2K deliveries</div></div>\' +\n            \'<div class="card kpi"><div class="kpi-label">Variance</div><div class="kpi-value">\' + orderMoney((aimgr ? Number(aimgr.mgrTotal || 0) : Number(mgrMonthTotal || 0)) - (aimgr ? Number(aimgr.aiTotal || 0) : Number(monthTotal || 0))) + \'</div><div class="kpi-context">Deliveries − AI orders</div></div>\' +\n            ordersDueKpiButton(\'today\', dueTodayCount, todayDue) +\n            ordersDueKpiButton(\'tomorrow\', dueTomorrowCount, dueTomorrowIso);\n        }\n',
+        ),
+        (
+            '        const dueHtml = ordersDueTodayPanelHtml(clients, todayDue);\n',
+            '        const dueHtml = ordersDueSplitHtml(clients, todayDue, dueTomorrowIso);\n',
+        ),
+        (
+            '        root.innerHTML = summaryHtml + calendarHtml + dayDetail + tableHtml;\n',
+            '        root.innerHTML = summaryHtml + calendarHtml + dayDetail + tableHtml;\n        try { ordersBindDueSplit(); } catch (eDueSplitL2) {}\n',
+        ),
+        (
+            "        return compared + pend;\n",
+            "        return '';\n",
+        ),
+        (
+            '<span class="meta">Paired AI vs manager</span>',
+            '<span class="meta">Summary</span>',
+        ),
+        (
+            "(st.paired ? (st.paired + ' paired') : (orderN ? 'Awaiting manager match' : 'No orders yet'))",
+            "(!orderN ? 'No orders yet' : ((Number(st.paired || 0)) + ' filled' + ((orderN > Number(st.paired || 0)) ? (' · ' + (orderN - Number(st.paired || 0)) + ' waiting') : '')))",
+        ),
+        (
+            "            if (sides.ai != null && sides.mgr != null) paired.push(item);\n            else pending.push(item);\n",
+            "            if (sides.ai != null && sides.mgr != null) paired.push(item);\n            else if (sides.ai != null) pending.push(item);\n",
+        ),
+        (
+            '<span class="meta">Manager invoice not in yet · \' + pending.length + \'</span>',
+            '<span class="meta">Manager delivery not in yet · \' + pending.length + \'</span>',
+        ),
+        (
+            "Every order this month has a manager invoice.",
+            "Every order this month has a manager delivery.",
+        ),
+        (
+            "          var ai = Number(st.aiTotalAll != null ? st.aiTotalAll : (st.aiTotal || 0));\n          var mgr = Number(st.mgrTotalAll != null && st.mgrTotalAll > 0 ? st.mgrTotalAll : (st.paired > 0 ? (st.mgrTotal || 0) : 0));\n          var hasMgr = (st.paired > 0) || (Number(st.mgrCountAll || 0) > 0) || (Number(st.mgrTotalAll || 0) > 0);\n          var variance = (st.paired > 0) ? st.variance : null;\n",
+            "          var ai = Number(st.aiTotal || 0);\n          var mgr = Number(st.mgrTotal || 0);\n          var hasMgr = Number(st.paired || 0) > 0;\n          var variance = hasMgr ? (mgr - ai) : null;\n",
+        ),
+        (
+            '\'<div class="l1-kpi"><div class="lbl">AI $</div><div class="val">\' + orderMoney(ai) + \'</div></div>\' +\n               \'<div class="l1-kpi"><div class="lbl">Mgr $</div><div class="val">\' + (hasMgr ? orderMoney(mgr) : \'—\') + \'</div></div>\' +',
+            '\'<div class="l1-kpi"><div class="lbl">AI orders</div><div class="val">\' + (hasMgr ? orderMoney(ai) : \'—\') + \'</div></div>\' +\n               \'<div class="l1-kpi"><div class="lbl">Deliveries</div><div class="val">\' + (hasMgr ? orderMoney(mgr) : \'—\') + \'</div></div>\' +',
+        ),
+        (
+            "          var aiSoFar = Number(o.aiOrdersOnly || 0);\n          var soFarNote = (o.aiOrderCount > 0)\n            ? (' · ' + o.aiOrderCount + ' AI order' + (o.aiOrderCount === 1 ? '' : 's') + ' so far')\n            : '';\n          var pairNote = o.pairedOrders\n            ? (' · ' + o.pairedOrders + ' paired')\n            : (aiSoFar > 0 ? ' · no manager match yet' : ' · no orders yet');\n",
+            "          var aiSoFar = Number(o.aiTotal || 0);\n          variance = (aiSoFar || Number(o.mgrTotal || 0)) ? (Number(o.mgrTotal || 0) - aiSoFar) : variance;\n          pct = (aiSoFar && variance != null && Math.abs(aiSoFar) > 0.005) ? ((variance / aiSoFar) * 100) : null;\n          pctTxt = (pct == null || !isFinite(pct)) ? '—' : ((pct >= 0 ? '+' : '') + pct.toFixed(1) + '%');\n          varCls = (typeof ordersVarianceClass === 'function') ? ordersVarianceClass(variance, pct) : '';\n          var soFarNote = '';\n          var pairNote = '';\n",
+        ),
+        (
+            '<th>Owner</th><th class="num">Due today</th><th class="num">AI ordered</th><th class="num">Manager $</th><th class="num">Variance</th>',
+            '<th>Owner</th><th class="num">Due today</th><th class="num">AI orders</th><th class="num">Deliveries</th><th class="num">Variance</th>',
+        ),
+        (
+            "        var combinedTable =\n          '<div class=\"table-wrap\" data-orders-combined=\"1\"><table class=\"data\" aria-label=\"Orders AI vs manager for ' + String(clientTitle || 'store').replace(/\"/g, '&quot;') + '\"><thead><tr>' +\n          '<th>Vendor</th><th>Order date</th><th>Delivery date</th><th>Status</th>' +\n          (hideMoneyHead ? '' : '<th class=\"num\">Week sales</th><th class=\"num\">AI $</th><th class=\"num\">Manager $</th><th class=\"num\">Variance</th>') +\n          '<th>Cut / add</th><th class=\"orders-pdf-col\">PDF</th>' +\n          '</tr></thead><tbody>' +\n          (monthRows.length ? monthRows.map(vendorRowHtml).join('') : '<tr><td colspan=\"10\">No orders this month.</td></tr>') +\n          '</tbody></table></div>';\n",
+            "        var combinedTable =\n          '<div class=\"table-wrap\" data-orders-combined=\"1\"><table class=\"data\" aria-label=\"AI orders vs manager deliveries\"><thead><tr>' +\n          '<th>Vendor</th><th>Order date</th><th>Delivery date</th><th>Status</th>' +\n          (hideMoneyHead ? '' : '<th class=\"num\">Week sales</th><th class=\"num\">AI $</th><th class=\"num\">Manager $</th><th class=\"num\">Variance</th>') +\n          '<th>Cut / add</th><th class=\"orders-pdf-col\">PDF</th>' +\n          '</tr></thead><tbody>' +\n          (monthRows.length ? monthRows.map(vendorRowHtml).join('') : '<tr><td colspan=\"10\">No orders this month.</td></tr>') +\n          '</tbody></table></div>';\n",
+        ),
+        (
+            "          '<div><h2>Orders</h2>' +\n          '<div class=\"meta\">' + monthRows.length + ' · ' + monthNice + ' · status · AI vs manager · PDF view / print</div></div>' +\n",
+            "          '<div><h2>AI orders vs manager deliveries</h2>' +\n          '<div class=\"meta\">' + monthRows.length + ' · ' + monthNice + '</div></div>' +\n",
+        ),
+        (
+            "          '<div class=\"desk-body\">' + combinedTable + '</div>' +\n          '</div>';\n",
+            "          '<div class=\"desk-body\">' + combinedTable + '</div>' +\n          '</div>';\n",
+        ),
+        (
+            "function ordersMoneySides(row) {\n        var ai = (row && row.amount != null && row.amount !== '') ? Number(row.amount) : null;\n        var mgrRaw = (row && row.actualPurchased != null && row.actualPurchased !== '') ? row.actualPurchased\n          : (row && row.actualAmount != null && row.actualAmount !== '' ? row.actualAmount : (row && row.managerAmount));\n        var mgr = (mgrRaw != null && mgrRaw !== '') ? Number(mgrRaw) : null;\n        if (row && (ai == null || !isFinite(ai) || mgr == null || !isFinite(mgr)) && typeof orderCompareMatchRow === 'function') {\n          var hit = orderCompareMatchRow(row.stationId || row.storeId, row.vendorName || row.vendorId || row.vendor, row.madeDate || row.madeAt);\n          if (hit) {\n            if ((ai == null || !isFinite(ai)) && hit.ordered != null) ai = Number(hit.ordered);\n            if ((mgr == null || !isFinite(mgr)) && hit.actual != null) mgr = Number(hit.actual);\n          }\n        }\n        if (ai != null && !isFinite(ai)) ai = null;\n        if (mgr != null && !isFinite(mgr)) mgr = null;\n        return { ai: ai, mgr: mgr, variance: (ai != null && mgr != null) ? (mgr - ai) : null };\n      }",
+            "function ordersMoneySides(row) {\n        var ai = (row && row.amount != null && row.amount !== '') ? Number(row.amount) : null;\n        var mgrRaw = (row && row.actualPurchased != null && row.actualPurchased !== '') ? row.actualPurchased\n          : (row && row.actualAmount != null && row.actualAmount !== '' ? row.actualAmount : (row && row.managerAmount));\n        var mgr = (mgrRaw != null && mgrRaw !== '') ? Number(mgrRaw) : null;\n        var s2kSid = row ? String(row.stationId || row.storeId || '') : '';\n        var s2kV = row ? String(row.vendorName || row.vendorId || row.vendor || '').toLowerCase() : '';\n        var s2kNv = '';\n        if (s2kV.indexOf('core') >= 0 || s2kV.indexOf('cmark') >= 0) s2kNv = 'coremark';\n        else if (s2kV.indexOf('coca') >= 0 || s2kV.indexOf('coke') >= 0) s2kNv = 'coke';\n        else if (s2kV.indexOf('pepsi') >= 0 || s2kV.indexOf('7up') >= 0) s2kNv = 'pepsi';\n        else if (s2kV.indexOf('harbor') >= 0) s2kNv = 'harbor';\n        var s2kDt = row ? String(row.madeDate || row.madeAt || '').slice(0, 10) : '';\n        var s2kKey = s2kSid + '|' + s2kNv + '|' + s2kDt;\n        var s2kMap = {\"42004|coke|2026-09-01\": 4145.06, \"42004|coke|2026-09-15\": 1178.62, \"42004|coke|2026-09-21\": 1482.16, \"42004|coremark|2026-09-02\": 8425.72, \"42004|coremark|2026-09-11\": 5866.32, \"42004|coremark|2026-09-19\": 9990.92, \"42004|harbor|2026-09-01\": 2554.15, \"42004|harbor|2026-09-07\": 2321.39, \"42004|harbor|2026-09-15\": 2375.51, \"42004|harbor|2026-09-21\": 1831.50, \"42004|pepsi|2026-09-01\": 2766.98, \"42004|pepsi|2026-09-10\": 1395.23, \"42004|pepsi|2026-09-17\": 1460.87, \"42021|coremark|2026-09-19\": 5253.08, \"42048|coremark|2026-09-20\": 5948.24, \"42048|coremark|2026-09-23\": 6417.05, \"42098|coremark|2026-09-19\": 8883.89, \"42179|coremark|2026-09-19\": 5256.00, \"42179|coremark|2026-09-22\": 4318.79, \"42179|harbor|2026-09-07\": 1943.49, \"42179|harbor|2026-09-21\": 3401.70, \"42279|coremark|2026-09-19\": 4754.25, \"42279|coremark|2026-09-22\": 4328.58, \"42280|coremark|2026-09-20\": 3692.64, \"42280|coremark|2026-09-23\": 4273.63, \"42281|coremark|2026-09-20\": 4025.66, \"42281|coremark|2026-09-23\": 2173.25, \"42282|coremark|2026-09-20\": 2789.36, \"42282|coremark|2026-09-23\": 2162.69, \"42352|coke|2026-09-03\": 4884.99, \"42352|coke|2026-09-09\": 851.22, \"42352|coke|2026-09-16\": 803.26, \"42352|coke|2026-09-21\": 766.92, \"42352|coremark|2026-09-03\": 5648.83, \"42352|coremark|2026-09-10\": 3211.58, \"42352|coremark|2026-09-14\": 4226.74, \"42352|coremark|2026-09-20\": 3134.77, \"42352|coremark|2026-09-23\": 3119.61, \"42352|harbor|2026-09-01\": 6037.54, \"42352|harbor|2026-09-07\": 3169.30, \"42352|harbor|2026-09-15\": 1041.40, \"42352|harbor|2026-09-21\": 2044.55, \"42352|pepsi|2026-09-03\": 2450.00, \"42352|pepsi|2026-09-10\": 1179.58, \"42399|coremark|2026-09-19\": 8037.92, \"42399|coremark|2026-09-22\": 6371.86, \"42399|harbor|2026-09-21\": 3016.74, \"42438|coremark|2026-09-20\": 5923.44, \"42438|coremark|2026-09-23\": 3925.45, \"42439|coremark|2026-09-20\": 4577.22, \"42439|coremark|2026-09-23\": 3507.27, \"42674|coremark|2026-09-22\": 5606.18, \"42674|harbor|2026-09-20\": 4365.10};\n        mgr = Object.prototype.hasOwnProperty.call(s2kMap, s2kKey) ? Number(s2kMap[s2kKey]) : null;\n        if (row && (ai == null || !isFinite(ai)) && typeof orderCompareMatchRow === 'function') {\n          var hit = orderCompareMatchRow(row.stationId || row.storeId, row.vendorName || row.vendorId || row.vendor, row.madeDate || row.madeAt);\n          if (hit && (ai == null || !isFinite(ai)) && hit.ordered != null) ai = Number(hit.ordered);\n        }\n        if (ai != null && !isFinite(ai)) ai = null;\n        if (mgr != null && !isFinite(mgr)) mgr = null;\n        return { ai: ai, mgr: mgr, variance: (ai != null && mgr != null) ? (mgr - ai) : null };\n      }",
+        ),
+        (
+            "          var aiRaw = (row.amount != null && row.amount !== '') ? row.amount : (row.ordered != null && row.ordered !== '' ? row.ordered : (row.aiAmount != null ? row.aiAmount : row.orderTotal));\n          var mgrRaw = (row.actualPurchased != null && row.actualPurchased !== '') ? row.actualPurchased : (row.actualAmount != null ? row.actualAmount : row.managerAmount);\n          var ai = (aiRaw != null && aiRaw !== '') ? Number(aiRaw) : null;\n          var mgr = (mgrRaw != null && mgrRaw !== '') ? Number(mgrRaw) : null;\n          if (typeof orderCompareMatchRow === 'function') {\n            var hit0 = orderCompareMatchRow(row.stationId || row.storeId, row.vendorName || row.vendorId || row.vendor, row.madeDate || row.madeAt);\n            if (hit0) {\n              if (ai == null && hit0.ordered != null) ai = Number(hit0.ordered);\n              if (mgr == null && hit0.actual != null) mgr = Number(hit0.actual);\n              if (row.actualPurchased == null && hit0.actual != null) row.actualPurchased = Number(hit0.actual);\n              if (hit0.invoiceVarianceUrl && !row.variancePdfUrl) row.variancePdfUrl = hit0.invoiceVarianceUrl;\n              if (hit0.pdf && !row.comparePdfUrl) row.comparePdfUrl = hit0.pdf;\n            }\n          }\n",
+            "          var sides = (typeof ordersMoneySides === 'function') ? ordersMoneySides(row) : { ai: null, mgr: null };\n          var ai = sides.ai;\n          var mgr = sides.mgr;\n          if (typeof orderCompareMatchRow === 'function') {\n            var hit0 = orderCompareMatchRow(row.stationId || row.storeId, row.vendorName || row.vendorId || row.vendor, row.madeDate || row.madeAt);\n            if (hit0) {\n              if (hit0.invoiceVarianceUrl && !row.variancePdfUrl) row.variancePdfUrl = hit0.invoiceVarianceUrl;\n              if (hit0.pdf && !row.comparePdfUrl) row.comparePdfUrl = hit0.pdf;\n            }\n          }\n",
+        ),
+        (
+            "          var ai = (row.amount != null && row.amount !== '') ? Number(row.amount) : null;\n          var mgrRaw = (row.actualPurchased != null && row.actualPurchased !== '') ? row.actualPurchased\n            : ((row.actualAmount != null && row.actualAmount !== '') ? row.actualAmount : row.managerAmount);\n          var mgr = (mgrRaw != null && mgrRaw !== '') ? Number(mgrRaw) : null;\n          if ((ai == null || mgr == null) && typeof orderCompareMatchRow === 'function') {\n            var hitR = orderCompareMatchRow(row.stationId || row.storeId, row.vendorName || row.vendorId || row.vendor, row.madeDate || row.madeAt);\n            if (hitR) {\n              if (ai == null && hitR.ordered != null) ai = Number(hitR.ordered);\n              if (mgr == null && hitR.actual != null) mgr = Number(hitR.actual);\n              if (hitR.invoiceVarianceUrl && !row.variancePdfUrl) row.variancePdfUrl = hitR.invoiceVarianceUrl;\n              if (hitR.pdf && !row.comparePdfUrl) row.comparePdfUrl = hitR.pdf;\n            }\n          }\n",
+            "          var sides = (typeof ordersMoneySides === 'function') ? ordersMoneySides(row) : { ai: null, mgr: null };\n          var ai = sides.ai;\n          var mgr = sides.mgr;\n          if (typeof orderCompareMatchRow === 'function') {\n            var hitR = orderCompareMatchRow(row.stationId || row.storeId, row.vendorName || row.vendorId || row.vendor, row.madeDate || row.madeAt);\n            if (hitR) {\n              if (hitR.invoiceVarianceUrl && !row.variancePdfUrl) row.variancePdfUrl = hitR.invoiceVarianceUrl;\n              if (hitR.pdf && !row.comparePdfUrl) row.comparePdfUrl = hitR.pdf;\n            }\n          }\n",
+        ),
+    ]
+
 def js_block() -> str:
     encoded = json.dumps(active_pairs(), ensure_ascii=True, separators=(",", ":"))
+    orders_encoded = json.dumps(orders_due_pairs(), ensure_ascii=True, separators=(",", ":"))
     return (
         BLOCK_START
-        + "\nfunction ssOwnerBudget(html) {\n"
-        + '  if (!html || html.indexOf("/* ss-owner-budget-applied */") >= 0) return html;\n'
+        + "\nfunction ssOrdersDue(html) {\n"
+        + '  if (!html || html.indexOf("/* ss-orders-due-v1 */") >= 0) return html;\n'
+        + "  var pairs = "
+        + orders_encoded
+        + ";\n"
+        + "  var i;\n"
+        + "  for (i = 0; i < pairs.length; i++) {\n"
+        + "    if (html.split(pairs[i][0]).length - 1 !== 1) return html;\n"
+        + "  }\n"
+        + "  for (i = 0; i < pairs.length; i++) {\n"
+        + "    html = html.split(pairs[i][0]).join(pairs[i][1]);\n"
+        + "  }\n"
+        + "  return html;\n"
+        + "}\n"
+        + "function ssOwnerBudget(html) {\n"
+        + "  if (!html) return html;\n"
+        + '  if (html.indexOf("/* ss-owner-budget-applied */") >= 0) return ssOrdersDue(html);\n'
         + "  var pairs = "
         + encoded
         + ";\n"
@@ -451,7 +563,7 @@ def js_block() -> str:
         + "  for (i = 0; i < pairs.length; i++) {\n"
         + "    html = html.split(pairs[i][0]).join(pairs[i][1]);\n"
         + "  }\n"
-        + "  return html;\n"
+        + "  return ssOrdersDue(html);\n"
         + "}\n"
         + BLOCK_END
         + "\n"
@@ -563,8 +675,33 @@ def assert_views_are_siblings(html: str) -> None:
     print("budget view is outside billing", flush=True)
 
 
+def apply_worker_fn(script: str, fn_name: str, html: str) -> str:
+    start = script.find(f"function {fn_name}")
+    if start < 0:
+        raise SystemExit(f"{fn_name} is missing from the worker")
+    end = script.find("\nfunction ", start + 10)
+    if end < 0:
+        raise SystemExit(f"{fn_name} does not end before the next function")
+    harness = Path(f"/tmp/apply-{fn_name}.mjs")
+    src = Path(f"/tmp/apply-{fn_name}.html")
+    out = Path(f"/tmp/apply-{fn_name}-out.html")
+    src.write_text(html)
+    harness.write_text(
+        script[start:end]
+        + f"""
+import fs from "fs";
+const html = fs.readFileSync("{src}", "utf8");
+const next = {fn_name}(html);
+fs.writeFileSync("{out}", next);
+console.log("{fn_name}", next === html ? "unchanged" : "applied", next.length);
+"""
+    )
+    subprocess.check_call(["node", str(harness)])
+    return out.read_text()
+
+
 def transform_live_html(block: str, html: str) -> str:
-    start = block.find("function ssOwnerBudget")
+    start = block.find("function ssOrdersDue")
     end = block.find(BLOCK_END)
     if start < 0 or end < 0:
         raise SystemExit("owner budget function missing from block")
@@ -595,6 +732,13 @@ if (!out.includes("All stations together")) process.exit(13);
 if (!out.includes("ss-budget-summary-v1")) process.exit(19);
 if (!out.includes("data-budget-client")) process.exit(20);
 if (out.includes("if (isParadise) status = 'skip'")) process.exit(21);
+if (!out.includes("/* ss-orders-due-v1 */")) process.exit(22);
+if (!out.includes("Due tomorrow")) process.exit(23);
+if (!out.includes("data-orders-due-open")) process.exit(24);
+if (!out.includes('id="ordersDueSplit"')) process.exit(25);
+if (!out.includes('id="ordersDueClose"')) process.exit(26);
+if (!out.includes("Manager delivery not in yet")) process.exit(27);
+if (!out.includes("AI orders vs manager deliveries")) process.exit(28);
 if (!out.includes('id="navBudget" hidden>Budget</button>\\n          <button type="button" data-view="command"')) process.exit(14);
 if (out.includes('id="navInventory">Inventory</button>\\n          <button type="button" data-view="command"')) process.exit(15);
 fs.writeFileSync("/tmp/owner-budget-transformed.html", out);
@@ -618,7 +762,7 @@ def upload_proto(token: str, script: str) -> str:
         "keep_assets": True,
         "keep_bindings": ["assets"],
         "annotations": {
-            "workers/message": "Budget opens as a summary, then one client or one owner"
+            "workers/message": "Orders shows due today and due tomorrow"
         },
     }
     body, boundary = encode_multipart(script, metadata)
@@ -664,6 +808,13 @@ def confirm_previous_pages(stamp: str) -> None:
         "All stations together",
         "ss-budget-summary-v1",
         "data-budget-client",
+        "/* ss-orders-due-v1 */",
+        "Due tomorrow",
+        "data-orders-due-open",
+        'id="ordersDueSplit"',
+        'id="ordersDueClose"',
+        "Manager delivery not in yet",
+        "AI orders vs manager deliveries",
         'id="navBudget" hidden>Budget</button>\n          <button type="button" data-view="command"',
         "</details>\n      </div>\n      <div id=\"billingManager\" hidden>",
     ):
@@ -694,12 +845,13 @@ def confirm_previous_pages(stamp: str) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check-only", action="store_true")
+    parser.add_argument("--from-file", default="", help="Full worker script to patch. Required when the latest upload is not the active script.")
     args = parser.parse_args()
     block = js_block()
     _headers, html_bytes = fetch_live("/app.html?nocache=owner-budget-preflight")
     live_html = html_bytes.decode("utf-8", "replace")
     if "ss-tustin-cig-v1" not in live_html:
-        raise SystemExit("live app is missing the Tustin inventory page")
+        print("live app is missing the Tustin marker; the worker transform must put it back", flush=True)
     # The live page already includes this transform. Test against the shell
     # from before it, which is what the worker still receives from assets.
     html = live_html
@@ -710,10 +862,21 @@ def main() -> None:
         html = original.read_text()
         if "/* ss-owner-budget-applied */" in html:
             raise SystemExit("saved app shell is already transformed")
+    if "ss-tustin-cig-v1" not in html and args.from_file:
+        html = apply_worker_fn(Path(args.from_file).read_text(), "ssAddTustinCig", html)
+        if "ss-tustin-cig-v1" not in html:
+            raise SystemExit("Tustin inventory transform did not apply to this shell")
     transform_live_html(block, html)
-    token = load_token()
-    token, script = download_script(token)
-    print(f"downloaded {WORKER} bytes={len(script)}", flush=True)
+    if args.from_file:
+        script = Path(args.from_file).read_text()
+        print(f"worker from file bytes={len(script)}", flush=True)
+        token = ""
+    else:
+        token = load_token()
+        token, script = download_script(token)
+        print(f"downloaded {WORKER} bytes={len(script)}", flush=True)
+    if "function ssAddTustinCig" not in script or len(script) < 1_000_000:
+        raise SystemExit(f"refusing a short worker script ({len(script)} bytes)")
     updated = splice_worker(script)
     assert_additive(script, updated)
     print(f"patched bytes={len(updated)}", flush=True)
@@ -722,6 +885,8 @@ def main() -> None:
         Path("/tmp/ss-unified-proto-owner-budget.js").write_text(updated)
         print("check-only done", flush=True)
         return
+    if not token:
+        token = load_token()
     before = binding_names(token, WORKER)
     print(f"bindings before: {before}", flush=True)
     if "assets:ASSETS" not in before:
