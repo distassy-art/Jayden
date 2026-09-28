@@ -29,3 +29,7 @@ Orders are sent from `orders@smartsolutionsai26.onmicrosoft.com`.
 ## Saturday 2026-09-26
 
 Core-Mark’s day arrived. There was no new Saturday charge file, so no 2026-09-26 Core-Mark amount was invented. Eighteen older orders whose store, vendor, and date were missing were appended. The 25 live sends and the shell orders were copied through unchanged.
+
+## Monday 2026-09-28
+
+Harbor’s day arrived. Site PDFs existed for Brookhurst 75 (`42098-harbor-09282026.pdf`, $1,374.72) and Tustin (`42674-harbor-09282026.pdf`, $2,223.69), so those Monday identities were appended. The other twelve Harbor stores had no charge file or site PDF for 2026-09-28, so no amounts were invented. Every existing send and shell order was left unchanged.

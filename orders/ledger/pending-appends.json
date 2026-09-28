@@ -268,5 +268,37 @@
     "notes": "Different truck from the 2026-09-20 Harbor $605.58 row, which stays. That earlier fee is already charged.",
     "submittedByAI": false,
     "mycokeDraftSaved": false
+  },
+  {
+    "storeId": "42098",
+    "storeName": "Arco Brookhurst 75",
+    "vendor": "Harbor",
+    "dateSent": "2026-09-28",
+    "aiAmount": 1374.72,
+    "orderingFee": 13.75,
+    "orderingFeeCharged": false,
+    "pdfName": "42098-harbor-09282026.pdf",
+    "size": null,
+    "status": "Sent — emailed for manager",
+    "notes": "Harbor Monday due 2026-09-28. SKU 9/14–9/20. Delivery Tuesday. Site PDF 42098-harbor-09282026.pdf.",
+    "emailTo": "brookhurst75@outlook.com",
+    "submittedByAI": false,
+    "mycokeDraftSaved": false
+  },
+  {
+    "storeId": "42674",
+    "storeName": "Arco Tustin",
+    "vendor": "Harbor",
+    "dateSent": "2026-09-28",
+    "aiAmount": 2223.69,
+    "orderingFee": 22.24,
+    "orderingFeeCharged": false,
+    "pdfName": "42674-harbor-09282026.pdf",
+    "size": null,
+    "status": "Sent — emailed for manager",
+    "notes": "Harbor Monday due 2026-09-28. SKU 9/14–9/20. Delivery Wednesday. Site PDF 42674-harbor-09282026.pdf.",
+    "emailTo": "arcotustin@outlook.com",
+    "submittedByAI": false,
+    "mycokeDraftSaved": false
   }
 ]

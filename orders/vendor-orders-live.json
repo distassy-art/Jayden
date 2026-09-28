@@ -1,6 +1,6 @@
 {
   "version": 8,
-  "updatedAt": "2026-09-26T23:42:40.833Z",
+  "updatedAt": "2026-09-28T10:10:26.013Z",
   "fromMailbox": "orders@smartsolutionsai26.onmicrosoft.com",
   "fields": {
     "aiAmount": "Dollar total on the AI draft / emailed PDF",
@@ -1063,6 +1063,46 @@
       "submittedByAI": false,
       "mycokeDraftSaved": false,
       "pdfUrl": "/web/orders/pdfs/42021-harbor-09232026.pdf"
+    },
+    {
+      "dateSent": "2026-09-28",
+      "vendor": "Harbor",
+      "store": "42098",
+      "storeId": "42098",
+      "client": "Arco Brookhurst 75",
+      "aiAmount": 1374.72,
+      "orderingFee": 13.75,
+      "orderingFeeCharged": false,
+      "status": "Sent — emailed for manager",
+      "pdfName": "42098-harbor-09282026.pdf",
+      "emailTo": "brookhurst75@outlook.com",
+      "subject": "Harbor",
+      "size": "",
+      "notes": "Harbor Monday due 2026-09-28. SKU 9/14–9/20. Delivery Tuesday. Site PDF 42098-harbor-09282026.pdf.",
+      "from": "orders@smartsolutionsai26.onmicrosoft.com",
+      "submittedByAI": false,
+      "mycokeDraftSaved": false,
+      "pdfUrl": "/web/orders/pdfs/42098-harbor-09282026.pdf"
+    },
+    {
+      "dateSent": "2026-09-28",
+      "vendor": "Harbor",
+      "store": "42674",
+      "storeId": "42674",
+      "client": "Arco Tustin",
+      "aiAmount": 2223.69,
+      "orderingFee": 22.24,
+      "orderingFeeCharged": false,
+      "status": "Sent — emailed for manager",
+      "pdfName": "42674-harbor-09282026.pdf",
+      "emailTo": "arcotustin@outlook.com",
+      "subject": "Harbor",
+      "size": "",
+      "notes": "Harbor Monday due 2026-09-28. SKU 9/14–9/20. Delivery Wednesday. Site PDF 42674-harbor-09282026.pdf.",
+      "from": "orders@smartsolutionsai26.onmicrosoft.com",
+      "submittedByAI": false,
+      "mycokeDraftSaved": false,
+      "pdfUrl": "/web/orders/pdfs/42674-harbor-09282026.pdf"
     }
   ],
   "schedules": [
