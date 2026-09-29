@@ -20,4 +20,4 @@ Station 42279. S2K site 195.
 
 Packet directory: `42279/2026-09-28/`.
 
-Billing and site-publish are out of scope for this branch.
+Site inventory entry published via `site-publish/public/inventory/` (see commit on this branch). Billing is out of scope.

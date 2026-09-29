@@ -1,0 +1,589 @@
+{
+  "schema": "ss-inventory-index-v1",
+  "updated": "2026-09-29",
+  "note": "Inventory page entries. Edit this file (not app.html). One entry per client + category + date. count = the four count boxes (null hides them). See docs/INVENTORY-PUBLISH.md.",
+  "entries": [
+    {
+      "stationId": "42279",
+      "client": "Flamingo (Koval)",
+      "date": "2026-09-28",
+      "dateLabel": "September 28, 2026",
+      "category": "Cigarettes",
+      "heading": "Count written September 28, 2026. On that date, S2K quantity on hand was set to those counted packs (SKU Inventory CIG COUNT 09282026, transaction 274158, plus supplement CIG COUNT 09282026 B, transaction 274163). The three-page scan is missing the printed grid for rows 1\u201333; those counts were taken from the handwriting below the grid on page 3. American Spirit Turquoise is included. Row 57 (Marlboro Cowboy Menthol Box) was marked \u201c?\u201d and was not posted.",
+      "summary": "The actual count is $11,991.63 for 1,211 packs on 100 lines. Minus is $646.65, where the book is above the count (66 packs). Plus is $1,114.16, where the count is above the book (115 packs). Overall is positive $467.51. The first S2K post covered the handwritten grid on scan pages 1\u20132 and rows 106\u2013107 (74 lines). The supplement posted rows 1\u201333 from the below-grid list and margin corrections on Marlboro Special Select Black/Green and two Pall Mall lines. Crown Blue 100, Winston margin lines, and a few ambiguous margin names were skipped because they do not map cleanly to one sheet row. Those 100 lines now have quantity on hand equal to the physical count.",
+      "count": {
+        "actualPacks": 1211,
+        "actualCost": 11991.63,
+        "minusPacks": 66,
+        "minusCost": 646.65,
+        "plusPacks": 115,
+        "plusCost": 1114.16,
+        "overall": 467.51
+      },
+      "files": [
+        {
+          "group": "Scans",
+          "label": "Scan page 1",
+          "note": "Handwritten quantity, September 28 (grid rows 70\u2013105)",
+          "href": "/inventory/42279/2026-09-28/scan-1.pdf"
+        },
+        {
+          "group": "Scans",
+          "label": "Scan page 2",
+          "note": "Handwritten quantity, September 28 (grid rows 34\u201369)",
+          "href": "/inventory/42279/2026-09-28/scan-2.pdf"
+        },
+        {
+          "group": "Scans",
+          "label": "Scan page 3",
+          "note": "Handwritten quantity, rows 106\u2013107 and counts written below the grid",
+          "href": "/inventory/42279/2026-09-28/scan-3.pdf"
+        },
+        {
+          "group": "Scans",
+          "label": "Count sheet (full PDF)",
+          "note": "Original emailed count sheet attachment, September 28",
+          "href": "/inventory/42279/2026-09-28/count-sheet.pdf"
+        },
+        {
+          "group": "S2K quantity on hand",
+          "label": "Packs, department 200",
+          "note": "S2K SKU Sales PDF from before the quantity-on-hand change, August 1 through September 28",
+          "href": "/inventory/42279/2026-09-28/qoh-packs.pdf"
+        },
+        {
+          "group": "S2K quantity on hand",
+          "label": "Cartons, department 281",
+          "note": "S2K SKU Sales PDF from before the quantity-on-hand change, August 1 through September 28",
+          "href": "/inventory/42279/2026-09-28/qoh-cartons.pdf"
+        },
+        {
+          "group": "S2K quantity on hand",
+          "label": "Quantity on hand change",
+          "note": "SKU Inventory counted lines, 1,211 packs total. Primary transaction 274158; supplement 274163.",
+          "href": "/inventory/42279/2026-09-28/s2k-change.pdf"
+        },
+        {
+          "group": "Count",
+          "label": "Cigarette count",
+          "note": "Actual cost, then minus, then plus",
+          "href": "/inventory/42279/2026-09-28/count.pdf"
+        }
+      ],
+      "highlights": {
+        "note": "Top 3 by dollars, from the count lines in this entry's count file; brand = sum of that brand's lines.",
+        "minusBrands": [
+          {
+            "brand": "MARLBORO",
+            "cost": 215.14
+          },
+          {
+            "brand": "PARLIAMENT",
+            "cost": 106.97
+          },
+          {
+            "brand": "NEWPORT",
+            "cost": 88.7
+          }
+        ],
+        "plusBrands": [
+          {
+            "brand": "MARLBORO",
+            "cost": 574.74
+          },
+          {
+            "brand": "CAMEL",
+            "cost": 330.38
+          },
+          {
+            "brand": "KOOL",
+            "cost": 103.07
+          }
+        ],
+        "minusItems": [
+          {
+            "item": "PARLIAMENT WHITE BOX P",
+            "packs": 9,
+            "cost": 106.97
+          },
+          {
+            "item": "MARLBORO SILVER 100 BOX P",
+            "packs": 9,
+            "cost": 91.43
+          },
+          {
+            "item": "CAMEL CRUSH MENTHOL SILVER BOX P",
+            "packs": 5,
+            "cost": 51.65
+          }
+        ],
+        "plusItems": [
+          {
+            "item": "CAMEL CRUSH P",
+            "packs": 20,
+            "cost": 206.59
+          },
+          {
+            "item": "MARLBORO MNTHL SILVER 100 BOX P",
+            "packs": 10,
+            "cost": 104.37
+          },
+          {
+            "item": "MARLBORO MENTHOL 100 BOX P",
+            "packs": 10,
+            "cost": 103.73
+          }
+        ]
+      }
+    },
+    {
+      "stationId": "42282",
+      "client": "Oakey Las Vegas Blvd",
+      "date": "2026-09-28",
+      "dateLabel": "September 28, 2026",
+      "category": "Cigarettes",
+      "heading": "Count written September 28, 2026. On that date, S2K quantity on hand was set to those counted packs (SKU Inventory CIG COUNT 09282026, transaction 274124). American Spirit Turquoise is included. Blank quantity cells were left unchanged. Counts written below the printed grid were not posted.",
+      "summary": "The actual count is $5,828.76 for 615 packs. Minus is $1,091.72, where the book is above the count. Plus is $845.83, where the count is above the book. Overall is negative $245.88. The book on the counted lines is $6,074.64. The biggest minus is Kool at $257.00. Marlboro's plus is $256.89. American Spirit Turquoise was written as 5 and the book was already 5. The 26 blank quantity cells, including cells that were only scribbled out, were not changed. Counts written below the printed grid were not posted, because they repeated a grid line or could match more than one SKU. Those 68 lines now have quantity on hand equal to the physical count.",
+      "count": {
+        "actualPacks": 615,
+        "actualCost": 5828.76,
+        "minusPacks": 114,
+        "minusCost": 1091.72,
+        "plusPacks": 86,
+        "plusCost": 845.83,
+        "overall": -245.88
+      },
+      "files": [
+        {
+          "group": "Scans",
+          "label": "Scan page 1",
+          "note": "Handwritten quantity, September 28",
+          "href": "/inventory/42282/2026-09-28/scan-1.pdf"
+        },
+        {
+          "group": "Scans",
+          "label": "Scan page 2",
+          "note": "Handwritten quantity, September 28",
+          "href": "/inventory/42282/2026-09-28/scan-2.pdf"
+        },
+        {
+          "group": "Scans",
+          "label": "Scan page 3",
+          "note": "Handwritten quantity, rows 70-94, and counts written below the grid",
+          "href": "/inventory/42282/2026-09-28/scan-3.pdf"
+        },
+        {
+          "group": "Scans",
+          "label": "Scan page 4",
+          "note": "Handwritten notes. These lines were not posted.",
+          "href": "/inventory/42282/2026-09-28/scan-4.pdf"
+        },
+        {
+          "group": "S2K quantity on hand",
+          "label": "Packs, department 200",
+          "note": "S2K SKU Sales PDF from before the quantity-on-hand change, August 1 through September 28",
+          "href": "/inventory/42282/2026-09-28/qoh-packs.pdf"
+        },
+        {
+          "group": "S2K quantity on hand",
+          "label": "Cartons, department 281",
+          "note": "S2K SKU Sales PDF from before the quantity-on-hand change. No carton sales in that range.",
+          "href": "/inventory/42282/2026-09-28/qoh-cartons.pdf"
+        },
+        {
+          "group": "S2K quantity on hand",
+          "label": "Quantity on hand change",
+          "note": "SKU Inventory CIG COUNT 09282026, transaction 274124. The counted packs, 615 total. Turquoise is on it.",
+          "href": "/inventory/42282/2026-09-28/s2k-change.pdf"
+        },
+        {
+          "group": "Count",
+          "label": "Cigarette count",
+          "note": "Actual cost, then minus, then plus",
+          "href": "/inventory/42282/2026-09-28/count.pdf"
+        }
+      ]
+    },
+    {
+      "stationId": "42352",
+      "client": "Arco Db",
+      "date": "2026-09-26",
+      "dateLabel": "September 26, 2026",
+      "category": "Cigarettes",
+      "heading": "Count written September 25, 2026. On September 26, 2026, S2K quantity on hand was set to those counted packs (SKU Inventory CIG COUNT 09262026). American Spirit Turquoise was left unchanged because the pencil mark was blank.",
+      "summary": "The actual count is $2,938.42 for 276 packs. Minus is $6,858.17, where the book is above the count. Plus is $14,363.43, where the count is above the book. Overall is positive $7,505.26. The book on the counted lines is $4,566.84 below zero. The biggest minus is Camel at $2,603.99. Marlboro's plus is $7,155.07 because several Marlboro books are below zero. American Spirit Turquoise had no readable pencil mark, so that line was left out of the count and was not changed in S2K. The 77 counted packs now have quantity on hand equal to the physical count.",
+      "count": {
+        "actualPacks": 276,
+        "actualCost": 2938.42,
+        "minusPacks": 659,
+        "minusCost": 6858.17,
+        "plusPacks": 1239,
+        "plusCost": 14363.43,
+        "overall": 7505.26
+      },
+      "files": [
+        {
+          "group": "Scans",
+          "label": "Scan page 1",
+          "note": "Handwritten quantity, September 25",
+          "href": "/inventory/42352/2026-09-26/scan-1.pdf"
+        },
+        {
+          "group": "Scans",
+          "label": "Scan page 2",
+          "note": "Handwritten quantity, September 25",
+          "href": "/inventory/42352/2026-09-26/scan-2.pdf"
+        },
+        {
+          "group": "Scans",
+          "label": "Scan page 3",
+          "note": "Handwritten quantity, September 25",
+          "href": "/inventory/42352/2026-09-26/scan-3.pdf"
+        },
+        {
+          "group": "S2K quantity on hand",
+          "label": "Packs, department 200",
+          "note": "S2K SKU Sales PDF from before the quantity-on-hand change, August 1 through September 26",
+          "href": "/inventory/42352/2026-09-26/qoh-packs.pdf"
+        },
+        {
+          "group": "S2K quantity on hand",
+          "label": "Cartons, department 281",
+          "note": "S2K SKU Sales PDF from before the quantity-on-hand change, August 1 through September 26",
+          "href": "/inventory/42352/2026-09-26/qoh-cartons.pdf"
+        },
+        {
+          "group": "S2K quantity on hand",
+          "label": "Quantity on hand change",
+          "note": "S2K print of SKU Inventory CIG COUNT 09262026. The counted packs, 276 total. Turquoise is not on it.",
+          "href": "/inventory/42352/2026-09-26/s2k-change.pdf"
+        },
+        {
+          "group": "Count",
+          "label": "Cigarette count",
+          "note": "Actual cost, then minus, then plus",
+          "href": "/inventory/42352/2026-09-26/count.pdf"
+        }
+      ],
+      "highlights": {
+        "note": "Top 3 by dollars, from the count lines in this entry's count file; brand = sum of that brand's lines.",
+        "minusBrands": [
+          {
+            "brand": "CAMEL",
+            "cost": 2603.99
+          },
+          {
+            "brand": "MARLBORO",
+            "cost": 2404.18
+          },
+          {
+            "brand": "AMERICAN SPIRIT",
+            "cost": 534.7
+          }
+        ],
+        "plusBrands": [
+          {
+            "brand": "MARLBORO",
+            "cost": 7155.07
+          },
+          {
+            "brand": "PARLIAMENT",
+            "cost": 2767.55
+          },
+          {
+            "brand": "AMERICAN SPIRIT",
+            "cost": 2665.49
+          }
+        ],
+        "minusItems": [
+          {
+            "item": "MARLBORO 100 BOX P",
+            "packs": 94,
+            "cost": 1043.98
+          },
+          {
+            "item": "CAMEL FLTR FF 99'S BX P",
+            "packs": 57,
+            "cost": 664.12
+          },
+          {
+            "item": "AMERICAN SPIRIT GOLD HARD P",
+            "packs": 43,
+            "cost": 534.7
+          }
+        ],
+        "plusItems": [
+          {
+            "item": "MARLBORO GOLD BOX P",
+            "packs": 190,
+            "cost": 2126.1
+          },
+          {
+            "item": "AMERICAN SPIRIT YELLOW MLLW TST HARD P",
+            "packs": 128,
+            "cost": 1562.24
+          },
+          {
+            "item": "PARLIAMENT WHITE 100 BOX P",
+            "packs": 115,
+            "cost": 1468.55
+          }
+        ]
+      }
+    },
+    {
+      "stationId": "42674",
+      "client": "Tustin",
+      "date": "2026-09-26",
+      "dateLabel": "September 26, 2026",
+      "category": "Cigarettes",
+      "heading": "Count written September 26, 2026. On that date, S2K quantity on hand was set to those counted packs (SKU Inventory CIG COUNT 09262026, transaction 28742).",
+      "summary": "The actual count is $4,156.74 for 389 packs. Minus is $6,974.64, where the book is above the count. Plus is $362.13, where the count is above the book. Overall is negative $6,612.51. The book on the counted lines is $10,769.24. The biggest minus is Marlboro at $3,746.71. Marlboro's plus is $131.31. Every counted line, including American Spirit Turquoise, was written. Those 69 lines now have quantity on hand equal to the physical count.",
+      "count": {
+        "actualPacks": 389,
+        "actualCost": 4156.74,
+        "minusPacks": 636,
+        "minusCost": 6974.64,
+        "plusPacks": 36,
+        "plusCost": 362.13,
+        "overall": -6612.51
+      },
+      "files": [
+        {
+          "group": "Scans",
+          "label": "Scan page 1",
+          "note": "Handwritten quantity, September 26",
+          "href": "/inventory/42674/2026-09-26/scan-1.pdf"
+        },
+        {
+          "group": "Scans",
+          "label": "Scan page 2",
+          "note": "Handwritten quantity, September 26",
+          "href": "/inventory/42674/2026-09-26/scan-2.pdf"
+        },
+        {
+          "group": "Scans",
+          "label": "Scan page 3",
+          "note": "Handwritten quantity, September 26",
+          "href": "/inventory/42674/2026-09-26/scan-3.pdf"
+        },
+        {
+          "group": "S2K quantity on hand",
+          "label": "Packs, department 200",
+          "note": "S2K SKU Sales PDF from before the quantity-on-hand change, August 1 through September 26",
+          "href": "/inventory/42674/2026-09-26/qoh-packs.pdf"
+        },
+        {
+          "group": "S2K quantity on hand",
+          "label": "Cartons, department 281",
+          "note": "S2K SKU Sales PDF from before the quantity-on-hand change, August 1 through September 26",
+          "href": "/inventory/42674/2026-09-26/qoh-cartons.pdf"
+        },
+        {
+          "group": "S2K quantity on hand",
+          "label": "Quantity on hand change",
+          "note": "SKU Inventory CIG COUNT 09262026. The counted packs, 389 total.",
+          "href": "/inventory/42674/2026-09-26/s2k-change.pdf"
+        },
+        {
+          "group": "Count",
+          "label": "Cigarette count",
+          "note": "Actual cost, then minus, then plus",
+          "href": "/inventory/42674/2026-09-26/count.pdf"
+        }
+      ],
+      "highlights": {
+        "note": "Top 3 by dollars, from the count lines in this entry's count file; brand = sum of that brand's lines.",
+        "minusBrands": [
+          {
+            "brand": "MARLBORO",
+            "cost": 3746.71
+          },
+          {
+            "brand": "CAMEL",
+            "cost": 1113.41
+          },
+          {
+            "brand": "AMERICAN SPIRIT",
+            "cost": 955.32
+          }
+        ],
+        "plusBrands": [
+          {
+            "brand": "MARLBORO",
+            "cost": 131.31
+          },
+          {
+            "brand": "KOOL",
+            "cost": 113.89
+          },
+          {
+            "brand": "LUCKY STRIKE",
+            "cost": 52.37
+          }
+        ],
+        "minusItems": [
+          {
+            "item": "MARLBORO BOX P",
+            "packs": 104,
+            "cost": 1161.79
+          },
+          {
+            "item": "MARLBORO GOLD BOX P",
+            "packs": 60,
+            "cost": 671.4
+          },
+          {
+            "item": "MARLBORO GOLD 100 BOX P",
+            "packs": 58,
+            "cost": 648.54
+          }
+        ],
+        "plusItems": [
+          {
+            "item": "KOOL NM KING BOX PACK",
+            "packs": 7,
+            "cost": 79.73
+          },
+          {
+            "item": "MARLBORO SILVER BOX P",
+            "packs": 5,
+            "cost": 55.95
+          },
+          {
+            "item": "MARLBORO BLACK GOLD 100 PACK",
+            "packs": 4,
+            "cost": 40.3
+          }
+        ]
+      }
+    },
+    {
+      "stationId": "42004",
+      "client": "Arco Placentia",
+      "date": "2026-09-27",
+      "dateLabel": "September 27, 2026",
+      "category": "Cigarettes",
+      "heading": "Count written September 27, 2026 on the count sheet, including the counts written below the grid. The book is S2K quantity on hand before S2K transaction 5707 (CIG COUNT 09272026).",
+      "summary": "The actual count is $9,255.78 for 891 packs. Minus is $28,694.29, where the book is above the count. Plus is $231.24, where the count is above the book. Overall is negative $28,463.05. The book on the 91 counted lines is 3,516 packs, $37,718.83. The biggest minus is Marlboro at $13,520.88, then Camel at $5,430.22. The Pall Mall counts written below the grid are on the Pallsav lines. The other counts written below the grid (L&M, Newport gold, Winston, Montego orange) are added as 9 more lines. S2K has no unit cost on Pallsav Orange 100 and 85, so those 15 packs add no dollars. S2K transaction 5707 as entered has 467 packs and does not match this sheet. S2K was not changed.",
+      "count": {
+        "actualPacks": 891,
+        "actualCost": 9255.78,
+        "minusPacks": 2647,
+        "minusCost": 28694.29,
+        "plusPacks": 22,
+        "plusCost": 231.24,
+        "overall": -28463.05
+      },
+      "files": [
+        {
+          "group": "Scans",
+          "label": "Scan page 1",
+          "note": "Handwritten quantity, September 27",
+          "href": "/inventory/42004/2026-09-27/scan-1.pdf"
+        },
+        {
+          "group": "Scans",
+          "label": "Scan page 2",
+          "note": "Handwritten quantity, September 27",
+          "href": "/inventory/42004/2026-09-27/scan-2.pdf"
+        },
+        {
+          "group": "Scans",
+          "label": "Scan page 3",
+          "note": "Handwritten quantity, September 27, with the counts written below the grid",
+          "href": "/inventory/42004/2026-09-27/scan-3.pdf"
+        },
+        {
+          "group": "S2K quantity on hand",
+          "label": "S2K transaction 5707 as entered",
+          "note": "S2K Take Inventory History for September 27 (CIG COUNT 09272026, 467 packs as entered). Its quantity on hand before the change is the book for lines 1-82. Its counted column does not match the handwritten sheet",
+          "href": "/inventory/42004/2026-09-27/s2k-change.pdf"
+        },
+        {
+          "group": "S2K quantity on hand",
+          "label": "Items written below the grid",
+          "note": "S2K SKU Sales, cigarette packs, January 1 through September 27. Quantity on hand and unit cost for lines 83-91, which are not in transaction 5707",
+          "href": "/inventory/42004/2026-09-27/qoh-below-grid.pdf"
+        },
+        {
+          "group": "Count",
+          "label": "Cigarette count",
+          "note": "Actual cost, then minus, then plus",
+          "href": "/inventory/42004/2026-09-27/count.pdf"
+        },
+        {
+          "group": "Count",
+          "label": "Cigarette count (Excel)",
+          "note": "Same count as the PDF, with formulas",
+          "href": "/inventory/42004/2026-09-27/count.xlsx"
+        }
+      ],
+      "highlights": {
+        "note": "Top 3 by dollars, from the count lines in this entry's count file; brand = sum of that brand's lines.",
+        "minusBrands": [
+          {
+            "brand": "MARLBORO",
+            "cost": 13520.88
+          },
+          {
+            "brand": "CAMEL",
+            "cost": 5430.22
+          },
+          {
+            "brand": "AMERICAN SPIRIT",
+            "cost": 3212.42
+          }
+        ],
+        "plusBrands": [
+          {
+            "brand": "CAMEL",
+            "cost": 116.7
+          },
+          {
+            "brand": "PALL MALL",
+            "cost": 79.11
+          },
+          {
+            "brand": "PARLIAMENT",
+            "cost": 35.43
+          }
+        ],
+        "minusItems": [
+          {
+            "item": "MARLBORO GOLD BOX P",
+            "packs": 209,
+            "cost": 2334.53
+          },
+          {
+            "item": "MARLBORO BOX P",
+            "packs": 180,
+            "cost": 2008.8
+          },
+          {
+            "item": "MARLBORO 100 BOX P",
+            "packs": 158,
+            "cost": 1752.22
+          }
+        ],
+        "plusItems": [
+          {
+            "item": "CAMEL CLASSIC GOLD 99 BX P",
+            "packs": 10,
+            "cost": 116.7
+          },
+          {
+            "item": "PALL MALL SELECT BLUE BOX PK",
+            "packs": 9,
+            "cost": 79.11
+          },
+          {
+            "item": "PARLIAMENT BLUE BOX P",
+            "packs": 3,
+            "cost": 35.43
+          }
+        ]
+      }
+    }
+  ]
+}
