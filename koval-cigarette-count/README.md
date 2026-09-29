@@ -3,19 +3,18 @@
 Station 42279. S2K site 195.
 
 - Reference: `CIG COUNT 09282026`
-- Transaction: **274158** (canonical post). A duplicate test post **274159** was created during idempotency debugging — void/delete 274159 in S2K if still present.
+- Transaction: 274158
 
 ## Totals
 
-- Actual: 731 packs, $7,053.93
-- Minus: 77 packs, $752.12
-- Plus: 48 packs, $487.83
-- Overall: -$264.29
-- Blank / unchanged: 33 grid lines (rows 1–33 missing from scan except Turquoise row 8; row 57 ambiguous)
-- Lines posted: 74
-- Rows 1–33: printed grid not in scan PDF — QoH left unchanged (32 lines) except American Spirit Turquoise row 8 (count 8).
-- Row 57 (MARLBORO COWBOY MENTHOL BOX PACK): ambiguous handwritten quantity — not posted.
-- Handwritten list below grid on scan page 3 (Camel, American Spirit, Crown, Kool, etc.) was not posted except American Spirit Turquoise on row 8 per store policy.
+- Actual: 1211 packs, $11,991.63
+- Minus: 66 packs, $646.65
+- Plus: 115 packs, $1,114.16
+- Overall: $467.51
+- Lines on count (merged): 100
+- Primary transaction: 274158 (CIG COUNT 09282026). Supplement: 274163 (CIG COUNT 09282026 B).
+- Row 57 (MARLBORO COWBOY MENTHOL BOX PACK): ambiguous — not posted.
+- Below-grid skipped (no sheet row or ambiguous): see `belowGridSkipped` in summary.json.
 
 ## Files
 

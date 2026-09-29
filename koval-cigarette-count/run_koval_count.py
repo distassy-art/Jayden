@@ -107,11 +107,68 @@ HANDWRITTEN: dict[int, int | None] = {
 }
 
 AMBIGUOUS_ROWS = [57]
-BELOW_GRID_NOT_POSTED = [
-    "Handwritten list below grid on scan page 3 (Camel, American Spirit, Crown, Kool, etc.) "
-    "was not posted except American Spirit Turquoise on row 8 per store policy.",
-    "Scan PDF is missing the printed grid for rows 1–33; those lines were left unchanged in S2K.",
+
+# Page 3 handwriting: rows 1–33 (grid page missing from 3-page scan) + margin overrides.
+BELOW_GRID: dict[int, int] = {
+    1: 14,
+    2: 10,
+    3: 6,
+    4: 8,
+    5: 20,
+    6: 19,
+    7: 43,
+    8: 8,
+    9: 4,
+    10: 23,
+    11: 16,
+    12: 15,
+    13: 9,
+    14: 9,
+    17: 57,
+    19: 19,
+    20: 87,
+    21: 7,
+    23: 3,
+    24: 14,
+    25: 16,
+    26: 10,
+    28: 10,
+    29: 1,
+    30: 11,
+    31: 8,
+    33: 3,
+}
+
+# Margin lines that correct grid rows where quantity was left at 0 (page 1).
+MARGIN_OVERRIDE: dict[int, int] = {
+    72: 10,
+    73: 10,
+    76: 9,
+    77: 9,
+    94: 2,
+    97: 10,
+}
+
+BELOW_GRID_SKIPPED = [
+    "Row 32 L&M BOX P — not listed on margin.",
+    "Rows 15–16, 18 Camel promo SKUs — no margin quantity.",
+    "Row 57 Marlboro Cowboy Menthol Box — still “?” on grid.",
+    "Crown Blue 100's (margin) — no matching row on count sheet.",
+    "Winston Red/Menthol 100's (margin) — no matching pack row on sheet.",
+    "Marlboro Red Label 100's / Cowboy Cut Gold 100's (margin) — ambiguous vs grid SKUs.",
+    "Newport Non-Menthol margin (9/4) — kept grid counts on rows 85–86 (11/7).",
 ]
+
+TRANREF_SUPPLEMENT = "CIG COUNT 09282026 B"
+
+
+def merged_counts() -> dict[int, int]:
+    out = dict(HANDWRITTEN)
+    for n, q in BELOW_GRID.items():
+        out[n] = q
+    for n, q in MARGIN_OVERRIDE.items():
+        out[n] = q
+    return out
 
 
 def money(n: float) -> str:
@@ -208,7 +265,7 @@ def product_lookup(session, upc: str) -> dict | None:
     return data[0]
 
 
-def find_existing_tran(session) -> dict | None:
+def find_existing_tran(session, tranref: str = TRANREF) -> dict | None:
     xsrf = session.cookies.get("XSRF-TOKEN")
     hdr = {"X-XSRF-TOKEN": xsrf} if xsrf else {}
     for url in (
@@ -224,18 +281,25 @@ def find_existing_tran(session) -> dict | None:
             continue
         items = data if isinstance(data, list) else data.get("data") or []
         for it in items:
-            if str(it.get("tranref") or "") == TRANREF and int(it.get("siteid") or 0) == SITEID:
+            if str(it.get("tranref") or "") == tranref and int(it.get("siteid") or 0) == SITEID:
                 return it
     return None
 
 
-def post_inventory(session, lines: list[dict]) -> dict:
-    meta_path = WORKDIR / "post-meta.json"
+def post_inventory(
+    session,
+    lines: list[dict],
+    *,
+    tranref: str = TRANREF,
+    meta_path: Path | None = None,
+    note: str | None = None,
+) -> dict:
+    meta_path = meta_path or WORKDIR / "post-meta.json"
     if meta_path.exists():
         try:
             prior = json.loads(meta_path.read_text())
             if (
-                prior.get("tranref") == TRANREF
+                prior.get("tranref") == tranref
                 and int(prior.get("siteid") or 0) == SITEID
                 and prior.get("id")
             ):
@@ -246,7 +310,7 @@ def post_inventory(session, lines: list[dict]) -> dict:
                 }
         except (json.JSONDecodeError, TypeError, ValueError):
             pass
-    existing = find_existing_tran(session)
+    existing = find_existing_tran(session, tranref)
     if existing:
         return {"skipped": True, "id": existing.get("id"), "reason": "already posted"}
 
@@ -261,25 +325,20 @@ def post_inventory(session, lines: list[dict]) -> dict:
                 "model_dirty": True,
             }
         )
+    default_note = (
+        f"{NAME} cigarette physical count written {TRANDATE}. "
+        "Quantity on hand set to the counted packs. "
+        "Grid handwriting plus below-grid rows 1–33 and margin corrections."
+    )
     item = {
         "siteid": SITEID,
-        "tranref": TRANREF,
+        "tranref": tranref,
         "trandate": TRANDATE,
         "trandate2": TRANDATE,
         "trantype": 10,
         "lines": tran_lines,
         "deleted_lines": [],
-        "props": json.dumps(
-            {
-                "note": (
-                    f"{NAME} cigarette physical count written {TRANDATE}. "
-                    "Quantity on hand set to the counted packs. "
-                    "American Spirit Turquoise included. "
-                    "Blank quantity cells were left unchanged. "
-                    "Rows 1–33 grid page missing from scan."
-                )
-            }
-        ),
+        "props": json.dumps({"note": note or default_note}),
         "model_dirty": True,
     }
     body = {
@@ -414,7 +473,7 @@ def write_pdfs(lines: list[dict], summary: dict, tranid: int | None):
     pdf2.output(OUT / "s2k-change.pdf")
 
 
-def build_entry(summary: dict, tranid: int | None) -> dict:
+def build_entry(summary: dict, tranid: int | None, supp_tranid: int | None = None) -> dict:
     base = f"/inventory/{STATION}/{TRANDATE}"
     return {
         "stationId": STATION,
@@ -425,8 +484,12 @@ def build_entry(summary: dict, tranid: int | None) -> dict:
         "heading": (
             f"Count written September 28, 2026. SKU Inventory {TRANREF}"
             + (f", transaction {tranid}." if tranid else ".")
-            + " American Spirit Turquoise included. Rows 1–33 missing from scan were unchanged. "
-            "Below-grid counts were not posted except Turquoise."
+            + (
+                f" Supplement {TRANREF_SUPPLEMENT}, transaction {supp_tranid}."
+                if supp_tranid
+                else ""
+            )
+            + " Grid counts plus below-grid rows 1–33 and margin lines posted per Mina."
         ),
         "summary": summary["narrative"],
         "count": {
@@ -483,7 +546,13 @@ def main():
 
     ap = argparse.ArgumentParser()
     ap.add_argument("--no-post", action="store_true", help="Build packet only; do not call S2K tran/update")
+    ap.add_argument(
+        "--supplement",
+        action="store_true",
+        help="Post only below-grid / margin lines under CIG COUNT 09282026 B",
+    )
     args = ap.parse_args()
+    counts = merged_counts()
     OUT.mkdir(parents=True, exist_ok=True)
     items = load_sheet_items()
     logins = build_all.load_logins()
@@ -498,7 +567,7 @@ def main():
     skipped_no_varid = []
     for it in items:
         n = it["n"]
-        actual = HANDWRITTEN.get(n)
+        actual = counts.get(n)
         if actual is None:
             continue
         prod = product_lookup(session, it["upc"])
@@ -538,8 +607,25 @@ def main():
     plus_cost = round2(sum(r["cost_delta"] for r in plus if r["cost_delta"] > 0))
     overall = round2(plus_cost - minus_cost)
 
+    supp_tranid = None
+    supp_post: dict = {}
+    primary_meta = WORKDIR / "post-meta.json"
+    supp_meta = WORKDIR / "post-meta-supplement.json"
+
+    if args.supplement:
+        primary_rows = set(HANDWRITTEN.keys())
+        supp_lines = []
+        for row in lines:
+            n = row["n"]
+            if n not in primary_rows:
+                supp_lines.append(row)
+            elif HANDWRITTEN.get(n) != row["actual"]:
+                supp_lines.append(row)
+        lines_for_packet = lines
+        lines = supp_lines
+
     if args.no_post:
-        meta_path = WORKDIR / "post-meta.json"
+        meta_path = primary_meta
         tranid = None
         post = {"skipped": True, "reason": "--no-post"}
         if meta_path.exists():
@@ -547,9 +633,40 @@ def main():
                 tranid = json.loads(meta_path.read_text()).get("id")
             except json.JSONDecodeError:
                 pass
+        if supp_meta.exists():
+            try:
+                supp_tranid = json.loads(supp_meta.read_text()).get("id")
+            except json.JSONDecodeError:
+                pass
+    elif args.supplement:
+        tranid = None
+        if primary_meta.exists():
+            try:
+                tranid = json.loads(primary_meta.read_text()).get("id")
+            except json.JSONDecodeError:
+                pass
+        post = {"skipped": True, "reason": "supplement-only run"}
+        supp_post = post_inventory(
+            session,
+            lines,
+            tranref=TRANREF_SUPPLEMENT,
+            meta_path=supp_meta,
+            note=(
+                f"{NAME} cigarette count supplement {TRANDATE}. "
+                "Below-grid rows 1–33 and margin corrections not in the first post."
+            ),
+        )
+        supp_tranid = supp_post.get("id")
+        if args.supplement:
+            lines = lines_for_packet
     else:
         post = post_inventory(session, lines)
         tranid = post.get("id")
+        if supp_meta.exists():
+            try:
+                supp_tranid = json.loads(supp_meta.read_text()).get("id")
+            except json.JSONDecodeError:
+                pass
 
     summary = {
         "station": STATION,
@@ -559,6 +676,12 @@ def main():
         "tranref": TRANREF,
         "tranid": tranid,
         "linesPosted": len(lines),
+        "linesPrimary": len([n for n in counts if n in HANDWRITTEN]),
+        "linesBelowGrid": len(BELOW_GRID),
+        "supplementTranref": TRANREF_SUPPLEMENT if supp_tranid else None,
+        "supplementTranid": supp_tranid,
+        "supplementPost": supp_post or None,
+        "belowGridSkipped": BELOW_GRID_SKIPPED,
         "blankLeftUnchanged": 107 - len(lines),
         "actualPacks": int(actual_packs),
         "actualCost": actual_cost,
@@ -567,7 +690,7 @@ def main():
         "plusPacks": int(plus_packs),
         "plusCost": plus_cost,
         "overall": overall,
-        "turquoise": "included, count 8 from below-grid (row 8 grid page missing)",
+        "turquoise": "included, count 8 (below-grid / row 8)",
         "ambiguousRows": AMBIGUOUS_ROWS,
         "missingGridRows": "1-33",
         "post": post,
@@ -579,20 +702,36 @@ def main():
     }
     (WORKDIR / "summary.json").write_text(json.dumps(summary, indent=2))
     (OUT / "lines.json").write_text(json.dumps(lines, indent=2))
-    (WORKDIR / "post-meta.json").write_text(
-        json.dumps(
-            {
-                "id": tranid,
-                "tranref": TRANREF,
-                "trandate": TRANDATE,
-                "siteid": SITEID,
-                "nlines": len(lines),
-                "status": 200 if tranid else None,
-                "post": post,
-            },
-            indent=2,
+    if not args.supplement:
+        (WORKDIR / "post-meta.json").write_text(
+            json.dumps(
+                {
+                    "id": tranid,
+                    "tranref": TRANREF,
+                    "trandate": TRANDATE,
+                    "siteid": SITEID,
+                    "nlines": len(lines),
+                    "status": 200 if tranid else None,
+                    "post": post,
+                },
+                indent=2,
+            )
         )
-    )
+    if args.supplement and supp_tranid:
+        supp_meta.write_text(
+            json.dumps(
+                {
+                    "id": supp_tranid,
+                    "tranref": TRANREF_SUPPLEMENT,
+                    "trandate": TRANDATE,
+                    "siteid": SITEID,
+                    "nlines": len(supp_lines),
+                    "status": 200,
+                    "post": supp_post,
+                },
+                indent=2,
+            )
+        )
 
     write_pdfs(lines, summary, tranid)
 
@@ -611,7 +750,9 @@ def main():
         rp = session.get(url, timeout=240)
         if rp.content[:4] == b"%PDF":
             (OUT / fname).write_bytes(rp.content)
-    (OUT / "entry.json").write_text(json.dumps(build_entry(summary, tranid), indent=2) + "\n")
+    (OUT / "entry.json").write_text(
+        json.dumps(build_entry(summary, tranid, supp_tranid), indent=2) + "\n"
+    )
 
     # Scans: PDF page 1 = grid 70-105, page 2 = 34-69, page 3 = 106-107 + notes
     shutil.copy(WORKDIR / "Koval_Cigarette_Count_09282026.pdf", OUT / "count-sheet.pdf")
@@ -650,10 +791,10 @@ Station {STATION}. S2K site {SITEID}.
 - Minus: {summary['minusPacks']} packs, {money(summary['minusCost'])}
 - Plus: {summary['plusPacks']} packs, {money(summary['plusCost'])}
 - Overall: {money(summary['overall'])}
-- Lines posted: {summary['linesPosted']}
-- Rows 1–33: printed grid not in scan PDF — QoH left unchanged ({33 - 1} lines) except American Spirit Turquoise row 8 (count 8).
-- Row 57 ({items[56]['desc']}): ambiguous handwritten quantity — not posted.
-- {BELOW_GRID_NOT_POSTED[0]}
+- Lines on count (merged): {summary['linesPosted']}
+- Primary transaction: {tranid or '274158'} ({TRANREF}). Supplement: {supp_tranid or '(pending)'} ({TRANREF_SUPPLEMENT}).
+- Row 57 ({items[56]['desc']}): ambiguous — not posted.
+- Below-grid skipped (no sheet row or ambiguous): see `belowGridSkipped` in summary.json.
 
 ## Files
 
