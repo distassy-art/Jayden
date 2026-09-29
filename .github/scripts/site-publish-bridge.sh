@@ -35,6 +35,7 @@ ALLOW_RE=(
   '^public/order-comparisons/.+'
   '^public/orders\.json$'
   '^public/billing-live\.json$'
+  '^public/command-category-yoy\.json$'
 )
 # Always refused, even inside an allowed directory.
 DENY_RE=(
