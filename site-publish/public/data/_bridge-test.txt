@@ -1,0 +1,1 @@
+Harmless no-op test file for the Jayden publish-to-site bridge (2026-09-28 PT). Safe to ignore; removed by the next bridge run.
