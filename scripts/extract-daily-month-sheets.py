@@ -149,6 +149,9 @@ def header_map(row):
 
 
 def day_obj(dt, sales, purch, vol, gp, sp, tp):
+    # No purchases for a real day (sales or gas posted) = 0, never null (same as sync_from_excel.py).
+    if purch is None and (sales is not None or vol is not None or gp is not None):
+        purch = 0.0
     if sp is None and sales is not None and purch is not None:
         sp = sales - purch
     if tp is None and sp is not None and gp is not None:
