@@ -30,7 +30,7 @@ Rules:
   you mean to, and put the result under `site-publish/`. For `daily_*.json` the bridge only **adds**
   days. If any day already on main differs in your copy, the whole publish is refused. Publish both
   `public/data/daily_<month>.json` and `api/cf-dist/data/daily_<month>.json` with the same bytes.
-- **No purchases for a day = purch 0 (never null); store_profit = sales - purch.**
+- **No purchases for a day = purch 0 (never null).** `store_profit` follows that store's Excel month margin. Where Excel's month profit is sales minus purchases, `store_profit = sales - purch` (a blank purchase counts as zero). Where Excel leaves that day's store profit blank and the month margin sums the daily profit column, leave `store_profit` null. Charleston is that case: September 20's purchase cell is empty, so its profit stays blank.
 - Billing: `public/billing-live.json` and `public/data/billing.json` must be the same bytes, and
   incomeTotal never drops. La Mesa 42642 is never published. Never force-push.
 - Deleting a file under `site-publish/` deletes it on the site. Deleting a data JSON file is refused.

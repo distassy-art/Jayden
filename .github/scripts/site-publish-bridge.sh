@@ -218,9 +218,21 @@ for d in sys.argv[1:]:
     if ext in (".json", ".txt", ".csv") and TOK.search(b): errs.append(f"{d}: contains 42642 (La Mesa is not a client)")
     for label, rx in STRICT:
         if re.search(rx, b): errs.append(f"{d}: contains what looks like a {label}")
-    # Daily files: the bridge only ADDS days. A day already on main must come through unchanged, so a
-    # stale copy can never silently undo a correction made on main. Restatements are done in
-    # ss-unified-proto itself, in their own commit.
+    # Daily files: the bridge only ADDS days, plus the explicit Excel restatements below.
+    # Any other change to a day already on main is refused, so a stale copy cannot silently undo a
+    # correction. Each allowlisted pair is the live day object and the Excel day object. Once main
+    # has the new object, the pair no longer matches and a second change is refused.
+    # Parsed through json.loads so float values match the daily file exactly.
+    EXCEL_DAY_RESTATEMENTS = {
+        ("42279", "2026-09-21"): (
+            json.loads('{"date":"2026-09-21","gas_vol":3597.1,"gas_profit":1532.75,"sales":3839.37,"purch":5395.28,"store_profit":-1555.91,"margin":-0.4053,"total_profit":-23.16}'),
+            json.loads('{"date":"2026-09-21","gas_vol":3597.1,"gas_profit":1532.75,"sales":3789.37,"purch":5395.28,"store_profit":-1605.91,"margin":-0.4238,"total_profit":-73.16}'),
+        ),
+        ("42281", "2026-09-20"): (
+            json.loads('{"date":"2026-09-20","gas_vol":2080.69,"gas_profit":1521.25,"sales":2675.59,"purch":172.09,"store_profit":2503.5,"margin":0.9357,"total_profit":4024.75}'),
+            json.loads('{"date":"2026-09-20","gas_vol":3364.89,"gas_profit":1408.52,"sales":2409.91,"purch":0,"store_profit":null,"margin":null,"total_profit":1408.52}'),
+        ),
+    }
     if re.search(r"/daily_[a-z]+\.json$", d):
         old_b = main_copy(d)
         def index(doc):   # same shape as scripts/lib/data-no-regression.mjs indexDaily()
@@ -231,18 +243,26 @@ for d in sys.argv[1:]:
             return out
         if old_b:
             ost, nst = index(json.loads(old_b)), index(new)
-            added, bad_here = 0, False
+            added, bad_here, restated = 0, False, []
             for sid, od in ost.items():
                 nd = nst.get(sid, {})
                 changed = sorted(k for k in od if k in nd and nd[k] != od[k])
-                if changed:
+                refused = []
+                for k in changed:
+                    pair = EXCEL_DAY_RESTATEMENTS.get((sid, k))
+                    if pair and od[k] == pair[0] and nd[k] == pair[1]:
+                        restated.append(f"{sid} {k}")
+                    else:
+                        refused.append(k)
+                if refused:
                     bad_here = True
-                    errs.append(f"{d}: station {sid} changes {len(changed)} day(s) already on main: {', '.join(changed[:8])} - "
+                    errs.append(f"{d}: station {sid} changes {len(refused)} day(s) already on main: {', '.join(refused[:8])} - "
                                 "the bridge only ADDS days; start from the live file https://smartsolutionsai.us/data/" + d.rsplit('/', 1)[1])
             for sid, nd in nst.items():
                 added += sum(1 for k in nd if k not in ost.get(sid, {}))
             if not bad_here:
-                print(f"  {d}: adds {added} station-day(s); no existing day changed")
+                extra = f"; restates {len(restated)} Excel day(s): {', '.join(restated)}" if restated else ""
+                print(f"  {d}: adds {added} station-day(s); no existing day changed{extra}")
         twin = ("api/cf-dist/data/" + d[len("public/data/"):]) if d.startswith("public/data/") else ("public/data/" + d[len("api/cf-dist/data/"):]) if d.startswith("api/cf-dist/data/") else None
         if twin and twin not in sys.argv[1:] and main_copy(twin) is not None and main_copy(twin) == old_b:
             warns.append(f"{d}: its twin {twin} is identical on main but is not in this publish — publish both copies")
