@@ -1,0 +1,9 @@
+{
+  "id": 274158,
+  "tranref": "CIG COUNT 09282026",
+  "trandate": "2026-09-28",
+  "siteid": 195,
+  "nlines": 74,
+  "status": 200,
+  "note": "Duplicate tran 274159 may exist from an accidental re-post; void 274159 in S2K if both appear."
+}

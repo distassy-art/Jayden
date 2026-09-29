@@ -1,0 +1,55 @@
+{
+  "stationId": "42279",
+  "client": "Flamingo (Koval)",
+  "date": "2026-09-28",
+  "dateLabel": "September 28, 2026",
+  "category": "Cigarettes",
+  "heading": "Count written September 28, 2026. SKU Inventory CIG COUNT 09282026, transaction 274158. American Spirit Turquoise included. Rows 1\u201333 missing from scan were unchanged. Below-grid counts were not posted except Turquoise.",
+  "summary": "Actual $7,053.93 for 731 packs on 74 lines. Minus $752.12 (77 packs), plus $487.83 (48 packs). Overall -$264.29.",
+  "count": {
+    "actualPacks": 731,
+    "actualCost": 7053.93,
+    "minusPacks": 77,
+    "minusCost": 752.12,
+    "plusPacks": 48,
+    "plusCost": 487.83,
+    "overall": -264.29
+  },
+  "files": [
+    {
+      "group": "Scans",
+      "label": "Scan page 1 (grid rows 70\u2013105)",
+      "href": "/inventory/42279/2026-09-28/scan-1.pdf"
+    },
+    {
+      "group": "Scans",
+      "label": "Scan page 2 (grid rows 34\u201369)",
+      "href": "/inventory/42279/2026-09-28/scan-2.pdf"
+    },
+    {
+      "group": "Scans",
+      "label": "Scan page 3 (rows 106\u2013107 and below-grid notes)",
+      "href": "/inventory/42279/2026-09-28/scan-3.pdf"
+    },
+    {
+      "group": "S2K quantity on hand",
+      "label": "Packs, department 200",
+      "href": "/inventory/42279/2026-09-28/qoh-packs.pdf"
+    },
+    {
+      "group": "S2K quantity on hand",
+      "label": "Cartons, department 281",
+      "href": "/inventory/42279/2026-09-28/qoh-cartons.pdf"
+    },
+    {
+      "group": "S2K quantity on hand",
+      "label": "Quantity on hand change",
+      "href": "/inventory/42279/2026-09-28/s2k-change.pdf"
+    },
+    {
+      "group": "Count",
+      "label": "Cigarette count",
+      "href": "/inventory/42279/2026-09-28/count.pdf"
+    }
+  ]
+}
