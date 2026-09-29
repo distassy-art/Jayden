@@ -46,7 +46,6 @@ Known station IDs:
 | 42399 | Garden Grove |
 | 42438 | Vista |
 | 42439 | Lamb |
-| 42642 | La Mesa |
 | 42674 | Tustin |
 | extramile | ExtraMile |
 
@@ -90,7 +89,57 @@ node scripts/publish-books.mjs --file stations.json
 (`publish-books.mjs` accepts `stations[]` or legacy `patches[]` and always posts to `books`.)
 
 4. GET overlay again (and `/new/api/books-overlay`) and confirm each store’s `days` through the target date.
-5. Spot-check https://smartsolutionsai.us/yearly.html and https://smartsolutionsai.us/new/ (owner session) if a browser is available.
+5. Rebuild and deploy `/data/daily_september.json` so `/new` MTD shows the same through-date. Overlay publish alone does **not** update admin `daily-open`:
+
+```
+python3 scripts/rebuild_daily_open_month.py --month 2026-09 \
+  --out /path/to/smartsolutions-site/data/daily_september.json
+# then in that checkout: bash scripts/build-cf-dist.sh && npx wrangler deploy
+```
+
+Confirm `https://smartsolutionsai.us/data/daily_september.json` and
+`https://smartsolutionsai.us/new/api/data/daily-open.json` share the same
+`through` (and neither lists La Mesa `42642`).
+
+**La Mesa / old-station scrub (required on every site deploy):**
+`daily_september.json` + `manager.json` alone are not enough. The legacy
+owner/manager portal still reads roster JSONs. Before `wrangler deploy` of
+`smartsolutions-site`, confirm **none** of these still contain `42642` /
+`La Mesa` / `arcolamesa`:
+
+- `data/stations.json`, `data/admin-stores.json`, `data/managers.json`
+- `data/owners.json`, `data/logins.json`, `data/profiles.json`
+- `data/books.json`, `data/fuel.json`, `data/profit.json`, `data/depts.json`
+- `data/daily_july.json`, `data/daily_august.json`, `data/weekly.json`
+- `data/vendor_dly_spend_2026.json`, `data/vendor-orders.json`
+- Worker maps in `src/handlers/stations.js`, `src/lib/books-store.js`,
+  `src/lib/extract-books.js`, `src/handlers/mgr-vendor-schedule.js`
+  (and the `netlify/functions/lib/` copies)
+
+Also scrub the live KV books overlay (`SS_BOOKS` key `overlay`): drop station
+`42642`, any `files[]` rows for La Mesa workbooks, and La Mesa rows in
+`weekly.ranking`. Use `scripts/scrub_la_mesa_site_data.py` against the site
+checkout, then rewrite the overlay JSON and
+`npx wrangler kv key put overlay --path … --namespace-id 3748022d759e4fbe918ff2df5d306263`.
+
+Bump cache-bust query params on `owner.js` / `mgr-dash.js` (`stations.json`,
+`fuel.json`, `profit.json`, `daily_september.json`, `manager.json`) when those
+files change so browsers do not keep a HIT of the old roster.
+
+**Deploy note:** `smartsolutions-site` owns the domain; `smartsolutions-admin`
+owns only `/new` and `/new/*`. After any `wrangler deploy` of the site, confirm
+`/new/` still returns 200 (not a 302 to `/`). If `/new` breaks, redeploy admin:
+
+```
+cd site-v2 && npx wrangler deploy --env live
+```
+
+A site deploy can also replace `data/daily_september.json` with an older copy —
+always re-run `rebuild_daily_open_month.py` into that checkout before deploying
+when open-month days changed. Prefer **https://smartsolutionsai.us/new/** for
+owner/admin books; the root portal is legacy and will show stale stations if
+the roster JSONs were not scrubbed.
+6. Spot-check https://smartsolutionsai.us/yearly.html and https://smartsolutionsai.us/new/ (owner session) if a browser is available.
 
 Skip Store Services workbooks. Merge is additive by date/month; do not wipe other stations.
 

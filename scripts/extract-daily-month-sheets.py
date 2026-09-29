@@ -131,7 +131,16 @@ def header_map(row):
     return {
         "vol": find("gas volume") or find("gas vol") or find("volume (gal)"),
         "gp": find("gas profit"),
-        "sales": find("c-store sales") or find("sales"),
+        # Prefer C-Store Sales; never match "c-store total" via bare "sales".
+        "sales": find("c-store sales")
+        or find("store sales")
+        or find("sales", exclude=("total", "gas", "fuel")),
+        "cstore_total": find("c-store total") or find("cstore total"),
+        "tax1": find("tax 1") or find("tax1"),
+        "tax4": find("tax 4") or find("tax4"),
+        "scratch": find("scratch"),
+        "lotto": find("lotto"),
+        "card": find("card"),
         "purch": find("purchase"),
         "sp": find("store profit"),
         "tp": find("total profit"),
@@ -654,6 +663,18 @@ def extract_days(path: str, min_month="2026-09"):
                 v = row[i]
                 return v if isinstance(v, (int, float)) else None
 
+            def sales_from_total(row):
+                """C-Store Sales is often =J-SUM(taxes) with no cached value."""
+                total = g(row, "cstore_total")
+                if total is None:
+                    return None
+                taxes = 0.0
+                for k in ("tax1", "tax4", "scratch", "lotto", "card"):
+                    v = g(row, k)
+                    if isinstance(v, (int, float)):
+                        taxes += float(v)
+                return total - taxes
+
             for offset, row in enumerate(rows[hi + 1 :]):
                 if row and isinstance(row[0], str) and str(row[0]).strip():
                     break
@@ -674,6 +695,8 @@ def extract_days(path: str, min_month="2026-09"):
                     g(row, "sp"),
                     g(row, "tp"),
                 )
+                if sales is None:
+                    sales = sales_from_total(row)
                 if not any(isinstance(v, (int, float)) and v != 0 for v in (sales, purch, vol, gp, sp, tp)):
                     continue
                 if purch is None and (sales is not None or vol is not None or gp is not None):
