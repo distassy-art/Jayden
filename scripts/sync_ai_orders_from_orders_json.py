@@ -112,6 +112,36 @@ def fee_from_total(total: float) -> float:
     return round(total * RATE, 2)
 
 
+def patch_customer_fee_totals(billing: dict, totals: dict[str, dict], month: str) -> None:
+    """Align billing.customerFeeTotals[month].customers aiOrderTotal with order rollups."""
+    cft_root = billing.get("customerFeeTotals") or {}
+    block = cft_root.get(month)
+    if not block:
+        return
+    for row in block.get("customers") or []:
+        store_ids = [str(s).strip() for s in (row.get("stores") or []) if str(s).strip()]
+        if not store_ids:
+            continue
+        ai_total = round(
+            sum(totals[sid]["aiOrderTotal"] for sid in store_ids if sid in totals),
+            2,
+        )
+        row["aiOrderTotal"] = ai_total
+        row["aiFee"] = fee_from_total(ai_total)
+        other = 0.0
+        for key in (
+            "s2kFee",
+            "pricebookFee",
+            "inventoryFee",
+            "aiPriceRecommendationFee",
+            "tasksFee",
+            "scheduleFee",
+        ):
+            if row.get(key) is not None:
+                other += float(row[key] or 0)
+        row["totalFee"] = round(other + row["aiFee"], 2)
+
+
 def patch_billing_ai_rows(billing: dict, totals: dict[str, dict], month: str) -> None:
     def patch_row(row: dict) -> None:
         sid = str(row.get("store") or "").strip()
@@ -169,7 +199,8 @@ def patch_ordering_invoices(billing: dict, totals: dict[str, dict], month: str) 
         inv["total"] = round(max(old_total, fee), 2)
 
     income = sum(float(inv.get("total") or 0) for inv in billing.get("invoices") or [])
-    billing["incomeTotal"] = round(income, 2)
+    floor = float(billing.get("incomeTotal") or 0)
+    billing["incomeTotal"] = round(max(income, floor), 2)
     billing["net"] = round(income - float(billing.get("expenseTotal") or 0), 2)
     roll = billing.setdefault("rollups", {})
     roll["incomeTotal"] = billing["incomeTotal"]
@@ -195,6 +226,7 @@ def main() -> None:
     billing_out = deepcopy(billing)
     billing_out["updatedAt"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     patch_billing_ai_rows(billing_out, totals, args.month)
+    patch_customer_fee_totals(billing_out, totals, args.month)
     patch_ordering_invoices(billing_out, totals, args.month)
 
     args.out_orders.parent.mkdir(parents=True, exist_ok=True)
