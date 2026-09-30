@@ -51,12 +51,16 @@ PAIRS: list[list[str]] = [
     ],
     [
         """              kpis.innerHTML =
-                '<div class="card kpi"><div class="kpi-label">AI orders</div><div class="kpi-value">' + orderMoney(totAi) + '</div><div class="kpi-context">' + monthKey + ' · filled deliveries only</div></div>' +""",
+                '<div class="card kpi"><div class="kpi-label">AI orders</div><div class="kpi-value">' + orderMoney(totAi) + '</div><div class="kpi-context">' + monthKey + ' · filled deliveries only</div></div>' +
+                '<div class="card kpi"><div class="kpi-label">Manager deliveries</div><div class="kpi-value">' + orderMoney(totMgr) + '</div><div class="kpi-context">S2K deliveries</div></div>' +
+                '<div class="card kpi"><div class="kpi-label">Variance</div><div class="kpi-value">' + orderMoney(totMgr - totAi) + '</div><div class="kpi-context">Deliveries − AI orders</div></div>' +""",
         """              var rollupAi = 0;
               (allClients || []).forEach(function (c) { rollupAi += Number(c.orderedTotal || 0); });
-              var kpiAi = rollupAi > 0 ? rollupAi : totAi;
+              var kpiTotalAi = rollupAi > 0 ? rollupAi : totAiAll;
               kpis.innerHTML =
-                '<div class="card kpi"><div class="kpi-label">AI orders</div><div class="kpi-value">' + orderMoney(kpiAi) + '</div><div class="kpi-context">' + monthKey + ' · built orders MTD</div></div>' +""",
+                '<div class="card kpi"><div class="kpi-label">AI orders · MTD</div><div class="kpi-value">' + orderMoney(kpiTotalAi) + '</div><div class="kpi-context">' + monthKey + ' · all built orders</div></div>' +
+                '<div class="card kpi"><div class="kpi-label">Manager deliveries</div><div class="kpi-value">' + orderMoney(totMgr) + '</div><div class="kpi-context">' + monthKey + ' · paired S2K only</div></div>' +
+                '<div class="card kpi"><div class="kpi-label">Compare variance</div><div class="kpi-value">' + orderMoney(totMgr - totAi) + '</div><div class="kpi-context">Paired only · AI ' + orderMoney(totAi) + '</div></div>' +""",
     ],
     [
         """              map[sid] = {
@@ -101,10 +105,20 @@ PAIRS: list[list[str]] = [
     ],
     [
         """          var aiSoFar = Number(o.aiTotal || 0);
-          variance = (aiSoFar || Number(o.mgrTotal || 0)) ? (Number(o.mgrTotal || 0) - aiSoFar) : variance;""",
-        """          var aiSoFar = Number(o.aiTotal || 0);
-          if ((o.aiRollup || 0) > 0) aiSoFar = Number(o.aiRollup);
-          variance = (aiSoFar || Number(o.mgrTotal || 0)) ? (Number(o.mgrTotal || 0) - aiSoFar) : variance;""",
+          variance = (aiSoFar || Number(o.mgrTotal || 0)) ? (Number(o.mgrTotal || 0) - aiSoFar) : variance;
+          pct = (aiSoFar && variance != null && Math.abs(aiSoFar) > 0.005) ? ((variance / aiSoFar) * 100) : null;
+          pctTxt = (pct == null || !isFinite(pct)) ? '—' : ((pct >= 0 ? '+' : '') + pct.toFixed(1) + '%');
+          varCls = (typeof ordersVarianceClass === 'function') ? ordersVarianceClass(variance, pct) : '';""",
+        """          var aiPaired = Number(o.aiTotal || 0);
+          var aiSoFar = Number(o.aiRollup || o.aiOrdersOnly || aiPaired || 0);
+          variance = (aiPaired || Number(o.mgrTotal || 0)) ? (Number(o.mgrTotal || 0) - aiPaired) : variance;
+          pct = (aiPaired && variance != null && Math.abs(aiPaired) > 0.005) ? ((variance / aiPaired) * 100) : null;
+          pctTxt = (pct == null || !isFinite(pct)) ? '—' : ((pct >= 0 ? '+' : '') + pct.toFixed(1) + '%');
+          varCls = (typeof ordersVarianceClass === 'function') ? ordersVarianceClass(variance, pct) : '';""",
+    ],
+    [
+        """          '<th>Owner</th><th class="num">Due today</th><th class="num">AI orders</th><th class="num">Deliveries</th><th class="num">Variance</th><th class="num">%</th><th class="num">Cut</th><th class="num">Add</th><th class="num">PDF</th>' +""",
+        """          '<th>Owner</th><th class="num">Due today</th><th class="num">AI · MTD</th><th class="num">Deliveries</th><th class="num">Variance</th><th class="num">%</th><th class="num">Cut</th><th class="num">Add</th><th class="num">PDF</th>' +""",
     ],
 ]
 
@@ -174,9 +188,10 @@ const html = fs.readFileSync('/tmp/orders-rollup-live.html','utf8');
 const out = ssOrdersRollupKpi(html);
 if (!out.includes('rollupAi')) { console.error('no rollupAi'); process.exit(2); }
 if (!out.includes('ordersS2kDeliveries')) { console.error('no fetch'); process.exit(3); }
-if (!out.includes('built orders MTD')) { console.error('no label'); process.exit(4); }
-if (out.includes('filled deliveries only')) { console.error('old kpi label'); process.exit(5); }
-if (ssOrdersRollupKpi(out) !== out) { console.error('not idempotent'); process.exit(6); }
+if (!out.includes('all built orders')) { console.error('no total label'); process.exit(4); }
+if (!out.includes('kpiTotalAi')) { console.error('no kpiTotalAi'); process.exit(5); }
+if (out.includes('filled deliveries only')) { console.error('old kpi label'); process.exit(6); }
+if (ssOrdersRollupKpi(out) !== out) { console.error('not idempotent'); process.exit(7); }
 fs.writeFileSync('/tmp/orders-rollup-out.html', out);
 console.log('transform ok');
 """
@@ -197,15 +212,15 @@ def main() -> None:
         raise SystemExit("live app missing buildOrders")
     transform_check(live_html)
 
+    if args.check_only:
+        print("html transform check ok (worker not downloaded)", flush=True)
+        return
+
     token = pob.load_token()
     token, script = pob.download_script(token)
     updated = splice_worker(script)
     pob.assert_additive(script, updated)
     pob.node_check(updated, "ss-unified-proto-orders-rollup")
-    if args.check_only:
-        Path("/tmp/ss-unified-proto-orders-rollup.js").write_text(updated)
-        print("check-only ok", flush=True)
-        return
 
     before = pob.binding_names(token, pob.WORKER)
     previous = pob.current_version(token, pob.WORKER)
