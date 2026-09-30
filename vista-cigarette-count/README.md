@@ -13,3 +13,7 @@ Station 42438. **S2K site 293** (Vista only — not Koval/Spring).
 - Overall: $3,678.16
 
 Packet: `42438/2026-09-29/`.
+
+## Site publish
+
+Inventory PDFs and `public/inventory/index.json` live under `site-publish/public/inventory/` (see `SITE-PUBLISH.md`). Pushing that folder runs the **publish-to-site** workflow to `ss-unified-proto`.
