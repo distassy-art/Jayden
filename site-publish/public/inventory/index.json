@@ -1,6 +1,6 @@
 {
   "schema": "ss-inventory-index-v1",
-  "updated": "2026-09-30",
+  "updated": "2026-09-30T01:15Z",
   "note": "Inventory page entries. Edit this file (not app.html). One entry per client + category + date. count = the four count boxes (null hides them). See docs/INVENTORY-PUBLISH.md.",
   "entries": [
     {
