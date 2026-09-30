@@ -1,0 +1,25 @@
+{
+  "id": 274218,
+  "tranref": "CIG COUNT 09292026 B",
+  "trandate": "2026-09-29",
+  "siteid": 293,
+  "nlines": 1,
+  "post": {
+    "skipped": true,
+    "id": 274218,
+    "reason": "already posted (local meta)"
+  },
+  "line": {
+    "n": 115,
+    "upc": "047995200404",
+    "desc": "American Spirit sky",
+    "actual": 8,
+    "qoh": 0.0,
+    "diff": 8.0,
+    "cost": 12.1158,
+    "cost_delta": 96.93,
+    "varid": -34430,
+    "qoh_asof": null,
+    "dept": "CIGARETTES - PACKS"
+  }
+}
