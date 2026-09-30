@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "updatedAt": "2026-09-30T18:59:16Z",
+  "updatedAt": "2026-09-30T19:00:07Z",
   "rate": 750,
   "month": "2026-08",
   "invoices": [
@@ -5639,6 +5639,30 @@
       "updatedAt": "2026-09-29T01:56:11Z"
     },
     {
+      "id": "inv_oakey_2026-09_ordering",
+      "client": "Oakey Las Vegas Blvd",
+      "stationId": "42282",
+      "month": "2026-09",
+      "lines": [],
+      "total": 0.0,
+      "invoiceCount": 0,
+      "status": "superseded",
+      "supersededBy": "inv_42282_2026-09_ordering",
+      "description": "Superseded — ordering lines moved to numbered invoice inv_42282_2026-09_ordering. Do not use name-based id inv_oakey_2026-09_ordering (Mina 2026-09-30)."
+    },
+    {
+      "id": "inv_westminster_2026-09_ordering",
+      "client": "Westminster",
+      "stationId": "42021",
+      "month": "2026-09",
+      "lines": [],
+      "total": 0.0,
+      "invoiceCount": 0,
+      "status": "superseded",
+      "supersededBy": "inv_42021_2026-10_ordering",
+      "description": "Superseded — ordering lines moved to numbered invoice inv_42021_2026-10_ordering. Do not use name-based id inv_westminster_2026-09_ordering (Mina 2026-09-30)."
+    },
+    {
       "id": "inv_42021_2026-10_ordering",
       "client": "Westminster",
       "ownerClient": "Westminster",
@@ -5647,7 +5671,7 @@
       "kind": "ordering_pct",
       "description": "October 2026 Ordering for Westminster (#42021): site-built and portal orders per fees.aiOrdering / fees.aiOrderingPortal.",
       "invoiceCount": 1,
-      "total": 20.57,
+      "total": 21.13,
       "status": "unpaid",
       "paidAt": null,
       "stores": [
@@ -5660,11 +5684,11 @@
           "store": "42021",
           "date": "2026-10-01",
           "vendor": "Ordering",
-          "description": "Pepsi site ordering $2,113.17 (Oct 2026 marginal 1% on first $2,000 + 0.5% above; fee $20.57)",
+          "description": "Pepsi ordering $2,113.17 on inv_42021_2026-10_ordering (Oct 2026 rates in fees.aiOrdering / fees.aiOrderingPortal; fee $21.13 unchanged from prior bill)",
           "sourceAmount": 2113.17,
           "orderVendor": "Pepsi",
-          "rate": 0.005,
-          "fee": 20.57,
+          "rate": 0.01,
+          "fee": 21.13,
           "status": "ai_draft_billed",
           "attachment": "42021-pepsi-10032026.pdf",
           "pdfUrl": "/order-comparisons/invoices/42021-pepsi-10032026.pdf",
@@ -5681,13 +5705,13 @@
   ],
   "expenses": [],
   "rollups": {
-    "incomeTotal": 15813.86,
+    "incomeTotal": 15814.42,
     "expensesTotal": 0,
-    "net": 15813.86
+    "net": 15814.42
   },
-  "incomeTotal": 15813.86,
+  "incomeTotal": 15814.42,
   "expenseTotal": 0,
-  "net": 15813.86,
+  "net": 15814.42,
   "payment": {
     "payableTo": "Smart Solutions AI LLC",
     "bank": "U.S. Bank",
@@ -6444,7 +6468,7 @@
   },
   "rateNote": "Setup $750 only when Mina says. Schedule $25/mo + Tasks $25/mo. Ordering: Sep 1% site + portal 1.5% top-up from 9/30; Oct site marginal 1%/0.5% + portal brackets. S2K $0.10/line (Sep+).",
   "deployStamp": "billing-oct2026-ordering-fees-20260930",
-  "billingSotNote": "2026-09-30 PM PT: Oct 2026 ordering fee tiers (Mina). fees.aiOrdering: Oct+ marginal 1% on first $2k + 0.5% above (Sep stays flat 1%). fees.aiOrderingPortal: Oct+ brackets 1% / 1.5% / 1%; Sep portal 1.5% top-up unchanged. invoiceIdPattern inv_{storeId}_{YYYY-MM}_ordering. Cleanup: moved line from inv_oakey_2026-09_ordering -> inv_42282_2026-09_ordering fee 9.39->9.39, removed inv_oakey_2026-09_ordering, moved line from inv_westminster_2026-09_ordering -> inv_42021_2026-10_ordering fee 21.13->20.57, removed inv_westminster_2026-09_ordering. incomeTotal 15814.42->15813.86. 2026-09-30 ~8:21 AM PT: RATE CHANGE (Mina 9/30 8:19 AM PT): fees.aiOrderingPortal 2% -> 1.5%; site-only stays 1%; never both. Restated today's portal lines on inv_arco-db_2026-09_ordering: Coke 10/2 top-up $21.04 -> $8.89 (1.5% x $2,429.56 = $36.44 - $27.55 at 1%; sourceId ..._portal2pct -> order_42352_coke_2026-10-02_portal15pct); Core-Mark 10/2 portal line from 32cac3e $78.46 (2% of full $3,923.24 on top of the $39.23 1% line = 3%) -> $19.62 top-up (1.5% x $3,923.24 = $58.85 - $39.23; sourceId order_42352_cmark_2026-10-02_portal15pct). 1% lines unchanged; nothing before 9/30 changed. inv 644.28->573.29. incomeTotal 15925.60->15854.61 (-70.99, rate-change correction on unpaid same-day lines). rollups were stale at 15847.14 after 32cac3e; now 15854.61. Previous stamp billing-sot-stray-ordering-merge-20260930. 2026-09-30 ~8:13 AM PT: Cleanup, no charge change: merged stray non-standard ordering invoices into the stores' numbered invoices and removed the strays: inv_oakey_2026-09_ordering ($12.47: Nevada Beverage $233.54 fee $2.34 [order_42282_nevada_2026-10-01], Core-Mark $1,013.28 fee $10.13 [order_42282_cmark_2026-10-02]) -> inv_42282_2026-09_ordering $37.09->$49.56; inv_westminster_2026-09_ordering ($12.60: Pepsi $434.49 fee $4.34 [order_42021_pepsi_2026-10-01], Coke $825.72 fee $8.26 [order_42021_coke_2026-10-02]) -> inv_42021_2026-09_ordering $69.21->$81.81. sourceIds added where missing; deduped by sourceId/attachment/vendor+amount+date (no duplicates). incomeTotal unchanged 15847.14. Previous stamp billing-sot-db-coke-portal2pct-20260930. 2026-09-30 ~8:06 AM PT: New rate fees.aiOrderingPortal 2% (Mina 9/30: orders a bot enters in a vendor portal bill 2%; site-only orders stay 1%; never both, top up once saved in portal). Arco Db #42352 Coke 10/2 delivery entered in My Coke 9/30, cart draft $2,429.56 x 2% = $48.59; existing 1% line $27.55 (on $2,755.05 draft) kept; top-up +$21.04 (sourceId order_42352_coke_2026-10-02_portal2pct). inv_arco-db_2026-09_ordering 54",
+  "billingSotNote": "2026-09-30 PM PT: Oct 2026 ordering fee tiers (Mina). fees.aiOrdering: Oct+ marginal 1% on first $2k + 0.5% above (Sep stays flat 1%). fees.aiOrderingPortal: Oct+ brackets 1% / 1.5% / 1%; Sep portal 1.5% top-up unchanged. invoiceIdPattern inv_{storeId}_{YYYY-MM}_ordering. Cleanup: moved line from inv_oakey_2026-09_ordering -> inv_42282_2026-09_ordering fee $9.39, zeroed inv_oakey_2026-09_ordering (supersededBy inv_42282_2026-09_ordering), moved line from inv_westminster_2026-09_ordering -> inv_42021_2026-10_ordering fee $21.13, zeroed inv_westminster_2026-09_ordering (supersededBy inv_42021_2026-10_ordering). incomeTotal 15814.42->15814.42. 2026-09-30 ~8:21 AM PT: RATE CHANGE (Mina 9/30 8:19 AM PT): fees.aiOrderingPortal 2% -> 1.5%; site-only stays 1%; never both. Restated today's portal lines on inv_arco-db_2026-09_ordering: Coke 10/2 top-up $21.04 -> $8.89 (1.5% x $2,429.56 = $36.44 - $27.55 at 1%; sourceId ..._portal2pct -> order_42352_coke_2026-10-02_portal15pct); Core-Mark 10/2 portal line from 32cac3e $78.46 (2% of full $3,923.24 on top of the $39.23 1% line = 3%) -> $19.62 top-up (1.5% x $3,923.24 = $58.85 - $39.23; sourceId order_42352_cmark_2026-10-02_portal15pct). 1% lines unchanged; nothing before 9/30 changed. inv 644.28->573.29. incomeTotal 15925.60->15854.61 (-70.99, rate-change correction on unpaid same-day lines). rollups were stale at 15847.14 after 32cac3e; now 15854.61. Previous stamp billing-sot-stray-ordering-merge-20260930. 2026-09-30 ~8:13 AM PT: Cleanup, no charge change: merged stray non-standard ordering invoices into the stores' numbered invoices and removed the strays: inv_oakey_2026-09_ordering ($12.47: Nevada Beverage $233.54 fee $2.34 [order_42282_nevada_2026-10-01], Core-Mark $1,013.28 fee $10.13 [order_42282_cmark_2026-10-02]) -> inv_42282_2026-09_ordering $37.09->$49.56; inv_westminster_2026-09_ordering ($12.60: Pepsi $434.49 fee $4.34 [order_42021_pepsi_2026-10-01], Coke $825.72 fee $8.26 [order_42021_coke_2026-10-02]) -> inv_42021_2026-09_ordering $69.21->$81.81. sourceIds added where missing; deduped by sourceId/attachment/vendor+amount+date (no duplicates). incomeTotal unchanged 15847.14. Previous stamp billing-sot-db-coke-portal2pct-20260930. 2026-09-30 ~8:06 AM PT: New rate fees.aiOrderingPortal 2% (Mina 9/30: orders a bot enters in a vendor portal bill 2%; site-only orders stay 1%; never both, top up once saved in portal). Arco Db #42352 Coke 10/2 delivery entered in My Coke 9/30, cart draft $2,429.56 x 2% = $48.59; existing 1% line $27.55 (on $2,755.05 draft) kept; top-up +$21.04 (sourceId order_42352_coke_2026-10-02_portal2pct). inv_arco-db_2026-09_ordering 54",
   "cfDistRefreshAt": "2026-09-24T12:10:59Z",
   "cfDistRefreshNote": "Local mirrors synced after Arco Db Pepsi AI draft Ordering 1% $5.12 (PDF TOTAL $512.17). Live /data needs Website Builder ss-api refresh."
 }

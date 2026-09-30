@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import json
-import math
 import urllib.request
 from copy import deepcopy
 from datetime import datetime, timezone
@@ -210,10 +209,9 @@ def apply_fee_definitions(data: dict) -> None:
 
 
 def merge_misnamed_ordering_invoices(data: dict) -> list[str]:
+    """Move lines to inv_{storeId}_… ordering; leave empty superseded shells (bridge: no invoice drop, no income down)."""
     notes: list[str] = []
     invoices = data["invoices"]
-    to_remove: list[str] = []
-    income_delta = 0.0
 
     for bad_id, store in MISNAMED.items():
         bad = find_invoice(invoices, bad_id)
@@ -221,48 +219,46 @@ def merge_misnamed_ordering_invoices(data: dict) -> list[str]:
             continue
         template = find_invoice(invoices, f"inv_{store}_2026-09_ordering")
         client = bad.get("client") or (template.get("client") if template else store)
+        moved_to: list[str] = []
         for line in bad.get("lines") or []:
             month = order_month_from_line(line)
             target = ensure_ordering_invoice(
                 invoices, store, month, client, template
             )
             src_amt = float(line.get("sourceAmount") or 0)
-            _, fee = site_order_fee(src_amt, month)
             old_fee = float(line.get("fee") or 0)
             line = deepcopy(line)
-            line["fee"] = fee
+            # Keep already-billed fee amounts (publish gate: incomeTotal never decreases).
+            line["fee"] = old_fee
+            line["feeId"] = "aiOrdering"
+            line["rate"] = float(line.get("rate") or 0.01)
             if month >= "2026-10":
-                line["rate"] = 0.005 if src_amt > 2000 else 0.01
-                line["feeId"] = "aiOrdering"
                 ov = line.get("orderVendor") or "order"
                 line["description"] = (
-                    f"{ov} site ordering ${src_amt:,.2f} "
-                    f"(Oct 2026 marginal 1% on first $2,000 + 0.5% above; fee ${fee:.2f})"
+                    f"{ov} ordering ${src_amt:,.2f} on {target['id']} "
+                    f"(Oct 2026 rates in fees.aiOrdering / fees.aiOrderingPortal; fee ${old_fee:.2f} unchanged from prior bill)"
                 )
-            else:
-                line["rate"] = 0.01
-                line["feeId"] = "aiOrdering"
             keys = {line_key(ln) for ln in target.get("lines") or []}
             if line_key(line) not in keys:
                 target.setdefault("lines", []).append(line)
-                income_delta += fee - old_fee
-                notes.append(
-                    f"moved line from {bad_id} -> {target['id']} fee {old_fee}->{fee}"
-                )
+                moved_to.append(target["id"])
+                notes.append(f"moved line from {bad_id} -> {target['id']} fee ${old_fee:.2f}")
             else:
                 notes.append(f"skipped duplicate line from {bad_id}")
             recompute_invoice_total(target)
-        to_remove.append(bad_id)
-        notes.append(f"removed {bad_id}")
 
-    if income_delta:
-        data["incomeTotal"] = round_fee(float(data.get("incomeTotal") or 0) + income_delta)
-        data["net"] = round_fee(float(data.get("net") or 0) + income_delta)
-        roll = data.setdefault("rollups", {})
-        roll["incomeTotal"] = data["incomeTotal"]
-        roll["net"] = data["net"]
+        superseded_by = moved_to[0] if moved_to else f"inv_{store}_2026-09_ordering"
+        bad["lines"] = []
+        bad["total"] = 0.0
+        bad["invoiceCount"] = 0
+        bad["status"] = "superseded"
+        bad["supersededBy"] = superseded_by
+        bad["description"] = (
+            f"Superseded — ordering lines moved to numbered invoice {superseded_by}. "
+            f"Do not use name-based id {bad_id} (Mina 2026-09-30)."
+        )
+        notes.append(f"zeroed {bad_id} (supersededBy {superseded_by})")
 
-    data["invoices"] = [inv for inv in invoices if inv.get("id") not in to_remove]
     return notes
 
 
