@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "updatedAt": "2026-09-30T04:51:51Z",
+  "updatedAt": "2026-09-30T18:59:16Z",
   "rate": 750,
   "month": "2026-08",
   "invoices": [
@@ -19,7 +19,7 @@
           "store": "42021",
           "date": "2026-08-31",
           "vendor": "Setup Fees",
-          "description": "Setup Fees (scanner + Jan 2025\u2013Jul 2026 analysis)",
+          "description": "Setup Fees (scanner + Jan 2025–Jul 2026 analysis)",
           "sourceAmount": 750,
           "fee": 750
         },
@@ -27,7 +27,7 @@
           "store": "42021",
           "date": "2026-08-31",
           "vendor": "5% c-store profit increase",
-          "description": "5% of YoY c-store profit increase ($15,378.00 \u2192 $20,277.19, \u0394 $4,899.19)",
+          "description": "5% of YoY c-store profit increase ($15,378.00 → $20,277.19, Δ $4,899.19)",
           "sourceAmount": 4899.19,
           "fee": 244.96,
           "sp25": 15378,
@@ -61,7 +61,7 @@
           "store": "42098",
           "date": "2026-08-31",
           "vendor": "Setup Fees",
-          "description": "Setup Fees (scanner + Jan 2025\u2013Jul 2026 analysis)",
+          "description": "Setup Fees (scanner + Jan 2025–Jul 2026 analysis)",
           "sourceAmount": 750,
           "fee": 750
         },
@@ -69,7 +69,7 @@
           "store": "42098",
           "date": "2026-08-31",
           "vendor": "5% c-store profit increase",
-          "description": "5% of YoY c-store profit increase ($38,204.74 \u2192 $42,956.07, \u0394 $4,751.33)",
+          "description": "5% of YoY c-store profit increase ($38,204.74 → $42,956.07, Δ $4,751.33)",
           "sourceAmount": 4751.33,
           "fee": 237.57,
           "sp25": 38204.74,
@@ -103,7 +103,7 @@
           "store": "42279",
           "date": "2026-08-31",
           "vendor": "Setup Fees",
-          "description": "Setup Fees (scanner + Jan 2025\u2013Jul 2026 analysis)",
+          "description": "Setup Fees (scanner + Jan 2025–Jul 2026 analysis)",
           "sourceAmount": 750,
           "fee": 750
         },
@@ -111,7 +111,7 @@
           "store": "42279",
           "date": "2026-08-31",
           "vendor": "5% c-store profit increase",
-          "description": "5% of YoY c-store profit increase ($52,419.02 \u2192 $63,087.20, \u0394 $10,668.18)",
+          "description": "5% of YoY c-store profit increase ($52,419.02 → $63,087.20, Δ $10,668.18)",
           "sourceAmount": 10668.18,
           "fee": 533.41,
           "sp25": 52419.02,
@@ -145,7 +145,7 @@
           "store": "42280",
           "date": "2026-08-31",
           "vendor": "Setup Fees",
-          "description": "Setup Fees (scanner + Jan 2025\u2013Jul 2026 analysis)",
+          "description": "Setup Fees (scanner + Jan 2025–Jul 2026 analysis)",
           "sourceAmount": 750,
           "fee": 750
         },
@@ -153,7 +153,7 @@
           "store": "42280",
           "date": "2026-08-31",
           "vendor": "5% c-store profit increase",
-          "description": "5% of YoY c-store profit increase ($26,168.11 \u2192 $36,772.83, \u0394 $10,604.72)",
+          "description": "5% of YoY c-store profit increase ($26,168.11 → $36,772.83, Δ $10,604.72)",
           "sourceAmount": 10604.72,
           "fee": 530.24,
           "sp25": 26168.11,
@@ -187,7 +187,7 @@
           "store": "42282",
           "date": "2026-08-31",
           "vendor": "Setup Fees",
-          "description": "Setup Fees (scanner + Jan 2025\u2013Jul 2026 analysis)",
+          "description": "Setup Fees (scanner + Jan 2025–Jul 2026 analysis)",
           "sourceAmount": 750,
           "fee": 750
         },
@@ -195,7 +195,7 @@
           "store": "42282",
           "date": "2026-08-31",
           "vendor": "5% c-store profit increase",
-          "description": "5% of YoY c-store profit increase ($6,680.18 \u2192 $13,025.62, \u0394 $6,345.44)",
+          "description": "5% of YoY c-store profit increase ($6,680.18 → $13,025.62, Δ $6,345.44)",
           "sourceAmount": 6345.44,
           "fee": 317.27,
           "sp25": 6680.18,
@@ -229,7 +229,7 @@
           "store": "42439",
           "date": "2026-08-31",
           "vendor": "Setup Fees",
-          "description": "Setup Fees (scanner + Jan 2025\u2013Jul 2026 analysis)",
+          "description": "Setup Fees (scanner + Jan 2025–Jul 2026 analysis)",
           "sourceAmount": 750,
           "fee": 750
         },
@@ -237,7 +237,7 @@
           "store": "42439",
           "date": "2026-08-31",
           "vendor": "5% c-store profit increase",
-          "description": "5% of YoY c-store profit increase ($31,869.77 \u2192 $30,441.63, \u0394 $-1,428.14)",
+          "description": "5% of YoY c-store profit increase ($31,869.77 → $30,441.63, Δ $-1,428.14)",
           "sourceAmount": -1428.14,
           "fee": 0,
           "sp25": 31869.77,
@@ -271,7 +271,7 @@
           "store": "42674",
           "date": "2026-08-31",
           "vendor": "Setup Fees",
-          "description": "Setup Fees (scanner + Jan 2025\u2013Jul 2026 analysis)",
+          "description": "Setup Fees (scanner + Jan 2025–Jul 2026 analysis)",
           "sourceAmount": 750,
           "fee": 750
         },
@@ -279,7 +279,7 @@
           "store": "42674",
           "date": "2026-08-31",
           "vendor": "5% c-store profit increase",
-          "description": "5% of YoY c-store profit increase ($90,975.08 \u2192 $31,219.60, \u0394 $-59,755.48)",
+          "description": "5% of YoY c-store profit increase ($90,975.08 → $31,219.60, Δ $-59,755.48)",
           "sourceAmount": -59755.48,
           "fee": 0,
           "sp25": 90975.08,
@@ -313,7 +313,7 @@
           "store": "42281",
           "date": "2026-08-31",
           "vendor": "Setup Fees",
-          "description": "Setup Fees (scanner + Jan 2025\u2013Jul 2026 analysis)",
+          "description": "Setup Fees (scanner + Jan 2025–Jul 2026 analysis)",
           "sourceAmount": 750,
           "fee": 750
         },
@@ -321,7 +321,7 @@
           "store": "42281",
           "date": "2026-08-31",
           "vendor": "5% c-store profit increase",
-          "description": "5% of YoY c-store profit increase ($36,181.12 \u2192 $20,425.34, \u0394 $-15,755.78)",
+          "description": "5% of YoY c-store profit increase ($36,181.12 → $20,425.34, Δ $-15,755.78)",
           "sourceAmount": -15755.78,
           "fee": 0,
           "sp25": 36181.12,
@@ -430,7 +430,7 @@
       "month": "2026-08",
       "date": "2026-08-31",
       "kind": "package",
-      "description": "August 2026: S2K invoicing $250 + Ordering $250 + Schedule and tasks $100 (Arco Db #42352).",
+      "description": "August 2026: S2K invoicing $250 + Ordering $250 (Arco Db #42352). Schedule and tasks $100 removed (Mina 9/30).",
       "lines": [
         {
           "store": "42352",
@@ -447,22 +447,14 @@
           "description": "Ordering",
           "sourceAmount": 250,
           "fee": 250
-        },
-        {
-          "store": "42352",
-          "date": "2026-08-31",
-          "vendor": "Schedule and tasks",
-          "description": "Schedule and tasks",
-          "sourceAmount": 100,
-          "fee": 100
         }
       ],
       "invoiceCount": 3,
       "rate": null,
-      "total": 600,
+      "total": 500,
       "status": "unpaid",
       "paidAt": null,
-      "updatedAt": "2026-09-04T05:30:42Z",
+      "updatedAt": "2026-09-30T17:42:46Z",
       "pdf": "/data/billing/pdfs/2026-08-arco-db.pdf",
       "stores": [
         "42352"
@@ -539,7 +531,7 @@
           "billableLines": 3,
           "unitCost": 0.1,
           "fee": 0.3,
-          "description": "S2K enter/fix \u00b7 3 billable lines \u00d7 $0.10"
+          "description": "S2K enter/fix · 3 billable lines × $0.10"
         },
         {
           "store": "42352",
@@ -551,7 +543,7 @@
           "billableLines": 6,
           "unitCost": 0.1,
           "fee": 0.6,
-          "description": "S2K fixed-in-Sep \u00b7 6 billable lines \u00d7 $0.10"
+          "description": "S2K fixed-in-Sep · 6 billable lines × $0.10"
         },
         {
           "store": "42352",
@@ -563,7 +555,7 @@
           "billableLines": 1,
           "unitCost": 0.1,
           "fee": 0.1,
-          "description": "S2K enter/fix \u00b7 1 billable line \u00d7 $0.10"
+          "description": "S2K enter/fix · 1 billable line × $0.10"
         },
         {
           "store": "42352",
@@ -575,7 +567,7 @@
           "billableLines": 9,
           "unitCost": 0.1,
           "fee": 0.9,
-          "description": "S2K enter/fix \u00b7 9 billable lines \u00d7 $0.10"
+          "description": "S2K enter/fix · 9 billable lines × $0.10"
         },
         {
           "store": "42352",
@@ -587,7 +579,7 @@
           "billableLines": 34,
           "unitCost": 0.1,
           "fee": 3.4,
-          "description": "S2K enter/fix \u00b7 34 billable lines \u00d7 $0.10"
+          "description": "S2K enter/fix · 34 billable lines × $0.10"
         },
         {
           "store": "42352",
@@ -601,7 +593,7 @@
           "fee": 3.1,
           "diff": 0,
           "pendingBillableLines": false,
-          "description": "S2K enter/fix \u00b7 31 billable lines \u00d7 $0.10"
+          "description": "S2K enter/fix · 31 billable lines × $0.10"
         },
         {
           "store": "42352",
@@ -615,7 +607,7 @@
           "fee": 1.4,
           "diff": 0,
           "pendingBillableLines": false,
-          "description": "S2K enter/fix \u00b7 14 billable lines \u00d7 $0.10"
+          "description": "S2K enter/fix · 14 billable lines × $0.10"
         },
         {
           "store": "42352",
@@ -629,7 +621,7 @@
           "fee": 0.8,
           "diff": 0,
           "aliasVendor": "Singtech",
-          "description": "S2K enter/fix \u00b7 Kickpower/Singtech \u00b7 8 billable lines \u00d7 $0.10"
+          "description": "S2K enter/fix · Kickpower/Singtech · 8 billable lines × $0.10"
         },
         {
           "store": "42352",
@@ -643,7 +635,7 @@
           "fee": 0.3,
           "diff": 0,
           "aliasVendor": "Universal Nozzle",
-          "description": "S2K enter/fix \u00b7 Repairs/Universal Nozzle \u00b7 3 billable lines \u00d7 $0.10"
+          "description": "S2K enter/fix · Repairs/Universal Nozzle · 3 billable lines × $0.10"
         },
         {
           "store": "42352",
@@ -657,7 +649,7 @@
           "fee": 4.2,
           "diff": 0,
           "aliasVendor": "Pepsi",
-          "description": "S2K enter/fix \u00b7 Pepsi itemized expand \u00b7 42 billable lines \u00d7 $0.10 (not 2-line rollup)"
+          "description": "S2K enter/fix · Pepsi itemized expand · 42 billable lines × $0.10 (not 2-line rollup)"
         },
         {
           "store": "42352",
@@ -673,7 +665,7 @@
           "pendingBillableLines": false,
           "action": "ADD",
           "s2kId": 22836,
-          "description": "S2K enter/fix \u00b7 New Image Property Services \u00b7 1 billable line \u00d7 $0.10 (ADD)",
+          "description": "S2K enter/fix · New Image Property Services · 1 billable line × $0.10 (ADD)",
           "source": "onedrive_charge-queue-arco-db-s2k-2026-09-22-match"
         },
         {
@@ -690,7 +682,7 @@
           "pendingBillableLines": false,
           "action": "ADD",
           "s2kId": 22837,
-          "description": "S2K enter/fix \u00b7 California Lottery \u00b7 1 billable line \u00d7 $0.10 (ADD)",
+          "description": "S2K enter/fix · California Lottery · 1 billable line × $0.10 (ADD)",
           "source": "onedrive_charge-queue-arco-db-s2k-2026-09-22-match"
         }
       ],
@@ -725,7 +717,7 @@
           "billableLines": 1,
           "unitCost": 0.1,
           "fee": 0.1,
-          "description": "S2K enter/fix \u00b7 return \u00b7 1 billable line \u00d7 $0.10"
+          "description": "S2K enter/fix · return · 1 billable line × $0.10"
         },
         {
           "store": "42004",
@@ -737,7 +729,7 @@
           "billableLines": 1,
           "unitCost": 0.1,
           "fee": 0.1,
-          "description": "S2K enter/fix \u00b7 1 billable line \u00d7 $0.10"
+          "description": "S2K enter/fix · 1 billable line × $0.10"
         },
         {
           "store": "42004",
@@ -749,7 +741,7 @@
           "billableLines": 1,
           "unitCost": 0.1,
           "fee": 0.1,
-          "description": "S2K penny Diff fix \u00b7 1 billable line \u00d7 $0.10"
+          "description": "S2K penny Diff fix · 1 billable line × $0.10"
         },
         {
           "store": "42004",
@@ -761,7 +753,7 @@
           "billableLines": 1,
           "unitCost": 0.1,
           "fee": 0.1,
-          "description": "S2K penny Diff fix \u00b7 1 billable line \u00d7 $0.10"
+          "description": "S2K penny Diff fix · 1 billable line × $0.10"
         },
         {
           "store": "42004",
@@ -773,7 +765,7 @@
           "billableLines": 1,
           "unitCost": 0.1,
           "fee": 0.1,
-          "description": "S2K penny Diff fix \u00b7 1 billable line \u00d7 $0.10"
+          "description": "S2K penny Diff fix · 1 billable line × $0.10"
         },
         {
           "store": "42004",
@@ -785,7 +777,7 @@
           "billableLines": 1,
           "unitCost": 0.1,
           "fee": 0.1,
-          "description": "S2K penny Diff fix \u00b7 listing #32692111 \u00b7 1 billable line \u00d7 $0.10"
+          "description": "S2K penny Diff fix · listing #32692111 · 1 billable line × $0.10"
         },
         {
           "store": "42004",
@@ -797,7 +789,7 @@
           "billableLines": 1,
           "unitCost": 0.1,
           "fee": 0.1,
-          "description": "S2K penny Diff fix \u00b7 1 billable line \u00d7 $0.10"
+          "description": "S2K penny Diff fix · 1 billable line × $0.10"
         },
         {
           "store": "42004",
@@ -809,7 +801,7 @@
           "billableLines": 40,
           "unitCost": 0.1,
           "fee": 4,
-          "description": "S2K enter/fix \u00b7 CRV UPC 99 $92.10 split + product line edits \u00b7 40 billable lines \u00d7 $0.10",
+          "description": "S2K enter/fix · CRV UPC 99 $92.10 split + product line edits · 40 billable lines × $0.10",
           "sessionDate": "2026-09-26"
         },
         {
@@ -822,7 +814,7 @@
           "billableLines": 44,
           "unitCost": 0.1,
           "fee": 4.4,
-          "description": "S2K enter/fix \u00b7 CRV UPC 99 $82.20 split + product line edits \u00b7 44 billable lines \u00d7 $0.10",
+          "description": "S2K enter/fix · CRV UPC 99 $82.20 split + product line edits · 44 billable lines × $0.10",
           "sessionDate": "2026-09-26"
         },
         {
@@ -835,7 +827,7 @@
           "billableLines": 39,
           "unitCost": 0.1,
           "fee": 3.9,
-          "description": "S2K enter/fix \u00b7 CRV UPC 99 $78.90 split + product line edits \u00b7 39 billable lines \u00d7 $0.10",
+          "description": "S2K enter/fix · CRV UPC 99 $78.90 split + product line edits · 39 billable lines × $0.10",
           "sessionDate": "2026-09-26"
         },
         {
@@ -848,7 +840,7 @@
           "billableLines": 1,
           "unitCost": 0.1,
           "fee": 0.1,
-          "description": "S2K enter/fix \u00b7 CRV UPC 99 $7.63 added to close Diff \u00b7 1 billable lines \u00d7 $0.10",
+          "description": "S2K enter/fix · CRV UPC 99 $7.63 added to close Diff · 1 billable lines × $0.10",
           "sessionDate": "2026-09-26"
         },
         {
@@ -861,7 +853,7 @@
           "billableLines": 16,
           "unitCost": 0.1,
           "fee": 1.6,
-          "description": "S2K enter/fix \u00b7 entered 16 lines; no paper CRV \u00b7 16 billable lines \u00d7 $0.10",
+          "description": "S2K enter/fix · entered 16 lines; no paper CRV · 16 billable lines × $0.10",
           "sessionDate": "2026-09-26"
         },
         {
@@ -874,7 +866,7 @@
           "billableLines": 6,
           "unitCost": 0.1,
           "fee": 0.6,
-          "description": "S2K enter/fix \u00b7 entered 6 lines; no paper CRV \u00b7 6 billable lines \u00d7 $0.10",
+          "description": "S2K enter/fix · entered 6 lines; no paper CRV · 6 billable lines × $0.10",
           "sessionDate": "2026-09-26"
         },
         {
@@ -887,7 +879,7 @@
           "billableLines": 1,
           "unitCost": 0.1,
           "fee": 0.1,
-          "description": "S2K enter/fix \u00b7 entered 1 line \u00b7 1 billable lines \u00d7 $0.10",
+          "description": "S2K enter/fix · entered 1 line · 1 billable lines × $0.10",
           "sessionDate": "2026-09-26"
         },
         {
@@ -900,7 +892,7 @@
           "billableLines": 1,
           "unitCost": 0.1,
           "fee": 0.1,
-          "description": "S2K enter/fix \u00b7 entered 1 line \u00b7 1 billable lines \u00d7 $0.10",
+          "description": "S2K enter/fix · entered 1 line · 1 billable lines × $0.10",
           "sessionDate": "2026-09-26"
         },
         {
@@ -913,7 +905,7 @@
           "billableLines": 1,
           "unitCost": 0.1,
           "fee": 0.1,
-          "description": "S2K enter/fix \u00b7 entered 1 line \u00b7 1 billable lines \u00d7 $0.10",
+          "description": "S2K enter/fix · entered 1 line · 1 billable lines × $0.10",
           "sessionDate": "2026-09-26"
         },
         {
@@ -926,7 +918,7 @@
           "billableLines": 21,
           "unitCost": 0.1,
           "fee": 2.1,
-          "description": "S2K enter/fix \u00b7 entered 21 lines incl CRV UPC 99 $37.40; Diff 0 \u00b7 21 billable lines \u00d7 $0.10",
+          "description": "S2K enter/fix · entered 21 lines incl CRV UPC 99 $37.40; Diff 0 · 21 billable lines × $0.10",
           "sessionDate": "2026-09-26"
         },
         {
@@ -939,7 +931,7 @@
           "billableLines": 28,
           "unitCost": 0.1,
           "fee": 2.8,
-          "description": "S2K enter/fix \u00b7 entered 28 lines; no paper CRV; Diff 0 \u00b7 28 billable lines \u00d7 $0.10",
+          "description": "S2K enter/fix · entered 28 lines; no paper CRV; Diff 0 · 28 billable lines × $0.10",
           "sessionDate": "2026-09-26"
         },
         {
@@ -952,7 +944,7 @@
           "billableLines": 62,
           "unitCost": 0.1,
           "fee": 6.2,
-          "description": "S2K enter/fix \u00b7 entered 62 lines (incl returns); no paper CRV; Diff 0 \u00b7 62 billable lines \u00d7 $0.10",
+          "description": "S2K enter/fix · entered 62 lines (incl returns); no paper CRV; Diff 0 · 62 billable lines × $0.10",
           "sessionDate": "2026-09-26"
         }
       ],
@@ -975,7 +967,7 @@
       "month": "2026-09",
       "date": "2026-09-07",
       "kind": "ordering_pct",
-      "description": "September 2026 Ordering for Farsai Inc (#42352): 1% of AI order totals (12 orders / $20,182.88 source).",
+      "description": "September 2026 Ordering for Arco Db (#42352): 1% of Sent order totals (drafts excluded).",
       "lines": [
         {
           "store": "42352",
@@ -1072,7 +1064,7 @@
           "store": "42352",
           "date": "2026-09-14",
           "vendor": "Ordering",
-          "description": "Core-Mark AI order 1% of $2,091.25 (CF #163154298233634788 draft \u2014 awaiting Mina confirm)",
+          "description": "Core-Mark AI order 1% of $2,091.25 (CF #163154298233634788 draft — awaiting Mina confirm)",
           "sourceAmount": 2091.25,
           "orderVendor": "Core-Mark",
           "cfOrderId": "163154298233634788",
@@ -1085,7 +1077,7 @@
           "store": "42352",
           "date": "2026-09-15",
           "vendor": "Ordering",
-          "description": "Harbor AI order 1% of $927.94 (draft 2026-09-15 \u2014 awaiting Mina confirm to email)",
+          "description": "Harbor AI order 1% of $927.94 (draft 2026-09-15 — awaiting Mina confirm to email)",
           "sourceAmount": 927.94,
           "orderVendor": "Harbor",
           "rate": 0.01,
@@ -1097,7 +1089,7 @@
           "store": "42352",
           "date": "2026-09-16",
           "vendor": "Ordering",
-          "description": "Coke AI draft 1% of $534.72 (My Coke draft not saved yet \u2014 awaiting email confirm)",
+          "description": "Coke AI draft 1% of $534.72 (My Coke draft not saved yet — awaiting email confirm)",
           "sourceAmount": 534.72,
           "orderVendor": "Coke",
           "rate": 0.01,
@@ -1109,7 +1101,7 @@
           "store": "42352",
           "date": "2026-09-16",
           "vendor": "Ordering",
-          "description": "Straub/AB SALES AI draft 1% of $708.91 (29 cases \u00b7 18 lines \u00b7 sales 2026-09-09\u20132026-09-15; PDF emailed arcodb + Rachel)",
+          "description": "Straub/AB SALES AI draft 1% of $708.91 (29 cases · 18 lines · sales 2026-09-09–2026-09-15; PDF emailed arcodb + Rachel)",
           "sourceAmount": 708.91,
           "orderVendor": "Straub",
           "orderVendorAlt": "AB SALES",
@@ -1126,7 +1118,7 @@
           "store": "42352",
           "date": "2026-09-17",
           "vendor": "Ordering",
-          "description": "Pepsi AI draft 1% of $440.76 (23 cases \u00b7 sales 2026-09-10\u20132026-09-16; PDF emailed arcodb@outlook.com + reoberholtzer@gmail.com)",
+          "description": "Pepsi AI draft 1% of $440.76 (23 cases · sales 2026-09-10–2026-09-16; PDF emailed arcodb@outlook.com + reoberholtzer@gmail.com)",
           "sourceAmount": 440.76,
           "orderVendor": "Pepsi",
           "rate": 0.01,
@@ -1141,7 +1133,7 @@
           "store": "42352",
           "date": "2026-09-17",
           "vendor": "Ordering",
-          "description": "Core-Mark AI draft 1% of $2,086.60 (CF #163154298274911400 \u00b7 16 cartons \u00b7 22 items \u00b7 sales 2026-09-10\u20132026-09-16; unsubmitted \u2014 manager owns portal)",
+          "description": "Core-Mark AI draft 1% of $2,086.60 (CF #163154298274911400 · 16 cartons · 22 items · sales 2026-09-10–2026-09-16; unsubmitted — manager owns portal)",
           "sourceAmount": 2086.6,
           "orderVendor": "Core-Mark",
           "cfOrderId": "163154298274911400",
@@ -1219,7 +1211,7 @@
           "store": "42352",
           "date": "2026-09-23",
           "vendor": "Ordering",
-          "description": "Harbor AI order 1% of $1,932.80 (OneDrive PDF EST. COST; queue claimed $2,521.25 \u2014 charged PDF amount)",
+          "description": "Harbor AI order 1% of $1,932.80 (OneDrive PDF EST. COST; queue claimed $2,521.25 — charged PDF amount)",
           "sourceAmount": 1932.8,
           "orderVendor": "Harbor",
           "rate": 0.01,
@@ -1238,7 +1230,7 @@
           "store": "42352",
           "date": "2026-09-23",
           "vendor": "Ordering",
-          "description": "Coke AI draft 1% of $1,180.75 (32 cases \u00b7 19 lines \u00b7 sales 2026-09-16\u20132026-09-22; OneDrive PDF verified TOTAL; awaiting Mina confirm to email)",
+          "description": "Coke AI draft 1% of $1,180.75 (32 cases · 19 lines · sales 2026-09-16–2026-09-22; OneDrive PDF verified TOTAL; awaiting Mina confirm to email)",
           "sourceAmount": 1180.75,
           "orderVendor": "Coke",
           "rate": 0.01,
@@ -1260,7 +1252,7 @@
           "store": "42352",
           "date": "2026-09-24",
           "vendor": "Ordering",
-          "description": "Pepsi AI draft 1% of $512.17 (26 cases \u00b7 21 lines \u00b7 sales 2026-09-14\u20132026-09-20; OneDrive PDF verified TOTAL; awaiting Mina confirm to email)",
+          "description": "Pepsi AI draft 1% of $512.17 (26 cases · 21 lines · sales 2026-09-14–2026-09-20; OneDrive PDF verified TOTAL; awaiting Mina confirm to email)",
           "sourceAmount": 512.17,
           "orderVendor": "Pepsi",
           "rate": 0.01,
@@ -1282,7 +1274,7 @@
           "store": "42352",
           "date": "2026-09-24",
           "vendor": "Ordering",
-          "description": "Core-Mark AI draft 1% of $1,471.32 (CF #163154298375657384 \u00b7 13 cartons \u00b7 8 lines \u00b7 sales 2026-09-17\u20132026-09-23; unsubmitted)",
+          "description": "Core-Mark AI draft 1% of $1,471.32 (CF #163154298375657384 · 13 cartons · 8 lines · sales 2026-09-17–2026-09-23; unsubmitted)",
           "sourceAmount": 1471.32,
           "orderVendor": "Core-Mark",
           "cfOrderId": "163154298375657384",
@@ -1305,7 +1297,7 @@
           "store": "42352",
           "date": "2026-09-26",
           "vendor": "Ordering",
-          "description": "Core-Mark 1% of $1567.84 (AI order \u00b7 receive 2026-09-29)",
+          "description": "Core-Mark 1% of $1567.84 (AI order · receive 2026-09-29)",
           "sourceAmount": 1567.84,
           "orderVendor": "Core-Mark",
           "rate": 0.01,
@@ -1322,7 +1314,7 @@
           "store": "42352",
           "date": "2026-09-27",
           "vendor": "Ordering",
-          "description": "Harbor 1% of $1995.95 (AI order \u00b7 receive 2026-09-30)",
+          "description": "Harbor 1% of $1995.95 (AI order · receive 2026-09-30)",
           "sourceAmount": 1995.95,
           "orderVendor": "Harbor",
           "rate": 0.01,
@@ -1346,15 +1338,115 @@
           "status": "ai_draft_billed",
           "attachment": "42352-redbull-10012026.pdf",
           "pdfUrl": "/order-comparisons/invoices/42352-redbull-10012026.pdf",
-          "addedAt": "2026-09-30T02:48:20.484Z"
+          "addedAt": "2026-09-30T05:56:56.561Z"
+        },
+        {
+          "store": "42352",
+          "date": "2026-09-30",
+          "vendor": "Ordering",
+          "description": "Coke AI order 1% of $2755.05 (made 2026-09-30; receive 2026-10-02)",
+          "sourceAmount": 2755.05,
+          "orderVendor": "Coke",
+          "rate": 0.01,
+          "fee": 27.55,
+          "status": "ai_draft_billed",
+          "attachment": "42352-coke-10022026.pdf",
+          "pdfUrl": "/order-comparisons/invoices/42352-coke-10022026.pdf",
+          "addedAt": "2026-09-30T14:52:14.170Z"
+        },
+        {
+          "store": "42352",
+          "date": "2026-09-30",
+          "vendor": "Ordering",
+          "description": "Core-Mark AI order 1% of $3923.24 (made 2026-09-30; receive 2026-10-02)",
+          "sourceAmount": 3923.24,
+          "orderVendor": "Core-Mark",
+          "rate": 0.01,
+          "fee": 39.23,
+          "status": "ai_draft_billed",
+          "attachment": "42352-cmark-10022026.pdf",
+          "pdfUrl": "/order-comparisons/invoices/42352-cmark-10022026.pdf",
+          "addedAt": "2026-09-30T14:52:14.170Z"
+        },
+        {
+          "store": "42352",
+          "date": "2026-09-30",
+          "vendor": "Ordering",
+          "description": "My Coke portal entry top-up to 1.5% of $2,429.56 (10/2 delivery; $27.55 already billed)",
+          "sourceAmount": 2429.56,
+          "orderVendor": "Coke",
+          "rate": 0.015,
+          "fee": 8.89,
+          "feeId": "aiOrderingPortal",
+          "status": "portal_draft_saved",
+          "portalStatus": "my_coke_cart_draft_saved",
+          "portalEnteredAt": "2026-09-30",
+          "deliveryDate": "2026-10-02",
+          "attachment": "42352-coke-10022026.pdf",
+          "sourceId": "order_42352_coke_2026-10-02_portal15pct",
+          "topUpOf": "Coke AI order 1% of $2755.05 (made 2026-09-30; receive 2026-10-02) fee $27.55",
+          "alreadyBilled": 27.55,
+          "orderTotalFee": 36.44,
+          "reportedBy": "The Boss",
+          "addedAt": "2026-09-30T08:06:55-07:00",
+          "note": "Portal cart draft $2,429.56 x 1.5% = $36.44 total for this order (Mina 9/30 8:19 AM PT: portal rate 1.5%, was 2%); $27.55 billed at 1% on the earlier $2,755.05 site draft, so top-up $8.89 (was $21.04 at 2%). Do not re-bill the 1% line.",
+          "previousSourceId": "order_42352_coke_2026-10-02_portal2pct",
+          "restatedAt": "2026-09-30T08:21:14-07:00",
+          "restatedFrom": {
+            "rate": 0.02,
+            "fee": 21.04,
+            "orderTotalFee": 48.59
+          }
+        },
+        {
+          "store": "42352",
+          "date": "2026-09-30",
+          "vendor": "Portal",
+          "description": "Core-Mark portal top-up to 1.5% of $3,923.24 (draft loaded · portal 163154298463455860; 10/2 delivery; $39.23 already billed at 1%)",
+          "sourceAmount": 3923.24,
+          "orderVendor": "Core-Mark",
+          "rate": 0.015,
+          "fee": 19.62,
+          "status": "portal_draft_loaded",
+          "attachment": "42352-cmark-10022026-portal",
+          "pdfUrl": "/order-comparisons/invoices/42352-cmark-10022026.pdf",
+          "portalOrderId": "163154298463455860",
+          "addedAt": "2026-09-30T15:14:18.383Z",
+          "feeId": "aiOrderingPortal",
+          "orderTotalFee": 58.85,
+          "alreadyBilled": 39.23,
+          "sourceId": "order_42352_cmark_2026-10-02_portal15pct",
+          "topUpOf": "Core-Mark AI order 1% of $3923.24 (made 2026-09-30; receive 2026-10-02) fee $39.23",
+          "restatedAt": "2026-09-30T08:21:14-07:00",
+          "restatedFrom": {
+            "rate": 0.02,
+            "fee": 78.46,
+            "description": "Core-Mark portal 2% of $3923.24 (draft loaded · portal 163154298463455860; made 2026-09-30; receive 2026-10-02)",
+            "commit": "32cac3e"
+          },
+          "note": "Restated by Billing 2026-09-30: added at 2% of the full $3,923.24 ($78.46) on top of the existing 1% line ($39.23) = 3% on one order. Per Mina 9/30 8:19 AM PT the portal rate is 1.5% and both rates are never billed: 1.5% x $3,923.24 = $58.85 total; minus $39.23 already billed = $19.62 top-up."
+        },
+        {
+          "store": "42352",
+          "date": "2026-10-01",
+          "vendor": "Ordering",
+          "description": "Pepsi AI order 1% of $2465.87 (made 2026-10-01; receive 2026-10-03)",
+          "sourceAmount": 2465.87,
+          "orderVendor": "Pepsi",
+          "rate": 0.01,
+          "fee": 24.66,
+          "status": "ai_draft_billed",
+          "attachment": "42352-pepsi-10032026.pdf",
+          "pdfUrl": "/order-comparisons/invoices/42352-pepsi-10032026.pdf",
+          "addedAt": "2026-09-30T15:34:25.093Z"
         }
       ],
-      "invoiceCount": 23,
+      "invoiceCount": 28,
       "rate": 0.01,
-      "total": 478.0,
+      "total": 597.95,
       "status": "unpaid",
       "paidAt": null,
-      "updatedAt": "2026-09-24T13:03:00Z",
+      "updatedAt": "2026-09-30T15:21:14Z",
       "stores": [
         "42352"
       ],
@@ -1372,7 +1464,7 @@
       "month": "2026-09",
       "date": "2026-09-07",
       "kind": "ordering_pct",
-      "description": "September 2026 Ordering for Arco Placentia (#42004): 1% of AI order totals (13 orders / $20,707.14 source).",
+      "description": "September 2026 Ordering for Arco Placentia (#42004): 1% of AI order totals (15 orders / $33,978.72 source).",
       "lines": [
         {
           "store": "42004",
@@ -1439,7 +1531,7 @@
           "store": "42004",
           "date": "2026-09-10",
           "vendor": "Ordering",
-          "description": "Pepsi AI order 1% of $1,297.67 (emailed to arcoplacentia@gmail.com; S2K_FRESH 9/3\u20139/9 leftover trim)",
+          "description": "Pepsi AI order 1% of $1,297.67 (emailed to arcoplacentia@gmail.com; S2K_FRESH 9/3–9/9 leftover trim)",
           "sourceAmount": 1297.67,
           "orderVendor": "Pepsi",
           "emailTo": "arcoplacentia@gmail.com",
@@ -1465,7 +1557,7 @@
           "store": "42004",
           "date": "2026-09-15",
           "vendor": "Ordering",
-          "description": "Harbor AI order 1% of $1,091.29 (draft 2026-09-15 \u2014 awaiting Mina confirm to email)",
+          "description": "Harbor AI order 1% of $1,091.29 (draft 2026-09-15 — awaiting Mina confirm to email)",
           "sourceAmount": 1091.29,
           "orderVendor": "Harbor",
           "rate": 0.01,
@@ -1477,7 +1569,7 @@
           "store": "42004",
           "date": "2026-09-15",
           "vendor": "Ordering",
-          "description": "Coke AI draft 1% of $405.14 (emailed arcoplacentia@gmail.com; My Coke draft not saved \u2014 login blocker)",
+          "description": "Coke AI draft 1% of $405.14 (emailed arcoplacentia@gmail.com; My Coke draft not saved — login blocker)",
           "sourceAmount": 405.14,
           "orderVendor": "Coke",
           "rate": 0.01,
@@ -1489,7 +1581,7 @@
           "store": "42004",
           "date": "2026-09-17",
           "vendor": "Ordering",
-          "description": "Pepsi AI draft 1% of $180.69 (10 cases \u00b7 10 lines \u00b7 sales 2026-09-10\u20132026-09-16; PDF emailed arcoplacentia@gmail.com + Rachel)",
+          "description": "Pepsi AI draft 1% of $180.69 (10 cases · 10 lines · sales 2026-09-10–2026-09-16; PDF emailed arcoplacentia@gmail.com + Rachel)",
           "sourceAmount": 180.69,
           "orderVendor": "Pepsi",
           "rate": 0.01,
@@ -1589,7 +1681,7 @@
           "store": "42004",
           "date": "2026-09-22",
           "vendor": "Ordering",
-          "description": "Coke AI order 1% of $826.07 (AI draft 2026-09-22; list/PDF only \u2014 emailed=false, submitted=false)",
+          "description": "Coke AI order 1% of $826.07 (AI draft 2026-09-22; list/PDF only — emailed=false, submitted=false)",
           "sourceAmount": 826.07,
           "orderVendor": "Coke",
           "rate": 0.01,
@@ -1640,7 +1732,7 @@
           "store": "42004",
           "date": "2026-09-27",
           "vendor": "Ordering",
-          "description": "Pepsi 1% of $996.54 (AI order \u00b7 receive 2026-09-26)",
+          "description": "Pepsi 1% of $996.54 (AI order · receive 2026-09-26)",
           "sourceAmount": 996.54,
           "orderVendor": "Pepsi",
           "rate": 0.01,
@@ -1656,7 +1748,7 @@
           "store": "42004",
           "date": "2026-09-27",
           "vendor": "Ordering",
-          "description": "Harbor 1% of $2251.43 (AI order \u00b7 receive 2026-09-30)",
+          "description": "Harbor 1% of $2251.43 (AI order · receive 2026-09-30)",
           "sourceAmount": 2251.43,
           "orderVendor": "Harbor",
           "rate": 0.01,
@@ -1672,20 +1764,6 @@
           "store": "42004",
           "date": "2026-09-29",
           "vendor": "Ordering",
-          "description": "Coke AI order 1% of $1212.56 (made 2026-09-29; receive 2026-10-01)",
-          "sourceAmount": 1212.56,
-          "orderVendor": "Coke",
-          "rate": 0.01,
-          "fee": 12.13,
-          "status": "ai_draft_billed",
-          "attachment": "42004-coke-10012026.pdf",
-          "pdfUrl": "/order-comparisons/invoices/42004-coke-10012026.pdf",
-          "addedAt": "2026-09-30T03:00:02.143Z"
-        },
-        {
-          "store": "42004",
-          "date": "2026-09-29",
-          "vendor": "Ordering",
           "description": "Pepsi AI order 1% of $1147.02 (made 2026-09-29; receive 2026-10-01)",
           "sourceAmount": 1147.02,
           "orderVendor": "Pepsi",
@@ -1694,12 +1772,40 @@
           "status": "ai_draft_billed",
           "attachment": "42004-pepsi-10012026.pdf",
           "pdfUrl": "/order-comparisons/invoices/42004-pepsi-10012026.pdf",
-          "addedAt": "2026-09-30T03:00:02.143Z"
+          "addedAt": "2026-09-30T05:56:56.560Z"
+        },
+        {
+          "store": "42004",
+          "date": "2026-09-29",
+          "vendor": "Ordering",
+          "description": "Coke AI order 1% of $1212.56 (made 2026-09-29; receive 2026-10-01)",
+          "sourceAmount": 1212.56,
+          "orderVendor": "Coke",
+          "rate": 0.01,
+          "fee": 12.13,
+          "status": "ai_draft_billed",
+          "attachment": "42004-coke-10012026.pdf",
+          "pdfUrl": "/order-comparisons/invoices/42004-coke-10012026.pdf",
+          "addedAt": "2026-09-30T05:56:56.561Z"
+        },
+        {
+          "store": "42004",
+          "date": "2026-09-30",
+          "vendor": "Ordering",
+          "description": "Red Bull AI order 1% of $736.32 (made 2026-09-30; receive 2026-10-02)",
+          "sourceAmount": 736.32,
+          "orderVendor": "Red Bull",
+          "rate": 0.01,
+          "fee": 7.36,
+          "status": "ai_draft_billed",
+          "attachment": "42004-redbull-10022026.pdf",
+          "pdfUrl": "/order-comparisons/invoices/42004-redbull-10022026.pdf",
+          "addedAt": "2026-09-30T14:52:14.169Z"
         }
       ],
       "invoiceCount": 20,
       "rate": 0.01,
-      "total": 440.68,
+      "total": 448.04,
       "status": "unpaid",
       "paidAt": null,
       "updatedAt": "2026-09-25T15:12:35Z",
@@ -1721,7 +1827,7 @@
       "month": "2026-09",
       "date": "2026-09-07",
       "kind": "ordering_pct",
-      "description": "September 2026 Ordering for Farsai Inc (#42179): 1% of AI order totals (7 orders / $14,251.71 source).",
+      "description": "September 2026 Ordering for Arco HB (#42179): 1% of Sent order totals (drafts excluded).",
       "lines": [
         {
           "store": "42179",
@@ -1808,7 +1914,7 @@
           "store": "42179",
           "date": "2026-09-27",
           "vendor": "Ordering",
-          "description": "Pepsi 1% of $1177.09 (AI order \u00b7 receive 2026-09-26)",
+          "description": "Pepsi 1% of $1177.09 (AI order · receive 2026-09-26)",
           "sourceAmount": 1177.09,
           "orderVendor": "Pepsi",
           "rate": 0.01,
@@ -1824,7 +1930,7 @@
           "store": "42179",
           "date": "2026-09-27",
           "vendor": "Ordering",
-          "description": "Harbor 1% of $2939.71 (AI order \u00b7 receive 2026-09-30)",
+          "description": "Harbor 1% of $2939.71 (AI order · receive 2026-09-30)",
           "sourceAmount": 2939.71,
           "orderVendor": "Harbor",
           "rate": 0.01,
@@ -1876,7 +1982,7 @@
           "status": "ai_draft_billed",
           "attachment": "42179-cmark-10012026.pdf",
           "pdfUrl": "/order-comparisons/invoices/42179-cmark-10012026.pdf",
-          "addedAt": "2026-09-30T02:48:20.484Z"
+          "addedAt": "2026-09-30T05:56:56.561Z"
         },
         {
           "store": "42179",
@@ -1890,12 +1996,26 @@
           "status": "ai_draft_billed",
           "attachment": "42179-harbor-10012026.pdf",
           "pdfUrl": "/order-comparisons/invoices/42179-harbor-10012026.pdf",
-          "addedAt": "2026-09-30T02:48:20.484Z"
+          "addedAt": "2026-09-30T05:56:56.561Z"
+        },
+        {
+          "store": "42179",
+          "date": "2026-09-30",
+          "vendor": "Ordering",
+          "description": "Pepsi AI order 1% of $1127.14 (made 2026-09-30; receive 2026-10-02)",
+          "sourceAmount": 1127.14,
+          "orderVendor": "Pepsi",
+          "rate": 0.01,
+          "fee": 11.27,
+          "status": "ai_draft_billed",
+          "attachment": "42179-pepsi-10022026.pdf",
+          "pdfUrl": "/order-comparisons/invoices/42179-pepsi-10022026.pdf",
+          "addedAt": "2026-09-30T14:52:14.170Z"
         }
       ],
       "invoiceCount": 7,
       "rate": 0.01,
-      "total": 224.13,
+      "total": 235.4,
       "status": "unpaid",
       "paidAt": null,
       "updatedAt": "2026-09-23T03:47:02Z",
@@ -1905,41 +2025,6 @@
       "autoCharged": true,
       "basisKind": "all_orders_pct",
       "sentOnly": true
-    },
-    {
-      "id": "inv_arco-db_2026-09_schedule",
-      "client": "Arco Db",
-      "clientEmails": [
-        "owner@farsai"
-      ],
-      "month": "2026-09",
-      "date": "2026-09-08",
-      "kind": "schedule_tasks",
-      "description": "September 2026: Schedule $25 + Tasks $25 (Arco Db #42352).",
-      "lines": [
-        {
-          "store": "42352",
-          "date": "2026-09-08",
-          "vendor": "Schedule",
-          "description": "Schedule fee $25/month",
-          "sourceAmount": 25,
-          "fee": 25
-        },
-        {
-          "store": "42352",
-          "date": "2026-09-08",
-          "vendor": "Tasks",
-          "description": "Tasks fee $25/month",
-          "sourceAmount": 25,
-          "fee": 25
-        }
-      ],
-      "invoiceCount": 2,
-      "rate": 25,
-      "total": 50,
-      "status": "unpaid",
-      "paidAt": null,
-      "updatedAt": "2026-09-08T21:18:57Z"
     },
     {
       "id": "inv_arco-hb_2026-09_schedule",
@@ -2027,7 +2112,7 @@
           "store": "42352",
           "date": "2026-09-15",
           "vendor": "Pricebook",
-          "description": "5 creates \u00d7 $0.25: Trolli Spicy Crawlers (041420091971), Reese\u2019s Big Cup Strawberry PB&J KS (034000450225), Archer Original Beef Stick (853016002571), Archer Jalape\u00f1o Beef Stick (853016002649), Archer Original Turkey Stick (853016002663)",
+          "description": "5 creates × $0.25: Trolli Spicy Crawlers (041420091971), Reese’s Big Cup Strawberry PB&J KS (034000450225), Archer Original Beef Stick (853016002571), Archer Jalapeño Beef Stick (853016002649), Archer Original Turkey Stick (853016002663)",
           "itemCount": 5,
           "unitCost": 0.25,
           "fee": 1.25,
@@ -2040,7 +2125,7 @@
               "action": "create"
             },
             {
-              "name": "Reese\u2019s Big Cup Strawberry PB&J King Size",
+              "name": "Reese’s Big Cup Strawberry PB&J King Size",
               "upc": "034000450225",
               "retail": 3.99,
               "action": "create"
@@ -2052,7 +2137,7 @@
               "action": "create"
             },
             {
-              "name": "Archer Jalape\u00f1o Beef Stick",
+              "name": "Archer Jalapeño Beef Stick",
               "upc": "853016002649",
               "retail": 2.99,
               "action": "create"
@@ -2069,36 +2154,36 @@
           "store": "42352",
           "date": "2026-09-01",
           "vendor": "Pricebook",
-          "description": "77 Gatorade 28oz retail edits \u2192 $3.79 \u00d7 $0.25",
+          "description": "77 Gatorade 28oz retail edits → $3.79 × $0.25",
           "itemCount": 77,
           "unitCost": 0.25,
           "fee": 19.25,
           "workType": "edit",
-          "note": "Gatorade 28oz retail \u2192 $3.79"
+          "note": "Gatorade 28oz retail → $3.79"
         },
         {
           "store": "42352",
           "date": "2026-09-17",
           "vendor": "Pricebook",
-          "description": "63 Monster 16oz retail edits \u2192 $3.99 \u00d7 $0.25 (pending unpublished)",
+          "description": "63 Monster 16oz retail edits → $3.99 × $0.25 (pending unpublished)",
           "itemCount": 63,
           "unitCost": 0.25,
           "fee": 15.75,
           "workType": "edit",
           "status": "pending_unpublished",
-          "note": "Monster 16oz retail \u2192 $3.99"
+          "note": "Monster 16oz retail → $3.99"
         },
         {
           "store": "42352",
           "date": "2026-09-17",
           "vendor": "Pricebook",
-          "description": "44 Red Bull 8.4oz retail edits \u2192 $3.99 \u00d7 $0.25 (pending unpublished; CRV untouched)",
+          "description": "44 Red Bull 8.4oz retail edits → $3.99 × $0.25 (pending unpublished; CRV untouched)",
           "itemCount": 44,
           "unitCost": 0.25,
           "fee": 11,
           "workType": "edit",
           "status": "pending_unpublished",
-          "note": "Red Bull 8.4oz retail \u2192 $3.99; CRV untouched"
+          "note": "Red Bull 8.4oz retail → $3.99; CRV untouched"
         },
         {
           "store": "42352",
@@ -2209,18 +2294,18 @@
           "store": "42004",
           "date": "2026-09-01",
           "vendor": "Pricebook",
-          "description": "77 Gatorade 28oz retail edits \u2192 $3.79 \u00d7 $0.25 (was pending)",
+          "description": "77 Gatorade 28oz retail edits → $3.79 × $0.25 (was pending)",
           "itemCount": 77,
           "unitCost": 0.25,
           "fee": 19.25,
           "workType": "edit",
-          "note": "Gatorade 28oz retail \u2192 $3.79"
+          "note": "Gatorade 28oz retail → $3.79"
         },
         {
           "store": "42004",
           "date": "2026-09-15",
           "vendor": "Pricebook",
-          "description": "4 creates \u00d7 $0.25 (pending unpublished): Trolli Spicy Crawlers (041420091971 @$4.29), Archer Original Beef (853016002571 @$2.99), Archer Jalape\u00f1o Beef (853016002649 @$2.99), Archer Original Turkey (853016002663 @$2.99). Reese\u2019s held.",
+          "description": "4 creates × $0.25 (pending unpublished): Trolli Spicy Crawlers (041420091971 @$4.29), Archer Original Beef (853016002571 @$2.99), Archer Jalapeño Beef (853016002649 @$2.99), Archer Original Turkey (853016002663 @$2.99). Reese’s held.",
           "itemCount": 4,
           "unitCost": 0.25,
           "fee": 1,
@@ -2240,7 +2325,7 @@
               "action": "create"
             },
             {
-              "name": "Archer Jalape\u00f1o Beef Stick",
+              "name": "Archer Jalapeño Beef Stick",
               "upc": "853016002649",
               "retail": 2.99,
               "action": "create"
@@ -2257,31 +2342,31 @@
           "store": "42004",
           "date": "2026-09-17",
           "vendor": "Pricebook",
-          "description": "73 Monster retail edits \u2192 $3.99 \u00d7 $0.25 (pending unpublished; CRV untouched)",
+          "description": "73 Monster retail edits → $3.99 × $0.25 (pending unpublished; CRV untouched)",
           "itemCount": 73,
           "unitCost": 0.25,
           "fee": 18.25,
           "workType": "edit",
           "status": "pending_unpublished",
-          "note": "Monster retail \u2192 $3.99; CRV untouched"
+          "note": "Monster retail → $3.99; CRV untouched"
         },
         {
           "store": "42004",
           "date": "2026-09-17",
           "vendor": "Pricebook",
-          "description": "44 Red Bull 8.4oz retail edits \u2192 $3.99 \u00d7 $0.25 (pending unpublished; CRV untouched)",
+          "description": "44 Red Bull 8.4oz retail edits → $3.99 × $0.25 (pending unpublished; CRV untouched)",
           "itemCount": 44,
           "unitCost": 0.25,
           "fee": 11,
           "workType": "edit",
           "status": "pending_unpublished",
-          "note": "Red Bull 8.4oz retail \u2192 $3.99; CRV untouched"
+          "note": "Red Bull 8.4oz retail → $3.99; CRV untouched"
         },
         {
           "store": "42004",
           "date": "2026-09-26",
           "vendor": "Pricebook",
-          "description": "2 creates/setup \u00d7 $0.25 (pending unpublished for manager): GILLETTE BLUE II PLUS RAZORS 2PK (8888855001432 @$2.49), TRASH BAGS 45 GALLON (964150113327 @$39.99)",
+          "description": "2 creates/setup × $0.25 (pending unpublished for manager): GILLETTE BLUE II PLUS RAZORS 2PK (8888855001432 @$2.49), TRASH BAGS 45 GALLON (964150113327 @$39.99)",
           "itemCount": 2,
           "unitCost": 0.25,
           "fee": 0.5,
@@ -2475,18 +2560,18 @@
           "store": "42179",
           "date": "2026-09-01",
           "vendor": "Pricebook",
-          "description": "77 Gatorade 28oz retail edits \u2192 $3.79 \u00d7 $0.25",
+          "description": "77 Gatorade 28oz retail edits → $3.79 × $0.25",
           "itemCount": 77,
           "unitCost": 0.25,
           "fee": 19.25,
           "workType": "edit",
-          "note": "Gatorade 28oz retail \u2192 $3.79"
+          "note": "Gatorade 28oz retail → $3.79"
         },
         {
           "store": "42179",
           "date": "2026-09-15",
           "vendor": "Pricebook",
-          "description": "4 creates/edits \u00d7 $0.25 (pending unpublished): Trolli Spicy Crawlers (041420091971 create @$4.29), Archer Original Beef (853016002571 create @$2.99), Archer Jalape\u00f1o Beef (853016002649 edit $1.69\u2192$2.99), Archer Original Turkey (853016002663 create @$2.99). Reese\u2019s excluded (bad UPC).",
+          "description": "4 creates/edits × $0.25 (pending unpublished): Trolli Spicy Crawlers (041420091971 create @$4.29), Archer Original Beef (853016002571 create @$2.99), Archer Jalapeño Beef (853016002649 edit $1.69→$2.99), Archer Original Turkey (853016002663 create @$2.99). Reese’s excluded (bad UPC).",
           "itemCount": 4,
           "unitCost": 0.25,
           "fee": 1,
@@ -2506,7 +2591,7 @@
               "action": "create"
             },
             {
-              "name": "Archer Jalape\u00f1o Beef Stick",
+              "name": "Archer Jalapeño Beef Stick",
               "upc": "853016002649",
               "retail": 2.99,
               "action": "edit",
@@ -2524,44 +2609,44 @@
           "store": "42179",
           "date": "2026-09-17",
           "vendor": "Pricebook",
-          "description": "73 Monster retail edits \u2192 $3.99 \u00d7 $0.25 (pending unpublished; CRV untouched)",
+          "description": "73 Monster retail edits → $3.99 × $0.25 (pending unpublished; CRV untouched)",
           "itemCount": 73,
           "unitCost": 0.25,
           "fee": 18.25,
           "workType": "edit",
           "status": "pending_unpublished",
-          "note": "Monster retail \u2192 $3.99; CRV untouched"
+          "note": "Monster retail → $3.99; CRV untouched"
         },
         {
           "store": "42179",
           "date": "2026-09-17",
           "vendor": "Pricebook",
-          "description": "44 Red Bull 8.4oz retail edits \u2192 $3.99 \u00d7 $0.25 (pending unpublished; CRV untouched)",
+          "description": "44 Red Bull 8.4oz retail edits → $3.99 × $0.25 (pending unpublished; CRV untouched)",
           "itemCount": 44,
           "unitCost": 0.25,
           "fee": 11,
           "workType": "edit",
           "status": "pending_unpublished",
-          "note": "Red Bull 8.4oz retail \u2192 $3.99; CRV untouched"
+          "note": "Red Bull 8.4oz retail → $3.99; CRV untouched"
         },
         {
           "store": "42179",
           "date": "2026-09-17",
           "vendor": "Pricebook",
-          "description": "1 lighter retail edit \u00d7 $0.25: UPC 853195009590 \u2192 $1.49 (pending for Robert). Mass 66 lighter edits reverted \u2014 not billed.",
+          "description": "1 lighter retail edit × $0.25: UPC 853195009590 → $1.49 (pending for Robert). Mass 66 lighter edits reverted — not billed.",
           "itemCount": 1,
           "unitCost": 0.25,
           "fee": 0.25,
           "workType": "edit",
           "status": "pending_for_robert",
           "upc": "853195009590",
-          "note": "retail \u2192 $1.49; mass lighter edits (66) reverted \u2014 do not bill"
+          "note": "retail → $1.49; mass lighter edits (66) reverted — do not bill"
         },
         {
           "store": "42179",
           "date": "2026-09-18",
           "vendor": "Pricebook",
-          "description": "8 pricebook not-setup fixes \u00d7 $0.25 (from GrokBot-Billing charge queue 2026-09-18)",
+          "description": "8 pricebook not-setup fixes × $0.25 (from GrokBot-Billing charge queue 2026-09-18)",
           "itemCount": 8,
           "unitCost": 0.25,
           "fee": 2,
@@ -2713,7 +2798,7 @@
           "billableLines": 60,
           "unitCost": 0.1,
           "fee": 6,
-          "description": "S2K enter/fix \u00b7 60 billable lines \u00d7 $0.10"
+          "description": "S2K enter/fix · 60 billable lines × $0.10"
         },
         {
           "store": "42179",
@@ -2723,7 +2808,7 @@
           "billableLines": 9,
           "unitCost": 0.1,
           "fee": 0.9,
-          "description": "S2K enter/fix \u00b7 9 billable lines \u00d7 $0.10"
+          "description": "S2K enter/fix · 9 billable lines × $0.10"
         },
         {
           "store": "42179",
@@ -2733,7 +2818,7 @@
           "billableLines": 19,
           "unitCost": 0.1,
           "fee": 1.9,
-          "description": "S2K CRV rebuild \u00b7 19 billable lines \u00d7 $0.10"
+          "description": "S2K CRV rebuild · 19 billable lines × $0.10"
         }
       ],
       "invoiceCount": 3,
@@ -2760,7 +2845,7 @@
       "month": "2026-09",
       "date": "2026-09-22",
       "kind": "ordering_pct",
-      "description": "September 2026 Ordering for Brookhurst 75 (#42098): 1% of AI order totals (4 orders / $4,753.25 source).",
+      "description": "September 2026 Ordering for Brookhurst 75 (#42098): 1% of AI order totals.",
       "invoiceCount": 6,
       "rate": 0.01,
       "total": 113.22,
@@ -2778,7 +2863,7 @@
           "store": "42098",
           "date": "2026-09-22",
           "vendor": "Ordering",
-          "description": "Harbor AI order 1% of $1,956.03 (AI draft created 2026-09-22; PDF held, no client email; sales window 9/14\u20139/20)",
+          "description": "Harbor AI order 1% of $1,956.03 (AI draft created 2026-09-22; PDF held, no client email; sales window 9/14–9/20)",
           "sourceAmount": 1956.03,
           "orderVendor": "Harbor",
           "rate": 0.01,
@@ -2889,13 +2974,13 @@
       "month": "2026-09",
       "date": "2026-09-22",
       "kind": "ordering_pct",
-      "description": "September 2026 Ordering for Westminster (#42021): 1% of AI order totals (5 orders / $3,574.33 source).",
-      "invoiceCount": 6,
+      "description": "September 2026 Ordering for Westminster (#42021): 1% of AI order totals.",
+      "invoiceCount": 8,
       "rate": 0.01,
-      "total": 69.21,
+      "total": 81.81,
       "status": "unpaid",
       "paidAt": null,
-      "updatedAt": "2026-09-25T15:12:35Z",
+      "updatedAt": "2026-09-30T15:13:53Z",
       "stores": [
         "42021"
       ],
@@ -2941,7 +3026,7 @@
           "store": "42021",
           "date": "2026-09-24",
           "vendor": "Ordering",
-          "description": "Pepsi AI draft 1% of $394.53 (18 cases \u00b7 18 lines; OneDrive PDF verified TOTAL; receive 2026-09-26; awaiting email)",
+          "description": "Pepsi AI draft 1% of $394.53 (18 cases · 18 lines; OneDrive PDF verified TOTAL; receive 2026-09-26; awaiting email)",
           "sourceAmount": 394.53,
           "orderVendor": "Pepsi",
           "rate": 0.01,
@@ -2980,7 +3065,7 @@
           "store": "42021",
           "date": "2026-09-26",
           "vendor": "Ordering",
-          "description": "Red Bull 1% of $205.20 (AI order \u00b7 receive 2026-09-29)",
+          "description": "Red Bull 1% of $205.20 (AI order · receive 2026-09-29)",
           "sourceAmount": 205.2,
           "orderVendor": "Red Bull",
           "rate": 0.01,
@@ -2997,7 +3082,7 @@
           "store": "42021",
           "date": "2026-09-27",
           "vendor": "Ordering",
-          "description": "Harbor 1% of $833.57 (AI order \u00b7 receive 2026-09-29)",
+          "description": "Harbor 1% of $833.57 (AI order · receive 2026-09-29)",
           "sourceAmount": 833.57,
           "orderVendor": "Harbor",
           "rate": 0.01,
@@ -3008,6 +3093,40 @@
           "salesWindow": "2026-09-20..2026-09-26",
           "reportedBy": "Ampm Ordering",
           "addedAt": "2026-09-27T10:45:00-07:00"
+        },
+        {
+          "store": "42021",
+          "date": "2026-09-29",
+          "vendor": "Ordering",
+          "description": "Pepsi AI order 1% of $434.49 (made 2026-09-29; receive 2026-10-01)",
+          "sourceAmount": 434.49,
+          "orderVendor": "Pepsi",
+          "rate": 0.01,
+          "fee": 4.34,
+          "status": "ai_draft_billed",
+          "attachment": "42021-pepsi-10012026.pdf",
+          "pdfUrl": "/order-comparisons/invoices/42021-pepsi-10012026.pdf",
+          "addedAt": "2026-09-30T05:56:56.561Z",
+          "sourceId": "order_42021_pepsi_2026-10-01",
+          "movedFrom": "stray invoice inv_westminster_2026-09_ordering (removed 2026-09-30)",
+          "movedAt": "2026-09-30T08:13:53-07:00"
+        },
+        {
+          "store": "42021",
+          "date": "2026-09-30",
+          "vendor": "Ordering",
+          "description": "Coke AI order 1% of $825.72 (made 2026-09-30; receive 2026-10-02)",
+          "sourceAmount": 825.72,
+          "orderVendor": "Coke",
+          "rate": 0.01,
+          "fee": 8.26,
+          "status": "ai_draft_billed",
+          "attachment": "42021-coke-10022026.pdf",
+          "pdfUrl": "/order-comparisons/invoices/42021-coke-10022026.pdf",
+          "addedAt": "2026-09-30T14:52:14.170Z",
+          "sourceId": "order_42021_coke_2026-10-02",
+          "movedFrom": "stray invoice inv_westminster_2026-09_ordering (removed 2026-09-30)",
+          "movedAt": "2026-09-30T08:13:53-07:00"
         }
       ]
     },
@@ -3021,10 +3140,10 @@
       "month": "2026-09",
       "date": "2026-09-22",
       "kind": "ordering_pct",
-      "description": "September 2026 Ordering for San Diego (#42048): 1% of AI order totals (5 orders / $9,743.38 source).",
-      "invoiceCount": 5,
+      "description": "September 2026 Ordering for San Diego (#42048): 1% of AI order totals.",
+      "invoiceCount": 6,
       "rate": 0.01,
-      "total": 97.43,
+      "total": 182.27,
       "status": "unpaid",
       "paidAt": null,
       "updatedAt": "2026-09-23T02:50:40Z",
@@ -3073,7 +3192,7 @@
           "store": "42048",
           "date": "2026-09-27",
           "vendor": "Ordering",
-          "description": "Core-Mark 1% of $2189.28 (AI order \u00b7 receive 2026-09-29)",
+          "description": "Core-Mark 1% of $2189.28 (AI order · receive 2026-09-29)",
           "sourceAmount": 2189.28,
           "orderVendor": "Core-Mark",
           "rate": 0.01,
@@ -3089,7 +3208,7 @@
           "store": "42048",
           "date": "2026-09-27",
           "vendor": "Ordering",
-          "description": "Red Bull 1% of $473.76 (AI order \u00b7 receive 2026-09-29)",
+          "description": "Red Bull 1% of $473.76 (AI order · receive 2026-09-29)",
           "sourceAmount": 473.76,
           "orderVendor": "Red Bull",
           "rate": 0.01,
@@ -3105,7 +3224,7 @@
           "store": "42048",
           "date": "2026-09-27",
           "vendor": "Ordering",
-          "description": "Pepsi 1% of $817.38 (AI order \u00b7 receive 2026-09-26)",
+          "description": "Pepsi 1% of $817.38 (AI order · receive 2026-09-26)",
           "sourceAmount": 817.38,
           "orderVendor": "Pepsi",
           "rate": 0.01,
@@ -3116,6 +3235,48 @@
           "salesWindow": "2026-09-20..2026-09-26",
           "reportedBy": "Ampm Ordering",
           "addedAt": "2026-09-27T10:45:00-07:00"
+        },
+        {
+          "store": "42048",
+          "date": "2026-09-29",
+          "vendor": "Ordering",
+          "description": "Coke AI order 1% of $4302.24 (made 2026-09-29; receive 2026-10-01)",
+          "sourceAmount": 4302.24,
+          "orderVendor": "Coke",
+          "rate": 0.01,
+          "fee": 43.02,
+          "status": "ai_draft_billed",
+          "attachment": "42048-coke-10012026.pdf",
+          "pdfUrl": "/order-comparisons/invoices/42048-coke-10012026.pdf",
+          "addedAt": "2026-09-30T05:56:56.561Z"
+        },
+        {
+          "store": "42048",
+          "date": "2026-09-30",
+          "vendor": "Ordering",
+          "description": "Pepsi AI order 1% of $436.20 (made 2026-09-30; receive 2026-10-02)",
+          "sourceAmount": 436.2,
+          "orderVendor": "Pepsi",
+          "rate": 0.01,
+          "fee": 4.36,
+          "status": "ai_draft_billed",
+          "attachment": "42048-pepsi-10022026.pdf",
+          "pdfUrl": "/order-comparisons/invoices/42048-pepsi-10022026.pdf",
+          "addedAt": "2026-09-30T14:52:14.170Z"
+        },
+        {
+          "store": "42048",
+          "date": "2026-09-30",
+          "vendor": "Ordering",
+          "description": "Core-Mark AI order 1% of $3745.78 (made 2026-09-30; receive 2026-10-02)",
+          "sourceAmount": 3745.78,
+          "orderVendor": "Core-Mark",
+          "rate": 0.01,
+          "fee": 37.46,
+          "status": "ai_draft_billed",
+          "attachment": "42048-cmark-10022026.pdf",
+          "pdfUrl": "/order-comparisons/invoices/42048-cmark-10022026.pdf",
+          "addedAt": "2026-09-30T14:52:14.170Z"
         }
       ]
     },
@@ -3129,7 +3290,7 @@
       "month": "2026-09",
       "date": "2026-09-22",
       "kind": "ordering_pct",
-      "description": "September 2026 Ordering for Koval (#42279): 1% of AI order totals (7 orders / $7,511.36 source).",
+      "description": "September 2026 Ordering for Koval (#42279): 1% of AI order totals.",
       "invoiceCount": 5,
       "rate": 0.01,
       "total": 148.95,
@@ -3198,7 +3359,7 @@
           "store": "42279",
           "date": "2026-09-27",
           "vendor": "Ordering",
-          "description": "Nevada Beverage 1% of $98.65 (AI order \u00b7 receive 2026-09-29)",
+          "description": "Nevada Beverage 1% of $98.65 (AI order · receive 2026-09-29)",
           "sourceAmount": 98.65,
           "orderVendor": "Nevada Beverage",
           "rate": 0.01,
@@ -3215,7 +3376,7 @@
           "store": "42279",
           "date": "2026-09-27",
           "vendor": "Ordering",
-          "description": "Pepsi 1% of $781.59 (AI order \u00b7 receive 2026-09-26)",
+          "description": "Pepsi 1% of $781.59 (AI order · receive 2026-09-26)",
           "sourceAmount": 781.59,
           "orderVendor": "Pepsi",
           "rate": 0.01,
@@ -3281,7 +3442,7 @@
           "status": "ai_draft_billed",
           "attachment": "42279-pepsi-10012026.pdf",
           "pdfUrl": "/order-comparisons/invoices/42279-pepsi-10012026.pdf",
-          "addedAt": "2026-09-30T02:48:20.485Z"
+          "addedAt": "2026-09-30T05:56:56.561Z"
         },
         {
           "store": "42279",
@@ -3295,7 +3456,7 @@
           "status": "ai_draft_billed",
           "attachment": "42279-cmark-10012026.pdf",
           "pdfUrl": "/order-comparisons/invoices/42279-cmark-10012026.pdf",
-          "addedAt": "2026-09-30T02:48:20.485Z"
+          "addedAt": "2026-09-30T05:56:56.561Z"
         }
       ]
     },
@@ -3309,10 +3470,10 @@
       "month": "2026-09",
       "date": "2026-09-22",
       "kind": "ordering_pct",
-      "description": "September 2026 Ordering for Spring Mtn (#42280): 1% of AI order totals (6 orders / $7,154.78 source).",
+      "description": "September 2026 Ordering for Spring Mtn (#42280): 1% of AI order totals.",
       "invoiceCount": 4,
       "rate": 0.01,
-      "total": 97.68,
+      "total": 127.53,
       "status": "unpaid",
       "paidAt": null,
       "updatedAt": "2026-09-23T02:50:40Z",
@@ -3361,7 +3522,7 @@
           "store": "42280",
           "date": "2026-09-26",
           "vendor": "Ordering",
-          "description": "Core-Mark 1% of $1407.40 (AI order \u00b7 receive 2026-09-29)",
+          "description": "Core-Mark 1% of $1407.40 (AI order · receive 2026-09-29)",
           "sourceAmount": 1407.4,
           "orderVendor": "Core-Mark",
           "rate": 0.01,
@@ -3378,7 +3539,7 @@
           "store": "42280",
           "date": "2026-09-27",
           "vendor": "Ordering",
-          "description": "Pepsi 1% of $552.73 (AI order \u00b7 receive 2026-09-30)",
+          "description": "Pepsi 1% of $552.73 (AI order · receive 2026-09-30)",
           "sourceAmount": 552.73,
           "orderVendor": "Pepsi",
           "rate": 0.01,
@@ -3416,7 +3577,7 @@
           "status": "ai_draft_billed",
           "attachment": "42280-nevada-10012026.pdf",
           "pdfUrl": "/order-comparisons/invoices/42280-nevada-10012026.pdf",
-          "addedAt": "2026-09-30T02:48:20.485Z"
+          "addedAt": "2026-09-30T05:56:56.561Z"
         },
         {
           "store": "42280",
@@ -3430,7 +3591,21 @@
           "status": "ai_draft_billed",
           "attachment": "42280-redbull-10012026.pdf",
           "pdfUrl": "/order-comparisons/invoices/42280-redbull-10012026.pdf",
-          "addedAt": "2026-09-30T02:48:20.485Z"
+          "addedAt": "2026-09-30T05:56:56.561Z"
+        },
+        {
+          "store": "42280",
+          "date": "2026-09-30",
+          "vendor": "Ordering",
+          "description": "Core-Mark AI order 1% of $2985.43 (made 2026-09-30; receive 2026-10-02)",
+          "sourceAmount": 2985.43,
+          "orderVendor": "Core-Mark",
+          "rate": 0.01,
+          "fee": 29.85,
+          "status": "ai_draft_billed",
+          "attachment": "42280-cmark-10022026.pdf",
+          "pdfUrl": "/order-comparisons/invoices/42280-cmark-10022026.pdf",
+          "addedAt": "2026-09-30T14:52:14.170Z"
         }
       ]
     },
@@ -3444,10 +3619,10 @@
       "month": "2026-09",
       "date": "2026-09-22",
       "kind": "ordering_pct",
-      "description": "September 2026 Ordering for Charleston (#42281): 1% of AI order totals (6 orders / $4,118.34 source).",
+      "description": "September 2026 Ordering for Charleston (#42281): 1% of AI order totals.",
       "invoiceCount": 4,
       "rate": 0.01,
-      "total": 61.42,
+      "total": 101.89,
       "status": "unpaid",
       "paidAt": null,
       "updatedAt": "2026-09-23T02:50:40Z",
@@ -3496,7 +3671,7 @@
           "store": "42281",
           "date": "2026-09-26",
           "vendor": "Ordering",
-          "description": "Core-Mark 1% of $802.14 (AI order \u00b7 receive 2026-09-29)",
+          "description": "Core-Mark 1% of $802.14 (AI order · receive 2026-09-29)",
           "sourceAmount": 802.14,
           "orderVendor": "Core-Mark",
           "rate": 0.01,
@@ -3513,7 +3688,7 @@
           "store": "42281",
           "date": "2026-09-26",
           "vendor": "Ordering",
-          "description": "Pepsi 1% of $437.95 (AI order \u00b7 receive 2026-09-29)",
+          "description": "Pepsi 1% of $437.95 (AI order · receive 2026-09-29)",
           "sourceAmount": 437.95,
           "orderVendor": "Pepsi",
           "rate": 0.01,
@@ -3567,6 +3742,34 @@
           "attachment": "42281-redbull-09302026.pdf",
           "pdfUrl": "/order-comparisons/invoices/42281-redbull-09302026.pdf",
           "addedAt": "2026-09-29T05:06:10.587Z"
+        },
+        {
+          "store": "42281",
+          "date": "2026-09-30",
+          "vendor": "Ordering",
+          "description": "Southern Glazers AI order 1% of $1861.54 (made 2026-09-30; receive 2026-10-02)",
+          "sourceAmount": 1861.54,
+          "orderVendor": "Southern Glazers",
+          "rate": 0.01,
+          "fee": 18.62,
+          "status": "ai_draft_billed",
+          "attachment": "42281-southern_glazers-10022026.pdf",
+          "pdfUrl": "/order-comparisons/invoices/42281-southern_glazers-10022026.pdf",
+          "addedAt": "2026-09-30T14:52:14.170Z"
+        },
+        {
+          "store": "42281",
+          "date": "2026-09-30",
+          "vendor": "Ordering",
+          "description": "Core-Mark AI order 1% of $2185.18 (made 2026-09-30; receive 2026-10-02)",
+          "sourceAmount": 2185.18,
+          "orderVendor": "Core-Mark",
+          "rate": 0.01,
+          "fee": 21.85,
+          "status": "ai_draft_billed",
+          "attachment": "42281-cmark-10022026.pdf",
+          "pdfUrl": "/order-comparisons/invoices/42281-cmark-10022026.pdf",
+          "addedAt": "2026-09-30T14:52:14.170Z"
         }
       ]
     },
@@ -3580,13 +3783,13 @@
       "month": "2026-09",
       "date": "2026-09-22",
       "kind": "ordering_pct",
-      "description": "September 2026 Ordering for Oakey Las Vegas Blvd (#42282): 1% of AI order totals (6 orders / $2,680.02 source).",
-      "invoiceCount": 4,
+      "description": "September 2026 Ordering for Oakey Las Vegas Blvd #42282: 1% of AI order totals.",
+      "invoiceCount": 9,
       "rate": 0.01,
-      "total": 37.09,
+      "total": 58.95,
       "status": "unpaid",
       "paidAt": null,
-      "updatedAt": "2026-09-23T03:47:02Z",
+      "updatedAt": "2026-09-30T15:13:53Z",
       "stores": [
         "42282"
       ],
@@ -3632,7 +3835,7 @@
           "store": "42282",
           "date": "2026-09-27",
           "vendor": "Ordering",
-          "description": "Core-Mark 1% of $515.95 (AI order \u00b7 receive 2026-09-29)",
+          "description": "Core-Mark 1% of $515.95 (AI order · receive 2026-09-29)",
           "sourceAmount": 515.95,
           "orderVendor": "Core-Mark",
           "rate": 0.01,
@@ -3648,7 +3851,7 @@
           "store": "42282",
           "date": "2026-09-27",
           "vendor": "Ordering",
-          "description": "Pepsi 1% of $59.04 (AI order \u00b7 receive 2026-09-30)",
+          "description": "Pepsi 1% of $59.04 (AI order · receive 2026-09-30)",
           "sourceAmount": 59.04,
           "orderVendor": "Pepsi",
           "rate": 0.01,
@@ -3687,6 +3890,55 @@
           "attachment": "42282-southern_glazers-09302026.pdf",
           "pdfUrl": "/order-comparisons/invoices/42282-southern_glazers-09302026.pdf",
           "addedAt": "2026-09-29T05:06:10.587Z"
+        },
+        {
+          "store": "42282",
+          "date": "2026-09-29",
+          "vendor": "Ordering",
+          "description": "Nevada Beverage AI order 1% of $233.54 (made 2026-09-29; receive 2026-10-01)",
+          "sourceAmount": 233.54,
+          "orderVendor": "Nevada Beverage",
+          "rate": 0.01,
+          "fee": 2.34,
+          "status": "ai_draft_billed",
+          "attachment": "42282-nevada-10012026.pdf",
+          "pdfUrl": "/order-comparisons/invoices/42282-nevada-10012026.pdf",
+          "addedAt": "2026-09-30T05:56:56.561Z",
+          "sourceId": "order_42282_nevada_2026-10-01",
+          "movedFrom": "stray invoice inv_oakey_2026-09_ordering (removed 2026-09-30)",
+          "movedAt": "2026-09-30T08:13:53-07:00"
+        },
+        {
+          "store": "42282",
+          "date": "2026-09-30",
+          "vendor": "Ordering",
+          "description": "Core-Mark AI order 1% of $1013.28 (made 2026-09-30; receive 2026-10-02)",
+          "sourceAmount": 1013.28,
+          "orderVendor": "Core-Mark",
+          "rate": 0.01,
+          "fee": 10.13,
+          "status": "ai_draft_billed",
+          "attachment": "42282-cmark-10022026.pdf",
+          "pdfUrl": "/order-comparisons/invoices/42282-cmark-10022026.pdf",
+          "addedAt": "2026-09-30T14:52:14.170Z",
+          "sourceId": "order_42282_cmark_2026-10-02",
+          "movedFrom": "stray invoice inv_oakey_2026-09_ordering (removed 2026-09-30)",
+          "movedAt": "2026-09-30T08:13:53-07:00"
+        },
+        {
+          "store": "42282",
+          "date": "2026-09-30",
+          "vendor": "Ordering",
+          "description": "Red Bull AI order 1% of $939.12 (made 2026-09-30; receive 2026-10-02)",
+          "sourceAmount": 939.12,
+          "orderVendor": "Red Bull",
+          "rate": 0.01,
+          "fee": 9.39,
+          "status": "ai_draft_billed",
+          "attachment": "42282-redbull-10022026.pdf",
+          "pdfUrl": "/order-comparisons/invoices/42282-redbull-10022026.pdf",
+          "addedAt": "2026-09-30T15:34:13.314Z",
+          "feeId": "aiOrdering"
         }
       ]
     },
@@ -3700,10 +3952,10 @@
       "month": "2026-09",
       "date": "2026-09-22",
       "kind": "ordering_pct",
-      "description": "September 2026 Ordering for Garden Grove (#42399): 1% of AI order totals (4 orders / $12,147.78 source).",
+      "description": "September 2026 Ordering for Garden Grove (#42399): 1% of AI order totals.",
       "invoiceCount": 5,
       "rate": 0.01,
-      "total": 165.02,
+      "total": 179.6,
       "status": "unpaid",
       "paidAt": null,
       "updatedAt": "2026-09-24T23:40:00-07:00",
@@ -3786,7 +4038,7 @@
           "store": "42399",
           "date": "2026-09-27",
           "vendor": "Ordering",
-          "description": "Harbor 1% of $3430.95 (AI order \u00b7 receive 2026-09-30)",
+          "description": "Harbor 1% of $3430.95 (AI order · receive 2026-09-30)",
           "sourceAmount": 3430.95,
           "orderVendor": "Harbor",
           "rate": 0.01,
@@ -3802,6 +4054,20 @@
           "store": "42399",
           "date": "2026-09-29",
           "vendor": "Ordering",
+          "description": "Coke AI order 1% of $543.98 (made 2026-09-29; receive 2026-10-01)",
+          "sourceAmount": 543.98,
+          "orderVendor": "Coke",
+          "rate": 0.01,
+          "fee": 5.44,
+          "status": "ai_draft_billed",
+          "attachment": "42399-coke-10012026.pdf",
+          "pdfUrl": "/order-comparisons/invoices/42399-coke-10012026.pdf",
+          "addedAt": "2026-09-30T05:56:56.561Z"
+        },
+        {
+          "store": "42399",
+          "date": "2026-09-29",
+          "vendor": "Ordering",
           "description": "Core-Mark AI order 1% of $4549.70 (made 2026-09-29; receive 2026-10-01)",
           "sourceAmount": 4549.7,
           "orderVendor": "Core-Mark",
@@ -3810,7 +4076,35 @@
           "status": "ai_draft_billed",
           "attachment": "42399-cmark-10012026.pdf",
           "pdfUrl": "/order-comparisons/invoices/42399-cmark-10012026.pdf",
-          "addedAt": "2026-09-30T02:48:20.485Z"
+          "addedAt": "2026-09-30T05:56:56.561Z"
+        },
+        {
+          "store": "42399",
+          "date": "2026-09-30",
+          "vendor": "Ordering",
+          "description": "Red Bull AI order 1% of $465.12 (made 2026-09-30; receive 2026-10-02)",
+          "sourceAmount": 465.12,
+          "orderVendor": "Red Bull",
+          "rate": 0.01,
+          "fee": 4.65,
+          "status": "ai_draft_billed",
+          "attachment": "42399-redbull-10022026.pdf",
+          "pdfUrl": "/order-comparisons/invoices/42399-redbull-10022026.pdf",
+          "addedAt": "2026-09-30T14:52:14.170Z"
+        },
+        {
+          "store": "42399",
+          "date": "2026-09-30",
+          "vendor": "Ordering",
+          "description": "Pepsi AI order 1% of $449.28 (made 2026-09-30; receive 2026-10-02)",
+          "sourceAmount": 449.28,
+          "orderVendor": "Pepsi",
+          "rate": 0.01,
+          "fee": 4.49,
+          "status": "ai_draft_billed",
+          "attachment": "42399-pepsi-10022026.pdf",
+          "pdfUrl": "/order-comparisons/invoices/42399-pepsi-10022026.pdf",
+          "addedAt": "2026-09-30T14:52:14.170Z"
         }
       ]
     },
@@ -3824,10 +4118,10 @@
       "month": "2026-09",
       "date": "2026-09-22",
       "kind": "ordering_pct",
-      "description": "September 2026 Ordering for Vista (#42438): 1% of AI order totals (6 orders / $5,690.55 source).",
+      "description": "September 2026 Ordering for Vista (#42438): 1% of AI order totals.",
       "invoiceCount": 4,
       "rate": 0.01,
-      "total": 81.49,
+      "total": 177.73,
       "status": "unpaid",
       "paidAt": null,
       "updatedAt": "2026-09-24T14:49:42Z",
@@ -3876,7 +4170,7 @@
           "store": "42438",
           "date": "2026-09-24",
           "vendor": "Ordering",
-          "description": "Pepsi AI draft 1% of $308.01 (15 cases \u00b7 15 lines; OneDrive PDF verified TOTAL; receive 2026-09-26; awaiting email)",
+          "description": "Pepsi AI draft 1% of $308.01 (15 cases · 15 lines; OneDrive PDF verified TOTAL; receive 2026-09-26; awaiting email)",
           "sourceAmount": 308.01,
           "orderVendor": "Pepsi",
           "rate": 0.01,
@@ -3898,7 +4192,7 @@
           "store": "42438",
           "date": "2026-09-26",
           "vendor": "Ordering",
-          "description": "Core-Mark 1% of $1708.86 (AI order \u00b7 receive 2026-09-29)",
+          "description": "Core-Mark 1% of $1708.86 (AI order · receive 2026-09-29)",
           "sourceAmount": 1708.86,
           "orderVendor": "Core-Mark",
           "rate": 0.01,
@@ -3951,7 +4245,63 @@
           "status": "ai_draft_billed",
           "attachment": "42438-redbull-10012026.pdf",
           "pdfUrl": "/order-comparisons/invoices/42438-redbull-10012026.pdf",
-          "addedAt": "2026-09-30T02:48:20.485Z"
+          "addedAt": "2026-09-30T05:56:56.561Z"
+        },
+        {
+          "store": "42438",
+          "date": "2026-09-30",
+          "vendor": "Ordering",
+          "description": "Southern Glazers AI order 1% of $1516.94 (made 2026-09-30; receive 2026-10-02)",
+          "sourceAmount": 1516.94,
+          "orderVendor": "Southern Glazers",
+          "rate": 0.01,
+          "fee": 15.17,
+          "status": "ai_draft_billed",
+          "attachment": "42438-southern_glazers-10022026.pdf",
+          "pdfUrl": "/order-comparisons/invoices/42438-southern_glazers-10022026.pdf",
+          "addedAt": "2026-09-30T14:52:14.170Z"
+        },
+        {
+          "store": "42438",
+          "date": "2026-09-30",
+          "vendor": "Ordering",
+          "description": "Core-Mark AI order 1% of $4486.82 (made 2026-09-30; receive 2026-10-02)",
+          "sourceAmount": 4486.82,
+          "orderVendor": "Core-Mark",
+          "rate": 0.01,
+          "fee": 44.87,
+          "status": "ai_draft_billed",
+          "attachment": "42438-cmark-10022026.pdf",
+          "pdfUrl": "/order-comparisons/invoices/42438-cmark-10022026.pdf",
+          "addedAt": "2026-09-30T14:52:14.170Z"
+        },
+        {
+          "store": "42438",
+          "date": "2026-10-01",
+          "vendor": "Ordering",
+          "description": "Pepsi AI order 1% of $2043.01 (made 2026-10-01; receive 2026-10-03)",
+          "sourceAmount": 2043.01,
+          "orderVendor": "Pepsi",
+          "rate": 0.01,
+          "fee": 20.43,
+          "status": "ai_draft_billed",
+          "attachment": "42438-pepsi-10032026.pdf",
+          "pdfUrl": "/order-comparisons/invoices/42438-pepsi-10032026.pdf",
+          "addedAt": "2026-09-30T15:34:25.093Z"
+        },
+        {
+          "store": "42438",
+          "date": "2026-10-01",
+          "vendor": "Ordering",
+          "description": "Southern Glazers AI order 1% of $1577.46 (made 2026-10-01; receive 2026-10-03)",
+          "sourceAmount": 1577.46,
+          "orderVendor": "Southern Glazers",
+          "rate": 0.01,
+          "fee": 15.77,
+          "status": "ai_draft_billed",
+          "attachment": "42438-southern_glazers-10032026.pdf",
+          "pdfUrl": "/order-comparisons/invoices/42438-southern_glazers-10032026.pdf",
+          "addedAt": "2026-09-30T15:34:25.093Z"
         }
       ]
     },
@@ -3965,10 +4315,10 @@
       "month": "2026-09",
       "date": "2026-09-22",
       "kind": "ordering_pct",
-      "description": "September 2026 Ordering for Lamb (#42439): 1% of AI order totals (7 orders / $5,095.01 source).",
+      "description": "September 2026 Ordering for Lamb (#42439): 1% of AI order totals.",
       "invoiceCount": 6,
       "rate": 0.01,
-      "total": 70.94,
+      "total": 120.39,
       "status": "unpaid",
       "paidAt": null,
       "updatedAt": "2026-09-23T02:50:40Z",
@@ -4034,7 +4384,7 @@
           "store": "42439",
           "date": "2026-09-26",
           "vendor": "Ordering",
-          "description": "Core-Mark 1% of $997.60 (AI order \u00b7 receive 2026-09-29)",
+          "description": "Core-Mark 1% of $997.60 (AI order · receive 2026-09-29)",
           "sourceAmount": 997.6,
           "orderVendor": "Core-Mark",
           "rate": 0.01,
@@ -4051,7 +4401,7 @@
           "store": "42439",
           "date": "2026-09-26",
           "vendor": "Ordering",
-          "description": "Nevada Beverage 1% of $26.76 (AI order \u00b7 receive 2026-09-29)",
+          "description": "Nevada Beverage 1% of $26.76 (AI order · receive 2026-09-29)",
           "sourceAmount": 26.76,
           "orderVendor": "Nevada Beverage",
           "rate": 0.01,
@@ -4068,7 +4418,7 @@
           "store": "42439",
           "date": "2026-09-27",
           "vendor": "Ordering",
-          "description": "Pepsi 1% of $384.09 (AI order \u00b7 receive 2026-09-26)",
+          "description": "Pepsi 1% of $384.09 (AI order · receive 2026-09-26)",
           "sourceAmount": 384.09,
           "orderVendor": "Pepsi",
           "rate": 0.01,
@@ -4092,7 +4442,7 @@
           "status": "ai_draft_billed",
           "attachment": "42439-southern_glazers-10012026.pdf",
           "pdfUrl": "/order-comparisons/invoices/42439-southern_glazers-10012026.pdf",
-          "addedAt": "2026-09-30T02:48:20.485Z"
+          "addedAt": "2026-09-30T05:56:56.561Z"
         },
         {
           "store": "42439",
@@ -4106,7 +4456,63 @@
           "status": "ai_draft_billed",
           "attachment": "42439-redbull-10012026.pdf",
           "pdfUrl": "/order-comparisons/invoices/42439-redbull-10012026.pdf",
-          "addedAt": "2026-09-30T02:48:20.485Z"
+          "addedAt": "2026-09-30T05:56:56.561Z"
+        },
+        {
+          "store": "42439",
+          "date": "2026-09-30",
+          "vendor": "Ordering",
+          "description": "Red Bull AI order 1% of $249.36 (made 2026-09-30; receive 2026-10-02)",
+          "sourceAmount": 249.36,
+          "orderVendor": "Red Bull",
+          "rate": 0.01,
+          "fee": 2.49,
+          "status": "ai_draft_billed",
+          "attachment": "42439-redbull-10022026.pdf",
+          "pdfUrl": "/order-comparisons/invoices/42439-redbull-10022026.pdf",
+          "addedAt": "2026-09-30T14:52:14.170Z"
+        },
+        {
+          "store": "42439",
+          "date": "2026-09-30",
+          "vendor": "Ordering",
+          "description": "Pepsi AI order 1% of $460.26 (made 2026-09-30; receive 2026-10-02)",
+          "sourceAmount": 460.26,
+          "orderVendor": "Pepsi",
+          "rate": 0.01,
+          "fee": 4.6,
+          "status": "ai_draft_billed",
+          "attachment": "42439-pepsi-10022026.pdf",
+          "pdfUrl": "/order-comparisons/invoices/42439-pepsi-10022026.pdf",
+          "addedAt": "2026-09-30T14:52:14.170Z"
+        },
+        {
+          "store": "42439",
+          "date": "2026-09-30",
+          "vendor": "Ordering",
+          "description": "Core-Mark AI order 1% of $2393.05 (made 2026-09-30; receive 2026-10-02)",
+          "sourceAmount": 2393.05,
+          "orderVendor": "Core-Mark",
+          "rate": 0.01,
+          "fee": 23.93,
+          "status": "ai_draft_billed",
+          "attachment": "42439-cmark-10022026.pdf",
+          "pdfUrl": "/order-comparisons/invoices/42439-cmark-10022026.pdf",
+          "addedAt": "2026-09-30T14:52:14.170Z"
+        },
+        {
+          "store": "42439",
+          "date": "2026-10-01",
+          "vendor": "Ordering",
+          "description": "Pepsi AI order 1% of $1842.51 (made 2026-10-01; receive 2026-10-03)",
+          "sourceAmount": 1842.51,
+          "orderVendor": "Pepsi",
+          "rate": 0.01,
+          "fee": 18.43,
+          "status": "ai_draft_billed",
+          "attachment": "42439-pepsi-10032026.pdf",
+          "pdfUrl": "/order-comparisons/invoices/42439-pepsi-10032026.pdf",
+          "addedAt": "2026-09-30T15:34:25.093Z"
         }
       ]
     },
@@ -4120,10 +4526,10 @@
       "month": "2026-09",
       "date": "2026-09-22",
       "kind": "ordering_pct",
-      "description": "September 2026 Ordering for Tustin (#42674): 1% of AI order totals (3 orders / $5,759.07 source).",
+      "description": "September 2026 Ordering for Tustin (#42674): 1% of AI order totals.",
       "invoiceCount": 4,
       "rate": 0.01,
-      "total": 117.41,
+      "total": 122.03,
       "status": "unpaid",
       "paidAt": null,
       "updatedAt": "2026-09-23T02:50:40Z",
@@ -4189,7 +4595,7 @@
           "store": "42674",
           "date": "2026-09-27",
           "vendor": "Ordering",
-          "description": "Pepsi 1% of $492.18 (AI order \u00b7 receive 2026-09-25)",
+          "description": "Pepsi 1% of $492.18 (AI order · receive 2026-09-25)",
           "sourceAmount": 492.18,
           "orderVendor": "Pepsi",
           "rate": 0.01,
@@ -4200,6 +4606,20 @@
           "salesWindow": "2026-09-20..2026-09-26",
           "reportedBy": "Ampm Ordering",
           "addedAt": "2026-09-27T10:45:00-07:00"
+        },
+        {
+          "store": "42674",
+          "date": "2026-09-30",
+          "vendor": "Ordering",
+          "description": "Pepsi AI order 1% of $462.12 (made 2026-09-30; receive 2026-10-02)",
+          "sourceAmount": 462.12,
+          "orderVendor": "Pepsi",
+          "rate": 0.01,
+          "fee": 4.62,
+          "status": "ai_draft_billed",
+          "attachment": "42674-pepsi-10022026.pdf",
+          "pdfUrl": "/order-comparisons/invoices/42674-pepsi-10022026.pdf",
+          "addedAt": "2026-09-30T14:52:14.170Z"
         }
       ]
     },
@@ -5219,61 +5639,55 @@
       "updatedAt": "2026-09-29T01:56:11Z"
     },
     {
-      "id": "inv_oakey_2026-09_ordering",
-      "client": "Oakey Las Vegas Blvd",
-      "stationId": "42282",
-      "month": "2026-09",
-      "lines": [
-        {
-          "store": "42282",
-          "date": "2026-09-29",
-          "vendor": "Ordering",
-          "description": "Nevada Beverage AI order 1% of $233.54 (made 2026-09-29; receive 2026-10-01)",
-          "sourceAmount": 233.54,
-          "orderVendor": "Nevada Beverage",
-          "rate": 0.01,
-          "fee": 2.34,
-          "status": "ai_draft_billed",
-          "attachment": "42282-nevada-10012026.pdf",
-          "pdfUrl": "/order-comparisons/invoices/42282-nevada-10012026.pdf",
-          "addedAt": "2026-09-30T02:48:20.485Z"
-        }
-      ],
-      "total": 2.34
-    },
-    {
-      "id": "inv_westminster_2026-09_ordering",
+      "id": "inv_42021_2026-10_ordering",
       "client": "Westminster",
-      "stationId": "42021",
-      "month": "2026-09",
+      "ownerClient": "Westminster",
+      "month": "2026-10",
+      "date": "2026-10-01",
+      "kind": "ordering_pct",
+      "description": "October 2026 Ordering for Westminster (#42021): site-built and portal orders per fees.aiOrdering / fees.aiOrderingPortal.",
+      "invoiceCount": 1,
+      "total": 20.57,
+      "status": "unpaid",
+      "paidAt": null,
+      "stores": [
+        "42021"
+      ],
+      "autoCharged": true,
+      "basisKind": "all_orders_pct",
       "lines": [
         {
           "store": "42021",
-          "date": "2026-09-29",
+          "date": "2026-10-01",
           "vendor": "Ordering",
-          "description": "Pepsi AI order 1% of $434.49 (made 2026-09-29; receive 2026-10-01)",
-          "sourceAmount": 434.49,
+          "description": "Pepsi site ordering $2,113.17 (Oct 2026 marginal 1% on first $2,000 + 0.5% above; fee $20.57)",
+          "sourceAmount": 2113.17,
           "orderVendor": "Pepsi",
-          "rate": 0.01,
-          "fee": 4.34,
+          "rate": 0.005,
+          "fee": 20.57,
           "status": "ai_draft_billed",
-          "attachment": "42021-pepsi-10012026.pdf",
-          "pdfUrl": "/order-comparisons/invoices/42021-pepsi-10012026.pdf",
-          "addedAt": "2026-09-30T02:48:20.485Z"
+          "attachment": "42021-pepsi-10032026.pdf",
+          "pdfUrl": "/order-comparisons/invoices/42021-pepsi-10032026.pdf",
+          "addedAt": "2026-09-30T15:34:25.093Z",
+          "feeId": "aiOrdering"
         }
       ],
-      "total": 4.34
+      "clientEmails": [
+        "owner@bigdaddy"
+      ],
+      "sentOnly": false,
+      "updatedAt": "2026-09-30T15:13:53Z"
     }
   ],
   "expenses": [],
   "rollups": {
-    "incomeTotal": 15466.64,
+    "incomeTotal": 15813.86,
     "expensesTotal": 0,
-    "net": 15456.88
+    "net": 15813.86
   },
-  "incomeTotal": 15466.64,
+  "incomeTotal": 15813.86,
   "expenseTotal": 0,
-  "net": 15456.88,
+  "net": 15813.86,
   "payment": {
     "payableTo": "Smart Solutions AI LLC",
     "bank": "U.S. Bank",
@@ -5301,19 +5715,45 @@
     "aiOrdering": {
       "label": "Ordering",
       "rate": 0.01,
-      "rateLabel": "1% of all order totals per client",
+      "rateLabel": "Sep 2026: 1% of order total (site-built). Oct 2026+: 1% on the first $2,000 of the order + 0.5% on the amount over $2,000.",
       "from": "2026-09",
       "autoCharge": true,
       "chargedPer": "client",
       "basis": "All order totals for that client (charged per client)",
-      "note": "From Sep 2026, 1% of ALL orders per client replaces the flat $250 Ordering fee. Auto-add without asking Mina. Not limited to Harbor/Coke/Pepsi/Core-Mark AI draft aiAmount. August keeps $250 Ordering where applicable.",
+      "note": "Site-built / AI draft orders (not saved in a vendor portal): Sep 2026 flat 1% of order total. From Oct 2026, marginal site rate on order total — 1% × min(total, $2,000) + 0.5% × max(total − $2,000, 0). If the order is later entered in a vendor portal, replace the line with the portal bracket rate (fees.aiOrderingPortal); never bill site and portal fees on the same order. Bill on inv_{storeId}_{YYYY-MM}_ordering only (numeric store id, never inv_oakey_…). Auto-add without asking Mina.",
       "replacesFlatOrdering": true,
       "flatOrderingThrough": "2026-08",
       "flatOrdering": 250,
       "august": "recalculate_preview_no_charge",
       "id": "aiOrdering",
       "basisKind": "all_orders_pct",
-      "requiresExplicitMinaApproval": false
+      "requiresExplicitMinaApproval": false,
+      "invoiceIdPattern": "inv_{storeId}_{YYYY-MM}_ordering",
+      "invoiceIdExamples": [
+        "inv_42282_2026-10_ordering",
+        "inv_42021_2026-10_ordering"
+      ],
+      "neverUseNameBasedInvoiceIds": true,
+      "rateByMonth": {
+        "2026-09": {
+          "kind": "flat_pct",
+          "rate": 0.01
+        },
+        "2026-10": {
+          "kind": "marginal_pct",
+          "segments": [
+            {
+              "upTo": 2000,
+              "rate": 0.01
+            },
+            {
+              "above": 2000,
+              "rate": 0.005
+            }
+          ]
+        }
+      },
+      "portalFeeId": "aiOrderingPortal"
     },
     "setup": {
       "label": "Setup fee",
@@ -5325,7 +5765,7 @@
       "note": "Setup Fees $750 only when Mina explicitly says to charge setup for that store/client. Do NOT auto-add setup.",
       "id": "setup",
       "basisKind": "setup_explicit",
-      "basis": "$750 per store \u2014 only when Mina explicitly approves"
+      "basis": "$750 per store — only when Mina explicitly approves"
     },
     "schedule": {
       "id": "schedule",
@@ -5396,6 +5836,67 @@
         "inventory_count"
       ],
       "note": "Mina rule 2026-09-27: $50 per department, billed each time that department's inventory count is completed for a store. Source: /api/inventory-done (status done only; record id on each line as sourceId/recordId). Billed per store on inv_ _ _inventory under the store's own client name. Lines carry kind inventory_count + store + dept + countDate so the Billing page's /api/inventory-done merge sees them and does not add them again."
+    },
+    "aiOrderingPortal": {
+      "id": "aiOrderingPortal",
+      "label": "Ordering (entered in vendor portal)",
+      "rate": 0.015,
+      "rateLabel": "Sep 30–Sep 2026: 1.5% when a bot saves the order in the portal (top-up from 1% site). Oct 2026+: one bracket rate on full order value — 1% if under $1,000; 1.5% if $1,000–$2,000; 1% if over $2,000.",
+      "from": "2026-09-30",
+      "autoCharge": true,
+      "chargedPer": "order",
+      "basisKind": "all_orders_pct",
+      "requiresExplicitMinaApproval": false,
+      "basis": "Vendor portal entry (Customer First, My Coke, etc.) by a bot: Sep 30–Sep 2026 use 1.5% top-up from site 1%; Oct 2026+ use a single bracket rate on the full portal order value.",
+      "note": "Mina 2026-09-30: Sep orders keep Sep rules (1% site; portal top-up to 1.5% from 9/30, no double bill). Mina 2026-09-30 PM: Oct 2026+ portal brackets — under $1,000 → 1%; $1,000 through $2,000 → 1.5%; over $2,000 → 1%. Charge each order at one rate only. If a site-built order is later saved in the portal, change that order's fee to the portal bracket (replace the line; do not add a second fee). Bill on inv_{storeId}_{YYYY-MM}_ordering. Bill each store under its own client name.",
+      "rateHistory": [
+        {
+          "rate": 0.02,
+          "from": "2026-09-30T08:05-07:00",
+          "to": "2026-09-30T08:19-07:00"
+        },
+        {
+          "rate": 0.015,
+          "from": "2026-09-30T08:19-07:00"
+        },
+        {
+          "note": "Oct 2026 bracket schedule; Sep 2026 portal top-up unchanged",
+          "from": "2026-10-01"
+        }
+      ],
+      "invoiceIdPattern": "inv_{storeId}_{YYYY-MM}_ordering",
+      "invoiceIdExamples": [
+        "inv_42282_2026-10_ordering",
+        "inv_42021_2026-10_ordering"
+      ],
+      "neverUseNameBasedInvoiceIds": true,
+      "rateByMonth": {
+        "2026-09": {
+          "kind": "portal_top_up",
+          "siteRate": 0.01,
+          "portalRate": 0.015,
+          "effectiveFrom": "2026-09-30"
+        },
+        "2026-10": {
+          "kind": "bracket_pct",
+          "brackets": [
+            {
+              "maxExclusive": 1000,
+              "rate": 0.01
+            },
+            {
+              "minInclusive": 1000,
+              "maxInclusive": 2000,
+              "rate": 0.015
+            },
+            {
+              "minExclusive": 2000,
+              "rate": 0.01
+            }
+          ],
+          "replacesSiteLineWhenPortalSaved": true
+        }
+      }
     }
   },
   "s2kUsagePreview": [
@@ -5463,7 +5964,7 @@
   "augustPreviewUnderSepRules": {
     "month": "2026-08",
     "charged": false,
-    "note": "Recalculated under Sep 2026 fee rules for preview only \u2014 no charge for August.",
+    "note": "Recalculated under Sep 2026 fee rules for preview only — no charge for August.",
     "s2kInvoicing": {
       "rate": 0.1,
       "stores": [
@@ -5747,12 +6248,13 @@
           ],
           "s2kLines": 153,
           "s2kFee": 15.3,
-          "aiOrderTotal": 20182.88,
-          "aiFee": 201.83,
-          "totalFee": 325.38,
+          "aiOrderTotal": 43519.22,
+          "aiFee": 435.19,
+          "totalFee": 587.25,
           "charged": true,
           "pricebookFee": 58.25,
-          "inventoryFee": 50
+          "inventoryFee": 50,
+          "aiPortalTopUpFee": 28.51
         },
         {
           "client": "Arco Placentia",
@@ -5761,9 +6263,9 @@
           ],
           "s2kLines": 267,
           "s2kFee": 26.7,
-          "aiOrderTotal": 20707.14,
-          "aiFee": 207.07,
-          "totalFee": 359.32,
+          "aiOrderTotal": 37725.45,
+          "aiFee": 377.26,
+          "totalFee": 529.51,
           "charged": true,
           "pricebookFee": 68.25,
           "inventoryFee": 50,
@@ -5776,9 +6278,9 @@
           ],
           "s2kLines": 88,
           "s2kFee": 8.8,
-          "aiOrderTotal": 14251.71,
-          "aiFee": 142.52,
-          "totalFee": 225.82,
+          "aiOrderTotal": 8161.25,
+          "aiFee": 81.61,
+          "totalFee": 164.91,
           "charged": true,
           "pricebookFee": 74.5
         },
@@ -5789,9 +6291,9 @@
           ],
           "s2kLines": 0,
           "s2kFee": 0,
-          "aiOrderTotal": 3574.33,
-          "aiFee": 35.74,
-          "totalFee": 50.19,
+          "aiOrderTotal": 5881.96,
+          "aiFee": 58.82,
+          "totalFee": 73.27,
           "charged": true,
           "pricebookFee": 9.75,
           "aiPriceRecommendationFee": 4.7
@@ -5803,9 +6305,9 @@
           ],
           "s2kLines": 0,
           "s2kFee": 0,
-          "aiOrderTotal": 9743.38,
-          "aiFee": 97.43,
-          "totalFee": 110.53,
+          "aiOrderTotal": 6262.96,
+          "aiFee": 62.63,
+          "totalFee": 75.73,
           "charged": true,
           "pricebookFee": 6,
           "aiPriceRecommendationFee": 7.1
@@ -5817,9 +6319,9 @@
           ],
           "s2kLines": 0,
           "s2kFee": 0,
-          "aiOrderTotal": 4753.25,
-          "aiFee": 47.53,
-          "totalFee": 66.68,
+          "aiOrderTotal": 6569.2,
+          "aiFee": 65.69,
+          "totalFee": 84.84,
           "charged": true,
           "pricebookFee": 12.25,
           "aiPriceRecommendationFee": 6.9
@@ -5831,9 +6333,9 @@
           ],
           "s2kLines": 0,
           "s2kFee": 0,
-          "aiOrderTotal": 7511.36,
-          "aiFee": 75.11,
-          "totalFee": 77.91,
+          "aiOrderTotal": 5268.55,
+          "aiFee": 52.68,
+          "totalFee": 55.48,
           "charged": true,
           "pricebookFee": 2,
           "aiPriceRecommendationFee": 0.8
@@ -5845,9 +6347,9 @@
           ],
           "s2kLines": 0,
           "s2kFee": 0,
-          "aiOrderTotal": 7154.78,
-          "aiFee": 71.55,
-          "totalFee": 76.95,
+          "aiOrderTotal": 5206.73,
+          "aiFee": 52.07,
+          "totalFee": 57.47,
           "charged": true,
           "pricebookFee": 0,
           "aiPriceRecommendationFee": 5.4
@@ -5859,9 +6361,9 @@
           ],
           "s2kLines": 0,
           "s2kFee": 0,
-          "aiOrderTotal": 4118.34,
-          "aiFee": 41.18,
-          "totalFee": 52.18,
+          "aiOrderTotal": 4053.56,
+          "aiFee": 40.54,
+          "totalFee": 51.54,
           "charged": true,
           "pricebookFee": 0,
           "aiPriceRecommendationFee": 11
@@ -5873,9 +6375,9 @@
           ],
           "s2kLines": 0,
           "s2kFee": 0,
-          "aiOrderTotal": 2680.02,
-          "aiFee": 26.8,
-          "totalFee": 38.0,
+          "aiOrderTotal": 2560.96,
+          "aiFee": 25.61,
+          "totalFee": 36.81,
           "charged": true,
           "pricebookFee": 8,
           "aiPriceRecommendationFee": 3.2
@@ -5887,9 +6389,9 @@
           ],
           "s2kLines": 0,
           "s2kFee": 0,
-          "aiOrderTotal": 12147.78,
-          "aiFee": 121.48,
-          "totalFee": 172.23,
+          "aiOrderTotal": 6654.69,
+          "aiFee": 66.55,
+          "totalFee": 117.3,
           "charged": true,
           "pricebookFee": 36.25,
           "aiPriceRecommendationFee": 14.5
@@ -5901,9 +6403,9 @@
           ],
           "s2kLines": 0,
           "s2kFee": 0,
-          "aiOrderTotal": 5690.55,
-          "aiFee": 56.91,
-          "totalFee": 65.61,
+          "aiOrderTotal": 5182.32,
+          "aiFee": 51.82,
+          "totalFee": 60.52,
           "charged": true,
           "pricebookFee": 0,
           "aiPriceRecommendationFee": 8.7
@@ -5915,9 +6417,9 @@
           ],
           "s2kLines": 0,
           "s2kFee": 0,
-          "aiOrderTotal": 5095.01,
-          "aiFee": 50.95,
-          "totalFee": 61.05,
+          "aiOrderTotal": 3972.41,
+          "aiFee": 39.72,
+          "totalFee": 49.82,
           "charged": true,
           "pricebookFee": 0,
           "aiPriceRecommendationFee": 10.1
@@ -5929,9 +6431,9 @@
           ],
           "s2kLines": 0,
           "s2kFee": 0,
-          "aiOrderTotal": 5759.07,
-          "aiFee": 57.59,
-          "totalFee": 116.69,
+          "aiOrderTotal": 9025.69,
+          "aiFee": 90.25,
+          "totalFee": 149.35,
           "charged": true,
           "pricebookFee": 0,
           "inventoryFee": 50,
@@ -5940,9 +6442,9 @@
       ]
     }
   },
-  "rateNote": "Setup $750 only when Mina says. Schedule $25/mo + Tasks $25/mo. Ordering 1% all orders (Sep+). S2K $0.10/line (Sep+).",
-  "deployStamp": "billing-sot-brookhurst-ordering-merge-20260929",
-  "billingSotNote": "2026-09-29 ~4:51 AM PT: Cleanup, no charge change: moved the single line (Brookhurst #42098 Red Bull AI order 1% of $520.32 = $5.20, receive 2026-09-30, sourceId order_42098_redbull_2026-09-30) from a store-mis-named invoice onto inv_42098_2026-09_ordering (client/ownerClient Brookhurst 75) 108.02->113.22, and removed the old invoice (added by another bot 9/28 under a non-store name). Dedupe: no other Red Bull $520.32 / 42098-redbull-09302026 line existed. incomeTotal unchanged 14626.02. Previous stamp billing-sot-aipricing-entries-20260929. 2026-09-29 ~4:48 AM PT: AI Pricing S2K entries (pricebook $0.25 x itemsEntered, workType ai_pricing_entry), Website Builder handoff 9/29 4:47 AM PT, 12 done approvals verified against /api/ai-pricing/approvals (+$88.75): Arco HB (#42179) aip_mukig8r4db6c0ff0 66 +$16.50; Oakey Las Vegas Blvd (#42282) aip_mukjpb1u57fb61a9 32 +$8.00; Brookhurst 75 (#42098) aip_muld4zee5bc67a05 25 +$6.25; Brookhurst 75 (#42098) aip_muldihbi211a1dd5 9 +$2.25; Brookhurst 75 (#42098) aip_muldkwasac7c8e32 8 +$2.00; Brookhurst 75 (#42098) aip_muldlck939f64b63 2 +$0.50; Brookhurst 75 (#42098) aip_muldlua12882f2f1 2 +$0.50; Brookhurst 75 (#42098) aip_muldm59r3f1e7ee9 3 +$0.75; San Diego (#42048) aip_mulnja0zab8b8e2b 24 +$6.00; Westminster (#42021) aip_mum5j9kq672ec0b5 36 +$9.00; Westminster (#42021) aip_mum5ibrg32597f6b 3 +$0.75; Garden Grove (#42399) aip_mum5n7xz7e4033cc 145 +$36.25. Invoices: inv_arco-hb_2026-09_pricebook 67.50->84.00; inv_42282_2026-09_pricebook 3.20->11.20; inv_42098_2026-09_pricebook 6.90->19.15; inv_42048_2026-09_pricebook 7.10->13.10; inv_42021_2026-09_pricebook 4.70->14.45; inv_42399_2026-09_pricebook 14.50->50.75. Merged live first (other bots: Oakey inventory, 9/28 ordering lines; base 14537.27). /api/inventory-done: 4 done, all already billed. incomeTotal 14537.27->14626.02. Previous stamp billing-sot-oakey-inventory-done-id-20260928. 2026-09-28 ~7:00 PM PT: Synced inv_42282_2026-09_inventory sourceId/recordId to live /api/inventory-done id invd_mum14ayqoy8b0z (was invd_mum0z1rsieqebd; marked done via admin browser). No incomeTotal change (14454.63). Previous stamp billing-sot-oakey-inventory-20260928. 2026-09-28 ~6:55 PM PT: Oakey Las Vegas Blvd #42282 Cigarettes inventory count 2026-09-28 +$50 (inv_42282_2026-09_inventory, sourceId invd_mum0z1rsieqebd; Website Builder publish of Jayden packet; inventory-done backfill in billing.json). incomeTotal 14404.63->14454.63 (+50). Previous stamp billing-sot-aipricing-rec-entries-20260928. 2026-09-28 ~8:41 AM PT: AI Pricing auto-bill (Mina standing rule). Pricebook $0.25 x itemsEntered for done approvals (+$16.00): Arco HB (#42179) aip_mukf9tme2ea29411 +$2.50; Arco HB (#42179) aip_mukgnjlr4a22e3c5 +$3.50; Arco Db (#42352) aip_mukgrz1fc54e4ce2 +$5.75; Koval (#42279) aip_mukjhweh04fa1f66 +$2.00; Arco Placentia (#42004) aip_mukknxei4a66ac53 +$1.75; Arco Placentia (#42004) aip_mukl3g7i83e2f8b7 +$0.25; Arco Placentia (#42004) aip_mukl3ud1f746b578 +$0.25. AI Pricing recommendations $0.10, weekly report 2026-09-21..09-26, after ignores, sourceId aiprec_ _2026-09-21 (+$88.80): Arco Placentia (#42004) 73 +$7.30; Brookhurst 75 (#42098) 69 +$6.90; Charleston (#42281) 110 +$11.00; Garden Grove (#42399) 145 +$14.50; Koval (#42279) 8 +$0.80; Lamb (#42439) 101 +$10.10; Oakey Las Vegas Blvd (#42282) 32 +$3.20; San Diego (#42048) 71 +$7.10; Spring Mtn (#42280) 54 +$5.40; Tustin (#42674) 91 +$9.10; Vista (#42438) 87 +$8.70; Westminster (#42021) 47 +$4.70. Arco Db/HB recommendations already billed 2026-09-27 (44/95), not re-billed. New pricebook invoices: inv_42279_2026-09_pricebook, inv_42098_2026-09_pricebook, inv_42281_2026-09_pricebook, inv_42399_2026-09_pricebook, inv_42439_2026-09_pricebook, inv_42282_2026-09_pricebook, inv_42048_2026-09_pricebook, inv_42280_2026-09_pricebook, inv_42674_2026-09_pricebook, inv_42438_2026-09_pricebook, inv_42021_2026-09_pricebook. incomeTotal 14299.83->14404.63 (+104.80). Previous stamp billing-sot-inventory-aipricing-20260928. 2026-09-28 ~8:37 AM PT: Inventory count fee + AI Pricing S2K entries. Added fees.inventoryCount ($50 per department, billed each time a department count is completed; Mina rule 2026-09-27). Inventory (from /api/inventory-done, status done, 3 records): Arco Db #42352 Cigarettes 2026-09-26 +$50 (inv_arco-db_2026-09_inventory, new), Tustin #42674 Cigarettes 2026-09-26 +$50 (inv_42674_2026-09_inventory, new), Arco Placentia #42004 Cigarettes 2026-09-27 +$50 (inv_arco-placentia_2026-09_inventory, new). AI Pricing part 2 (pricebook $0.25 x items entered in S2K as pending, approvals status done): Arco Placentia aip_mukhd59u624226c7 44 +$11.00 and aip_mukhfmtfdc4cd041 20 +$5.00 (inv_arco-placentia_2026-09_pricebook 50.00->66.00); Arco HB aip_muka7pq9fb796b16 1 +$0.25 (inv_arco-hb_2026-09_pricebook); Arco Db aip_mukef6f3c251c300 13 +$3.25 and aip_mukegmz6e4ea8769 8 +$2.00 (inv_arco-db_2026-09_pricebook). Source ids on each line (sourceId). Placentia $0.10 recommendations NOT billed. incomeTotal 14128.33->14299.83 (+171.50). Previous stamp billing-sot-placa-s2k-pb-catchup-20260928. 2026-09-28 ~8:30 AM PT: CATCH-UP Arco Placentia #42004 S2K enter/fix +$26.00 (260 billable lines @ $0.10) + Pricebook +$0.50 (2 items @ $0.25, pending unpublished for manager). inv_arco-placentia_2026-09 0.7->26.7 (billableLines 7->267); inv_arco-placentia_2026-09_pricebook 49.5->50.0. incomeTotal 14101.83->14128.33. OD: HANDOFF-charge-placa-s2k-pb-2026-09-26 + charge-queue-placa-s2k-pb-2026-09-26.json. Previous stamp billing-sot-ai-pricing-db-hb-20260927. 2026-09-27 ~2:05 PM PT: AI Pricing recommendations $0.10/item (fee aiPriceRecommendation), weekly report 2026-09-27, Mina approved ~1:57 PM PT: Arco Db #42352 44 items +$4.40 (inv_arco-db_2026-09_pricebook 47.25->51.65), Arco HB #42179 95 items +$9.50 (inv_arco-hb_2026-09_pricebook 51.75->61.25). No $0.25 part (no S2K retails changed). Cursor handoffs bh-20260927-134521-itemad-0e1934/-fc9b07. incomeTotal 14087.93->14101.83. Previous stamp billing-sot-ai-pricing-rate-20260927. 2026-09-27 ~1:55 PM PT: rate card only (no charge). Added fees.aiPriceRecommendation $0.10 per AI-recommended price-increase item per store per weekly report (Mina 2026-09-27 1:51 PM PT); S2K changes reuse pricebook $0.25/item (note updated). No invoice or incomeTotal change (14087.93). Previous stamp billing-sot-mon-0928-harbor-pepsi-coke-20260925. 2026-09-25: Brookhurst Harbor 1% +$13.75 of $1,374.72, Brookhurst Pepsi 1% +$2.54 of $253.92, Tustin Harbor 1% +$22.24 of $2,223.69, Lamb Coke 1% +$0.29 of $29.28. incomeTotal 13777.66->13816.48. Previous stamp billing-sot-placa-wm-cmark-0928-20260925. 2026-09-24: Westminster #42021 Pepsi AI draft Ordering 1% +$3.95 (EST. COST $394.53). inv 39.92->43.87. Skipped Db Pepsi $5.12 + Vista Pepsi $3.08 (already billed). incomeTotal 13644.46->13648.41. Previous stamp billing-sot-westminster-pepsi-39453-20260924. 2026-09-25: Brookhurst #42098 Core-Mark Ordering 1% +$26.04 (EST. COST $2,604.29). inv 65.69->91.73. incomeTotal 13648.41->13674.45. Previous stamp billing-sot-brookhurst-cmark-260429-20260925. 2026-09-24: Koval #42279 Core-Mark Ordering 1% +$21.15 (EST. COST $2,114.61). inv 52.68->73.83. incomeTotal 13674.45->13695.60. Previous stamp billing-sot-koval-cmark-211461-20260924. 2026-09-24: Garden Grove #42399 Core-Mark Ordering 1% +$18.66 (EST. COST $1,866.03). inv 66.55->85.21. incomeTotal 13695.60->13714.26. 2026-09-25 ~8:15 AM PT: Arco Placentia #42004 Core-Mark Ordering 1% +$25.36 (EST. COST $2,535.63). inv 351.90->377.26. Westminster #42021 Core-Mark Ordering 1% +$14.95 (EST. COST $1,495.49). inv 43.87->58.82. Also synced local mirrors to live overnight SoT (Brookhurst +$26.04, Koval +$21.15, Garden Grove +$18.66). incomeTotal 13714.26->13754.57.",
+  "rateNote": "Setup $750 only when Mina says. Schedule $25/mo + Tasks $25/mo. Ordering: Sep 1% site + portal 1.5% top-up from 9/30; Oct site marginal 1%/0.5% + portal brackets. S2K $0.10/line (Sep+).",
+  "deployStamp": "billing-oct2026-ordering-fees-20260930",
+  "billingSotNote": "2026-09-30 PM PT: Oct 2026 ordering fee tiers (Mina). fees.aiOrdering: Oct+ marginal 1% on first $2k + 0.5% above (Sep stays flat 1%). fees.aiOrderingPortal: Oct+ brackets 1% / 1.5% / 1%; Sep portal 1.5% top-up unchanged. invoiceIdPattern inv_{storeId}_{YYYY-MM}_ordering. Cleanup: moved line from inv_oakey_2026-09_ordering -> inv_42282_2026-09_ordering fee 9.39->9.39, removed inv_oakey_2026-09_ordering, moved line from inv_westminster_2026-09_ordering -> inv_42021_2026-10_ordering fee 21.13->20.57, removed inv_westminster_2026-09_ordering. incomeTotal 15814.42->15813.86. 2026-09-30 ~8:21 AM PT: RATE CHANGE (Mina 9/30 8:19 AM PT): fees.aiOrderingPortal 2% -> 1.5%; site-only stays 1%; never both. Restated today's portal lines on inv_arco-db_2026-09_ordering: Coke 10/2 top-up $21.04 -> $8.89 (1.5% x $2,429.56 = $36.44 - $27.55 at 1%; sourceId ..._portal2pct -> order_42352_coke_2026-10-02_portal15pct); Core-Mark 10/2 portal line from 32cac3e $78.46 (2% of full $3,923.24 on top of the $39.23 1% line = 3%) -> $19.62 top-up (1.5% x $3,923.24 = $58.85 - $39.23; sourceId order_42352_cmark_2026-10-02_portal15pct). 1% lines unchanged; nothing before 9/30 changed. inv 644.28->573.29. incomeTotal 15925.60->15854.61 (-70.99, rate-change correction on unpaid same-day lines). rollups were stale at 15847.14 after 32cac3e; now 15854.61. Previous stamp billing-sot-stray-ordering-merge-20260930. 2026-09-30 ~8:13 AM PT: Cleanup, no charge change: merged stray non-standard ordering invoices into the stores' numbered invoices and removed the strays: inv_oakey_2026-09_ordering ($12.47: Nevada Beverage $233.54 fee $2.34 [order_42282_nevada_2026-10-01], Core-Mark $1,013.28 fee $10.13 [order_42282_cmark_2026-10-02]) -> inv_42282_2026-09_ordering $37.09->$49.56; inv_westminster_2026-09_ordering ($12.60: Pepsi $434.49 fee $4.34 [order_42021_pepsi_2026-10-01], Coke $825.72 fee $8.26 [order_42021_coke_2026-10-02]) -> inv_42021_2026-09_ordering $69.21->$81.81. sourceIds added where missing; deduped by sourceId/attachment/vendor+amount+date (no duplicates). incomeTotal unchanged 15847.14. Previous stamp billing-sot-db-coke-portal2pct-20260930. 2026-09-30 ~8:06 AM PT: New rate fees.aiOrderingPortal 2% (Mina 9/30: orders a bot enters in a vendor portal bill 2%; site-only orders stay 1%; never both, top up once saved in portal). Arco Db #42352 Coke 10/2 delivery entered in My Coke 9/30, cart draft $2,429.56 x 2% = $48.59; existing 1% line $27.55 (on $2,755.05 draft) kept; top-up +$21.04 (sourceId order_42352_coke_2026-10-02_portal2pct). inv_arco-db_2026-09_ordering 54",
   "cfDistRefreshAt": "2026-09-24T12:10:59Z",
   "cfDistRefreshNote": "Local mirrors synced after Arco Db Pepsi AI draft Ordering 1% $5.12 (PDF TOTAL $512.17). Live /data needs Website Builder ss-api refresh."
 }
