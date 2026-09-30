@@ -8,3 +8,5 @@ Intact monthly PDFs (Jan–Sep 2026) are here:
 - `reports/Clients/42179 (Arco HB)/Vendor Purchases/`
 
 Other client folders have `Vendor Purchases/INDEX.txt` only (this S2K login cannot pull those stores). ExtraMile is skipped. Laguna, Arco GG, and Brookhurst 20 are under `_Archived`.
+
+Publishing to smartsolutionsai.us: see [SITE-PUBLISH.md](SITE-PUBLISH.md).
