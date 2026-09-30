@@ -1,0 +1,45 @@
+{
+  "stationId": "42438",
+  "client": "Vista",
+  "date": "2026-09-29",
+  "dateLabel": "September 29, 2026",
+  "category": "Cigarettes",
+  "heading": "Count written September 29, 2026. SKU Inventory CIG COUNT 09292026, S2K site 293, transaction 274216. Physical count from CIG SHEET 09292026 compared to Vista S2K QoH.",
+  "summary": "Vista S2K site 293: actual $12,844.88 for 1408 packs on 114 lines. Minus $535.54 (59 packs), plus $4,213.70 (482 packs). Overall $3,678.16.",
+  "count": {
+    "actualPacks": 1408,
+    "actualCost": 12844.88,
+    "minusPacks": 59,
+    "minusCost": 535.54,
+    "plusPacks": 482,
+    "plusCost": 4213.7,
+    "overall": 3678.16
+  },
+  "files": [
+    {
+      "group": "Scans",
+      "label": "Manager count sheet (CIG SHEET 09292026)",
+      "href": "/inventory/42438/2026-09-29/count-sheet.pdf"
+    },
+    {
+      "group": "S2K quantity on hand",
+      "label": "Packs, department 200",
+      "href": "/inventory/42438/2026-09-29/qoh-packs.pdf"
+    },
+    {
+      "group": "S2K quantity on hand",
+      "label": "Cartons, department 281",
+      "href": "/inventory/42438/2026-09-29/qoh-cartons.pdf"
+    },
+    {
+      "group": "S2K quantity on hand",
+      "label": "Quantity on hand change",
+      "href": "/inventory/42438/2026-09-29/s2k-change.pdf"
+    },
+    {
+      "group": "Count",
+      "label": "Cigarette count",
+      "href": "/inventory/42438/2026-09-29/count.pdf"
+    }
+  ]
+}
