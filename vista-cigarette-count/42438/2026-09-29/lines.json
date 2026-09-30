@@ -1480,5 +1480,18 @@
     "varid": -26754,
     "qoh_asof": "2026-09-12",
     "dept": "CIGARETTES - PACKS"
+  },
+  {
+    "n": 115,
+    "upc": "047995200404",
+    "desc": "AMERICAN SPIRIT SKY P",
+    "actual": 8,
+    "qoh": 0.0,
+    "diff": 8.0,
+    "cost": 12.1158,
+    "cost_delta": 96.93,
+    "varid": -34430,
+    "qoh_asof": null,
+    "dept": "CIGARETTES - PACKS"
   }
 ]

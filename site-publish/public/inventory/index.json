@@ -1,6 +1,6 @@
 {
   "schema": "ss-inventory-index-v1",
-  "updated": "2026-09-30T01:15Z",
+  "updated": "2026-09-30T01:26Z",
   "note": "Inventory page entries. Edit this file (not app.html). One entry per client + category + date. count = the four count boxes (null hides them). See docs/INVENTORY-PUBLISH.md.",
   "entries": [
     {
@@ -591,46 +591,42 @@
       "date": "2026-09-29",
       "dateLabel": "September 29, 2026",
       "category": "Cigarettes",
-      "heading": "Count written September 29, 2026 from CIG SHEET 09292026. On that date, S2K quantity on hand was set to those counted packs (SKU Inventory CIG COUNT 09292026, S2K site 293, transaction 274216). American Spirit sky (047995205404) was on the margin note but is not on the 114-line sheet and was not posted.",
-      "summary": "The actual count is $12,844.88 for 1,408 packs on 114 lines. Minus is $535.54, where the book is above the count (59 packs). Plus is $4,213.70, where the count is above the book (482 packs). Overall is positive $3,678.16. Those 114 lines now have quantity on hand equal to the physical count.",
+      "heading": "Count written September 29, 2026 from CIG SHEET 09292026. On that date, S2K quantity on hand was set to those counted packs (SKU Inventory CIG COUNT 09292026, S2K site 293, transaction 274216, plus supplement CIG COUNT 09292026 B, transaction 274218). American Spirit sky, 8 packs on the margin note (S2K UPC 047995200404), was posted on the supplement.",
+      "summary": "Vista S2K site 293: actual $12,941.80 for 1416 packs (114 sheet lines plus margin American Spirit sky). Primary CIG COUNT 09292026 transaction 274216; supplement CIG COUNT 09292026 B transaction 274218. Minus $535.54 (59 packs), plus $4,310.63 (490 packs). Overall $3,775.09.",
       "count": {
-        "actualPacks": 1408,
-        "actualCost": 12844.88,
+        "actualPacks": 1416,
+        "actualCost": 12941.8,
         "minusPacks": 59,
         "minusCost": 535.54,
-        "plusPacks": 482,
-        "plusCost": 4213.7,
-        "overall": 3678.16
+        "plusPacks": 490,
+        "plusCost": 4310.63,
+        "overall": 3775.09
       },
       "files": [
         {
           "group": "Scans",
           "label": "Manager count sheet (CIG SHEET 09292026)",
-          "note": "Handwritten quantity, September 29",
           "href": "/inventory/42438/2026-09-29/count-sheet.pdf"
         },
         {
           "group": "S2K quantity on hand",
           "label": "Packs, department 200",
-          "note": "S2K SKU Sales PDF from before the quantity-on-hand change, August 1 through September 29",
           "href": "/inventory/42438/2026-09-29/qoh-packs.pdf"
         },
         {
           "group": "S2K quantity on hand",
           "label": "Cartons, department 281",
-          "note": "S2K SKU Sales PDF from before the quantity-on-hand change, August 1 through September 29",
           "href": "/inventory/42438/2026-09-29/qoh-cartons.pdf"
         },
         {
           "group": "S2K quantity on hand",
           "label": "Quantity on hand change",
-          "note": "SKU Inventory CIG COUNT 09292026. The counted packs, 1,408 total.",
-          "href": "/inventory/42438/2026-09-29/s2k-change.pdf"
+          "href": "/inventory/42438/2026-09-29/s2k-change.pdf",
+          "note": "SKU Inventory CIG COUNT 09292026 (114 lines) and supplement CIG COUNT 09292026 B (American Spirit sky). 1416 packs total."
         },
         {
           "group": "Count",
           "label": "Cigarette count",
-          "note": "Actual cost, then minus, then plus",
           "href": "/inventory/42438/2026-09-29/count.pdf"
         }
       ],

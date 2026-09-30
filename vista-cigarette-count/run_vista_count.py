@@ -145,11 +145,16 @@ HANDWRITTEN: dict[int, int] = {
 }
 
 # Margin (not on printed 114-line sheet).
-MARGIN_EXTRA = [{"upc": "047995205404", "desc": "American Spirit sky", "qty": 8}]
-
-BELOW_GRID_SKIPPED = [
-    "Margin American Spirit sky (047995205404) — no row on count sheet; not posted unless varid mapped separately.",
+MARGIN_EXTRA = [
+    {
+        "upc": "047995200404",
+        "marginNoteUpc": "047995205404",
+        "desc": "American Spirit sky",
+        "qty": 8,
+    }
 ]
+
+BELOW_GRID_SKIPPED: list[str] = []
 
 
 def merged_counts() -> dict[int, int]:
@@ -390,7 +395,7 @@ def write_pdfs(lines: list[dict], summary: dict, tranid: int | None):
         f"September 29, 2026. Actual {money(summary['actualCost'])} for {summary['actualPacks']} packs. "
         f"Overall {money(summary['overall'])}. Book QoH from S2K site {SITEID} packs report through {REPORT_END}.",
     )
-    actual_rows = sorted(lines, key=lambda r: r["n"])
+    actual_rows = sorted(lines, key=lambda r: (0 if isinstance(r["n"], int) else 1, r["n"]))
     for row in actual_rows:
         row["actual_amt"] = round2(row["actual"] * row["cost"])
     pdf.ln(2)
@@ -429,7 +434,7 @@ def write_pdfs(lines: list[dict], summary: dict, tranid: int | None):
         pdf2.cell(w, 5, label, new_x="RIGHT", new_y="TOP")
     pdf2.ln(5)
     pdf2.set_font("Helvetica", "", 8)
-    for row in sorted(lines, key=lambda r: r["n"]):
+    for row in sorted(lines, key=lambda r: (0 if isinstance(r["n"], int) else 1, r["n"])):
         if pdf2.get_y() > 262:
             pdf2.add_page()
         pdf2.set_x(pdf2.l_margin)

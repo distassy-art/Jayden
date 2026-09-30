@@ -4,16 +4,16 @@
   "date": "2026-09-29",
   "dateLabel": "September 29, 2026",
   "category": "Cigarettes",
-  "heading": "Count written September 29, 2026. SKU Inventory CIG COUNT 09292026, S2K site 293, transaction 274216. Physical count from CIG SHEET 09292026 compared to Vista S2K QoH.",
-  "summary": "Vista S2K site 293: actual $12,844.88 for 1408 packs on 114 lines. Minus $535.54 (59 packs), plus $4,213.70 (482 packs). Overall $3,678.16.",
+  "heading": "Count written September 29, 2026 from CIG SHEET 09292026. On that date, S2K quantity on hand was set to those counted packs (SKU Inventory CIG COUNT 09292026, S2K site 293, transaction 274216, plus supplement CIG COUNT 09292026 B, transaction 274218). American Spirit sky, 8 packs on the margin note (S2K UPC 047995200404), was posted on the supplement.",
+  "summary": "Vista S2K site 293: actual $12,941.80 for 1416 packs (114 sheet lines plus margin American Spirit sky). Primary CIG COUNT 09292026 transaction 274216; supplement CIG COUNT 09292026 B transaction 274218. Minus $535.54 (59 packs), plus $4,310.63 (490 packs). Overall $3,775.09.",
   "count": {
-    "actualPacks": 1408,
-    "actualCost": 12844.88,
+    "actualPacks": 1416,
+    "actualCost": 12941.8,
     "minusPacks": 59,
     "minusCost": 535.54,
-    "plusPacks": 482,
-    "plusCost": 4213.7,
-    "overall": 3678.16
+    "plusPacks": 490,
+    "plusCost": 4310.63,
+    "overall": 3775.09
   },
   "files": [
     {
@@ -34,7 +34,8 @@
     {
       "group": "S2K quantity on hand",
       "label": "Quantity on hand change",
-      "href": "/inventory/42438/2026-09-29/s2k-change.pdf"
+      "href": "/inventory/42438/2026-09-29/s2k-change.pdf",
+      "note": "SKU Inventory CIG COUNT 09292026 (114 lines) and supplement CIG COUNT 09292026 B (American Spirit sky). 1416 packs total."
     },
     {
       "group": "Count",
