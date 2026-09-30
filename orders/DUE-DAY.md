@@ -33,3 +33,7 @@ Core-Mark’s day arrived. There was no new Saturday charge file, so no 2026-09-
 ## Monday 2026-09-28
 
 Harbor’s day arrived. Site PDFs existed for Brookhurst 75 (`42098-harbor-09282026.pdf`, $1,374.72) and Tustin (`42674-harbor-09282026.pdf`, $2,223.69), so those Monday identities were appended. The other twelve Harbor stores had no charge file or site PDF for 2026-09-28, so no amounts were invented. Every existing send and shell order was left unchanged.
+
+## Wednesday 2026-09-30
+
+Coke’s day arrived. Seven stores had amounts on the site order list with a matching PDF under `/web/orders/pdfs/` for identity `2026-09-30`: Db $2,755.05, HB $1,188.05, Westminster $3,068.87, Koval $108.48, Charleston $39.36, Oakey $154.08, Vista $440.88. Those rows were appended with My Coke draft-only status (not submitted). The other seven Coke calendar stores had no charge file or site PDF for 2026-09-30, so no amounts were invented. All 25 prior live sends and shell orders were left unchanged. Non-Coke rows still in `pending-appends.json` were not merged on this pass.

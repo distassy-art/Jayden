@@ -9,7 +9,7 @@
     "orderingFeeCharged": false,
     "pdfName": "42352-coke-09232026.pdf",
     "size": "32 cases / 19 lines",
-    "status": "Draft ready — My Coke draft only, not submitted",
+    "status": "Draft ready \u2014 My Coke draft only, not submitted",
     "notes": "Due Wednesday. Sales window 2026-09-16 to 2026-09-22. Different order from the 2026-09-16 Coke $534.72 row, which stays.",
     "submittedByAI": false,
     "mycokeDraftSaved": false
@@ -24,7 +24,7 @@
     "orderingFeeCharged": true,
     "pdfName": null,
     "size": "18 cases / 17 lines",
-    "status": "Draft ready — My Coke draft only, not submitted",
+    "status": "Draft ready \u2014 My Coke draft only, not submitted",
     "notes": "Due day order. Fee $8.26 is already on the Placentia invoice. Do not add another 1% line. Site PDF was not present, so no link was attached.",
     "submittedByAI": false,
     "mycokeDraftSaved": false
@@ -39,7 +39,7 @@
     "orderingFeeCharged": false,
     "pdfName": "42004-coke-09232026.pdf",
     "size": null,
-    "status": "Draft ready — My Coke draft only, not submitted",
+    "status": "Draft ready \u2014 My Coke draft only, not submitted",
     "notes": "Separate from the 2026-09-22 Coke $826.07 row.",
     "submittedByAI": false,
     "mycokeDraftSaved": false
@@ -54,7 +54,7 @@
     "orderingFeeCharged": false,
     "pdfName": "42352-pepsi-09262026.pdf",
     "size": "26 cases / 21 lines",
-    "status": "Draft ready — not emailed",
+    "status": "Draft ready \u2014 not emailed",
     "notes": "Due Thursday. Delivery 2026-09-26.",
     "submittedByAI": false,
     "mycokeDraftSaved": false
@@ -69,7 +69,7 @@
     "orderingFeeCharged": false,
     "pdfName": "42438-pepsi-09262026.pdf",
     "size": null,
-    "status": "Draft ready — not emailed",
+    "status": "Draft ready \u2014 not emailed",
     "notes": "Due Thursday. Delivery 2026-09-26.",
     "submittedByAI": false,
     "mycokeDraftSaved": false
@@ -84,7 +84,7 @@
     "orderingFeeCharged": false,
     "pdfName": "42021-pepsi-09262026.pdf",
     "size": null,
-    "status": "Draft ready — not emailed",
+    "status": "Draft ready \u2014 not emailed",
     "notes": "Due Thursday. Delivery 2026-09-26. Separate from the 2026-09-23 Pepsi row.",
     "submittedByAI": false,
     "mycokeDraftSaved": false
@@ -99,7 +99,7 @@
     "orderingFeeCharged": false,
     "pdfName": "42021-pepsi-09232026.pdf",
     "size": null,
-    "status": "Draft ready — not emailed",
+    "status": "Draft ready \u2014 not emailed",
     "notes": "Separate from the 2026-09-24 Pepsi row.",
     "submittedByAI": false,
     "mycokeDraftSaved": false
@@ -114,7 +114,7 @@
     "orderingFeeCharged": false,
     "pdfName": "42004-coremark-09282026.pdf",
     "size": null,
-    "status": "Draft ready — Customer First not submitted",
+    "status": "Draft ready \u2014 Customer First not submitted",
     "notes": "Saturday cycle. Delivery 2026-09-28. The 2026-09-19 Core-Mark draft stays as it is.",
     "submittedByAI": false,
     "mycokeDraftSaved": false
@@ -129,7 +129,7 @@
     "orderingFeeCharged": false,
     "pdfName": null,
     "size": null,
-    "status": "Draft ready — Customer First not submitted",
+    "status": "Draft ready \u2014 Customer First not submitted",
     "notes": "Saturday cycle. Delivery 2026-09-28. The 2026-09-19 draft stays. Site PDF was not present, so no link was attached.",
     "submittedByAI": false,
     "mycokeDraftSaved": false
@@ -144,7 +144,7 @@
     "orderingFeeCharged": false,
     "pdfName": null,
     "size": null,
-    "status": "Draft ready — Customer First not submitted",
+    "status": "Draft ready \u2014 Customer First not submitted",
     "notes": "Different date from the 2026-09-22 draft, which stays. Site PDF was not present, so no link was attached.",
     "submittedByAI": false,
     "mycokeDraftSaved": false
@@ -159,7 +159,7 @@
     "orderingFeeCharged": false,
     "pdfName": null,
     "size": null,
-    "status": "Draft ready — Customer First not submitted",
+    "status": "Draft ready \u2014 Customer First not submitted",
     "notes": "Different date from the 2026-09-22 draft, which stays. Site PDF was not present, so no link was attached.",
     "submittedByAI": false,
     "mycokeDraftSaved": false
@@ -174,7 +174,7 @@
     "orderingFeeCharged": false,
     "pdfName": "42352-cmark-09222026.pdf",
     "size": null,
-    "status": "Draft ready — Customer First not submitted",
+    "status": "Draft ready \u2014 Customer First not submitted",
     "notes": "PDF date 2026-09-22. The 2026-09-20 and 2026-09-23 drafts stay.",
     "submittedByAI": false,
     "mycokeDraftSaved": false
@@ -189,7 +189,7 @@
     "orderingFeeCharged": false,
     "pdfName": "42352-cmark-09252026.pdf",
     "size": null,
-    "status": "Draft ready — Customer First not submitted",
+    "status": "Draft ready \u2014 Customer First not submitted",
     "notes": "PDF date 2026-09-25. The 2026-09-23 draft $1604.38 stays.",
     "submittedByAI": false,
     "mycokeDraftSaved": false
@@ -204,7 +204,7 @@
     "orderingFeeCharged": false,
     "pdfName": "42179-cmark-09212026.pdf",
     "size": null,
-    "status": "Draft ready — Customer First not submitted",
+    "status": "Draft ready \u2014 Customer First not submitted",
     "notes": "Different date from the 2026-09-19 and 2026-09-22 drafts, which stay.",
     "submittedByAI": false,
     "mycokeDraftSaved": false
@@ -219,7 +219,7 @@
     "orderingFeeCharged": false,
     "pdfName": "42179-cmark-09242026.pdf",
     "size": null,
-    "status": "Draft ready — Customer First not submitted",
+    "status": "Draft ready \u2014 Customer First not submitted",
     "notes": "Saturday cycle. The earlier HB Core-Mark drafts stay.",
     "submittedByAI": false,
     "mycokeDraftSaved": false
@@ -234,7 +234,7 @@
     "orderingFeeCharged": false,
     "pdfName": "42021-coke-09232026.pdf",
     "size": null,
-    "status": "Draft ready — My Coke draft only, not submitted",
+    "status": "Draft ready \u2014 My Coke draft only, not submitted",
     "notes": "My Coke draft only. Do not submit.",
     "submittedByAI": false,
     "mycokeDraftSaved": false
@@ -249,7 +249,7 @@
     "orderingFeeCharged": false,
     "pdfName": "42021-redbull-09232026.pdf",
     "size": null,
-    "status": "Draft ready — not emailed",
+    "status": "Draft ready \u2014 not emailed",
     "notes": "Added because this store and date were not on the list.",
     "submittedByAI": false,
     "mycokeDraftSaved": false
@@ -264,7 +264,7 @@
     "orderingFeeCharged": false,
     "pdfName": "42021-harbor-09232026.pdf",
     "size": null,
-    "status": "Draft ready — not emailed",
+    "status": "Draft ready \u2014 not emailed",
     "notes": "Different truck from the 2026-09-20 Harbor $605.58 row, which stays. That earlier fee is already charged.",
     "submittedByAI": false,
     "mycokeDraftSaved": false
@@ -279,8 +279,8 @@
     "orderingFeeCharged": false,
     "pdfName": "42098-harbor-09282026.pdf",
     "size": null,
-    "status": "Sent — emailed for manager",
-    "notes": "Harbor Monday due 2026-09-28. SKU 9/14–9/20. Delivery Tuesday. Site PDF 42098-harbor-09282026.pdf.",
+    "status": "Sent \u2014 emailed for manager",
+    "notes": "Harbor Monday due 2026-09-28. SKU 9/14\u20139/20. Delivery Tuesday. Site PDF 42098-harbor-09282026.pdf.",
     "emailTo": "brookhurst75@outlook.com",
     "submittedByAI": false,
     "mycokeDraftSaved": false
@@ -295,8 +295,8 @@
     "orderingFeeCharged": false,
     "pdfName": "42674-harbor-09282026.pdf",
     "size": null,
-    "status": "Sent — emailed for manager",
-    "notes": "Harbor Monday due 2026-09-28. SKU 9/14–9/20. Delivery Wednesday. Site PDF 42674-harbor-09282026.pdf.",
+    "status": "Sent \u2014 emailed for manager",
+    "notes": "Harbor Monday due 2026-09-28. SKU 9/14\u20139/20. Delivery Wednesday. Site PDF 42674-harbor-09282026.pdf.",
     "emailTo": "arcotustin@outlook.com",
     "submittedByAI": false,
     "mycokeDraftSaved": false
