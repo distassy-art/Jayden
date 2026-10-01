@@ -1,0 +1,21 @@
+{
+  "name": "smartsolutions-admin-preview",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Preview admin console for smartsolutionsai.us — reads live data, writes nothing.",
+  "scripts": {
+    "dev": "node scripts/dev-server.mjs",
+    "check": "node scripts/contrast.mjs && node scripts/check.mjs && node scripts/check-app.mjs && npm run --silent check:numbers",
+    "check:contrast": "node scripts/contrast.mjs",
+    "check:views": "node scripts/check.mjs",
+    "check:app": "node scripts/check-app.mjs",
+    "check:numbers": "node scripts/dump-model.mjs > /tmp/ss-model.json && curl -sf http://localhost:8787/api/books-overlay -o /tmp/ss-overlay.json && curl -sf http://localhost:8787/api/data/owners.json -o /tmp/ss-owners.json && curl -sf http://localhost:8787/api/data/monthly.json -o /tmp/ss-monthly.json && curl -sf http://localhost:8787/api/data/daily-open.json -o /tmp/ss-open-days.json && curl -sf http://localhost:8787/api/data/depts.json -o /tmp/ss-depts.json && python3 scripts/verify-numbers.py /tmp/ss-model.json /tmp/ss-overlay.json /tmp/ss-owners.json /tmp/ss-monthly.json /tmp/ss-open-days.json /tmp/ss-depts.json && node scripts/dump-buy.mjs > /tmp/ss-buy.json && curl -sf http://localhost:8787/api/data/manager.json -o /tmp/ss-manager.json && python3 scripts/verify-buy.py /tmp/ss-buy.json /tmp/ss-manager.json",
+    "logos": "python3 scripts/build-logos.py",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "jsdom": "^29.1.1",
+    "wrangler": "^4.28.1"
+  }
+}
