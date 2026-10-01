@@ -1,0 +1,1064 @@
+{
+  "asOf": "2026-09-21",
+  "timezone": "America/Los_Angeles",
+  "sourceWorkbook": "Vendor_Order_Schedule.xlsx",
+  "minaOverrides": [
+    "2026-09-21: Core-Mark is Saturday for ALL clients/stores. Build/place/client-confirm on Saturday cycle. Leave Customer First draft unsubmitted.",
+    "Orders From: orders@smartsolutionsai26.onmicrosoft.com via Graph Mail.Send",
+    "Coke: My Coke portal draft only \u2014 do not submit"
+  ],
+  "stores": [
+    {
+      "storeId": "42352",
+      "name": "Arco Db (Diamond Bar)",
+      "orderEmail": "arcodb@outlook.com",
+      "sheet": "42352 Arco Db",
+      "vendors": [
+        {
+          "vendor": "Harbor",
+          "draftDay": "Monday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Tuesday AM",
+          "delivery": "Wednesday",
+          "emailSubject": "Harbor Order Date",
+          "method": "PDF email",
+          "notes": "2-wk SKU sales; first week bigger | dly spend primary=Wednesday; days=Wednesday; inv=2026-09-02 [medium]"
+        },
+        {
+          "vendor": "Coke",
+          "draftDay": "Wednesday",
+          "draftTime": "12:00 PM PT",
+          "salesman": "Thursday",
+          "delivery": "Friday",
+          "emailSubject": "Coke",
+          "method": "PDF + My Coke draft",
+          "notes": "Smart Water 1L = 0 or 25 by sales | dly spend primary=Friday; days=Friday; inv=2026-09-04 [low]"
+        },
+        {
+          "vendor": "Pepsi",
+          "draftDay": "Thursday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Friday",
+          "delivery": "Thursday",
+          "emailSubject": "Pepsi",
+          "method": "PDF email",
+          "notes": "First week bigger | dly spend primary=Thursday; days=Thursday; inv=2026-09-03 [low]"
+        },
+        {
+          "vendor": "Core-Mark",
+          "draftDay": "Saturday",
+          "draftTime": "TBD PT",
+          "salesman": "Tue/Fri",
+          "delivery": "Saturday (Mina standing 2026-09-21 \u2014 overrides prior Tue/Fri/Thu)",
+          "emailSubject": "(portal)",
+          "method": "Customer First",
+          "notes": "Do not submit until Mina confirms | dly spend primary=Tuesday; days=Tuesday,Friday; inv=2026-09-01,2026-09-04 [medium] | MINA OVERRIDE: Core-Mark day = Saturday for all stores. Portal draft only \u2014 do not submit."
+        },
+        {
+          "vendor": "Frito-Lay",
+          "draftDay": "TBD",
+          "draftTime": "",
+          "salesman": "",
+          "delivery": "Friday",
+          "emailSubject": "",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-04, 2026-09-02 -> Friday / Wednesday [low] (added from dly; draft day TBD) | dly spend primary=Friday; days=Friday,Wednesday; inv=2026-09-02,2026-09-04 [low]"
+        },
+        {
+          "vendor": "Bimbo",
+          "draftDay": "TBD",
+          "draftTime": "",
+          "salesman": "",
+          "delivery": "Wednesday",
+          "emailSubject": "",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-02 -> Wednesday [low] (added from dly; draft day TBD) | dly spend primary=Wednesday; days=Wednesday; inv=2026-09-02 [low]"
+        },
+        {
+          "vendor": "Red Bull",
+          "draftDay": "TBD",
+          "draftTime": "",
+          "salesman": "",
+          "delivery": "Thursday",
+          "emailSubject": "",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-03 -> Thursday [low] (added from dly; draft day TBD) | dly spend primary=Thursday; days=Thursday; inv=2026-09-03 [low]"
+        },
+        {
+          "vendor": "7UP",
+          "draftDay": "TBD",
+          "draftTime": "Vendor",
+          "salesman": "AI $",
+          "delivery": "Wednesday",
+          "emailSubject": "Subject",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-02 -> Wednesday [low] (added from dly; draft day TBD) | dly spend primary=Wednesday; days=Wednesday; inv=2026-09-02 [low]"
+        }
+      ]
+    },
+    {
+      "storeId": "42004",
+      "name": "Arco Placentia",
+      "orderEmail": "arcoplacentia@gmail.com",
+      "sheet": "42004 Placentia",
+      "vendors": [
+        {
+          "vendor": "Harbor",
+          "draftDay": "Monday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Tuesday AM",
+          "delivery": "Wednesday",
+          "emailSubject": "Harbor Order Date",
+          "method": "PDF email",
+          "notes": "~$3,500 budget; regular (not double) | dly spend primary=Wednesday; days=Wednesday; inv=2026-09-02 [low]"
+        },
+        {
+          "vendor": "Coke",
+          "draftDay": "Wednesday",
+          "draftTime": "12:00 PM PT",
+          "salesman": "Thursday",
+          "delivery": "Friday",
+          "emailSubject": "Coke",
+          "method": "PDF email",
+          "notes": "Regular size (not Db first-week double)"
+        },
+        {
+          "vendor": "Pepsi",
+          "draftDay": "Thursday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Friday",
+          "delivery": "Thursday",
+          "emailSubject": "Pepsi",
+          "method": "PDF email",
+          "notes": "Regular size (not Db first-week double) | dly spend primary=Thursday; days=Thursday; inv=2026-09-03 [low]"
+        },
+        {
+          "vendor": "Core-Mark",
+          "draftDay": "Saturday",
+          "draftTime": "before cutoff",
+          "salesman": "\u2014",
+          "delivery": "Saturday (Mina standing 2026-09-21 \u2014 overrides prior Tue/Fri/Thu)",
+          "emailSubject": "Customer First draft",
+          "method": "Website draft",
+          "notes": "Do not submit until Mina confirms | MINA OVERRIDE: Core-Mark day = Saturday for all stores. Portal draft only \u2014 do not submit."
+        },
+        {
+          "vendor": "Frito-Lay",
+          "draftDay": "TBD",
+          "draftTime": "",
+          "salesman": "",
+          "delivery": "Friday",
+          "emailSubject": "",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-04, 2026-09-02 -> Friday / Wednesday [low] (added from dly; draft day TBD) | dly spend primary=Friday; days=Friday,Wednesday; inv=2026-09-02,2026-09-04 [low]"
+        },
+        {
+          "vendor": "Bimbo",
+          "draftDay": "TBD",
+          "draftTime": "",
+          "salesman": "",
+          "delivery": "Tuesday",
+          "emailSubject": "",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-01 -> Tuesday [low] (added from dly; draft day TBD) | dly spend primary=Tuesday; days=Tuesday; inv=2026-09-01 [low]"
+        },
+        {
+          "vendor": "Straub",
+          "draftDay": "TBD",
+          "draftTime": "",
+          "salesman": "",
+          "delivery": "Wednesday",
+          "emailSubject": "",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-02 -> Wednesday [low] (added from dly; draft day TBD) | dly spend primary=Wednesday; days=Wednesday; inv=2026-09-02 [medium]"
+        }
+      ]
+    },
+    {
+      "storeId": "42179",
+      "name": "Arco HB",
+      "orderEmail": "robertking630@gmail.com",
+      "sheet": "42179 Arco HB",
+      "vendors": [
+        {
+          "vendor": "Harbor",
+          "draftDay": "Monday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Tuesday AM",
+          "delivery": "Wednesday",
+          "emailSubject": "Harbor Order Date",
+          "method": "PDF email",
+          "notes": "2-wk SKU sales; first week bigger"
+        },
+        {
+          "vendor": "Coke",
+          "draftDay": "Wednesday",
+          "draftTime": "12:00 PM PT",
+          "salesman": "Thursday",
+          "delivery": "Friday",
+          "emailSubject": "Coke",
+          "method": "PDF email",
+          "notes": "Regular weekly size"
+        },
+        {
+          "vendor": "Pepsi",
+          "draftDay": "Thursday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Friday",
+          "delivery": "Saturday",
+          "emailSubject": "Pepsi",
+          "method": "PDF email",
+          "notes": "Regular weekly size"
+        },
+        {
+          "vendor": "Core-Mark",
+          "draftDay": "Saturday",
+          "draftTime": "before cutoff",
+          "salesman": "\u2014",
+          "delivery": "Saturday (Mina standing 2026-09-21 \u2014 overrides prior Tue/Fri/Thu)",
+          "emailSubject": "Customer First draft",
+          "method": "Website draft",
+          "notes": "Do not submit until Mina confirms | dly spend primary=Thursday; days=Thursday; inv=2026-09-03 [high] | MINA OVERRIDE: Core-Mark day = Saturday for all stores. Portal draft only \u2014 do not submit."
+        }
+      ]
+    },
+    {
+      "storeId": "42439",
+      "name": "Arco Lamb",
+      "orderEmail": "arcolamb@outlook.com",
+      "sheet": "42439 Lamb",
+      "vendors": [
+        {
+          "vendor": "Harbor",
+          "draftDay": "Monday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Tuesday AM",
+          "delivery": "Wednesday",
+          "emailSubject": "Harbor Order Date",
+          "method": "PDF email",
+          "notes": "2-wk SKU sales; first week bigger"
+        },
+        {
+          "vendor": "Coke",
+          "draftDay": "Wednesday",
+          "draftTime": "12:00 PM PT",
+          "salesman": "Thursday",
+          "delivery": "Friday",
+          "emailSubject": "Coke",
+          "method": "PDF + My Coke draft",
+          "notes": "Smart Water 1L = 0 or 25 by sales"
+        },
+        {
+          "vendor": "Pepsi",
+          "draftDay": "Thursday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Friday",
+          "delivery": "Saturday",
+          "emailSubject": "Pepsi",
+          "method": "PDF email",
+          "notes": "First week bigger"
+        },
+        {
+          "vendor": "Core-Mark",
+          "draftDay": "Saturday",
+          "draftTime": "TBD PT",
+          "salesman": "Tue/Fri",
+          "delivery": "Saturday (Mina standing 2026-09-21 \u2014 overrides prior Tue/Fri/Thu)",
+          "emailSubject": "(portal)",
+          "method": "Customer First",
+          "notes": "Do not submit until Mina confirms | dly spend primary=Tuesday; days=Tuesday,Friday; inv=2026-09-01,2026-09-04 [medium] | MINA OVERRIDE: Core-Mark day = Saturday for all stores. Portal draft only \u2014 do not submit."
+        },
+        {
+          "vendor": "Frito-Lay",
+          "draftDay": "TBD",
+          "draftTime": "",
+          "salesman": "",
+          "delivery": "Wednesday",
+          "emailSubject": "",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-02 -> Wednesday [low] (added from dly; draft day TBD) | dly spend primary=Wednesday; days=Wednesday; inv=2026-09-02 [low]"
+        },
+        {
+          "vendor": "Bimbo",
+          "draftDay": "TBD",
+          "draftTime": "",
+          "salesman": "",
+          "delivery": "Tuesday",
+          "emailSubject": "",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-01 -> Tuesday [low] (added from dly; draft day TBD) | dly spend primary=Tuesday; days=Tuesday; inv=2026-09-01 [low]"
+        },
+        {
+          "vendor": "7UP",
+          "draftDay": "TBD",
+          "draftTime": "",
+          "salesman": "",
+          "delivery": "Wednesday",
+          "emailSubject": "",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-02 -> Wednesday [low] (added from dly; draft day TBD) | dly spend primary=Wednesday; days=Wednesday; inv=2026-09-02 [low]"
+        }
+      ]
+    },
+    {
+      "storeId": "42279",
+      "name": "Arco Flamingo (Koval)",
+      "orderEmail": "arcokoval@outlook.com",
+      "sheet": "42279 Flamingo Koval",
+      "vendors": [
+        {
+          "vendor": "Harbor",
+          "draftDay": "Monday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Tuesday AM",
+          "delivery": "Wednesday",
+          "emailSubject": "Harbor Order Date",
+          "method": "PDF email",
+          "notes": "2-wk SKU sales; first week bigger"
+        },
+        {
+          "vendor": "Coke",
+          "draftDay": "Wednesday",
+          "draftTime": "12:00 PM PT",
+          "salesman": "Thursday",
+          "delivery": "Friday",
+          "emailSubject": "Coke",
+          "method": "PDF + My Coke draft",
+          "notes": "Smart Water 1L = 0 or 25 by sales"
+        },
+        {
+          "vendor": "Pepsi",
+          "draftDay": "Thursday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Friday",
+          "delivery": "Thursday",
+          "emailSubject": "Pepsi",
+          "method": "PDF email",
+          "notes": "First week bigger | dly spend primary=Thursday; days=Thursday; inv=2026-09-03 [low]"
+        },
+        {
+          "vendor": "Core-Mark",
+          "draftDay": "Saturday",
+          "draftTime": "TBD PT",
+          "salesman": "Tue/Fri",
+          "delivery": "Saturday (Mina standing 2026-09-21 \u2014 overrides prior Tue/Fri/Thu)",
+          "emailSubject": "(portal)",
+          "method": "Customer First",
+          "notes": "Do not submit until Mina confirms | dly spend primary=Thursday; days=Thursday; inv=2026-09-03 [high] | MINA OVERRIDE: Core-Mark day = Saturday for all stores. Portal draft only \u2014 do not submit."
+        },
+        {
+          "vendor": "Frito-Lay",
+          "draftDay": "TBD",
+          "draftTime": "",
+          "salesman": "",
+          "delivery": "Thursday",
+          "emailSubject": "",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-03, 2026-09-01 -> Thursday / Tuesday [low] (added from dly; draft day TBD) | dly spend primary=Thursday; days=Thursday,Tuesday; inv=2026-09-01,2026-09-03 [low]"
+        },
+        {
+          "vendor": "Bimbo",
+          "draftDay": "TBD",
+          "draftTime": "",
+          "salesman": "",
+          "delivery": "Wednesday",
+          "emailSubject": "",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-02 -> Wednesday [low] (added from dly; draft day TBD) | dly spend primary=Wednesday; days=Wednesday; inv=2026-09-02 [low]"
+        },
+        {
+          "vendor": "Red Bull",
+          "draftDay": "TBD",
+          "draftTime": "",
+          "salesman": "",
+          "delivery": "Wednesday",
+          "emailSubject": "",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-02 -> Wednesday [low] (added from dly; draft day TBD) | dly spend primary=Wednesday; days=Wednesday; inv=2026-09-02 [low]"
+        },
+        {
+          "vendor": "7UP",
+          "draftDay": "TBD",
+          "draftTime": "Vendor",
+          "salesman": "AI $",
+          "delivery": "Wednesday",
+          "emailSubject": "Subject",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-02 -> Wednesday [low] (added from dly; draft day TBD) | dly spend primary=Wednesday; days=Wednesday; inv=2026-09-02 [low]"
+        },
+        {
+          "vendor": "Nevada Beverage",
+          "draftDay": "TBD",
+          "draftTime": "",
+          "salesman": "",
+          "delivery": "Tuesday",
+          "emailSubject": "",
+          "method": "invoice",
+          "notes": "dly spend primary=Tuesday; inv=2026-09-01 [low]"
+        }
+      ]
+    },
+    {
+      "storeId": "42674",
+      "name": "Arco Tustin",
+      "orderEmail": "arcotustin@outlook.com",
+      "sheet": "42674 Tustin",
+      "vendors": [
+        {
+          "vendor": "Harbor",
+          "draftDay": "Monday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Tuesday AM",
+          "delivery": "Wednesday",
+          "emailSubject": "Harbor Order Date",
+          "method": "PDF email",
+          "notes": "2-wk SKU sales; first week bigger"
+        },
+        {
+          "vendor": "Coke",
+          "draftDay": "Wednesday",
+          "draftTime": "12:00 PM PT",
+          "salesman": "Thursday",
+          "delivery": "Wednesday",
+          "emailSubject": "Coke",
+          "method": "PDF + My Coke draft",
+          "notes": "Smart Water 1L = 0 or 25 by sales | dly spend primary=Wednesday; days=Wednesday; inv=2026-09-02 [low]"
+        },
+        {
+          "vendor": "Pepsi",
+          "draftDay": "Thursday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Friday",
+          "delivery": "Friday",
+          "emailSubject": "Pepsi",
+          "method": "PDF email",
+          "notes": "First week bigger | dly spend primary=Friday; days=Friday; inv=2026-09-04 [low]"
+        },
+        {
+          "vendor": "Core-Mark",
+          "draftDay": "Saturday",
+          "draftTime": "TBD PT",
+          "salesman": "Tue/Fri",
+          "delivery": "Saturday (Mina standing 2026-09-21 \u2014 overrides prior Tue/Fri/Thu)",
+          "emailSubject": "(portal)",
+          "method": "Customer First",
+          "notes": "Do not submit until Mina confirms | dly spend primary=Thursday; days=Thursday; inv=2026-09-03 [high] | MINA OVERRIDE: Core-Mark day = Saturday for all stores. Portal draft only \u2014 do not submit."
+        },
+        {
+          "vendor": "Frito-Lay",
+          "draftDay": "TBD",
+          "draftTime": "",
+          "salesman": "",
+          "delivery": "Thursday",
+          "emailSubject": "",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-03, 2026-09-01 -> Thursday / Tuesday [low] (added from dly; draft day TBD) | dly spend primary=Thursday; days=Thursday,Tuesday; inv=2026-09-01,2026-09-03 [low]"
+        },
+        {
+          "vendor": "Bimbo",
+          "draftDay": "TBD",
+          "draftTime": "",
+          "salesman": "",
+          "delivery": "Tuesday",
+          "emailSubject": "",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-01 -> Tuesday [low] (added from dly; draft day TBD) | dly spend primary=Tuesday; days=Tuesday; inv=2026-09-01 [low]"
+        },
+        {
+          "vendor": "Red Bull",
+          "draftDay": "TBD",
+          "draftTime": "",
+          "salesman": "",
+          "delivery": "Wednesday",
+          "emailSubject": "",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-02 -> Wednesday [low] (added from dly; draft day TBD) | dly spend primary=Wednesday; days=Wednesday; inv=2026-09-02 [low]"
+        },
+        {
+          "vendor": "Straub",
+          "draftDay": "TBD",
+          "draftTime": "Vendor",
+          "salesman": "AI $",
+          "delivery": "Wednesday",
+          "emailSubject": "Subject",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-02, 2026-09-03 -> Thursday / Wednesday [low] (added from dly; draft day TBD) | dly spend primary=Wednesday; days=Wednesday,Thursday; inv=2026-09-02,2026-09-03 [low]"
+        }
+      ]
+    },
+    {
+      "storeId": "42399",
+      "name": "Arco Garden Grove",
+      "orderEmail": "gardengroveblv@outlook.com",
+      "sheet": "42399 Garden Grove",
+      "vendors": [
+        {
+          "vendor": "Harbor",
+          "draftDay": "Monday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Tuesday AM",
+          "delivery": "Wednesday",
+          "emailSubject": "Harbor Order Date",
+          "method": "PDF email",
+          "notes": "2-wk SKU sales; first week bigger | dly spend primary=Wednesday; days=Wednesday; inv=2026-09-02 [medium]"
+        },
+        {
+          "vendor": "Coke",
+          "draftDay": "Wednesday",
+          "draftTime": "12:00 PM PT",
+          "salesman": "Thursday",
+          "delivery": "Friday",
+          "emailSubject": "Coke",
+          "method": "PDF + My Coke draft",
+          "notes": "Smart Water 1L = 0 or 25 by sales"
+        },
+        {
+          "vendor": "Pepsi",
+          "draftDay": "Thursday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Friday",
+          "delivery": "Saturday",
+          "emailSubject": "Pepsi",
+          "method": "PDF email",
+          "notes": "First week bigger"
+        },
+        {
+          "vendor": "Core-Mark",
+          "draftDay": "Saturday",
+          "draftTime": "TBD PT",
+          "salesman": "Tue/Fri",
+          "delivery": "Saturday (Mina standing 2026-09-21 \u2014 overrides prior Tue/Fri/Thu)",
+          "emailSubject": "(portal)",
+          "method": "Customer First",
+          "notes": "Do not submit until Mina confirms | dly spend primary=Thursday; days=Thursday; inv=2026-09-03 [low] | MINA OVERRIDE: Core-Mark day = Saturday for all stores. Portal draft only \u2014 do not submit."
+        },
+        {
+          "vendor": "Bimbo",
+          "draftDay": "TBD",
+          "draftTime": "",
+          "salesman": "",
+          "delivery": "Thursday",
+          "emailSubject": "",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-03 -> Thursday [low] (added from dly; draft day TBD) | dly spend primary=Thursday; days=Thursday; inv=2026-09-03 [low]"
+        }
+      ]
+    },
+    {
+      "storeId": "42098",
+      "name": "Arco Brookhurst 75",
+      "orderEmail": "brookhurst75@outlook.com",
+      "sheet": "42098 Brookhurst 75",
+      "vendors": [
+        {
+          "vendor": "Harbor",
+          "draftDay": "Monday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Tuesday AM",
+          "delivery": "Tuesday",
+          "emailSubject": "Harbor Order Date",
+          "method": "PDF email",
+          "notes": "2-wk SKU sales; first week bigger | dly spend primary=Tuesday; days=Tuesday; inv=2026-09-01 [low]"
+        },
+        {
+          "vendor": "Coke",
+          "draftDay": "Wednesday",
+          "draftTime": "12:00 PM PT",
+          "salesman": "Thursday",
+          "delivery": "Wednesday",
+          "emailSubject": "Coke",
+          "method": "PDF + My Coke draft",
+          "notes": "Smart Water 1L = 0 or 25 by sales | dly spend primary=Wednesday; days=Wednesday; inv=2026-09-02 [low]"
+        },
+        {
+          "vendor": "Pepsi",
+          "draftDay": "Thursday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Friday",
+          "delivery": "Saturday",
+          "emailSubject": "Pepsi",
+          "method": "PDF email",
+          "notes": "First week bigger"
+        },
+        {
+          "vendor": "Core-Mark",
+          "draftDay": "Saturday",
+          "draftTime": "TBD PT",
+          "salesman": "Tue/Fri",
+          "delivery": "Saturday (Mina standing 2026-09-21 \u2014 overrides prior Tue/Fri/Thu)",
+          "emailSubject": "(portal)",
+          "method": "Customer First",
+          "notes": "Do not submit until Mina confirms | MINA OVERRIDE: Core-Mark day = Saturday for all stores. Portal draft only \u2014 do not submit."
+        },
+        {
+          "vendor": "Frito-Lay",
+          "draftDay": "TBD",
+          "draftTime": "",
+          "salesman": "",
+          "delivery": "Thursday",
+          "emailSubject": "",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-03 -> Thursday [low] (added from dly; draft day TBD) | dly spend primary=Thursday; days=Thursday; inv=2026-09-03 [low]"
+        },
+        {
+          "vendor": "Red Bull",
+          "draftDay": "TBD",
+          "draftTime": "",
+          "salesman": "",
+          "delivery": "Wednesday",
+          "emailSubject": "",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-02 -> Wednesday [low] (added from dly; draft day TBD) | dly spend primary=Wednesday; days=Wednesday; inv=2026-09-02 [low]"
+        },
+        {
+          "vendor": "Straub",
+          "draftDay": "TBD",
+          "draftTime": "",
+          "salesman": "",
+          "delivery": "Friday",
+          "emailSubject": "",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-04 -> Friday [low] (added from dly; draft day TBD) | dly spend primary=Friday; days=Friday; inv=2026-09-04 [low]"
+        }
+      ]
+    },
+    {
+      "storeId": "42281",
+      "name": "Arco Charleston",
+      "orderEmail": "arcocharleston@outlook.com",
+      "sheet": "42281 Charleston",
+      "vendors": [
+        {
+          "vendor": "Harbor",
+          "draftDay": "Monday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Tuesday AM",
+          "delivery": "Wednesday",
+          "emailSubject": "Harbor Order Date",
+          "method": "PDF email",
+          "notes": "2-wk SKU sales; first week bigger"
+        },
+        {
+          "vendor": "Coke",
+          "draftDay": "Wednesday",
+          "draftTime": "12:00 PM PT",
+          "salesman": "Thursday",
+          "delivery": "Friday",
+          "emailSubject": "Coke",
+          "method": "PDF + My Coke draft",
+          "notes": "Smart Water 1L = 0 or 25 by sales"
+        },
+        {
+          "vendor": "Pepsi",
+          "draftDay": "Thursday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Friday",
+          "delivery": "Tuesday",
+          "emailSubject": "Pepsi",
+          "method": "PDF email",
+          "notes": "First week bigger | dly spend primary=Tuesday; days=Tuesday; inv=2026-09-01 [low]"
+        },
+        {
+          "vendor": "Core-Mark",
+          "draftDay": "Saturday",
+          "draftTime": "TBD PT",
+          "salesman": "Tue/Fri",
+          "delivery": "Saturday (Mina standing 2026-09-21 \u2014 overrides prior Tue/Fri/Thu)",
+          "emailSubject": "(portal)",
+          "method": "Customer First",
+          "notes": "Do not submit until Mina confirms | dly spend primary=Tuesday; days=Tuesday,Friday; inv=2026-09-01,2026-09-04 [medium] | MINA OVERRIDE: Core-Mark day = Saturday for all stores. Portal draft only \u2014 do not submit."
+        },
+        {
+          "vendor": "Frito-Lay",
+          "draftDay": "TBD",
+          "draftTime": "",
+          "salesman": "",
+          "delivery": "Wednesday",
+          "emailSubject": "",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-02 -> Wednesday [low] (added from dly; draft day TBD) | dly spend primary=Wednesday; days=Wednesday; inv=2026-09-02 [low]"
+        },
+        {
+          "vendor": "Red Bull",
+          "draftDay": "TBD",
+          "draftTime": "",
+          "salesman": "",
+          "delivery": "Wednesday",
+          "emailSubject": "",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-02 -> Wednesday [low] (added from dly; draft day TBD) | dly spend primary=Wednesday; days=Wednesday; inv=2026-09-02 [low]"
+        }
+      ]
+    },
+    {
+      "storeId": "42282",
+      "name": "Arco Oakey",
+      "orderEmail": "arcooakey@outlook.com",
+      "sheet": "42282 Oakey",
+      "vendors": [
+        {
+          "vendor": "Harbor",
+          "draftDay": "Monday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Tuesday AM",
+          "delivery": "Wednesday",
+          "emailSubject": "Harbor Order Date",
+          "method": "PDF email",
+          "notes": "2-wk SKU sales; first week bigger"
+        },
+        {
+          "vendor": "Coke",
+          "draftDay": "Wednesday",
+          "draftTime": "12:00 PM PT",
+          "salesman": "Thursday",
+          "delivery": "Friday",
+          "emailSubject": "Coke",
+          "method": "PDF + My Coke draft",
+          "notes": "Smart Water 1L = 0 or 25 by sales"
+        },
+        {
+          "vendor": "Pepsi",
+          "draftDay": "Thursday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Friday",
+          "delivery": "Wednesday",
+          "emailSubject": "Pepsi",
+          "method": "PDF email",
+          "notes": "First week bigger | dly spend primary=Wednesday; days=Wednesday; inv=2026-09-02 [medium]"
+        },
+        {
+          "vendor": "Core-Mark",
+          "draftDay": "Saturday",
+          "draftTime": "TBD PT",
+          "salesman": "Tue/Fri",
+          "delivery": "Saturday (Mina standing 2026-09-21 \u2014 overrides prior Tue/Fri/Thu)",
+          "emailSubject": "(portal)",
+          "method": "Customer First",
+          "notes": "Do not submit until Mina confirms | dly spend primary=Tuesday; days=Tuesday,Friday; inv=2026-09-01,2026-09-04 [medium] | MINA OVERRIDE: Core-Mark day = Saturday for all stores. Portal draft only \u2014 do not submit."
+        },
+        {
+          "vendor": "Frito-Lay",
+          "draftDay": "TBD",
+          "draftTime": "",
+          "salesman": "",
+          "delivery": "Tuesday",
+          "emailSubject": "",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-01 -> Tuesday [low] (added from dly; draft day TBD) | dly spend primary=Tuesday; days=Tuesday; inv=2026-09-01 [low]"
+        },
+        {
+          "vendor": "Nevada Beverage",
+          "draftDay": "TBD",
+          "draftTime": "",
+          "salesman": "",
+          "delivery": "Thursday",
+          "emailSubject": "",
+          "method": "invoice",
+          "notes": "Vegas client list; no Nevada Beverage in dly spend yet \u2014 keeping Thursday [low]"
+        }
+      ]
+    },
+    {
+      "storeId": "42438",
+      "name": "Arco Vista",
+      "orderEmail": "arcovista@outlook.com",
+      "sheet": "42438 Vista",
+      "vendors": [
+        {
+          "vendor": "Harbor",
+          "draftDay": "Monday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Tuesday AM",
+          "delivery": "Wednesday",
+          "emailSubject": "Harbor Order Date",
+          "method": "PDF email",
+          "notes": "2-wk SKU sales; first week bigger"
+        },
+        {
+          "vendor": "Coke",
+          "draftDay": "Wednesday",
+          "draftTime": "12:00 PM PT",
+          "salesman": "Thursday",
+          "delivery": "Wednesday",
+          "emailSubject": "Coke",
+          "method": "PDF + My Coke draft",
+          "notes": "Smart Water 1L = 0 or 25 by sales | dly spend primary=Wednesday; days=Wednesday; inv=2026-09-02 [low]"
+        },
+        {
+          "vendor": "Pepsi",
+          "draftDay": "Thursday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Friday",
+          "delivery": "Saturday",
+          "emailSubject": "Pepsi",
+          "method": "PDF email",
+          "notes": "First week bigger"
+        },
+        {
+          "vendor": "Core-Mark",
+          "draftDay": "Saturday",
+          "draftTime": "TBD PT",
+          "salesman": "Tue/Fri",
+          "delivery": "Saturday (Mina standing 2026-09-21 \u2014 overrides prior Tue/Fri/Thu)",
+          "emailSubject": "(portal)",
+          "method": "Customer First",
+          "notes": "Do not submit until Mina confirms | dly spend primary=Tuesday; days=Tuesday,Friday; inv=2026-09-01,2026-09-04 [medium] | MINA OVERRIDE: Core-Mark day = Saturday for all stores. Portal draft only \u2014 do not submit."
+        },
+        {
+          "vendor": "Frito-Lay",
+          "draftDay": "TBD",
+          "draftTime": "",
+          "salesman": "",
+          "delivery": "Wednesday",
+          "emailSubject": "",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-02 -> Wednesday [low] (added from dly; draft day TBD) | dly spend primary=Wednesday; days=Wednesday; inv=2026-09-02 [low]"
+        },
+        {
+          "vendor": "Red Bull",
+          "draftDay": "TBD",
+          "draftTime": "",
+          "salesman": "",
+          "delivery": "Thursday",
+          "emailSubject": "",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-03 -> Thursday [low] (added from dly; draft day TBD) | dly spend primary=Thursday; days=Thursday; inv=2026-09-03 [low]"
+        }
+      ]
+    },
+    {
+      "storeId": "42021",
+      "name": "Arco Westminster",
+      "orderEmail": "westminster42021@outlook.com",
+      "sheet": "42021 Westminster",
+      "vendors": [
+        {
+          "vendor": "Harbor",
+          "draftDay": "Monday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Tuesday AM",
+          "delivery": "Wednesday",
+          "emailSubject": "Harbor Order Date",
+          "method": "PDF email",
+          "notes": "2-wk SKU sales; first week bigger"
+        },
+        {
+          "vendor": "Coke",
+          "draftDay": "Wednesday",
+          "draftTime": "12:00 PM PT",
+          "salesman": "Thursday",
+          "delivery": "Friday",
+          "emailSubject": "Coke",
+          "method": "PDF + My Coke draft",
+          "notes": "Smart Water 1L = 0 or 25 by sales"
+        },
+        {
+          "vendor": "Pepsi",
+          "draftDay": "Thursday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Friday",
+          "delivery": "Saturday",
+          "emailSubject": "Pepsi",
+          "method": "PDF email",
+          "notes": "First week bigger"
+        },
+        {
+          "vendor": "Core-Mark",
+          "draftDay": "Saturday",
+          "draftTime": "TBD PT",
+          "salesman": "Tue/Fri",
+          "delivery": "Saturday (Mina standing 2026-09-21 \u2014 overrides prior Tue/Fri/Thu)",
+          "emailSubject": "(portal)",
+          "method": "Customer First",
+          "notes": "Do not submit until Mina confirms | MINA OVERRIDE: Core-Mark day = Saturday for all stores. Portal draft only \u2014 do not submit."
+        },
+        {
+          "vendor": "Frito-Lay",
+          "draftDay": "TBD",
+          "draftTime": "",
+          "salesman": "",
+          "delivery": "Wednesday",
+          "emailSubject": "",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-02 -> Wednesday [low] (added from dly; draft day TBD) | dly spend primary=Wednesday; days=Wednesday; inv=2026-09-02 [low]"
+        },
+        {
+          "vendor": "Bimbo",
+          "draftDay": "TBD",
+          "draftTime": "",
+          "salesman": "",
+          "delivery": "Tuesday",
+          "emailSubject": "",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-01 -> Tuesday [low] (added from dly; draft day TBD) | dly spend primary=Tuesday; days=Tuesday; inv=2026-09-01 [low]"
+        },
+        {
+          "vendor": "Red Bull",
+          "draftDay": "TBD",
+          "draftTime": "",
+          "salesman": "",
+          "delivery": "Tuesday",
+          "emailSubject": "",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-01 -> Tuesday [low] (added from dly; draft day TBD) | dly spend primary=Tuesday; days=Tuesday; inv=2026-09-01 [low]"
+        },
+        {
+          "vendor": "7UP",
+          "draftDay": "TBD",
+          "draftTime": "Vendor",
+          "salesman": "AI $",
+          "delivery": "Wednesday",
+          "emailSubject": "Subject",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-02 -> Wednesday [low] (added from dly; draft day TBD) | dly spend primary=Wednesday; days=Wednesday; inv=2026-09-02 [low]"
+        }
+      ]
+    },
+    {
+      "storeId": "42280",
+      "name": "Arco Spring Mtn",
+      "orderEmail": "arcospring@outlook.com",
+      "sheet": "42280 Spring Mtn",
+      "vendors": [
+        {
+          "vendor": "Harbor",
+          "draftDay": "Monday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Tuesday AM",
+          "delivery": "Wednesday",
+          "emailSubject": "Harbor Order Date",
+          "method": "PDF email",
+          "notes": "2-wk SKU sales; first week bigger"
+        },
+        {
+          "vendor": "Coke",
+          "draftDay": "Wednesday",
+          "draftTime": "12:00 PM PT",
+          "salesman": "Thursday",
+          "delivery": "Friday",
+          "emailSubject": "Coke",
+          "method": "PDF + My Coke draft",
+          "notes": "Smart Water 1L = 0 or 25 by sales"
+        },
+        {
+          "vendor": "Pepsi",
+          "draftDay": "Thursday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Friday",
+          "delivery": "Wednesday",
+          "emailSubject": "Pepsi",
+          "method": "PDF email",
+          "notes": "First week bigger | dly spend primary=Wednesday; days=Wednesday; inv=2026-09-02 [low]"
+        },
+        {
+          "vendor": "Core-Mark",
+          "draftDay": "Saturday",
+          "draftTime": "TBD PT",
+          "salesman": "Tue/Fri",
+          "delivery": "Saturday (Mina standing 2026-09-21 \u2014 overrides prior Tue/Fri/Thu)",
+          "emailSubject": "(portal)",
+          "method": "Customer First",
+          "notes": "Do not submit until Mina confirms | dly spend primary=Tuesday; days=Tuesday,Friday; inv=2026-09-01,2026-09-04 [medium] | MINA OVERRIDE: Core-Mark day = Saturday for all stores. Portal draft only \u2014 do not submit."
+        },
+        {
+          "vendor": "Frito-Lay",
+          "draftDay": "TBD",
+          "draftTime": "",
+          "salesman": "",
+          "delivery": "Thursday",
+          "emailSubject": "",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-03 -> Thursday [low] (added from dly; draft day TBD) | dly spend primary=Thursday; days=Thursday; inv=2026-09-03 [low]"
+        },
+        {
+          "vendor": "Red Bull",
+          "draftDay": "TBD",
+          "draftTime": "",
+          "salesman": "",
+          "delivery": "Thursday",
+          "emailSubject": "",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-03 -> Thursday [low] (added from dly; draft day TBD) | dly spend primary=Thursday; days=Thursday; inv=2026-09-03 [low]"
+        }
+      ]
+    },
+    {
+      "storeId": "42048",
+      "name": "Arco San Diego",
+      "orderEmail": "arcosandiego@outlook.com",
+      "sheet": "42048 San Diego",
+      "vendors": [
+        {
+          "vendor": "Harbor",
+          "draftDay": "Monday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Tuesday AM",
+          "delivery": "Wednesday",
+          "emailSubject": "Harbor Order Date",
+          "method": "PDF email",
+          "notes": "2-wk SKU sales; first week bigger"
+        },
+        {
+          "vendor": "Coke",
+          "draftDay": "Wednesday",
+          "draftTime": "12:00 PM PT",
+          "salesman": "Thursday",
+          "delivery": "Thursday",
+          "emailSubject": "Coke",
+          "method": "PDF + My Coke draft",
+          "notes": "Smart Water 1L = 0 or 25 by sales | dly spend primary=Thursday; days=Thursday; inv=2026-09-03 [low]"
+        },
+        {
+          "vendor": "Pepsi",
+          "draftDay": "Thursday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Friday",
+          "delivery": "Saturday",
+          "emailSubject": "Pepsi",
+          "method": "PDF email",
+          "notes": "First week bigger"
+        },
+        {
+          "vendor": "Core-Mark",
+          "draftDay": "Saturday",
+          "draftTime": "TBD PT",
+          "salesman": "Tue/Fri",
+          "delivery": "Saturday (Mina standing 2026-09-21 \u2014 overrides prior Tue/Fri/Thu)",
+          "emailSubject": "(portal)",
+          "method": "Customer First",
+          "notes": "Do not submit until Mina confirms | dly spend primary=Tuesday; days=Tuesday,Friday; inv=2026-09-01,2026-09-04 [medium] | MINA OVERRIDE: Core-Mark day = Saturday for all stores. Portal draft only \u2014 do not submit."
+        },
+        {
+          "vendor": "Frito-Lay",
+          "draftDay": "TBD",
+          "draftTime": "",
+          "salesman": "",
+          "delivery": "Thursday",
+          "emailSubject": "",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-03 -> Thursday [low] (added from dly; draft day TBD) | dly spend primary=Thursday; days=Thursday; inv=2026-09-03 [low]"
+        },
+        {
+          "vendor": "Red Bull",
+          "draftDay": "TBD",
+          "draftTime": "",
+          "salesman": "",
+          "delivery": "Friday",
+          "emailSubject": "",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-04 -> Friday [low] (added from dly; draft day TBD) | dly spend primary=Friday; days=Friday; inv=2026-09-04 [low]"
+        },
+        {
+          "vendor": "7UP",
+          "draftDay": "TBD",
+          "draftTime": "",
+          "salesman": "",
+          "delivery": "Wednesday",
+          "emailSubject": "",
+          "method": "invoice",
+          "notes": "dly inv dates 2026-09-02 -> Wednesday [low] (added from dly; draft day TBD) | dly spend primary=Wednesday; days=Wednesday; inv=2026-09-02 [low]"
+        }
+      ]
+    }
+  ]
+}

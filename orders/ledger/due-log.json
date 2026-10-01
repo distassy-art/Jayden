@@ -1,0 +1,30 @@
+[
+  {
+    "dueDay": "2026-09-26",
+    "vendor": "Core-Mark",
+    "timezone": "America/Los_Angeles",
+    "started": "2026-09-26T23:40:00Z",
+    "result": "Saturday arrived and the Core-Mark pass started. No charge file for 2026-09-26 was present, so no Saturday amount was added. Eighteen orders whose store, vendor, and date were missing from the shell and the live sends were appended. All 25 live sends and the shell orders were kept."
+  },
+  {
+    "dueDay": "2026-09-28",
+    "vendor": "Harbor",
+    "timezone": "America/Los_Angeles",
+    "started": "2026-09-28T09:00:05Z",
+    "result": "Monday Harbor due day. Appended 42098 and 42674 for 2026-09-28 from site PDFs ($1,374.72 and $2,223.69). No other Harbor store had a charge file or site PDF for that date. All prior sends unchanged."
+  },
+  {
+    "dueDay": "2026-09-30",
+    "vendor": "Coke",
+    "timezone": "America/Los_Angeles",
+    "started": "2026-09-30T09:00:05Z",
+    "result": "Wednesday Coke due day. Appended seven stores for 2026-09-30 from site order amounts and PDFs (42352, 42179, 42021, 42279, 42281, 42282, 42438). Seven other Coke stores had no charge file or PDF for that date. Twenty non-Coke pending rows left for a later merge. All 25 prior live sends unchanged."
+  },
+  {
+    "dueDay": "2026-10-01",
+    "vendor": "Pepsi",
+    "timezone": "America/Los_Angeles",
+    "started": "2026-10-01T13:40:00Z",
+    "result": "Thursday Pepsi due day. Appended 42004, 42279, and 42021 for 2026-10-01 from site PDF totals ($1,147.02, $834.64, $434.49). Eleven other Pepsi calendar stores had no charge file or site PDF for that date. Twenty non-Pepsi pending rows left for a later merge. All 32 prior live sends unchanged."
+  }
+]
