@@ -1,0 +1,2073 @@
+{
+  "version": 8,
+  "updatedAt": "2026-09-21T18:41:21Z",
+  "fromMailbox": "orders@smartsolutionsai26.onmicrosoft.com",
+  "fields": {
+    "aiAmount": "Dollar total on the AI draft / emailed PDF",
+    "attachment": "Path to the AI order PDF",
+    "actualAmount": "Invoice total when order is received",
+    "difference": "Actual \u2212 AI (fill after received)",
+    "actualInvoiceDate": "Dly Inv Date",
+    "actualInvoiceNumbers": "Dly invoice number(s)",
+    "actualSource": "Source dly PDF"
+  },
+  "sends": [
+    {
+      "dateSent": "2026-09-16",
+      "vendor": "Coke",
+      "store": "42352",
+      "storeId": "42352",
+      "client": "Arco Db",
+      "aiAmount": 534.72,
+      "orderingFee": 5.35,
+      "orderingFeeCharged": true,
+      "status": "Sent \u2014 awaiting invoice",
+      "pdfName": "42352-coke-09162026.pdf",
+      "pdfUrl": "/data/vendor-orders/pdfs/42352-coke-09162026.pdf",
+      "emailTo": "arcodb@outlook.com; reoberholtzer@gmail.com",
+      "subject": "Coke",
+      "size": "16 cases / 14 lines \u00b7 Smart Water 0",
+      "notes": "Half-week sales 9/9-9/15. Bill on create. My Coke draft not saved.",
+      "from": "orders@smartsolutionsai26.onmicrosoft.com",
+      "submittedByAI": false,
+      "mycokeDraftSaved": false
+    },
+    {
+      "dateSent": "2026-09-15",
+      "vendor": "Coke",
+      "store": "42004",
+      "storeId": "42004",
+      "client": "Arco Placentia",
+      "aiAmount": 405.14,
+      "orderingFee": 4.05,
+      "orderingFeeCharged": true,
+      "status": "Compared \u2014 OVERSIZED vs AI",
+      "pdfName": "42004-coke-09152026.pdf",
+      "pdfUrl": "/data/vendor-orders/pdfs/42004-coke-09152026.pdf",
+      "emailTo": "arcoplacentia@gmail.com",
+      "subject": "Coke",
+      "size": "10 cases / 9 lines",
+      "notes": "AI $405.14 emailed; My Coke draft $329.59 saved as arcopacentia@; delivery 9/17; not submitted. Bill on create already at AI amount.",
+      "from": "orders@smartsolutionsai26.onmicrosoft.com",
+      "submittedByAI": false,
+      "mycokeDraftSaved": true,
+      "portalTotal": 329.59,
+      "actualAmount": 1178.62,
+      "difference": 773.48,
+      "actualSource": "order-comparisons/index.json NonFuel match",
+      "invoiceVarianceUrl": "/order-comparisons/invoices/42004-2026-09-15-coke-54316843007.pdf"
+    },
+    {
+      "dateSent": "2026-09-15",
+      "vendor": "Harbor",
+      "store": "42004",
+      "storeId": "42004",
+      "client": "Arco Placentia",
+      "aiAmount": 1091.29,
+      "orderingFee": 10.91,
+      "orderingFeeCharged": true,
+      "status": "Compared \u2014 OVERSIZED vs AI",
+      "pdfName": "42004-harbor-09152026.pdf",
+      "pdfUrl": "/data/vendor-orders/pdfs/42004-harbor-09152026.pdf",
+      "emailTo": "arcoplacentia@gmail.com",
+      "subject": "Harbor Order Date",
+      "size": "35 cases / 29 lines \u00b7 half-week",
+      "notes": "Sales 9/7\u20139/13 half-week leftover trim. Bill on create.",
+      "from": "orders@smartsolutionsai26.onmicrosoft.com",
+      "submittedByAI": false,
+      "actualAmount": 2375.51,
+      "difference": 1284.22,
+      "actualSource": "order-comparisons/index.json NonFuel match",
+      "invoiceVarianceUrl": "/order-comparisons/invoices/42004-2026-09-15-harbor-200855974-200855975.pdf"
+    },
+    {
+      "dateSent": "2026-09-15",
+      "vendor": "Harbor",
+      "store": "42352",
+      "storeId": "42352",
+      "client": "Arco Db",
+      "aiAmount": 927.94,
+      "orderingFee": 9.28,
+      "orderingFeeCharged": true,
+      "status": "Sent \u2014 awaiting invoice",
+      "pdfName": "42352-harbor-09152026.pdf",
+      "pdfUrl": "/data/vendor-orders/pdfs/42352-harbor-09152026.pdf",
+      "emailTo": "arcodb@outlook.com; reoberholtzer@gmail.com",
+      "subject": "Harbor Order Date",
+      "size": "31 cases / 27 lines \u00b7 half-week",
+      "notes": "Sales 9/7\u20139/13 half-week leftover trim. Bill on create.",
+      "from": "orders@smartsolutionsai26.onmicrosoft.com",
+      "submittedByAI": false
+    },
+    {
+      "dateSent": "2026-09-14",
+      "vendor": "Core-Mark",
+      "store": "42352",
+      "storeId": "42352",
+      "client": "Arco Db",
+      "aiAmount": 2091.25,
+      "orderingFee": 20.91,
+      "orderingFeeCharged": true,
+      "status": "Draft ready \u2014 AI created, billed on create; await Mina confirm to submit",
+      "pdfName": "42352-coremark-09142026.pdf",
+      "pdfUrl": "/data/vendor-orders/pdfs/42352-coremark-09142026.pdf",
+      "emailTo": "arcodb@outlook.com; reoberholtzer@gmail.com",
+      "subject": null,
+      "size": "21 items / 16 CT \u00b7 Gold Box 5 CT",
+      "notes": "CF #163154298233634788 unsubmitted. Half-week under $7251 cap. Bill on create per Mina 9/11. | Audit 2026-09-15: AI draft \u2014 no invoice (unsubmitted); Actual/Diff left blank | client email sent 2026-09-21T06:40:47 from orders@ via Graph",
+      "from": "orders@smartsolutionsai26.onmicrosoft.com",
+      "portalTotal": 2091.25,
+      "cfOrderId": "163154298233634788",
+      "submittedByAI": false,
+      "held": true,
+      "actualAmount": null,
+      "difference": null,
+      "auditStatus": "AI_draft_no_invoice",
+      "emailSentAt": "2026-09-21T06:40:47",
+      "emailFrom": "orders@smartsolutionsai26.onmicrosoft.com"
+    },
+    {
+      "dateSent": "2026-09-10",
+      "vendor": "Core-Mark",
+      "store": "42352",
+      "storeId": "42352",
+      "client": "Arco Db",
+      "aiAmount": 4690.45,
+      "orderingFee": 46.9,
+      "orderingFeeCharged": true,
+      "status": "Draft held \u2014 AI created, billed on create (mgr/AI submit later)",
+      "pdfName": null,
+      "pdfUrl": null,
+      "emailTo": null,
+      "subject": null,
+      "size": "38 items / 39 cartons \u00b7 Gold 10 CT \u00b7 Box 5 CT \u00b7 Gold100 2 CT",
+      "notes": "CF #163154298175859850 unsubmitted (held). Mina 2026-09-11: bill on AI draft create. | Audit 2026-09-15: AI draft \u2014 no invoice (unsubmitted); Actual/Diff left blank",
+      "from": "orders@smartsolutionsai26.onmicrosoft.com",
+      "portalTotal": 4690.45,
+      "cfOrderId": "163154298175859850",
+      "submittedByAI": false,
+      "managerWillSubmit": false,
+      "held": true,
+      "actualAmount": null,
+      "difference": null,
+      "auditStatus": "AI_draft_no_invoice"
+    },
+    {
+      "dateSent": "2026-09-11",
+      "vendor": "Core-Mark",
+      "store": "42004",
+      "storeId": "42004",
+      "client": "Arco Placentia",
+      "aiAmount": 3548.78,
+      "orderingFee": 35.49,
+      "orderingFeeCharged": true,
+      "status": "Compared \u2014 OVERSIZED vs AI",
+      "pdfName": "42004-coremark-09112026.pdf",
+      "pdfUrl": "/data/vendor-orders/pdfs/42004-coremark-09112026.pdf",
+      "emailTo": "arcoplacentia@gmail.com",
+      "subject": null,
+      "size": "90 items / 12 cartons \u00b7 Gold 8 CT \u00b7 Box 4 CT",
+      "notes": "CF #307546298106720402 unsubmitted; manager will submit. Mina: bill on AI draft create. | Audit 2026-09-15: AI draft \u2014 no invoice (unsubmitted); Actual/Diff left blank | client email sent 2026-09-21T06:40:47 from orders@ via Graph",
+      "from": "orders@smartsolutionsai26.onmicrosoft.com",
+      "portalTotal": 3548.78,
+      "cfOrderId": "307546298106720402",
+      "submittedByAI": false,
+      "managerWillSubmit": true,
+      "actualAmount": 5866.32,
+      "difference": 2317.54,
+      "auditStatus": "AI_draft_no_invoice",
+      "actualSource": "order-comparisons/index.json NonFuel match",
+      "invoiceVarianceUrl": "/order-comparisons/invoices/42004-2026-09-11-core-mark-0262571087-0262571088-0262571089.pdf",
+      "emailSentAt": "2026-09-21T06:40:47",
+      "emailFrom": "orders@smartsolutionsai26.onmicrosoft.com"
+    },
+    {
+      "dateSent": "2026-09-10",
+      "timeSentPT": "~11:25 AM PT (emailed earlier; VO backfill on Placentia Pepsi Thursday routine)",
+      "store": "42004",
+      "storeId": "42004",
+      "client": "Arco Placentia",
+      "vendor": "Pepsi",
+      "aiAmount": 1297.67,
+      "orderingFee": 12.98,
+      "orderingFeeCharged": true,
+      "attachment": "42004-pepsi-09102026.pdf",
+      "pdfName": "42004-pepsi-09102026.pdf",
+      "pdfUrl": "/data/vendor-orders/pdfs/42004-pepsi-09102026.pdf",
+      "localPath": "/workspace/placentia/pepsi/09102026.pdf",
+      "emailTo": "arcoplacentia@gmail.com",
+      "subject": "Pepsi",
+      "size": "54 cases / 47 lines",
+      "status": "Received \u2014 near miss / added vs AI",
+      "notes": "1wk sales 9/3\u20139/9 leftover trim; emailed from orders@ earlier today; routine backfill VO + Billing. | Audit 2026-09-15: Actual $1395.23 inv (MTD delta; inv# TBD) (Diff $+97.56 +7.5%; near_miss)",
+      "from": "orders@smartsolutionsai26.onmicrosoft.com",
+      "graph": 202,
+      "method": "one_week_true_pull + leftover trim (need=sold-max(0,pur-sold); cases=ceil(need/pack)); regular weekly Placentia",
+      "salesWindow": "2026-09-03 to 2026-09-09",
+      "actualAmount": 1395.23,
+      "difference": 97.56,
+      "actualInvoiceDate": "2026-09-11..13",
+      "actualInvoiceNumbers": [],
+      "actualInvoiceNote": "(MTD delta; inv# TBD)",
+      "actualSource": "order-comparisons/index.json NonFuel match",
+      "auditStatus": "near_miss",
+      "auditPct": 7.52,
+      "invoiceVarianceUrl": "/order-comparisons/invoices/42004-2026-09-10-pepsi-5135201560-7up-mtd-delta-match-from-week.pdf"
+    },
+    {
+      "dateSent": "2026-09-10",
+      "vendor": "Pepsi",
+      "store": "42352",
+      "storeId": "42352",
+      "client": "Arco Db",
+      "aiAmount": 970.1,
+      "orderingFee": 9.7,
+      "orderingFeeCharged": true,
+      "status": "Received \u2014 material miss (>8%)",
+      "pdfName": "42352-pepsi-09102026.pdf",
+      "pdfUrl": "/data/vendor-orders/pdfs/42352-pepsi-09102026.pdf",
+      "emailTo": "arcodb@outlook.com",
+      "subject": "Pepsi",
+      "size": "40 cases / 36 lines",
+      "notes": "CORRECTED: true 1wk 9/3\u20139/9 leftover trim; NO GATORADE; replaces fallback $2926.36 email. | Audit 2026-09-15: Actual $1179.58 inv 35575800 (Diff $+209.48 +21.6%; material_miss)",
+      "from": "orders@smartsolutionsai26.onmicrosoft.com",
+      "s2k_fresh": true,
+      "no_gatorade": true,
+      "replacesAiAmount": 2926.36,
+      "actualAmount": 1179.58,
+      "difference": 209.48,
+      "actualInvoiceDate": "2026-09-12",
+      "actualInvoiceNumbers": [
+        "35575800"
+      ],
+      "actualSource": "scan Pepsi 1209.pdf (OCR); NOT yet in NonFuel MTD as-of 9/13 AM",
+      "auditStatus": "material_miss",
+      "auditPct": 21.59
+    },
+    {
+      "dateSent": "2026-09-09",
+      "vendor": "Coke",
+      "store": "42004",
+      "storeId": "42004",
+      "aiAmount": 959.03,
+      "orderingFee": 9.59,
+      "orderingFeeCharged": true,
+      "status": "Sent \u2014 emailed for manager",
+      "pdfName": "42004-coke-09092026.pdf",
+      "pdfUrl": "/data/vendor-orders/pdfs/42004-coke-09092026.pdf",
+      "emailTo": "arcoplacentia@gmail.com",
+      "subject": "Coke",
+      "size": "31 cases / 25 lines",
+      "notes": "Leftover-aware from 1wk sales 9/2\u20139/8 after 9/3 inv ~$4145; Smart Water 1L skipped. Mina confirmed email. | Audit 2026-09-15: AI sent \u2014 no invoice yet; Actual/Diff left blank",
+      "actualAmount": null,
+      "difference": null,
+      "auditStatus": "AI_no_invoice_yet"
+    },
+    {
+      "dateSent": "2026-09-09",
+      "vendor": "Coke",
+      "store": "42352",
+      "storeId": "42352",
+      "aiAmount": 1121.22,
+      "orderingFee": 11.21,
+      "orderingFeeCharged": true,
+      "status": "Received \u2014 material miss (>8%)",
+      "pdfName": "42352-coke-09092026.pdf",
+      "pdfUrl": "/data/vendor-orders/pdfs/42352-coke-09092026.pdf",
+      "emailTo": "arcodb@outlook.com",
+      "subject": "Coke",
+      "size": "25 cases / 15 lines",
+      "portalAmount": 1121.22,
+      "notes": "Updated PDF matches MyCoke DRAFT $1121.22: 6 BIB, 9 green Monster, 2 Classic 12pk. Manager submits. | Audit 2026-09-15: Actual $851.22 inv 54229698011 (Diff $-270.00 -24.1%; material_miss)",
+      "actualAmount": 851.22,
+      "difference": -270.0,
+      "actualInvoiceDate": "2026-09-11",
+      "actualInvoiceNumbers": [
+        "54229698011"
+      ],
+      "actualSource": "scan Coca Cola 1109 + Vendor Audit + dly Coke delta",
+      "auditStatus": "material_miss",
+      "auditPct": -24.08
+    },
+    {
+      "dateSent": "2026-09-07",
+      "aiAmount": 2488.75,
+      "size": "81 cases",
+      "status": "Received \u2014 material miss (>8%)",
+      "emailTo": "arcodb@outlook.com",
+      "subject": "Harbor Order Date",
+      "sentVia": "Email",
+      "attachment": "42352-harbor-09072026.pdf",
+      "pdfName": "42352-harbor-09072026.pdf",
+      "pdfUrl": "/data/vendor-orders/pdfs/42352-harbor-09072026.pdf",
+      "localPath": "/workspace/harbor/09072026.pdf",
+      "sentViaDetail": "orders@ \u2192 arcodb@outlook.com \u00b7 subject Harbor Order Date",
+      "notes": "Week-2 one-week sales 8/24\u20139/6. Emailed after Mina review. | Audit 2026-09-15: Actual $3169.30 inv 200851289+200851290 (Diff $+680.55 +27.4%; material_miss)",
+      "orderingFeeRate": 0.01,
+      "orderingFee": 24.89,
+      "orderingFeeCharged": true,
+      "client": "Arco Db",
+      "store": "42352",
+      "vendor": "Harbor",
+      "actualAmount": 3169.3,
+      "difference": 680.55,
+      "actualInvoiceDate": "2026-09-09",
+      "actualInvoiceNumbers": [
+        "200851289",
+        "200851290"
+      ],
+      "actualSource": "dly NonFuel 9/11 + Vendor Audit + scan Harbor 0909",
+      "auditStatus": "material_miss",
+      "auditPct": 27.35
+    },
+    {
+      "dateSent": "2026-09-07",
+      "aiAmount": 1959.89,
+      "size": "63 cases",
+      "status": "Received \u2014 dly matched",
+      "emailTo": "robertking630@gmail.com",
+      "subject": "Harbor Order Date",
+      "sentVia": "Email",
+      "attachment": "42179-harbor-09072026.pdf",
+      "pdfName": "42179-harbor-09072026.pdf",
+      "pdfUrl": "/data/vendor-orders/pdfs/42179-harbor-09072026.pdf",
+      "localPath": "/workspace/harbor-hb/09072026.pdf",
+      "sentViaDetail": "orders@ \u2192 robertking630@gmail.com \u00b7 subject Harbor Order Date",
+      "notes": "Week-2 one-week sales 8/24\u20139/6. Emailed after Mina OK. | Audit 2026-09-15: Actual $1943.49 inv (MTD delta HARBOR DIST; inv# TBD) (Diff $-16.40 -0.8%; match_within_2pct)",
+      "orderingFeeRate": 0.01,
+      "orderingFee": 19.6,
+      "orderingFeeCharged": true,
+      "client": "Arco HB",
+      "store": "42179",
+      "vendor": "Harbor",
+      "actualAmount": 1943.49,
+      "difference": -16.4,
+      "actualInvoiceDate": "2026-09-11..13",
+      "actualInvoiceNumbers": [],
+      "actualInvoiceNote": "(MTD delta HARBOR DIST; inv# TBD)",
+      "actualSource": "dly NonFuel HARBOR DIST MTD 3021.38\u21924964.87 between 9/11 and 9/13",
+      "auditStatus": "match_within_2pct",
+      "auditPct": -0.84
+    },
+    {
+      "dateSent": "2026-09-07",
+      "aiAmount": 2222.83,
+      "size": "72 cases",
+      "status": "Received \u2014 near miss / added vs AI",
+      "emailTo": "arcoplacentia@gmail.com",
+      "subject": "Harbor Order Date",
+      "sentVia": "Email",
+      "attachment": "42004-harbor-09072026.pdf",
+      "pdfName": "42004-harbor-09072026.pdf",
+      "pdfUrl": "/data/vendor-orders/pdfs/42004-harbor-09072026.pdf",
+      "localPath": "/workspace/placentia/harbor/09072026.pdf",
+      "sentViaDetail": "orders@ \u2192 arcoplacentia@gmail.com \u00b7 subject Harbor Order Date",
+      "notes": "Week-2 one-week sales 8/24\u20139/6. Emailed. | Audit 2026-09-15: Actual $2321.39 inv 200851906+200851907 (Diff $+98.56 +4.4%; near_miss)",
+      "orderingFeeRate": 0.01,
+      "orderingFee": 22.23,
+      "orderingFeeCharged": true,
+      "client": "Arco Placentia",
+      "store": "42004",
+      "vendor": "Harbor",
+      "actualAmount": 2321.39,
+      "difference": 98.56,
+      "actualInvoiceDate": "2026-09-09",
+      "actualInvoiceNumbers": [
+        "200851906",
+        "200851907"
+      ],
+      "actualSource": "order-comparisons/index.json NonFuel match",
+      "auditStatus": "near_miss",
+      "auditPct": 4.43,
+      "invoiceVarianceUrl": "/order-comparisons/invoices/42004-2026-09-07-harbor-200851906-200851907.pdf"
+    },
+    {
+      "dateSent": "2026-09-03",
+      "timeSentPT": "8:10 PM PT",
+      "store": "42352",
+      "client": "Arco Db",
+      "vendor": "Pepsi",
+      "aiAmount": 4263.56,
+      "attachment": "42352-pepsi-09032026.pdf",
+      "emailTo": "arcodb@outlook.com",
+      "subject": "Pepsi",
+      "size": "193 cases / 92 lines",
+      "dateReceived": null,
+      "actualAmount": 2450.0,
+      "difference": -1813.56,
+      "status": "Received \u2014 dly matched",
+      "notes": "First-week Sep; salesman Fri 9/4 delivery Sat 9/5 | Dly actual 2026-09-03 inv 32685500 = $2450.00 (Diff $-1813.56)",
+      "pdfUrl": "/data/vendor-orders/pdfs/42352-pepsi-09032026.pdf",
+      "pdfName": "42352-pepsi-09032026.pdf",
+      "localPath": "/workspace/pepsi/09052026.pdf",
+      "sentVia": "Email",
+      "sentViaDetail": "orders@ \u2192 arcodb@outlook.com \u00b7 subject Pepsi",
+      "orderingFeeRate": 0.01,
+      "orderingFeePreview": 42.64,
+      "orderingFee": 42.64,
+      "orderingFeeCharged": true,
+      "actualInvoiceDate": "2026-09-03",
+      "actualInvoiceNumbers": [
+        "32685500"
+      ],
+      "actualSource": "dly 42352-09052026dly.pdf"
+    },
+    {
+      "dateSent": "2026-09-03",
+      "timeSentPT": "8:10 PM PT",
+      "store": "42352",
+      "client": "Arco Db",
+      "vendor": "Coke",
+      "aiAmount": 4453.4,
+      "attachment": "42352-coke-09032026.pdf",
+      "emailTo": "arcodb@outlook.com",
+      "subject": "Coke",
+      "size": "146 cases My Coke",
+      "dateReceived": null,
+      "actualAmount": 4884.99,
+      "difference": 431.59,
+      "status": "Received \u2014 dly matched",
+      "notes": "Smart Water 1L 25 CS; PDF S2K estimate may differ slightly | Dly actual 2026-09-04 inv 54133528012 = $4884.99 (Diff $+431.59)",
+      "pdfUrl": "/data/vendor-orders/pdfs/42352-coke-09032026.pdf",
+      "pdfName": "42352-coke-09032026.pdf",
+      "localPath": "/workspace/coke/09042026.pdf",
+      "sentVia": "Email + website",
+      "sentViaDetail": "Email orders@ \u2192 arcodb@outlook.com \u00b7 subject Coke; also My Coke draft AMPM #42352",
+      "orderingFeeRate": 0.01,
+      "orderingFeePreview": 44.53,
+      "orderingFee": 44.53,
+      "orderingFeeCharged": true,
+      "actualInvoiceDate": "2026-09-04",
+      "actualInvoiceNumbers": [
+        "54133528012"
+      ],
+      "actualSource": "dly 42352-09052026dly.pdf"
+    },
+    {
+      "dateSent": "2026-09-03",
+      "timeSentPT": "draft PT (portal)",
+      "store": "42352",
+      "client": "Arco Db",
+      "vendor": "Core-Mark",
+      "aiAmount": 3642.59,
+      "attachment": "42352-core-mark-09032026.pdf",
+      "pdfUrl": "/data/vendor-orders/pdfs/42352-core-mark-09032026.pdf",
+      "pdfName": "42352-core-mark-09032026.pdf",
+      "localPath": "/workspace/coremark/09042026.pdf",
+      "emailTo": "(Customer First #163154 \u2014 not emailed)",
+      "subject": "Core-Mark draft Fri 9/4 delivery",
+      "size": "101 lines \u00b7 est $3,642.59 (PDF)",
+      "dateReceived": null,
+      "actualAmount": 5648.83,
+      "difference": 2006.24,
+      "status": "Received \u2014 dly matched (big CMARK)",
+      "notes": "Customer First portal draft; PDF AI record. Do not submit until Mina confirms. | Dly big CMARK only 2026-09-04 inv 0262473421 = $5648.83 (Diff $+2006.24); ignored small CMARK lines",
+      "sentVia": "Website",
+      "sentViaDetail": "Customer First #163154 (Rachel) \u2014 unsubmitted portal draft",
+      "orderingFeeRate": 0.01,
+      "orderingFeePreview": 36.43,
+      "orderingFee": 36.43,
+      "orderingFeeCharged": true,
+      "actualInvoiceDate": "2026-09-04",
+      "actualInvoiceNumbers": [
+        "0262473421"
+      ],
+      "actualSource": "dly 42352-09052026dly.pdf (big CMARK only; ignored smalls 369.00 / -56.77)"
+    },
+    {
+      "dateSent": "2026-09-02",
+      "timeSentPT": "afternoon PT (portal)",
+      "store": "42004",
+      "client": "Arco Placentia",
+      "vendor": "Core-Mark",
+      "aiAmount": 6489.02,
+      "attachment": "42004-core-mark-09042026.pdf",
+      "pdfUrl": "/data/vendor-orders/pdfs/42004-core-mark-09042026.pdf",
+      "pdfName": "42004-core-mark-09042026.pdf",
+      "localPath": "/workspace/placentia/coremark/09042026.pdf",
+      "emailTo": "(Customer First #307546 \u2014 not emailed)",
+      "subject": "Core-Mark cigs-only draft #307546298062823952",
+      "size": "90 items \u00b7 40 CT",
+      "dateReceived": null,
+      "actualAmount": null,
+      "difference": null,
+      "status": "unsubmitted draft",
+      "notes": "Cigs sized to 1.5wk of 8/19\u20139/1 sales (590 packs). Trimmed from 56 CT. Friday 9/4 noon routine: still UNSUBMITTED; portal login wall \u2014 Mina must sign in on the box to confirm. Do not submit until she confirms.",
+      "sentVia": "Website",
+      "sentViaDetail": "Customer First #307546 (Brian) \u2014 unsubmitted portal draft #307546298062823952",
+      "orderingFeeRate": 0.01,
+      "orderingFeePreview": 64.89,
+      "orderingFee": 64.89,
+      "orderingFeeCharged": true,
+      "fridayReviewedPT": "2026-09-04 12:23 PT"
+    },
+    {
+      "dateSent": "2026-09-01",
+      "timeSentPT": "~evening PT",
+      "store": "42352",
+      "client": "Arco Db",
+      "vendor": "Harbor",
+      "aiAmount": 5386.4,
+      "attachment": "42352-harbor-09012026.pdf",
+      "emailTo": "arcodb@outlook.com",
+      "subject": "Harbor Order Date",
+      "size": "cases (Harbor)",
+      "dateReceived": null,
+      "actualAmount": 6037.54,
+      "difference": 651.14,
+      "status": "Received \u2014 dly matched",
+      "notes": "Approved and emailed | Dly actual 2026-09-02 inv 200847996,200847997 = $6037.54 (Diff $+651.14)",
+      "pdfUrl": "/data/vendor-orders/pdfs/42352-harbor-09012026.pdf",
+      "pdfName": "42352-harbor-09012026.pdf",
+      "localPath": "/workspace/harbor/09012026.pdf",
+      "sentVia": "Email",
+      "sentViaDetail": "orders@ \u2192 arcodb@outlook.com \u00b7 subject Harbor Order Date",
+      "orderingFeeRate": 0.01,
+      "orderingFeePreview": 53.86,
+      "orderingFee": 53.86,
+      "orderingFeeCharged": true,
+      "actualInvoiceDate": "2026-09-02",
+      "actualInvoiceNumbers": [
+        "200847996",
+        "200847997"
+      ],
+      "actualSource": "dly 42352-09052026dly.pdf"
+    },
+    {
+      "dateSent": "2026-09-01",
+      "timeSentPT": "~evening PT",
+      "store": "42004",
+      "client": "Arco Placentia",
+      "vendor": "Harbor",
+      "aiAmount": 3525.75,
+      "attachment": "42004-harbor-09012026.pdf",
+      "emailTo": "arcoplacentia@gmail.com",
+      "subject": "Harbor Order Date",
+      "size": "110 cases",
+      "dateReceived": null,
+      "actualAmount": 2554.15,
+      "difference": -971.6,
+      "status": "Received \u2014 dly matched",
+      "notes": "Approved and emailed | Dly actual 2026-09-02 inv 200848685 = $2554.15 (Diff $-971.60)",
+      "pdfUrl": "/data/vendor-orders/pdfs/42004-harbor-09012026.pdf",
+      "pdfName": "42004-harbor-09012026.pdf",
+      "localPath": "/workspace/placentia/harbor/09012026.pdf",
+      "sentVia": "Email",
+      "sentViaDetail": "orders@ \u2192 arcoplacentia@gmail.com \u00b7 subject Harbor Order Date",
+      "orderingFeeRate": 0.01,
+      "orderingFeePreview": 35.26,
+      "orderingFee": 35.26,
+      "orderingFeeCharged": true,
+      "actualInvoiceDate": "2026-09-02",
+      "actualInvoiceNumbers": [
+        "200848685"
+      ],
+      "actualSource": "dly 42004-09052026dly.pdf"
+    },
+    {
+      "dateSent": "2026-09-01",
+      "timeSentPT": "~evening PT",
+      "store": "42004",
+      "client": "Arco Placentia",
+      "vendor": "Coke",
+      "aiAmount": 2842.12,
+      "attachment": "42004-coke-09012026.pdf",
+      "emailTo": "arcoplacentia@gmail.com",
+      "subject": "Coke",
+      "size": "73 cases",
+      "dateReceived": null,
+      "actualAmount": 4145.06,
+      "difference": 1302.94,
+      "status": "Received \u2014 dly matched",
+      "notes": "Emailed with Pepsi | Dly actual 2026-09-03 inv 54111469005 = $4145.06 (Diff $+1302.94)",
+      "pdfUrl": "/data/vendor-orders/pdfs/42004-coke-09012026.pdf",
+      "pdfName": "42004-coke-09012026.pdf",
+      "localPath": "/workspace/placentia/coke/09042026.pdf",
+      "sentVia": "Email",
+      "sentViaDetail": "orders@ \u2192 arcoplacentia@gmail.com \u00b7 subject Coke",
+      "orderingFeeRate": 0.01,
+      "orderingFeePreview": 28.42,
+      "orderingFee": 28.42,
+      "orderingFeeCharged": true,
+      "actualInvoiceDate": "2026-09-03",
+      "actualInvoiceNumbers": [
+        "54111469005"
+      ],
+      "actualSource": "dly 42004-09052026dly.pdf"
+    },
+    {
+      "dateSent": "2026-09-01",
+      "timeSentPT": "~evening PT",
+      "store": "42004",
+      "client": "Arco Placentia",
+      "vendor": "Pepsi",
+      "aiAmount": 2379.56,
+      "attachment": "42004-pepsi-09012026.pdf",
+      "emailTo": "arcoplacentia@gmail.com",
+      "subject": "Pepsi",
+      "size": "95 cases",
+      "dateReceived": null,
+      "actualAmount": 2766.98,
+      "difference": 387.42,
+      "status": "Received \u2014 dly matched",
+      "notes": "Emailed with Coke | Dly actual 2026-09-03 inv 32692111 = $2766.98 (Diff $+387.42)",
+      "pdfUrl": "/data/vendor-orders/pdfs/42004-pepsi-09012026.pdf",
+      "pdfName": "42004-pepsi-09012026.pdf",
+      "localPath": "/workspace/placentia/pepsi/09052026.pdf",
+      "sentVia": "Email",
+      "sentViaDetail": "orders@ \u2192 arcoplacentia@gmail.com \u00b7 subject Pepsi",
+      "orderingFeeRate": 0.01,
+      "orderingFeePreview": 23.8,
+      "orderingFee": 23.8,
+      "orderingFeeCharged": true,
+      "actualInvoiceDate": "2026-09-03",
+      "actualInvoiceNumbers": [
+        "32692111"
+      ],
+      "actualSource": "dly 42004-09052026dly.pdf"
+    },
+    {
+      "dateSent": "2026-09-17",
+      "timeSentPT": "draft ~5:35 AM PT",
+      "store": "42004",
+      "storeId": "42004",
+      "client": "Arco Placentia",
+      "vendor": "Pepsi",
+      "aiAmount": 180.69,
+      "attachment": "42004-pepsi-09172026.pdf",
+      "emailTo": "arcoplacentia@gmail.com",
+      "subject": "Pepsi",
+      "size": "10 cases / 10 lines",
+      "dateReceived": null,
+      "actualAmount": 1460.87,
+      "difference": 1280.18,
+      "status": "Compared \u2014 OVERSIZED vs AI",
+      "notes": "1wk sales 9/10\u20139/16 leftover+QoH trim + half-week ~50% prefer cuts; Gatorade 7 + Celsius 3; not padded. Bill 1% on create.",
+      "pdfUrl": "/data/vendor-orders/pdfs/42004-pepsi-09172026.pdf",
+      "pdfName": "42004-pepsi-09172026.pdf",
+      "localPath": "/workspace/placentia/pepsi/09172026.pdf",
+      "sentVia": null,
+      "sentViaDetail": "NOT EMAILED yet \u2014 routine: show Mina first",
+      "orderingFeeRate": 0.01,
+      "orderingFeePreview": 1.81,
+      "orderingFee": 1.81,
+      "orderingFeeCharged": true,
+      "from": "orders@smartsolutionsai26.onmicrosoft.com",
+      "voPostedAt": "2026-09-17T12:39:13Z",
+      "actualSource": "order-comparisons/index.json NonFuel match",
+      "invoiceVarianceUrl": "/order-comparisons/invoices/42004-2026-09-17-pepsi-37204408.pdf"
+    },
+    {
+      "dateSent": "2026-09-19",
+      "store": "42004",
+      "storeId": "42004",
+      "client": "Arco Placentia",
+      "vendor": "Core-Mark",
+      "aiAmount": 5393.22,
+      "actualAmount": null,
+      "difference": null,
+      "status": "Excluded \u2014 no landed invoice",
+      "pdfUrl": "/data/vendor-orders/pdfs/42004-coremark-09192026.pdf",
+      "pdfName": "42004-coremark-09192026.pdf",
+      "actualSource": "order-comparisons/index.json",
+      "invoiceVarianceUrl": "/order-comparisons/invoices/42004-2026-09-19-core-mark-ai-2026-09-19-core-mark.pdf",
+      "orderingFeeCharged": true,
+      "notes": "Excluded \u2014 no landed Core-Mark invoice (delivery 9/21 pending) | client email sent 2026-09-21T06:40:47 from orders@ via Graph",
+      "cutCount": 0,
+      "addCount": 0,
+      "lineRecoverable": false,
+      "orderingFee": 53.93,
+      "emailTo": "arcoplacentia@gmail.com",
+      "emailSentAt": "2026-09-21T06:40:47",
+      "emailFrom": "orders@smartsolutionsai26.onmicrosoft.com"
+    },
+    {
+      "dateSent": "2026-09-21",
+      "store": "42004",
+      "storeId": "42004",
+      "client": "Arco Placentia",
+      "vendor": "Harbor",
+      "aiAmount": 2124.6,
+      "actualAmount": null,
+      "difference": null,
+      "status": "Sent \u2014 emailed for manager",
+      "pdfUrl": "/data/vendor-orders/pdfs/42004-harbor-09232026.pdf",
+      "pdfName": "42004-harbor-09232026.pdf",
+      "actualSource": "order-comparisons/index.json",
+      "invoiceVarianceUrl": "/order-comparisons/invoices/42004-2026-09-21-harbor-ai-2026-09-21-harbor.pdf",
+      "orderingFeeCharged": true,
+      "notes": "Redo 2026-09-21 \u2014 fixed stale PDF link; emailed $2124.60 Harbor order",
+      "cutCount": 0,
+      "addCount": 0,
+      "lineRecoverable": false,
+      "orderingFee": 21.25,
+      "emailTo": "arcoplacentia@gmail.com",
+      "emailSentAt": "2026-09-21T06:40:47",
+      "emailFrom": "orders@smartsolutionsai26.onmicrosoft.com",
+      "size": "41 lines \u00b7 redo",
+      "from": "orders@Smartsolutionsai26.onmicrosoft.com",
+      "subject": "Harbor Order Date 9/21/2026 \u2014 Arco Placentia (REDO $2,124.60)"
+    }
+  ],
+  "schedules": [
+    {
+      "store": "42098",
+      "name": "Arco Brookhurst 75",
+      "orderTo": "brookhurst75@outlook.com",
+      "vendors": [
+        {
+          "vendor": "Harbor",
+          "draftDay": "Monday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Tuesday AM",
+          "delivery": "Tuesday",
+          "subject": "Harbor Order Date",
+          "method": "PDF email",
+          "notes": "2-wk SKU sales; first week bigger | dly spend primary=Tuesday; days=Tuesday; inv=2026-09-01 [low]",
+          "contactEmail": "brookhurst75@outlook.com",
+          "frequency": "weekly",
+          "deliveryConfidence": "low",
+          "deliveryInvoiceDates": [
+            "2026-09-01"
+          ],
+          "deliverySource": "vendor_dly_spend_2026",
+          "primaryDeliveryDay": "Tuesday",
+          "inferredDeliveryDays": [
+            "Tuesday"
+          ]
+        },
+        {
+          "vendor": "Coke",
+          "draftDay": "Wednesday",
+          "draftTime": "12:00 PM PT",
+          "salesman": "Thursday",
+          "delivery": "Wednesday",
+          "subject": "Coke",
+          "method": "PDF + My Coke draft",
+          "notes": "Smart Water 1L = 0 or 25 by sales | dly spend primary=Wednesday; days=Wednesday; inv=2026-09-02 [low]",
+          "contactEmail": "brookhurst75@outlook.com",
+          "frequency": "weekly",
+          "websiteUrl": "https://www.my-coke.com",
+          "deliveryConfidence": "low",
+          "deliveryInvoiceDates": [
+            "2026-09-02"
+          ],
+          "deliverySource": "vendor_dly_spend_2026",
+          "primaryDeliveryDay": "Wednesday",
+          "inferredDeliveryDays": [
+            "Wednesday"
+          ]
+        },
+        {
+          "vendor": "Pepsi",
+          "draftDay": "Thursday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Friday",
+          "delivery": "",
+          "subject": "Pepsi",
+          "method": "PDF email",
+          "notes": "First week bigger | dly spend: no invoice in window [none] | cadence cleared (no dly evidence)",
+          "contactEmail": "brookhurst75@outlook.com",
+          "frequency": "weekly",
+          "deliveryConfidence": "none",
+          "deliverySource": "vendor_dly_spend_2026"
+        },
+        {
+          "vendor": "Core-Mark",
+          "draftDay": "Mon + Thu",
+          "draftTime": "before cutoff",
+          "salesman": "Tue/Fri",
+          "delivery": "",
+          "subject": "(portal)",
+          "method": "Customer First",
+          "notes": "dly spend: no invoice in window [none] | cadence cleared (no dly evidence)",
+          "contactEmail": "brookhurst75@outlook.com",
+          "frequency": "twice_weekly",
+          "websiteUrl": "https://www.coremarkcustomerfirst.com",
+          "deliveryConfidence": "none",
+          "deliverySource": "vendor_dly_spend_2026"
+        },
+        {
+          "vendor": "Straub",
+          "draftDay": "TBD",
+          "delivery": "Friday",
+          "frequency": "weekly",
+          "method": "invoice",
+          "notes": "dly inv 2026-09-04 -> Friday [low] (standing day from invoices) | dly spend primary=Friday; days=Friday; inv=2026-09-04 [low]",
+          "deliveryConfidence": "low",
+          "deliveryInvoiceDates": [
+            "2026-09-04"
+          ],
+          "deliverySource": "vendor_dly_spend_2026",
+          "primaryDeliveryDay": "Friday",
+          "inferredDeliveryDays": [
+            "Friday"
+          ]
+        }
+      ],
+      "updatedAt": "2026-09-08T18:40:00Z"
+    },
+    {
+      "store": "42281",
+      "name": "Arco Charleston",
+      "orderTo": "arcocharleston@outlook.com",
+      "vendors": [
+        {
+          "vendor": "Harbor",
+          "draftDay": "Monday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Tuesday AM",
+          "delivery": "",
+          "subject": "Harbor Order Date",
+          "method": "PDF email",
+          "notes": "2-wk SKU sales; first week bigger | dly spend: no invoice in window [none] | cadence cleared (no dly evidence)",
+          "contactEmail": "arcocharleston@outlook.com",
+          "frequency": "weekly",
+          "deliveryConfidence": "none",
+          "deliverySource": "vendor_dly_spend_2026"
+        },
+        {
+          "vendor": "Coke",
+          "draftDay": "Wednesday",
+          "draftTime": "12:00 PM PT",
+          "salesman": "Thursday",
+          "delivery": "",
+          "subject": "Coke",
+          "method": "PDF + My Coke draft",
+          "notes": "Smart Water 1L = 0 or 25 by sales | dly spend: no invoice in window [none] | cadence cleared (no dly evidence)",
+          "contactEmail": "arcocharleston@outlook.com",
+          "frequency": "weekly",
+          "websiteUrl": "https://www.my-coke.com",
+          "deliveryConfidence": "none",
+          "deliverySource": "vendor_dly_spend_2026"
+        },
+        {
+          "vendor": "Pepsi",
+          "draftDay": "Thursday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Friday",
+          "delivery": "Tuesday",
+          "subject": "Pepsi",
+          "method": "PDF email",
+          "notes": "First week bigger | dly spend primary=Tuesday; days=Tuesday; inv=2026-09-01 [low]",
+          "contactEmail": "arcocharleston@outlook.com",
+          "frequency": "weekly",
+          "deliveryConfidence": "low",
+          "deliveryInvoiceDates": [
+            "2026-09-01"
+          ],
+          "deliverySource": "vendor_dly_spend_2026",
+          "primaryDeliveryDay": "Tuesday",
+          "inferredDeliveryDays": [
+            "Tuesday"
+          ]
+        },
+        {
+          "vendor": "Core-Mark",
+          "draftDay": "Mon + Thu",
+          "draftTime": "before cutoff",
+          "salesman": "Tue/Fri",
+          "delivery": "Tuesday / Friday",
+          "subject": "(portal)",
+          "method": "Customer First",
+          "notes": "dly spend primary=Tuesday; days=Tuesday,Friday; inv=2026-09-01,2026-09-04 [medium]",
+          "contactEmail": "arcocharleston@outlook.com",
+          "frequency": "twice_weekly",
+          "websiteUrl": "https://www.coremarkcustomerfirst.com",
+          "deliveryConfidence": "medium",
+          "deliveryInvoiceDates": [
+            "2026-09-01",
+            "2026-09-04"
+          ],
+          "deliverySource": "vendor_dly_spend_2026",
+          "primaryDeliveryDay": "Tuesday",
+          "inferredDeliveryDays": [
+            "Tuesday",
+            "Friday"
+          ]
+        },
+        {
+          "vendor": "Nevada Beverage",
+          "delivery": "Wednesday",
+          "frequency": "weekly",
+          "draftDay": "TBD",
+          "method": "invoice",
+          "deliverySource": "vendor_dly_spend_2026",
+          "deliveryConfidence": "low",
+          "primaryDeliveryDay": "Wednesday",
+          "notes": "dly spend primary=Wednesday; inv=2026-09-02 [low]",
+          "deliveryInvoiceDates": [
+            "2026-09-02"
+          ]
+        }
+      ],
+      "updatedAt": "2026-09-08T18:40:00Z"
+    },
+    {
+      "store": "42352",
+      "name": "Arco Db (Diamond Bar)",
+      "orderTo": "arcodb@outlook.com",
+      "vendors": [
+        {
+          "vendor": "Harbor",
+          "draftDay": "Monday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Tuesday AM",
+          "delivery": "Wednesday",
+          "subject": "Harbor Order Date",
+          "method": "PDF email",
+          "notes": "2-wk SKU sales; first week bigger | dly spend primary=Wednesday; days=Wednesday; inv=2026-09-02 [medium]",
+          "contactEmail": "arcodb@outlook.com",
+          "frequency": "weekly",
+          "deliveryConfidence": "medium",
+          "deliveryInvoiceDates": [
+            "2026-09-02"
+          ],
+          "deliverySource": "vendor_dly_spend_2026",
+          "primaryDeliveryDay": "Wednesday",
+          "inferredDeliveryDays": [
+            "Wednesday"
+          ]
+        },
+        {
+          "vendor": "Coke",
+          "draftDay": "Wednesday",
+          "draftTime": "12:00 PM PT",
+          "salesman": "Thursday",
+          "delivery": "Friday",
+          "subject": "Coke",
+          "method": "PDF + My Coke draft",
+          "notes": "Smart Water 1L = 0 or 25 by sales | dly spend primary=Friday; days=Friday; inv=2026-09-04 [low]",
+          "contactEmail": "arcodb@outlook.com",
+          "frequency": "weekly",
+          "websiteUrl": "https://www.my-coke.com",
+          "deliveryConfidence": "low",
+          "deliveryInvoiceDates": [
+            "2026-09-04"
+          ],
+          "deliverySource": "vendor_dly_spend_2026",
+          "primaryDeliveryDay": "Friday",
+          "inferredDeliveryDays": [
+            "Friday"
+          ]
+        },
+        {
+          "vendor": "Pepsi",
+          "draftDay": "Thursday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Friday",
+          "delivery": "Thursday",
+          "subject": "Pepsi",
+          "method": "PDF email",
+          "notes": "First week bigger | dly spend primary=Thursday; days=Thursday; inv=2026-09-03 [low]",
+          "contactEmail": "arcodb@outlook.com",
+          "frequency": "weekly",
+          "deliveryConfidence": "low",
+          "deliveryInvoiceDates": [
+            "2026-09-03"
+          ],
+          "deliverySource": "vendor_dly_spend_2026",
+          "primaryDeliveryDay": "Thursday",
+          "inferredDeliveryDays": [
+            "Thursday"
+          ]
+        },
+        {
+          "vendor": "Core-Mark",
+          "draftDay": "Mon + Thu",
+          "draftTime": "before cutoff",
+          "salesman": "Tue/Fri",
+          "delivery": "Tuesday / Friday",
+          "subject": "(portal)",
+          "method": "Customer First",
+          "notes": "dly spend primary=Tuesday; days=Tuesday,Friday; inv=2026-09-01,2026-09-04 [medium]",
+          "contactEmail": "arcodb@outlook.com",
+          "frequency": "twice_weekly",
+          "websiteUrl": "https://www.coremarkcustomerfirst.com",
+          "deliveryConfidence": "medium",
+          "deliveryInvoiceDates": [
+            "2026-09-01",
+            "2026-09-04"
+          ],
+          "deliverySource": "vendor_dly_spend_2026",
+          "primaryDeliveryDay": "Tuesday",
+          "inferredDeliveryDays": [
+            "Tuesday",
+            "Friday"
+          ]
+        }
+      ],
+      "updatedAt": "2026-09-08T18:40:00Z"
+    },
+    {
+      "store": "42279",
+      "name": "Arco Flamingo (Koval)",
+      "orderTo": "arcokoval@outlook.com",
+      "vendors": [
+        {
+          "vendor": "Harbor",
+          "draftDay": "Monday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Tuesday AM",
+          "delivery": "",
+          "subject": "Harbor Order Date",
+          "method": "PDF email",
+          "notes": "2-wk SKU sales; first week bigger | dly spend: no invoice in window [none] | cadence cleared (no dly evidence)",
+          "contactEmail": "arcokoval@outlook.com",
+          "frequency": "weekly",
+          "deliveryConfidence": "none",
+          "deliverySource": "vendor_dly_spend_2026"
+        },
+        {
+          "vendor": "Coke",
+          "draftDay": "Wednesday",
+          "draftTime": "12:00 PM PT",
+          "salesman": "Thursday",
+          "delivery": "",
+          "subject": "Coke",
+          "method": "PDF + My Coke draft",
+          "notes": "Smart Water 1L = 0 or 25 by sales | dly spend: no invoice in window [none] | cadence cleared (no dly evidence)",
+          "contactEmail": "arcokoval@outlook.com",
+          "frequency": "weekly",
+          "websiteUrl": "https://www.my-coke.com",
+          "deliveryConfidence": "none",
+          "deliverySource": "vendor_dly_spend_2026"
+        },
+        {
+          "vendor": "Pepsi",
+          "draftDay": "Thursday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Friday",
+          "delivery": "Thursday",
+          "subject": "Pepsi",
+          "method": "PDF email",
+          "notes": "First week bigger | dly spend primary=Thursday; days=Thursday; inv=2026-09-03 [low]",
+          "contactEmail": "arcokoval@outlook.com",
+          "frequency": "weekly",
+          "deliveryConfidence": "low",
+          "deliveryInvoiceDates": [
+            "2026-09-03"
+          ],
+          "deliverySource": "vendor_dly_spend_2026",
+          "primaryDeliveryDay": "Thursday",
+          "inferredDeliveryDays": [
+            "Thursday"
+          ]
+        },
+        {
+          "vendor": "Core-Mark",
+          "draftDay": "Mon + Thu",
+          "draftTime": "before cutoff",
+          "salesman": "Tue/Fri",
+          "delivery": "Thursday",
+          "subject": "(portal)",
+          "method": "Customer First",
+          "notes": "dly spend primary=Thursday; days=Thursday; inv=2026-09-03 [high]",
+          "contactEmail": "arcokoval@outlook.com",
+          "frequency": "weekly",
+          "websiteUrl": "https://www.coremarkcustomerfirst.com",
+          "deliveryConfidence": "high",
+          "deliveryInvoiceDates": [
+            "2026-09-03"
+          ],
+          "deliverySource": "vendor_dly_spend_2026",
+          "primaryDeliveryDay": "Thursday",
+          "inferredDeliveryDays": [
+            "Thursday"
+          ]
+        },
+        {
+          "vendor": "Nevada Beverage",
+          "delivery": "Tuesday",
+          "frequency": "weekly",
+          "draftDay": "TBD",
+          "method": "invoice",
+          "deliverySource": "vendor_dly_spend_2026",
+          "deliveryConfidence": "low",
+          "primaryDeliveryDay": "Tuesday",
+          "notes": "dly spend primary=Tuesday; inv=2026-09-01 [low]",
+          "deliveryInvoiceDates": [
+            "2026-09-01"
+          ]
+        }
+      ],
+      "updatedAt": "2026-09-08T18:40:00Z"
+    },
+    {
+      "store": "42399",
+      "name": "Arco Garden Grove",
+      "orderTo": "gardengroveblv@outlook.com",
+      "vendors": [
+        {
+          "vendor": "Harbor",
+          "draftDay": "Monday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Tuesday AM",
+          "delivery": "Wednesday",
+          "subject": "Harbor Order Date",
+          "method": "PDF email",
+          "notes": "2-wk SKU sales; first week bigger | dly spend primary=Wednesday; days=Wednesday; inv=2026-09-02 [medium]",
+          "contactEmail": "gardengroveblv@outlook.com",
+          "frequency": "weekly",
+          "deliveryConfidence": "medium",
+          "deliverySource": "vendor_dly_spend_2026",
+          "deliveryInvoiceDates": [
+            "2026-09-02"
+          ],
+          "primaryDeliveryDay": "Wednesday",
+          "inferredDeliveryDays": [
+            "Wednesday"
+          ]
+        },
+        {
+          "vendor": "Coke",
+          "draftDay": "Wednesday",
+          "draftTime": "12:00 PM PT",
+          "salesman": "Thursday",
+          "delivery": "",
+          "subject": "Coke",
+          "method": "PDF + My Coke draft",
+          "notes": "Smart Water 1L = 0 or 25 by sales | dly spend: no invoice in window [none] | cadence cleared (no dly evidence)",
+          "contactEmail": "gardengroveblv@outlook.com",
+          "frequency": "weekly",
+          "websiteUrl": "https://www.my-coke.com",
+          "deliveryConfidence": "none",
+          "deliverySource": "vendor_dly_spend_2026"
+        },
+        {
+          "vendor": "Pepsi",
+          "draftDay": "Thursday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Friday",
+          "delivery": "",
+          "subject": "Pepsi",
+          "method": "PDF email",
+          "notes": "First week bigger | dly spend: no invoice in window [none] | cadence cleared (no dly evidence)",
+          "contactEmail": "gardengroveblv@outlook.com",
+          "frequency": "weekly",
+          "deliveryConfidence": "none",
+          "deliverySource": "vendor_dly_spend_2026"
+        },
+        {
+          "vendor": "Core-Mark",
+          "draftDay": "Mon + Thu",
+          "draftTime": "before cutoff",
+          "salesman": "Tue/Fri",
+          "delivery": "Thursday",
+          "subject": "(portal)",
+          "method": "Customer First",
+          "notes": "dly spend primary=Thursday; days=Thursday; inv=2026-09-03 [low]",
+          "contactEmail": "gardengroveblv@outlook.com",
+          "frequency": "weekly",
+          "websiteUrl": "https://www.coremarkcustomerfirst.com",
+          "deliveryConfidence": "low",
+          "deliveryInvoiceDates": [
+            "2026-09-03"
+          ],
+          "deliverySource": "vendor_dly_spend_2026",
+          "primaryDeliveryDay": "Thursday",
+          "inferredDeliveryDays": [
+            "Thursday"
+          ]
+        }
+      ],
+      "updatedAt": "2026-09-08T18:40:00Z"
+    },
+    {
+      "store": "42179",
+      "name": "Arco HB",
+      "orderTo": "robertking630@gmail.com",
+      "vendors": [
+        {
+          "vendor": "Harbor",
+          "draftDay": "Tuesday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Wednesday AM",
+          "delivery": "Thursday",
+          "primaryDeliveryDay": "Thursday",
+          "inferredDeliveryDays": [
+            "Thursday"
+          ],
+          "subject": "Harbor Order Date",
+          "method": "PDF email",
+          "notes": "2-wk SKU sales; first week bigger | dly Inv Date primary=Thursday (Jul\u2013Aug) [high]",
+          "contactEmail": "robertking630@gmail.com",
+          "frequency": "weekly",
+          "deliveryConfidence": "high",
+          "deliverySource": "vendor_dly_spend_2026"
+        },
+        {
+          "vendor": "Coke",
+          "draftDay": "Monday",
+          "draftTime": "12:00 PM PT",
+          "salesman": "Tuesday",
+          "delivery": "Wednesday",
+          "primaryDeliveryDay": "Wednesday",
+          "inferredDeliveryDays": [
+            "Wednesday"
+          ],
+          "subject": "Coke",
+          "method": "PDF email",
+          "notes": "Regular weekly size | dly Inv Date primary=Wednesday (Jul\u2013Aug) [high]",
+          "contactEmail": "robertking630@gmail.com",
+          "frequency": "weekly",
+          "websiteUrl": "https://www.my-coke.com",
+          "deliveryConfidence": "high",
+          "deliverySource": "vendor_dly_spend_2026"
+        },
+        {
+          "vendor": "Pepsi",
+          "draftDay": "Wednesday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Thursday",
+          "delivery": "Friday",
+          "primaryDeliveryDay": "Friday",
+          "inferredDeliveryDays": [
+            "Friday"
+          ],
+          "subject": "Pepsi",
+          "method": "PDF email",
+          "notes": "Regular weekly size | dly Inv Date primary=Friday (Jul\u2013Aug) [high]",
+          "contactEmail": "robertking630@gmail.com",
+          "frequency": "weekly",
+          "deliveryConfidence": "high",
+          "deliverySource": "vendor_dly_spend_2026"
+        },
+        {
+          "vendor": "Core-Mark",
+          "draftDay": "Saturday / Wednesday",
+          "draftTime": "8:00 AM PT",
+          "salesman": "\u2014",
+          "delivery": "Monday / Thursday",
+          "primaryDeliveryDay": "Monday",
+          "inferredDeliveryDays": [
+            "Monday",
+            "Thursday"
+          ],
+          "readyWindows": [
+            {
+              "readyDay": "Saturday",
+              "readyTime": "8:00 AM PT",
+              "delivery": "Monday"
+            },
+            {
+              "readyDay": "Wednesday",
+              "readyTime": "8:00 AM PT",
+              "delivery": "Thursday"
+            }
+          ],
+          "subject": "Customer First draft",
+          "method": "Website draft",
+          "notes": "HB: order ready Sat 8am PT for Mon delivery; Wed 8am PT for Thu delivery. | dly Inv Date Mon+Thu [high]",
+          "contactEmail": "robertking630@gmail.com",
+          "frequency": "twice weekly",
+          "websiteUrl": "https://www.coremarkcustomerfirst.com/home",
+          "deliveryConfidence": "high",
+          "deliverySource": "mina_confirm_2026-09-08"
+        }
+      ],
+      "updatedAt": "2026-09-08T18:40:00Z",
+      "source": "dly Inv Date Jul\u2013Aug 2026 (not Db copy)"
+    },
+    {
+      "store": "42439",
+      "name": "Arco Lamb",
+      "orderTo": "arcolamb@outlook.com",
+      "vendors": [
+        {
+          "vendor": "Harbor",
+          "draftDay": "Monday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Tuesday AM",
+          "delivery": "",
+          "subject": "Harbor Order Date",
+          "method": "PDF email",
+          "notes": "2-wk SKU sales; first week bigger | dly spend: no invoice in window [none] | cadence cleared (no dly evidence)",
+          "contactEmail": "arcolamb@outlook.com",
+          "frequency": "weekly",
+          "deliveryConfidence": "none",
+          "deliverySource": "vendor_dly_spend_2026"
+        },
+        {
+          "vendor": "Coke",
+          "draftDay": "Wednesday",
+          "draftTime": "12:00 PM PT",
+          "salesman": "Thursday",
+          "delivery": "",
+          "subject": "Coke",
+          "method": "PDF + My Coke draft",
+          "notes": "Smart Water 1L = 0 or 25 by sales | dly spend: no invoice in window [none] | cadence cleared (no dly evidence)",
+          "contactEmail": "arcolamb@outlook.com",
+          "frequency": "weekly",
+          "websiteUrl": "https://www.my-coke.com",
+          "deliveryConfidence": "none",
+          "deliverySource": "vendor_dly_spend_2026"
+        },
+        {
+          "vendor": "Pepsi",
+          "draftDay": "Thursday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Friday",
+          "delivery": "",
+          "subject": "Pepsi",
+          "method": "PDF email",
+          "notes": "First week bigger | dly spend: no invoice in window [none] | cadence cleared (no dly evidence)",
+          "contactEmail": "arcolamb@outlook.com",
+          "frequency": "weekly",
+          "deliveryConfidence": "none",
+          "deliverySource": "vendor_dly_spend_2026"
+        },
+        {
+          "vendor": "Core-Mark",
+          "draftDay": "Mon + Thu",
+          "draftTime": "before cutoff",
+          "salesman": "Tue/Fri",
+          "delivery": "Tuesday / Friday",
+          "subject": "(portal)",
+          "method": "Customer First",
+          "notes": "dly spend primary=Tuesday; days=Tuesday,Friday; inv=2026-09-01,2026-09-04 [medium]",
+          "contactEmail": "arcolamb@outlook.com",
+          "frequency": "twice_weekly",
+          "websiteUrl": "https://www.coremarkcustomerfirst.com",
+          "deliveryConfidence": "medium",
+          "deliveryInvoiceDates": [
+            "2026-09-01",
+            "2026-09-04"
+          ],
+          "deliverySource": "vendor_dly_spend_2026",
+          "primaryDeliveryDay": "Tuesday",
+          "inferredDeliveryDays": [
+            "Tuesday",
+            "Friday"
+          ]
+        },
+        {
+          "vendor": "Nevada Beverage",
+          "delivery": "Tuesday",
+          "frequency": "weekly",
+          "draftDay": "TBD",
+          "method": "invoice",
+          "deliverySource": "vendor_dly_spend_2026",
+          "deliveryConfidence": "low",
+          "primaryDeliveryDay": "Tuesday",
+          "notes": "dly spend primary=Tuesday; inv=2026-09-01 [low]",
+          "deliveryInvoiceDates": [
+            "2026-09-01"
+          ]
+        }
+      ],
+      "updatedAt": "2026-09-08T18:40:00Z"
+    },
+    {
+      "store": "42282",
+      "name": "Arco Oakey",
+      "orderTo": "arcooakey@outlook.com",
+      "vendors": [
+        {
+          "vendor": "Harbor",
+          "draftDay": "Monday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Tuesday AM",
+          "delivery": "",
+          "subject": "Harbor Order Date",
+          "method": "PDF email",
+          "notes": "2-wk SKU sales; first week bigger | dly spend: no invoice in window [none] | cadence cleared (no dly evidence)",
+          "contactEmail": "arcooakey@outlook.com",
+          "frequency": "weekly",
+          "deliveryConfidence": "none",
+          "deliverySource": "vendor_dly_spend_2026"
+        },
+        {
+          "vendor": "Coke",
+          "draftDay": "Wednesday",
+          "draftTime": "12:00 PM PT",
+          "salesman": "Thursday",
+          "delivery": "",
+          "subject": "Coke",
+          "method": "PDF + My Coke draft",
+          "notes": "Smart Water 1L = 0 or 25 by sales | dly spend: no invoice in window [none] | cadence cleared (no dly evidence)",
+          "contactEmail": "arcooakey@outlook.com",
+          "frequency": "weekly",
+          "websiteUrl": "https://www.my-coke.com",
+          "deliveryConfidence": "none",
+          "deliverySource": "vendor_dly_spend_2026"
+        },
+        {
+          "vendor": "Pepsi",
+          "draftDay": "Thursday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Friday",
+          "delivery": "Wednesday",
+          "subject": "Pepsi",
+          "method": "PDF email",
+          "notes": "First week bigger | dly spend primary=Wednesday; days=Wednesday; inv=2026-09-02 [medium]",
+          "contactEmail": "arcooakey@outlook.com",
+          "frequency": "weekly",
+          "deliveryConfidence": "medium",
+          "deliveryInvoiceDates": [
+            "2026-09-02"
+          ],
+          "deliverySource": "vendor_dly_spend_2026",
+          "primaryDeliveryDay": "Wednesday",
+          "inferredDeliveryDays": [
+            "Wednesday"
+          ]
+        },
+        {
+          "vendor": "Core-Mark",
+          "draftDay": "Mon + Thu",
+          "draftTime": "before cutoff",
+          "salesman": "Tue/Fri",
+          "delivery": "Tuesday / Friday",
+          "subject": "(portal)",
+          "method": "Customer First",
+          "notes": "dly spend primary=Tuesday; days=Tuesday,Friday; inv=2026-09-01,2026-09-04 [medium]",
+          "contactEmail": "arcooakey@outlook.com",
+          "frequency": "twice_weekly",
+          "websiteUrl": "https://www.coremarkcustomerfirst.com",
+          "deliveryConfidence": "medium",
+          "deliveryInvoiceDates": [
+            "2026-09-01",
+            "2026-09-04"
+          ],
+          "deliverySource": "vendor_dly_spend_2026",
+          "primaryDeliveryDay": "Tuesday",
+          "inferredDeliveryDays": [
+            "Tuesday",
+            "Friday"
+          ]
+        },
+        {
+          "vendor": "Nevada Beverage",
+          "delivery": "Thursday",
+          "frequency": "weekly",
+          "draftDay": "TBD",
+          "method": "invoice",
+          "deliverySource": "boss_vegas_list_no_dly_hit_yet",
+          "deliveryConfidence": "low",
+          "primaryDeliveryDay": "Thursday",
+          "notes": "Vegas client list; no Nevada Beverage in dly spend yet \u2014 keeping Thursday [low]",
+          "deliveryInvoiceDates": []
+        }
+      ],
+      "updatedAt": "2026-09-08T18:40:00Z"
+    },
+    {
+      "store": "42004",
+      "name": "Arco Placentia",
+      "orderTo": "arcoplacentia@gmail.com",
+      "vendors": [
+        {
+          "vendor": "Harbor",
+          "draftDay": "Monday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Tuesday AM",
+          "delivery": "Wednesday",
+          "subject": "Harbor Order Date",
+          "method": "PDF email",
+          "notes": "~$3,500 budget; regular (not double) | dly spend primary=Wednesday; days=Wednesday; inv=2026-09-02 [low]",
+          "contactEmail": "arcoplacentia@gmail.com",
+          "frequency": "weekly",
+          "deliveryConfidence": "low",
+          "deliveryInvoiceDates": [
+            "2026-09-02"
+          ],
+          "deliverySource": "vendor_dly_spend_2026",
+          "primaryDeliveryDay": "Wednesday",
+          "inferredDeliveryDays": [
+            "Wednesday"
+          ]
+        },
+        {
+          "vendor": "Coke",
+          "draftDay": "Wednesday",
+          "draftTime": "12:00 PM PT",
+          "salesman": "Thursday",
+          "delivery": "Friday",
+          "subject": "Coke",
+          "method": "PDF email",
+          "notes": "Regular size (not Db first-week double) | dly spend: no invoice in window [none]",
+          "contactEmail": "arcoplacentia@gmail.com",
+          "frequency": "weekly",
+          "websiteUrl": "https://www.my-coke.com",
+          "deliveryConfidence": "none",
+          "deliverySource": "vendor_dly_spend_2026"
+        },
+        {
+          "vendor": "Pepsi",
+          "draftDay": "Thursday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Friday",
+          "delivery": "Thursday",
+          "subject": "Pepsi",
+          "method": "PDF email",
+          "notes": "Regular size (not Db first-week double) | dly spend primary=Thursday; days=Thursday; inv=2026-09-03 [low]",
+          "contactEmail": "arcoplacentia@gmail.com",
+          "frequency": "weekly",
+          "deliveryConfidence": "low",
+          "deliveryInvoiceDates": [
+            "2026-09-03"
+          ],
+          "deliverySource": "vendor_dly_spend_2026",
+          "primaryDeliveryDay": "Thursday",
+          "inferredDeliveryDays": [
+            "Thursday"
+          ]
+        },
+        {
+          "vendor": "Core-Mark",
+          "draftDay": "Mon / Thu",
+          "draftTime": "before cutoff",
+          "salesman": "\u2014",
+          "delivery": "Tue / Fri",
+          "subject": "Customer First draft",
+          "method": "Website draft",
+          "notes": "dly spend: no invoice in window [none]",
+          "contactEmail": "arcoplacentia@gmail.com",
+          "frequency": "twice_weekly",
+          "websiteUrl": "https://www.coremarkcustomerfirst.com",
+          "deliveryConfidence": "none",
+          "deliverySource": "vendor_dly_spend_2026"
+        },
+        {
+          "vendor": "Straub",
+          "draftDay": "TBD",
+          "delivery": "Wednesday",
+          "frequency": "weekly",
+          "method": "invoice",
+          "notes": "dly inv 2026-09-02 -> Wednesday [low] (standing day from invoices) | dly spend primary=Wednesday; days=Wednesday; inv=2026-09-02 [medium]",
+          "deliveryConfidence": "medium",
+          "deliveryInvoiceDates": [
+            "2026-09-02"
+          ],
+          "deliverySource": "vendor_dly_spend_2026",
+          "primaryDeliveryDay": "Wednesday",
+          "inferredDeliveryDays": [
+            "Wednesday"
+          ]
+        }
+      ],
+      "updatedAt": "2026-09-08T18:40:00Z"
+    },
+    {
+      "store": "42048",
+      "name": "Arco San Diego",
+      "orderTo": "arcosandiego@outlook.com",
+      "vendors": [
+        {
+          "vendor": "Harbor",
+          "draftDay": "Monday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Tuesday AM",
+          "delivery": "",
+          "subject": "Harbor Order Date",
+          "method": "PDF email",
+          "notes": "2-wk SKU sales; first week bigger | dly spend: no invoice in window [none] | cadence cleared (no dly evidence)",
+          "contactEmail": "arcosandiego@outlook.com",
+          "frequency": "weekly",
+          "deliveryConfidence": "none",
+          "deliverySource": "vendor_dly_spend_2026"
+        },
+        {
+          "vendor": "Coke",
+          "draftDay": "Wednesday",
+          "draftTime": "12:00 PM PT",
+          "salesman": "Thursday",
+          "delivery": "Thursday",
+          "subject": "Coke",
+          "method": "PDF + My Coke draft",
+          "notes": "Smart Water 1L = 0 or 25 by sales | dly spend primary=Thursday; days=Thursday; inv=2026-09-03 [low]",
+          "contactEmail": "arcosandiego@outlook.com",
+          "frequency": "weekly",
+          "websiteUrl": "https://www.my-coke.com",
+          "deliveryConfidence": "low",
+          "deliveryInvoiceDates": [
+            "2026-09-03"
+          ],
+          "deliverySource": "vendor_dly_spend_2026",
+          "primaryDeliveryDay": "Thursday",
+          "inferredDeliveryDays": [
+            "Thursday"
+          ]
+        },
+        {
+          "vendor": "Pepsi",
+          "draftDay": "Thursday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Friday",
+          "delivery": "",
+          "subject": "Pepsi",
+          "method": "PDF email",
+          "notes": "First week bigger | dly spend: no invoice in window [none] | cadence cleared (no dly evidence)",
+          "contactEmail": "arcosandiego@outlook.com",
+          "frequency": "weekly",
+          "deliveryConfidence": "none",
+          "deliverySource": "vendor_dly_spend_2026"
+        },
+        {
+          "vendor": "Core-Mark",
+          "draftDay": "Mon + Thu",
+          "draftTime": "before cutoff",
+          "salesman": "Tue/Fri",
+          "delivery": "Tuesday / Friday",
+          "subject": "(portal)",
+          "method": "Customer First",
+          "notes": "dly spend primary=Tuesday; days=Tuesday,Friday; inv=2026-09-01,2026-09-04 [medium]",
+          "contactEmail": "arcosandiego@outlook.com",
+          "frequency": "twice_weekly",
+          "websiteUrl": "https://www.coremarkcustomerfirst.com",
+          "deliveryConfidence": "medium",
+          "deliveryInvoiceDates": [
+            "2026-09-01",
+            "2026-09-04"
+          ],
+          "deliverySource": "vendor_dly_spend_2026",
+          "primaryDeliveryDay": "Tuesday",
+          "inferredDeliveryDays": [
+            "Tuesday",
+            "Friday"
+          ]
+        }
+      ],
+      "updatedAt": "2026-09-08T18:40:00Z"
+    },
+    {
+      "store": "42280",
+      "name": "Arco Spring Mtn",
+      "orderTo": "arcospring@outlook.com",
+      "vendors": [
+        {
+          "vendor": "Harbor",
+          "draftDay": "Monday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Tuesday AM",
+          "delivery": "",
+          "subject": "Harbor Order Date",
+          "method": "PDF email",
+          "notes": "2-wk SKU sales; first week bigger | dly spend: no invoice in window [none] | cadence cleared (no dly evidence)",
+          "contactEmail": "arcospring@outlook.com",
+          "frequency": "weekly",
+          "deliveryConfidence": "none",
+          "deliverySource": "vendor_dly_spend_2026"
+        },
+        {
+          "vendor": "Coke",
+          "draftDay": "Wednesday",
+          "draftTime": "12:00 PM PT",
+          "salesman": "Thursday",
+          "delivery": "",
+          "subject": "Coke",
+          "method": "PDF + My Coke draft",
+          "notes": "Smart Water 1L = 0 or 25 by sales | dly spend: no invoice in window [none] | cadence cleared (no dly evidence)",
+          "contactEmail": "arcospring@outlook.com",
+          "frequency": "weekly",
+          "websiteUrl": "https://www.my-coke.com",
+          "deliveryConfidence": "none",
+          "deliverySource": "vendor_dly_spend_2026"
+        },
+        {
+          "vendor": "Pepsi",
+          "draftDay": "Thursday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Friday",
+          "delivery": "Wednesday",
+          "subject": "Pepsi",
+          "method": "PDF email",
+          "notes": "First week bigger | dly spend primary=Wednesday; days=Wednesday; inv=2026-09-02 [low]",
+          "contactEmail": "arcospring@outlook.com",
+          "frequency": "weekly",
+          "deliveryConfidence": "low",
+          "deliveryInvoiceDates": [
+            "2026-09-02"
+          ],
+          "deliverySource": "vendor_dly_spend_2026",
+          "primaryDeliveryDay": "Wednesday",
+          "inferredDeliveryDays": [
+            "Wednesday"
+          ]
+        },
+        {
+          "vendor": "Core-Mark",
+          "draftDay": "Mon + Thu",
+          "draftTime": "before cutoff",
+          "salesman": "Tue/Fri",
+          "delivery": "Tuesday / Friday",
+          "subject": "(portal)",
+          "method": "Customer First",
+          "notes": "dly spend primary=Tuesday; days=Tuesday,Friday; inv=2026-09-01,2026-09-04 [medium]",
+          "contactEmail": "arcospring@outlook.com",
+          "frequency": "twice_weekly",
+          "websiteUrl": "https://www.coremarkcustomerfirst.com",
+          "deliveryConfidence": "medium",
+          "deliveryInvoiceDates": [
+            "2026-09-01",
+            "2026-09-04"
+          ],
+          "deliverySource": "vendor_dly_spend_2026",
+          "primaryDeliveryDay": "Tuesday",
+          "inferredDeliveryDays": [
+            "Tuesday",
+            "Friday"
+          ]
+        },
+        {
+          "vendor": "Nevada Beverage",
+          "delivery": "Thursday",
+          "frequency": "weekly",
+          "draftDay": "TBD",
+          "method": "invoice",
+          "deliverySource": "vendor_dly_spend_2026",
+          "deliveryConfidence": "low",
+          "primaryDeliveryDay": "Thursday",
+          "notes": "dly spend primary=Thursday; inv=2026-09-03 [low]",
+          "deliveryInvoiceDates": [
+            "2026-09-03"
+          ]
+        }
+      ],
+      "updatedAt": "2026-09-08T18:40:00Z"
+    },
+    {
+      "store": "42674",
+      "name": "Arco Tustin",
+      "orderTo": "arcotustin@outlook.com",
+      "vendors": [
+        {
+          "vendor": "Harbor",
+          "draftDay": "Monday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Tuesday AM",
+          "delivery": "",
+          "subject": "Harbor Order Date",
+          "method": "PDF email",
+          "notes": "2-wk SKU sales; first week bigger | dly spend: no invoice in window [none] | cadence cleared (no dly evidence)",
+          "contactEmail": "arcotustin@outlook.com",
+          "frequency": "weekly",
+          "deliveryConfidence": "none",
+          "deliverySource": "vendor_dly_spend_2026"
+        },
+        {
+          "vendor": "Coke",
+          "draftDay": "Wednesday",
+          "draftTime": "12:00 PM PT",
+          "salesman": "Thursday",
+          "delivery": "Wednesday",
+          "subject": "Coke",
+          "method": "PDF + My Coke draft",
+          "notes": "Smart Water 1L = 0 or 25 by sales | dly spend primary=Wednesday; days=Wednesday; inv=2026-09-02 [low]",
+          "contactEmail": "arcotustin@outlook.com",
+          "frequency": "weekly",
+          "websiteUrl": "https://www.my-coke.com",
+          "deliveryConfidence": "low",
+          "deliveryInvoiceDates": [
+            "2026-09-02"
+          ],
+          "deliverySource": "vendor_dly_spend_2026",
+          "primaryDeliveryDay": "Wednesday",
+          "inferredDeliveryDays": [
+            "Wednesday"
+          ]
+        },
+        {
+          "vendor": "Pepsi",
+          "draftDay": "Thursday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Friday",
+          "delivery": "Friday",
+          "subject": "Pepsi",
+          "method": "PDF email",
+          "notes": "First week bigger | dly spend primary=Friday; days=Friday; inv=2026-09-04 [low]",
+          "contactEmail": "arcotustin@outlook.com",
+          "frequency": "weekly",
+          "deliveryConfidence": "low",
+          "deliveryInvoiceDates": [
+            "2026-09-04"
+          ],
+          "deliverySource": "vendor_dly_spend_2026",
+          "primaryDeliveryDay": "Friday",
+          "inferredDeliveryDays": [
+            "Friday"
+          ]
+        },
+        {
+          "vendor": "Core-Mark",
+          "draftDay": "Mon + Thu",
+          "draftTime": "before cutoff",
+          "salesman": "Tue/Fri",
+          "delivery": "Thursday",
+          "subject": "(portal)",
+          "method": "Customer First",
+          "notes": "dly spend primary=Thursday; days=Thursday; inv=2026-09-03 [high]",
+          "contactEmail": "arcotustin@outlook.com",
+          "frequency": "weekly",
+          "websiteUrl": "https://www.coremarkcustomerfirst.com",
+          "deliveryConfidence": "high",
+          "deliveryInvoiceDates": [
+            "2026-09-03"
+          ],
+          "deliverySource": "vendor_dly_spend_2026",
+          "primaryDeliveryDay": "Thursday",
+          "inferredDeliveryDays": [
+            "Thursday"
+          ]
+        },
+        {
+          "vendor": "Straub",
+          "draftDay": "TBD",
+          "delivery": "Wednesday",
+          "frequency": "weekly",
+          "method": "invoice",
+          "notes": "dly inv 2026-09-02, 2026-09-03 -> Thursday / Wednesday [low] (standing day from invoices) | dly spend primary=Wednesday; days=Wednesday,Thursday; inv=2026-09-02,2026-09-03 [low]",
+          "deliveryConfidence": "low",
+          "deliveryInvoiceDates": [
+            "2026-09-02",
+            "2026-09-03"
+          ],
+          "deliverySource": "vendor_dly_spend_2026",
+          "primaryDeliveryDay": "Wednesday",
+          "inferredDeliveryDays": [
+            "Wednesday",
+            "Thursday"
+          ]
+        }
+      ],
+      "updatedAt": "2026-09-08T18:40:00Z"
+    },
+    {
+      "store": "42438",
+      "name": "Arco Vista",
+      "orderTo": "arcovista@outlook.com",
+      "vendors": [
+        {
+          "vendor": "Harbor",
+          "draftDay": "Monday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Tuesday AM",
+          "delivery": "",
+          "subject": "Harbor Order Date",
+          "method": "PDF email",
+          "notes": "2-wk SKU sales; first week bigger | dly spend: no invoice in window [none] | cadence cleared (no dly evidence)",
+          "contactEmail": "arcovista@outlook.com",
+          "frequency": "weekly",
+          "deliveryConfidence": "none",
+          "deliverySource": "vendor_dly_spend_2026"
+        },
+        {
+          "vendor": "Coke",
+          "draftDay": "Wednesday",
+          "draftTime": "12:00 PM PT",
+          "salesman": "Thursday",
+          "delivery": "Wednesday",
+          "subject": "Coke",
+          "method": "PDF + My Coke draft",
+          "notes": "Smart Water 1L = 0 or 25 by sales | dly spend primary=Wednesday; days=Wednesday; inv=2026-09-02 [low]",
+          "contactEmail": "arcovista@outlook.com",
+          "frequency": "weekly",
+          "websiteUrl": "https://www.my-coke.com",
+          "deliveryConfidence": "low",
+          "deliveryInvoiceDates": [
+            "2026-09-02"
+          ],
+          "deliverySource": "vendor_dly_spend_2026",
+          "primaryDeliveryDay": "Wednesday",
+          "inferredDeliveryDays": [
+            "Wednesday"
+          ]
+        },
+        {
+          "vendor": "Pepsi",
+          "draftDay": "Thursday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Friday",
+          "delivery": "",
+          "subject": "Pepsi",
+          "method": "PDF email",
+          "notes": "First week bigger | dly spend: no invoice in window [none] | cadence cleared (no dly evidence)",
+          "contactEmail": "arcovista@outlook.com",
+          "frequency": "weekly",
+          "deliveryConfidence": "none",
+          "deliverySource": "vendor_dly_spend_2026"
+        },
+        {
+          "vendor": "Core-Mark",
+          "draftDay": "Mon + Thu",
+          "draftTime": "before cutoff",
+          "salesman": "Tue/Fri",
+          "delivery": "Tuesday / Friday",
+          "subject": "(portal)",
+          "method": "Customer First",
+          "notes": "dly spend primary=Tuesday; days=Tuesday,Friday; inv=2026-09-01,2026-09-04 [medium]",
+          "contactEmail": "arcovista@outlook.com",
+          "frequency": "twice_weekly",
+          "websiteUrl": "https://www.coremarkcustomerfirst.com",
+          "deliveryConfidence": "medium",
+          "deliveryInvoiceDates": [
+            "2026-09-01",
+            "2026-09-04"
+          ],
+          "deliverySource": "vendor_dly_spend_2026",
+          "primaryDeliveryDay": "Tuesday",
+          "inferredDeliveryDays": [
+            "Tuesday",
+            "Friday"
+          ]
+        },
+        {
+          "vendor": "Nevada Beverage",
+          "delivery": "Wednesday",
+          "frequency": "weekly",
+          "draftDay": "TBD",
+          "method": "invoice",
+          "deliverySource": "vendor_dly_spend_2026",
+          "deliveryConfidence": "low",
+          "primaryDeliveryDay": "Wednesday",
+          "notes": "dly spend primary=Wednesday; inv=2026-09-02 [low]",
+          "deliveryInvoiceDates": [
+            "2026-09-02"
+          ]
+        }
+      ],
+      "updatedAt": "2026-09-08T18:40:00Z"
+    },
+    {
+      "store": "42021",
+      "name": "Arco Westminster",
+      "orderTo": "westminster42021@outlook.com",
+      "vendors": [
+        {
+          "vendor": "Harbor",
+          "draftDay": "Monday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Tuesday AM",
+          "delivery": "",
+          "subject": "Harbor Order Date",
+          "method": "PDF email",
+          "notes": "2-wk SKU sales; first week bigger | dly spend: no invoice in window [none] | cadence cleared (no dly evidence)",
+          "contactEmail": "westminster42021@outlook.com",
+          "frequency": "weekly",
+          "deliveryConfidence": "none",
+          "deliverySource": "vendor_dly_spend_2026"
+        },
+        {
+          "vendor": "Coke",
+          "draftDay": "Wednesday",
+          "draftTime": "12:00 PM PT",
+          "salesman": "Thursday",
+          "delivery": "",
+          "subject": "Coke",
+          "method": "PDF + My Coke draft",
+          "notes": "Smart Water 1L = 0 or 25 by sales | dly spend: no invoice in window [none] | cadence cleared (no dly evidence)",
+          "contactEmail": "westminster42021@outlook.com",
+          "frequency": "weekly",
+          "websiteUrl": "https://www.my-coke.com",
+          "deliveryConfidence": "none",
+          "deliverySource": "vendor_dly_spend_2026"
+        },
+        {
+          "vendor": "Pepsi",
+          "draftDay": "Thursday",
+          "draftTime": "6:00 PM PT",
+          "salesman": "Friday",
+          "delivery": "",
+          "subject": "Pepsi",
+          "method": "PDF email",
+          "notes": "First week bigger | dly spend: no invoice in window [none] | cadence cleared (no dly evidence)",
+          "contactEmail": "westminster42021@outlook.com",
+          "frequency": "weekly",
+          "deliveryConfidence": "none",
+          "deliverySource": "vendor_dly_spend_2026"
+        },
+        {
+          "vendor": "Core-Mark",
+          "draftDay": "Mon + Thu",
+          "draftTime": "before cutoff",
+          "salesman": "Tue/Fri",
+          "delivery": "",
+          "subject": "(portal)",
+          "method": "Customer First",
+          "notes": "dly spend: no invoice in window [none] | cadence cleared (no dly evidence)",
+          "contactEmail": "westminster42021@outlook.com",
+          "frequency": "twice_weekly",
+          "websiteUrl": "https://www.coremarkcustomerfirst.com",
+          "deliveryConfidence": "none",
+          "deliverySource": "vendor_dly_spend_2026"
+        }
+      ],
+      "updatedAt": "2026-09-08T18:40:00Z"
+    },
+    {
+      "store": "42359",
+      "name": "Arco Paradise",
+      "orderTo": "",
+      "vendors": [],
+      "honestEmpty": true,
+      "emptyReason": "No Vendor_Order_Schedule sheet / no dly evidence for Paradise; honest empty."
+    }
+  ],
+  "scope": "master-all-stores-admin-only",
+  "fieldsNote": "sentVia = Email | Website | Email + website Manager UI loads /data/vendor-orders/by-store/{storeId}.json only \u2014 not this master file.",
+  "aiOrderingFee": {
+    "rate": 0.01,
+    "label": "1% of AI/Sent order totals",
+    "from": "2026-09"
+  },
+  "aiOrderingRollups": [
+    {
+      "store": "42352",
+      "client": "Arco Db",
+      "month": "2026-09",
+      "orders": 15,
+      "aiOrderTotal": 33060.62,
+      "previewFee": 330.6,
+      "fee": 330.6,
+      "charged": true,
+      "sentOnly": true,
+      "source": "billing_sot_2026-09-21"
+    },
+    {
+      "store": "42004",
+      "client": "Arco Placentia",
+      "month": "2026-09",
+      "orders": 14,
+      "aiOrderTotal": 28139.15,
+      "previewFee": 281.39,
+      "fee": 281.39,
+      "charged": true,
+      "sentOnly": true,
+      "source": "billing_sot_2026-09-21"
+    },
+    {
+      "store": "42179",
+      "client": "Arco HB",
+      "month": "2026-09",
+      "orders": 1,
+      "aiOrderTotal": 1959.89,
+      "previewFee": 19.6,
+      "fee": 19.6,
+      "charged": true,
+      "sentOnly": true,
+      "source": "billing_sot_2026-09-21"
+    }
+  ],
+  "byStorePath": "/data/vendor-orders/by-store/{storeId}.json",
+  "deliveryInference": {
+    "source": "vendor_dly_spend_2026.json",
+    "as_of": "2026-09-05",
+    "period": "2026-09-01 to 2026-09-30",
+    "grouping": "by client/store",
+    "note": "Inv Date = invoice received / delivery proxy; assumed Arco Db cadence removed \u2014 evidence-only"
+  },
+  "lastActualDiffAudit": {
+    "at": "2026-09-15T15:46:53Z",
+    "window": [
+      "2026-09-08",
+      "2026-09-14"
+    ],
+    "source": "ai-orders-audit-20260915",
+    "diffConvention": "Actual \u2212 AI"
+  },
+  "lastPlacentiaCompareSync": "2026-09-21T13:09:33.013685+00:00",
+  "deployNote": "Placentia actuals on root vendor-orders-live.json | 2026-09-21: aiOrderingRollups aligned to Billing SoT Sep ordering (Db $33,060.62 / Placentia $28,139.15 / HB $1,959.89)",
+  "cacheBust": "placentia-harbor-redo-212460-20260921",
+  "_forceUpload2": "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy"
+}
