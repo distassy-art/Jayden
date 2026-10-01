@@ -1,0 +1,5541 @@
+{
+  "meta": {
+    "generated": "2026-09-21T04:33:10.406466+00:00",
+    "source_xlsx": "/workspace/sep2025-cstore/Sep2026-Dept-Purchase-Budgets-40pct.xlsx",
+    "gross_profit_target": 0.4,
+    "purchase_ratio": 0.6,
+    "rule": "Spend = department purchases for latest books month. Budget = Mina-set (or S2K) purchase budget for THAT SAME month. Do NOT use Sep-2025 sales \u00d7 margin.",
+    "note": "Invented Sep-2025\u00d7ratio budgets cleared 2026-09-20 after Mina rejection. prior_formula_purchase_budget kept for reference only; purchase_budget is null until Mina provides August (same-month) targets.",
+    "updated": "2026-09-21T05:20:35.986322+00:00",
+    "budget_policy": "same_month_only",
+    "status": "blocked_no_s2k_monthly_purchase_budget_module",
+    "latest_spend_month": "2026-08",
+    "needed_from_mina": "S2K has no monthly purchase budget module in Mina login. Provide August 2026 purchase budget $ by dept (or grant S2K module/account that stores them). Until then purchase_budget stays null; Sep\u00d760% stays dead.",
+    "s2k_pull": "/data/aug-2026-dept-purchase-budgets-from-s2k.json",
+    "spend_vs_budget_report": "/data/aug-2026-spend-vs-budget.json",
+    "_deploy_bump": "2026-09-22T08:10Z-cc-restore",
+    "restored_at": "2026-09-22T08:15:00-07:00"
+  },
+  "stores": {
+    "42004": {
+      "store_id": "42004",
+      "store": "Arco Placentia",
+      "departments": [
+        {
+          "name": "BEER",
+          "sep_2025_sales": 15183.64,
+          "purchase_budget": null,
+          "target_profit": 6073.46,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 9110.18,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "SCRATCH TICKETS",
+          "sep_2025_sales": 15066.0,
+          "purchase_budget": null,
+          "target_profit": 6026.4,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 9039.6,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "CIGARETTES - PACKS",
+          "sep_2025_sales": 12638.21,
+          "purchase_budget": null,
+          "target_profit": 5055.28,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 7582.93,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-LT CA-T NV-NT",
+          "sep_2025_sales": 12551.54,
+          "purchase_budget": null,
+          "target_profit": 5020.62,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 7530.92,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGES - NON-CARBONATED",
+          "sep_2025_sales": 11715.21,
+          "purchase_budget": null,
+          "target_profit": 4686.08,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 7029.13,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "LOTTO",
+          "sep_2025_sales": 8449.0,
+          "purchase_budget": null,
+          "target_profit": 3379.6,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 5069.4,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "SNACKS",
+          "sep_2025_sales": 8046.52,
+          "purchase_budget": null,
+          "target_profit": 3218.61,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 4827.91,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "TAX 1",
+          "sep_2025_sales": 4902.81,
+          "purchase_budget": null,
+          "target_profit": 1961.12,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 2941.69,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "CANDY",
+          "sep_2025_sales": 4461.9,
+          "purchase_budget": null,
+          "target_profit": 1784.76,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2677.14,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGES - CARBONATED",
+          "sep_2025_sales": 4439.17,
+          "purchase_budget": null,
+          "target_profit": 1775.67,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2663.5,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED SWEET SNACKS",
+          "sep_2025_sales": 4069.62,
+          "purchase_budget": null,
+          "target_profit": 1627.85,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2441.77,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "HOT DISPENSED BEVERAGES",
+          "sep_2025_sales": 3650.79,
+          "purchase_budget": null,
+          "target_profit": 1460.32,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2190.47,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COLD DISPENSED BEV - CARB",
+          "sep_2025_sales": 3545.31,
+          "purchase_budget": null,
+          "target_profit": 1418.12,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2127.19,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "OTHER TOBACCO PRODUCTS",
+          "sep_2025_sales": 2735.18,
+          "purchase_budget": null,
+          "target_profit": 1094.07,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1641.11,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "AMPM FOODSERVICE - HOT",
+          "sep_2025_sales": 2266.49,
+          "purchase_budget": null,
+          "target_profit": 906.6,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1359.89,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ICE",
+          "sep_2025_sales": 1580.55,
+          "purchase_budget": null,
+          "target_profit": 632.22,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 948.33,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "WINE",
+          "sep_2025_sales": 1454.88,
+          "purchase_budget": null,
+          "target_profit": 581.95,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 872.93,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "AMPM FOODSERVICE - OTHER",
+          "sep_2025_sales": 1204.16,
+          "purchase_budget": null,
+          "target_profit": 481.66,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 722.5,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "AUTOMOTIVE PRODUCTS",
+          "sep_2025_sales": 1091.16,
+          "purchase_budget": null,
+          "target_profit": 436.46,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 654.7,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "GENERAL MERCHANDISE",
+          "sep_2025_sales": 995.47,
+          "purchase_budget": null,
+          "target_profit": 398.19,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 597.28,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "HEALTH & BEAUTY CARE",
+          "sep_2025_sales": 925.52,
+          "purchase_budget": null,
+          "target_profit": 370.21,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 555.31,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "BOTTLE DEPOSITS - TAXABLE",
+          "sep_2025_sales": 778.6,
+          "purchase_budget": null,
+          "target_profit": 311.44,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 467.16,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "AMPM MOJO DELI",
+          "sep_2025_sales": 759.67,
+          "purchase_budget": null,
+          "target_profit": 303.87,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 455.8,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED ICE CREAM/NOVELTIES",
+          "sep_2025_sales": 752.48,
+          "purchase_budget": null,
+          "target_profit": 300.99,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 451.49,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "(NOT SETUP)",
+          "sep_2025_sales": 727.75,
+          "purchase_budget": null,
+          "target_profit": 291.1,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 436.65,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FLUID MILK PRODUCTS",
+          "sep_2025_sales": 552.55,
+          "purchase_budget": null,
+          "target_profit": 221.02,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 331.53,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "BOTTLE DEPOSITS - NONTAXABLE",
+          "sep_2025_sales": 475.3,
+          "purchase_budget": null,
+          "target_profit": 190.12,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 285.18,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COLD DISPENSED BEV - NON-CARB",
+          "sep_2025_sales": 420.08,
+          "purchase_budget": null,
+          "target_profit": 168.03,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 252.05,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-LT CA-NT NV-NT",
+          "sep_2025_sales": 416.3,
+          "purchase_budget": null,
+          "target_profit": 166.52,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 249.78,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "EDIBLE GROCERY",
+          "sep_2025_sales": 231.54,
+          "purchase_budget": null,
+          "target_profit": 92.62,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 138.92,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ATM COMMISSION",
+          "sep_2025_sales": 228.15,
+          "purchase_budget": null,
+          "target_profit": 91.26,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 136.89,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "E-CIG CETEC",
+          "sep_2025_sales": 192.84,
+          "purchase_budget": null,
+          "target_profit": 77.14,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 115.7,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FROZEN DISPENSED BEVERAGES",
+          "sep_2025_sales": 179.28,
+          "purchase_budget": null,
+          "target_profit": 71.71,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 107.57,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COMMISSARY - SALAD/SANDWICHES",
+          "sep_2025_sales": 163.18,
+          "purchase_budget": null,
+          "target_profit": 65.27,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 97.91,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "CARD ACTIVATIONS",
+          "sep_2025_sales": 100.0,
+          "purchase_budget": null,
+          "target_profit": 40.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 60.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FROZEN FOODS",
+          "sep_2025_sales": 74.33,
+          "purchase_budget": null,
+          "target_profit": 29.73,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 44.6,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "NON-EDIBLE GROCERY",
+          "sep_2025_sales": 51.31,
+          "purchase_budget": null,
+          "target_profit": 20.52,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 30.79,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-HT CA-T NV-T",
+          "sep_2025_sales": 38.58,
+          "purchase_budget": null,
+          "target_profit": 15.43,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 23.15,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "TAX 4",
+          "sep_2025_sales": 25.09,
+          "purchase_budget": null,
+          "target_profit": 10.04,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 15.05,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "OTHER DAIRY & DELI PRODUCTS",
+          "sep_2025_sales": 19.92,
+          "purchase_budget": null,
+          "target_profit": 7.97,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 11.95,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGE - SUPPLEMENT",
+          "sep_2025_sales": 16.74,
+          "purchase_budget": null,
+          "target_profit": 6.7,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 10.04,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COMMISSARY & OTHER PACKAGED PRODUCTS",
+          "sep_2025_sales": 10.77,
+          "purchase_budget": null,
+          "target_profit": 4.31,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 6.46,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "BAG FEES",
+          "sep_2025_sales": 3.0,
+          "purchase_budget": null,
+          "target_profit": 1.2,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 1.8,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "CIGARETTES - CARTONS",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FUEL DEPOSIT",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ICE BLOCKS",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "LIQUOR",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PROPANE EXCHANGES",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        }
+      ]
+    },
+    "42021": {
+      "store_id": "42021",
+      "store": "Westminster",
+      "departments": [
+        {
+          "name": "CIGARETTES - PACKS",
+          "sep_2025_sales": 7728.83,
+          "purchase_budget": null,
+          "target_profit": 3091.53,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 4637.3,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGES - NON-CARBONATED",
+          "sep_2025_sales": 5989.8,
+          "purchase_budget": null,
+          "target_profit": 2395.92,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 3593.88,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-LT CA-T NV-NT",
+          "sep_2025_sales": 5818.76,
+          "purchase_budget": null,
+          "target_profit": 2327.5,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 3491.25,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "BEER",
+          "sep_2025_sales": 5671.44,
+          "purchase_budget": null,
+          "target_profit": 2268.58,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 3402.86,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "SNACKS",
+          "sep_2025_sales": 3629.39,
+          "purchase_budget": null,
+          "target_profit": 1451.76,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2177.64,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "HOT DISPENSED BEVERAGES",
+          "sep_2025_sales": 3539.77,
+          "purchase_budget": null,
+          "target_profit": 1415.91,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2123.86,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED SWEET SNACKS",
+          "sep_2025_sales": 3174.89,
+          "purchase_budget": null,
+          "target_profit": 1269.95,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1904.93,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGES - CARBONATED",
+          "sep_2025_sales": 2307.17,
+          "purchase_budget": null,
+          "target_profit": 922.87,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1384.3,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "CANDY",
+          "sep_2025_sales": 2282.81,
+          "purchase_budget": null,
+          "target_profit": 913.12,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1369.68,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "OTHER TOBACCO PRODUCTS",
+          "sep_2025_sales": 1509.04,
+          "purchase_budget": null,
+          "target_profit": 603.62,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 905.42,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "2025 full-year actuals, 2026 Jan\u2013Jul actuals, and a separate 2026 full-year estimate.",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "Westminster \u2014 Department Sales vs Purchases",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        }
+      ]
+    },
+    "42048": {
+      "store_id": "42048",
+      "store": "San Diego",
+      "departments": [
+        {
+          "name": "TOP 12 TOTAL",
+          "sep_2025_sales": 91976.9,
+          "purchase_budget": null,
+          "target_profit": 36790.76,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 55186.14,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "CIGARETTES - PACKS",
+          "sep_2025_sales": 13897.25,
+          "purchase_budget": null,
+          "target_profit": 5558.9,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 8338.35,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGES - NON-CARBONATED",
+          "sep_2025_sales": 13427.01,
+          "purchase_budget": null,
+          "target_profit": 5370.81,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 8056.21,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-LT CA-T NV-NT",
+          "sep_2025_sales": 12552.25,
+          "purchase_budget": null,
+          "target_profit": 5020.9,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 7531.35,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "SNACKS",
+          "sep_2025_sales": 12363.8,
+          "purchase_budget": null,
+          "target_profit": 4945.52,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 7418.28,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "BEER",
+          "sep_2025_sales": 10664.65,
+          "purchase_budget": null,
+          "target_profit": 4265.86,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 6398.79,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "CANDY",
+          "sep_2025_sales": 7001.03,
+          "purchase_budget": null,
+          "target_profit": 2800.41,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 4200.61,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "OTHER TOBACCO PRODUCTS",
+          "sep_2025_sales": 6855.48,
+          "purchase_budget": null,
+          "target_profit": 2742.19,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 4113.29,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGES - CARBONATED",
+          "sep_2025_sales": 5418.04,
+          "purchase_budget": null,
+          "target_profit": 2167.22,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 3250.82,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "HOT DISPENSED BEVERAGES",
+          "sep_2025_sales": 3726.36,
+          "purchase_budget": null,
+          "target_profit": 1490.54,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2235.82,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED SWEET SNACKS",
+          "sep_2025_sales": 2939.86,
+          "purchase_budget": null,
+          "target_profit": 1175.94,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1763.91,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "GENERAL MERCHANDISE",
+          "sep_2025_sales": 1690.84,
+          "purchase_budget": null,
+          "target_profit": 676.34,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1014.51,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "E-CIG CETEC",
+          "sep_2025_sales": 1440.35,
+          "purchase_budget": null,
+          "target_profit": 576.14,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 864.21,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "2025 full-year actuals, 2026 Jan\u2013Jul actuals, and annualized 2026 full-year estimates for the top 12 departments.",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "San Diego \u2014 Department Sales vs Purchases",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        }
+      ]
+    },
+    "42098": {
+      "store_id": "42098",
+      "store": "Brookhurst 75",
+      "departments": [
+        {
+          "name": "SCRATCH TICKETS",
+          "sep_2025_sales": 18396.0,
+          "purchase_budget": null,
+          "target_profit": 7358.4,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 11037.6,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "LOTTO",
+          "sep_2025_sales": 16445.0,
+          "purchase_budget": null,
+          "target_profit": 6578.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 9867.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGES - NON-CARBONATED",
+          "sep_2025_sales": 11551.61,
+          "purchase_budget": null,
+          "target_profit": 4620.64,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 6930.97,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "CIGARETTES - PACKS",
+          "sep_2025_sales": 10852.32,
+          "purchase_budget": null,
+          "target_profit": 4340.93,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 6511.39,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "BEER",
+          "sep_2025_sales": 10366.0,
+          "purchase_budget": null,
+          "target_profit": 4146.4,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 6219.6,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-LT CA-T NV-NT",
+          "sep_2025_sales": 9746.96,
+          "purchase_budget": null,
+          "target_profit": 3898.78,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 5848.18,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "SNACKS",
+          "sep_2025_sales": 7687.46,
+          "purchase_budget": null,
+          "target_profit": 3074.98,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 4612.48,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "CANDY",
+          "sep_2025_sales": 5359.33,
+          "purchase_budget": null,
+          "target_profit": 2143.73,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 3215.6,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "TAX 1",
+          "sep_2025_sales": 4524.15,
+          "purchase_budget": null,
+          "target_profit": 1809.66,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 2714.49,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGES - CARBONATED",
+          "sep_2025_sales": 3904.52,
+          "purchase_budget": null,
+          "target_profit": 1561.81,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2342.71,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "OTHER TOBACCO PRODUCTS",
+          "sep_2025_sales": 3367.64,
+          "purchase_budget": null,
+          "target_profit": 1347.06,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2020.58,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED SWEET SNACKS",
+          "sep_2025_sales": 3088.34,
+          "purchase_budget": null,
+          "target_profit": 1235.34,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1853.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "HOT DISPENSED BEVERAGES",
+          "sep_2025_sales": 2948.48,
+          "purchase_budget": null,
+          "target_profit": 1179.39,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1769.09,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COLD DISPENSED BEV - CARB",
+          "sep_2025_sales": 2319.25,
+          "purchase_budget": null,
+          "target_profit": 927.7,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1391.55,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED ICE CREAM/NOVELTIES",
+          "sep_2025_sales": 1516.31,
+          "purchase_budget": null,
+          "target_profit": 606.52,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 909.79,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "HEALTH & BEAUTY CARE",
+          "sep_2025_sales": 1513.01,
+          "purchase_budget": null,
+          "target_profit": 605.2,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 907.81,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "E-CIG CETEC",
+          "sep_2025_sales": 1138.71,
+          "purchase_budget": null,
+          "target_profit": 455.48,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 683.23,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "GENERAL MERCHANDISE",
+          "sep_2025_sales": 1092.79,
+          "purchase_budget": null,
+          "target_profit": 437.12,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 655.67,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "WINE",
+          "sep_2025_sales": 919.4,
+          "purchase_budget": null,
+          "target_profit": 367.76,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 551.64,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FLUID MILK PRODUCTS",
+          "sep_2025_sales": 744.76,
+          "purchase_budget": null,
+          "target_profit": 297.9,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 446.86,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ICE",
+          "sep_2025_sales": 615.63,
+          "purchase_budget": null,
+          "target_profit": 246.25,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 369.38,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "EDIBLE GROCERY",
+          "sep_2025_sales": 601.45,
+          "purchase_budget": null,
+          "target_profit": 240.58,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 360.87,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PROPANE EXCHANGES",
+          "sep_2025_sales": 349.9,
+          "purchase_budget": null,
+          "target_profit": 139.96,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 209.94,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COMMISSARY - SALAD/SANDWICHES",
+          "sep_2025_sales": 337.5,
+          "purchase_budget": null,
+          "target_profit": 135.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 202.5,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "NON-EDIBLE GROCERY",
+          "sep_2025_sales": 278.8,
+          "purchase_budget": null,
+          "target_profit": 111.52,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 167.28,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FROZEN DISPENSED BEVERAGES",
+          "sep_2025_sales": 276.84,
+          "purchase_budget": null,
+          "target_profit": 110.74,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 166.1,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "LIQUOR",
+          "sep_2025_sales": 194.87,
+          "purchase_budget": null,
+          "target_profit": 77.95,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 116.92,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-LT CA-NT NV-NT",
+          "sep_2025_sales": 182.84,
+          "purchase_budget": null,
+          "target_profit": 73.14,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 109.7,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "TAX 4",
+          "sep_2025_sales": 147.32,
+          "purchase_budget": null,
+          "target_profit": 58.93,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 88.39,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COLD DISPENSED BEV - NON-CARB",
+          "sep_2025_sales": 64.34,
+          "purchase_budget": null,
+          "target_profit": 25.74,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 38.6,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "OTHER DAIRY & DELI PRODUCTS",
+          "sep_2025_sales": 35.24,
+          "purchase_budget": null,
+          "target_profit": 14.1,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 21.14,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FUEL DEPOSIT",
+          "sep_2025_sales": 0.02,
+          "purchase_budget": null,
+          "target_profit": 0.01,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 0.01,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COMMISSARY & OTHER PACKAGED PRODUCTS",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-HT CA-T NV-T",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FROZEN FOODS",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ICE BLOCKS",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGE - SUPPLEMENT",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        }
+      ]
+    },
+    "42179": {
+      "store_id": "42179",
+      "store": "Arco HB",
+      "departments": [
+        {
+          "name": "SCRATCH TICKETS",
+          "sep_2025_sales": 28587.0,
+          "purchase_budget": null,
+          "target_profit": 11434.8,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 17152.2,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "LOTTO",
+          "sep_2025_sales": 16772.0,
+          "purchase_budget": null,
+          "target_profit": 6708.8,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 10063.2,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-LT CA-T NV-NT",
+          "sep_2025_sales": 16532.84,
+          "purchase_budget": null,
+          "target_profit": 6613.14,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 9919.7,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "CIGARETTES - PACKS",
+          "sep_2025_sales": 15712.8,
+          "purchase_budget": null,
+          "target_profit": 6285.12,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 9427.68,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "BEER",
+          "sep_2025_sales": 14477.6,
+          "purchase_budget": null,
+          "target_profit": 5791.04,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 8686.56,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGES - NON-CARBONATED",
+          "sep_2025_sales": 13505.38,
+          "purchase_budget": null,
+          "target_profit": 5402.15,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 8103.23,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "SNACKS",
+          "sep_2025_sales": 12492.45,
+          "purchase_budget": null,
+          "target_profit": 4996.98,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 7495.47,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "AMPM FOODSERVICE - HOT",
+          "sep_2025_sales": 9138.65,
+          "purchase_budget": null,
+          "target_profit": 3655.46,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 5483.19,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "OTHER TOBACCO PRODUCTS",
+          "sep_2025_sales": 7028.86,
+          "purchase_budget": null,
+          "target_profit": 2811.54,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 4217.32,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "TAX 1",
+          "sep_2025_sales": 6973.41,
+          "purchase_budget": null,
+          "target_profit": 2789.36,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 4184.05,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "CANDY",
+          "sep_2025_sales": 5908.77,
+          "purchase_budget": null,
+          "target_profit": 2363.51,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 3545.26,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGES - CARBONATED",
+          "sep_2025_sales": 5153.21,
+          "purchase_budget": null,
+          "target_profit": 2061.28,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 3091.93,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "NON-INTEGRATED FUEL",
+          "sep_2025_sales": 4640.47,
+          "purchase_budget": null,
+          "target_profit": 1856.19,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 2784.28,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "HOT DISPENSED BEVERAGES",
+          "sep_2025_sales": 4225.64,
+          "purchase_budget": null,
+          "target_profit": 1690.26,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2535.38,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED SWEET SNACKS",
+          "sep_2025_sales": 3702.8,
+          "purchase_budget": null,
+          "target_profit": 1481.12,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2221.68,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COLD DISPENSED BEV - CARB",
+          "sep_2025_sales": 3146.29,
+          "purchase_budget": null,
+          "target_profit": 1258.52,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1887.77,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "LIQUOR",
+          "sep_2025_sales": 2575.21,
+          "purchase_budget": null,
+          "target_profit": 1030.08,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1545.13,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "AMPM MOJO DELI",
+          "sep_2025_sales": 1697.79,
+          "purchase_budget": null,
+          "target_profit": 679.12,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1018.67,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "AMPM FOODSERVICE - OTHER",
+          "sep_2025_sales": 1582.92,
+          "purchase_budget": null,
+          "target_profit": 633.17,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 949.75,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "AUTOMOTIVE PRODUCTS",
+          "sep_2025_sales": 1457.96,
+          "purchase_budget": null,
+          "target_profit": 583.18,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 874.78,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "GENERAL MERCHANDISE",
+          "sep_2025_sales": 1405.5,
+          "purchase_budget": null,
+          "target_profit": 562.2,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 843.3,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "CARD ACTIVATIONS",
+          "sep_2025_sales": 1125.0,
+          "purchase_budget": null,
+          "target_profit": 450.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 675.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "HEALTH & BEAUTY CARE",
+          "sep_2025_sales": 963.98,
+          "purchase_budget": null,
+          "target_profit": 385.59,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 578.39,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "E-CIG CETEC",
+          "sep_2025_sales": 949.92,
+          "purchase_budget": null,
+          "target_profit": 379.97,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 569.95,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ICE",
+          "sep_2025_sales": 884.05,
+          "purchase_budget": null,
+          "target_profit": 353.62,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 530.43,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "BOTTLE DEPOSITS - TAXABLE",
+          "sep_2025_sales": 832.9,
+          "purchase_budget": null,
+          "target_profit": 333.16,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 499.74,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED ICE CREAM/NOVELTIES",
+          "sep_2025_sales": 620.85,
+          "purchase_budget": null,
+          "target_profit": 248.34,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 372.51,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FLUID MILK PRODUCTS",
+          "sep_2025_sales": 452.64,
+          "purchase_budget": null,
+          "target_profit": 181.06,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 271.58,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FROZEN DISPENSED BEVERAGES",
+          "sep_2025_sales": 445.67,
+          "purchase_budget": null,
+          "target_profit": 178.27,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 267.4,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "BOTTLE DEPOSITS - NONTAXABLE",
+          "sep_2025_sales": 440.25,
+          "purchase_budget": null,
+          "target_profit": 176.1,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 264.15,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COMMISSARY - SALAD/SANDWICHES",
+          "sep_2025_sales": 359.42,
+          "purchase_budget": null,
+          "target_profit": 143.77,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 215.65,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PROPANE EXCHANGES",
+          "sep_2025_sales": 358.9,
+          "purchase_budget": null,
+          "target_profit": 143.56,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 215.34,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "EDIBLE GROCERY",
+          "sep_2025_sales": 352.27,
+          "purchase_budget": null,
+          "target_profit": 140.91,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 211.36,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "WINE",
+          "sep_2025_sales": 244.55,
+          "purchase_budget": null,
+          "target_profit": 97.82,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 146.73,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PUBLICATIONS",
+          "sep_2025_sales": 222.46,
+          "purchase_budget": null,
+          "target_profit": 88.98,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 133.48,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "BAG FEES",
+          "sep_2025_sales": 167.4,
+          "purchase_budget": null,
+          "target_profit": 66.96,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 100.44,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "OTHER DAIRY & DELI PRODUCTS",
+          "sep_2025_sales": 150.04,
+          "purchase_budget": null,
+          "target_profit": 60.02,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 90.02,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "(NOT SETUP)",
+          "sep_2025_sales": 120.38,
+          "purchase_budget": null,
+          "target_profit": 48.15,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 72.23,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "TAX 4",
+          "sep_2025_sales": 119.78,
+          "purchase_budget": null,
+          "target_profit": 47.91,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 71.87,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-LT CA-NT NV-NT",
+          "sep_2025_sales": 112.79,
+          "purchase_budget": null,
+          "target_profit": 45.12,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 67.67,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "NON-EDIBLE GROCERY",
+          "sep_2025_sales": 93.93,
+          "purchase_budget": null,
+          "target_profit": 37.57,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 56.36,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGE - SUPPLEMENT",
+          "sep_2025_sales": 76.86,
+          "purchase_budget": null,
+          "target_profit": 30.74,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 46.12,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COLD DISPENSED BEV - NON-CARB",
+          "sep_2025_sales": 63.6,
+          "purchase_budget": null,
+          "target_profit": 25.44,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 38.16,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COMMISSARY & OTHER PACKAGED PRODUCTS",
+          "sep_2025_sales": 54.89,
+          "purchase_budget": null,
+          "target_profit": 21.96,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 32.93,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "BEER - NON-ALCOHOLIC",
+          "sep_2025_sales": 27.98,
+          "purchase_budget": null,
+          "target_profit": 11.19,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 16.79,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FROZEN FOODS",
+          "sep_2025_sales": 9.16,
+          "purchase_budget": null,
+          "target_profit": 3.66,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 5.5,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "CIGARETTES - CARTONS",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ICE BLOCKS",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FUEL DEPOSIT",
+          "sep_2025_sales": -10.09,
+          "purchase_budget": null,
+          "target_profit": -4.04,
+          "pass_through": true,
+          "prior_formula_purchase_budget": -6.05,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        }
+      ]
+    },
+    "42279": {
+      "store_id": "42279",
+      "store": "Koval",
+      "departments": [
+        {
+          "name": "PACKAGED BEVERAGES - NON-CARBONATED",
+          "sep_2025_sales": 19950.31,
+          "purchase_budget": null,
+          "target_profit": 7980.12,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 11970.19,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "BEER",
+          "sep_2025_sales": 16514.58,
+          "purchase_budget": null,
+          "target_profit": 6605.83,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 9908.75,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "CIGARETTES - PACKS",
+          "sep_2025_sales": 15923.6,
+          "purchase_budget": null,
+          "target_profit": 6369.44,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 9554.16,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "OTHER TOBACCO PRODUCTS",
+          "sep_2025_sales": 10576.39,
+          "purchase_budget": null,
+          "target_profit": 4230.56,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 6345.83,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "SNACKS",
+          "sep_2025_sales": 9940.69,
+          "purchase_budget": null,
+          "target_profit": 3976.28,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 5964.41,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-LT CA-T NV-NT",
+          "sep_2025_sales": 7843.28,
+          "purchase_budget": null,
+          "target_profit": 3137.31,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 4705.97,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "CANDY",
+          "sep_2025_sales": 6033.43,
+          "purchase_budget": null,
+          "target_profit": 2413.37,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 3620.06,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGES - CARBONATED",
+          "sep_2025_sales": 5558.4,
+          "purchase_budget": null,
+          "target_profit": 2223.36,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 3335.04,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "TAX 1",
+          "sep_2025_sales": 5262.57,
+          "purchase_budget": null,
+          "target_profit": 2105.03,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 3157.54,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "AMPM FOODSERVICE - HOT",
+          "sep_2025_sales": 3399.76,
+          "purchase_budget": null,
+          "target_profit": 1359.9,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2039.86,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "HEALTH & BEAUTY CARE",
+          "sep_2025_sales": 3208.0,
+          "purchase_budget": null,
+          "target_profit": 1283.2,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1924.8,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COLD DISPENSED BEV - CARB",
+          "sep_2025_sales": 2748.81,
+          "purchase_budget": null,
+          "target_profit": 1099.52,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1649.29,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED SWEET SNACKS",
+          "sep_2025_sales": 2632.27,
+          "purchase_budget": null,
+          "target_profit": 1052.91,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1579.36,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "GENERAL MERCHANDISE",
+          "sep_2025_sales": 1988.43,
+          "purchase_budget": null,
+          "target_profit": 795.37,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1193.06,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "AMPM FOODSERVICE - OTHER",
+          "sep_2025_sales": 1921.77,
+          "purchase_budget": null,
+          "target_profit": 768.71,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1153.06,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "EDIBLE GROCERY",
+          "sep_2025_sales": 1842.15,
+          "purchase_budget": null,
+          "target_profit": 736.86,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1105.29,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "E-CIG CETEC",
+          "sep_2025_sales": 1786.63,
+          "purchase_budget": null,
+          "target_profit": 714.65,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1071.98,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "AMPM MOJO DELI",
+          "sep_2025_sales": 1714.89,
+          "purchase_budget": null,
+          "target_profit": 685.96,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1028.93,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "HOT DISPENSED BEVERAGES",
+          "sep_2025_sales": 1709.94,
+          "purchase_budget": null,
+          "target_profit": 683.98,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1025.96,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "WINE",
+          "sep_2025_sales": 1611.77,
+          "purchase_budget": null,
+          "target_profit": 644.71,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 967.06,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED ICE CREAM/NOVELTIES",
+          "sep_2025_sales": 931.01,
+          "purchase_budget": null,
+          "target_profit": 372.4,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 558.61,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FLUID MILK PRODUCTS",
+          "sep_2025_sales": 927.38,
+          "purchase_budget": null,
+          "target_profit": 370.95,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 556.43,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ICE",
+          "sep_2025_sales": 874.54,
+          "purchase_budget": null,
+          "target_profit": 349.82,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 524.72,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "LIQUOR",
+          "sep_2025_sales": 780.67,
+          "purchase_budget": null,
+          "target_profit": 312.27,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 468.4,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "OTHER DAIRY & DELI PRODUCTS",
+          "sep_2025_sales": 512.66,
+          "purchase_budget": null,
+          "target_profit": 205.06,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 307.6,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "AUTOMOTIVE PRODUCTS",
+          "sep_2025_sales": 479.62,
+          "purchase_budget": null,
+          "target_profit": 191.85,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 287.77,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FROZEN DISPENSED BEVERAGES",
+          "sep_2025_sales": 464.67,
+          "purchase_budget": null,
+          "target_profit": 185.87,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 278.8,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COLD DISPENSED BEV - NON-CARB",
+          "sep_2025_sales": 324.9,
+          "purchase_budget": null,
+          "target_profit": 129.96,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 194.94,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGE - SUPPLEMENT",
+          "sep_2025_sales": 203.66,
+          "purchase_budget": null,
+          "target_profit": 81.46,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 122.2,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COMMISSARY - SALAD/SANDWICHES",
+          "sep_2025_sales": 171.75,
+          "purchase_budget": null,
+          "target_profit": 68.7,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 103.05,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "(NOT SETUP)",
+          "sep_2025_sales": 60.85,
+          "purchase_budget": null,
+          "target_profit": 24.34,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 36.51,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "CARD ACTIVATIONS",
+          "sep_2025_sales": 50.0,
+          "purchase_budget": null,
+          "target_profit": 20.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 30.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PUBLICATIONS",
+          "sep_2025_sales": 44.5,
+          "purchase_budget": null,
+          "target_profit": 17.8,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 26.7,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "NON-EDIBLE GROCERY",
+          "sep_2025_sales": 38.89,
+          "purchase_budget": null,
+          "target_profit": 15.56,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 23.33,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COMMISSARY & OTHER PACKAGED PRODUCTS",
+          "sep_2025_sales": 13.98,
+          "purchase_budget": null,
+          "target_profit": 5.59,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 8.39,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-HT CA-T NV-T",
+          "sep_2025_sales": 7.98,
+          "purchase_budget": null,
+          "target_profit": 3.19,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 4.79,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-LT CA-NT NV-NT",
+          "sep_2025_sales": 7.98,
+          "purchase_budget": null,
+          "target_profit": 3.19,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 4.79,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "BAG FEES",
+          "sep_2025_sales": 2.0,
+          "purchase_budget": null,
+          "target_profit": 0.8,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 1.2,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "BOTTLE DEPOSITS - TAXABLE",
+          "sep_2025_sales": 0.1,
+          "purchase_budget": null,
+          "target_profit": 0.04,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 0.06,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "BEER - NON-ALCOHOLIC",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FROZEN FOODS",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ICE BLOCKS",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "LOTTO",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PROPANE EXCHANGES",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "SCRATCH TICKETS",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "TAX 4",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FUEL DEPOSIT",
+          "sep_2025_sales": -8.0,
+          "purchase_budget": null,
+          "target_profit": -3.2,
+          "pass_through": true,
+          "prior_formula_purchase_budget": -4.8,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        }
+      ]
+    },
+    "42280": {
+      "store_id": "42280",
+      "store": "Spring Mtn",
+      "departments": [
+        {
+          "name": "CIGARETTES - PACKS",
+          "sep_2025_sales": 15494.55,
+          "purchase_budget": null,
+          "target_profit": 6197.82,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 9296.73,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "BEER",
+          "sep_2025_sales": 12499.41,
+          "purchase_budget": null,
+          "target_profit": 4999.76,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 7499.65,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGES - NON-CARBONATED",
+          "sep_2025_sales": 11218.47,
+          "purchase_budget": null,
+          "target_profit": 4487.39,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 6731.08,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-LT CA-T NV-NT",
+          "sep_2025_sales": 8324.09,
+          "purchase_budget": null,
+          "target_profit": 3329.64,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 4994.45,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "SNACKS",
+          "sep_2025_sales": 5768.08,
+          "purchase_budget": null,
+          "target_profit": 2307.23,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 3460.85,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGES - CARBONATED",
+          "sep_2025_sales": 4414.9,
+          "purchase_budget": null,
+          "target_profit": 1765.96,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2648.94,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "CANDY",
+          "sep_2025_sales": 3995.97,
+          "purchase_budget": null,
+          "target_profit": 1598.39,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2397.58,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "TAX 1",
+          "sep_2025_sales": 3685.34,
+          "purchase_budget": null,
+          "target_profit": 1474.14,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 2211.2,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "OTHER TOBACCO PRODUCTS",
+          "sep_2025_sales": 3672.18,
+          "purchase_budget": null,
+          "target_profit": 1468.87,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2203.31,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED SWEET SNACKS",
+          "sep_2025_sales": 1425.76,
+          "purchase_budget": null,
+          "target_profit": 570.3,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 855.46,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "HEALTH & BEAUTY CARE",
+          "sep_2025_sales": 1332.32,
+          "purchase_budget": null,
+          "target_profit": 532.93,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 799.39,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "GENERAL MERCHANDISE",
+          "sep_2025_sales": 1164.15,
+          "purchase_budget": null,
+          "target_profit": 465.66,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 698.49,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COLD DISPENSED BEV - CARB",
+          "sep_2025_sales": 1113.7,
+          "purchase_budget": null,
+          "target_profit": 445.48,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 668.22,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "EDIBLE GROCERY",
+          "sep_2025_sales": 710.59,
+          "purchase_budget": null,
+          "target_profit": 284.24,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 426.35,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "HOT DISPENSED BEVERAGES",
+          "sep_2025_sales": 674.02,
+          "purchase_budget": null,
+          "target_profit": 269.61,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 404.41,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ICE",
+          "sep_2025_sales": 624.32,
+          "purchase_budget": null,
+          "target_profit": 249.73,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 374.59,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "WINE",
+          "sep_2025_sales": 621.41,
+          "purchase_budget": null,
+          "target_profit": 248.56,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 372.85,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "E-CIG CETEC",
+          "sep_2025_sales": 485.54,
+          "purchase_budget": null,
+          "target_profit": 194.22,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 291.32,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FLUID MILK PRODUCTS",
+          "sep_2025_sales": 462.7,
+          "purchase_budget": null,
+          "target_profit": 185.08,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 277.62,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED ICE CREAM/NOVELTIES",
+          "sep_2025_sales": 361.68,
+          "purchase_budget": null,
+          "target_profit": 144.67,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 217.01,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FROZEN DISPENSED BEVERAGES",
+          "sep_2025_sales": 119.11,
+          "purchase_budget": null,
+          "target_profit": 47.64,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 71.47,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGE - SUPPLEMENT",
+          "sep_2025_sales": 81.2,
+          "purchase_budget": null,
+          "target_profit": 32.48,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 48.72,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COMMISSARY - SALAD/SANDWICHES",
+          "sep_2025_sales": 76.27,
+          "purchase_budget": null,
+          "target_profit": 30.51,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 45.76,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COLD DISPENSED BEV - NON-CARB",
+          "sep_2025_sales": 70.03,
+          "purchase_budget": null,
+          "target_profit": 28.01,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 42.02,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "NON-EDIBLE GROCERY",
+          "sep_2025_sales": 62.18,
+          "purchase_budget": null,
+          "target_profit": 24.87,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 37.31,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-LT CA-NT NV-NT",
+          "sep_2025_sales": 46.76,
+          "purchase_budget": null,
+          "target_profit": 18.7,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 28.06,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "LIQUOR",
+          "sep_2025_sales": 32.94,
+          "purchase_budget": null,
+          "target_profit": 13.18,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 19.76,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "OTHER DAIRY & DELI PRODUCTS",
+          "sep_2025_sales": 5.99,
+          "purchase_budget": null,
+          "target_profit": 2.4,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 3.59,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COMMISSARY & OTHER PACKAGED PRODUCTS",
+          "sep_2025_sales": 1.99,
+          "purchase_budget": null,
+          "target_profit": 0.8,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1.19,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-HT CA-T NV-T",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FROZEN FOODS",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FUEL DEPOSIT",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ICE BLOCKS",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "LOTTO",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PROPANE EXCHANGES",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "Rows 51\u201352 updated from attached Daily Book Summary PDFs. Net Sales = CStore Sales Station Total minus TAX 1, TAX 4, Scratch Tickets, Lotto, and Card Activations. Detail department rows above are retained for category views and may not include every report-only department line.",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "SCRATCH TICKETS",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "TAX 4",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        }
+      ]
+    },
+    "42281": {
+      "store_id": "42281",
+      "store": "Charleston",
+      "departments": [
+        {
+          "name": "BEER",
+          "sep_2025_sales": 14633.78,
+          "purchase_budget": null,
+          "target_profit": 5853.51,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 8780.27,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "CIGARETTES - PACKS",
+          "sep_2025_sales": 10233.59,
+          "purchase_budget": null,
+          "target_profit": 4093.44,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 6140.15,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGES - NON-CARBONATED",
+          "sep_2025_sales": 8106.25,
+          "purchase_budget": null,
+          "target_profit": 3242.5,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 4863.75,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-LT CA-T NV-NT",
+          "sep_2025_sales": 6506.59,
+          "purchase_budget": null,
+          "target_profit": 2602.64,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 3903.95,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "SNACKS",
+          "sep_2025_sales": 5899.81,
+          "purchase_budget": null,
+          "target_profit": 2359.92,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 3539.89,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COLD DISPENSED BEV - CARB",
+          "sep_2025_sales": 4247.03,
+          "purchase_budget": null,
+          "target_profit": 1698.81,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2548.22,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "CANDY",
+          "sep_2025_sales": 4028.55,
+          "purchase_budget": null,
+          "target_profit": 1611.42,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2417.13,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "OTHER TOBACCO PRODUCTS",
+          "sep_2025_sales": 3924.09,
+          "purchase_budget": null,
+          "target_profit": 1569.64,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2354.45,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "TAX 1",
+          "sep_2025_sales": 3730.69,
+          "purchase_budget": null,
+          "target_profit": 1492.28,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 2238.41,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGES - CARBONATED",
+          "sep_2025_sales": 3453.92,
+          "purchase_budget": null,
+          "target_profit": 1381.57,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2072.35,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED SWEET SNACKS",
+          "sep_2025_sales": 2286.72,
+          "purchase_budget": null,
+          "target_profit": 914.69,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1372.03,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ICE",
+          "sep_2025_sales": 1308.07,
+          "purchase_budget": null,
+          "target_profit": 523.23,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 784.84,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "HOT DISPENSED BEVERAGES",
+          "sep_2025_sales": 904.46,
+          "purchase_budget": null,
+          "target_profit": 361.78,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 542.68,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "EDIBLE GROCERY",
+          "sep_2025_sales": 775.38,
+          "purchase_budget": null,
+          "target_profit": 310.15,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 465.23,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "HEALTH & BEAUTY CARE",
+          "sep_2025_sales": 593.4,
+          "purchase_budget": null,
+          "target_profit": 237.36,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 356.04,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "GENERAL MERCHANDISE",
+          "sep_2025_sales": 550.71,
+          "purchase_budget": null,
+          "target_profit": 220.28,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 330.43,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED ICE CREAM/NOVELTIES",
+          "sep_2025_sales": 530.85,
+          "purchase_budget": null,
+          "target_profit": 212.34,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 318.51,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "WINE",
+          "sep_2025_sales": 525.74,
+          "purchase_budget": null,
+          "target_profit": 210.3,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 315.44,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FLUID MILK PRODUCTS",
+          "sep_2025_sales": 506.63,
+          "purchase_budget": null,
+          "target_profit": 202.65,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 303.98,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FROZEN DISPENSED BEVERAGES",
+          "sep_2025_sales": 434.87,
+          "purchase_budget": null,
+          "target_profit": 173.95,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 260.92,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COLD DISPENSED BEV - NON-CARB",
+          "sep_2025_sales": 420.35,
+          "purchase_budget": null,
+          "target_profit": 168.14,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 252.21,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "E-CIG CETEC",
+          "sep_2025_sales": 149.13,
+          "purchase_budget": null,
+          "target_profit": 59.65,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 89.48,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COMMISSARY - SALAD/SANDWICHES",
+          "sep_2025_sales": 136.38,
+          "purchase_budget": null,
+          "target_profit": 54.55,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 81.83,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "LIQUOR",
+          "sep_2025_sales": 93.85,
+          "purchase_budget": null,
+          "target_profit": 37.54,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 56.31,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGE - SUPPLEMENT",
+          "sep_2025_sales": 76.63,
+          "purchase_budget": null,
+          "target_profit": 30.65,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 45.98,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-LT CA-NT NV-NT",
+          "sep_2025_sales": 48.5,
+          "purchase_budget": null,
+          "target_profit": 19.4,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 29.1,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "OTHER DAIRY & DELI PRODUCTS",
+          "sep_2025_sales": 47.53,
+          "purchase_budget": null,
+          "target_profit": 19.01,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 28.52,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "NON-EDIBLE GROCERY",
+          "sep_2025_sales": 37.95,
+          "purchase_budget": null,
+          "target_profit": 15.18,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 22.77,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COMMISSARY & OTHER PACKAGED PRODUCTS",
+          "sep_2025_sales": 11.96,
+          "purchase_budget": null,
+          "target_profit": 4.78,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 7.18,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FROZEN FOODS",
+          "sep_2025_sales": 3.99,
+          "purchase_budget": null,
+          "target_profit": 1.6,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2.39,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-HT CA-T NV-T",
+          "sep_2025_sales": 3.49,
+          "purchase_budget": null,
+          "target_profit": 1.4,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2.09,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FUEL DEPOSIT",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ICE BLOCKS",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "LOTTO",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PROPANE EXCHANGES",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "SCRATCH TICKETS",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "TAX 4",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        }
+      ]
+    },
+    "42282": {
+      "store_id": "42282",
+      "store": "Oakey Las Vegas Blvd",
+      "departments": [
+        {
+          "name": "CIGARETTES - PACKS",
+          "sep_2025_sales": 5677.2,
+          "purchase_budget": null,
+          "target_profit": 2270.88,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 3406.32,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COLD DISPENSED BEV - CARB",
+          "sep_2025_sales": 4272.27,
+          "purchase_budget": null,
+          "target_profit": 1708.91,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2563.36,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGES - NON-CARBONATED",
+          "sep_2025_sales": 4123.04,
+          "purchase_budget": null,
+          "target_profit": 1649.22,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2473.82,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "BEER",
+          "sep_2025_sales": 3383.01,
+          "purchase_budget": null,
+          "target_profit": 1353.2,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2029.81,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "OTHER TOBACCO PRODUCTS",
+          "sep_2025_sales": 2417.11,
+          "purchase_budget": null,
+          "target_profit": 966.84,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1450.27,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-LT CA-T NV-NT",
+          "sep_2025_sales": 2351.11,
+          "purchase_budget": null,
+          "target_profit": 940.44,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1410.67,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "CANDY",
+          "sep_2025_sales": 2301.53,
+          "purchase_budget": null,
+          "target_profit": 920.61,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1380.92,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "SNACKS",
+          "sep_2025_sales": 2245.78,
+          "purchase_budget": null,
+          "target_profit": 898.31,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1347.47,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGES - CARBONATED",
+          "sep_2025_sales": 1545.08,
+          "purchase_budget": null,
+          "target_profit": 618.03,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 927.05,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "TAX 1",
+          "sep_2025_sales": 1534.32,
+          "purchase_budget": null,
+          "target_profit": 613.73,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 920.59,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED SWEET SNACKS",
+          "sep_2025_sales": 887.63,
+          "purchase_budget": null,
+          "target_profit": 355.05,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 532.58,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "GENERAL MERCHANDISE",
+          "sep_2025_sales": 759.17,
+          "purchase_budget": null,
+          "target_profit": 303.67,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 455.5,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "HEALTH & BEAUTY CARE",
+          "sep_2025_sales": 592.56,
+          "purchase_budget": null,
+          "target_profit": 237.02,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 355.54,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED ICE CREAM/NOVELTIES",
+          "sep_2025_sales": 522.75,
+          "purchase_budget": null,
+          "target_profit": 209.1,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 313.65,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "EDIBLE GROCERY",
+          "sep_2025_sales": 500.35,
+          "purchase_budget": null,
+          "target_profit": 200.14,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 300.21,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "HOT DISPENSED BEVERAGES",
+          "sep_2025_sales": 481.61,
+          "purchase_budget": null,
+          "target_profit": 192.64,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 288.97,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "WINE",
+          "sep_2025_sales": 349.31,
+          "purchase_budget": null,
+          "target_profit": 139.72,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 209.59,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ICE",
+          "sep_2025_sales": 297.09,
+          "purchase_budget": null,
+          "target_profit": 118.84,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 178.25,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FROZEN DISPENSED BEVERAGES",
+          "sep_2025_sales": 282.62,
+          "purchase_budget": null,
+          "target_profit": 113.05,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 169.57,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FLUID MILK PRODUCTS",
+          "sep_2025_sales": 273.02,
+          "purchase_budget": null,
+          "target_profit": 109.21,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 163.81,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COLD DISPENSED BEV - NON-CARB",
+          "sep_2025_sales": 179.7,
+          "purchase_budget": null,
+          "target_profit": 71.88,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 107.82,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "NON-EDIBLE GROCERY",
+          "sep_2025_sales": 90.5,
+          "purchase_budget": null,
+          "target_profit": 36.2,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 54.3,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "E-CIG CETEC",
+          "sep_2025_sales": 81.52,
+          "purchase_budget": null,
+          "target_profit": 32.61,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 48.91,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COMMISSARY & OTHER PACKAGED PRODUCTS",
+          "sep_2025_sales": 70.35,
+          "purchase_budget": null,
+          "target_profit": 28.14,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 42.21,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "OTHER DAIRY & DELI PRODUCTS",
+          "sep_2025_sales": 67.74,
+          "purchase_budget": null,
+          "target_profit": 27.1,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 40.64,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COMMISSARY - SALAD/SANDWICHES",
+          "sep_2025_sales": 60.06,
+          "purchase_budget": null,
+          "target_profit": 24.02,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 36.04,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGE - SUPPLEMENT",
+          "sep_2025_sales": 39.91,
+          "purchase_budget": null,
+          "target_profit": 15.96,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 23.95,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "LIQUOR",
+          "sep_2025_sales": 19.47,
+          "purchase_budget": null,
+          "target_profit": 7.79,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 11.68,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-HT CA-T NV-T",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-LT CA-NT NV-NT",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FROZEN FOODS",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FUEL DEPOSIT",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ICE BLOCKS",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "LOTTO",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PROPANE EXCHANGES",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "SCRATCH TICKETS",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "TAX 4",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        }
+      ]
+    },
+    "42352": {
+      "store_id": "42352",
+      "store": "Arco Db",
+      "departments": [
+        {
+          "name": "LOTTO",
+          "sep_2025_sales": 29764.0,
+          "purchase_budget": null,
+          "target_profit": 11905.6,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 17858.4,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "SCRATCH TICKETS",
+          "sep_2025_sales": 25948.0,
+          "purchase_budget": null,
+          "target_profit": 10379.2,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 15568.8,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "BEER",
+          "sep_2025_sales": 22079.67,
+          "purchase_budget": null,
+          "target_profit": 8831.87,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 13247.8,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "CIGARETTES - PACKS",
+          "sep_2025_sales": 17093.55,
+          "purchase_budget": null,
+          "target_profit": 6837.42,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 10256.13,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGES - NON-CARBONATED",
+          "sep_2025_sales": 13829.46,
+          "purchase_budget": null,
+          "target_profit": 5531.78,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 8297.68,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "SNACKS",
+          "sep_2025_sales": 12959.68,
+          "purchase_budget": null,
+          "target_profit": 5183.87,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 7775.81,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-LT CA-T NV-NT",
+          "sep_2025_sales": 11013.37,
+          "purchase_budget": null,
+          "target_profit": 4405.35,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 6608.02,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "TAX 1",
+          "sep_2025_sales": 8093.58,
+          "purchase_budget": null,
+          "target_profit": 3237.43,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 4856.15,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "LIQUOR",
+          "sep_2025_sales": 7276.03,
+          "purchase_budget": null,
+          "target_profit": 2910.41,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 4365.62,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "CANDY",
+          "sep_2025_sales": 6561.09,
+          "purchase_budget": null,
+          "target_profit": 2624.44,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 3936.65,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGES - CARBONATED",
+          "sep_2025_sales": 5033.45,
+          "purchase_budget": null,
+          "target_profit": 2013.38,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 3020.07,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "OTHER TOBACCO PRODUCTS",
+          "sep_2025_sales": 4370.37,
+          "purchase_budget": null,
+          "target_profit": 1748.15,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2622.22,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "AMPM FOODSERVICE - HOT",
+          "sep_2025_sales": 3240.41,
+          "purchase_budget": null,
+          "target_profit": 1296.16,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1944.25,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED SWEET SNACKS",
+          "sep_2025_sales": 3163.96,
+          "purchase_budget": null,
+          "target_profit": 1265.58,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1898.38,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COLD DISPENSED BEV - CARB",
+          "sep_2025_sales": 2890.24,
+          "purchase_budget": null,
+          "target_profit": 1156.1,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1734.14,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "HOT DISPENSED BEVERAGES",
+          "sep_2025_sales": 1991.21,
+          "purchase_budget": null,
+          "target_profit": 796.48,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1194.73,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "AMPM MOJO DELI",
+          "sep_2025_sales": 1951.65,
+          "purchase_budget": null,
+          "target_profit": 780.66,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1170.99,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "GENERAL MERCHANDISE",
+          "sep_2025_sales": 1616.17,
+          "purchase_budget": null,
+          "target_profit": 646.47,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 969.7,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "AUTOMOTIVE PRODUCTS",
+          "sep_2025_sales": 1549.41,
+          "purchase_budget": null,
+          "target_profit": 619.76,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 929.65,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ATM COMMISSION",
+          "sep_2025_sales": 1220.0,
+          "purchase_budget": null,
+          "target_profit": 488.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 732.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "CARD ACTIVATIONS",
+          "sep_2025_sales": 1175.0,
+          "purchase_budget": null,
+          "target_profit": 470.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 705.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "AMPM FOODSERVICE - OTHER",
+          "sep_2025_sales": 1106.43,
+          "purchase_budget": null,
+          "target_profit": 442.57,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 663.86,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ICE",
+          "sep_2025_sales": 1047.76,
+          "purchase_budget": null,
+          "target_profit": 419.1,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 628.66,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "BOTTLE DEPOSITS - TAXABLE",
+          "sep_2025_sales": 957.5,
+          "purchase_budget": null,
+          "target_profit": 383.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 574.5,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "HEALTH & BEAUTY CARE",
+          "sep_2025_sales": 890.87,
+          "purchase_budget": null,
+          "target_profit": 356.35,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 534.52,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "NON-INTEGRATED FUEL",
+          "sep_2025_sales": 777.66,
+          "purchase_budget": null,
+          "target_profit": 311.06,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 466.6,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "SMOKELESS",
+          "sep_2025_sales": 669.12,
+          "purchase_budget": null,
+          "target_profit": 267.65,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 401.47,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "WINE",
+          "sep_2025_sales": 613.68,
+          "purchase_budget": null,
+          "target_profit": 245.47,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 368.21,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED ICE CREAM/NOVELTIES",
+          "sep_2025_sales": 509.66,
+          "purchase_budget": null,
+          "target_profit": 203.86,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 305.8,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "BOTTLE DEPOSITS - NONTAXABLE",
+          "sep_2025_sales": 492.75,
+          "purchase_budget": null,
+          "target_profit": 197.1,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 295.65,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FROZEN DISPENSED BEVERAGES",
+          "sep_2025_sales": 400.7,
+          "purchase_budget": null,
+          "target_profit": 160.28,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 240.42,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "EDIBLE GROCERY",
+          "sep_2025_sales": 393.29,
+          "purchase_budget": null,
+          "target_profit": 157.32,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 235.97,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FLUID MILK PRODUCTS",
+          "sep_2025_sales": 331.07,
+          "purchase_budget": null,
+          "target_profit": 132.43,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 198.64,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "(NOT SETUP)",
+          "sep_2025_sales": 206.87,
+          "purchase_budget": null,
+          "target_profit": 82.75,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 124.12,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COMMISSARY & OTHER PACKAGED PRODUCTS",
+          "sep_2025_sales": 199.21,
+          "purchase_budget": null,
+          "target_profit": 79.68,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 119.53,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-LT CA-NT NV-NT",
+          "sep_2025_sales": 188.52,
+          "purchase_budget": null,
+          "target_profit": 75.41,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 113.11,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "BAG FEES",
+          "sep_2025_sales": 120.29,
+          "purchase_budget": null,
+          "target_profit": 48.12,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 72.17,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "CIGARETTES - CARTONS",
+          "sep_2025_sales": 119.7,
+          "purchase_budget": null,
+          "target_profit": 47.88,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 71.82,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "TAX 4",
+          "sep_2025_sales": 95.1,
+          "purchase_budget": null,
+          "target_profit": 38.04,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 57.06,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PROPANE EXCHANGES",
+          "sep_2025_sales": 69.98,
+          "purchase_budget": null,
+          "target_profit": 27.99,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 41.99,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "BEER - NON-ALCOHOLIC",
+          "sep_2025_sales": 56.96,
+          "purchase_budget": null,
+          "target_profit": 22.78,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 34.18,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "OTHER DAIRY & DELI PRODUCTS",
+          "sep_2025_sales": 45.27,
+          "purchase_budget": null,
+          "target_profit": 18.11,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 27.16,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "NON-EDIBLE GROCERY",
+          "sep_2025_sales": 22.42,
+          "purchase_budget": null,
+          "target_profit": 8.97,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 13.45,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-HT CA-T NV-T",
+          "sep_2025_sales": 20.93,
+          "purchase_budget": null,
+          "target_profit": 8.37,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 12.56,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FROZEN FOODS",
+          "sep_2025_sales": 11.08,
+          "purchase_budget": null,
+          "target_profit": 4.43,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 6.65,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COLD DISPENSED BEV - NON-CARB",
+          "sep_2025_sales": 7.53,
+          "purchase_budget": null,
+          "target_profit": 3.01,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 4.52,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGE - SUPPLEMENT",
+          "sep_2025_sales": 3.49,
+          "purchase_budget": null,
+          "target_profit": 1.4,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2.09,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COMMISSARY - SALAD/SANDWICHES",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "E-CIG CETEC",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ICE BLOCKS",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "LICENSES",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FUEL DEPOSIT",
+          "sep_2025_sales": -50.0,
+          "purchase_budget": null,
+          "target_profit": -20.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": -30.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        }
+      ]
+    },
+    "42359": {
+      "store_id": "42359",
+      "store": "Paradise",
+      "departments": [
+        {
+          "name": "PACKAGED BEVERAGES - NON-CARBONATED",
+          "sep_2025_sales": 16936.99,
+          "purchase_budget": null,
+          "target_profit": 6774.79,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 10162.19,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "BEER",
+          "sep_2025_sales": 11701.73,
+          "purchase_budget": null,
+          "target_profit": 4680.69,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 7021.04,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "CIGARETTES - PACKS",
+          "sep_2025_sales": 9839.7,
+          "purchase_budget": null,
+          "target_profit": 3935.88,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 5903.82,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "SNACKS",
+          "sep_2025_sales": 8097.1,
+          "purchase_budget": null,
+          "target_profit": 3238.84,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 4858.26,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-LT CA-T NV-NT",
+          "sep_2025_sales": 7070.85,
+          "purchase_budget": null,
+          "target_profit": 2828.34,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 4242.51,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "OTHER TOBACCO PRODUCTS",
+          "sep_2025_sales": 5582.78,
+          "purchase_budget": null,
+          "target_profit": 2233.11,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 3349.67,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "CANDY",
+          "sep_2025_sales": 4717.57,
+          "purchase_budget": null,
+          "target_profit": 1887.03,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2830.54,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGES - CARBONATED",
+          "sep_2025_sales": 4018.38,
+          "purchase_budget": null,
+          "target_profit": 1607.35,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2411.03,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "AMPM FOODSERVICE - HOT",
+          "sep_2025_sales": 2351.36,
+          "purchase_budget": null,
+          "target_profit": 940.54,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1410.81,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "EDIBLE GROCERY",
+          "sep_2025_sales": 1227.16,
+          "purchase_budget": null,
+          "target_profit": 490.86,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 736.3,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "Paradise (Riviera #1) opened late July 2025 \u2014 July 2025 is a partial opening month, 2025 history covers Jul\u2013Dec only, and there is no Jan\u2013Jun 2025 data. 2026 actuals run Jan\u2013Jul.",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "Paradise \u2014 Department Sales vs Purchases",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        }
+      ]
+    },
+    "42399": {
+      "store_id": "42399",
+      "store": "Garden Grove",
+      "departments": [
+        {
+          "name": "SCRATCH TICKETS",
+          "sep_2025_sales": 35020.0,
+          "purchase_budget": null,
+          "target_profit": 14008.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 21012.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "BEER",
+          "sep_2025_sales": 25921.77,
+          "purchase_budget": null,
+          "target_profit": 10368.71,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 15553.06,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "LOTTO",
+          "sep_2025_sales": 22382.0,
+          "purchase_budget": null,
+          "target_profit": 8952.8,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 13429.2,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGES - NON-CARBONATED",
+          "sep_2025_sales": 18625.96,
+          "purchase_budget": null,
+          "target_profit": 7450.38,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 11175.58,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "CIGARETTES - PACKS",
+          "sep_2025_sales": 14247.21,
+          "purchase_budget": null,
+          "target_profit": 5698.88,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 8548.33,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "SNACKS",
+          "sep_2025_sales": 13088.9,
+          "purchase_budget": null,
+          "target_profit": 5235.56,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 7853.34,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-LT CA-T NV-NT",
+          "sep_2025_sales": 12210.12,
+          "purchase_budget": null,
+          "target_profit": 4884.05,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 7326.07,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "CANDY",
+          "sep_2025_sales": 8235.81,
+          "purchase_budget": null,
+          "target_profit": 3294.32,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 4941.49,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "TAX 1",
+          "sep_2025_sales": 7053.51,
+          "purchase_budget": null,
+          "target_profit": 2821.4,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 4232.11,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "HOT DISPENSED BEVERAGES",
+          "sep_2025_sales": 6737.37,
+          "purchase_budget": null,
+          "target_profit": 2694.95,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 4042.42,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "AMPM FOODSERVICE - HOT",
+          "sep_2025_sales": 6691.58,
+          "purchase_budget": null,
+          "target_profit": 2676.63,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 4014.95,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGES - CARBONATED",
+          "sep_2025_sales": 6650.09,
+          "purchase_budget": null,
+          "target_profit": 2660.04,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 3990.05,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED SWEET SNACKS",
+          "sep_2025_sales": 6556.76,
+          "purchase_budget": null,
+          "target_profit": 2622.7,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 3934.06,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COLD DISPENSED BEV - CARB",
+          "sep_2025_sales": 4712.28,
+          "purchase_budget": null,
+          "target_profit": 1884.91,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2827.37,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "HEALTH & BEAUTY CARE",
+          "sep_2025_sales": 2799.93,
+          "purchase_budget": null,
+          "target_profit": 1119.97,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1679.96,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "AMPM MOJO DELI",
+          "sep_2025_sales": 2483.41,
+          "purchase_budget": null,
+          "target_profit": 993.36,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1490.05,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED ICE CREAM/NOVELTIES",
+          "sep_2025_sales": 2179.51,
+          "purchase_budget": null,
+          "target_profit": 871.8,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1307.71,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "GENERAL MERCHANDISE",
+          "sep_2025_sales": 2086.78,
+          "purchase_budget": null,
+          "target_profit": 834.71,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1252.07,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "OTHER TOBACCO PRODUCTS",
+          "sep_2025_sales": 2030.94,
+          "purchase_budget": null,
+          "target_profit": 812.38,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1218.56,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "AUTOMOTIVE PRODUCTS",
+          "sep_2025_sales": 1972.47,
+          "purchase_budget": null,
+          "target_profit": 788.99,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1183.48,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "EDIBLE GROCERY",
+          "sep_2025_sales": 1855.8,
+          "purchase_budget": null,
+          "target_profit": 742.32,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1113.48,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "AMPM FOODSERVICE - OTHER",
+          "sep_2025_sales": 1745.93,
+          "purchase_budget": null,
+          "target_profit": 698.37,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1047.56,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ICE",
+          "sep_2025_sales": 1536.61,
+          "purchase_budget": null,
+          "target_profit": 614.64,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 921.97,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FLUID MILK PRODUCTS",
+          "sep_2025_sales": 1489.1,
+          "purchase_budget": null,
+          "target_profit": 595.64,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 893.46,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "BOTTLE DEPOSITS - TAXABLE",
+          "sep_2025_sales": 1143.8,
+          "purchase_budget": null,
+          "target_profit": 457.52,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 686.28,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "WINE",
+          "sep_2025_sales": 1141.15,
+          "purchase_budget": null,
+          "target_profit": 456.46,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 684.69,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FROZEN DISPENSED BEVERAGES",
+          "sep_2025_sales": 734.35,
+          "purchase_budget": null,
+          "target_profit": 293.74,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 440.61,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COMMISSARY - SALAD/SANDWICHES",
+          "sep_2025_sales": 684.86,
+          "purchase_budget": null,
+          "target_profit": 273.94,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 410.92,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "BOTTLE DEPOSITS - NONTAXABLE",
+          "sep_2025_sales": 629.95,
+          "purchase_budget": null,
+          "target_profit": 251.98,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 377.97,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PROPANE EXCHANGES",
+          "sep_2025_sales": 289.94,
+          "purchase_budget": null,
+          "target_profit": 115.98,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 173.96,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "BAG FEES",
+          "sep_2025_sales": 219.9,
+          "purchase_budget": null,
+          "target_profit": 87.96,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 131.94,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "NON-EDIBLE GROCERY",
+          "sep_2025_sales": 145.03,
+          "purchase_budget": null,
+          "target_profit": 58.01,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 87.02,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "OTHER DAIRY & DELI PRODUCTS",
+          "sep_2025_sales": 128.92,
+          "purchase_budget": null,
+          "target_profit": 51.57,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 77.35,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "E-CIG CETEC",
+          "sep_2025_sales": 75.81,
+          "purchase_budget": null,
+          "target_profit": 30.32,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 45.49,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COMMISSARY & OTHER PACKAGED PRODUCTS",
+          "sep_2025_sales": 66.99,
+          "purchase_budget": null,
+          "target_profit": 26.8,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 40.19,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-LT CA-NT NV-NT",
+          "sep_2025_sales": 60.93,
+          "purchase_budget": null,
+          "target_profit": 24.37,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 36.56,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "(NOT SETUP)",
+          "sep_2025_sales": 52.41,
+          "purchase_budget": null,
+          "target_profit": 20.96,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 31.45,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGE - SUPPLEMENT",
+          "sep_2025_sales": 51.87,
+          "purchase_budget": null,
+          "target_profit": 20.75,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 31.12,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PUBLICATIONS",
+          "sep_2025_sales": 50.0,
+          "purchase_budget": null,
+          "target_profit": 20.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 30.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "BEER - NON-ALCOHOLIC",
+          "sep_2025_sales": 43.96,
+          "purchase_budget": null,
+          "target_profit": 17.58,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 26.38,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "TAX 4",
+          "sep_2025_sales": 10.47,
+          "purchase_budget": null,
+          "target_profit": 4.19,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 6.28,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COLD DISPENSED BEV - NON-CARB",
+          "sep_2025_sales": 2.58,
+          "purchase_budget": null,
+          "target_profit": 1.03,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1.55,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "CARD ACTIVATIONS",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-HT CA-T NV-T",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FROZEN FOODS",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FUEL DEPOSIT",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ICE BLOCKS",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "LIQUOR",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        }
+      ]
+    },
+    "42438": {
+      "store_id": "42438",
+      "store": "Vista",
+      "departments": [
+        {
+          "name": "CIGARETTES - PACKS",
+          "sep_2025_sales": 17936.29,
+          "purchase_budget": null,
+          "target_profit": 7174.52,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 10761.77,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "BEER",
+          "sep_2025_sales": 13351.61,
+          "purchase_budget": null,
+          "target_profit": 5340.64,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 8010.97,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGES - NON-CARBONATED",
+          "sep_2025_sales": 7346.22,
+          "purchase_budget": null,
+          "target_profit": 2938.49,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 4407.73,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "SNACKS",
+          "sep_2025_sales": 6915.61,
+          "purchase_budget": null,
+          "target_profit": 2766.24,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 4149.37,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-LT CA-T NV-NT",
+          "sep_2025_sales": 6210.63,
+          "purchase_budget": null,
+          "target_profit": 2484.25,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 3726.38,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "CANDY",
+          "sep_2025_sales": 5817.04,
+          "purchase_budget": null,
+          "target_profit": 2326.82,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 3490.22,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COLD DISPENSED BEV - CARB",
+          "sep_2025_sales": 4548.42,
+          "purchase_budget": null,
+          "target_profit": 1819.37,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2729.05,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGES - CARBONATED",
+          "sep_2025_sales": 4164.57,
+          "purchase_budget": null,
+          "target_profit": 1665.83,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2498.74,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "OTHER TOBACCO PRODUCTS",
+          "sep_2025_sales": 4091.85,
+          "purchase_budget": null,
+          "target_profit": 1636.74,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2455.11,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "TAX 1",
+          "sep_2025_sales": 4084.44,
+          "purchase_budget": null,
+          "target_profit": 1633.78,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 2450.66,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED SWEET SNACKS",
+          "sep_2025_sales": 1833.78,
+          "purchase_budget": null,
+          "target_profit": 733.51,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1100.27,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "E-CIG CETEC",
+          "sep_2025_sales": 1025.69,
+          "purchase_budget": null,
+          "target_profit": 410.28,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 615.41,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "HOT DISPENSED BEVERAGES",
+          "sep_2025_sales": 871.03,
+          "purchase_budget": null,
+          "target_profit": 348.41,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 522.62,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ICE",
+          "sep_2025_sales": 820.56,
+          "purchase_budget": null,
+          "target_profit": 328.22,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 492.34,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "EDIBLE GROCERY",
+          "sep_2025_sales": 801.26,
+          "purchase_budget": null,
+          "target_profit": 320.5,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 480.76,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "HEALTH & BEAUTY CARE",
+          "sep_2025_sales": 742.07,
+          "purchase_budget": null,
+          "target_profit": 296.83,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 445.24,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FROZEN DISPENSED BEVERAGES",
+          "sep_2025_sales": 682.83,
+          "purchase_budget": null,
+          "target_profit": 273.13,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 409.7,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FLUID MILK PRODUCTS",
+          "sep_2025_sales": 645.44,
+          "purchase_budget": null,
+          "target_profit": 258.18,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 387.26,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "WINE",
+          "sep_2025_sales": 632.25,
+          "purchase_budget": null,
+          "target_profit": 252.9,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 379.35,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "GENERAL MERCHANDISE",
+          "sep_2025_sales": 604.76,
+          "purchase_budget": null,
+          "target_profit": 241.9,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 362.86,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED ICE CREAM/NOVELTIES",
+          "sep_2025_sales": 509.86,
+          "purchase_budget": null,
+          "target_profit": 203.94,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 305.92,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "OTHER DAIRY & DELI PRODUCTS",
+          "sep_2025_sales": 228.65,
+          "purchase_budget": null,
+          "target_profit": 91.46,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 137.19,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COLD DISPENSED BEV - NON-CARB",
+          "sep_2025_sales": 131.43,
+          "purchase_budget": null,
+          "target_profit": 52.57,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 78.86,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COMMISSARY - SALAD/SANDWICHES",
+          "sep_2025_sales": 85.16,
+          "purchase_budget": null,
+          "target_profit": 34.06,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 51.1,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COMMISSARY & OTHER PACKAGED PRODUCTS",
+          "sep_2025_sales": 74.31,
+          "purchase_budget": null,
+          "target_profit": 29.72,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 44.59,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "NON-EDIBLE GROCERY",
+          "sep_2025_sales": 72.92,
+          "purchase_budget": null,
+          "target_profit": 29.17,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 43.75,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGE - SUPPLEMENT",
+          "sep_2025_sales": 67.82,
+          "purchase_budget": null,
+          "target_profit": 27.13,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 40.69,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-LT CA-NT NV-NT",
+          "sep_2025_sales": 65.57,
+          "purchase_budget": null,
+          "target_profit": 26.23,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 39.34,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "LIQUOR",
+          "sep_2025_sales": 40.22,
+          "purchase_budget": null,
+          "target_profit": 16.09,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 24.13,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-HT CA-T NV-T",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FROZEN FOODS",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FUEL DEPOSIT",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ICE BLOCKS",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "LOTTO",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PROPANE EXCHANGES",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "SCRATCH TICKETS",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "TAX 4",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        }
+      ]
+    },
+    "42439": {
+      "store_id": "42439",
+      "store": "Lamb",
+      "departments": [
+        {
+          "name": "BEER",
+          "sep_2025_sales": 13193.34,
+          "purchase_budget": null,
+          "target_profit": 5277.34,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 7916.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "CIGARETTES - PACKS",
+          "sep_2025_sales": 10586.37,
+          "purchase_budget": null,
+          "target_profit": 4234.55,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 6351.82,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGES - NON-CARBONATED",
+          "sep_2025_sales": 8224.23,
+          "purchase_budget": null,
+          "target_profit": 3289.69,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 4934.54,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "SNACKS",
+          "sep_2025_sales": 7461.74,
+          "purchase_budget": null,
+          "target_profit": 2984.7,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 4477.04,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-LT CA-T NV-NT",
+          "sep_2025_sales": 6710.43,
+          "purchase_budget": null,
+          "target_profit": 2684.17,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 4026.26,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "CANDY",
+          "sep_2025_sales": 4907.74,
+          "purchase_budget": null,
+          "target_profit": 1963.1,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2944.64,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "TAX 1",
+          "sep_2025_sales": 4157.38,
+          "purchase_budget": null,
+          "target_profit": 1662.95,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 2494.43,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "OTHER TOBACCO PRODUCTS",
+          "sep_2025_sales": 3953.22,
+          "purchase_budget": null,
+          "target_profit": 1581.29,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2371.93,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGES - CARBONATED",
+          "sep_2025_sales": 3592.33,
+          "purchase_budget": null,
+          "target_profit": 1436.93,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2155.4,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COLD DISPENSED BEV - CARB",
+          "sep_2025_sales": 3206.22,
+          "purchase_budget": null,
+          "target_profit": 1282.49,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1923.73,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED SWEET SNACKS",
+          "sep_2025_sales": 1866.11,
+          "purchase_budget": null,
+          "target_profit": 746.44,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1119.67,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "HOT DISPENSED BEVERAGES",
+          "sep_2025_sales": 1290.29,
+          "purchase_budget": null,
+          "target_profit": 516.12,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 774.17,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ICE",
+          "sep_2025_sales": 843.0,
+          "purchase_budget": null,
+          "target_profit": 337.2,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 505.8,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FROZEN DISPENSED BEVERAGES",
+          "sep_2025_sales": 766.41,
+          "purchase_budget": null,
+          "target_profit": 306.56,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 459.85,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "HEALTH & BEAUTY CARE",
+          "sep_2025_sales": 553.65,
+          "purchase_budget": null,
+          "target_profit": 221.46,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 332.19,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "GENERAL MERCHANDISE",
+          "sep_2025_sales": 530.39,
+          "purchase_budget": null,
+          "target_profit": 212.16,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 318.23,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "WINE",
+          "sep_2025_sales": 520.61,
+          "purchase_budget": null,
+          "target_profit": 208.24,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 312.37,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FLUID MILK PRODUCTS",
+          "sep_2025_sales": 492.31,
+          "purchase_budget": null,
+          "target_profit": 196.92,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 295.39,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "EDIBLE GROCERY",
+          "sep_2025_sales": 442.91,
+          "purchase_budget": null,
+          "target_profit": 177.16,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 265.75,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED ICE CREAM/NOVELTIES",
+          "sep_2025_sales": 389.86,
+          "purchase_budget": null,
+          "target_profit": 155.94,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 233.92,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "E-CIG CETEC",
+          "sep_2025_sales": 331.49,
+          "purchase_budget": null,
+          "target_profit": 132.6,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 198.89,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGE - SUPPLEMENT",
+          "sep_2025_sales": 91.61,
+          "purchase_budget": null,
+          "target_profit": 36.64,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 54.97,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "OTHER DAIRY & DELI PRODUCTS",
+          "sep_2025_sales": 37.26,
+          "purchase_budget": null,
+          "target_profit": 14.9,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 22.36,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "NON-EDIBLE GROCERY",
+          "sep_2025_sales": 23.94,
+          "purchase_budget": null,
+          "target_profit": 9.58,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 14.36,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-LT CA-NT NV-NT",
+          "sep_2025_sales": 19.94,
+          "purchase_budget": null,
+          "target_profit": 7.98,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 11.96,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "LIQUOR",
+          "sep_2025_sales": 17.94,
+          "purchase_budget": null,
+          "target_profit": 7.18,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 10.76,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COLD DISPENSED BEV - NON-CARB",
+          "sep_2025_sales": 1.09,
+          "purchase_budget": null,
+          "target_profit": 0.44,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.65,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COMMISSARY & OTHER PACKAGED PRODUCTS",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COMMISSARY - SALAD/SANDWICHES",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-HT CA-T NV-T",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FROZEN FOODS",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FUEL DEPOSIT",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ICE BLOCKS",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "LOTTO",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PROPANE EXCHANGES",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "SCRATCH TICKETS",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "TAX 4",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        }
+      ]
+    },
+    "42674": {
+      "store_id": "42674",
+      "store": "Tustin",
+      "departments": [
+        {
+          "name": "SCRATCH TICKETS",
+          "sep_2025_sales": 31803.0,
+          "purchase_budget": null,
+          "target_profit": 12721.2,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 19081.8,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "LOTTO",
+          "sep_2025_sales": 17958.0,
+          "purchase_budget": null,
+          "target_profit": 7183.2,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 10774.8,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "BEER",
+          "sep_2025_sales": 17409.16,
+          "purchase_budget": null,
+          "target_profit": 6963.66,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 10445.5,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "CIGARETTES - PACKS",
+          "sep_2025_sales": 15594.99,
+          "purchase_budget": null,
+          "target_profit": 6238.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 9356.99,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGES - NON-CARBONATED",
+          "sep_2025_sales": 10993.06,
+          "purchase_budget": null,
+          "target_profit": 4397.22,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 6595.84,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-LT CA-T NV-NT",
+          "sep_2025_sales": 8512.77,
+          "purchase_budget": null,
+          "target_profit": 3405.11,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 5107.66,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "SNACKS",
+          "sep_2025_sales": 6645.91,
+          "purchase_budget": null,
+          "target_profit": 2658.36,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 3987.55,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "TAX 1",
+          "sep_2025_sales": 4809.78,
+          "purchase_budget": null,
+          "target_profit": 1923.91,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 2885.87,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "HOT DISPENSED BEVERAGES",
+          "sep_2025_sales": 4506.29,
+          "purchase_budget": null,
+          "target_profit": 1802.52,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2703.77,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGES - CARBONATED",
+          "sep_2025_sales": 4187.69,
+          "purchase_budget": null,
+          "target_profit": 1675.08,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2512.61,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "CANDY",
+          "sep_2025_sales": 4179.13,
+          "purchase_budget": null,
+          "target_profit": 1671.65,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2507.48,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "OTHER TOBACCO PRODUCTS",
+          "sep_2025_sales": 3436.13,
+          "purchase_budget": null,
+          "target_profit": 1374.45,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 2061.68,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED SWEET SNACKS",
+          "sep_2025_sales": 3297.23,
+          "purchase_budget": null,
+          "target_profit": 1318.89,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1978.34,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COLD DISPENSED BEV - CARB",
+          "sep_2025_sales": 3055.82,
+          "purchase_budget": null,
+          "target_profit": 1222.33,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 1833.49,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "E-CIG CETEC",
+          "sep_2025_sales": 1079.85,
+          "purchase_budget": null,
+          "target_profit": 431.94,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 647.91,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "HEALTH & BEAUTY CARE",
+          "sep_2025_sales": 847.45,
+          "purchase_budget": null,
+          "target_profit": 338.98,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 508.47,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED ICE CREAM/NOVELTIES",
+          "sep_2025_sales": 742.08,
+          "purchase_budget": null,
+          "target_profit": 296.83,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 445.25,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "GENERAL MERCHANDISE",
+          "sep_2025_sales": 661.67,
+          "purchase_budget": null,
+          "target_profit": 264.67,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 397.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ICE",
+          "sep_2025_sales": 421.59,
+          "purchase_budget": null,
+          "target_profit": 168.64,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 252.95,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FLUID MILK PRODUCTS",
+          "sep_2025_sales": 409.47,
+          "purchase_budget": null,
+          "target_profit": 163.79,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 245.68,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FROZEN DISPENSED BEVERAGES",
+          "sep_2025_sales": 387.69,
+          "purchase_budget": null,
+          "target_profit": 155.08,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 232.61,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "EDIBLE GROCERY",
+          "sep_2025_sales": 363.67,
+          "purchase_budget": null,
+          "target_profit": 145.47,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 218.2,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PROPANE EXCHANGES",
+          "sep_2025_sales": 279.93,
+          "purchase_budget": null,
+          "target_profit": 111.97,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 167.96,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "WINE",
+          "sep_2025_sales": 197.53,
+          "purchase_budget": null,
+          "target_profit": 79.01,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 118.52,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COMMISSARY - SALAD/SANDWICHES",
+          "sep_2025_sales": 182.88,
+          "purchase_budget": null,
+          "target_profit": 73.15,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 109.73,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "TAX 4",
+          "sep_2025_sales": 135.01,
+          "purchase_budget": null,
+          "target_profit": 54.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 81.01,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-LT CA-NT NV-NT",
+          "sep_2025_sales": 126.73,
+          "purchase_budget": null,
+          "target_profit": 50.69,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 76.04,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "OTHER DAIRY & DELI PRODUCTS",
+          "sep_2025_sales": 64.44,
+          "purchase_budget": null,
+          "target_profit": 25.78,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 38.66,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "NON-EDIBLE GROCERY",
+          "sep_2025_sales": 46.26,
+          "purchase_budget": null,
+          "target_profit": 18.5,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 27.76,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COMMISSARY & OTHER PACKAGED PRODUCTS",
+          "sep_2025_sales": 11.97,
+          "purchase_budget": null,
+          "target_profit": 4.79,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 7.18,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "COLD DISPENSED BEV - NON-CARB",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ENERGY DRINK-AZ-HT CA-T NV-T",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FROZEN FOODS",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "FUEL DEPOSIT",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": true,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "ICE BLOCKS",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "LIQUOR",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        },
+        {
+          "name": "PACKAGED BEVERAGE - SUPPLEMENT",
+          "sep_2025_sales": 0.0,
+          "purchase_budget": null,
+          "target_profit": 0.0,
+          "pass_through": false,
+          "prior_formula_purchase_budget": 0.0,
+          "budget_month": null,
+          "budget_status": "awaiting_mina_same_month"
+        }
+      ]
+    }
+  }
+}

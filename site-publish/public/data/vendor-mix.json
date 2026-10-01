@@ -1,0 +1,4629 @@
+{
+  "meta": {
+    "generated": "2026-09-26T06:14:30.925Z",
+    "source_dly": "/workspace/orders/vendor_dly_spend_2026.json",
+    "source_targets": "budget-targets.json",
+    "majors": [
+      "Harbor",
+      "Coke",
+      "Pepsi",
+      "Core-Mark",
+      "Straub",
+      "Frito Lay",
+      "Bimbo",
+      "Red Bull",
+      "7UP",
+      "Nevada Beverage"
+    ],
+    "mix_basis_preferred": "2026-08",
+    "current_mtd_month": "2026-09",
+    "formula": {
+      "mix_pct": "vendor mtd_total / store month total vendor spend (from dly)",
+      "month_purchase_budget": "Sep 2025 sales × 0.60 (40% GP target)",
+      "vendor_month_budget": "month_purchase_budget × mix_pct",
+      "vendor_annual_budget": "annual_purchase_budget × mix_pct (annual = month × 12)",
+      "remaining": "vendor_month_budget − mtd_spend",
+      "ordering_rule": "When ordering, order to whatever budget is LEFT for each vendor. Split remaining across weeks left in the month; each week prioritize top-selling items within that week’s split."
+    },
+    "dly_meta": {
+      "official_months": {
+        "2026-07": "dly-onedrive/2026-07/*-07312026dly.pdf",
+        "2026-08": "dly-onedrive/2026-08/*-08312026dly.pdf",
+        "2026-09": "Clients/…/09192026dly.pdf (42352); prior *-09052026dly superseded for 42352"
+      },
+      "missing_by_month": {
+        "2026-07": [
+          "42021",
+          "42048",
+          "42073",
+          "42098",
+          "42279",
+          "42280",
+          "42281",
+          "42282",
+          "42359",
+          "42399",
+          "42438",
+          "42439",
+          "42674"
+        ],
+        "2026-08": [
+          "42359"
+        ],
+        "2026-09": [
+          "42359"
+        ]
+      }
+    },
+    "note": "MTD spend refreshed: Big Daddy pack -> 2026-09-12 detail DLY; 42352 remains 2026-09-19; solo 42004/42179/42674 remain 2026-09-05; budgets unchanged from ArcoDb 60% EOM recal. | 2026-09-20T11:15:57-07:00: mtd_total set from Daily Excel Net Purchases for all stores except Paradise",
+    "updated_42352_budget": "2026-09-20T17:51:57.357416+00:00",
+    "note_42352": "month_purchase_budget set to 71400; vendor remaining recomputed; other stores unchanged",
+    "recalibrated": "2026-09-20T10:57:59.085370-07:00",
+    "method": "ArcoDb: month_purchase_budget = 60% × EOM sales estimate; EOM = MTD store sales × days_in_month/days_elapsed (Sep 2026: 30/19); Arco Db 42352 pinned 119000/71400",
+    "rebuilt_spend": "2026-09-20T11:05:44.223632-07:00",
+    "spend_authority": "Latest September DLY invoices; Tustin uses Daily Excel Net Purchases",
+    "excel_sync_at": "2026-09-26T06:14:30.925Z",
+    "vendor_remain_method": "Diamond Bar: DLY major spent (raw); Other=Excel−DLY; remain=budget×mix−spent",
+    "vendor_remain_at": "2026-09-20T11:19:29-07:00",
+    "paradise_skipped": "42359",
+    "placentia_hb_excel_alloc_at": "2026-09-20T11:22:25-07:00",
+    "budget_page_note": "Purchases updated 2026-09-25 from DLY through 2026-09-23 for the Big Daddy pack, 2026-09-19 Placentia and HB, 2026-09-20 Db, and Tustin Excel Net Purchases 56967.73. A vendor stays at the higher of the old spend and the new invoices. Other is the rest of the store total."
+  },
+  "months": {
+    "2026-07": {
+      "stores": {
+        "42004": {
+          "total_vendor_spend": 69962.2,
+          "amounts": {
+            "7UP": 1879.03,
+            "Bimbo": 1149.89,
+            "Core-Mark": 27418.96,
+            "Coke": 8852.86,
+            "Frito Lay": 4699.02,
+            "Harbor": 12651.14,
+            "Pepsi": 6567.49,
+            "Red Bull": 3713.34,
+            "Straub": 3030.47
+          },
+          "mix_pct": {
+            "7UP": 0.026858,
+            "Bimbo": 0.016436,
+            "Core-Mark": 0.391911,
+            "Coke": 0.126538,
+            "Frito Lay": 0.067165,
+            "Harbor": 0.180828,
+            "Pepsi": 0.093872,
+            "Red Bull": 0.053076,
+            "Straub": 0.043316
+          },
+          "top_vendors": [
+            {
+              "vendor": "Core-Mark",
+              "spend": 27418.96,
+              "pct": 0.391911
+            },
+            {
+              "vendor": "Harbor",
+              "spend": 12651.14,
+              "pct": 0.180828
+            },
+            {
+              "vendor": "Coke",
+              "spend": 8852.86,
+              "pct": 0.126538
+            },
+            {
+              "vendor": "Pepsi",
+              "spend": 6567.49,
+              "pct": 0.093872
+            },
+            {
+              "vendor": "Frito Lay",
+              "spend": 4699.02,
+              "pct": 0.067165
+            },
+            {
+              "vendor": "Red Bull",
+              "spend": 3713.34,
+              "pct": 0.053076
+            },
+            {
+              "vendor": "Straub",
+              "spend": 3030.47,
+              "pct": 0.043316
+            },
+            {
+              "vendor": "7UP",
+              "spend": 1879.03,
+              "pct": 0.026858
+            },
+            {
+              "vendor": "Bimbo",
+              "spend": 1149.89,
+              "pct": 0.016436
+            }
+          ]
+        },
+        "42179": {
+          "total_vendor_spend": 75247.5,
+          "amounts": {
+            "7UP": 1988.94,
+            "Bimbo": 759.45,
+            "Core-Mark": 36458.88,
+            "Coke": 8596.64,
+            "Frito Lay": 3684.4,
+            "Harbor": 11208.33,
+            "Pepsi": 8465.5,
+            "Red Bull": 4085.36
+          },
+          "mix_pct": {
+            "7UP": 0.026432,
+            "Bimbo": 0.010093,
+            "Core-Mark": 0.484519,
+            "Coke": 0.114245,
+            "Frito Lay": 0.048964,
+            "Harbor": 0.148953,
+            "Pepsi": 0.112502,
+            "Red Bull": 0.054292
+          },
+          "top_vendors": [
+            {
+              "vendor": "Core-Mark",
+              "spend": 36458.88,
+              "pct": 0.484519
+            },
+            {
+              "vendor": "Harbor",
+              "spend": 11208.33,
+              "pct": 0.148953
+            },
+            {
+              "vendor": "Coke",
+              "spend": 8596.64,
+              "pct": 0.114245
+            },
+            {
+              "vendor": "Pepsi",
+              "spend": 8465.5,
+              "pct": 0.112502
+            },
+            {
+              "vendor": "Red Bull",
+              "spend": 4085.36,
+              "pct": 0.054292
+            },
+            {
+              "vendor": "Frito Lay",
+              "spend": 3684.4,
+              "pct": 0.048964
+            },
+            {
+              "vendor": "7UP",
+              "spend": 1988.94,
+              "pct": 0.026432
+            },
+            {
+              "vendor": "Bimbo",
+              "spend": 759.45,
+              "pct": 0.010093
+            }
+          ]
+        },
+        "42352": {
+          "total_vendor_spend": 67321.24,
+          "amounts": {
+            "7UP": 1479.86,
+            "Bimbo": 796.98,
+            "Core-Mark": 32254.63,
+            "Coke": 5933.24,
+            "Frito Lay": 4532.73,
+            "Harbor": 14543.57,
+            "Pepsi": 4693.45,
+            "Red Bull": 3086.78
+          },
+          "mix_pct": {
+            "7UP": 0.021982,
+            "Bimbo": 0.011838,
+            "Core-Mark": 0.479115,
+            "Coke": 0.088133,
+            "Frito Lay": 0.06733,
+            "Harbor": 0.216032,
+            "Pepsi": 0.069717,
+            "Red Bull": 0.045852
+          },
+          "top_vendors": [
+            {
+              "vendor": "Core-Mark",
+              "spend": 32254.63,
+              "pct": 0.479115
+            },
+            {
+              "vendor": "Harbor",
+              "spend": 14543.57,
+              "pct": 0.216032
+            },
+            {
+              "vendor": "Coke",
+              "spend": 5933.24,
+              "pct": 0.088133
+            },
+            {
+              "vendor": "Pepsi",
+              "spend": 4693.45,
+              "pct": 0.069717
+            },
+            {
+              "vendor": "Frito Lay",
+              "spend": 4532.73,
+              "pct": 0.06733
+            },
+            {
+              "vendor": "Red Bull",
+              "spend": 3086.78,
+              "pct": 0.045852
+            },
+            {
+              "vendor": "7UP",
+              "spend": 1479.86,
+              "pct": 0.021982
+            },
+            {
+              "vendor": "Bimbo",
+              "spend": 796.98,
+              "pct": 0.011838
+            }
+          ]
+        }
+      }
+    },
+    "2026-08": {
+      "stores": {
+        "42004": {
+          "total_vendor_spend": 72919.3,
+          "amounts": {
+            "7UP": 3094.7,
+            "Bimbo": 1080.37,
+            "Core-Mark": 33673.07,
+            "Coke": 7794.82,
+            "Frito Lay": 3668.08,
+            "Harbor": 10646.09,
+            "Pepsi": 5892.66,
+            "Red Bull": 4529.43,
+            "Straub": 2540.08
+          },
+          "mix_pct": {
+            "7UP": 0.04244,
+            "Bimbo": 0.014816,
+            "Core-Mark": 0.461785,
+            "Coke": 0.106897,
+            "Frito Lay": 0.050303,
+            "Harbor": 0.145998,
+            "Pepsi": 0.080811,
+            "Red Bull": 0.062116,
+            "Straub": 0.034834
+          },
+          "top_vendors": [
+            {
+              "vendor": "Core-Mark",
+              "spend": 33673.07,
+              "pct": 0.461785
+            },
+            {
+              "vendor": "Harbor",
+              "spend": 10646.09,
+              "pct": 0.145998
+            },
+            {
+              "vendor": "Coke",
+              "spend": 7794.82,
+              "pct": 0.106897
+            },
+            {
+              "vendor": "Pepsi",
+              "spend": 5892.66,
+              "pct": 0.080811
+            },
+            {
+              "vendor": "Red Bull",
+              "spend": 4529.43,
+              "pct": 0.062116
+            },
+            {
+              "vendor": "Frito Lay",
+              "spend": 3668.08,
+              "pct": 0.050303
+            },
+            {
+              "vendor": "7UP",
+              "spend": 3094.7,
+              "pct": 0.04244
+            },
+            {
+              "vendor": "Straub",
+              "spend": 2540.08,
+              "pct": 0.034834
+            },
+            {
+              "vendor": "Bimbo",
+              "spend": 1080.37,
+              "pct": 0.014816
+            }
+          ]
+        },
+        "42021": {
+          "total_vendor_spend": 36581.04,
+          "amounts": {
+            "7UP": 293.11,
+            "Straub": 955.75,
+            "Bimbo": 711.79,
+            "Core-Mark": 22499.37,
+            "Coke": 2310.74,
+            "Frito Lay": 680.3,
+            "Harbor": 5613.61,
+            "Pepsi": 2332.61,
+            "Red Bull": 1183.76
+          },
+          "mix_pct": {
+            "7UP": 0.008013,
+            "Straub": 0.026127,
+            "Bimbo": 0.019458,
+            "Core-Mark": 0.615056,
+            "Coke": 0.063168,
+            "Frito Lay": 0.018597,
+            "Harbor": 0.153457,
+            "Pepsi": 0.063766,
+            "Red Bull": 0.03236
+          },
+          "top_vendors": [
+            {
+              "vendor": "Core-Mark",
+              "spend": 22499.37,
+              "pct": 0.615056
+            },
+            {
+              "vendor": "Harbor",
+              "spend": 5613.61,
+              "pct": 0.153457
+            },
+            {
+              "vendor": "Pepsi",
+              "spend": 2332.61,
+              "pct": 0.063766
+            },
+            {
+              "vendor": "Coke",
+              "spend": 2310.74,
+              "pct": 0.063168
+            },
+            {
+              "vendor": "Red Bull",
+              "spend": 1183.76,
+              "pct": 0.03236
+            },
+            {
+              "vendor": "Straub",
+              "spend": 955.75,
+              "pct": 0.026127
+            },
+            {
+              "vendor": "Bimbo",
+              "spend": 711.79,
+              "pct": 0.019458
+            },
+            {
+              "vendor": "Frito Lay",
+              "spend": 680.3,
+              "pct": 0.018597
+            },
+            {
+              "vendor": "7UP",
+              "spend": 293.11,
+              "pct": 0.008013
+            }
+          ]
+        },
+        "42048": {
+          "total_vendor_spend": 63275.64,
+          "amounts": {
+            "7UP": 2885.13,
+            "Bimbo": 671.53,
+            "Core-Mark": 42780.1,
+            "Coke": 6442.98,
+            "Frito Lay": 4267.14,
+            "Pepsi": 3751.35,
+            "Red Bull": 2477.41
+          },
+          "mix_pct": {
+            "7UP": 0.045596,
+            "Bimbo": 0.010613,
+            "Core-Mark": 0.676091,
+            "Coke": 0.101824,
+            "Frito Lay": 0.067437,
+            "Pepsi": 0.059286,
+            "Red Bull": 0.039153
+          },
+          "top_vendors": [
+            {
+              "vendor": "Core-Mark",
+              "spend": 42780.1,
+              "pct": 0.676091
+            },
+            {
+              "vendor": "Coke",
+              "spend": 6442.98,
+              "pct": 0.101824
+            },
+            {
+              "vendor": "Frito Lay",
+              "spend": 4267.14,
+              "pct": 0.067437
+            },
+            {
+              "vendor": "Pepsi",
+              "spend": 3751.35,
+              "pct": 0.059286
+            },
+            {
+              "vendor": "7UP",
+              "spend": 2885.13,
+              "pct": 0.045596
+            },
+            {
+              "vendor": "Red Bull",
+              "spend": 2477.41,
+              "pct": 0.039153
+            },
+            {
+              "vendor": "Bimbo",
+              "spend": 671.53,
+              "pct": 0.010613
+            }
+          ]
+        },
+        "42073": {
+          "total_vendor_spend": 93198.95,
+          "amounts": {
+            "7UP": 2171.03,
+            "Straub": 6302.32,
+            "Bimbo": 267.43,
+            "Core-Mark": 47587.15,
+            "Coke": 5866.37,
+            "Frito Lay": 3576.79,
+            "Harbor": 20369.55,
+            "Pepsi": 5047.64,
+            "Red Bull": 2010.67
+          },
+          "mix_pct": {
+            "7UP": 0.023295,
+            "Straub": 0.067622,
+            "Bimbo": 0.002869,
+            "Core-Mark": 0.510597,
+            "Coke": 0.062945,
+            "Frito Lay": 0.038378,
+            "Harbor": 0.21856,
+            "Pepsi": 0.05416,
+            "Red Bull": 0.021574
+          },
+          "top_vendors": [
+            {
+              "vendor": "Core-Mark",
+              "spend": 47587.15,
+              "pct": 0.510597
+            },
+            {
+              "vendor": "Harbor",
+              "spend": 20369.55,
+              "pct": 0.21856
+            },
+            {
+              "vendor": "Straub",
+              "spend": 6302.32,
+              "pct": 0.067622
+            },
+            {
+              "vendor": "Coke",
+              "spend": 5866.37,
+              "pct": 0.062945
+            },
+            {
+              "vendor": "Pepsi",
+              "spend": 5047.64,
+              "pct": 0.05416
+            },
+            {
+              "vendor": "Frito Lay",
+              "spend": 3576.79,
+              "pct": 0.038378
+            },
+            {
+              "vendor": "7UP",
+              "spend": 2171.03,
+              "pct": 0.023295
+            },
+            {
+              "vendor": "Red Bull",
+              "spend": 2010.67,
+              "pct": 0.021574
+            },
+            {
+              "vendor": "Bimbo",
+              "spend": 267.43,
+              "pct": 0.002869
+            }
+          ]
+        },
+        "42098": {
+          "total_vendor_spend": 64179.32,
+          "amounts": {
+            "7UP": 1504.76,
+            "Straub": 2563.11,
+            "Bimbo": 1011.08,
+            "Core-Mark": 35377.2,
+            "Coke": 4883.94,
+            "Frito Lay": 3345.08,
+            "Harbor": 5940.4,
+            "Pepsi": 6360.11,
+            "Red Bull": 3193.64
+          },
+          "mix_pct": {
+            "7UP": 0.023446,
+            "Straub": 0.039937,
+            "Bimbo": 0.015754,
+            "Core-Mark": 0.551224,
+            "Coke": 0.076098,
+            "Frito Lay": 0.052121,
+            "Harbor": 0.092559,
+            "Pepsi": 0.099099,
+            "Red Bull": 0.049761
+          },
+          "top_vendors": [
+            {
+              "vendor": "Core-Mark",
+              "spend": 35377.2,
+              "pct": 0.551224
+            },
+            {
+              "vendor": "Pepsi",
+              "spend": 6360.11,
+              "pct": 0.099099
+            },
+            {
+              "vendor": "Harbor",
+              "spend": 5940.4,
+              "pct": 0.092559
+            },
+            {
+              "vendor": "Coke",
+              "spend": 4883.94,
+              "pct": 0.076098
+            },
+            {
+              "vendor": "Frito Lay",
+              "spend": 3345.08,
+              "pct": 0.052121
+            },
+            {
+              "vendor": "Red Bull",
+              "spend": 3193.64,
+              "pct": 0.049761
+            },
+            {
+              "vendor": "Straub",
+              "spend": 2563.11,
+              "pct": 0.039937
+            },
+            {
+              "vendor": "7UP",
+              "spend": 1504.76,
+              "pct": 0.023446
+            },
+            {
+              "vendor": "Bimbo",
+              "spend": 1011.08,
+              "pct": 0.015754
+            }
+          ]
+        },
+        "42179": {
+          "total_vendor_spend": 69136.83,
+          "amounts": {
+            "7UP": 2067.71,
+            "Bimbo": 766.16,
+            "Core-Mark": 32940.53,
+            "Coke": 8583.33,
+            "Frito Lay": 4092.43,
+            "Harbor": 11983.63,
+            "Pepsi": 6002.26,
+            "Red Bull": 2700.78
+          },
+          "mix_pct": {
+            "7UP": 0.029908,
+            "Bimbo": 0.011082,
+            "Core-Mark": 0.476454,
+            "Coke": 0.12415,
+            "Frito Lay": 0.059193,
+            "Harbor": 0.173332,
+            "Pepsi": 0.086817,
+            "Red Bull": 0.039064
+          },
+          "top_vendors": [
+            {
+              "vendor": "Core-Mark",
+              "spend": 32940.53,
+              "pct": 0.476454
+            },
+            {
+              "vendor": "Harbor",
+              "spend": 11983.63,
+              "pct": 0.173332
+            },
+            {
+              "vendor": "Coke",
+              "spend": 8583.33,
+              "pct": 0.12415
+            },
+            {
+              "vendor": "Pepsi",
+              "spend": 6002.26,
+              "pct": 0.086817
+            },
+            {
+              "vendor": "Frito Lay",
+              "spend": 4092.43,
+              "pct": 0.059193
+            },
+            {
+              "vendor": "Red Bull",
+              "spend": 2700.78,
+              "pct": 0.039064
+            },
+            {
+              "vendor": "7UP",
+              "spend": 2067.71,
+              "pct": 0.029908
+            },
+            {
+              "vendor": "Bimbo",
+              "spend": 766.16,
+              "pct": 0.011082
+            }
+          ]
+        },
+        "42279": {
+          "total_vendor_spend": 53095.79,
+          "amounts": {
+            "7UP": 1486.77,
+            "Bimbo": 483.26,
+            "Core-Mark": 36097.26,
+            "Coke": 3820.35,
+            "Frito Lay": 2878.61,
+            "Nevada Beverage": 2749.59,
+            "Pepsi": 4269.84,
+            "Red Bull": 1310.11
+          },
+          "mix_pct": {
+            "7UP": 0.028002,
+            "Bimbo": 0.009102,
+            "Core-Mark": 0.679852,
+            "Coke": 0.071952,
+            "Frito Lay": 0.054215,
+            "Nevada Beverage": 0.051785,
+            "Pepsi": 0.080418,
+            "Red Bull": 0.024674
+          },
+          "top_vendors": [
+            {
+              "vendor": "Core-Mark",
+              "spend": 36097.26,
+              "pct": 0.679852
+            },
+            {
+              "vendor": "Pepsi",
+              "spend": 4269.84,
+              "pct": 0.080418
+            },
+            {
+              "vendor": "Coke",
+              "spend": 3820.35,
+              "pct": 0.071952
+            },
+            {
+              "vendor": "Frito Lay",
+              "spend": 2878.61,
+              "pct": 0.054215
+            },
+            {
+              "vendor": "Nevada Beverage",
+              "spend": 2749.59,
+              "pct": 0.051785
+            },
+            {
+              "vendor": "7UP",
+              "spend": 1486.77,
+              "pct": 0.028002
+            },
+            {
+              "vendor": "Red Bull",
+              "spend": 1310.11,
+              "pct": 0.024674
+            },
+            {
+              "vendor": "Bimbo",
+              "spend": 483.26,
+              "pct": 0.009102
+            }
+          ]
+        },
+        "42280": {
+          "total_vendor_spend": 43986.06,
+          "amounts": {
+            "7UP": 1029.4,
+            "Bimbo": 332.49,
+            "Core-Mark": 27124.34,
+            "Coke": 5216.15,
+            "Frito Lay": 2641.32,
+            "Nevada Beverage": 1538.59,
+            "Pepsi": 4355.93,
+            "Red Bull": 1747.84
+          },
+          "mix_pct": {
+            "7UP": 0.023403,
+            "Bimbo": 0.007559,
+            "Core-Mark": 0.616658,
+            "Coke": 0.118586,
+            "Frito Lay": 0.060049,
+            "Nevada Beverage": 0.034979,
+            "Pepsi": 0.09903,
+            "Red Bull": 0.039736
+          },
+          "top_vendors": [
+            {
+              "vendor": "Core-Mark",
+              "spend": 27124.34,
+              "pct": 0.616658
+            },
+            {
+              "vendor": "Coke",
+              "spend": 5216.15,
+              "pct": 0.118586
+            },
+            {
+              "vendor": "Pepsi",
+              "spend": 4355.93,
+              "pct": 0.09903
+            },
+            {
+              "vendor": "Frito Lay",
+              "spend": 2641.32,
+              "pct": 0.060049
+            },
+            {
+              "vendor": "Red Bull",
+              "spend": 1747.84,
+              "pct": 0.039736
+            },
+            {
+              "vendor": "Nevada Beverage",
+              "spend": 1538.59,
+              "pct": 0.034979
+            },
+            {
+              "vendor": "7UP",
+              "spend": 1029.4,
+              "pct": 0.023403
+            },
+            {
+              "vendor": "Bimbo",
+              "spend": 332.49,
+              "pct": 0.007559
+            }
+          ]
+        },
+        "42281": {
+          "total_vendor_spend": 43883.73,
+          "amounts": {
+            "7UP": 1248.46,
+            "Bimbo": 1096.96,
+            "Core-Mark": 27784.49,
+            "Coke": 4095.19,
+            "Frito Lay": 3120.58,
+            "Nevada Beverage": 1784.41,
+            "Pepsi": 3565.97,
+            "Red Bull": 1187.67
+          },
+          "mix_pct": {
+            "7UP": 0.028449,
+            "Bimbo": 0.024997,
+            "Core-Mark": 0.633139,
+            "Coke": 0.093319,
+            "Frito Lay": 0.07111,
+            "Nevada Beverage": 0.040662,
+            "Pepsi": 0.08126,
+            "Red Bull": 0.027064
+          },
+          "top_vendors": [
+            {
+              "vendor": "Core-Mark",
+              "spend": 27784.49,
+              "pct": 0.633139
+            },
+            {
+              "vendor": "Coke",
+              "spend": 4095.19,
+              "pct": 0.093319
+            },
+            {
+              "vendor": "Pepsi",
+              "spend": 3565.97,
+              "pct": 0.08126
+            },
+            {
+              "vendor": "Frito Lay",
+              "spend": 3120.58,
+              "pct": 0.07111
+            },
+            {
+              "vendor": "Nevada Beverage",
+              "spend": 1784.41,
+              "pct": 0.040662
+            },
+            {
+              "vendor": "7UP",
+              "spend": 1248.46,
+              "pct": 0.028449
+            },
+            {
+              "vendor": "Red Bull",
+              "spend": 1187.67,
+              "pct": 0.027064
+            },
+            {
+              "vendor": "Bimbo",
+              "spend": 1096.96,
+              "pct": 0.024997
+            }
+          ]
+        },
+        "42282": {
+          "total_vendor_spend": 19371.18,
+          "amounts": {
+            "7UP": 518.15,
+            "Bimbo": 195.06,
+            "Core-Mark": 14738.65,
+            "Coke": 648.58,
+            "Frito Lay": 361.79,
+            "Nevada Beverage": 1225.42,
+            "Pepsi": 1137.47,
+            "Red Bull": 546.06
+          },
+          "mix_pct": {
+            "7UP": 0.026748,
+            "Bimbo": 0.01007,
+            "Core-Mark": 0.760855,
+            "Coke": 0.033482,
+            "Frito Lay": 0.018677,
+            "Nevada Beverage": 0.06326,
+            "Pepsi": 0.05872,
+            "Red Bull": 0.028189
+          },
+          "top_vendors": [
+            {
+              "vendor": "Core-Mark",
+              "spend": 14738.65,
+              "pct": 0.760855
+            },
+            {
+              "vendor": "Nevada Beverage",
+              "spend": 1225.42,
+              "pct": 0.06326
+            },
+            {
+              "vendor": "Pepsi",
+              "spend": 1137.47,
+              "pct": 0.05872
+            },
+            {
+              "vendor": "Coke",
+              "spend": 648.58,
+              "pct": 0.033482
+            },
+            {
+              "vendor": "Red Bull",
+              "spend": 546.06,
+              "pct": 0.028189
+            },
+            {
+              "vendor": "7UP",
+              "spend": 518.15,
+              "pct": 0.026748
+            },
+            {
+              "vendor": "Frito Lay",
+              "spend": 361.79,
+              "pct": 0.018677
+            },
+            {
+              "vendor": "Bimbo",
+              "spend": 195.06,
+              "pct": 0.01007
+            }
+          ]
+        },
+        "42352": {
+          "total_vendor_spend": 77236.93,
+          "amounts": {
+            "7UP": 1532.24,
+            "Bimbo": 895.3,
+            "Core-Mark": 39013.33,
+            "Coke": 6570.42,
+            "Frito Lay": 4850.04,
+            "Harbor": 13601.33,
+            "Pepsi": 7920.48,
+            "Red Bull": 2853.79
+          },
+          "mix_pct": {
+            "7UP": 0.019838,
+            "Bimbo": 0.011592,
+            "Core-Mark": 0.505112,
+            "Coke": 0.085068,
+            "Frito Lay": 0.062794,
+            "Harbor": 0.176099,
+            "Pepsi": 0.102548,
+            "Red Bull": 0.036949
+          },
+          "top_vendors": [
+            {
+              "vendor": "Core-Mark",
+              "spend": 39013.33,
+              "pct": 0.505112
+            },
+            {
+              "vendor": "Harbor",
+              "spend": 13601.33,
+              "pct": 0.176099
+            },
+            {
+              "vendor": "Pepsi",
+              "spend": 7920.48,
+              "pct": 0.102548
+            },
+            {
+              "vendor": "Coke",
+              "spend": 6570.42,
+              "pct": 0.085068
+            },
+            {
+              "vendor": "Frito Lay",
+              "spend": 4850.04,
+              "pct": 0.062794
+            },
+            {
+              "vendor": "Red Bull",
+              "spend": 2853.79,
+              "pct": 0.036949
+            },
+            {
+              "vendor": "7UP",
+              "spend": 1532.24,
+              "pct": 0.019838
+            },
+            {
+              "vendor": "Bimbo",
+              "spend": 895.3,
+              "pct": 0.011592
+            }
+          ]
+        },
+        "42399": {
+          "total_vendor_spend": 11563.45,
+          "amounts": {
+            "Straub": 1347.62,
+            "Core-Mark": 2843.56,
+            "Coke": 3186.42,
+            "Pepsi": 2553.7,
+            "Red Bull": 1632.15
+          },
+          "mix_pct": {
+            "Straub": 0.116541,
+            "Core-Mark": 0.245909,
+            "Coke": 0.27556,
+            "Pepsi": 0.220842,
+            "Red Bull": 0.141147
+          },
+          "top_vendors": [
+            {
+              "vendor": "Coke",
+              "spend": 3186.42,
+              "pct": 0.27556
+            },
+            {
+              "vendor": "Core-Mark",
+              "spend": 2843.56,
+              "pct": 0.245909
+            },
+            {
+              "vendor": "Pepsi",
+              "spend": 2553.7,
+              "pct": 0.220842
+            },
+            {
+              "vendor": "Red Bull",
+              "spend": 1632.15,
+              "pct": 0.141147
+            },
+            {
+              "vendor": "Straub",
+              "spend": 1347.62,
+              "pct": 0.116541
+            }
+          ]
+        },
+        "42438": {
+          "total_vendor_spend": 56492.88,
+          "amounts": {
+            "Bimbo": 779.12,
+            "Core-Mark": 42588.41,
+            "Coke": 2517.37,
+            "Frito Lay": 2911.52,
+            "Nevada Beverage": 2086.89,
+            "Pepsi": 3372.48,
+            "Red Bull": 2237.09
+          },
+          "mix_pct": {
+            "Bimbo": 0.013791,
+            "Core-Mark": 0.753872,
+            "Coke": 0.044561,
+            "Frito Lay": 0.051538,
+            "Nevada Beverage": 0.036941,
+            "Pepsi": 0.059697,
+            "Red Bull": 0.0396
+          },
+          "top_vendors": [
+            {
+              "vendor": "Core-Mark",
+              "spend": 42588.41,
+              "pct": 0.753872
+            },
+            {
+              "vendor": "Pepsi",
+              "spend": 3372.48,
+              "pct": 0.059697
+            },
+            {
+              "vendor": "Frito Lay",
+              "spend": 2911.52,
+              "pct": 0.051538
+            },
+            {
+              "vendor": "Coke",
+              "spend": 2517.37,
+              "pct": 0.044561
+            },
+            {
+              "vendor": "Red Bull",
+              "spend": 2237.09,
+              "pct": 0.0396
+            },
+            {
+              "vendor": "Nevada Beverage",
+              "spend": 2086.89,
+              "pct": 0.036941
+            },
+            {
+              "vendor": "Bimbo",
+              "spend": 779.12,
+              "pct": 0.013791
+            }
+          ]
+        },
+        "42439": {
+          "total_vendor_spend": 44846.7,
+          "amounts": {
+            "7UP": 1469.01,
+            "Bimbo": 626.69,
+            "Core-Mark": 30547.2,
+            "Coke": 2995.53,
+            "Frito Lay": 2852.16,
+            "Nevada Beverage": 1249.47,
+            "Pepsi": 3322.51,
+            "Red Bull": 1784.13
+          },
+          "mix_pct": {
+            "7UP": 0.032756,
+            "Bimbo": 0.013974,
+            "Core-Mark": 0.681147,
+            "Coke": 0.066795,
+            "Frito Lay": 0.063598,
+            "Nevada Beverage": 0.027861,
+            "Pepsi": 0.074086,
+            "Red Bull": 0.039783
+          },
+          "top_vendors": [
+            {
+              "vendor": "Core-Mark",
+              "spend": 30547.2,
+              "pct": 0.681147
+            },
+            {
+              "vendor": "Pepsi",
+              "spend": 3322.51,
+              "pct": 0.074086
+            },
+            {
+              "vendor": "Coke",
+              "spend": 2995.53,
+              "pct": 0.066795
+            },
+            {
+              "vendor": "Frito Lay",
+              "spend": 2852.16,
+              "pct": 0.063598
+            },
+            {
+              "vendor": "Red Bull",
+              "spend": 1784.13,
+              "pct": 0.039783
+            },
+            {
+              "vendor": "7UP",
+              "spend": 1469.01,
+              "pct": 0.032756
+            },
+            {
+              "vendor": "Nevada Beverage",
+              "spend": 1249.47,
+              "pct": 0.027861
+            },
+            {
+              "vendor": "Bimbo",
+              "spend": 626.69,
+              "pct": 0.013974
+            }
+          ]
+        },
+        "42674": {
+          "total_vendor_spend": 64838.08,
+          "amounts": {
+            "7UP": 1369.57,
+            "Bimbo": 696.14,
+            "Core-Mark": 29579.93,
+            "Coke": 4308.38,
+            "Frito Lay": 1990.03,
+            "Harbor": 18314.04,
+            "Pepsi": 3756.89,
+            "Red Bull": 2357.26,
+            "Straub": 2465.84
+          },
+          "mix_pct": {
+            "7UP": 0.021123,
+            "Bimbo": 0.010737,
+            "Core-Mark": 0.456212,
+            "Coke": 0.066448,
+            "Frito Lay": 0.030692,
+            "Harbor": 0.282458,
+            "Pepsi": 0.057943,
+            "Red Bull": 0.036356,
+            "Straub": 0.038031
+          },
+          "top_vendors": [
+            {
+              "vendor": "Core-Mark",
+              "spend": 29579.93,
+              "pct": 0.456212
+            },
+            {
+              "vendor": "Harbor",
+              "spend": 18314.04,
+              "pct": 0.282458
+            },
+            {
+              "vendor": "Coke",
+              "spend": 4308.38,
+              "pct": 0.066448
+            },
+            {
+              "vendor": "Pepsi",
+              "spend": 3756.89,
+              "pct": 0.057943
+            },
+            {
+              "vendor": "Straub",
+              "spend": 2465.84,
+              "pct": 0.038031
+            },
+            {
+              "vendor": "Red Bull",
+              "spend": 2357.26,
+              "pct": 0.036356
+            },
+            {
+              "vendor": "Frito Lay",
+              "spend": 1990.03,
+              "pct": 0.030692
+            },
+            {
+              "vendor": "7UP",
+              "spend": 1369.57,
+              "pct": 0.021123
+            },
+            {
+              "vendor": "Bimbo",
+              "spend": 696.14,
+              "pct": 0.010737
+            }
+          ]
+        }
+      }
+    },
+    "2026-09": {
+      "stores": {
+        "42004": {
+          "total_vendor_spend": 49234.34,
+          "amounts": {
+            "Bimbo": 373.24,
+            "Frito Lay": 2935.13,
+            "Harbor": 10434.78,
+            "Pepsi": 11304.28,
+            "Straub": 7252.6,
+            "Coke": 16934.31,
+            "7UP": 0,
+            "Core-Mark": 0,
+            "Red Bull": 0
+          },
+          "mix_pct": {
+            "7UP": 0.04244,
+            "Bimbo": 0.014816,
+            "Core-Mark": 0.461785,
+            "Coke": 0.106897,
+            "Frito Lay": 0.050303,
+            "Harbor": 0.145998,
+            "Pepsi": 0.080811,
+            "Red Bull": 0.062116,
+            "Straub": 0.034834
+          },
+          "top_vendors": [
+            {
+              "vendor": "Coke",
+              "spend": 4145.06,
+              "pct": 0.344605
+            },
+            {
+              "vendor": "Pepsi",
+              "spend": 2766.98,
+              "pct": 0.230037
+            },
+            {
+              "vendor": "Harbor",
+              "spend": 2554.15,
+              "pct": 0.212343
+            },
+            {
+              "vendor": "Straub",
+              "spend": 1752.44,
+              "pct": 0.145691
+            },
+            {
+              "vendor": "Frito Lay",
+              "spend": 718.44,
+              "pct": 0.059728
+            },
+            {
+              "vendor": "Bimbo",
+              "spend": 91.36,
+              "pct": 0.007595
+            }
+          ],
+          "excel_net_purchases_mtd": 49234.34
+        },
+        "42021": {
+          "total_vendor_spend": 19498.75,
+          "amounts": {
+            "7UP": 724.14,
+            "Straub": 1168.31,
+            "Bimbo": 465.49,
+            "Core-Mark": 10226.73,
+            "Coke": 4150.12,
+            "Frito Lay": 325.03,
+            "Pepsi": 1512.27,
+            "Red Bull": 926.66,
+            "Harbor": 0
+          },
+          "mix_pct": {
+            "7UP": 0.008013,
+            "Straub": 0.026127,
+            "Bimbo": 0.019458,
+            "Core-Mark": 0.615055,
+            "Coke": 0.063168,
+            "Frito Lay": 0.018597,
+            "Harbor": 0.153457,
+            "Pepsi": 0.063766,
+            "Red Bull": 0.03236
+          },
+          "top_vendors": [
+            {
+              "vendor": "Red Bull",
+              "spend": 504.69,
+              "pct": 0.379575
+            },
+            {
+              "vendor": "7UP",
+              "spend": 394.39,
+              "pct": 0.296619
+            },
+            {
+              "vendor": "Bimbo",
+              "spend": 253.52,
+              "pct": 0.190671
+            },
+            {
+              "vendor": "Frito Lay",
+              "spend": 177.02,
+              "pct": 0.133136
+            }
+          ],
+          "excel_net_purchases_mtd": 19498.75
+        },
+        "42048": {
+          "total_vendor_spend": 44916.54,
+          "amounts": {
+            "7UP": 1992.25,
+            "Bimbo": 221.49,
+            "Core-Mark": 36405.36,
+            "Coke": 3730.27,
+            "Frito Lay": 1666.36,
+            "Red Bull": 900.81,
+            "Pepsi": 0
+          },
+          "mix_pct": {
+            "7UP": 0.045596,
+            "Bimbo": 0.010613,
+            "Core-Mark": 0.676091,
+            "Coke": 0.101824,
+            "Frito Lay": 0.067437,
+            "Pepsi": 0.059286,
+            "Red Bull": 0.039153
+          },
+          "top_vendors": [
+            {
+              "vendor": "Core-Mark",
+              "spend": 11817.31,
+              "pct": 0.740869
+            },
+            {
+              "vendor": "Coke",
+              "spend": 2147.78,
+              "pct": 0.134652
+            },
+            {
+              "vendor": "7UP",
+              "spend": 1147.08,
+              "pct": 0.071914
+            },
+            {
+              "vendor": "Red Bull",
+              "spend": 518.66,
+              "pct": 0.032517
+            },
+            {
+              "vendor": "Frito Lay",
+              "spend": 365.53,
+              "pct": 0.022916
+            },
+            {
+              "vendor": "Harbor",
+              "spend": -45.75,
+              "pct": -0.002868
+            }
+          ],
+          "excel_net_purchases_mtd": 44916.54
+        },
+        "42073": {
+          "total_vendor_spend": 14951.49,
+          "amounts": {
+            "7UP": 1135.94,
+            "Straub": 1914.7,
+            "Bimbo": 338.19,
+            "Core-Mark": 3870.55,
+            "Frito Lay": 412.66,
+            "Harbor": 6593.74,
+            "Red Bull": 685.71
+          },
+          "mix_pct": {
+            "7UP": 0.075975,
+            "Straub": 0.128061,
+            "Bimbo": 0.022619,
+            "Core-Mark": 0.258874,
+            "Frito Lay": 0.0276,
+            "Harbor": 0.441009,
+            "Red Bull": 0.045862
+          },
+          "top_vendors": [
+            {
+              "vendor": "Harbor",
+              "spend": 6593.74,
+              "pct": 0.441009
+            },
+            {
+              "vendor": "Core-Mark",
+              "spend": 3870.55,
+              "pct": 0.258874
+            },
+            {
+              "vendor": "Straub",
+              "spend": 1914.7,
+              "pct": 0.128061
+            },
+            {
+              "vendor": "7UP",
+              "spend": 1135.94,
+              "pct": 0.075975
+            },
+            {
+              "vendor": "Red Bull",
+              "spend": 685.71,
+              "pct": 0.045862
+            },
+            {
+              "vendor": "Frito Lay",
+              "spend": 412.66,
+              "pct": 0.0276
+            },
+            {
+              "vendor": "Bimbo",
+              "spend": 338.19,
+              "pct": 0.022619
+            }
+          ]
+        },
+        "42098": {
+          "total_vendor_spend": 37866.19,
+          "amounts": {
+            "Straub": 3220.99,
+            "Bimbo": 402.95,
+            "Core-Mark": 11277.59,
+            "Coke": 4680.35,
+            "Frito Lay": 2443.46,
+            "Harbor": 8570.68,
+            "Pepsi": 3134.46,
+            "Red Bull": 4135.71,
+            "7UP": 0
+          },
+          "mix_pct": {
+            "7UP": 0.023446,
+            "Straub": 0.039937,
+            "Bimbo": 0.015754,
+            "Core-Mark": 0.551225,
+            "Coke": 0.076098,
+            "Frito Lay": 0.052121,
+            "Harbor": 0.092559,
+            "Pepsi": 0.099099,
+            "Red Bull": 0.049761
+          },
+          "top_vendors": [
+            {
+              "vendor": "Harbor",
+              "spend": 3957.27,
+              "pct": 0.444337
+            },
+            {
+              "vendor": "Coke",
+              "spend": 2161.02,
+              "pct": 0.242647
+            },
+            {
+              "vendor": "Straub",
+              "spend": 1487.2,
+              "pct": 0.166988
+            },
+            {
+              "vendor": "Red Bull",
+              "spend": 987.87,
+              "pct": 0.110922
+            },
+            {
+              "vendor": "Frito Lay",
+              "spend": 312.65,
+              "pct": 0.035106
+            }
+          ],
+          "excel_net_purchases_mtd": 37866.19
+        },
+        "42179": {
+          "total_vendor_spend": 47096.52,
+          "amounts": {
+            "Core-Mark": 47096.52,
+            "7UP": 0,
+            "Bimbo": 0,
+            "Coke": 0,
+            "Frito Lay": 0,
+            "Harbor": 0,
+            "Pepsi": 0,
+            "Red Bull": 0
+          },
+          "mix_pct": {
+            "7UP": 0.029908,
+            "Bimbo": 0.011082,
+            "Core-Mark": 0.476454,
+            "Coke": 0.12415,
+            "Frito Lay": 0.059193,
+            "Harbor": 0.173332,
+            "Pepsi": 0.086817,
+            "Red Bull": 0.039064
+          },
+          "top_vendors": [
+            {
+              "vendor": "Core-Mark",
+              "spend": 4244.27,
+              "pct": 1
+            }
+          ],
+          "excel_net_purchases_mtd": 47096.52
+        },
+        "42279": {
+          "total_vendor_spend": 40625.29,
+          "amounts": {
+            "7UP": 1634.04,
+            "Bimbo": 325.52,
+            "Core-Mark": 25569.2,
+            "Coke": 2138.7,
+            "Frito Lay": 2663.23,
+            "Nevada Beverage": 1237.7,
+            "Pepsi": 5125.23,
+            "Red Bull": 1931.67
+          },
+          "mix_pct": {
+            "7UP": 0.028002,
+            "Bimbo": 0.009102,
+            "Core-Mark": 0.679852,
+            "Coke": 0.071952,
+            "Frito Lay": 0.054215,
+            "Nevada Beverage": 0.051785,
+            "Pepsi": 0.080418,
+            "Red Bull": 0.024674
+          },
+          "top_vendors": [
+            {
+              "vendor": "Core-Mark",
+              "spend": 3096.72,
+              "pct": 0.463012
+            },
+            {
+              "vendor": "Pepsi",
+              "spend": 1022.66,
+              "pct": 0.152905
+            },
+            {
+              "vendor": "Coke",
+              "spend": 726.74,
+              "pct": 0.10866
+            },
+            {
+              "vendor": "Frito Lay",
+              "spend": 663.71,
+              "pct": 0.099236
+            },
+            {
+              "vendor": "Nevada Beverage",
+              "spend": 559.85,
+              "pct": 0.083707
+            },
+            {
+              "vendor": "Red Bull",
+              "spend": 458.09,
+              "pct": 0.068492
+            },
+            {
+              "vendor": "7UP",
+              "spend": 327.52,
+              "pct": 0.04897
+            },
+            {
+              "vendor": "Bimbo",
+              "spend": 51.04,
+              "pct": 0.007631
+            },
+            {
+              "vendor": "Harbor",
+              "spend": -218.13,
+              "pct": -0.032614
+            }
+          ],
+          "excel_net_purchases_mtd": 40625.29
+        },
+        "42280": {
+          "total_vendor_spend": 38976.7,
+          "amounts": {
+            "7UP": 1082.24,
+            "Bimbo": 131.49,
+            "Core-Mark": 26649.25,
+            "Coke": 2812.18,
+            "Frito Lay": 1567.89,
+            "Nevada Beverage": 1391.27,
+            "Pepsi": 3037.65,
+            "Red Bull": 2304.73
+          },
+          "mix_pct": {
+            "7UP": 0.023403,
+            "Bimbo": 0.007559,
+            "Core-Mark": 0.616658,
+            "Coke": 0.118586,
+            "Frito Lay": 0.060049,
+            "Nevada Beverage": 0.034979,
+            "Pepsi": 0.09903,
+            "Red Bull": 0.039736
+          },
+          "top_vendors": [
+            {
+              "vendor": "Core-Mark",
+              "spend": 6698.93,
+              "pct": 0.677064
+            },
+            {
+              "vendor": "Pepsi",
+              "spend": 1664.08,
+              "pct": 0.168189
+            },
+            {
+              "vendor": "Nevada Beverage",
+              "spend": 762.16,
+              "pct": 0.077032
+            },
+            {
+              "vendor": "Red Bull",
+              "spend": 663.79,
+              "pct": 0.06709
+            },
+            {
+              "vendor": "Frito Lay",
+              "spend": 275.79,
+              "pct": 0.027874
+            },
+            {
+              "vendor": "Harbor",
+              "spend": -170.66,
+              "pct": -0.017249
+            }
+          ],
+          "excel_net_purchases_mtd": 38976.7
+        },
+        "42281": {
+          "total_vendor_spend": 30198.48,
+          "amounts": {
+            "Bimbo": 276.69,
+            "Core-Mark": 21995.01,
+            "Frito Lay": 1225.36,
+            "Nevada Beverage": 1216.33,
+            "Pepsi": 2484.33,
+            "Red Bull": 3000.76,
+            "7UP": 0,
+            "Coke": 0
+          },
+          "mix_pct": {
+            "7UP": 0.028449,
+            "Bimbo": 0.024997,
+            "Core-Mark": 0.633139,
+            "Coke": 0.093319,
+            "Frito Lay": 0.07111,
+            "Nevada Beverage": 0.040662,
+            "Pepsi": 0.08126,
+            "Red Bull": 0.027064
+          },
+          "top_vendors": [
+            {
+              "vendor": "Core-Mark",
+              "spend": 6155.26,
+              "pct": 0.692608
+            },
+            {
+              "vendor": "Red Bull",
+              "spend": 1094.88,
+              "pct": 0.123199
+            },
+            {
+              "vendor": "Nevada Beverage",
+              "spend": 811.2,
+              "pct": 0.091279
+            },
+            {
+              "vendor": "Pepsi",
+              "spend": 694.9,
+              "pct": 0.078192
+            },
+            {
+              "vendor": "Frito Lay",
+              "spend": 143.85,
+              "pct": 0.016186
+            },
+            {
+              "vendor": "Harbor",
+              "spend": -13.01,
+              "pct": -0.001464
+            }
+          ],
+          "excel_net_purchases_mtd": 30198.48
+        },
+        "42282": {
+          "total_vendor_spend": 15306.39,
+          "amounts": {
+            "Core-Mark": 13049.36,
+            "Frito Lay": 266.7,
+            "Pepsi": 1859.9,
+            "Red Bull": 130.43,
+            "7UP": 0,
+            "Bimbo": 0,
+            "Coke": 0,
+            "Nevada Beverage": 0
+          },
+          "mix_pct": {
+            "7UP": 0.026748,
+            "Bimbo": 0.01007,
+            "Core-Mark": 0.760854,
+            "Coke": 0.033482,
+            "Frito Lay": 0.018677,
+            "Nevada Beverage": 0.06326,
+            "Pepsi": 0.05872,
+            "Red Bull": 0.028189
+          },
+          "top_vendors": [
+            {
+              "vendor": "Core-Mark",
+              "spend": 5336.27,
+              "pct": 0.778817
+            },
+            {
+              "vendor": "Pepsi",
+              "spend": 1325.43,
+              "pct": 0.193444
+            },
+            {
+              "vendor": "Frito Lay",
+              "spend": 190.06,
+              "pct": 0.027739
+            }
+          ],
+          "excel_net_purchases_mtd": 15306.39
+        },
+        "42352": {
+          "total_vendor_spend": 59891.27,
+          "amounts": {
+            "7UP": 2501.83,
+            "Bimbo": 686.65,
+            "Core-Mark": 29611.22,
+            "Coke": 6630.27,
+            "Frito Lay": 2947.33,
+            "Harbor": 10390.54,
+            "Pepsi": 4923.2,
+            "Red Bull": 2200.23
+          },
+          "mix_pct": {
+            "7UP": 0.019838,
+            "Bimbo": 0.011592,
+            "Core-Mark": 0.505112,
+            "Coke": 0.085068,
+            "Frito Lay": 0.062794,
+            "Harbor": 0.176099,
+            "Pepsi": 0.102548,
+            "Red Bull": 0.036949
+          },
+          "top_vendors": [
+            {
+              "vendor": "Core-Mark",
+              "spend": 29205.68,
+              "pct": 0.494416
+            },
+            {
+              "vendor": "Harbor",
+              "spend": 10248.24,
+              "pct": 0.17349
+            },
+            {
+              "vendor": "Coke",
+              "spend": 6539.47,
+              "pct": 0.110705
+            },
+            {
+              "vendor": "Pepsi",
+              "spend": 4855.78,
+              "pct": 0.082202
+            },
+            {
+              "vendor": "Frito Lay",
+              "spend": 2906.97,
+              "pct": 0.049211
+            },
+            {
+              "vendor": "7UP",
+              "spend": 2467.57,
+              "pct": 0.041773
+            },
+            {
+              "vendor": "Red Bull",
+              "spend": 2170.1,
+              "pct": 0.036737
+            },
+            {
+              "vendor": "Bimbo",
+              "spend": 677.25,
+              "pct": 0.011465
+            }
+          ],
+          "excel_net_purchases_mtd": 59891.27
+        },
+        "42399": {
+          "total_vendor_spend": 39809.33,
+          "amounts": {
+            "Straub": 2343.66,
+            "Bimbo": 287.46,
+            "Core-Mark": 25529.37,
+            "Frito Lay": 2715.9,
+            "Harbor": 4824.4,
+            "Pepsi": 3073.38,
+            "Red Bull": 1035.16,
+            "Coke": 0
+          },
+          "mix_pct": {
+            "Straub": 0.116541,
+            "Core-Mark": 0.245909,
+            "Coke": 0.27556,
+            "Pepsi": 0.220842,
+            "Red Bull": 0.141147,
+            "Bimbo": 0,
+            "Frito Lay": 0,
+            "Harbor": 0
+          },
+          "top_vendors": [
+            {
+              "vendor": "Core-Mark",
+              "spend": 4298.72,
+              "pct": 0.586345
+            },
+            {
+              "vendor": "Harbor",
+              "spend": 2862.12,
+              "pct": 0.390393
+            },
+            {
+              "vendor": "Bimbo",
+              "spend": 170.54,
+              "pct": 0.023262
+            }
+          ],
+          "excel_net_purchases_mtd": 39809.33
+        },
+        "42438": {
+          "total_vendor_spend": 40636.8,
+          "amounts": {
+            "7UP": 1840.27,
+            "Bimbo": 527.17,
+            "Core-Mark": 27690.82,
+            "Coke": 2887.79,
+            "Frito Lay": 1671.8,
+            "Nevada Beverage": 2787.73,
+            "Pepsi": 1864.93,
+            "Red Bull": 1366.29
+          },
+          "mix_pct": {
+            "Bimbo": 0.013791,
+            "Core-Mark": 0.753872,
+            "Coke": 0.044561,
+            "Frito Lay": 0.051538,
+            "Nevada Beverage": 0.036941,
+            "Pepsi": 0.059697,
+            "Red Bull": 0.0396,
+            "7UP": 0
+          },
+          "top_vendors": [
+            {
+              "vendor": "Core-Mark",
+              "spend": 9775.37,
+              "pct": 0.729742
+            },
+            {
+              "vendor": "Coke",
+              "spend": 1748.47,
+              "pct": 0.130525
+            },
+            {
+              "vendor": "Nevada Beverage",
+              "spend": 1334,
+              "pct": 0.099584
+            },
+            {
+              "vendor": "Frito Lay",
+              "spend": 337.95,
+              "pct": 0.025228
+            },
+            {
+              "vendor": "Red Bull",
+              "spend": 199.87,
+              "pct": 0.014921
+            }
+          ],
+          "excel_net_purchases_mtd": 40636.8
+        },
+        "42439": {
+          "total_vendor_spend": 38276.63,
+          "amounts": {
+            "7UP": 738.89,
+            "Bimbo": 568.31,
+            "Core-Mark": 26891.35,
+            "Frito Lay": 2793.49,
+            "Nevada Beverage": 2286.19,
+            "Pepsi": 3658.26,
+            "Red Bull": 1340.14,
+            "Coke": 0
+          },
+          "mix_pct": {
+            "7UP": 0.032756,
+            "Bimbo": 0.013974,
+            "Core-Mark": 0.681147,
+            "Coke": 0.066795,
+            "Frito Lay": 0.063598,
+            "Nevada Beverage": 0.027861,
+            "Pepsi": 0.074086,
+            "Red Bull": 0.039783
+          },
+          "top_vendors": [
+            {
+              "vendor": "Core-Mark",
+              "spend": 8218.36,
+              "pct": 0.777279
+            },
+            {
+              "vendor": "Nevada Beverage",
+              "spend": 1258.77,
+              "pct": 0.119052
+            },
+            {
+              "vendor": "Frito Lay",
+              "spend": 603.57,
+              "pct": 0.057085
+            },
+            {
+              "vendor": "7UP",
+              "spend": 390.68,
+              "pct": 0.03695
+            },
+            {
+              "vendor": "Bimbo",
+              "spend": 101.87,
+              "pct": 0.009635
+            }
+          ],
+          "excel_net_purchases_mtd": 38276.63
+        },
+        "42674": {
+          "total_vendor_spend": 56996.29,
+          "amounts": {
+            "Bimbo": 2161.83,
+            "Core-Mark": 30593.04,
+            "Coke": 5609.97,
+            "Frito Lay": 2441.05,
+            "Pepsi": 3961.83,
+            "Red Bull": 1658.08,
+            "Straub": 10570.49,
+            "7UP": 0,
+            "Harbor": 0
+          },
+          "mix_pct": {
+            "7UP": 0.021123,
+            "Bimbo": 0.010737,
+            "Core-Mark": 0.456212,
+            "Coke": 0.066448,
+            "Frito Lay": 0.030692,
+            "Harbor": 0.282458,
+            "Pepsi": 0.057943,
+            "Red Bull": 0.036356,
+            "Straub": 0.038031
+          },
+          "top_vendors": [
+            {
+              "vendor": "Core-Mark",
+              "spend": 7167.11,
+              "pct": 0.538325
+            },
+            {
+              "vendor": "Straub",
+              "spend": 2520.54,
+              "pct": 0.189319
+            },
+            {
+              "vendor": "Coke",
+              "spend": 1337.7,
+              "pct": 0.100475
+            },
+            {
+              "vendor": "Pepsi",
+              "spend": 944.7,
+              "pct": 0.070957
+            },
+            {
+              "vendor": "Frito Lay",
+              "spend": 549.18,
+              "pct": 0.041249
+            },
+            {
+              "vendor": "Bimbo",
+              "spend": 399.13,
+              "pct": 0.029979
+            },
+            {
+              "vendor": "Red Bull",
+              "spend": 395.37,
+              "pct": 0.029696
+            }
+          ],
+          "excel_net_purchases_mtd": 56996.29
+        }
+      }
+    }
+  },
+  "stores": {
+    "42004": {
+      "store_id": "42004",
+      "store": "Arco Placentia",
+      "mix_basis_month": "2026-08",
+      "mix_pct": {
+        "7UP": 0.04244,
+        "Bimbo": 0.014816,
+        "Core-Mark": 0.461785,
+        "Coke": 0.106897,
+        "Frito Lay": 0.050303,
+        "Harbor": 0.145998,
+        "Pepsi": 0.080811,
+        "Red Bull": 0.062116,
+        "Straub": 0.034834
+      },
+      "top_vendors": [
+        {
+          "vendor": "Core-Mark",
+          "spend": 33673.07,
+          "pct": 0.461785
+        },
+        {
+          "vendor": "Harbor",
+          "spend": 10646.09,
+          "pct": 0.145998
+        },
+        {
+          "vendor": "Coke",
+          "spend": 7794.82,
+          "pct": 0.106897
+        },
+        {
+          "vendor": "Pepsi",
+          "spend": 5892.66,
+          "pct": 0.080811
+        },
+        {
+          "vendor": "Red Bull",
+          "spend": 4529.43,
+          "pct": 0.062116
+        },
+        {
+          "vendor": "Frito Lay",
+          "spend": 3668.08,
+          "pct": 0.050303
+        },
+        {
+          "vendor": "7UP",
+          "spend": 3094.7,
+          "pct": 0.04244
+        },
+        {
+          "vendor": "Straub",
+          "spend": 2540.08,
+          "pct": 0.034834
+        },
+        {
+          "vendor": "Bimbo",
+          "spend": 1080.37,
+          "pct": 0.014816
+        }
+      ],
+      "month_purchase_budget": 65226.89,
+      "annual_purchase_budget": 782722.68,
+      "required_spend_month": {
+        "7UP": 2768.23,
+        "Bimbo": 966.4,
+        "Core-Mark": 30120.8,
+        "Coke": 6972.56,
+        "Frito Lay": 3281.11,
+        "Harbor": 9523,
+        "Pepsi": 5271.05,
+        "Red Bull": 4051.63,
+        "Straub": 2272.11
+      },
+      "required_spend_annual": {
+        "7UP": 33218.75,
+        "Bimbo": 11596.82,
+        "Core-Mark": 361449.59,
+        "Coke": 83670.71,
+        "Frito Lay": 39373.3,
+        "Harbor": 114275.95,
+        "Pepsi": 63252.6,
+        "Red Bull": 48619.6,
+        "Straub": 27265.36
+      },
+      "mtd_month": "2026-09",
+      "mtd_spend": 51641.05,
+      "mtd_total": 51641.05,
+      "remaining_month": 13585.84,
+      "vendors_ranked": [
+        {
+          "vendor": "Core-Mark",
+          "mix_pct": 0.461785,
+          "budget_month": 30120.8,
+          "spent_mtd": 22735.66,
+          "remaining": 7385.14,
+          "actual_spent": 22735.66
+        },
+        {
+          "vendor": "Harbor",
+          "mix_pct": 0.145998,
+          "budget_month": 9523,
+          "spent_mtd": 7251.05,
+          "remaining": 2271.95,
+          "actual_spent": 7251.05
+        },
+        {
+          "vendor": "Coke",
+          "mix_pct": 0.106897,
+          "budget_month": 6972.56,
+          "spent_mtd": 5323.68,
+          "remaining": 1648.88,
+          "actual_spent": 5323.68
+        },
+        {
+          "vendor": "Pepsi",
+          "mix_pct": 0.080811,
+          "budget_month": 5271.05,
+          "spent_mtd": 5199.22,
+          "remaining": 71.83,
+          "actual_spent": 5199.22
+        },
+        {
+          "vendor": "Red Bull",
+          "mix_pct": 0.062116,
+          "budget_month": 4051.63,
+          "spent_mtd": 3058.24,
+          "remaining": 993.39,
+          "actual_spent": 3058.24
+        },
+        {
+          "vendor": "Frito Lay",
+          "mix_pct": 0.050303,
+          "budget_month": 3281.11,
+          "spent_mtd": 2476.64,
+          "remaining": 804.47,
+          "actual_spent": 2476.64
+        },
+        {
+          "vendor": "7UP",
+          "mix_pct": 0.04244,
+          "budget_month": 2768.23,
+          "spent_mtd": 2089.51,
+          "remaining": 678.72,
+          "actual_spent": 2089.51
+        },
+        {
+          "vendor": "Straub",
+          "mix_pct": 0.034834,
+          "budget_month": 2272.11,
+          "spent_mtd": 2777.59,
+          "remaining": -505.48,
+          "actual_spent": 2777.59
+        },
+        {
+          "vendor": "Bimbo",
+          "mix_pct": 0.014816,
+          "budget_month": 966.4,
+          "spent_mtd": 729.46,
+          "remaining": 236.94,
+          "actual_spent": 729.46
+        }
+      ],
+      "eom_sales_estimate": 108711.49,
+      "purchase_budget_basis": "60% of $108,711 EOM sales estimate (MTD run-rate × 30/19; Mina ArcoDb method 2026-09-20)",
+      "month_remaining_total": 13585.84,
+      "spend_pin": "2026-09-19",
+      "spend_source": "September DLY invoices through 2026-09-19 (fuel and lottery left out)",
+      "excel_net_purchases_mtd": 51641.05,
+      "excel_read_at": "2026-09-26T06:14:30.925Z",
+      "vendor_remain_method": "latest DLY; remaining = month budget - spent",
+      "vendor_remain_at": "2026-09-26T06:14:30.925Z",
+      "dly_majors_mtd": 51641.05
+    },
+    "42021": {
+      "store_id": "42021",
+      "store": "Westminster",
+      "mix_basis_month": "2026-08",
+      "mix_pct": {
+        "7UP": 0.008013,
+        "Straub": 0.026127,
+        "Bimbo": 0.019458,
+        "Core-Mark": 0.615054,
+        "Coke": 0.063168,
+        "Frito Lay": 0.018597,
+        "Harbor": 0.153457,
+        "Pepsi": 0.063766,
+        "Red Bull": 0.03236
+      },
+      "top_vendors": [
+        {
+          "vendor": "Core-Mark",
+          "spend": 22499.37,
+          "pct": 0.615056
+        },
+        {
+          "vendor": "Harbor",
+          "spend": 5613.61,
+          "pct": 0.153457
+        },
+        {
+          "vendor": "Pepsi",
+          "spend": 2332.61,
+          "pct": 0.063766
+        },
+        {
+          "vendor": "Coke",
+          "spend": 2310.74,
+          "pct": 0.063168
+        },
+        {
+          "vendor": "Red Bull",
+          "spend": 1183.76,
+          "pct": 0.03236
+        },
+        {
+          "vendor": "Straub",
+          "spend": 955.75,
+          "pct": 0.026127
+        },
+        {
+          "vendor": "Bimbo",
+          "spend": 711.79,
+          "pct": 0.019458
+        },
+        {
+          "vendor": "Frito Lay",
+          "spend": 680.3,
+          "pct": 0.018597
+        },
+        {
+          "vendor": "7UP",
+          "spend": 293.11,
+          "pct": 0.008013
+        }
+      ],
+      "month_purchase_budget": 32197.63,
+      "annual_purchase_budget": 386371.56,
+      "required_spend_month": {
+        "7UP": 258,
+        "Straub": 841.23,
+        "Bimbo": 626.5,
+        "Core-Mark": 19803.29,
+        "Coke": 2033.86,
+        "Frito Lay": 598.78,
+        "Harbor": 4940.95,
+        "Pepsi": 2053.11,
+        "Red Bull": 1041.91
+      },
+      "required_spend_annual": {
+        "7UP": 3096,
+        "Straub": 10094.73,
+        "Bimbo": 7518.02,
+        "Core-Mark": 237640.15,
+        "Coke": 24406.32,
+        "Frito Lay": 7185.35,
+        "Harbor": 59291.42,
+        "Pepsi": 24637.37,
+        "Red Bull": 12502.98
+      },
+      "mtd_month": "2026-09",
+      "mtd_spend": 28156.08,
+      "mtd_total": 28156.08,
+      "remaining_month": 4041.55,
+      "vendors_ranked": [
+        {
+          "vendor": "Core-Mark",
+          "mix_pct": 0.615054,
+          "budget_month": 19803.29,
+          "spent_mtd": 16403.04,
+          "remaining": 3400.25,
+          "actual_spent": 16403.04
+        },
+        {
+          "vendor": "Harbor",
+          "mix_pct": 0.153457,
+          "budget_month": 4940.95,
+          "spent_mtd": 0,
+          "remaining": 4940.95,
+          "actual_spent": 0
+        },
+        {
+          "vendor": "Pepsi",
+          "mix_pct": 0.063766,
+          "budget_month": 2053.11,
+          "spent_mtd": 1602.1,
+          "remaining": 451.01,
+          "actual_spent": 1602.1
+        },
+        {
+          "vendor": "Coke",
+          "mix_pct": 0.063168,
+          "budget_month": 2033.86,
+          "spent_mtd": 2260.29,
+          "remaining": -226.43,
+          "actual_spent": 2260.29
+        },
+        {
+          "vendor": "Red Bull",
+          "mix_pct": 0.03236,
+          "budget_month": 1041.91,
+          "spent_mtd": 504.69,
+          "remaining": 537.22,
+          "actual_spent": 504.69
+        },
+        {
+          "vendor": "Straub",
+          "mix_pct": 0.026127,
+          "budget_month": 841.23,
+          "spent_mtd": 636.3,
+          "remaining": 204.93,
+          "actual_spent": 636.3
+        },
+        {
+          "vendor": "Bimbo",
+          "mix_pct": 0.019458,
+          "budget_month": 626.5,
+          "spent_mtd": 1078.26,
+          "remaining": -451.76,
+          "actual_spent": 1078.26
+        },
+        {
+          "vendor": "Frito Lay",
+          "mix_pct": 0.018597,
+          "budget_month": 598.78,
+          "spent_mtd": 558.94,
+          "remaining": 39.84,
+          "actual_spent": 558.94
+        },
+        {
+          "vendor": "7UP",
+          "mix_pct": 0.008013,
+          "budget_month": 258,
+          "spent_mtd": 394.39,
+          "remaining": -136.39,
+          "actual_spent": 394.39
+        },
+        {
+          "vendor": "Other (Excel−majors)",
+          "mix_pct": 0,
+          "budget_month": 0,
+          "spent_mtd": 4718.07,
+          "remaining": -4718.07,
+          "actual_spent": 4718.07
+        }
+      ],
+      "eom_sales_estimate": 53662.72,
+      "purchase_budget_basis": "60% of $53,663 EOM sales estimate (MTD run-rate × 30/19; Mina ArcoDb method 2026-09-20)",
+      "month_remaining_total": 4041.55,
+      "spend_pin": "2026-09-23",
+      "spend_source": "September DLY invoices through 2026-09-23 (fuel and lottery left out)",
+      "excel_net_purchases_mtd": 28156.08,
+      "excel_read_at": "2026-09-26T06:14:30.925Z",
+      "vendor_remain_method": "latest DLY; remaining = month budget - spent",
+      "vendor_remain_at": "2026-09-26T06:14:30.925Z",
+      "dly_majors_mtd": 23438.01,
+      "excel_minus_dly_majors": 8879.11
+    },
+    "42048": {
+      "store_id": "42048",
+      "store": "San Diego",
+      "mix_basis_month": "2026-08",
+      "mix_pct": {
+        "7UP": 0.045596,
+        "Bimbo": 0.010613,
+        "Core-Mark": 0.676091,
+        "Coke": 0.101824,
+        "Frito Lay": 0.067437,
+        "Pepsi": 0.059286,
+        "Red Bull": 0.039153
+      },
+      "top_vendors": [
+        {
+          "vendor": "Core-Mark",
+          "spend": 42780.1,
+          "pct": 0.676091
+        },
+        {
+          "vendor": "Coke",
+          "spend": 6442.98,
+          "pct": 0.101824
+        },
+        {
+          "vendor": "Frito Lay",
+          "spend": 4267.14,
+          "pct": 0.067437
+        },
+        {
+          "vendor": "Pepsi",
+          "spend": 3751.35,
+          "pct": 0.059286
+        },
+        {
+          "vendor": "7UP",
+          "spend": 2885.13,
+          "pct": 0.045596
+        },
+        {
+          "vendor": "Red Bull",
+          "spend": 2477.41,
+          "pct": 0.039153
+        },
+        {
+          "vendor": "Bimbo",
+          "spend": 671.53,
+          "pct": 0.010613
+        }
+      ],
+      "month_purchase_budget": 61397.07,
+      "annual_purchase_budget": 736764.84,
+      "required_spend_month": {
+        "7UP": 2799.46,
+        "Bimbo": 651.61,
+        "Core-Mark": 41510.01,
+        "Coke": 6251.7,
+        "Frito Lay": 4140.43,
+        "Pepsi": 3639.99,
+        "Red Bull": 2403.88
+      },
+      "required_spend_annual": {
+        "7UP": 33593.53,
+        "Bimbo": 7819.29,
+        "Core-Mark": 498120.08,
+        "Coke": 75020.34,
+        "Frito Lay": 49685.21,
+        "Pepsi": 43679.84,
+        "Red Bull": 28846.55
+      },
+      "mtd_month": "2026-09",
+      "mtd_spend": 64754.03,
+      "mtd_total": 64754.03,
+      "remaining_month": -3356.96,
+      "vendors_ranked": [
+        {
+          "vendor": "Core-Mark",
+          "mix_pct": 0.676091,
+          "budget_month": 41510.01,
+          "spent_mtd": 37946.81,
+          "remaining": 3563.2,
+          "actual_spent": 37946.81
+        },
+        {
+          "vendor": "Coke",
+          "mix_pct": 0.101824,
+          "budget_month": 6251.7,
+          "spent_mtd": 2549.09,
+          "remaining": 3702.61,
+          "actual_spent": 2549.09
+        },
+        {
+          "vendor": "Frito Lay",
+          "mix_pct": 0.067437,
+          "budget_month": 4140.43,
+          "spent_mtd": 2659.66,
+          "remaining": 1480.77,
+          "actual_spent": 2659.66
+        },
+        {
+          "vendor": "Pepsi",
+          "mix_pct": 0.059286,
+          "budget_month": 3639.99,
+          "spent_mtd": 3105.31,
+          "remaining": 534.68,
+          "actual_spent": 3105.31
+        },
+        {
+          "vendor": "7UP",
+          "mix_pct": 0.045596,
+          "budget_month": 2799.46,
+          "spent_mtd": 2919.73,
+          "remaining": -120.27,
+          "actual_spent": 2919.73
+        },
+        {
+          "vendor": "Red Bull",
+          "mix_pct": 0.039153,
+          "budget_month": 2403.88,
+          "spent_mtd": 2590.27,
+          "remaining": -186.39,
+          "actual_spent": 2590.27
+        },
+        {
+          "vendor": "Bimbo",
+          "mix_pct": 0.010613,
+          "budget_month": 651.61,
+          "spent_mtd": 352.55,
+          "remaining": 299.06,
+          "actual_spent": 352.55
+        },
+        {
+          "vendor": "Other (Excel−majors)",
+          "mix_pct": 0,
+          "budget_month": 0,
+          "spent_mtd": 12630.61,
+          "remaining": -12630.61,
+          "actual_spent": 12630.61
+        }
+      ],
+      "eom_sales_estimate": 102328.45,
+      "purchase_budget_basis": "60% of $102,328 EOM sales estimate (MTD run-rate × 30/19; Mina ArcoDb method 2026-09-20)",
+      "month_remaining_total": -3356.96,
+      "spend_pin": "2026-09-23",
+      "spend_source": "September DLY invoices through 2026-09-23 (fuel and lottery left out)",
+      "excel_net_purchases_mtd": 64754.03,
+      "excel_read_at": "2026-09-26T06:14:30.925Z",
+      "vendor_remain_method": "latest DLY; remaining = month budget - spent",
+      "vendor_remain_at": "2026-09-26T06:14:30.925Z",
+      "dly_majors_mtd": 52123.42,
+      "excel_minus_dly_majors": 19054.92
+    },
+    "42073": {
+      "store_id": "42073",
+      "store": "42073",
+      "mix_basis_month": "2026-08",
+      "mix_pct": {
+        "7UP": 0.023295,
+        "Straub": 0.067622,
+        "Bimbo": 0.002869,
+        "Core-Mark": 0.510597,
+        "Coke": 0.062945,
+        "Frito Lay": 0.038378,
+        "Harbor": 0.21856,
+        "Pepsi": 0.05416,
+        "Red Bull": 0.021574
+      },
+      "top_vendors": [
+        {
+          "vendor": "Core-Mark",
+          "spend": 47587.15,
+          "pct": 0.510597
+        },
+        {
+          "vendor": "Harbor",
+          "spend": 20369.55,
+          "pct": 0.21856
+        },
+        {
+          "vendor": "Straub",
+          "spend": 6302.32,
+          "pct": 0.067622
+        },
+        {
+          "vendor": "Coke",
+          "spend": 5866.37,
+          "pct": 0.062945
+        },
+        {
+          "vendor": "Pepsi",
+          "spend": 5047.64,
+          "pct": 0.05416
+        },
+        {
+          "vendor": "Frito Lay",
+          "spend": 3576.79,
+          "pct": 0.038378
+        },
+        {
+          "vendor": "7UP",
+          "spend": 2171.03,
+          "pct": 0.023295
+        },
+        {
+          "vendor": "Red Bull",
+          "spend": 2010.67,
+          "pct": 0.021574
+        },
+        {
+          "vendor": "Bimbo",
+          "spend": 267.43,
+          "pct": 0.002869
+        }
+      ],
+      "month_purchase_budget": null,
+      "annual_purchase_budget": null,
+      "required_spend_month": {
+        "7UP": 0,
+        "Straub": 0,
+        "Bimbo": 0,
+        "Core-Mark": 0,
+        "Coke": 0,
+        "Frito Lay": 0,
+        "Harbor": 0,
+        "Pepsi": 0,
+        "Red Bull": 0
+      },
+      "required_spend_annual": {
+        "7UP": 0,
+        "Straub": 0,
+        "Bimbo": 0,
+        "Core-Mark": 0,
+        "Coke": 0,
+        "Frito Lay": 0,
+        "Harbor": 0,
+        "Pepsi": 0,
+        "Red Bull": 0
+      },
+      "mtd_month": "2026-09",
+      "mtd_spend": 78068.25,
+      "mtd_total": 78068.25,
+      "remaining_month": -78068.25,
+      "vendors_ranked": [
+        {
+          "vendor": "Core-Mark",
+          "mix_pct": 0.510597,
+          "budget_month": 0,
+          "spent_mtd": 31397.14,
+          "remaining": -31397.14,
+          "actual_spent": 31397.14
+        },
+        {
+          "vendor": "Harbor",
+          "mix_pct": 0.21856,
+          "budget_month": 0,
+          "spent_mtd": 16263.54,
+          "remaining": -16263.54,
+          "actual_spent": 16263.54
+        },
+        {
+          "vendor": "Straub",
+          "mix_pct": 0.067622,
+          "budget_month": 0,
+          "spent_mtd": 4741.6,
+          "remaining": -4741.6,
+          "actual_spent": 4741.6
+        },
+        {
+          "vendor": "Coke",
+          "mix_pct": 0.062945,
+          "budget_month": 0,
+          "spent_mtd": 3461.52,
+          "remaining": -3461.52,
+          "actual_spent": 3461.52
+        },
+        {
+          "vendor": "Pepsi",
+          "mix_pct": 0.05416,
+          "budget_month": 0,
+          "spent_mtd": 3350.65,
+          "remaining": -3350.65,
+          "actual_spent": 3350.65
+        },
+        {
+          "vendor": "Frito Lay",
+          "mix_pct": 0.038378,
+          "budget_month": 0,
+          "spent_mtd": 2018.19,
+          "remaining": -2018.19,
+          "actual_spent": 2018.19
+        },
+        {
+          "vendor": "7UP",
+          "mix_pct": 0.023295,
+          "budget_month": 0,
+          "spent_mtd": 1135.94,
+          "remaining": -1135.94,
+          "actual_spent": 1135.94
+        },
+        {
+          "vendor": "Red Bull",
+          "mix_pct": 0.021574,
+          "budget_month": 0,
+          "spent_mtd": 1562.23,
+          "remaining": -1562.23,
+          "actual_spent": 1562.23
+        },
+        {
+          "vendor": "Bimbo",
+          "mix_pct": 0.002869,
+          "budget_month": 0,
+          "spent_mtd": 505.87,
+          "remaining": -505.87,
+          "actual_spent": 505.87
+        },
+        {
+          "vendor": "Other (Excel−majors)",
+          "mix_pct": 0,
+          "budget_month": 0,
+          "spent_mtd": 13631.57,
+          "remaining": -13631.57,
+          "actual_spent": 13631.57
+        }
+      ],
+      "month_remaining_total": -78068.25,
+      "spend_pin": "2026-09-23",
+      "spend_source": "September DLY invoices through 2026-09-23 (fuel and lottery left out)",
+      "excel_net_purchases_mtd": 78068.25,
+      "excel_read_at": "2026-09-26T06:14:30.925Z",
+      "dly_majors_mtd": 64436.68,
+      "vendor_remain_method": "latest DLY; remaining = month budget - spent",
+      "vendor_remain_at": "2026-09-26T06:14:30.925Z"
+    },
+    "42098": {
+      "store_id": "42098",
+      "store": "Brookhurst 75",
+      "mix_basis_month": "2026-08",
+      "mix_pct": {
+        "7UP": 0.023446,
+        "Straub": 0.039937,
+        "Bimbo": 0.015754,
+        "Core-Mark": 0.551225,
+        "Coke": 0.076098,
+        "Frito Lay": 0.052121,
+        "Harbor": 0.092559,
+        "Pepsi": 0.099099,
+        "Red Bull": 0.049761
+      },
+      "top_vendors": [
+        {
+          "vendor": "Core-Mark",
+          "spend": 35377.2,
+          "pct": 0.551224
+        },
+        {
+          "vendor": "Pepsi",
+          "spend": 6360.11,
+          "pct": 0.099099
+        },
+        {
+          "vendor": "Harbor",
+          "spend": 5940.4,
+          "pct": 0.092559
+        },
+        {
+          "vendor": "Coke",
+          "spend": 4883.94,
+          "pct": 0.076098
+        },
+        {
+          "vendor": "Frito Lay",
+          "spend": 3345.08,
+          "pct": 0.052121
+        },
+        {
+          "vendor": "Red Bull",
+          "spend": 3193.64,
+          "pct": 0.049761
+        },
+        {
+          "vendor": "Straub",
+          "spend": 2563.11,
+          "pct": 0.039937
+        },
+        {
+          "vendor": "7UP",
+          "spend": 1504.76,
+          "pct": 0.023446
+        },
+        {
+          "vendor": "Bimbo",
+          "spend": 1011.08,
+          "pct": 0.015754
+        }
+      ],
+      "month_purchase_budget": 62153.18,
+      "annual_purchase_budget": 745838.16,
+      "required_spend_month": {
+        "7UP": 1457.24,
+        "Straub": 2482.21,
+        "Bimbo": 979.16,
+        "Core-Mark": 34260.39,
+        "Coke": 4729.73,
+        "Frito Lay": 3239.49,
+        "Harbor": 5752.84,
+        "Pepsi": 6159.32,
+        "Red Bull": 3092.8
+      },
+      "required_spend_annual": {
+        "7UP": 17486.92,
+        "Straub": 29786.54,
+        "Bimbo": 11749.93,
+        "Core-Mark": 411123.89,
+        "Coke": 56756.79,
+        "Frito Lay": 38873.83,
+        "Harbor": 69034.03,
+        "Pepsi": 73911.82,
+        "Red Bull": 37113.65
+      },
+      "mtd_month": "2026-09",
+      "mtd_spend": 56907.7,
+      "mtd_total": 56907.7,
+      "remaining_month": 5245.48,
+      "vendors_ranked": [
+        {
+          "vendor": "Core-Mark",
+          "mix_pct": 0.551225,
+          "budget_month": 34260.39,
+          "spent_mtd": 21330.44,
+          "remaining": 12929.95,
+          "actual_spent": 21330.44
+        },
+        {
+          "vendor": "Pepsi",
+          "mix_pct": 0.099099,
+          "budget_month": 6159.32,
+          "spent_mtd": 3419.29,
+          "remaining": 2740.03,
+          "actual_spent": 3419.29
+        },
+        {
+          "vendor": "Harbor",
+          "mix_pct": 0.092559,
+          "budget_month": 5752.84,
+          "spent_mtd": 8512.87,
+          "remaining": -2760.03,
+          "actual_spent": 8512.87
+        },
+        {
+          "vendor": "Coke",
+          "mix_pct": 0.076098,
+          "budget_month": 4729.73,
+          "spent_mtd": 3517.07,
+          "remaining": 1212.66,
+          "actual_spent": 3517.07
+        },
+        {
+          "vendor": "Frito Lay",
+          "mix_pct": 0.052121,
+          "budget_month": 3239.49,
+          "spent_mtd": 2406.34,
+          "remaining": 833.15,
+          "actual_spent": 2406.34
+        },
+        {
+          "vendor": "Red Bull",
+          "mix_pct": 0.049761,
+          "budget_month": 3092.8,
+          "spent_mtd": 3360.28,
+          "remaining": -267.48,
+          "actual_spent": 3360.28
+        },
+        {
+          "vendor": "Straub",
+          "mix_pct": 0.039937,
+          "budget_month": 2482.21,
+          "spent_mtd": 2749.98,
+          "remaining": -267.77,
+          "actual_spent": 2749.98
+        },
+        {
+          "vendor": "7UP",
+          "mix_pct": 0.023446,
+          "budget_month": 1457.24,
+          "spent_mtd": 0,
+          "remaining": 1457.24,
+          "actual_spent": 0
+        },
+        {
+          "vendor": "Bimbo",
+          "mix_pct": 0.015754,
+          "budget_month": 979.16,
+          "spent_mtd": 311.72,
+          "remaining": 667.44,
+          "actual_spent": 311.72
+        },
+        {
+          "vendor": "Other (Excel−majors)",
+          "mix_pct": 0,
+          "budget_month": 0,
+          "spent_mtd": 11299.71,
+          "remaining": -11299.71,
+          "actual_spent": 11299.71
+        }
+      ],
+      "eom_sales_estimate": 103588.63,
+      "purchase_budget_basis": "60% of $103,589 EOM sales estimate (MTD run-rate × 30/19; Mina ArcoDb method 2026-09-20)",
+      "month_remaining_total": 5245.48,
+      "spend_pin": "2026-09-23",
+      "spend_source": "September DLY invoices through 2026-09-23 (fuel and lottery left out)",
+      "excel_net_purchases_mtd": 56907.7,
+      "excel_read_at": "2026-09-26T06:14:30.925Z",
+      "vendor_remain_method": "latest DLY; remaining = month budget - spent",
+      "vendor_remain_at": "2026-09-26T06:14:30.925Z",
+      "dly_majors_mtd": 45607.99,
+      "excel_minus_dly_majors": 20382.54
+    },
+    "42179": {
+      "store_id": "42179",
+      "store": "Arco HB",
+      "mix_basis_month": "2026-08",
+      "mix_pct": {
+        "7UP": 0.029908,
+        "Bimbo": 0.011082,
+        "Core-Mark": 0.476454,
+        "Coke": 0.12415,
+        "Frito Lay": 0.059193,
+        "Harbor": 0.173332,
+        "Pepsi": 0.086817,
+        "Red Bull": 0.039064
+      },
+      "top_vendors": [
+        {
+          "vendor": "Core-Mark",
+          "spend": 32940.53,
+          "pct": 0.476454
+        },
+        {
+          "vendor": "Harbor",
+          "spend": 11983.63,
+          "pct": 0.173332
+        },
+        {
+          "vendor": "Coke",
+          "spend": 8583.33,
+          "pct": 0.12415
+        },
+        {
+          "vendor": "Pepsi",
+          "spend": 6002.26,
+          "pct": 0.086817
+        },
+        {
+          "vendor": "Frito Lay",
+          "spend": 4092.43,
+          "pct": 0.059193
+        },
+        {
+          "vendor": "Red Bull",
+          "spend": 2700.78,
+          "pct": 0.039064
+        },
+        {
+          "vendor": "7UP",
+          "spend": 2067.71,
+          "pct": 0.029908
+        },
+        {
+          "vendor": "Bimbo",
+          "spend": 766.16,
+          "pct": 0.011082
+        }
+      ],
+      "month_purchase_budget": 76709.12,
+      "annual_purchase_budget": 920509.44,
+      "required_spend_month": {
+        "7UP": 2294.22,
+        "Bimbo": 850.09,
+        "Core-Mark": 36548.37,
+        "Coke": 9523.44,
+        "Frito Lay": 4540.64,
+        "Harbor": 13296.15,
+        "Pepsi": 6659.66,
+        "Red Bull": 2996.57
+      },
+      "required_spend_annual": {
+        "7UP": 27530.6,
+        "Bimbo": 10201.09,
+        "Core-Mark": 438580.4,
+        "Coke": 114281.25,
+        "Frito Lay": 54487.72,
+        "Harbor": 159553.74,
+        "Pepsi": 79915.87,
+        "Red Bull": 35958.78
+      },
+      "mtd_month": "2026-09",
+      "mtd_spend": 61503.43,
+      "mtd_total": 61503.43,
+      "remaining_month": 15205.69,
+      "vendors_ranked": [
+        {
+          "vendor": "Core-Mark",
+          "mix_pct": 0.476454,
+          "budget_month": 36548.37,
+          "spent_mtd": 24441.95,
+          "remaining": 12106.42,
+          "actual_spent": 24441.95
+        },
+        {
+          "vendor": "Harbor",
+          "mix_pct": 0.173332,
+          "budget_month": 13296.15,
+          "spent_mtd": 8691.49,
+          "remaining": 4604.66,
+          "actual_spent": 8691.49
+        },
+        {
+          "vendor": "Coke",
+          "mix_pct": 0.12415,
+          "budget_month": 9523.44,
+          "spent_mtd": 5847.03,
+          "remaining": 3676.41,
+          "actual_spent": 5847.03
+        },
+        {
+          "vendor": "Pepsi",
+          "mix_pct": 0.086817,
+          "budget_month": 6659.66,
+          "spent_mtd": 4664.87,
+          "remaining": 1994.79,
+          "actual_spent": 4664.87
+        },
+        {
+          "vendor": "Frito Lay",
+          "mix_pct": 0.059193,
+          "budget_month": 4540.64,
+          "spent_mtd": 2787.78,
+          "remaining": 1752.86,
+          "actual_spent": 2787.78
+        },
+        {
+          "vendor": "Red Bull",
+          "mix_pct": 0.039064,
+          "budget_month": 2996.57,
+          "spent_mtd": 3288.03,
+          "remaining": -291.46,
+          "actual_spent": 3288.03
+        },
+        {
+          "vendor": "7UP",
+          "mix_pct": 0.029908,
+          "budget_month": 2294.22,
+          "spent_mtd": 1408.56,
+          "remaining": 885.66,
+          "actual_spent": 1408.56
+        },
+        {
+          "vendor": "Bimbo",
+          "mix_pct": 0.011082,
+          "budget_month": 850.09,
+          "spent_mtd": 521.92,
+          "remaining": 328.17,
+          "actual_spent": 521.92
+        },
+        {
+          "vendor": "Other (Excel−majors)",
+          "mix_pct": 0,
+          "budget_month": 0,
+          "spent_mtd": 9851.8,
+          "remaining": -9851.8,
+          "actual_spent": 9851.8
+        }
+      ],
+      "eom_sales_estimate": 127848.54,
+      "purchase_budget_basis": "60% of $127,849 EOM sales estimate (MTD run-rate × 30/19; Mina ArcoDb method 2026-09-20)",
+      "month_remaining_total": 15205.69,
+      "spend_pin": "2026-09-19",
+      "spend_source": "September DLY invoices through 2026-09-19 (fuel and lottery left out)",
+      "excel_net_purchases_mtd": 61503.43,
+      "excel_read_at": "2026-09-26T06:14:30.925Z",
+      "vendor_remain_method": "latest DLY; remaining = month budget - spent",
+      "vendor_remain_at": "2026-09-26T06:14:30.925Z",
+      "dly_majors_mtd": 51651.63
+    },
+    "42279": {
+      "store_id": "42279",
+      "store": "Koval",
+      "mix_basis_month": "2026-08",
+      "mix_pct": {
+        "7UP": 0.028002,
+        "Bimbo": 0.009102,
+        "Core-Mark": 0.679852,
+        "Coke": 0.071952,
+        "Frito Lay": 0.054215,
+        "Nevada Beverage": 0.051785,
+        "Pepsi": 0.080418,
+        "Red Bull": 0.024674
+      },
+      "top_vendors": [
+        {
+          "vendor": "Core-Mark",
+          "spend": 36097.26,
+          "pct": 0.679852
+        },
+        {
+          "vendor": "Pepsi",
+          "spend": 4269.84,
+          "pct": 0.080418
+        },
+        {
+          "vendor": "Coke",
+          "spend": 3820.35,
+          "pct": 0.071952
+        },
+        {
+          "vendor": "Frito Lay",
+          "spend": 2878.61,
+          "pct": 0.054215
+        },
+        {
+          "vendor": "Nevada Beverage",
+          "spend": 2749.59,
+          "pct": 0.051785
+        },
+        {
+          "vendor": "7UP",
+          "spend": 1486.77,
+          "pct": 0.028002
+        },
+        {
+          "vendor": "Red Bull",
+          "spend": 1310.11,
+          "pct": 0.024674
+        },
+        {
+          "vendor": "Bimbo",
+          "spend": 483.26,
+          "pct": 0.009102
+        }
+      ],
+      "month_purchase_budget": 65011.1,
+      "annual_purchase_budget": 780133.2,
+      "required_spend_month": {
+        "7UP": 1820.44,
+        "Bimbo": 591.73,
+        "Core-Mark": 44197.93,
+        "Coke": 4677.68,
+        "Frito Lay": 3524.58,
+        "Nevada Beverage": 3366.6,
+        "Pepsi": 5228.06,
+        "Red Bull": 1604.08
+      },
+      "required_spend_annual": {
+        "7UP": 21845.29,
+        "Bimbo": 7100.77,
+        "Core-Mark": 530375.12,
+        "Coke": 56132.14,
+        "Frito Lay": 42294.92,
+        "Nevada Beverage": 40399.2,
+        "Pepsi": 62736.75,
+        "Red Bull": 19249.01
+      },
+      "mtd_month": "2026-09",
+      "mtd_spend": 49240.3,
+      "mtd_total": 49240.3,
+      "remaining_month": 15770.8,
+      "vendors_ranked": [
+        {
+          "vendor": "Core-Mark",
+          "mix_pct": 0.679852,
+          "budget_month": 44197.93,
+          "spent_mtd": 25387.53,
+          "remaining": 18810.4,
+          "actual_spent": 25387.53
+        },
+        {
+          "vendor": "Pepsi",
+          "mix_pct": 0.080418,
+          "budget_month": 5228.06,
+          "spent_mtd": 3415.13,
+          "remaining": 1812.93,
+          "actual_spent": 3415.13
+        },
+        {
+          "vendor": "Coke",
+          "mix_pct": 0.071952,
+          "budget_month": 4677.68,
+          "spent_mtd": 2935.29,
+          "remaining": 1742.39,
+          "actual_spent": 2935.29
+        },
+        {
+          "vendor": "Frito Lay",
+          "mix_pct": 0.054215,
+          "budget_month": 3524.58,
+          "spent_mtd": 2861.68,
+          "remaining": 662.9,
+          "actual_spent": 2861.68
+        },
+        {
+          "vendor": "Nevada Beverage",
+          "mix_pct": 0.051785,
+          "budget_month": 3366.6,
+          "spent_mtd": 2162.36,
+          "remaining": 1204.24,
+          "actual_spent": 2162.36
+        },
+        {
+          "vendor": "7UP",
+          "mix_pct": 0.028002,
+          "budget_month": 1820.44,
+          "spent_mtd": 770.88,
+          "remaining": 1049.56,
+          "actual_spent": 770.88
+        },
+        {
+          "vendor": "Red Bull",
+          "mix_pct": 0.024674,
+          "budget_month": 1604.08,
+          "spent_mtd": 1511.01,
+          "remaining": 93.07,
+          "actual_spent": 1511.01
+        },
+        {
+          "vendor": "Bimbo",
+          "mix_pct": 0.009102,
+          "budget_month": 591.73,
+          "spent_mtd": 358.98,
+          "remaining": 232.75,
+          "actual_spent": 358.98
+        },
+        {
+          "vendor": "Other (Excel−majors)",
+          "mix_pct": 0,
+          "budget_month": 0,
+          "spent_mtd": 9837.44,
+          "remaining": -9837.44,
+          "actual_spent": 9837.44
+        }
+      ],
+      "eom_sales_estimate": 108351.84,
+      "purchase_budget_basis": "60% of $108,352 EOM sales estimate (MTD run-rate × 30/19; Mina ArcoDb method 2026-09-20)",
+      "month_remaining_total": 15770.8,
+      "spend_pin": "2026-09-23",
+      "spend_source": "September DLY invoices through 2026-09-23 (fuel and lottery left out)",
+      "excel_net_purchases_mtd": 49240.3,
+      "excel_read_at": "2026-09-26T06:14:30.925Z",
+      "vendor_remain_method": "latest DLY; remaining = month budget - spent",
+      "vendor_remain_at": "2026-09-26T06:14:30.925Z",
+      "dly_majors_mtd": 39402.86,
+      "excel_minus_dly_majors": 21459.8
+    },
+    "42280": {
+      "store_id": "42280",
+      "store": "Spring Mtn",
+      "mix_basis_month": "2026-08",
+      "mix_pct": {
+        "7UP": 0.023403,
+        "Bimbo": 0.007559,
+        "Core-Mark": 0.616658,
+        "Coke": 0.118586,
+        "Frito Lay": 0.060049,
+        "Nevada Beverage": 0.034979,
+        "Pepsi": 0.09903,
+        "Red Bull": 0.039736
+      },
+      "top_vendors": [
+        {
+          "vendor": "Core-Mark",
+          "spend": 27124.34,
+          "pct": 0.616658
+        },
+        {
+          "vendor": "Coke",
+          "spend": 5216.15,
+          "pct": 0.118586
+        },
+        {
+          "vendor": "Pepsi",
+          "spend": 4355.93,
+          "pct": 0.09903
+        },
+        {
+          "vendor": "Frito Lay",
+          "spend": 2641.32,
+          "pct": 0.060049
+        },
+        {
+          "vendor": "Red Bull",
+          "spend": 1747.84,
+          "pct": 0.039736
+        },
+        {
+          "vendor": "Nevada Beverage",
+          "spend": 1538.59,
+          "pct": 0.034979
+        },
+        {
+          "vendor": "7UP",
+          "spend": 1029.4,
+          "pct": 0.023403
+        },
+        {
+          "vendor": "Bimbo",
+          "spend": 332.49,
+          "pct": 0.007559
+        }
+      ],
+      "month_purchase_budget": 49785.94,
+      "annual_purchase_budget": 597431.28,
+      "required_spend_month": {
+        "7UP": 1165.14,
+        "Bimbo": 376.33,
+        "Core-Mark": 30700.9,
+        "Coke": 5903.92,
+        "Frito Lay": 2989.6,
+        "Nevada Beverage": 1741.46,
+        "Pepsi": 4930.3,
+        "Red Bull": 1978.29
+      },
+      "required_spend_annual": {
+        "7UP": 13981.68,
+        "Bimbo": 4515.98,
+        "Core-Mark": 368410.78,
+        "Coke": 70846.99,
+        "Frito Lay": 35875.15,
+        "Nevada Beverage": 20897.55,
+        "Pepsi": 59163.62,
+        "Red Bull": 23739.53
+      },
+      "mtd_month": "2026-09",
+      "mtd_spend": 46608.55,
+      "mtd_total": 46608.55,
+      "remaining_month": 3177.39,
+      "vendors_ranked": [
+        {
+          "vendor": "Core-Mark",
+          "mix_pct": 0.616658,
+          "budget_month": 30700.9,
+          "spent_mtd": 24621.31,
+          "remaining": 6079.59,
+          "actual_spent": 24621.31
+        },
+        {
+          "vendor": "Coke",
+          "mix_pct": 0.118586,
+          "budget_month": 5903.92,
+          "spent_mtd": 1906.37,
+          "remaining": 3997.55,
+          "actual_spent": 1906.37
+        },
+        {
+          "vendor": "Pepsi",
+          "mix_pct": 0.09903,
+          "budget_month": 4930.3,
+          "spent_mtd": 3853.16,
+          "remaining": 1077.14,
+          "actual_spent": 3853.16
+        },
+        {
+          "vendor": "Frito Lay",
+          "mix_pct": 0.060049,
+          "budget_month": 2989.6,
+          "spent_mtd": 1525.05,
+          "remaining": 1464.55,
+          "actual_spent": 1525.05
+        },
+        {
+          "vendor": "Red Bull",
+          "mix_pct": 0.039736,
+          "budget_month": 1978.29,
+          "spent_mtd": 1608.85,
+          "remaining": 369.44,
+          "actual_spent": 1608.85
+        },
+        {
+          "vendor": "Nevada Beverage",
+          "mix_pct": 0.034979,
+          "budget_month": 1741.46,
+          "spent_mtd": 1615.77,
+          "remaining": 125.69,
+          "actual_spent": 1615.77
+        },
+        {
+          "vendor": "7UP",
+          "mix_pct": 0.023403,
+          "budget_month": 1165.14,
+          "spent_mtd": 592.87,
+          "remaining": 572.27,
+          "actual_spent": 592.87
+        },
+        {
+          "vendor": "Bimbo",
+          "mix_pct": 0.007559,
+          "budget_month": 376.33,
+          "spent_mtd": 282.49,
+          "remaining": 93.84,
+          "actual_spent": 282.49
+        },
+        {
+          "vendor": "Other (Excel−majors)",
+          "mix_pct": 0,
+          "budget_month": 0,
+          "spent_mtd": 10602.68,
+          "remaining": -10602.68,
+          "actual_spent": 10602.68
+        }
+      ],
+      "eom_sales_estimate": 82976.56,
+      "purchase_budget_basis": "60% of $82,977 EOM sales estimate (MTD run-rate × 30/19; Mina ArcoDb method 2026-09-20)",
+      "month_remaining_total": 3177.39,
+      "spend_pin": "2026-09-23",
+      "spend_source": "September DLY invoices through 2026-09-23 (fuel and lottery left out)",
+      "excel_net_purchases_mtd": 46608.55,
+      "excel_read_at": "2026-09-26T06:14:30.925Z",
+      "vendor_remain_method": "latest DLY; remaining = month budget - spent",
+      "vendor_remain_at": "2026-09-26T06:14:30.925Z",
+      "dly_majors_mtd": 36005.87,
+      "excel_minus_dly_majors": 17624.58
+    },
+    "42281": {
+      "store_id": "42281",
+      "store": "Charleston",
+      "mix_basis_month": "2026-08",
+      "mix_pct": {
+        "7UP": 0.028449,
+        "Bimbo": 0.024997,
+        "Core-Mark": 0.633139,
+        "Coke": 0.093319,
+        "Frito Lay": 0.07111,
+        "Nevada Beverage": 0.040662,
+        "Pepsi": 0.08126,
+        "Red Bull": 0.027064
+      },
+      "top_vendors": [
+        {
+          "vendor": "Core-Mark",
+          "spend": 27784.49,
+          "pct": 0.633139
+        },
+        {
+          "vendor": "Coke",
+          "spend": 4095.19,
+          "pct": 0.093319
+        },
+        {
+          "vendor": "Pepsi",
+          "spend": 3565.97,
+          "pct": 0.08126
+        },
+        {
+          "vendor": "Frito Lay",
+          "spend": 3120.58,
+          "pct": 0.07111
+        },
+        {
+          "vendor": "Nevada Beverage",
+          "spend": 1784.41,
+          "pct": 0.040662
+        },
+        {
+          "vendor": "7UP",
+          "spend": 1248.46,
+          "pct": 0.028449
+        },
+        {
+          "vendor": "Red Bull",
+          "spend": 1187.67,
+          "pct": 0.027064
+        },
+        {
+          "vendor": "Bimbo",
+          "spend": 1096.96,
+          "pct": 0.024997
+        }
+      ],
+      "month_purchase_budget": 47725.43,
+      "annual_purchase_budget": 572705.16,
+      "required_spend_month": {
+        "7UP": 1357.74,
+        "Bimbo": 1192.99,
+        "Core-Mark": 30216.83,
+        "Coke": 4453.69,
+        "Frito Lay": 3393.76,
+        "Nevada Beverage": 1940.61,
+        "Pepsi": 3878.17,
+        "Red Bull": 1291.64
+      },
+      "required_spend_annual": {
+        "7UP": 16292.89,
+        "Bimbo": 14315.91,
+        "Core-Mark": 362601.97,
+        "Coke": 53444.27,
+        "Frito Lay": 40725.06,
+        "Nevada Beverage": 23287.34,
+        "Pepsi": 46538.02,
+        "Red Bull": 15499.69
+      },
+      "mtd_month": "2026-09",
+      "mtd_spend": 49706.55,
+      "mtd_total": 49706.55,
+      "remaining_month": -1981.12,
+      "vendors_ranked": [
+        {
+          "vendor": "Core-Mark",
+          "mix_pct": 0.633139,
+          "budget_month": 30216.83,
+          "spent_mtd": 25767.35,
+          "remaining": 4449.48,
+          "actual_spent": 25767.35
+        },
+        {
+          "vendor": "Coke",
+          "mix_pct": 0.093319,
+          "budget_month": 4453.69,
+          "spent_mtd": 4155.92,
+          "remaining": 297.77,
+          "actual_spent": 4155.92
+        },
+        {
+          "vendor": "Pepsi",
+          "mix_pct": 0.08126,
+          "budget_month": 3878.17,
+          "spent_mtd": 3128.51,
+          "remaining": 749.66,
+          "actual_spent": 3128.51
+        },
+        {
+          "vendor": "Frito Lay",
+          "mix_pct": 0.07111,
+          "budget_month": 3393.76,
+          "spent_mtd": 2021.98,
+          "remaining": 1371.78,
+          "actual_spent": 2021.98
+        },
+        {
+          "vendor": "Nevada Beverage",
+          "mix_pct": 0.040662,
+          "budget_month": 1940.61,
+          "spent_mtd": 1874.64,
+          "remaining": 65.97,
+          "actual_spent": 1874.64
+        },
+        {
+          "vendor": "7UP",
+          "mix_pct": 0.028449,
+          "budget_month": 1357.74,
+          "spent_mtd": 1179.54,
+          "remaining": 178.2,
+          "actual_spent": 1179.54
+        },
+        {
+          "vendor": "Red Bull",
+          "mix_pct": 0.027064,
+          "budget_month": 1291.64,
+          "spent_mtd": 3166.84,
+          "remaining": -1875.2,
+          "actual_spent": 3166.84
+        },
+        {
+          "vendor": "Bimbo",
+          "mix_pct": 0.024997,
+          "budget_month": 1192.99,
+          "spent_mtd": 605.57,
+          "remaining": 587.42,
+          "actual_spent": 605.57
+        },
+        {
+          "vendor": "Other (Excel−majors)",
+          "mix_pct": 0,
+          "budget_month": 0,
+          "spent_mtd": 7806.2,
+          "remaining": -7806.2,
+          "actual_spent": 7806.2
+        }
+      ],
+      "eom_sales_estimate": 79542.39,
+      "purchase_budget_basis": "60% of $79,542 EOM sales estimate (MTD run-rate × 30/19; Mina ArcoDb method 2026-09-20)",
+      "month_remaining_total": -1981.12,
+      "spend_pin": "2026-09-23",
+      "spend_source": "September DLY invoices through 2026-09-23 (fuel and lottery left out)",
+      "excel_net_purchases_mtd": 49706.55,
+      "excel_read_at": "2026-09-26T06:14:30.925Z",
+      "vendor_remain_method": "latest DLY; remaining = month budget - spent",
+      "vendor_remain_at": "2026-09-26T06:14:30.925Z",
+      "dly_majors_mtd": 41900.35,
+      "excel_minus_dly_majors": 10058.41
+    },
+    "42282": {
+      "store_id": "42282",
+      "store": "Oakey Las Vegas Blvd",
+      "mix_basis_month": "2026-08",
+      "mix_pct": {
+        "7UP": 0.026748,
+        "Bimbo": 0.01007,
+        "Core-Mark": 0.760854,
+        "Coke": 0.033482,
+        "Frito Lay": 0.018677,
+        "Nevada Beverage": 0.06326,
+        "Pepsi": 0.05872,
+        "Red Bull": 0.028189
+      },
+      "top_vendors": [
+        {
+          "vendor": "Core-Mark",
+          "spend": 14738.65,
+          "pct": 0.760855
+        },
+        {
+          "vendor": "Nevada Beverage",
+          "spend": 1225.42,
+          "pct": 0.06326
+        },
+        {
+          "vendor": "Pepsi",
+          "spend": 1137.47,
+          "pct": 0.05872
+        },
+        {
+          "vendor": "Coke",
+          "spend": 648.58,
+          "pct": 0.033482
+        },
+        {
+          "vendor": "Red Bull",
+          "spend": 546.06,
+          "pct": 0.028189
+        },
+        {
+          "vendor": "7UP",
+          "spend": 518.15,
+          "pct": 0.026748
+        },
+        {
+          "vendor": "Frito Lay",
+          "spend": 361.79,
+          "pct": 0.018677
+        },
+        {
+          "vendor": "Bimbo",
+          "spend": 195.06,
+          "pct": 0.01007
+        }
+      ],
+      "month_purchase_budget": 21624.94,
+      "annual_purchase_budget": 259499.28,
+      "required_spend_month": {
+        "7UP": 578.42,
+        "Bimbo": 217.76,
+        "Core-Mark": 16453.42,
+        "Coke": 724.05,
+        "Frito Lay": 403.89,
+        "Nevada Beverage": 1367.99,
+        "Pepsi": 1269.82,
+        "Red Bull": 609.59
+      },
+      "required_spend_annual": {
+        "7UP": 6941.09,
+        "Bimbo": 2613.16,
+        "Core-Mark": 197441.32,
+        "Coke": 8688.55,
+        "Frito Lay": 4846.67,
+        "Nevada Beverage": 16415.92,
+        "Pepsi": 15237.8,
+        "Red Bull": 7315.03
+      },
+      "mtd_month": "2026-09",
+      "mtd_spend": 21536.33,
+      "mtd_total": 21536.33,
+      "remaining_month": 88.61,
+      "vendors_ranked": [
+        {
+          "vendor": "Core-Mark",
+          "mix_pct": 0.760854,
+          "budget_month": 16453.42,
+          "spent_mtd": 15694.92,
+          "remaining": 758.5,
+          "actual_spent": 15694.92
+        },
+        {
+          "vendor": "Nevada Beverage",
+          "mix_pct": 0.06326,
+          "budget_month": 1367.99,
+          "spent_mtd": 361.89,
+          "remaining": 1006.1,
+          "actual_spent": 361.89
+        },
+        {
+          "vendor": "Pepsi",
+          "mix_pct": 0.05872,
+          "budget_month": 1269.82,
+          "spent_mtd": 1325.43,
+          "remaining": -55.61,
+          "actual_spent": 1325.43
+        },
+        {
+          "vendor": "Coke",
+          "mix_pct": 0.033482,
+          "budget_month": 724.05,
+          "spent_mtd": 1253.9,
+          "remaining": -529.85,
+          "actual_spent": 1253.9
+        },
+        {
+          "vendor": "Red Bull",
+          "mix_pct": 0.028189,
+          "budget_month": 609.59,
+          "spent_mtd": 92.95,
+          "remaining": 516.64,
+          "actual_spent": 92.95
+        },
+        {
+          "vendor": "7UP",
+          "mix_pct": 0.026748,
+          "budget_month": 578.42,
+          "spent_mtd": 208.67,
+          "remaining": 369.75,
+          "actual_spent": 208.67
+        },
+        {
+          "vendor": "Frito Lay",
+          "mix_pct": 0.018677,
+          "budget_month": 403.89,
+          "spent_mtd": 693.43,
+          "remaining": -289.54,
+          "actual_spent": 693.43
+        },
+        {
+          "vendor": "Bimbo",
+          "mix_pct": 0.01007,
+          "budget_month": 217.76,
+          "spent_mtd": 117.98,
+          "remaining": 99.78,
+          "actual_spent": 117.98
+        },
+        {
+          "vendor": "Other (Excel−majors)",
+          "mix_pct": 0,
+          "budget_month": 0,
+          "spent_mtd": 1787.16,
+          "remaining": -1787.16,
+          "actual_spent": 1787.16
+        }
+      ],
+      "eom_sales_estimate": 36041.57,
+      "purchase_budget_basis": "60% of $36,042 EOM sales estimate (MTD run-rate × 30/19; Mina ArcoDb method 2026-09-20)",
+      "month_remaining_total": 88.61,
+      "spend_pin": "2026-09-23",
+      "spend_source": "September DLY invoices through 2026-09-23 (fuel and lottery left out)",
+      "excel_net_purchases_mtd": 21536.33,
+      "excel_read_at": "2026-09-26T06:14:30.925Z",
+      "vendor_remain_method": "latest DLY; remaining = month budget - spent",
+      "vendor_remain_at": "2026-09-26T06:14:30.925Z",
+      "dly_majors_mtd": 19749.17,
+      "excel_minus_dly_majors": 4398.52
+    },
+    "42352": {
+      "store_id": "42352",
+      "store": "Arco Db",
+      "mix_basis_month": "2026-08",
+      "mix_pct": {
+        "7UP": 0.019838,
+        "Bimbo": 0.011592,
+        "Core-Mark": 0.505112,
+        "Coke": 0.085068,
+        "Frito Lay": 0.062794,
+        "Harbor": 0.176099,
+        "Pepsi": 0.102548,
+        "Red Bull": 0.036949
+      },
+      "top_vendors": [
+        {
+          "vendor": "Core-Mark",
+          "spend": 39013.33,
+          "pct": 0.505112
+        },
+        {
+          "vendor": "Harbor",
+          "spend": 13601.33,
+          "pct": 0.176099
+        },
+        {
+          "vendor": "Pepsi",
+          "spend": 7920.48,
+          "pct": 0.102548
+        },
+        {
+          "vendor": "Coke",
+          "spend": 6570.42,
+          "pct": 0.085068
+        },
+        {
+          "vendor": "Frito Lay",
+          "spend": 4850.04,
+          "pct": 0.062794
+        },
+        {
+          "vendor": "Red Bull",
+          "spend": 2853.79,
+          "pct": 0.036949
+        },
+        {
+          "vendor": "7UP",
+          "spend": 1532.24,
+          "pct": 0.019838
+        },
+        {
+          "vendor": "Bimbo",
+          "spend": 895.3,
+          "pct": 0.011592
+        }
+      ],
+      "month_purchase_budget": 71400,
+      "annual_purchase_budget": 856800,
+      "required_spend_month": {
+        "7UP": 1416.43,
+        "Bimbo": 827.67,
+        "Core-Mark": 36065,
+        "Coke": 6073.86,
+        "Frito Lay": 4483.49,
+        "Harbor": 12573.47,
+        "Pepsi": 7321.93,
+        "Red Bull": 2638.16
+      },
+      "required_spend_annual": {
+        "7UP": 16997.2,
+        "Bimbo": 9932.03,
+        "Core-Mark": 432779.96,
+        "Coke": 72886.26,
+        "Frito Lay": 53801.9,
+        "Harbor": 150881.62,
+        "Pepsi": 87863.13,
+        "Red Bull": 31657.9
+      },
+      "mtd_month": "2026-09",
+      "mtd_spend": 76461.98,
+      "mtd_total": 76461.98,
+      "remaining_month": -5061.98,
+      "vendors_ranked": [
+        {
+          "vendor": "Core-Mark",
+          "mix_pct": 0.505112,
+          "budget_month": 36065,
+          "spent_mtd": 29205.68,
+          "remaining": 6859.32,
+          "actual_spent": 29205.68
+        },
+        {
+          "vendor": "Harbor",
+          "mix_pct": 0.176099,
+          "budget_month": 12573.47,
+          "spent_mtd": 10248.24,
+          "remaining": 2325.23,
+          "actual_spent": 10248.24
+        },
+        {
+          "vendor": "Pepsi",
+          "mix_pct": 0.102548,
+          "budget_month": 7321.93,
+          "spent_mtd": 5744.63,
+          "remaining": 1577.3,
+          "actual_spent": 5744.63
+        },
+        {
+          "vendor": "Coke",
+          "mix_pct": 0.085068,
+          "budget_month": 6073.86,
+          "spent_mtd": 6539.47,
+          "remaining": -465.61,
+          "actual_spent": 6539.47
+        },
+        {
+          "vendor": "Frito Lay",
+          "mix_pct": 0.062794,
+          "budget_month": 4483.49,
+          "spent_mtd": 3334.06,
+          "remaining": 1149.43,
+          "actual_spent": 3334.06
+        },
+        {
+          "vendor": "Red Bull",
+          "mix_pct": 0.036949,
+          "budget_month": 2638.16,
+          "spent_mtd": 2170.1,
+          "remaining": 468.06,
+          "actual_spent": 2170.1
+        },
+        {
+          "vendor": "7UP",
+          "mix_pct": 0.019838,
+          "budget_month": 1416.43,
+          "spent_mtd": 2467.57,
+          "remaining": -1051.14,
+          "actual_spent": 2467.57
+        },
+        {
+          "vendor": "Bimbo",
+          "mix_pct": 0.011592,
+          "budget_month": 827.67,
+          "spent_mtd": 677.25,
+          "remaining": 150.42,
+          "actual_spent": 677.25
+        },
+        {
+          "vendor": "Other (Excel−majors)",
+          "mix_pct": 0,
+          "budget_month": 0,
+          "spent_mtd": 16074.98,
+          "remaining": -16074.98,
+          "actual_spent": 16074.98
+        }
+      ],
+      "month_remaining_total": -5061.98,
+      "purchase_budget_basis": "60% of $119,000 EOM sales estimate (MTD run-rate × 30/19; Mina ArcoDb method 2026-09-20)",
+      "eom_sales_estimate": 119000,
+      "spend_pin": "2026-09-20",
+      "spend_source": "September DLY invoices through 2026-09-20 (fuel and lottery left out)",
+      "excel_net_purchases_mtd": 76461.98,
+      "excel_read_at": "2026-09-26T06:14:30.925Z",
+      "vendor_remain_method": "latest DLY; remaining = month budget - spent",
+      "vendor_remain_at": "2026-09-26T06:14:30.925Z",
+      "dly_majors_mtd": 60387,
+      "excel_minus_dly_majors": 820.21
+    },
+    "42359": {
+      "store_id": "42359",
+      "store": "Paradise",
+      "mix_basis_month": "2026-08",
+      "mix_pct": {},
+      "top_vendors": [],
+      "month_purchase_budget": 0,
+      "annual_purchase_budget": 0,
+      "required_spend_month": {},
+      "required_spend_annual": {},
+      "mtd_month": "2026-09",
+      "mtd_spend": {},
+      "mtd_total": 0,
+      "remaining_month": {},
+      "vendors_ranked": [],
+      "eom_sales_estimate": 0,
+      "purchase_budget_basis": "60% of $0 EOM sales estimate (MTD run-rate × 30/19; Mina ArcoDb method 2026-09-20)",
+      "month_remaining_total": 0
+    },
+    "42399": {
+      "store_id": "42399",
+      "store": "Garden Grove",
+      "mix_basis_month": "2026-08",
+      "mix_pct": {
+        "Straub": 0.116541,
+        "Core-Mark": 0.245909,
+        "Coke": 0.27556,
+        "Pepsi": 0.220842,
+        "Red Bull": 0.141147,
+        "Bimbo": 0,
+        "Frito Lay": 0,
+        "Harbor": 0
+      },
+      "top_vendors": [
+        {
+          "vendor": "Coke",
+          "spend": 3186.42,
+          "pct": 0.27556
+        },
+        {
+          "vendor": "Core-Mark",
+          "spend": 2843.56,
+          "pct": 0.245909
+        },
+        {
+          "vendor": "Pepsi",
+          "spend": 2553.7,
+          "pct": 0.220842
+        },
+        {
+          "vendor": "Red Bull",
+          "spend": 1632.15,
+          "pct": 0.141147
+        },
+        {
+          "vendor": "Straub",
+          "spend": 1347.62,
+          "pct": 0.116541
+        }
+      ],
+      "month_purchase_budget": 71612.09,
+      "annual_purchase_budget": 859345.08,
+      "required_spend_month": {
+        "Straub": 8345.75,
+        "Core-Mark": 17610.08,
+        "Coke": 19733.45,
+        "Pepsi": 15814.97,
+        "Red Bull": 10107.84,
+        "Bimbo": 0,
+        "Frito Lay": 0,
+        "Harbor": 0
+      },
+      "required_spend_annual": {
+        "Straub": 100148.93,
+        "Core-Mark": 211320.69,
+        "Coke": 236801.13,
+        "Pepsi": 189779.49,
+        "Red Bull": 121293.98
+      },
+      "mtd_month": "2026-09",
+      "mtd_spend": 73941.04,
+      "mtd_total": 73941.04,
+      "remaining_month": -2328.95,
+      "vendors_ranked": [
+        {
+          "vendor": "Coke",
+          "mix_pct": 0.27556,
+          "budget_month": 19733.45,
+          "spent_mtd": 790.31,
+          "remaining": 18943.14,
+          "actual_spent": 790.31
+        },
+        {
+          "vendor": "Core-Mark",
+          "mix_pct": 0.245909,
+          "budget_month": 17610.08,
+          "spent_mtd": 34040.87,
+          "remaining": -16430.79,
+          "actual_spent": 34040.87
+        },
+        {
+          "vendor": "Pepsi",
+          "mix_pct": 0.220842,
+          "budget_month": 15814.97,
+          "spent_mtd": 4789.25,
+          "remaining": 11025.72,
+          "actual_spent": 4789.25
+        },
+        {
+          "vendor": "Red Bull",
+          "mix_pct": 0.141147,
+          "budget_month": 10107.84,
+          "spent_mtd": 2030.81,
+          "remaining": 8077.03,
+          "actual_spent": 2030.81
+        },
+        {
+          "vendor": "Straub",
+          "mix_pct": 0.116541,
+          "budget_month": 8345.75,
+          "spent_mtd": 1407.41,
+          "remaining": 6938.34,
+          "actual_spent": 1407.41
+        },
+        {
+          "vendor": "Harbor",
+          "mix_pct": 0,
+          "budget_month": 0,
+          "spent_mtd": 11407.71,
+          "remaining": -11407.71,
+          "actual_spent": 11407.71
+        },
+        {
+          "vendor": "Frito Lay",
+          "mix_pct": 0,
+          "budget_month": 0,
+          "spent_mtd": 4879,
+          "remaining": -4879,
+          "actual_spent": 4879
+        },
+        {
+          "vendor": "Bimbo",
+          "mix_pct": 0,
+          "budget_month": 0,
+          "spent_mtd": 1045.87,
+          "remaining": -1045.87,
+          "actual_spent": 1045.87
+        },
+        {
+          "vendor": "Other (Excel−majors)",
+          "mix_pct": 0,
+          "budget_month": 0,
+          "spent_mtd": 13549.81,
+          "remaining": -13549.81,
+          "actual_spent": 13549.81
+        }
+      ],
+      "eom_sales_estimate": 119353.48,
+      "purchase_budget_basis": "60% of $119,353 EOM sales estimate (MTD run-rate × 30/19; Mina ArcoDb method 2026-09-20)",
+      "month_remaining_total": -2328.95,
+      "spend_pin": "2026-09-23",
+      "spend_source": "September DLY invoices through 2026-09-23 (fuel and lottery left out)",
+      "excel_net_purchases_mtd": 73941.04,
+      "excel_read_at": "2026-09-26T06:14:30.925Z",
+      "vendor_remain_method": "latest DLY; remaining = month budget - spent",
+      "vendor_remain_at": "2026-09-26T06:14:30.925Z",
+      "dly_majors_mtd": 60391.23,
+      "excel_minus_dly_majors": 16192.09
+    },
+    "42438": {
+      "store_id": "42438",
+      "store": "Vista",
+      "mix_basis_month": "2026-08",
+      "mix_pct": {
+        "Bimbo": 0.013791,
+        "Core-Mark": 0.753872,
+        "Coke": 0.044561,
+        "Frito Lay": 0.051538,
+        "Nevada Beverage": 0.036941,
+        "Pepsi": 0.059697,
+        "Red Bull": 0.0396,
+        "7UP": 0
+      },
+      "top_vendors": [
+        {
+          "vendor": "Core-Mark",
+          "spend": 42588.41,
+          "pct": 0.753872
+        },
+        {
+          "vendor": "Pepsi",
+          "spend": 3372.48,
+          "pct": 0.059697
+        },
+        {
+          "vendor": "Frito Lay",
+          "spend": 2911.52,
+          "pct": 0.051538
+        },
+        {
+          "vendor": "Coke",
+          "spend": 2517.37,
+          "pct": 0.044561
+        },
+        {
+          "vendor": "Red Bull",
+          "spend": 2237.09,
+          "pct": 0.0396
+        },
+        {
+          "vendor": "Nevada Beverage",
+          "spend": 2086.89,
+          "pct": 0.036941
+        },
+        {
+          "vendor": "Bimbo",
+          "spend": 779.12,
+          "pct": 0.013791
+        }
+      ],
+      "month_purchase_budget": 50390.48,
+      "annual_purchase_budget": 604685.76,
+      "required_spend_month": {
+        "Bimbo": 694.94,
+        "Core-Mark": 37987.97,
+        "Coke": 2245.45,
+        "Frito Lay": 2597.02,
+        "Nevada Beverage": 1861.47,
+        "Pepsi": 3008.16,
+        "Red Bull": 1995.46,
+        "7UP": 0
+      },
+      "required_spend_annual": {
+        "Bimbo": 8339.22,
+        "Core-Mark": 455855.66,
+        "Coke": 26945.4,
+        "Frito Lay": 31164.29,
+        "Nevada Beverage": 22337.7,
+        "Pepsi": 36097.93,
+        "Red Bull": 23945.56
+      },
+      "mtd_month": "2026-09",
+      "mtd_spend": 56875.83,
+      "mtd_total": 56875.83,
+      "remaining_month": -6485.35,
+      "vendors_ranked": [
+        {
+          "vendor": "Core-Mark",
+          "mix_pct": 0.753872,
+          "budget_month": 37987.97,
+          "spent_mtd": 34627.16,
+          "remaining": 3360.81,
+          "actual_spent": 34627.16
+        },
+        {
+          "vendor": "Pepsi",
+          "mix_pct": 0.059697,
+          "budget_month": 3008.16,
+          "spent_mtd": 2372.21,
+          "remaining": 635.95,
+          "actual_spent": 2372.21
+        },
+        {
+          "vendor": "Frito Lay",
+          "mix_pct": 0.051538,
+          "budget_month": 2597.02,
+          "spent_mtd": 2409.83,
+          "remaining": 187.19,
+          "actual_spent": 2409.83
+        },
+        {
+          "vendor": "Coke",
+          "mix_pct": 0.044561,
+          "budget_month": 2245.45,
+          "spent_mtd": 1945.52,
+          "remaining": 299.93,
+          "actual_spent": 1945.52
+        },
+        {
+          "vendor": "Red Bull",
+          "mix_pct": 0.0396,
+          "budget_month": 1995.46,
+          "spent_mtd": 1581.02,
+          "remaining": 414.44,
+          "actual_spent": 1581.02
+        },
+        {
+          "vendor": "Nevada Beverage",
+          "mix_pct": 0.036941,
+          "budget_month": 1861.47,
+          "spent_mtd": 2946.6,
+          "remaining": -1085.13,
+          "actual_spent": 2946.6
+        },
+        {
+          "vendor": "Bimbo",
+          "mix_pct": 0.013791,
+          "budget_month": 694.94,
+          "spent_mtd": 797.3,
+          "remaining": -102.36,
+          "actual_spent": 797.3
+        },
+        {
+          "vendor": "7UP",
+          "mix_pct": 0,
+          "budget_month": 0,
+          "spent_mtd": 1239.8,
+          "remaining": -1239.8,
+          "actual_spent": 1239.8
+        },
+        {
+          "vendor": "Other (Excel−majors)",
+          "mix_pct": 0,
+          "budget_month": 0,
+          "spent_mtd": 8956.39,
+          "remaining": -8956.39,
+          "actual_spent": 8956.39
+        }
+      ],
+      "eom_sales_estimate": 83984.13,
+      "purchase_budget_basis": "60% of $83,984 EOM sales estimate (MTD run-rate × 30/19; Mina ArcoDb method 2026-09-20)",
+      "month_remaining_total": -6485.35,
+      "spend_pin": "2026-09-23",
+      "spend_source": "September DLY invoices through 2026-09-23 (fuel and lottery left out)",
+      "excel_net_purchases_mtd": 56875.83,
+      "excel_read_at": "2026-09-26T06:14:30.925Z",
+      "vendor_remain_method": "latest DLY; remaining = month budget - spent",
+      "vendor_remain_at": "2026-09-26T06:14:30.925Z",
+      "dly_majors_mtd": 47919.44,
+      "excel_minus_dly_majors": 13259.57
+    },
+    "42439": {
+      "store_id": "42439",
+      "store": "Lamb",
+      "mix_basis_month": "2026-08",
+      "mix_pct": {
+        "7UP": 0.032756,
+        "Bimbo": 0.013974,
+        "Core-Mark": 0.681147,
+        "Coke": 0.066795,
+        "Frito Lay": 0.063598,
+        "Nevada Beverage": 0.027861,
+        "Pepsi": 0.074086,
+        "Red Bull": 0.039783
+      },
+      "top_vendors": [
+        {
+          "vendor": "Core-Mark",
+          "spend": 30547.2,
+          "pct": 0.681147
+        },
+        {
+          "vendor": "Pepsi",
+          "spend": 3322.51,
+          "pct": 0.074086
+        },
+        {
+          "vendor": "Coke",
+          "spend": 2995.53,
+          "pct": 0.066795
+        },
+        {
+          "vendor": "Frito Lay",
+          "spend": 2852.16,
+          "pct": 0.063598
+        },
+        {
+          "vendor": "Red Bull",
+          "spend": 1784.13,
+          "pct": 0.039783
+        },
+        {
+          "vendor": "7UP",
+          "spend": 1469.01,
+          "pct": 0.032756
+        },
+        {
+          "vendor": "Nevada Beverage",
+          "spend": 1249.47,
+          "pct": 0.027861
+        },
+        {
+          "vendor": "Bimbo",
+          "spend": 626.69,
+          "pct": 0.013974
+        }
+      ],
+      "month_purchase_budget": 51915.21,
+      "annual_purchase_budget": 622982.52,
+      "required_spend_month": {
+        "7UP": 1700.53,
+        "Bimbo": 725.46,
+        "Core-Mark": 35361.89,
+        "Coke": 3467.68,
+        "Frito Lay": 3301.7,
+        "Nevada Beverage": 1446.41,
+        "Pepsi": 3846.19,
+        "Red Bull": 2065.34
+      },
+      "required_spend_annual": {
+        "7UP": 20406.42,
+        "Bimbo": 8705.56,
+        "Core-Mark": 424342.67,
+        "Coke": 41612.12,
+        "Frito Lay": 39620.44,
+        "Nevada Beverage": 17356.92,
+        "Pepsi": 46154.28,
+        "Red Bull": 24784.11
+      },
+      "mtd_month": "2026-09",
+      "mtd_spend": 57506.52,
+      "mtd_total": 57506.52,
+      "remaining_month": -5591.31,
+      "vendors_ranked": [
+        {
+          "vendor": "Core-Mark",
+          "mix_pct": 0.681147,
+          "budget_month": 35361.89,
+          "spent_mtd": 30094.15,
+          "remaining": 5267.74,
+          "actual_spent": 30094.15
+        },
+        {
+          "vendor": "Pepsi",
+          "mix_pct": 0.074086,
+          "budget_month": 3846.19,
+          "spent_mtd": 3526.81,
+          "remaining": 319.38,
+          "actual_spent": 3526.81
+        },
+        {
+          "vendor": "Coke",
+          "mix_pct": 0.066795,
+          "budget_month": 3467.68,
+          "spent_mtd": 5081.74,
+          "remaining": -1614.06,
+          "actual_spent": 5081.74
+        },
+        {
+          "vendor": "Frito Lay",
+          "mix_pct": 0.063598,
+          "budget_month": 3301.7,
+          "spent_mtd": 3013.27,
+          "remaining": 288.43,
+          "actual_spent": 3013.27
+        },
+        {
+          "vendor": "Red Bull",
+          "mix_pct": 0.039783,
+          "budget_month": 2065.34,
+          "spent_mtd": 2102.73,
+          "remaining": -37.39,
+          "actual_spent": 2102.73
+        },
+        {
+          "vendor": "7UP",
+          "mix_pct": 0.032756,
+          "budget_month": 1700.53,
+          "spent_mtd": 859.83,
+          "remaining": 840.7,
+          "actual_spent": 859.83
+        },
+        {
+          "vendor": "Nevada Beverage",
+          "mix_pct": 0.027861,
+          "budget_month": 1446.41,
+          "spent_mtd": 2297.58,
+          "remaining": -851.17,
+          "actual_spent": 2297.58
+        },
+        {
+          "vendor": "Bimbo",
+          "mix_pct": 0.013974,
+          "budget_month": 725.46,
+          "spent_mtd": 464.27,
+          "remaining": 261.19,
+          "actual_spent": 464.27
+        },
+        {
+          "vendor": "Other (Excel−majors)",
+          "mix_pct": 0,
+          "budget_month": 0,
+          "spent_mtd": 10066.14,
+          "remaining": -10066.14,
+          "actual_spent": 10066.14
+        }
+      ],
+      "eom_sales_estimate": 86525.35,
+      "purchase_budget_basis": "60% of $86,525 EOM sales estimate (MTD run-rate × 30/19; Mina ArcoDb method 2026-09-20)",
+      "month_remaining_total": -5591.31,
+      "spend_pin": "2026-09-23",
+      "spend_source": "September DLY invoices through 2026-09-23 (fuel and lottery left out)",
+      "excel_net_purchases_mtd": 57506.52,
+      "excel_read_at": "2026-09-26T06:14:30.925Z",
+      "vendor_remain_method": "latest DLY; remaining = month budget - spent",
+      "vendor_remain_at": "2026-09-26T06:14:30.925Z",
+      "dly_majors_mtd": 47440.38,
+      "excel_minus_dly_majors": 17201.59
+    },
+    "42674": {
+      "store_id": "42674",
+      "store": "Tustin",
+      "mix_basis_month": "2026-08",
+      "mix_pct": {
+        "7UP": 0.021123,
+        "Bimbo": 0.010737,
+        "Core-Mark": 0.456212,
+        "Coke": 0.066448,
+        "Frito Lay": 0.030692,
+        "Harbor": 0.282458,
+        "Pepsi": 0.057943,
+        "Red Bull": 0.036356,
+        "Straub": 0.038031
+      },
+      "top_vendors": [
+        {
+          "vendor": "Core-Mark",
+          "spend": 29579.93,
+          "pct": 0.456212
+        },
+        {
+          "vendor": "Harbor",
+          "spend": 18314.04,
+          "pct": 0.282458
+        },
+        {
+          "vendor": "Coke",
+          "spend": 4308.38,
+          "pct": 0.066448
+        },
+        {
+          "vendor": "Pepsi",
+          "spend": 3756.89,
+          "pct": 0.057943
+        },
+        {
+          "vendor": "Straub",
+          "spend": 2465.84,
+          "pct": 0.038031
+        },
+        {
+          "vendor": "Red Bull",
+          "spend": 2357.26,
+          "pct": 0.036356
+        },
+        {
+          "vendor": "Frito Lay",
+          "spend": 1990.03,
+          "pct": 0.030692
+        },
+        {
+          "vendor": "7UP",
+          "spend": 1369.57,
+          "pct": 0.021123
+        },
+        {
+          "vendor": "Bimbo",
+          "spend": 696.14,
+          "pct": 0.010737
+        }
+      ],
+      "month_purchase_budget": 58025.99,
+      "annual_purchase_budget": 696311.88,
+      "required_spend_month": {
+        "7UP": 1225.68,
+        "Bimbo": 623.03,
+        "Core-Mark": 26472.15,
+        "Coke": 3855.71,
+        "Frito Lay": 1780.93,
+        "Harbor": 16389.91,
+        "Pepsi": 3362.2,
+        "Red Bull": 2109.59,
+        "Straub": 2206.79
+      },
+      "required_spend_annual": {
+        "7UP": 14708.2,
+        "Bimbo": 7476.3,
+        "Core-Mark": 317665.84,
+        "Coke": 46268.53,
+        "Frito Lay": 21371.2,
+        "Harbor": 196678.86,
+        "Pepsi": 40346.4,
+        "Red Bull": 25315.11,
+        "Straub": 26481.44
+      },
+      "mtd_month": "2026-09",
+      "mtd_spend": 56967.73,
+      "mtd_total": 56967.73,
+      "remaining_month": 1058.26,
+      "vendors_ranked": [
+        {
+          "vendor": "Core-Mark",
+          "mix_pct": 0.456212,
+          "budget_month": 26472.15,
+          "spent_mtd": 24880.17,
+          "remaining": 1591.98,
+          "actual_spent": 24880.17
+        },
+        {
+          "vendor": "Harbor",
+          "mix_pct": 0.282458,
+          "budget_month": 16389.91,
+          "spent_mtd": 9942.49,
+          "remaining": 6447.42,
+          "actual_spent": 9942.49
+        },
+        {
+          "vendor": "Coke",
+          "mix_pct": 0.066448,
+          "budget_month": 3855.71,
+          "spent_mtd": 1337.7,
+          "remaining": 2518.01,
+          "actual_spent": 1337.7
+        },
+        {
+          "vendor": "Pepsi",
+          "mix_pct": 0.057943,
+          "budget_month": 3362.2,
+          "spent_mtd": 2484.12,
+          "remaining": 878.08,
+          "actual_spent": 2484.12
+        },
+        {
+          "vendor": "Straub",
+          "mix_pct": 0.038031,
+          "budget_month": 2206.79,
+          "spent_mtd": 2898.3,
+          "remaining": -691.51,
+          "actual_spent": 2898.3
+        },
+        {
+          "vendor": "Red Bull",
+          "mix_pct": 0.036356,
+          "budget_month": 2109.59,
+          "spent_mtd": 395.37,
+          "remaining": 1714.22,
+          "actual_spent": 395.37
+        },
+        {
+          "vendor": "Frito Lay",
+          "mix_pct": 0.030692,
+          "budget_month": 1780.93,
+          "spent_mtd": 1945.09,
+          "remaining": -164.16,
+          "actual_spent": 1945.09
+        },
+        {
+          "vendor": "7UP",
+          "mix_pct": 0.021123,
+          "budget_month": 1225.68,
+          "spent_mtd": 0,
+          "remaining": 1225.68,
+          "actual_spent": 0
+        },
+        {
+          "vendor": "Bimbo",
+          "mix_pct": 0.010737,
+          "budget_month": 623.03,
+          "spent_mtd": 783.43,
+          "remaining": -160.4,
+          "actual_spent": 783.43
+        },
+        {
+          "vendor": "Other (Excel−majors)",
+          "mix_pct": 0,
+          "budget_month": 0,
+          "spent_mtd": 12301.06,
+          "remaining": -12301.06,
+          "actual_spent": 12301.06
+        }
+      ],
+      "eom_sales_estimate": 96709.99,
+      "purchase_budget_basis": "60% of $96,710 EOM sales estimate (MTD run-rate × 30/19; Mina ArcoDb method 2026-09-20)",
+      "month_remaining_total": 1058.26,
+      "spend_pin": "2026-09-25",
+      "spend_source": "Tustin Daily.xlsx September 2026 Net Purchases F40, vendor split from 2026-09-21 DLY",
+      "excel_net_purchases_mtd": 56967.73,
+      "excel_read_at": "2026-09-26T06:14:30.925Z",
+      "vendor_remain_method": "latest DLY; remaining = month budget - spent",
+      "vendor_remain_at": "2026-09-26T06:14:30.925Z",
+      "dly_majors_mtd": 44666.67,
+      "excel_minus_dly_majors": 43405.49
+    }
+  }
+}
