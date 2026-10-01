@@ -1,0 +1,68 @@
+{
+  "stationId": "42279",
+  "client": "Flamingo (Koval)",
+  "date": "2026-09-28",
+  "dateLabel": "September 28, 2026",
+  "category": "Cigarettes",
+  "heading": "Count written September 28, 2026. On that date, S2K quantity on hand was set to those counted packs (SKU Inventory CIG COUNT 09282026, transaction 274158, plus supplement CIG COUNT 09282026 B, transaction 274163). The three-page scan is missing the printed grid for rows 1–33; those counts were taken from the handwriting below the grid on page 3. American Spirit Turquoise is included. Row 57 (Marlboro Cowboy Menthol Box) was marked “?” and was not posted.",
+  "summary": "The actual count is $11,991.63 for 1,211 packs on 100 lines. Minus is $646.65, where the book is above the count (66 packs). Plus is $1,114.16, where the count is above the book (115 packs). Overall is positive $467.51. The first S2K post covered the handwritten grid on scan pages 1–2 and rows 106–107 (74 lines). The supplement posted rows 1–33 from the below-grid list and margin corrections on Marlboro Special Select Black/Green and two Pall Mall lines. Crown Blue 100, Winston margin lines, and a few ambiguous margin names were skipped because they do not map cleanly to one sheet row. Those 100 lines now have quantity on hand equal to the physical count.",
+  "count": {
+    "actualPacks": 1211,
+    "actualCost": 11991.63,
+    "minusPacks": 66,
+    "minusCost": 646.65,
+    "plusPacks": 115,
+    "plusCost": 1114.16,
+    "overall": 467.51
+  },
+  "files": [
+    {
+      "group": "Scans",
+      "label": "Scan page 1",
+      "note": "Handwritten quantity, September 28 (grid rows 70–105)",
+      "href": "/inventory/42279/2026-09-28/scan-1.pdf"
+    },
+    {
+      "group": "Scans",
+      "label": "Scan page 2",
+      "note": "Handwritten quantity, September 28 (grid rows 34–69)",
+      "href": "/inventory/42279/2026-09-28/scan-2.pdf"
+    },
+    {
+      "group": "Scans",
+      "label": "Scan page 3",
+      "note": "Handwritten quantity, rows 106–107 and counts written below the grid",
+      "href": "/inventory/42279/2026-09-28/scan-3.pdf"
+    },
+    {
+      "group": "Scans",
+      "label": "Count sheet (full PDF)",
+      "note": "Original emailed count sheet attachment, September 28",
+      "href": "/inventory/42279/2026-09-28/count-sheet.pdf"
+    },
+    {
+      "group": "S2K quantity on hand",
+      "label": "Packs, department 200",
+      "note": "S2K SKU Sales PDF from before the quantity-on-hand change, August 1 through September 28",
+      "href": "/inventory/42279/2026-09-28/qoh-packs.pdf"
+    },
+    {
+      "group": "S2K quantity on hand",
+      "label": "Cartons, department 281",
+      "note": "S2K SKU Sales PDF from before the quantity-on-hand change, August 1 through September 28",
+      "href": "/inventory/42279/2026-09-28/qoh-cartons.pdf"
+    },
+    {
+      "group": "S2K quantity on hand",
+      "label": "Quantity on hand change",
+      "note": "SKU Inventory counted lines, 1,211 packs total. Primary transaction 274158; supplement 274163.",
+      "href": "/inventory/42279/2026-09-28/s2k-change.pdf"
+    },
+    {
+      "group": "Count",
+      "label": "Cigarette count",
+      "note": "Actual cost, then minus, then plus",
+      "href": "/inventory/42279/2026-09-28/count.pdf"
+    }
+  ]
+}
