@@ -5,6 +5,8 @@ Command Center **category YoY / department purchase vs sales** reads `public/dat
 
 **Do not use category purchase totals for margin decisions when `deptPurchFeedReliable` is false** — use **`storeDailySalesMtd` / `storeDailyPurchMtd`** on the same store object in `command-category-yoy.json`.
 
+**Live books through 2026-09-28** (09/29 daily not posted yet — see `UPDATES-2026-09-29.md`).
+
 ## Per-store status (Sep MTD through 2026-09-28, live audit)
 
 | Store | ID | Dept category purch MTD | Daily purch MTD | Feed |
