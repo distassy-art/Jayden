@@ -1,0 +1,26 @@
+{
+  "description": "S2K clients outside the 14-store core set.",
+  "stores": [
+    {
+      "id": "42359",
+      "name": "Paradise",
+      "daily_workbook": "Paradise Daily.xlsx",
+      "onedrive_folder": "Clients/BIG DADDY/42359 (Paradise)",
+      "daily_summary_subfolder": "{month}/Daily Summary",
+      "s2k_pdf_subdir": "42359_Pa",
+      "publish_to_site": true,
+      "s2k_browser": "microsoft-edge",
+      "s2k_station_id": "42073",
+      "notes": "Edge-only login (distassy@outlook.com). Do not use requests/Chrome UA — S2K returns 502. Pull via scripts/pull_paradise_s2k_edge.py."
+    },
+    {
+      "id": "42642",
+      "name": "La Mesa",
+      "daily_workbook": "La Mesa Daily.xlsx",
+      "onedrive_folder": "Clients/42642 (La Mesa)",
+      "s2k_pdf_subdir": "42642_LM",
+      "publish_to_site": false,
+      "notes": "OneDrive Excel only; not on public site."
+    }
+  ]
+}
