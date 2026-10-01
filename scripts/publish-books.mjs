@@ -45,13 +45,16 @@ async function readInput() {
 }
 
 async function api(path, { method = "GET", body } = {}) {
+  const bearer = process.env.SS_SESSION_BEARER || process.env.SS_BEARER || "";
+  const headers = {
+    "Content-Type": "application/json",
+    "x-ss-email": ADMIN.email,
+    "x-ss-role": ADMIN.role,
+  };
+  if (bearer) headers.Authorization = `Bearer ${bearer}`;
   const res = await fetch(SITE + path, {
     method,
-    headers: {
-      "Content-Type": "application/json",
-      "x-ss-email": ADMIN.email,
-      "x-ss-role": ADMIN.role,
-    },
+    headers,
     body: body ? JSON.stringify(body) : undefined,
   });
   const text = await res.text();
