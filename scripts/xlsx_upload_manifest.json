@@ -1,0 +1,827 @@
+[
+  {
+    "local": "/workspace/reports/Clients/42004 (Arco Placentia)/Vendor Purchases/42004arcoplacentia_012026_vendor_spend.xlsx",
+    "od_path": "Clients/42004 (Arco Placentia)/Vendor Purchases/42004arcoplacentia_012026_vendor_spend.xlsx",
+    "size": 6973
+  },
+  {
+    "local": "/workspace/reports/Clients/42004 (Arco Placentia)/Vendor Purchases/42004arcoplacentia_022026_vendor_spend.xlsx",
+    "od_path": "Clients/42004 (Arco Placentia)/Vendor Purchases/42004arcoplacentia_022026_vendor_spend.xlsx",
+    "size": 6780
+  },
+  {
+    "local": "/workspace/reports/Clients/42004 (Arco Placentia)/Vendor Purchases/42004arcoplacentia_032026_vendor_spend.xlsx",
+    "od_path": "Clients/42004 (Arco Placentia)/Vendor Purchases/42004arcoplacentia_032026_vendor_spend.xlsx",
+    "size": 6928
+  },
+  {
+    "local": "/workspace/reports/Clients/42004 (Arco Placentia)/Vendor Purchases/42004arcoplacentia_042026_vendor_spend.xlsx",
+    "od_path": "Clients/42004 (Arco Placentia)/Vendor Purchases/42004arcoplacentia_042026_vendor_spend.xlsx",
+    "size": 6699
+  },
+  {
+    "local": "/workspace/reports/Clients/42004 (Arco Placentia)/Vendor Purchases/42004arcoplacentia_052026_vendor_spend.xlsx",
+    "od_path": "Clients/42004 (Arco Placentia)/Vendor Purchases/42004arcoplacentia_052026_vendor_spend.xlsx",
+    "size": 6591
+  },
+  {
+    "local": "/workspace/reports/Clients/42004 (Arco Placentia)/Vendor Purchases/42004arcoplacentia_062026_vendor_spend.xlsx",
+    "od_path": "Clients/42004 (Arco Placentia)/Vendor Purchases/42004arcoplacentia_062026_vendor_spend.xlsx",
+    "size": 6648
+  },
+  {
+    "local": "/workspace/reports/Clients/42004 (Arco Placentia)/Vendor Purchases/42004arcoplacentia_072026_vendor_spend.xlsx",
+    "od_path": "Clients/42004 (Arco Placentia)/Vendor Purchases/42004arcoplacentia_072026_vendor_spend.xlsx",
+    "size": 6739
+  },
+  {
+    "local": "/workspace/reports/Clients/42004 (Arco Placentia)/Vendor Purchases/42004arcoplacentia_082026_vendor_spend.xlsx",
+    "od_path": "Clients/42004 (Arco Placentia)/Vendor Purchases/42004arcoplacentia_082026_vendor_spend.xlsx",
+    "size": 6736
+  },
+  {
+    "local": "/workspace/reports/Clients/42004 (Arco Placentia)/Vendor Purchases/42004arcoplacentia_092026_vendor_spend.xlsx",
+    "od_path": "Clients/42004 (Arco Placentia)/Vendor Purchases/42004arcoplacentia_092026_vendor_spend.xlsx",
+    "size": 5827
+  },
+  {
+    "local": "/workspace/reports/Clients/42004 (Arco Placentia)/Vendor Purchases/42004arcoplacentia_2026_Jan-Aug_vendor_spend_summary.xlsx",
+    "od_path": "Clients/42004 (Arco Placentia)/Vendor Purchases/42004arcoplacentia_2026_Jan-Aug_vendor_spend_summary.xlsx",
+    "size": 25796
+  },
+  {
+    "local": "/workspace/reports/Clients/42004 (Arco Placentia)/Vendor Purchases/42004arcoplacentia_2026_Jan-Sep_vendor_spend_summary.xlsx",
+    "od_path": "Clients/42004 (Arco Placentia)/Vendor Purchases/42004arcoplacentia_2026_Jan-Sep_vendor_spend_summary.xlsx",
+    "size": 48396
+  },
+  {
+    "local": "/workspace/reports/Clients/42179 (Arco HB)/Vendor Purchases/42179arcohb_012026_vendor_spend.xlsx",
+    "od_path": "Clients/42179 (Arco HB)/Vendor Purchases/42179arcohb_012026_vendor_spend.xlsx",
+    "size": 6704
+  },
+  {
+    "local": "/workspace/reports/Clients/42179 (Arco HB)/Vendor Purchases/42179arcohb_022026_vendor_spend.xlsx",
+    "od_path": "Clients/42179 (Arco HB)/Vendor Purchases/42179arcohb_022026_vendor_spend.xlsx",
+    "size": 6894
+  },
+  {
+    "local": "/workspace/reports/Clients/42179 (Arco HB)/Vendor Purchases/42179arcohb_032026_vendor_spend.xlsx",
+    "od_path": "Clients/42179 (Arco HB)/Vendor Purchases/42179arcohb_032026_vendor_spend.xlsx",
+    "size": 6678
+  },
+  {
+    "local": "/workspace/reports/Clients/42179 (Arco HB)/Vendor Purchases/42179arcohb_042026_vendor_spend.xlsx",
+    "od_path": "Clients/42179 (Arco HB)/Vendor Purchases/42179arcohb_042026_vendor_spend.xlsx",
+    "size": 6637
+  },
+  {
+    "local": "/workspace/reports/Clients/42179 (Arco HB)/Vendor Purchases/42179arcohb_052026_vendor_spend.xlsx",
+    "od_path": "Clients/42179 (Arco HB)/Vendor Purchases/42179arcohb_052026_vendor_spend.xlsx",
+    "size": 6773
+  },
+  {
+    "local": "/workspace/reports/Clients/42179 (Arco HB)/Vendor Purchases/42179arcohb_062026_vendor_spend.xlsx",
+    "od_path": "Clients/42179 (Arco HB)/Vendor Purchases/42179arcohb_062026_vendor_spend.xlsx",
+    "size": 6773
+  },
+  {
+    "local": "/workspace/reports/Clients/42179 (Arco HB)/Vendor Purchases/42179arcohb_072026_vendor_spend.xlsx",
+    "od_path": "Clients/42179 (Arco HB)/Vendor Purchases/42179arcohb_072026_vendor_spend.xlsx",
+    "size": 6812
+  },
+  {
+    "local": "/workspace/reports/Clients/42179 (Arco HB)/Vendor Purchases/42179arcohb_082026_vendor_spend.xlsx",
+    "od_path": "Clients/42179 (Arco HB)/Vendor Purchases/42179arcohb_082026_vendor_spend.xlsx",
+    "size": 6833
+  },
+  {
+    "local": "/workspace/reports/Clients/42179 (Arco HB)/Vendor Purchases/42179arcohb_092026_vendor_spend.xlsx",
+    "od_path": "Clients/42179 (Arco HB)/Vendor Purchases/42179arcohb_092026_vendor_spend.xlsx",
+    "size": 5840
+  },
+  {
+    "local": "/workspace/reports/Clients/42179 (Arco HB)/Vendor Purchases/42179arcohb_2026_Jan-Aug_vendor_spend_summary.xlsx",
+    "od_path": "Clients/42179 (Arco HB)/Vendor Purchases/42179arcohb_2026_Jan-Aug_vendor_spend_summary.xlsx",
+    "size": 25753
+  },
+  {
+    "local": "/workspace/reports/Clients/42179 (Arco HB)/Vendor Purchases/42179arcohb_2026_Jan-Sep_vendor_spend_summary.xlsx",
+    "od_path": "Clients/42179 (Arco HB)/Vendor Purchases/42179arcohb_2026_Jan-Sep_vendor_spend_summary.xlsx",
+    "size": 48314
+  },
+  {
+    "local": "/workspace/reports/Clients/42352 (Arco Db)/Vendor Purchases/42352arcodb_012026_vendor_spend.xlsx",
+    "od_path": "Clients/42352 (Arco Db)/Vendor Purchases/42352arcodb_012026_vendor_spend.xlsx",
+    "size": 6881
+  },
+  {
+    "local": "/workspace/reports/Clients/42352 (Arco Db)/Vendor Purchases/42352arcodb_022026_vendor_spend.xlsx",
+    "od_path": "Clients/42352 (Arco Db)/Vendor Purchases/42352arcodb_022026_vendor_spend.xlsx",
+    "size": 6936
+  },
+  {
+    "local": "/workspace/reports/Clients/42352 (Arco Db)/Vendor Purchases/42352arcodb_032026_vendor_spend.xlsx",
+    "od_path": "Clients/42352 (Arco Db)/Vendor Purchases/42352arcodb_032026_vendor_spend.xlsx",
+    "size": 7143
+  },
+  {
+    "local": "/workspace/reports/Clients/42352 (Arco Db)/Vendor Purchases/42352arcodb_042026_vendor_spend.xlsx",
+    "od_path": "Clients/42352 (Arco Db)/Vendor Purchases/42352arcodb_042026_vendor_spend.xlsx",
+    "size": 7092
+  },
+  {
+    "local": "/workspace/reports/Clients/42352 (Arco Db)/Vendor Purchases/42352arcodb_052026_vendor_spend.xlsx",
+    "od_path": "Clients/42352 (Arco Db)/Vendor Purchases/42352arcodb_052026_vendor_spend.xlsx",
+    "size": 6858
+  },
+  {
+    "local": "/workspace/reports/Clients/42352 (Arco Db)/Vendor Purchases/42352arcodb_062026_vendor_spend.xlsx",
+    "od_path": "Clients/42352 (Arco Db)/Vendor Purchases/42352arcodb_062026_vendor_spend.xlsx",
+    "size": 7174
+  },
+  {
+    "local": "/workspace/reports/Clients/42352 (Arco Db)/Vendor Purchases/42352arcodb_072026_vendor_spend.xlsx",
+    "od_path": "Clients/42352 (Arco Db)/Vendor Purchases/42352arcodb_072026_vendor_spend.xlsx",
+    "size": 6900
+  },
+  {
+    "local": "/workspace/reports/Clients/42352 (Arco Db)/Vendor Purchases/42352arcodb_082026_vendor_spend.xlsx",
+    "od_path": "Clients/42352 (Arco Db)/Vendor Purchases/42352arcodb_082026_vendor_spend.xlsx",
+    "size": 6909
+  },
+  {
+    "local": "/workspace/reports/Clients/42352 (Arco Db)/Vendor Purchases/42352arcodb_092026_vendor_spend.xlsx",
+    "od_path": "Clients/42352 (Arco Db)/Vendor Purchases/42352arcodb_092026_vendor_spend.xlsx",
+    "size": 5926
+  },
+  {
+    "local": "/workspace/reports/Clients/42352 (Arco Db)/Vendor Purchases/42352arcodb_2026_Jan-Aug_vendor_spend_summary.xlsx",
+    "od_path": "Clients/42352 (Arco Db)/Vendor Purchases/42352arcodb_2026_Jan-Aug_vendor_spend_summary.xlsx",
+    "size": 27890
+  },
+  {
+    "local": "/workspace/reports/Clients/42352 (Arco Db)/Vendor Purchases/42352arcodb_2026_Jan-Sep_vendor_spend_summary.xlsx",
+    "od_path": "Clients/42352 (Arco Db)/Vendor Purchases/42352arcodb_2026_Jan-Sep_vendor_spend_summary.xlsx",
+    "size": 52658
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42021 (Westminster)/Vendor Purchases/42021westminster_012026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42021 (Westminster)/Vendor Purchases/42021westminster_012026_vendor_spend.xlsx",
+    "size": 6996
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42021 (Westminster)/Vendor Purchases/42021westminster_022026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42021 (Westminster)/Vendor Purchases/42021westminster_022026_vendor_spend.xlsx",
+    "size": 7030
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42021 (Westminster)/Vendor Purchases/42021westminster_032026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42021 (Westminster)/Vendor Purchases/42021westminster_032026_vendor_spend.xlsx",
+    "size": 6958
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42021 (Westminster)/Vendor Purchases/42021westminster_042026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42021 (Westminster)/Vendor Purchases/42021westminster_042026_vendor_spend.xlsx",
+    "size": 7182
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42021 (Westminster)/Vendor Purchases/42021westminster_052026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42021 (Westminster)/Vendor Purchases/42021westminster_052026_vendor_spend.xlsx",
+    "size": 7036
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42021 (Westminster)/Vendor Purchases/42021westminster_062026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42021 (Westminster)/Vendor Purchases/42021westminster_062026_vendor_spend.xlsx",
+    "size": 7104
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42021 (Westminster)/Vendor Purchases/42021westminster_072026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42021 (Westminster)/Vendor Purchases/42021westminster_072026_vendor_spend.xlsx",
+    "size": 6844
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42021 (Westminster)/Vendor Purchases/42021westminster_082026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42021 (Westminster)/Vendor Purchases/42021westminster_082026_vendor_spend.xlsx",
+    "size": 7031
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42021 (Westminster)/Vendor Purchases/42021westminster_092026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42021 (Westminster)/Vendor Purchases/42021westminster_092026_vendor_spend.xlsx",
+    "size": 6225
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42021 (Westminster)/Vendor Purchases/42021westminster_2026_Jan-Aug_vendor_spend_summary.xlsx",
+    "od_path": "Clients/BIG DADDY/42021 (Westminster)/Vendor Purchases/42021westminster_2026_Jan-Aug_vendor_spend_summary.xlsx",
+    "size": 28457
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42021 (Westminster)/Vendor Purchases/42021westminster_2026_Jan-Sep_vendor_spend_summary.xlsx",
+    "od_path": "Clients/BIG DADDY/42021 (Westminster)/Vendor Purchases/42021westminster_2026_Jan-Sep_vendor_spend_summary.xlsx",
+    "size": 54105
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42048 (San Diego)/Vendor Purchases/42048sandiego_012026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42048 (San Diego)/Vendor Purchases/42048sandiego_012026_vendor_spend.xlsx",
+    "size": 6946
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42048 (San Diego)/Vendor Purchases/42048sandiego_022026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42048 (San Diego)/Vendor Purchases/42048sandiego_022026_vendor_spend.xlsx",
+    "size": 7159
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42048 (San Diego)/Vendor Purchases/42048sandiego_032026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42048 (San Diego)/Vendor Purchases/42048sandiego_032026_vendor_spend.xlsx",
+    "size": 6956
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42048 (San Diego)/Vendor Purchases/42048sandiego_042026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42048 (San Diego)/Vendor Purchases/42048sandiego_042026_vendor_spend.xlsx",
+    "size": 7266
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42048 (San Diego)/Vendor Purchases/42048sandiego_052026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42048 (San Diego)/Vendor Purchases/42048sandiego_052026_vendor_spend.xlsx",
+    "size": 7096
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42048 (San Diego)/Vendor Purchases/42048sandiego_062026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42048 (San Diego)/Vendor Purchases/42048sandiego_062026_vendor_spend.xlsx",
+    "size": 7108
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42048 (San Diego)/Vendor Purchases/42048sandiego_072026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42048 (San Diego)/Vendor Purchases/42048sandiego_072026_vendor_spend.xlsx",
+    "size": 7054
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42048 (San Diego)/Vendor Purchases/42048sandiego_082026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42048 (San Diego)/Vendor Purchases/42048sandiego_082026_vendor_spend.xlsx",
+    "size": 7209
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42048 (San Diego)/Vendor Purchases/42048sandiego_092026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42048 (San Diego)/Vendor Purchases/42048sandiego_092026_vendor_spend.xlsx",
+    "size": 6331
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42048 (San Diego)/Vendor Purchases/42048sandiego_2026_Jan-Aug_vendor_spend_summary.xlsx",
+    "od_path": "Clients/BIG DADDY/42048 (San Diego)/Vendor Purchases/42048sandiego_2026_Jan-Aug_vendor_spend_summary.xlsx",
+    "size": 29424
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42048 (San Diego)/Vendor Purchases/42048sandiego_2026_Jan-Sep_vendor_spend_summary.xlsx",
+    "od_path": "Clients/BIG DADDY/42048 (San Diego)/Vendor Purchases/42048sandiego_2026_Jan-Sep_vendor_spend_summary.xlsx",
+    "size": 56112
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42098 (Brookhurst 75)/Vendor Purchases/42098brookhurst75_012026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42098 (Brookhurst 75)/Vendor Purchases/42098brookhurst75_012026_vendor_spend.xlsx",
+    "size": 7206
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42098 (Brookhurst 75)/Vendor Purchases/42098brookhurst75_022026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42098 (Brookhurst 75)/Vendor Purchases/42098brookhurst75_022026_vendor_spend.xlsx",
+    "size": 6638
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42098 (Brookhurst 75)/Vendor Purchases/42098brookhurst75_032026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42098 (Brookhurst 75)/Vendor Purchases/42098brookhurst75_032026_vendor_spend.xlsx",
+    "size": 7268
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42098 (Brookhurst 75)/Vendor Purchases/42098brookhurst75_042026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42098 (Brookhurst 75)/Vendor Purchases/42098brookhurst75_042026_vendor_spend.xlsx",
+    "size": 7344
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42098 (Brookhurst 75)/Vendor Purchases/42098brookhurst75_052026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42098 (Brookhurst 75)/Vendor Purchases/42098brookhurst75_052026_vendor_spend.xlsx",
+    "size": 7138
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42098 (Brookhurst 75)/Vendor Purchases/42098brookhurst75_062026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42098 (Brookhurst 75)/Vendor Purchases/42098brookhurst75_062026_vendor_spend.xlsx",
+    "size": 6938
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42098 (Brookhurst 75)/Vendor Purchases/42098brookhurst75_072026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42098 (Brookhurst 75)/Vendor Purchases/42098brookhurst75_072026_vendor_spend.xlsx",
+    "size": 7009
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42098 (Brookhurst 75)/Vendor Purchases/42098brookhurst75_082026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42098 (Brookhurst 75)/Vendor Purchases/42098brookhurst75_082026_vendor_spend.xlsx",
+    "size": 7025
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42098 (Brookhurst 75)/Vendor Purchases/42098brookhurst75_092026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42098 (Brookhurst 75)/Vendor Purchases/42098brookhurst75_092026_vendor_spend.xlsx",
+    "size": 6210
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42098 (Brookhurst 75)/Vendor Purchases/42098brookhurst75_2026_Jan-Aug_vendor_spend_summary.xlsx",
+    "od_path": "Clients/BIG DADDY/42098 (Brookhurst 75)/Vendor Purchases/42098brookhurst75_2026_Jan-Aug_vendor_spend_summary.xlsx",
+    "size": 30073
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42098 (Brookhurst 75)/Vendor Purchases/42098brookhurst75_2026_Jan-Sep_vendor_spend_summary.xlsx",
+    "od_path": "Clients/BIG DADDY/42098 (Brookhurst 75)/Vendor Purchases/42098brookhurst75_2026_Jan-Sep_vendor_spend_summary.xlsx",
+    "size": 57327
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42279 Flamingo (Koval)/Vendor Purchases/42279flamingokoval_012026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42279 Flamingo (Koval)/Vendor Purchases/42279flamingokoval_012026_vendor_spend.xlsx",
+    "size": 7577
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42279 Flamingo (Koval)/Vendor Purchases/42279flamingokoval_022026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42279 Flamingo (Koval)/Vendor Purchases/42279flamingokoval_022026_vendor_spend.xlsx",
+    "size": 6861
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42279 Flamingo (Koval)/Vendor Purchases/42279flamingokoval_032026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42279 Flamingo (Koval)/Vendor Purchases/42279flamingokoval_032026_vendor_spend.xlsx",
+    "size": 7044
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42279 Flamingo (Koval)/Vendor Purchases/42279flamingokoval_042026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42279 Flamingo (Koval)/Vendor Purchases/42279flamingokoval_042026_vendor_spend.xlsx",
+    "size": 7301
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42279 Flamingo (Koval)/Vendor Purchases/42279flamingokoval_052026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42279 Flamingo (Koval)/Vendor Purchases/42279flamingokoval_052026_vendor_spend.xlsx",
+    "size": 6745
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42279 Flamingo (Koval)/Vendor Purchases/42279flamingokoval_062026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42279 Flamingo (Koval)/Vendor Purchases/42279flamingokoval_062026_vendor_spend.xlsx",
+    "size": 6963
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42279 Flamingo (Koval)/Vendor Purchases/42279flamingokoval_072026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42279 Flamingo (Koval)/Vendor Purchases/42279flamingokoval_072026_vendor_spend.xlsx",
+    "size": 7037
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42279 Flamingo (Koval)/Vendor Purchases/42279flamingokoval_082026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42279 Flamingo (Koval)/Vendor Purchases/42279flamingokoval_082026_vendor_spend.xlsx",
+    "size": 6996
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42279 Flamingo (Koval)/Vendor Purchases/42279flamingokoval_092026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42279 Flamingo (Koval)/Vendor Purchases/42279flamingokoval_092026_vendor_spend.xlsx",
+    "size": 6162
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42279 Flamingo (Koval)/Vendor Purchases/42279flamingokoval_2026_Jan-Aug_vendor_spend_summary.xlsx",
+    "od_path": "Clients/BIG DADDY/42279 Flamingo (Koval)/Vendor Purchases/42279flamingokoval_2026_Jan-Aug_vendor_spend_summary.xlsx",
+    "size": 29381
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42279 Flamingo (Koval)/Vendor Purchases/42279flamingokoval_2026_Jan-Sep_vendor_spend_summary.xlsx",
+    "od_path": "Clients/BIG DADDY/42279 Flamingo (Koval)/Vendor Purchases/42279flamingokoval_2026_Jan-Sep_vendor_spend_summary.xlsx",
+    "size": 55920
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42280 (Spring Mtn)/Vendor Purchases/42280springmtn_012026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42280 (Spring Mtn)/Vendor Purchases/42280springmtn_012026_vendor_spend.xlsx",
+    "size": 6960
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42280 (Spring Mtn)/Vendor Purchases/42280springmtn_022026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42280 (Spring Mtn)/Vendor Purchases/42280springmtn_022026_vendor_spend.xlsx",
+    "size": 6803
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42280 (Spring Mtn)/Vendor Purchases/42280springmtn_032026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42280 (Spring Mtn)/Vendor Purchases/42280springmtn_032026_vendor_spend.xlsx",
+    "size": 6908
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42280 (Spring Mtn)/Vendor Purchases/42280springmtn_042026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42280 (Spring Mtn)/Vendor Purchases/42280springmtn_042026_vendor_spend.xlsx",
+    "size": 7054
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42280 (Spring Mtn)/Vendor Purchases/42280springmtn_052026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42280 (Spring Mtn)/Vendor Purchases/42280springmtn_052026_vendor_spend.xlsx",
+    "size": 6819
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42280 (Spring Mtn)/Vendor Purchases/42280springmtn_062026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42280 (Spring Mtn)/Vendor Purchases/42280springmtn_062026_vendor_spend.xlsx",
+    "size": 6830
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42280 (Spring Mtn)/Vendor Purchases/42280springmtn_072026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42280 (Spring Mtn)/Vendor Purchases/42280springmtn_072026_vendor_spend.xlsx",
+    "size": 6946
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42280 (Spring Mtn)/Vendor Purchases/42280springmtn_082026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42280 (Spring Mtn)/Vendor Purchases/42280springmtn_082026_vendor_spend.xlsx",
+    "size": 6721
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42280 (Spring Mtn)/Vendor Purchases/42280springmtn_092026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42280 (Spring Mtn)/Vendor Purchases/42280springmtn_092026_vendor_spend.xlsx",
+    "size": 6119
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42280 (Spring Mtn)/Vendor Purchases/42280springmtn_2026_Jan-Aug_vendor_spend_summary.xlsx",
+    "od_path": "Clients/BIG DADDY/42280 (Spring Mtn)/Vendor Purchases/42280springmtn_2026_Jan-Aug_vendor_spend_summary.xlsx",
+    "size": 27286
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42280 (Spring Mtn)/Vendor Purchases/42280springmtn_2026_Jan-Sep_vendor_spend_summary.xlsx",
+    "od_path": "Clients/BIG DADDY/42280 (Spring Mtn)/Vendor Purchases/42280springmtn_2026_Jan-Sep_vendor_spend_summary.xlsx",
+    "size": 51646
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42281 (Charleston)/Vendor Purchases/42281charleston_012026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42281 (Charleston)/Vendor Purchases/42281charleston_012026_vendor_spend.xlsx",
+    "size": 6649
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42281 (Charleston)/Vendor Purchases/42281charleston_022026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42281 (Charleston)/Vendor Purchases/42281charleston_022026_vendor_spend.xlsx",
+    "size": 6642
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42281 (Charleston)/Vendor Purchases/42281charleston_032026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42281 (Charleston)/Vendor Purchases/42281charleston_032026_vendor_spend.xlsx",
+    "size": 6784
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42281 (Charleston)/Vendor Purchases/42281charleston_042026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42281 (Charleston)/Vendor Purchases/42281charleston_042026_vendor_spend.xlsx",
+    "size": 6544
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42281 (Charleston)/Vendor Purchases/42281charleston_052026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42281 (Charleston)/Vendor Purchases/42281charleston_052026_vendor_spend.xlsx",
+    "size": 6774
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42281 (Charleston)/Vendor Purchases/42281charleston_062026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42281 (Charleston)/Vendor Purchases/42281charleston_062026_vendor_spend.xlsx",
+    "size": 6684
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42281 (Charleston)/Vendor Purchases/42281charleston_072026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42281 (Charleston)/Vendor Purchases/42281charleston_072026_vendor_spend.xlsx",
+    "size": 6799
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42281 (Charleston)/Vendor Purchases/42281charleston_082026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42281 (Charleston)/Vendor Purchases/42281charleston_082026_vendor_spend.xlsx",
+    "size": 6753
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42281 (Charleston)/Vendor Purchases/42281charleston_092026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42281 (Charleston)/Vendor Purchases/42281charleston_092026_vendor_spend.xlsx",
+    "size": 6023
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42281 (Charleston)/Vendor Purchases/42281charleston_2026_Jan-Aug_vendor_spend_summary.xlsx",
+    "od_path": "Clients/BIG DADDY/42281 (Charleston)/Vendor Purchases/42281charleston_2026_Jan-Aug_vendor_spend_summary.xlsx",
+    "size": 25323
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42281 (Charleston)/Vendor Purchases/42281charleston_2026_Jan-Sep_vendor_spend_summary.xlsx",
+    "od_path": "Clients/BIG DADDY/42281 (Charleston)/Vendor Purchases/42281charleston_2026_Jan-Sep_vendor_spend_summary.xlsx",
+    "size": 47620
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42282 (Oakey  Las Vegas Blvd)/Vendor Purchases/42282oakeylasvegasblvd_012026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42282 (Oakey  Las Vegas Blvd)/Vendor Purchases/42282oakeylasvegasblvd_012026_vendor_spend.xlsx",
+    "size": 6706
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42282 (Oakey  Las Vegas Blvd)/Vendor Purchases/42282oakeylasvegasblvd_022026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42282 (Oakey  Las Vegas Blvd)/Vendor Purchases/42282oakeylasvegasblvd_022026_vendor_spend.xlsx",
+    "size": 6717
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42282 (Oakey  Las Vegas Blvd)/Vendor Purchases/42282oakeylasvegasblvd_032026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42282 (Oakey  Las Vegas Blvd)/Vendor Purchases/42282oakeylasvegasblvd_032026_vendor_spend.xlsx",
+    "size": 6956
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42282 (Oakey  Las Vegas Blvd)/Vendor Purchases/42282oakeylasvegasblvd_042026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42282 (Oakey  Las Vegas Blvd)/Vendor Purchases/42282oakeylasvegasblvd_042026_vendor_spend.xlsx",
+    "size": 6850
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42282 (Oakey  Las Vegas Blvd)/Vendor Purchases/42282oakeylasvegasblvd_052026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42282 (Oakey  Las Vegas Blvd)/Vendor Purchases/42282oakeylasvegasblvd_052026_vendor_spend.xlsx",
+    "size": 6622
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42282 (Oakey  Las Vegas Blvd)/Vendor Purchases/42282oakeylasvegasblvd_062026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42282 (Oakey  Las Vegas Blvd)/Vendor Purchases/42282oakeylasvegasblvd_062026_vendor_spend.xlsx",
+    "size": 6536
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42282 (Oakey  Las Vegas Blvd)/Vendor Purchases/42282oakeylasvegasblvd_072026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42282 (Oakey  Las Vegas Blvd)/Vendor Purchases/42282oakeylasvegasblvd_072026_vendor_spend.xlsx",
+    "size": 7044
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42282 (Oakey  Las Vegas Blvd)/Vendor Purchases/42282oakeylasvegasblvd_082026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42282 (Oakey  Las Vegas Blvd)/Vendor Purchases/42282oakeylasvegasblvd_082026_vendor_spend.xlsx",
+    "size": 6698
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42282 (Oakey  Las Vegas Blvd)/Vendor Purchases/42282oakeylasvegasblvd_092026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42282 (Oakey  Las Vegas Blvd)/Vendor Purchases/42282oakeylasvegasblvd_092026_vendor_spend.xlsx",
+    "size": 5649
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42282 (Oakey  Las Vegas Blvd)/Vendor Purchases/42282oakeylasvegasblvd_2026_Jan-Aug_vendor_spend_summary.xlsx",
+    "od_path": "Clients/BIG DADDY/42282 (Oakey  Las Vegas Blvd)/Vendor Purchases/42282oakeylasvegasblvd_2026_Jan-Aug_vendor_spend_summary.xlsx",
+    "size": 26164
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42282 (Oakey  Las Vegas Blvd)/Vendor Purchases/42282oakeylasvegasblvd_2026_Jan-Sep_vendor_spend_summary.xlsx",
+    "od_path": "Clients/BIG DADDY/42282 (Oakey  Las Vegas Blvd)/Vendor Purchases/42282oakeylasvegasblvd_2026_Jan-Sep_vendor_spend_summary.xlsx",
+    "size": 48920
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42399 (Garden Grove)/Vendor Purchases/42399gardengrove_012026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42399 (Garden Grove)/Vendor Purchases/42399gardengrove_012026_vendor_spend.xlsx",
+    "size": 7425
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42399 (Garden Grove)/Vendor Purchases/42399gardengrove_022026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42399 (Garden Grove)/Vendor Purchases/42399gardengrove_022026_vendor_spend.xlsx",
+    "size": 7405
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42399 (Garden Grove)/Vendor Purchases/42399gardengrove_032026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42399 (Garden Grove)/Vendor Purchases/42399gardengrove_032026_vendor_spend.xlsx",
+    "size": 7331
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42399 (Garden Grove)/Vendor Purchases/42399gardengrove_042026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42399 (Garden Grove)/Vendor Purchases/42399gardengrove_042026_vendor_spend.xlsx",
+    "size": 7242
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42399 (Garden Grove)/Vendor Purchases/42399gardengrove_052026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42399 (Garden Grove)/Vendor Purchases/42399gardengrove_052026_vendor_spend.xlsx",
+    "size": 7107
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42399 (Garden Grove)/Vendor Purchases/42399gardengrove_062026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42399 (Garden Grove)/Vendor Purchases/42399gardengrove_062026_vendor_spend.xlsx",
+    "size": 7309
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42399 (Garden Grove)/Vendor Purchases/42399gardengrove_072026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42399 (Garden Grove)/Vendor Purchases/42399gardengrove_072026_vendor_spend.xlsx",
+    "size": 7247
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42399 (Garden Grove)/Vendor Purchases/42399gardengrove_082026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42399 (Garden Grove)/Vendor Purchases/42399gardengrove_082026_vendor_spend.xlsx",
+    "size": 6766
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42399 (Garden Grove)/Vendor Purchases/42399gardengrove_092026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42399 (Garden Grove)/Vendor Purchases/42399gardengrove_092026_vendor_spend.xlsx",
+    "size": 6378
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42399 (Garden Grove)/Vendor Purchases/42399gardengrove_2026_Jan-Aug_vendor_spend_summary.xlsx",
+    "od_path": "Clients/BIG DADDY/42399 (Garden Grove)/Vendor Purchases/42399gardengrove_2026_Jan-Aug_vendor_spend_summary.xlsx",
+    "size": 30652
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42399 (Garden Grove)/Vendor Purchases/42399gardengrove_2026_Jan-Sep_vendor_spend_summary.xlsx",
+    "od_path": "Clients/BIG DADDY/42399 (Garden Grove)/Vendor Purchases/42399gardengrove_2026_Jan-Sep_vendor_spend_summary.xlsx",
+    "size": 58629
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42438 (Vista)/Vendor Purchases/42438vista_012026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42438 (Vista)/Vendor Purchases/42438vista_012026_vendor_spend.xlsx",
+    "size": 7015
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42438 (Vista)/Vendor Purchases/42438vista_022026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42438 (Vista)/Vendor Purchases/42438vista_022026_vendor_spend.xlsx",
+    "size": 6808
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42438 (Vista)/Vendor Purchases/42438vista_032026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42438 (Vista)/Vendor Purchases/42438vista_032026_vendor_spend.xlsx",
+    "size": 7175
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42438 (Vista)/Vendor Purchases/42438vista_042026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42438 (Vista)/Vendor Purchases/42438vista_042026_vendor_spend.xlsx",
+    "size": 6813
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42438 (Vista)/Vendor Purchases/42438vista_052026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42438 (Vista)/Vendor Purchases/42438vista_052026_vendor_spend.xlsx",
+    "size": 6647
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42438 (Vista)/Vendor Purchases/42438vista_062026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42438 (Vista)/Vendor Purchases/42438vista_062026_vendor_spend.xlsx",
+    "size": 7068
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42438 (Vista)/Vendor Purchases/42438vista_072026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42438 (Vista)/Vendor Purchases/42438vista_072026_vendor_spend.xlsx",
+    "size": 7004
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42438 (Vista)/Vendor Purchases/42438vista_082026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42438 (Vista)/Vendor Purchases/42438vista_082026_vendor_spend.xlsx",
+    "size": 6824
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42438 (Vista)/Vendor Purchases/42438vista_092026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42438 (Vista)/Vendor Purchases/42438vista_092026_vendor_spend.xlsx",
+    "size": 6079
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42438 (Vista)/Vendor Purchases/42438vista_2026_Jan-Aug_vendor_spend_summary.xlsx",
+    "od_path": "Clients/BIG DADDY/42438 (Vista)/Vendor Purchases/42438vista_2026_Jan-Aug_vendor_spend_summary.xlsx",
+    "size": 27748
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42438 (Vista)/Vendor Purchases/42438vista_2026_Jan-Sep_vendor_spend_summary.xlsx",
+    "od_path": "Clients/BIG DADDY/42438 (Vista)/Vendor Purchases/42438vista_2026_Jan-Sep_vendor_spend_summary.xlsx",
+    "size": 52507
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42439 (Lamb)/Vendor Purchases/42439lamb_012026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42439 (Lamb)/Vendor Purchases/42439lamb_012026_vendor_spend.xlsx",
+    "size": 6849
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42439 (Lamb)/Vendor Purchases/42439lamb_022026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42439 (Lamb)/Vendor Purchases/42439lamb_022026_vendor_spend.xlsx",
+    "size": 6872
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42439 (Lamb)/Vendor Purchases/42439lamb_032026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42439 (Lamb)/Vendor Purchases/42439lamb_032026_vendor_spend.xlsx",
+    "size": 7002
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42439 (Lamb)/Vendor Purchases/42439lamb_042026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42439 (Lamb)/Vendor Purchases/42439lamb_042026_vendor_spend.xlsx",
+    "size": 6970
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42439 (Lamb)/Vendor Purchases/42439lamb_052026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42439 (Lamb)/Vendor Purchases/42439lamb_052026_vendor_spend.xlsx",
+    "size": 6843
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42439 (Lamb)/Vendor Purchases/42439lamb_062026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42439 (Lamb)/Vendor Purchases/42439lamb_062026_vendor_spend.xlsx",
+    "size": 7147
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42439 (Lamb)/Vendor Purchases/42439lamb_072026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42439 (Lamb)/Vendor Purchases/42439lamb_072026_vendor_spend.xlsx",
+    "size": 6897
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42439 (Lamb)/Vendor Purchases/42439lamb_082026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42439 (Lamb)/Vendor Purchases/42439lamb_082026_vendor_spend.xlsx",
+    "size": 6989
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42439 (Lamb)/Vendor Purchases/42439lamb_092026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42439 (Lamb)/Vendor Purchases/42439lamb_092026_vendor_spend.xlsx",
+    "size": 6209
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42439 (Lamb)/Vendor Purchases/42439lamb_2026_Jan-Aug_vendor_spend_summary.xlsx",
+    "od_path": "Clients/BIG DADDY/42439 (Lamb)/Vendor Purchases/42439lamb_2026_Jan-Aug_vendor_spend_summary.xlsx",
+    "size": 27862
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42439 (Lamb)/Vendor Purchases/42439lamb_2026_Jan-Sep_vendor_spend_summary.xlsx",
+    "od_path": "Clients/BIG DADDY/42439 (Lamb)/Vendor Purchases/42439lamb_2026_Jan-Sep_vendor_spend_summary.xlsx",
+    "size": 52904
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42642 (La Mesa)/Vendor Purchases/42642lamesa_012026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42642 (La Mesa)/Vendor Purchases/42642lamesa_012026_vendor_spend.xlsx",
+    "size": 7217
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42642 (La Mesa)/Vendor Purchases/42642lamesa_022026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42642 (La Mesa)/Vendor Purchases/42642lamesa_022026_vendor_spend.xlsx",
+    "size": 7111
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42642 (La Mesa)/Vendor Purchases/42642lamesa_032026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42642 (La Mesa)/Vendor Purchases/42642lamesa_032026_vendor_spend.xlsx",
+    "size": 7149
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42642 (La Mesa)/Vendor Purchases/42642lamesa_042026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42642 (La Mesa)/Vendor Purchases/42642lamesa_042026_vendor_spend.xlsx",
+    "size": 7226
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42642 (La Mesa)/Vendor Purchases/42642lamesa_052026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42642 (La Mesa)/Vendor Purchases/42642lamesa_052026_vendor_spend.xlsx",
+    "size": 6834
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42642 (La Mesa)/Vendor Purchases/42642lamesa_062026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42642 (La Mesa)/Vendor Purchases/42642lamesa_062026_vendor_spend.xlsx",
+    "size": 7188
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42642 (La Mesa)/Vendor Purchases/42642lamesa_072026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42642 (La Mesa)/Vendor Purchases/42642lamesa_072026_vendor_spend.xlsx",
+    "size": 7432
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42642 (La Mesa)/Vendor Purchases/42642lamesa_082026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42642 (La Mesa)/Vendor Purchases/42642lamesa_082026_vendor_spend.xlsx",
+    "size": 7080
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42642 (La Mesa)/Vendor Purchases/42642lamesa_092026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42642 (La Mesa)/Vendor Purchases/42642lamesa_092026_vendor_spend.xlsx",
+    "size": 6407
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42642 (La Mesa)/Vendor Purchases/42642lamesa_2026_Jan-Aug_vendor_spend_summary.xlsx",
+    "od_path": "Clients/BIG DADDY/42642 (La Mesa)/Vendor Purchases/42642lamesa_2026_Jan-Aug_vendor_spend_summary.xlsx",
+    "size": 30795
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42642 (La Mesa)/Vendor Purchases/42642lamesa_2026_Jan-Sep_vendor_spend_summary.xlsx",
+    "od_path": "Clients/BIG DADDY/42642 (La Mesa)/Vendor Purchases/42642lamesa_2026_Jan-Sep_vendor_spend_summary.xlsx",
+    "size": 58990
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42674 (Tustin)/Vendor Purchases/42674tustin_012026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42674 (Tustin)/Vendor Purchases/42674tustin_012026_vendor_spend.xlsx",
+    "size": 7032
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42674 (Tustin)/Vendor Purchases/42674tustin_022026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42674 (Tustin)/Vendor Purchases/42674tustin_022026_vendor_spend.xlsx",
+    "size": 6886
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42674 (Tustin)/Vendor Purchases/42674tustin_032026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42674 (Tustin)/Vendor Purchases/42674tustin_032026_vendor_spend.xlsx",
+    "size": 6873
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42674 (Tustin)/Vendor Purchases/42674tustin_042026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42674 (Tustin)/Vendor Purchases/42674tustin_042026_vendor_spend.xlsx",
+    "size": 6897
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42674 (Tustin)/Vendor Purchases/42674tustin_052026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42674 (Tustin)/Vendor Purchases/42674tustin_052026_vendor_spend.xlsx",
+    "size": 6844
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42674 (Tustin)/Vendor Purchases/42674tustin_062026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42674 (Tustin)/Vendor Purchases/42674tustin_062026_vendor_spend.xlsx",
+    "size": 6942
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42674 (Tustin)/Vendor Purchases/42674tustin_072026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42674 (Tustin)/Vendor Purchases/42674tustin_072026_vendor_spend.xlsx",
+    "size": 7067
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42674 (Tustin)/Vendor Purchases/42674tustin_082026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42674 (Tustin)/Vendor Purchases/42674tustin_082026_vendor_spend.xlsx",
+    "size": 6961
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42674 (Tustin)/Vendor Purchases/42674tustin_092026_vendor_spend.xlsx",
+    "od_path": "Clients/BIG DADDY/42674 (Tustin)/Vendor Purchases/42674tustin_092026_vendor_spend.xlsx",
+    "size": 6463
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42674 (Tustin)/Vendor Purchases/42674tustin_2026_Jan-Aug_vendor_spend_summary.xlsx",
+    "od_path": "Clients/BIG DADDY/42674 (Tustin)/Vendor Purchases/42674tustin_2026_Jan-Aug_vendor_spend_summary.xlsx",
+    "size": 27318
+  },
+  {
+    "local": "/workspace/reports/Clients/BIG DADDY/42674 (Tustin)/Vendor Purchases/42674tustin_2026_Jan-Sep_vendor_spend_summary.xlsx",
+    "od_path": "Clients/BIG DADDY/42674 (Tustin)/Vendor Purchases/42674tustin_2026_Jan-Sep_vendor_spend_summary.xlsx",
+    "size": 52120
+  }
+]
