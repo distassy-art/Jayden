@@ -1,0 +1,65 @@
+{
+  "station": "42279",
+  "name": "Flamingo (Koval)",
+  "siteid": 195,
+  "date": "2026-09-28",
+  "tranref": "CIG COUNT 09282026",
+  "tranid": 274158,
+  "linesPosted": 100,
+  "linesPrimary": 74,
+  "linesBelowGrid": 27,
+  "supplementTranref": "CIG COUNT 09282026 B",
+  "supplementTranid": 274163,
+  "supplementPost": {
+    "skipped": false,
+    "id": 274163,
+    "response": {
+      "id": 274163,
+      "siteid": 195,
+      "tranref": "CIG COUNT 09282026 B",
+      "trandate": "2026-09-28",
+      "accPostedAt": null,
+      "accPostedBy": null,
+      "accref": null,
+      "attachments": null,
+      "props_legacy": null,
+      "props": "{\"note\": \"Flamingo (Koval) cigarette count supplement 2026-09-28. Below-grid rows 1\\u201333 and margin corrections not in the first post.\"}",
+      "createdAt": "2026-09-29T13:43:08.790Z",
+      "updatedAt": null,
+      "updatedBy": 4699,
+      "approvedAt": null,
+      "approvedBy": null,
+      "trantype": 10,
+      "trandate_alt": null,
+      "qbfileid": 13,
+      "lines": "[{\"id\":32453714,\"tranid\":274163,\"trandate\":\"2026-09-28\",\"varid\":-26776,\"qty\":1.000000000000000e+000,\"cal_type\":0,\"props\":\"{\\\"sold\\\": 0}\",\"createdAt\":\"2026-09-29T13:43:13.5400000Z\"},{\"id\":32453715,\"tranid\":274163,\"trandate\":\"2026-09-28\",\"varid\":-26774,\"qty\":1.100000000000000e+001,\"cal_type\":0,\"props\":\"{\\\"sold\\\": 0}\",\"createdAt\":\"2026-09-29T13:43:13.5400000Z\"},{\"id\":32453716,\"tranid\":274163,\"trandate\":\"2026-09-28\",\"varid\":-2394,\"qty\":8.000000000000000e+000,\"cal_type\":0,\"props\":\"{\\\"sold\\\": 0}\",\"createdAt\":\"2026-09-29T13:43:13.5400000Z\"},{\"id\":32453717,\"tranid\":274163,\"trandate\":\"2026-09-28\",\"varid\":-1018,\"qty\":3.000000000000000e+000,\"cal_type\":0,\"props\":\"{\\\"sold\\\": 0}\",\"createdAt\":\"2026-09-29T13:43:13.5400000Z\"},{\"id\":32453718,\"tranid\":274163,\"trandate\":\"2026-09-28\",\"varid\":-1106,\"qty\":1.000000000000000e+001,\"cal_type\":0,\"props\":\"{\\\"sold\\\": 0}\",\"createdAt\":\"2026-09-29T13:43:13.5400000Z\"},{\"id\":32453719,\"tranid\":274163,\"trandate\":\"2026-09-28\",\"varid\":-2409,\"qty\":1.000000000000000e+001,\"cal_type\":0,\"props\":\"{\\\"sold\\\": 0}\",\"createdAt\":\"2026-09-29T13:43:13.5400000Z\"},{\"id\":32453720,\"tranid\":274163,\"trandate\":\"2026-09-28\",\"varid\":-2127,\"qty\":9.000000000000000e+000,\"cal_type\":0,\"props\":\"{\\\"sold\\\": 0}\",\"createdAt\":\"2026-09-29T13:43:13.5400000Z\"},{\"id\":32453721,\"tranid\":274163,\"trandate\":\"2026-09-28\",\"varid\":-924,\"qty\":9.000000000000000e+000,\"cal_type\":0,\"props\":\"{\\\"sold\\\": 0}\",\"createdAt\":\"2026-09-29T13:43:13.5400000Z\"},{\"id\":32453722,\"tranid\":274163,\"trandate\":\"2026-09-28\",\"varid\":-813,\"qty\":2.000000000000000e+000,\"cal_type\":0,\"props\":\"{\\\"sold\\\": 0}\",\"createdAt\":\"2026-09-29T13:43:13.5400000Z\"},{\"id\":32453723,\"tranid\":274163,\"trandate\":\"2026-09-28\",\"varid\":-1412,\"qty\":1.000000000000000e+001,\"cal_type\":0,\"props\":\"{\\\"sold\\\": 0}\",\"createdAt\":\"2026-09-29T13:43:13.5400000Z\"},{\"id\":32453692,\"tranid\":274163,\"trandate\":\"2026-09-28\",\"varid\":-2557,\"qty\":1.400000000000000e+001,\"cal_type\":0,\"props\":\"{\\\"sold\\\": 0}\",\"createdAt\":\"2026-09-29T13:43:13.5400000Z\"},{\"id\":32453693,\"tranid\":274163,\"trandate\":\"2026-09-28\",\"varid\":-1365,\"qty\":1.000000000000000e+001,\"cal_type\":0,\"props\":\"{\\\"sold\\\": 0}\",\"createdAt\":\"2026-09-29T13:43:13.5400000Z\"},{\"id\":32453694,\"tranid\":274163,\"trandate\":\"2026-09-28\",\"varid\":-350,\"qty\":6.000000000000000e+000,\"cal_type\":0,\"props\":\"{\\\"sold\\\": 0}\",\"createdAt\":\"2026-09-29T13:43:13.5400000Z\"},{\"id\":32453695,\"tranid\":274163,\"trandate\":\"2026-09-28\",\"varid\":-745,\"qty\":8.000000000000000e+000,\"cal_type\":0,\"props\":\"{\\\"sold\\\": 0}\",\"createdAt\":\"2026-09-29T13:43:13.5400000Z\"},{\"id\":32453696,\"tranid\":274163,\"trandate\":\"2026-09-28\",\"varid\":-466,\"qty\":2.000000000000000e+001,\"cal_type\":0,\"props\":\"{\\\"sold\\\": 0}\",\"createdAt\":\"2026-09-29T13:43:13.5400000Z\"},{\"id\":32453697,\"tranid\":274163,\"trandate\":\"2026-09-28\",\"varid\":-830,\"qty\":1.900000000000000e+001,\"cal_type\":0,\"props\":\"{\\\"sold\\\": 0}\",\"createdAt\":\"2026-09-29T13:43:13.5400000Z\"},{\"id\":32453698,\"tranid\":274163,\"trandate\":\"2026-09-28\",\"varid\":-1260,\"qty\":4.300000000000000e+001,\"cal_type\":0,\"props\":\"{\\\"sold\\\": 0}\",\"createdAt\":\"2026-09-29T13:43:13.5400000Z\"},{\"id\":32453699,\"tranid\":274163,\"trandate\":\"2026-09-28\",\"varid\":-34430,\"qty\":4.000000000000000e+000,\"cal_type\":0,\"props\":\"{\\\"sold\\\": 0}\",\"createdAt\":\"2026-09-29T13:43:13.5400000Z\"},{\"id\":32453700,\"tranid\":274163,\"trandate\":\"2026-09-28\",\"varid\":-1798,\"qty\":2.300000000000000e+001,\"cal_type\":0,\"props\":\"{\\\"sold\\\": 0}\",\"createdAt\":\"2026-09-29T13:43:13.5400000Z\"},{\"id\":32453701,\"tranid\":274163,\"trandate\":\"2026-09-28\",\"varid\":-1010,\"qty\":1.600000000000000e+001,\"cal_type\":0,\"props\":\"{\\\"sold\\\": 0}\",\"createdAt\":\"2026-09-29T13:43:13.5400000Z\"},{\"id\":32453702,\"tranid\":274163,\"trandate\":\"2026-09-28\",\"varid\":-1506,\"qty\":1.500000000000000e+001,\"cal_type\":0,\"props\":\"{\\\"sold\\\": 0}\",\"createdAt\":\"2026-09-29T13:43:13.5400000Z\"},{\"id\":32453703,\"tranid\":274163,\"trandate\":\"2026-09-28\",\"varid\":-35681,\"qty\":9.000000000000000e+000,\"cal_type\":0,\"props\":\"{\\\"sold\\\": 0}\",\"createdAt\":\"2026-09-29T13:43:13.5400000Z\"},{\"id\":32453704,\"tranid\":274163,\"trandate\":\"2026-09-28\",\"varid\":-35684,\"qty\":9.000000000000000e+000,\"cal_type\":0,\"props\":\"{\\\"sold\\\": 0}\",\"createdAt\":\"2026-09-29T13:43:13.5400000Z\"},{\"id\":32453705,\"tranid\":274163,\"trandate\":\"2026-09-28\",\"varid\":-1719,\"qty\":5.700000000000000e+001,\"cal_type\":0,\"props\":\"{\\\"sold\\\": 0}\",\"createdAt\":\"2026-09-29T13:43:13.5400000Z\"},{\"id\":32453706,\"tranid\":274163,\"trandate\":\"2026-09-28\",\"varid\":-1919,\"qty\":1.900000000000000e+001,\"cal_type\":0,\"props\":\"{\\\"sold\\\": 0}\",\"createdAt\":\"2026-09-29T13:43:13.5400000Z\"},{\"id\":32453707,\"tranid\":274163,\"trandate\":\"2026-09-28\",\"varid\":-2377,\"qty\":8.700000000000000e+001,\"cal_type\":0,\"props\":\"{\\\"sold\\\": 0}\",\"createdAt\":\"2026-09-29T13:43:13.5400000Z\"},{\"id\":32453708,\"tranid\":274163,\"trandate\":\"2026-09-28\",\"varid\":-32803,\"qty\":7.000000000000000e+000,\"cal_type\":0,\"props\":\"{\\\"sold\\\": 0}\",\"createdAt\":\"2026-09-29T13:43:13.5400000Z\"},{\"id\":32453709,\"tranid\":274163,\"trandate\":\"2026-09-28\",\"varid\":-33438,\"qty\":3.000000000000000e+000,\"cal_type\":0,\"props\":\"{\\\"sold\\\": 0}\",\"createdAt\":\"2026-09-29T13:43:13.5400000Z\"},{\"id\":32453710,\"tranid\":274163,\"trandate\":\"2026-09-28\",\"varid\":-1761,\"qty\":1.400000000000000e+001,\"cal_type\":0,\"props\":\"{\\\"sold\\\": 0}\",\"createdAt\":\"2026-09-29T13:43:13.5400000Z\"},{\"id\":32453711,\"tranid\":274163,\"trandate\":\"2026-09-28\",\"varid\":-1581,\"qty\":1.600000000000000e+001,\"cal_type\":0,\"props\":\"{\\\"sold\\\": 0}\",\"createdAt\":\"2026-09-29T13:43:13.5400000Z\"},{\"id\":32453712,\"tranid\":274163,\"trandate\":\"2026-09-28\",\"varid\":-40942,\"qty\":1.000000000000000e+001,\"cal_type\":0,\"props\":\"{\\\"sold\\\": 0}\",\"createdAt\":\"2026-09-29T13:43:13.5400000Z\"},{\"id\":32453713,\"tranid\":274163,\"trandate\":\"2026-09-28\",\"varid\":-26252,\"qty\":1.000000000000000e+001,\"cal_type\":0,\"props\":\"{\\\"sold\\\": 0}\",\"createdAt\":\"2026-09-29T13:43:13.5400000Z\"}]"
+    }
+  },
+  "belowGridSkipped": [
+    "Row 32 L&M BOX P \u2014 not listed on margin.",
+    "Rows 15\u201316, 18 Camel promo SKUs \u2014 no margin quantity.",
+    "Row 57 Marlboro Cowboy Menthol Box \u2014 still \u201c?\u201d on grid.",
+    "Crown Blue 100's (margin) \u2014 no matching row on count sheet.",
+    "Winston Red/Menthol 100's (margin) \u2014 no matching pack row on sheet.",
+    "Marlboro Red Label 100's / Cowboy Cut Gold 100's (margin) \u2014 ambiguous vs grid SKUs.",
+    "Newport Non-Menthol margin (9/4) \u2014 kept grid counts on rows 85\u201386 (11/7)."
+  ],
+  "blankLeftUnchanged": 7,
+  "actualPacks": 1211,
+  "actualCost": 11991.63,
+  "minusPacks": 66,
+  "minusCost": 646.65,
+  "plusPacks": 115,
+  "plusCost": 1114.16,
+  "overall": 467.51,
+  "turquoise": "included, count 8 (below-grid / row 8)",
+  "ambiguousRows": [
+    57
+  ],
+  "missingGridRows": "1-33",
+  "post": {
+    "skipped": true,
+    "reason": "supplement-only run"
+  },
+  "narrative": "Actual $11,991.63 for 1211 packs on 100 lines. Minus $646.65 (66 packs), plus $1,114.16 (115 packs). Overall $467.51."
+}
