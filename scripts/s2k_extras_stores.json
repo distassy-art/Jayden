@@ -1,0 +1,34 @@
+{
+  "description": "S2K clients outside the 14-store core set. See ASK-CURSOR-S2K-EXTRAS-NEW-EXCEL.md.",
+  "stores": [
+    {
+      "id": "42359",
+      "name": "Paradise",
+      "daily_workbook": "Paradise Daily.xlsx",
+      "onedrive_folder": "Clients/BIG DADDY/42359 (Paradise)",
+      "s2k_pdf_subdir": "42359_Pa",
+      "publish_to_site": true,
+      "s2k_browser": "microsoft-edge",
+      "notes": "Edge-only login. Fill via fill_daily_excel_from_softsp.py (single-store PDFs). Publish via sync_from_excel.py."
+    },
+    {
+      "id": "42642",
+      "name": "La Mesa",
+      "daily_workbook": "La Mesa Daily.xlsx",
+      "onedrive_folder": "Clients/42642 (La Mesa)",
+      "s2k_pdf_subdir": "42642_LM",
+      "publish_to_site": false,
+      "notes": "OneDrive Excel only. Site bridge rejects 42642 in JSON — do not add to STORE_FILES publish path."
+    },
+    {
+      "id": "extramile",
+      "name": "ExtraMile",
+      "daily_workbook": "Extramile.xlsx",
+      "onedrive_folder": "Clients/ExtraMile",
+      "template_daily_skip": ["ExtraMile Daily.xlsx", "ExtraMile Monthly.xlsx"],
+      "publish_to_site": true,
+      "publish_via": "scripts/extract-extramile-book.py",
+      "notes": "Not S2K. Copy from Hotmail OneDrive Extramile.xlsx then extract-extramile-book → publish-books.mjs."
+    }
+  ]
+}
