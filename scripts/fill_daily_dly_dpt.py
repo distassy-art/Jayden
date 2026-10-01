@@ -123,7 +123,8 @@ BD_CENTRAL_DEFS = {
 REPORTS = {
     # ShowCost=1 includes Cost / Margin / Profit columns.
     "daily": {"rpt": "DailyTotal+Summary", "extra": {"ShowCost": "1"}},
-    "dly": {"rpt": "None Fuel Invoice Total", "extra": {}},
+    # Toggle=1 → expanded invoice lines (TSO # … Inv Date …); required for Daily Excel purch.
+    "dly": {"rpt": "None Fuel Invoice Total", "extra": {"Toggle": "1"}},
     # Baseline DailyAPInvoice is already the collapsed vendor summary.
     # Do NOT pass ViewType=CollapseAll — that has returned HTTP 500.
     "dpt": {"rpt": "DailyAPInvoice", "extra": {}},
@@ -598,7 +599,8 @@ def run_daily(
 def run_dly_dpt(target: date, *, no_od: bool = False) -> dict:
     stores, bd = build_store_map(target)
     month_start = date(target.year, target.month, 1)
-    end = month_end(target)
+    # End on the stamped business day (not calendar month-end), matching MMDDYYYYdly.pdf.
+    end = target
     dly_name = f"{stamp(target)}dly.pdf"
     dpt_name = f"{stamp(target)}dpt.pdf"
 
