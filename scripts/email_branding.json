@@ -1,0 +1,18 @@
+{
+  "version": "2026-08-23",
+  "siteBase": "https://smartsolutionsai.us",
+  "logoUrl": "https://smartsolutionsai.us/data/branding/email/Smart-Solutions-AI-logo.png?v=20260823",
+  "footerUrl": "https://smartsolutionsai.us/data/branding/email/footer.png?v=20260823",
+  "logoMarkUrl": "https://smartsolutionsai.us/logo-mark.png?v=20260930",
+  "accentColor": "#1F4E78",
+  "textColor": "#0f2742",
+  "mailboxes": {
+    "orders": "orders@smartsolutionsai26.onmicrosoft.com",
+    "audit": "audit@smartsolutionsai26.onmicrosoft.com"
+  },
+  "onedriveSource": {
+    "folder": "Documents/Logo",
+    "logoItemName": "Smart-Solutions-AI-logo.png",
+    "footerItemName": "footer.png"
+  }
+}
