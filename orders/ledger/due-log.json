@@ -1,0 +1,16 @@
+[
+  {
+    "dueDay": "2026-09-26",
+    "vendor": "Core-Mark",
+    "timezone": "America/Los_Angeles",
+    "started": "2026-09-26T23:40:00Z",
+    "result": "Saturday arrived and the Core-Mark pass started. No charge file for 2026-09-26 was present, so no Saturday amount was added. Eighteen orders whose store, vendor, and date were missing from the shell and the live sends were appended. All 25 live sends and the shell orders were kept."
+  },
+  {
+    "dueDay": "2026-09-28",
+    "vendor": "Harbor",
+    "timezone": "America/Los_Angeles",
+    "started": "2026-09-28T09:00:05Z",
+    "result": "Monday Harbor due day. Appended 42098 and 42674 for 2026-09-28 from site PDFs ($1,374.72 and $2,223.69). No other Harbor store had a charge file or site PDF for that date. All prior sends unchanged."
+  }
+]
