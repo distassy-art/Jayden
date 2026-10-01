@@ -1,0 +1,68 @@
+{
+  "stationId": "42282",
+  "client": "Oakey Las Vegas Blvd",
+  "date": "2026-09-28",
+  "dateLabel": "September 28, 2026",
+  "category": "Cigarettes",
+  "heading": "Count written September 28, 2026. On that date, S2K quantity on hand was set to those counted packs (SKU Inventory CIG COUNT 09282026, transaction 274124). American Spirit Turquoise is included. Blank quantity cells were left unchanged. Counts written below the printed grid were not posted.",
+  "summary": "The actual count is $5,828.76 for 615 packs. Minus is $1,091.72, where the book is above the count. Plus is $845.83, where the count is above the book. Overall is negative $245.88. The book on the counted lines is $6,074.64. The biggest minus is Kool at $257.00. Marlboro's plus is $256.89. American Spirit Turquoise was written as 5 and the book was already 5. The 26 blank quantity cells, including cells that were only scribbled out, were not changed. Counts written below the printed grid were not posted, because they repeated a grid line or could match more than one SKU. Those 68 lines now have quantity on hand equal to the physical count.",
+  "count": {
+    "actualPacks": 615,
+    "actualCost": 5828.76,
+    "minusPacks": 114,
+    "minusCost": 1091.72,
+    "plusPacks": 86,
+    "plusCost": 845.83,
+    "overall": -245.88
+  },
+  "files": [
+    {
+      "group": "Scans",
+      "label": "Scan page 1",
+      "note": "Handwritten quantity, September 28",
+      "href": "/inventory/42282/2026-09-28/scan-1.pdf"
+    },
+    {
+      "group": "Scans",
+      "label": "Scan page 2",
+      "note": "Handwritten quantity, September 28",
+      "href": "/inventory/42282/2026-09-28/scan-2.pdf"
+    },
+    {
+      "group": "Scans",
+      "label": "Scan page 3",
+      "note": "Handwritten quantity, rows 70-94, and counts written below the grid",
+      "href": "/inventory/42282/2026-09-28/scan-3.pdf"
+    },
+    {
+      "group": "Scans",
+      "label": "Scan page 4",
+      "note": "Handwritten notes. These lines were not posted.",
+      "href": "/inventory/42282/2026-09-28/scan-4.pdf"
+    },
+    {
+      "group": "S2K quantity on hand",
+      "label": "Packs, department 200",
+      "note": "S2K SKU Sales PDF from before the quantity-on-hand change, August 1 through September 28",
+      "href": "/inventory/42282/2026-09-28/qoh-packs.pdf"
+    },
+    {
+      "group": "S2K quantity on hand",
+      "label": "Cartons, department 281",
+      "note": "S2K SKU Sales PDF from before the quantity-on-hand change. No carton sales in that range.",
+      "href": "/inventory/42282/2026-09-28/qoh-cartons.pdf"
+    },
+    {
+      "group": "S2K quantity on hand",
+      "label": "Quantity on hand change",
+      "note": "SKU Inventory CIG COUNT 09282026, transaction 274124. The counted packs, 615 total. Turquoise is on it.",
+      "href": "/inventory/42282/2026-09-28/s2k-change.pdf"
+    },
+    {
+      "group": "Count",
+      "label": "Cigarette count",
+      "note": "Actual cost, then minus, then plus",
+      "href": "/inventory/42282/2026-09-28/count.pdf"
+    }
+  ]
+}
