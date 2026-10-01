@@ -1,0 +1,18 @@
+{
+  "_note": "Mirror of app.html managerEmailByStation (2026-09). Excluded: 42642 La Mesa. Empty email = no nudge.",
+  "42004": { "client": "Arco Placentia", "owner": "Arco Placentia", "email": "arcoplacentia@gmail.com" },
+  "42352": { "client": "Arco Db", "owner": "Farsai Inc", "email": "reoberholtzer@gmail.com" },
+  "42179": { "client": "Arco HB", "owner": "Farsai Inc", "email": "robertking630@gmail.com" },
+  "42021": { "client": "Westminster", "owner": "Big Daddy", "email": "german@bigdaddysoil.com" },
+  "42048": { "client": "San Diego", "owner": "Big Daddy", "email": "angelaolson275@gmail.com" },
+  "42098": { "client": "Brookhurst 75", "owner": "Big Daddy", "email": "brookhurst75@outlook.com" },
+  "42279": { "client": "Koval", "owner": "Big Daddy", "email": "arcokoval@outlook.com" },
+  "42280": { "client": "Spring Mtn", "owner": "Big Daddy", "email": "arcospring@outlook.com" },
+  "42281": { "client": "Charleston", "owner": "Big Daddy", "email": "ramona@bigdaddysoil.com" },
+  "42282": { "client": "Oakey Las Vegas Blvd", "owner": "Big Daddy", "email": "arcooakey@outlook.com" },
+  "42359": { "client": "Paradise", "owner": "Big Daddy", "email": "" },
+  "42399": { "client": "Garden Grove", "owner": "Big Daddy", "email": "kkim562@yahoo.com" },
+  "42438": { "client": "Vista", "owner": "Big Daddy", "email": "wade@bigdaddysoil.com" },
+  "42439": { "client": "Lamb", "owner": "Big Daddy", "email": "arcolamb@outlook.com" },
+  "42674": { "client": "Tustin", "owner": "Big Daddy", "email": "malou@bigdaddysoil.com" }
+}
