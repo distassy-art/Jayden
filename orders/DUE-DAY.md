@@ -37,3 +37,7 @@ Harbor’s day arrived. Site PDFs existed for Brookhurst 75 (`42098-harbor-09282
 ## Wednesday 2026-09-30
 
 Coke’s day arrived. Seven stores had amounts on the site order list with a matching PDF under `/web/orders/pdfs/` for identity `2026-09-30`: Db $2,755.05, HB $1,188.05, Westminster $3,068.87, Koval $108.48, Charleston $39.36, Oakey $154.08, Vista $440.88. Those rows were appended with My Coke draft-only status (not submitted). The other seven Coke calendar stores had no charge file or site PDF for 2026-09-30, so no amounts were invented. All 25 prior live sends and shell orders were left unchanged. Non-Coke rows still in `pending-appends.json` were not merged on this pass.
+
+## Thursday 2026-10-01
+
+Pepsi’s day arrived. Placentia ($1,147.02), Koval ($834.64), and Westminster ($434.49) had site PDFs under `/web/orders/pdfs/` for identity `2026-10-01`, so those rows were appended. The other eleven Pepsi calendar stores had no charge file or site PDF for 2026-10-01, so no amounts were invented. All 32 prior live sends and shell orders were left unchanged. Non-Pepsi rows still in `pending-appends.json` were not merged on this pass.
