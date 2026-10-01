@@ -233,6 +233,58 @@ for d in sys.argv[1:]:
             json.loads('{"date":"2026-09-20","gas_vol":2080.69,"gas_profit":1521.25,"sales":2675.59,"purch":172.09,"store_profit":2503.5,"margin":0.9357,"total_profit":4024.75}'),
             json.loads('{"date":"2026-09-20","gas_vol":3364.89,"gas_profit":1408.52,"sales":2409.91,"purch":0,"store_profit":null,"margin":null,"total_profit":1408.52}'),
         ),
+        ("42004", "2026-09-29"): (
+            json.loads("{\"date\": \"2026-09-29\", \"gas_vol\": 6594.95, \"gas_profit\": 1719.99, \"sales\": 3233.41, \"purch\": 0, \"store_profit\": 3233.41, \"margin\": 1, \"total_profit\": null}"),
+            json.loads("{\"date\": \"2026-09-29\", \"gas_vol\": 6594.95, \"gas_profit\": 1719.99, \"sales\": 3233.41, \"purch\": 274.44, \"store_profit\": 2958.97, \"margin\": 0.9151, \"total_profit\": null}"),
+        ),
+        ("42021", "2026-09-29"): (
+            json.loads("{\"date\": \"2026-09-29\", \"gas_vol\": 2538.48, \"gas_profit\": 1887.27, \"sales\": 2056.33, \"purch\": 0, \"store_profit\": 2056.33, \"margin\": 1, \"total_profit\": null}"),
+            json.loads("{\"date\": \"2026-09-29\", \"gas_vol\": 2538.48, \"gas_profit\": 1887.27, \"sales\": 2056.33, \"purch\": 224.67, \"store_profit\": 1831.66, \"margin\": 0.8907, \"total_profit\": null}"),
+        ),
+        ("42048", "2026-09-29"): (
+            json.loads("{\"date\": \"2026-09-29\", \"gas_vol\": 5073.63, \"gas_profit\": 3642.01, \"sales\": 4342.28, \"purch\": 0, \"store_profit\": 4342.28, \"margin\": 1, \"total_profit\": null}"),
+            json.loads("{\"date\": \"2026-09-29\", \"gas_vol\": 5073.63, \"gas_profit\": 3642.01, \"sales\": 4342.28, \"purch\": 6053.77, \"store_profit\": -1711.49, \"margin\": -0.3941, \"total_profit\": null}"),
+        ),
+        ("42179", "2026-09-29"): (
+            json.loads("{\"date\": \"2026-09-29\", \"gas_vol\": 7918.97, \"gas_profit\": 3226.18, \"sales\": 4911.11, \"purch\": 0, \"store_profit\": 4911.11, \"margin\": 1, \"total_profit\": null}"),
+            json.loads("{\"date\": \"2026-09-29\", \"gas_vol\": 7918.97, \"gas_profit\": 3226.18, \"sales\": 4911.11, \"purch\": 33.35, \"store_profit\": 4877.76, \"margin\": 0.9932, \"total_profit\": null}"),
+        ),
+        ("42279", "2026-09-29"): (
+            json.loads("{\"date\": \"2026-09-29\", \"gas_vol\": 2552.42, \"gas_profit\": 1666.55, \"sales\": 2659.07, \"purch\": 0, \"store_profit\": 2659.07, \"margin\": 1, \"total_profit\": null}"),
+            json.loads("{\"date\": \"2026-09-29\", \"gas_vol\": 2552.42, \"gas_profit\": 1666.55, \"sales\": 2659.07, \"purch\": 1406.8, \"store_profit\": 1252.27, \"margin\": 0.4709, \"total_profit\": null}"),
+        ),
+        ("42280", "2026-09-29"): (
+            json.loads("{\"date\": \"2026-09-29\", \"gas_vol\": 2597.62, \"gas_profit\": 969.26, \"sales\": 2086.97, \"purch\": 0, \"store_profit\": 2086.97, \"margin\": 1, \"total_profit\": null}"),
+            json.loads("{\"date\": \"2026-09-29\", \"gas_vol\": 2597.62, \"gas_profit\": 969.26, \"sales\": 2086.97, \"purch\": 10735.59, \"store_profit\": -8648.62, \"margin\": -4.1441, \"total_profit\": null}"),
+        ),
+        ("42281", "2026-09-29"): (
+            json.loads("{\"date\": \"2026-09-29\", \"gas_vol\": 3255.91, \"gas_profit\": 1439.81, \"sales\": 1971.99, \"purch\": 0, \"store_profit\": 1971.99, \"margin\": 1, \"total_profit\": null}"),
+            json.loads("{\"date\": \"2026-09-29\", \"gas_vol\": 3255.91, \"gas_profit\": 1439.81, \"sales\": 1971.99, \"purch\": 4785.88, \"store_profit\": -2813.89, \"margin\": -1.4269, \"total_profit\": null}"),
+        ),
+        ("42282", "2026-09-29"): (
+            json.loads("{\"date\": \"2026-09-29\", \"gas_vol\": 948.79, \"gas_profit\": 562.4, \"sales\": 798.32, \"purch\": 0, \"store_profit\": 798.32, \"margin\": 1, \"total_profit\": null}"),
+            json.loads("{\"date\": \"2026-09-29\", \"gas_vol\": 948.79, \"gas_profit\": 562.4, \"sales\": 798.32, \"purch\": 2407.38, \"store_profit\": -1609.06, \"margin\": -2.0156, \"total_profit\": null}"),
+        ),
+        ("42352", "2026-09-29"): (
+            json.loads("{\"date\": \"2026-09-29\", \"gas_vol\": 8382.17, \"gas_profit\": 2304.66, \"sales\": 4683.4, \"purch\": 0, \"store_profit\": 4683.4, \"margin\": 1, \"total_profit\": null}"),
+            json.loads("{\"date\": \"2026-09-29\", \"gas_vol\": 8382.17, \"gas_profit\": 2304.66, \"sales\": 4683.4, \"purch\": 2341.09, \"store_profit\": 2342.31, \"margin\": 0.5001, \"total_profit\": null}"),
+        ),
+        ("42399", "2026-09-29"): (
+            json.loads("{\"date\": \"2026-09-29\", \"gas_vol\": 4385.05, \"gas_profit\": 2730.22, \"sales\": 4350.83, \"purch\": 0, \"store_profit\": 4350.83, \"margin\": 1, \"total_profit\": null}"),
+            json.loads("{\"date\": \"2026-09-29\", \"gas_vol\": 4385.05, \"gas_profit\": 2730.22, \"sales\": 4350.83, \"purch\": 666.43, \"store_profit\": 3684.4, \"margin\": 0.8468, \"total_profit\": null}"),
+        ),
+        ("42438", "2026-09-29"): (
+            json.loads("{\"date\": \"2026-09-29\", \"gas_vol\": 3210.04, \"gas_profit\": 1254.5, \"sales\": 2297.24, \"purch\": 0, \"store_profit\": 2297.24, \"margin\": 1, \"total_profit\": null}"),
+            json.loads("{\"date\": \"2026-09-29\", \"gas_vol\": 3210.04, \"gas_profit\": 1254.5, \"sales\": 2297.24, \"purch\": 7399.57, \"store_profit\": -5102.33, \"margin\": -2.2211, \"total_profit\": null}"),
+        ),
+        ("42439", "2026-09-29"): (
+            json.loads("{\"date\": \"2026-09-29\", \"gas_vol\": 3963.88, \"gas_profit\": 1684.74, \"sales\": 2358.67, \"purch\": 0, \"store_profit\": 2358.67, \"margin\": 1, \"total_profit\": null}"),
+            json.loads("{\"date\": \"2026-09-29\", \"gas_vol\": 3963.88, \"gas_profit\": 1684.74, \"sales\": 2358.67, \"purch\": 5484.08, \"store_profit\": -3125.41, \"margin\": -1.3251, \"total_profit\": null}"),
+        ),
+        ("42674", "2026-09-29"): (
+            json.loads("{\"date\": \"2026-09-29\", \"gas_vol\": 2382.5, \"gas_profit\": 1467.94, \"sales\": 3052.54, \"purch\": 0, \"store_profit\": 3052.54, \"margin\": 1, \"total_profit\": null}"),
+            json.loads("{\"date\": \"2026-09-29\", \"gas_vol\": 2382.5, \"gas_profit\": 1467.94, \"sales\": 3052.54, \"purch\": 1042.47, \"store_profit\": 2010.07, \"margin\": 0.6585, \"total_profit\": null}"),
+        ),
     }
     if re.search(r"/daily_[a-z]+\.json$", d):
         old_b = main_copy(d)
