@@ -1,0 +1,57 @@
+# Weekly AI pricing nudge — managers with pending S2K price entries (Mina / Jayden).
+# Mondays ~8:00 AM Pacific (15:00 UTC). Dry-run on workflow_dispatch; schedule uses --send.
+name: pricing-nudge-weekly
+on:
+  schedule:
+    - cron: "0 15 * * 1"
+  workflow_dispatch:
+    inputs:
+      send:
+        description: "If true, send live email (default false = dry-run)"
+        required: false
+        default: "false"
+      force_to:
+        description: "Optional test override (MinaMorcos@ only)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  nudge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run pricing nudge script
+        env:
+          SS_SITE_URL: https://smartsolutionsai.us
+          SS_ADMIN_EMAIL: ${{ secrets.SS_ADMIN_EMAIL }}
+          SS_ADMIN_PASSWORD: ${{ secrets.SS_ADMIN_PASSWORD }}
+          SS_SESSION_TOKEN: ${{ secrets.SS_SESSION_TOKEN }}
+          GRAPH_TENANT_ID: ${{ secrets.GRAPH_TENANT_ID }}
+          GRAPH_CLIENT_ID: ${{ secrets.GRAPH_CLIENT_ID }}
+          GRAPH_CLIENT_SECRET: ${{ secrets.GRAPH_CLIENT_SECRET }}
+          PRICING_NUDGE_FORCE_TO: ${{ inputs.force_to }}
+        run: |
+          set -euo pipefail
+          ARGS=""
+          if [ "${{ github.event_name }}" = "schedule" ] || [ "${{ inputs.send }}" = "true" ]; then
+            ARGS="--send"
+          fi
+          python3 scripts/send_pricing_nudge_emails.py $ARGS
+
+      - name: Commit coordination log
+        run: |
+          set -euo pipefail
+          if git diff --quiet COORDINATION-LOG.md; then
+            echo "No log changes"
+            exit 0
+          fi
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add COORDINATION-LOG.md
+          git commit -m "chore: pricing nudge coordination log"
+          git push
