@@ -17,7 +17,8 @@ Schedule (America/Los_Angeles) — see scripts/s2k_report_schedule.md:
   - Daily Excel update (from Daily PDFs): Mon/Wed/Fri/Sun 8:00 AM
 
 Requires:
-  - S2K logins from /tmp/s2k/creds/Client-logins.xlsx sheet ``s2k``
+  - S2K logins from /tmp/s2k/creds/Client-logins.xlsx sheet ``s2k``, or env
+    ``S2K_PLACENTIA_*``, ``S2K_BIGDADDY_*``, ``S2K_FARSAI_*`` (1Password / cloud secrets)
   - SharePoint cookies at /tmp/od_cookies.json (FedAuth) for upload + recycle
 
 Usage:
