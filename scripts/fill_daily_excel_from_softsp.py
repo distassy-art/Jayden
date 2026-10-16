@@ -127,15 +127,27 @@ def parse_cstore_fields(text: str) -> dict:
 
 def parse_fuel(text: str) -> dict:
     out: dict = {}
+    # Per-store chunk in multi-store PDFs includes a report-wide Grand Total — prefer Station Total.
+    m = re.search(
+        r"Station Total:\s*([\d,.]+)\s+\$([\d,.]+)\s+(?:[\d.]+%|\$[\d.]+)\s+\$([\-\d,.]+)",
+        text,
+    )
+    if m:
+        out["gas_vol"] = float(m.group(1).replace(",", ""))
+        out["gas_profit"] = money(m.group(3))
+        return out
+    m = re.search(
+        r"Station Total:\s*([\d,.]+)\s+\$([\d,.]+)\s+\$([\-\d,.]+)\s+\$([\-\d,.]+)",
+        text,
+    )
+    if m:
+        out["gas_vol"] = float(m.group(1).replace(",", ""))
+        out["gas_profit"] = money(m.group(4))
+        return out
     m = re.search(
         r"Grand Total:\s*([\d,.]+)\s+\$([\d,.]+)\s+\$([\d,.]+)\s+\$([\-\d,.]+)",
         text,
     )
-    if not m:
-        m = re.search(
-            r"Station Total:\s*([\d,.]+)\s+\$([\d,.]+)\s+\$([\-\d,.]+)\s+\$([\-\d,.]+)",
-            text,
-        )
     if m:
         out["gas_vol"] = float(m.group(1).replace(",", ""))
         out["gas_profit"] = money(m.group(4))

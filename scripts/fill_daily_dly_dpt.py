@@ -32,6 +32,7 @@ from __future__ import annotations
 import argparse
 import calendar
 import json
+import os
 import re
 import ssl
 import sys
@@ -79,6 +80,13 @@ LOGIN_GROUPS = {
     "gmail": "Arco Db",
     "hotmail": "big daddy",
     "placentia": "Placentia",
+}
+
+# Cloud / 1Password-injected secrets (see fill script doc); used when creds xlsx absent.
+ENV_LOGIN_KEYS: dict[str, tuple[str, str]] = {
+    "placentia": ("S2K_PLACENTIA_USER", "S2K_PLACENTIA_PASS"),
+    "hotmail": ("S2K_BIGDADDY_USER", "S2K_BIGDADDY_PASS"),
+    "gmail": ("S2K_FARSAI_USER", "S2K_FARSAI_PASS"),
 }
 
 # Static account/site map (paths built per target month)
@@ -159,32 +167,41 @@ STORES, BD_CENTRAL = build_store_map(_today_pt)
 
 
 def load_s2k_logins(path: Path = CREDS_XLSX) -> dict[str, tuple[str, str]]:
-    wb = openpyxl.load_workbook(path, data_only=True)
-    ws = wb["s2k"]
-    rows = []
-    for r in ws.iter_rows(values_only=True):
-        if not r:
-            continue
-        first = str(r[0] or "").strip()
-        if first.lower() in ("main account",):
-            continue
-        # Sheet layout: URL in A, label in B, user in C, password in D
-        if first.startswith("http"):
-            if not r[1] or not r[2] or not r[3]:
+    rows: list[tuple[str, str, str]] = []
+    if path.is_file():
+        wb = openpyxl.load_workbook(path, data_only=True)
+        ws = wb["s2k"]
+        for r in ws.iter_rows(values_only=True):
+            if not r:
                 continue
-            label = str(r[1]).strip()
-            rows.append((label, str(r[2]).strip(), str(r[3]).strip()))
-        else:
-            if not r[0] or not r[1] or not r[2]:
+            first = str(r[0] or "").strip()
+            if first.lower() in ("main account",):
                 continue
-            label = first
-            rows.append((label, str(r[1]).strip(), str(r[2]).strip()))
+            # Sheet layout: URL in A, label in B, user in C, password in D
+            if first.startswith("http"):
+                if not r[1] or not r[2] or not r[3]:
+                    continue
+                label = str(r[1]).strip()
+                rows.append((label, str(r[2]).strip(), str(r[3]).strip()))
+            else:
+                if not r[0] or not r[1] or not r[2]:
+                    continue
+                label = first
+                rows.append((label, str(r[1]).strip(), str(r[2]).strip()))
+
     out: dict[str, tuple[str, str]] = {}
     for group, needle in LOGIN_GROUPS.items():
         hit = next((r for r in rows if needle.lower() in r[0].lower()), None)
-        if not hit:
-            raise SystemExit(f"Missing S2K login for group {group!r} in {path}")
-        out[group] = (hit[1], hit[2])
+        if hit:
+            out[group] = (hit[1], hit[2])
+            continue
+        ukey, pkey = ENV_LOGIN_KEYS[group]
+        user, pw = os.environ.get(ukey), os.environ.get(pkey)
+        if user and pw:
+            out[group] = (user.strip(), pw)
+            continue
+        src = str(path) if path.is_file() else f"{path} (missing) + env"
+        raise SystemExit(f"Missing S2K login for group {group!r} ({src})")
     return out
 
 
