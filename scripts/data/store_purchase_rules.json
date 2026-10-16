@@ -1,0 +1,8 @@
+{
+  "rule": {
+    "summary": "Fallback empty snapshot; per-workbook deduct loaded at fill time.",
+    "negative_invoices": "zero",
+    "empty_day": "null"
+  },
+  "stores": {}
+}
