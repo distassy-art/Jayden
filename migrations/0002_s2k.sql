@@ -1,0 +1,1 @@
+ALTER TABLE calendar_days ADD COLUMN s2k TEXT;
