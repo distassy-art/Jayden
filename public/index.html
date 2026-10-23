@@ -8,7 +8,7 @@
       name="description"
       content="Monthly Arco HB / Arco DB calendar with saved day numbers."
     />
-    <link rel="stylesheet" href="/styles.css?v=scan-1" />
+    <link rel="stylesheet" href="/styles.css?v=scan-3" />
   </head>
   <body data-station="hb" data-role="farsai">
     <div class="page">
@@ -62,9 +62,14 @@
             <span>Thu</span><span>Fri</span><span>Sat</span>
           </div>
           <p class="key-legend">
-            Day squares: <strong>GL</strong> gallons ·
-            <strong>CS</strong> c-store · <strong>GP</strong> profit ·
-            <strong>OS</strong> over/short. Click a day for all 17.
+            <span class="leg up">Green</span> above month avg ·
+            <span class="leg down">Red</span> below · Gas gallons (GL) and
+            C-store sales (CS).
+            <span class="leg fuel">Fuel</span> GL GP DG GI NI PR FD
+            · <span class="leg cstore">C-store</span> CS TX
+            · <span class="leg lottery">Lottery</span> LS SC LP LY
+            · <span class="leg cash">Cash</span> OS SD PO CR.
+            Click a day for the side panel.
           </p>
           <div id="grid" class="grid" role="grid" aria-label="Month days"></div>
         </section>
@@ -75,10 +80,11 @@
             <button type="button" id="close-day">Back to calendar</button>
           </div>
           <p class="day-note">
-            Display only. Day squares show GL, CS, GP, and OS.
-            Empty stays blank — not 0. Click a day for all 17 fields,
-            grouped. Click Back to calendar, or the same day again,
-            to return to the month grid.
+            Display only. Day squares show filled numbers with short keys,
+            grouped Fuel / C-store / Lottery / Cash. Gas gallons and C-store
+            sales sit on top in green/red vs this month’s daily average.
+            Empty stays blank — not 0. Click a day for the side panel.
+            Click Back to calendar, or the same day again, to close it.
           </p>
           <div id="s2k-fields" class="s2k-fields"></div>
         </section>
@@ -90,12 +96,12 @@
           <dl id="totals"></dl>
         </article>
         <article>
-          <h2>Trend</h2>
+          <h2>Gas &amp; C-store trend</h2>
           <p id="trend" class="trend"></p>
         </article>
       </section>
     </div>
 
-    <script src="/app.js?v=scan-1" type="module"></script>
+    <script src="/app.js?v=scan-3" type="module"></script>
   </body>
 </html>
