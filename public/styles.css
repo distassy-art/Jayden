@@ -220,8 +220,20 @@ h1 {
 }
 
 .workspace.has-day {
-  grid-template-columns: minmax(0, 1.45fr) minmax(340px, 0.95fr);
+  grid-template-columns: minmax(0, 1.35fr) minmax(360px, 1fr);
   align-items: stretch;
+}
+
+.workspace.has-day .grid {
+  grid-auto-rows: minmax(92px, 1fr);
+}
+
+.workspace.has-day .grid button {
+  min-height: 92px;
+}
+
+.workspace.has-day .grid button .cell-groups {
+  display: none;
 }
 
 .calendar-wrap,
@@ -249,22 +261,28 @@ h1 {
 
 .grid {
   flex: 1 0 auto;
-  grid-auto-rows: minmax(118px, 1fr);
+  grid-auto-rows: minmax(172px, 1fr);
   min-height: 0;
 }
 
 .key-legend {
   margin: 0 4px 6px;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 11px;
   line-height: 1.45;
 }
 
-.key-legend strong {
-  color: var(--ink);
+.key-legend .leg {
   font-weight: 750;
   letter-spacing: 0.04em;
 }
+
+.key-legend .leg.fuel { color: #0f6e6b; }
+.key-legend .leg.cstore { color: #9a4a1c; }
+.key-legend .leg.lottery { color: #8a3d5c; }
+.key-legend .leg.cash { color: #875400; }
+.key-legend .leg.up { color: var(--good); }
+.key-legend .leg.down { color: var(--bad); }
 
 .dow {
   margin-bottom: 6px;
@@ -276,34 +294,104 @@ h1 {
 }
 
 .grid button {
-  min-height: 118px;
+  min-height: 172px;
   height: 100%;
   border: 1px solid var(--line);
   background: #fff;
-  border-radius: 10px;
-  padding: 6px 7px 5px;
+  border-radius: 8px;
+  padding: 4px 5px 3px;
   text-align: left;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
   overflow: hidden;
   cursor: pointer;
 }
 
 .grid button .dom {
   font-weight: 750;
-  font-size: 15px;
+  font-size: 13px;
   line-height: 1;
   flex-shrink: 0;
   letter-spacing: -0.03em;
 }
 
+.grid button .perf-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.grid button .perf {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 2px 4px 3px;
+  border-radius: 5px;
+  background: #f3f1ea;
+}
+
+.grid button .perf-name {
+  font-size: 9px;
+  font-weight: 750;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.grid button .perf-val {
+  font-variant-numeric: tabular-nums;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.grid button .perf.up .perf-val { color: var(--good); }
+.grid button .perf.down .perf-val { color: var(--bad); }
+.grid button .perf[data-tone="gallons"] .perf-name { color: #1d4f91; }
+.grid button .perf[data-tone="cstore"] .perf-name { color: #9a4a1c; }
+
+.grid button .cell-groups {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px 5px;
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
+  align-content: start;
+}
+
+.grid button .cell-group {
+  min-width: 0;
+  padding: 2px 3px 2px 5px;
+  border-radius: 5px;
+  border-left: 3px solid var(--line);
+  background: #fbfaf6;
+}
+
+.grid button .cell-group[data-group="fuel"] { border-left-color: #0f6e6b; }
+.grid button .cell-group[data-group="cstore"] { border-left-color: #9a4a1c; }
+.grid button .cell-group[data-group="lottery"] { border-left-color: #8a3d5c; }
+.grid button .cell-group[data-group="cash"] { border-left-color: #875400; }
+
+.grid button .cell-group-title {
+  display: block;
+  font-size: 9px;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1px;
+}
+
 .grid button .metrics {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2px 0;
+  gap: 0;
   width: 100%;
-  flex: 1 0 auto;
   min-height: 0;
   align-content: start;
 }
@@ -313,7 +401,7 @@ h1 {
   flex-direction: row;
   justify-content: space-between;
   align-items: baseline;
-  gap: 6px;
+  gap: 3px;
   min-width: 0;
   line-height: 1.2;
   min-height: 0;
@@ -321,17 +409,17 @@ h1 {
 }
 
 .grid button .metric-key {
-  font-size: 11px;
-  font-weight: 750;
-  letter-spacing: 0.06em;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   color: var(--muted);
   flex-shrink: 0;
 }
 
 .grid button .metric-val {
   font-variant-numeric: tabular-nums;
-  font-size: 15px;
-  font-weight: 750;
+  font-size: 12px;
+  font-weight: 700;
   color: var(--accent);
   white-space: nowrap;
   overflow: hidden;
@@ -339,8 +427,16 @@ h1 {
   flex: 1 1 auto;
   min-width: 0;
   text-align: right;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
 }
+
+.grid button .metric.perf .metric-val {
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.grid button .metric.perf.up .metric-val { color: var(--good); }
+.grid button .metric.perf.down .metric-val { color: var(--bad); }
 
 .grid button .metric.blank .metric-val {
   color: transparent;
@@ -388,7 +484,7 @@ h1 {
 }
 
 .grid button.empty {
-  opacity: 0.55;
+  opacity: 0.72;
 }
 
 .grid .pad {
@@ -713,13 +809,19 @@ h1 {
 .s2k-row[data-tone="fueldep"] .slot-key,
 .s2k-row[data-tone="fueldep"].filled .slot-val { color: #4a5a2e; }
 
+@media (max-width: 1280px) {
+  .grid button .metric-val {
+    font-size: 12px;
+  }
+
+  .grid button .perf-val {
+    font-size: 13px;
+  }
+}
+
 @media (max-width: 1100px) {
   .workspace.has-day {
     grid-template-columns: 1fr;
-  }
-
-  .grid button .metric-val {
-    font-size: 14px;
   }
 }
 
@@ -738,11 +840,11 @@ h1 {
   }
 
   .grid button .metric-key {
-    font-size: 11px;
+    font-size: 10px;
   }
 
   .grid button .metric-val {
-    font-size: 13px;
+    font-size: 12px;
   }
 
   .s2k-row.hero .slot-val {
@@ -759,19 +861,14 @@ h1 {
   }
 
   .grid {
-    grid-auto-rows: minmax(104px, 1fr);
+    grid-auto-rows: minmax(158px, 1fr);
   }
 
   .grid button {
-    min-height: 104px;
-    padding: 4px 5px;
+    min-height: 158px;
   }
 
-  .grid button .dom {
-    font-size: 13px;
-  }
-
-  .grid button .metric-val {
-    font-size: 12px;
+  .grid button .perf-row {
+    grid-template-columns: 1fr;
   }
 }

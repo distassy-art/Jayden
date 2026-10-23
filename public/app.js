@@ -26,6 +26,7 @@ const TREND_FIELDS = [
   { index: 6, short: "Gallons", tone: "gallons" },
   { index: 8, short: "C-store", tone: "cstore" },
 ];
+const PERF_INDEXES = new Set(TREND_FIELDS.map((f) => f.index));
 
 /** All 17 named fields. Cells use 1–3 letter keys; full names stay in day details. */
 const FALLBACK_CELL_FIELDS = [
@@ -60,7 +61,7 @@ const FOOTER_FIELDS = [
   { index: 17, short: "Credit", tone: "credit" },
 ];
 
-/** Month-grid highlights — scannable set; the other 13 stay one click away. */
+/** Large numbers in the selected-day side panel. */
 const HIGHLIGHT_FIELDS = [
   { index: 6, short: "Gallons", key: "GL", tone: "gallons" },
   { index: 8, short: "C-store", key: "CS", tone: "cstore" },
@@ -69,10 +70,10 @@ const HIGHLIGHT_FIELDS = [
 ];
 
 const FIELD_GROUPS = [
-  { id: "fuel", title: "Fuel", indexes: [1, 2, 3, 5, 6, 7, 16] },
+  { id: "fuel", title: "Fuel", indexes: [6, 7, 5, 1, 2, 3, 16] },
   { id: "cstore", title: "C-store", indexes: [8, 9] },
   { id: "lottery", title: "Lottery", indexes: [10, 11, 12, 13] },
-  { id: "cash", title: "Cash", indexes: [4, 14, 15, 17] },
+  { id: "cash", title: "Cash", indexes: [14, 4, 15, 17] },
 ];
 
 const HIGHLIGHT_INDEXES = new Set(HIGHLIGHT_FIELDS.map((f) => f.index));
@@ -208,23 +209,30 @@ function renderGrid() {
   for (let d = 1; d <= last; d++) {
     const iso = `${state.year}-${String(state.month).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
     const row = byDay.get(iso);
-    const anyFilled = gridCellMetrics(row?.s2k).some((m) => m.value != null);
-    const highlights = highlightMetrics(row?.s2k);
+    const groups = groupedFilled(row?.s2k);
+    const filled = gridCellMetrics(row?.s2k).filter((m) => m.value != null);
     const classes = ["cell"];
-    if (!anyFilled) classes.push("empty");
+    if (!filled.length) classes.push("empty");
     if (iso === today) classes.push("today");
     if (iso === state.selectedDay) classes.push("selected");
-    const lines = anyFilled
-      ? `<span class="metrics" data-count="${highlights.length}">${highlights
-          .map((m) => {
-            const blank = m.value == null ? " blank" : "";
-            return `<span class="metric${blank}" data-tone="${escapeHtml(m.tone)}" title="${escapeHtml(slotMeta(m.index - 1).label)}"><span class="metric-key">${escapeHtml(m.key)}</span><span class="metric-val">${fmtNum(m.value)}</span></span>`;
+    const perf = perfRowHtml(row?.s2k);
+    const groupHtml = groups.length
+      ? `<span class="cell-groups">${groups
+          .map((g) => {
+            const metrics = g.items
+              .map((m) => {
+                const vs = PERF_INDEXES.has(m.index) ? vsAvgClass(m.index, m.value) : "";
+                const perfMetric = PERF_INDEXES.has(m.index) ? " perf" : "";
+                return `<span class="metric${perfMetric}${vs}" data-tone="${escapeHtml(m.tone)}" title="${escapeHtml(vsAvgTitle(m.index, m.value))}"><span class="metric-key">${escapeHtml(m.key)}</span><span class="metric-val">${fmtNum(m.value)}</span></span>`;
+              })
+              .join("");
+            return `<span class="cell-group" data-group="${escapeHtml(g.id)}"><span class="cell-group-title">${escapeHtml(g.title)}</span><span class="metrics" data-count="${g.items.length}">${metrics}</span></span>`;
           })
           .join("")}</span>`
       : "";
-    const spoken = highlights.filter((m) => m.value != null);
-    const aria = spoken.length
-      ? `${d}, ${spoken.map((m) => `${m.short} ${fmtNum(m.value)}`).join(", ")}`
+    const lines = filled.length ? `${perf}${groupHtml}` : "";
+    const aria = filled.length
+      ? `${d}, ${filled.map((m) => `${m.short} ${fmtNum(m.value)}`).join(", ")}`
       : String(d);
     html.push(
       `<button type="button" class="${classes.join(" ")}" data-day="${iso}" aria-label="${escapeHtml(aria)}">
@@ -249,12 +257,42 @@ function gridCellMetrics(s2k) {
   }));
 }
 
-function highlightMetrics(s2k) {
+function groupedFilled(s2k) {
+  const byIndex = new Map(gridCellMetrics(s2k).map((m) => [m.index, m]));
+  return FIELD_GROUPS.map((group) => ({
+    ...group,
+    items: group.indexes
+      .filter((index) => !PERF_INDEXES.has(index))
+      .map((index) => byIndex.get(index))
+      .filter((m) => m && m.value != null),
+  })).filter((group) => group.items.length);
+}
+
+function vsAvgClass(index, value) {
+  const avg = monthAverage(index);
+  if (value == null || avg == null) return "";
+  return value >= avg ? " up" : " down";
+}
+
+function vsAvgTitle(index, value) {
+  const label = slotMeta(index - 1).label;
+  const avg = monthAverage(index);
+  if (value == null || avg == null) return label;
+  const above = value >= avg;
+  return `${label}: ${above ? "above" : "below"} month avg ${fmtNum(avg)}`;
+}
+
+function perfRowHtml(s2k) {
   const fields = s2k || [];
-  return HIGHLIGHT_FIELDS.map((field) => ({
-    ...field,
-    value: fields[field.index - 1] ?? null,
-  }));
+  const chips = TREND_FIELDS.map((field) => {
+    const value = fields[field.index - 1] ?? null;
+    if (value == null) return "";
+    const vs = vsAvgClass(field.index, value);
+    const name = field.index === 6 ? "Gas" : "C-store";
+    return `<span class="perf${vs}" data-tone="${escapeHtml(field.tone)}" title="${escapeHtml(vsAvgTitle(field.index, value))}"><span class="perf-name">${name}</span><span class="perf-val">${fmtNum(value)}</span></span>`;
+  }).filter(Boolean);
+  if (!chips.length) return "";
+  return `<span class="perf-row">${chips.join("")}</span>`;
 }
 
 function scanPdfLink(iso, field) {
@@ -349,8 +387,9 @@ function renderTrend() {
     } else if (avg != null) {
       compare = `avg ${fmtNum(avg)}`;
     }
+    const name = field.index === 6 ? "Gas gallons" : "C-store sales";
     return `<div class="${klass}" data-tone="${escapeHtml(field.tone)}">
-      <dt>${escapeHtml(field.short)}</dt>
+      <dt>${escapeHtml(name)}</dt>
       <dd>${fmtNum(value)}<small>${compare}</small></dd>
     </div>`;
   });

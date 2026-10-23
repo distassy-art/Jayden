@@ -190,7 +190,7 @@ test("month footer omits Gas Inventory; details still include it", () => {
   assert.match(cellBlock, /index: 17, short: "Credit", key: "CR"/);
   assert.equal((cellBlock.match(/index: \d+/g) || []).length, 17);
   assert.match(js, /FIELD_GROUPS/);
-  assert.match(js, /indexes: \[1, 2, 3, 5, 6, 7, 16\]/);
+  assert.match(js, /indexes: \[6, 7, 5, 1, 2, 3, 16\]/);
 });
 
 test("day-cell keys are 1 to 3 letters, not full field names", () => {
@@ -246,21 +246,27 @@ test("calendar UI is view-only with no Add control, file input, or Save", () => 
     assert.doesNotMatch(src, /type="file"/i);
   }
   assert.match(html, /Display only/);
-  assert.match(html, /Day squares show GL, CS, GP, and OS/);
-  assert.match(html, /scan-1/);
+  assert.match(html, /filled numbers with short keys/);
+  assert.match(html, /scan-3/);
   assert.match(html, /class="key-legend"/);
   assert.match(html, /id="workspace"/);
+  assert.match(html, /Gas &amp; C-store trend/);
   const css = readFileSync(new URL("../public/styles.css", import.meta.url), "utf8");
-  assert.match(css, /\.grid button \.metric-key \{\s*font-size: 11px;/s);
-  assert.match(css, /\.grid button \.metric-val \{[\s\S]*?font-size: 15px;/);
-  assert.match(css, /grid-auto-rows: minmax\(118px/);
+  assert.match(css, /\.grid button \.metric-key \{\s*font-size: 10px;/s);
+  assert.match(css, /\.grid button \.metric-val \{[\s\S]*?font-size: 12px;/);
+  assert.match(css, /grid-auto-rows: minmax\(172px/);
   assert.match(css, /\.workspace\.has-day/);
   assert.match(css, /\.s2k-row\.hero \.slot-val/);
+  assert.match(css, /\.grid button \.perf-row/);
+  assert.match(css, /\.grid button \.cell-groups/);
   assert.doesNotMatch(html, /id="add-field"/i);
   assert.doesNotMatch(html, /\bSave\b/);
   assert.match(js, /m\.value != null/);
   assert.match(js, /const HIGHLIGHT_FIELDS/);
   assert.match(js, /const FIELD_GROUPS/);
+  assert.match(js, /function perfRowHtml/);
+  assert.match(js, /Gas gallons/);
+  assert.match(js, /C-store sales/);
   assert.doesNotMatch(js, /\["Total"/);
 });
 
