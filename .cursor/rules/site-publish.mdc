@@ -1,0 +1,9 @@
+---
+description: How to publish to smartsolutionsai.us from Jayden (site-publish/ bridge)
+alwaysApply: true
+---
+To publish to smartsolutionsai.us, follow SITE-PUBLISH.md at the repo root. Put files under
+`site-publish/` at the same path they have in distassy-art/ss-unified-proto, then commit and push.
+The publish-to-site workflow checks the files and publishes them. Never touch Cloudflare (no wrangler
+or deploy scripts). Follow docs/INVENTORY-PUBLISH.md conventions. Never invent numbers.
+No purchases for a day = purch 0 (never null). store_profit follows Excel's month margin: sales minus purchases, except when Excel's daily profit cell is blank (Charleston), in which case store_profit stays null.

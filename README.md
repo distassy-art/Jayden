@@ -23,3 +23,7 @@ npm run dev
 Daily 10am numbers come from **S2K Prime** (one shared login for Arco DB and Arco HB). Confirm **DB first**, then HB. Username/password are Cloudflare Worker secrets only — never git. Do not invent S2K field mappings. Do not guess the major-cell list.
 
 Empty databases seed realistic HB and DB days for August 1–September 13, 2026.
+
+## Publishing
+
+See [SITE-PUBLISH.md](SITE-PUBLISH.md).
