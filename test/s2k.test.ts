@@ -167,7 +167,7 @@ test("day details pair each named field with that category's month total", () =>
   assert.ok(!rest.some((row) => [1, 4].includes(row.index)));
 });
 
-test("month footer omits Gas Inventory; day cells and details still include it", () => {
+test("month footer omits Gas Inventory; details still include it", () => {
   const js = readFileSync(new URL("../public/app.js", import.meta.url), "utf8");
   assert.match(js, /const GAS_INV_INDEX = 1/);
   assert.match(js, /function includeInMonthTotals\(index\) \{\s*return index !== GAS_INV_INDEX;/s);
@@ -189,6 +189,8 @@ test("month footer omits Gas Inventory; day cells and details still include it",
   assert.match(cellBlock, /index: 2, short: "Non-int", key: "NI"/);
   assert.match(cellBlock, /index: 17, short: "Credit", key: "CR"/);
   assert.equal((cellBlock.match(/index: \d+/g) || []).length, 17);
+  assert.match(js, /FIELD_GROUPS/);
+  assert.match(js, /indexes: \[1, 2, 3, 5, 6, 7, 16\]/);
 });
 
 test("day-cell keys are 1 to 3 letters, not full field names", () => {
@@ -204,6 +206,15 @@ test("day-cell keys are 1 to 3 letters, not full field names", () => {
   assert.match(gridChunk, /metric-key/);
   assert.match(gridChunk, /escapeHtml\(m\.key\)/);
   assert.doesNotMatch(gridChunk, /metric-label/);
+  const hiBlock = js.slice(
+    js.indexOf("const HIGHLIGHT_FIELDS"),
+    js.indexOf("const FIELD_GROUPS"),
+  );
+  assert.match(hiBlock, /key: "GL"/);
+  assert.match(hiBlock, /key: "CS"/);
+  assert.match(hiBlock, /key: "GP"/);
+  assert.match(hiBlock, /key: "OS"/);
+  assert.equal((hiBlock.match(/index: \d+/g) || []).length, 4);
 });
 
 test("Trend compares gallons and C-store to this month’s daily average", () => {
@@ -235,16 +246,21 @@ test("calendar UI is view-only with no Add control, file input, or Save", () => 
     assert.doesNotMatch(src, /type="file"/i);
   }
   assert.match(html, /Display only/);
-  assert.match(html, /filled numbers with short keys/);
-  assert.match(html, /cell-keys-4/);
+  assert.match(html, /Day squares show GL, CS, GP, and OS/);
+  assert.match(html, /scan-1/);
   assert.match(html, /class="key-legend"/);
+  assert.match(html, /id="workspace"/);
   const css = readFileSync(new URL("../public/styles.css", import.meta.url), "utf8");
-  assert.match(css, /\.grid button \.metric-key \{\s*font-size: 10px;/s);
-  assert.match(css, /\.grid button \.metric-val \{[\s\S]*?font-size: 13px;/);
-  assert.match(css, /grid-auto-rows: minmax\(158px/);
+  assert.match(css, /\.grid button \.metric-key \{\s*font-size: 11px;/s);
+  assert.match(css, /\.grid button \.metric-val \{[\s\S]*?font-size: 15px;/);
+  assert.match(css, /grid-auto-rows: minmax\(118px/);
+  assert.match(css, /\.workspace\.has-day/);
+  assert.match(css, /\.s2k-row\.hero \.slot-val/);
   assert.doesNotMatch(html, /id="add-field"/i);
   assert.doesNotMatch(html, /\bSave\b/);
-  assert.match(js, /filter\(\(m\) => m\.value != null\)/);
+  assert.match(js, /m\.value != null/);
+  assert.match(js, /const HIGHLIGHT_FIELDS/);
+  assert.match(js, /const FIELD_GROUPS/);
   assert.doesNotMatch(js, /\["Total"/);
 });
 

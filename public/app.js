@@ -27,7 +27,7 @@ const TREND_FIELDS = [
   { index: 8, short: "C-store", tone: "cstore" },
 ];
 
-/** All 17 named fields on the day square. Cells use 1–3 letter keys. */
+/** All 17 named fields. Cells use 1–3 letter keys; full names stay in day details. */
 const FALLBACK_CELL_FIELDS = [
   { index: 1, short: "Gas Inv", key: "GI", tone: "gas" },
   { index: 2, short: "Non-int", key: "NI", tone: "nonint" },
@@ -60,6 +60,23 @@ const FOOTER_FIELDS = [
   { index: 17, short: "Credit", tone: "credit" },
 ];
 
+/** Month-grid highlights — scannable set; the other 13 stay one click away. */
+const HIGHLIGHT_FIELDS = [
+  { index: 6, short: "Gallons", key: "GL", tone: "gallons" },
+  { index: 8, short: "C-store", key: "CS", tone: "cstore" },
+  { index: 7, short: "Profit", key: "GP", tone: "profit" },
+  { index: 14, short: "O/S", key: "OS", tone: "os" },
+];
+
+const FIELD_GROUPS = [
+  { id: "fuel", title: "Fuel", indexes: [1, 2, 3, 5, 6, 7, 16] },
+  { id: "cstore", title: "C-store", indexes: [8, 9] },
+  { id: "lottery", title: "Lottery", indexes: [10, 11, 12, 13] },
+  { id: "cash", title: "Cash", indexes: [4, 14, 15, 17] },
+];
+
+const HIGHLIGHT_INDEXES = new Set(HIGHLIGHT_FIELDS.map((f) => f.index));
+
 const state = {
   role: isOwner() ? "owner" : "farsai",
   station: "hb",
@@ -90,6 +107,7 @@ const els = {
   switchLabel: document.getElementById("switch-label"),
   btnHb: document.getElementById("btn-hb"),
   btnDb: document.getElementById("btn-db"),
+  workspace: document.getElementById("workspace"),
   grid: document.getElementById("grid"),
   totals: document.getElementById("totals"),
   trend: document.getElementById("trend"),
@@ -190,21 +208,23 @@ function renderGrid() {
   for (let d = 1; d <= last; d++) {
     const iso = `${state.year}-${String(state.month).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
     const row = byDay.get(iso);
-    const metrics = gridCellMetrics(row?.s2k).filter((m) => m.value != null);
-    const filled = metrics;
+    const anyFilled = gridCellMetrics(row?.s2k).some((m) => m.value != null);
+    const highlights = highlightMetrics(row?.s2k);
     const classes = ["cell"];
-    if (!filled.length) classes.push("empty");
+    if (!anyFilled) classes.push("empty");
     if (iso === today) classes.push("today");
     if (iso === state.selectedDay) classes.push("selected");
-    const lines = filled.length
-      ? `<span class="metrics" data-count="${filled.length}">${filled
+    const lines = anyFilled
+      ? `<span class="metrics" data-count="${highlights.length}">${highlights
           .map((m) => {
-            return `<span class="metric" data-tone="${escapeHtml(m.tone)}" title="${escapeHtml(slotMeta(m.index - 1).label)}"><span class="metric-key">${escapeHtml(m.key)}</span><span class="metric-val">${fmtNum(m.value)}</span></span>`;
+            const blank = m.value == null ? " blank" : "";
+            return `<span class="metric${blank}" data-tone="${escapeHtml(m.tone)}" title="${escapeHtml(slotMeta(m.index - 1).label)}"><span class="metric-key">${escapeHtml(m.key)}</span><span class="metric-val">${fmtNum(m.value)}</span></span>`;
           })
           .join("")}</span>`
       : "";
-    const aria = filled.length
-      ? `${d}, ${filled.map((m) => `${m.short} ${fmtNum(m.value)}`).join(", ")}`
+    const spoken = highlights.filter((m) => m.value != null);
+    const aria = spoken.length
+      ? `${d}, ${spoken.map((m) => `${m.short} ${fmtNum(m.value)}`).join(", ")}`
       : String(d);
     html.push(
       `<button type="button" class="${classes.join(" ")}" data-day="${iso}" aria-label="${escapeHtml(aria)}">
@@ -229,6 +249,14 @@ function gridCellMetrics(s2k) {
   }));
 }
 
+function highlightMetrics(s2k) {
+  const fields = s2k || [];
+  return HIGHLIGHT_FIELDS.map((field) => ({
+    ...field,
+    value: fields[field.index - 1] ?? null,
+  }));
+}
+
 function scanPdfLink(iso, field) {
   if (field !== 4 && field !== 12 && field !== 13) return "";
   const key = String(field);
@@ -246,8 +274,15 @@ function slotMeta(i) {
   return state.slots[i] || { index: i + 1, label: String(i + 1) };
 }
 
+function fieldMeta(index) {
+  return (
+    (state.cellFields || FALLBACK_CELL_FIELDS).find((f) => f.index === index) ||
+    FALLBACK_CELL_FIELDS[index - 1]
+  );
+}
+
 function cellIndexes() {
-  return new Set((state.cellFields || FALLBACK_CELL_FIELDS).map((f) => f.index));
+  return HIGHLIGHT_INDEXES;
 }
 
 function includeInMonthTotals(index) {
@@ -354,6 +389,7 @@ function closeDay() {
 
 function renderDayDetail(opts = {}) {
   const iso = state.selectedDay;
+  els.workspace.classList.toggle("has-day", Boolean(iso));
   if (!iso) {
     els.dayDetail.hidden = true;
     els.s2kFields.innerHTML = "";
@@ -364,29 +400,32 @@ function renderDayDetail(opts = {}) {
   const onCell = cellIndexes();
   els.dayTitle.textContent = `${STATIONS[state.station].title.replace(" calendar", "")} · ${iso}`;
   const monthTotals = state.summary?.totals ?? [];
-  els.s2kFields.innerHTML = [
-    `<div class="s2k-row head" aria-hidden="true">
-      <span class="slot"><span class="slot-num"></span><span class="slot-name">Field</span></span>
-      <span class="slot-val">This day</span>
-      <span class="slot-month">Month</span>
-    </div>`,
-    ...s2k.map((value, i) => {
-      const n = i + 1;
-      const slot = slotMeta(i);
-      const filled = value != null ? " filled" : "";
-      const onSquare = onCell.has(n) ? " on-cell" : "";
-      const title = escapeHtml(slot.label);
-      const scan = scanPdfLink(iso, n);
-      const month = includeInMonthTotals(n) ? fmtNum(monthTotals[i]) : "";
-      return `<div class="s2k-row${filled}${onSquare}">
-        <span class="slot"><span class="slot-num">${n}</span><span class="slot-name">${title}</span></span>
-        <span class="slot-val">${fmtNum(value)}${scan}</span>
-        <span class="slot-month">${month}</span>
-      </div>`;
-    }),
-  ].join("");
+  els.s2kFields.innerHTML = FIELD_GROUPS.map((group) => {
+    const rows = group.indexes
+      .map((n) => {
+        const i = n - 1;
+        const value = s2k[i];
+        const slot = slotMeta(i);
+        const meta = fieldMeta(n);
+        const filled = value != null ? " filled" : "";
+        const hero = onCell.has(n) ? " hero" : "";
+        const title = escapeHtml(slot.label);
+        const scan = scanPdfLink(iso, n);
+        const month = includeInMonthTotals(n) ? fmtNum(monthTotals[i]) : "";
+        const monthTxt = month ? `month ${month}` : "";
+        return `<div class="s2k-row${filled}${hero}" data-tone="${escapeHtml(meta.tone || "other")}">
+          <span class="slot"><span class="slot-key">${escapeHtml(meta.key)}</span><span class="slot-name">${title}</span></span>
+          <span class="slot-nums"><span class="slot-val">${fmtNum(value)}${scan}</span><span class="slot-month">${monthTxt}</span></span>
+        </div>`;
+      })
+      .join("");
+    return `<section class="day-group" data-group="${escapeHtml(group.id)}">
+      <h3>${escapeHtml(group.title)}</h3>
+      ${rows}
+    </section>`;
+  }).join("");
   els.dayDetail.hidden = false;
-  if (opts.scroll) {
+  if (opts.scroll && window.matchMedia("(max-width: 1100px)").matches) {
     els.dayDetail.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 }
