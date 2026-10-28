@@ -309,11 +309,36 @@ h1 {
 }
 
 .grid button .dom {
+  display: flex;
+  align-items: center;
+  gap: 4px;
   font-weight: 750;
   font-size: 13px;
   line-height: 1;
   flex-shrink: 0;
   letter-spacing: -0.03em;
+}
+
+.holiday-star {
+  color: #b45309;
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 800;
+}
+
+.key-legend .leg.holiday {
+  color: #b45309;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.grid button.holiday {
+  background: color-mix(in srgb, #b45309 7%, white);
+}
+
+.day-detail-top .holiday-star {
+  font-size: 16px;
+  vertical-align: -1px;
 }
 
 .grid button .perf-row {

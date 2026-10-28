@@ -13,6 +13,93 @@ const MONTHS = [
   "December",
 ];
 
+const PACIFIC_TZ = "America/Los_Angeles";
+const holidayByYear = new Map();
+
+function pacificNow() {
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat("en-US", {
+      timeZone: PACIFIC_TZ,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    })
+      .formatToParts(new Date())
+      .filter((part) => part.type !== "literal")
+      .map((part) => [part.type, part.value]),
+  );
+  const year = Number(parts.year);
+  const month = Number(parts.month);
+  const day = Number(parts.day);
+  return {
+    year,
+    month,
+    day,
+    iso: `${String(year).padStart(4, "0")}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`,
+  };
+}
+
+function ymd(year, month, day) {
+  return `${String(year).padStart(4, "0")}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+}
+
+function nthWeekdayUtc(year, month, weekday, nth) {
+  const firstWd = new Date(Date.UTC(year, month - 1, 1)).getUTCDay();
+  const day = 1 + ((weekday - firstWd + 7) % 7) + (nth - 1) * 7;
+  return ymd(year, month, day);
+}
+
+function lastWeekdayUtc(year, month, weekday) {
+  const lastDay = new Date(Date.UTC(year, month, 0)).getUTCDate();
+  const lastWd = new Date(Date.UTC(year, month - 1, lastDay)).getUTCDay();
+  const day = lastDay - ((lastWd - weekday + 7) % 7);
+  return ymd(year, month, day);
+}
+
+function observedHoliday(iso) {
+  const [year, month, day] = iso.split("-").map(Number);
+  const wd = new Date(Date.UTC(year, month - 1, day)).getUTCDay();
+  if (wd !== 0 && wd !== 6) return iso;
+  const shift = wd === 6 ? -1 : 1;
+  const moved = new Date(Date.UTC(year, month - 1, day + shift));
+  return ymd(moved.getUTCFullYear(), moved.getUTCMonth() + 1, moved.getUTCDate());
+}
+
+/** Nationwide OPM US federal holidays, plus Friday/Monday observed dates. */
+function federalHolidays(year) {
+  const cached = holidayByYear.get(year);
+  if (cached) return cached;
+  const map = new Map();
+  const add = (iso, name) => {
+    map.set(iso, name);
+    const observed = observedHoliday(iso);
+    if (observed !== iso) map.set(observed, `${name} (observed)`);
+  };
+  add(ymd(year, 1, 1), "New Year's Day");
+  add(nthWeekdayUtc(year, 1, 1, 3), "Birthday of Martin Luther King, Jr.");
+  add(nthWeekdayUtc(year, 2, 1, 3), "Washington's Birthday");
+  add(lastWeekdayUtc(year, 5, 1), "Memorial Day");
+  add(ymd(year, 6, 19), "Juneteenth National Independence Day");
+  add(ymd(year, 7, 4), "Independence Day");
+  add(nthWeekdayUtc(year, 9, 1, 1), "Labor Day");
+  add(nthWeekdayUtc(year, 10, 1, 2), "Columbus Day / Indigenous Peoples' Day");
+  add(ymd(year, 11, 11), "Veterans Day");
+  add(nthWeekdayUtc(year, 11, 4, 4), "Thanksgiving Day");
+  add(ymd(year, 12, 25), "Christmas Day");
+  holidayByYear.set(year, map);
+  return map;
+}
+
+function holidayName(iso) {
+  const year = Number(iso.slice(0, 4));
+  return (
+    federalHolidays(year).get(iso) ||
+    federalHolidays(year - 1).get(iso) ||
+    federalHolidays(year + 1).get(iso) ||
+    null
+  );
+}
+
 const STATIONS = {
   hb: { title: "HB calendar", sub: "Arco HB · store 42179" },
   db: { title: "DB calendar", sub: "Arco DB · store 42352" },
@@ -78,11 +165,12 @@ const FIELD_GROUPS = [
 
 const HIGHLIGHT_INDEXES = new Set(HIGHLIGHT_FIELDS.map((f) => f.index));
 
+const opening = pacificNow();
 const state = {
   role: isOwner() ? "owner" : "farsai",
   station: "hb",
-  year: 2026,
-  month: 9,
+  year: opening.year,
+  month: opening.month,
   days: [],
   prefs: { farsai: "hb", owner: "hb" },
   summary: null,
@@ -203,7 +291,7 @@ function renderGrid() {
   const first = new Date(Date.UTC(state.year, state.month - 1, 1));
   const pad = first.getUTCDay();
   const last = new Date(Date.UTC(state.year, state.month, 0)).getUTCDate();
-  const today = new Date().toISOString().slice(0, 10);
+  const today = pacificNow().iso;
   const html = [];
   for (let i = 0; i < pad; i++) html.push(`<div class="pad"></div>`);
   for (let d = 1; d <= last; d++) {
@@ -211,10 +299,12 @@ function renderGrid() {
     const row = byDay.get(iso);
     const groups = groupedFilled(row?.s2k);
     const filled = gridCellMetrics(row?.s2k).filter((m) => m.value != null);
+    const holiday = holidayName(iso);
     const classes = ["cell"];
     if (!filled.length) classes.push("empty");
     if (iso === today) classes.push("today");
     if (iso === state.selectedDay) classes.push("selected");
+    if (holiday) classes.push("holiday");
     const perf = perfRowHtml(row?.s2k);
     const groupHtml = groups.length
       ? `<span class="cell-groups">${groups
@@ -231,12 +321,17 @@ function renderGrid() {
           .join("")}</span>`
       : "";
     const lines = filled.length ? `${perf}${groupHtml}` : "";
+    const star = holiday
+      ? `<span class="holiday-star" title="${escapeHtml(holiday)}">★</span>`
+      : "";
     const aria = filled.length
-      ? `${d}, ${filled.map((m) => `${m.short} ${fmtNum(m.value)}`).join(", ")}`
-      : String(d);
+      ? `${d}${holiday ? `, ${holiday}` : ""}, ${filled.map((m) => `${m.short} ${fmtNum(m.value)}`).join(", ")}`
+      : holiday
+        ? `${d}, ${holiday}`
+        : String(d);
     html.push(
       `<button type="button" class="${classes.join(" ")}" data-day="${iso}" aria-label="${escapeHtml(aria)}">
-        <span class="dom">${d}</span>
+        <span class="dom">${d}${star}</span>
         ${lines}
       </button>`,
     );
@@ -437,7 +532,11 @@ function renderDayDetail(opts = {}) {
   const row = state.days.find((d) => d.day === iso);
   const s2k = Array.from({ length: fieldCount() }, (_, i) => row?.s2k?.[i] ?? null);
   const onCell = cellIndexes();
-  els.dayTitle.textContent = `${STATIONS[state.station].title.replace(" calendar", "")} · ${iso}`;
+  const holiday = holidayName(iso);
+  const label = STATIONS[state.station].title.replace(" calendar", "");
+  els.dayTitle.innerHTML = holiday
+    ? `${escapeHtml(label)} · ${escapeHtml(iso)} <span class="holiday-star" title="${escapeHtml(holiday)}">★</span> ${escapeHtml(holiday)}`
+    : `${escapeHtml(label)} · ${escapeHtml(iso)}`;
   const monthTotals = state.summary?.totals ?? [];
   els.s2kFields.innerHTML = FIELD_GROUPS.map((group) => {
     const rows = group.indexes

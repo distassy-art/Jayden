@@ -247,7 +247,8 @@ test("calendar UI is view-only with no Add control, file input, or Save", () => 
   }
   assert.match(html, /Display only/);
   assert.match(html, /filled numbers with short keys/);
-  assert.match(html, /scan-3/);
+  assert.match(html, /scan-4/);
+  assert.doesNotMatch(html, /September 2026/);
   assert.match(html, /class="key-legend"/);
   assert.match(html, /id="workspace"/);
   assert.match(html, /Gas &amp; C-store trend/);
@@ -278,4 +279,45 @@ test("day details close with Back to calendar or a second click on the selected 
   assert.match(js, /els\.closeDay\.addEventListener\("click", closeDay\)/);
   assert.match(js, /if \(state\.selectedDay === iso\) \{\s*closeDay\(\);/s);
   assert.match(js, /function closeDay\(\) \{\s*state\.selectedDay = null;/s);
+});
+
+test("opening month is Pacific now, not a hardcoded September", () => {
+  const js = readFileSync(new URL("../public/app.js", import.meta.url), "utf8");
+  const html = readFileSync(new URL("../public/index.html", import.meta.url), "utf8");
+  assert.match(js, /function pacificNow/);
+  assert.match(js, /timeZone: PACIFIC_TZ/);
+  assert.match(js, /const opening = pacificNow\(\);/);
+  assert.match(js, /year: opening\.year/);
+  assert.match(js, /month: opening\.month/);
+  assert.doesNotMatch(js, /year: 2026,\s*month: 9/);
+  assert.match(js, /const today = pacificNow\(\)\.iso/);
+  assert.doesNotMatch(html, /September 2026/);
+});
+
+test("US federal holidays get a star, including 2026-10-12", () => {
+  const js = readFileSync(new URL("../public/app.js", import.meta.url), "utf8");
+  const css = readFileSync(new URL("../public/styles.css", import.meta.url), "utf8");
+  const html = readFileSync(new URL("../public/index.html", import.meta.url), "utf8");
+  assert.match(js, /function federalHolidays/);
+  assert.match(js, /function holidayName/);
+  assert.match(js, /Columbus Day \/ Indigenous Peoples' Day/);
+  assert.match(js, /holiday-star/);
+  assert.match(js, /classes\.push\("holiday"\)/);
+  assert.match(css, /\.holiday-star/);
+  assert.match(html, /US federal holiday/);
+  const start = js.indexOf("const holidayByYear");
+  const end = js.indexOf("const STATIONS");
+  assert.ok(start > 0 && end > start);
+  const fns = new Function(
+    `${js.slice(start, end)}; return { federalHolidays, holidayName };`,
+  )();
+  assert.equal(fns.holidayName("2026-10-12"), "Columbus Day / Indigenous Peoples' Day");
+  assert.equal(fns.holidayName("2026-10-13"), null);
+  assert.equal(fns.holidayName("2026-10-28"), null);
+  assert.equal(fns.holidayName("2026-01-01"), "New Year's Day");
+  assert.equal(fns.holidayName("2026-01-19"), "Birthday of Martin Luther King, Jr.");
+  assert.equal(fns.holidayName("2026-07-04"), "Independence Day");
+  assert.equal(fns.holidayName("2026-07-03"), "Independence Day (observed)");
+  assert.equal(fns.holidayName("2026-11-26"), "Thanksgiving Day");
+  assert.ok(fns.federalHolidays(2026).has("2026-10-12"));
 });
