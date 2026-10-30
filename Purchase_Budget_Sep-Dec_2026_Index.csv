@@ -1,0 +1,67 @@
+Purchase Budget Sep–Dec 2026 (from Sep–Dec 2025 sales),,,,,,,
+Purchase budget = 60% of C-store Net Sales. Vendor split by 2026 whole-year avg/month share (vendor name only).,,,,,,,
+Client,Plan month,2025 sales month,Net sales 2025,Purchase budget (60%),Vendors,Sum vendor avgs/mo,Notes
+Arco Brookhurst 75,Sep 2026,Sep 2025,199109.26,119465.56,4,36378.28,Dept Sales
+Arco Brookhurst 75,Oct 2026,Oct 2025,195677.94,117406.76,4,36378.28,Dept Sales
+Arco Brookhurst 75,Nov 2026,Nov 2025,168738.09,101242.85,4,36378.28,Dept Sales
+Arco Brookhurst 75,Dec 2026,Dec 2025,186333.27,111799.96,4,36378.28,Dept Sales
+Arco Charleston,Sep 2026,Sep 2025,70480.2,42288.12,4,35291.26,Dept Sales
+Arco Charleston,Oct 2026,Oct 2025,71004.36,42602.62,4,35291.26,Dept Sales
+Arco Charleston,Nov 2026,Nov 2025,62971.02,37782.61,4,35291.26,Dept Sales
+Arco Charleston,Dec 2026,Dec 2025,61044.29,36626.57,4,35291.26,Dept Sales
+Arco Db (Diamond Bar),Sep 2026,Sep 2025,127052.46,76231.48,11,73128.85,Dept Sales
+Arco Db (Diamond Bar),Oct 2026,Oct 2025,132093.98,79256.39,11,73128.85,Dept Sales
+Arco Db (Diamond Bar),Nov 2026,Nov 2025,111305.45,66783.27,11,73128.85,Dept Sales
+Arco Db (Diamond Bar),Dec 2026,Dec 2025,115732.69,69439.61,11,73128.85,Dept Sales
+Arco Flamingo (Koval),Sep 2026,Sep 2025,122744.24,73646.54,4,43603.71,Dept Sales
+Arco Flamingo (Koval),Oct 2026,Oct 2025,101329.36,60797.62,4,43603.71,Dept Sales
+Arco Flamingo (Koval),Nov 2026,Nov 2025,108186.37,64911.82,4,43603.71,Dept Sales
+Arco Flamingo (Koval),Dec 2026,Dec 2025,95090.41,57054.25,4,43603.71,Dept Sales
+Arco Garden Grove,Sep 2026,Sep 2025,149380.78,89628.47,4,40978.09,Dept Sales
+Arco Garden Grove,Oct 2026,Oct 2025,153698.45,92219.07,4,40978.09,Dept Sales
+Arco Garden Grove,Nov 2026,Nov 2025,128223.2,76933.92,4,40978.09,Dept Sales
+Arco Garden Grove,Dec 2026,Dec 2025,136904.48,82142.69,4,40978.09,Dept Sales
+Arco HB,Sep 2026,Sep 2025,132379.94,79427.96,10,68424.86,Dept Sales
+Arco HB,Oct 2026,Oct 2025,136503.88,81902.33,10,68424.86,Dept Sales
+Arco HB,Nov 2026,Nov 2025,109138.12,65482.87,10,68424.86,Dept Sales
+Arco HB,Dec 2026,Dec 2025,112874.21,67724.53,10,68424.86,Dept Sales
+Arco La Mesa,Sep 2026,Sep 2025,103568.35,62141.01,0,,Dept Sales; No vendor avgs (pending)
+Arco La Mesa,Oct 2026,Oct 2025,87723.8,52634.28,0,,Dept Sales; No vendor avgs (pending)
+Arco La Mesa,Nov 2026,Nov 2025,99212.66,59527.6,0,,Dept Sales; No vendor avgs (pending)
+Arco La Mesa,Dec 2026,Dec 2025,103665.11,62199.07,0,,Dept Sales; No vendor avgs (pending)
+Arco Lamb,Sep 2026,Sep 2025,85480.5,51288.3,4,37843.03,Dept Sales
+Arco Lamb,Oct 2026,Oct 2025,84852.33,50911.4,4,37843.03,Dept Sales
+Arco Lamb,Nov 2026,Nov 2025,77949.48,46769.69,4,37843.03,Dept Sales
+Arco Lamb,Dec 2026,Dec 2025,85341.02,51204.61,4,37843.03,Dept Sales
+Arco Oakey,Sep 2026,Sep 2025,35826.29,21495.77,4,23598.03,Dept Sales
+Arco Oakey,Oct 2026,Oct 2025,41527.81,24916.69,4,23598.03,Dept Sales
+Arco Oakey,Nov 2026,Nov 2025,36845.08,22107.05,4,23598.03,Dept Sales
+Arco Oakey,Dec 2026,Dec 2025,33608.95,20165.37,4,23598.03,Dept Sales
+Arco Placentia,Sep 2026,Sep 2025,98647.69,59188.61,8,55527.3,Dept Sales
+Arco Placentia,Oct 2026,Oct 2025,97246.02,58347.61,8,55527.3,Dept Sales
+Arco Placentia,Nov 2026,Nov 2025,85904.09,51542.45,8,55527.3,Dept Sales
+Arco Placentia,Dec 2026,Dec 2025,85369.24,51221.54,8,55527.3,Dept Sales
+Arco San Diego,Sep 2026,Sep 2025,113968.18,68380.91,5,51755.72,Purchases vs Sales
+Arco San Diego,Oct 2026,Oct 2025,121704.08,73022.45,5,51755.72,Purchases vs Sales
+Arco San Diego,Nov 2026,Nov 2025,106530.63,63918.38,5,51755.72,Purchases vs Sales
+Arco San Diego,Dec 2026,Dec 2025,112410.82,67446.49,5,51755.72,Purchases vs Sales
+Arco Spring Mtn,Sep 2026,Sep 2025,82110.48,49266.29,4,38220.95,Dept Sales
+Arco Spring Mtn,Oct 2026,Oct 2025,84380.42,50628.25,4,38220.95,Dept Sales
+Arco Spring Mtn,Nov 2026,Nov 2025,75032.41,45019.45,4,38220.95,Dept Sales
+Arco Spring Mtn,Dec 2026,Dec 2025,87243.33,52346,4,38220.95,Dept Sales
+Arco Tustin,Sep 2026,Sep 2025,87641.39,52584.83,8,56213.66,Dept Sales
+Arco Tustin,Oct 2026,Oct 2025,86637.43,51982.46,8,56213.66,Dept Sales
+Arco Tustin,Nov 2026,Nov 2025,77204.16,46322.5,8,56213.66,Dept Sales
+Arco Tustin,Dec 2026,Dec 2025,81171.99,48703.19,8,56213.66,Dept Sales
+Arco Vista,Sep 2026,Sep 2025,80317.85,48190.71,4,47934.59,Dept Sales
+Arco Vista,Oct 2026,Oct 2025,81769.43,49061.66,4,47934.59,Dept Sales
+Arco Vista,Nov 2026,Nov 2025,69968.6,41981.16,4,47934.59,Dept Sales
+Arco Vista,Dec 2026,Dec 2025,73795.76,44277.46,4,47934.59,Dept Sales
+Arco Westminster,Sep 2026,Sep 2025,56302.02,33781.21,4,22803.35,Purchases vs Sales
+Arco Westminster,Oct 2026,Oct 2025,53347.21,32008.33,4,22803.35,Purchases vs Sales
+Arco Westminster,Nov 2026,Nov 2025,44619.9,26771.94,4,22803.35,Purchases vs Sales
+Arco Westminster,Dec 2026,Dec 2025,43387.29,26032.37,4,22803.35,Purchases vs Sales
+Laguna,Sep 2026,Sep 2025,141434.74,84860.84,4,49051.47,Dept Sales
+Laguna,Oct 2026,Oct 2025,146448.93,87869.36,4,49051.47,Dept Sales
+Laguna,Nov 2026,Nov 2025,126922.5,76153.5,4,49051.47,Dept Sales
+Laguna,Dec 2026,Dec 2025,143539.49,86123.69,4,49051.47,Dept Sales

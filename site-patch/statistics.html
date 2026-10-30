@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Statistics | Smart Solutions AI</title>
+<link rel="icon" href="logo-mark.png" type="image/png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0f2744">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Smart Solutions AI">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="app.css?v=h41">
+<link rel="stylesheet" href="helper.css">
+<style>
+.adm-filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:0 0 12px}
+.adm-filters select,.adm-filters input{padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:14px;min-width:180px}
+.adm-sum{display:flex;flex-wrap:wrap;gap:14px;margin:0 0 10px;font-size:14px}
+.adm-sum b{color:var(--navy)}
+.st-table-wrap{overflow-x:auto}
+.st-table{width:100%;border-collapse:collapse;font-size:13px;min-width:720px}
+.st-table th{text-align:left;padding:8px 10px;background:#f4f7fb;border-bottom:1px solid var(--line);font-size:12px;color:var(--mut);font-weight:700;white-space:nowrap}
+.st-table td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.st-table tr:hover td{background:#fafbfd}
+.st-table .num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.st-table .store{color:var(--mut);font-size:12px}
+.st-empty{padding:18px 4px;color:var(--mut);font-size:14px}
+.st-note{font-size:12px;color:var(--mut);margin:0 0 12px;line-height:1.45}
+</style>
+</head>
+<body data-page="statistics">
+<div class="print-brand" aria-hidden="true"><img src="logo-mark.png" alt=""><img class="print-wordmark" src="ss-logo-navy-v3.png" alt="Smart Solutions AI"><span>Smart Solutions AI</span></div>
+<div class="print-wm" aria-hidden="true"></div>
+<div class="app s2k">
+  <aside class="side">
+    <a class="brand" href="overview.html"><img src="ss-logo-navy-v3.png" alt="Smart Solutions AI"></a>
+    <nav>
+      <div class="file-label">Filing steps</div>
+      <ol class="file-steps">
+        <li data-step="daily"><a href="daily.html"><span class="n">1</span><span class="t">Daily</span></a></li>
+        <li data-step="weekly"><a href="weekly.html"><span class="n">2</span><span class="t">Weekly</span></a></li>
+        <li data-step="monthly"><a href="monthly.html"><span class="n">3</span><span class="t">Monthly</span></a></li>
+        <li data-step="yearly"><a href="yearly.html"><span class="n">4</span><span class="t">Yearly</span></a></li>
+      </ol>
+      <a class="nav-admin on" href="tickets.html">Admin</a>
+      <details class="file-more" open>
+        <summary>More</summary>
+        <a href="overview.html">Cover</a>
+        <a href="fuel.html">Fuel</a>
+        <a href="purchases.html">Purchases</a>
+        <a href="departments.html">Departments</a>
+        <a href="profit.html">Profit</a>
+        <a href="stations.html">Stations</a>
+        <a href="rankings.html">Rankings</a>
+        <a href="profile.html">Profile</a>
+        <a href="billing.html">Billing</a>
+        <a href="pnl.html">P&amp;L</a>
+        <a href="vendor-calendar.html">Vendor calendar</a>
+        <a class="on" href="statistics.html">Statistics</a>
+        <a href="ask.html">Ask our team</a>
+      </details>
+    </nav>
+    <div class="out"><a href="index.html">Log out</a><a href="index.html">Public site</a></div>
+  </aside>
+  <header class="topbar">
+    <div class="tb-title">Statistics</div>
+    <div class="tb-icons"></div>
+  </header>
+  <main class="main">
+    <img class="watermark" src="logo-mark.png" alt="">
+    <div id="view">
+      <h1>Statistics</h1>
+      <p class="lead">Whole-year vendor averages by client from S2K Non-Fuel invoices (2026).</p>
+      <p class="st-note" id="stMeta">Loading…</p>
+
+      <div class="card">
+        <div class="adm-sum" id="stSummary"></div>
+        <div class="adm-filters">
+          <label class="fine">Store
+            <select id="stStoreFilter"><option value="">All stores</option></select>
+          </label>
+          <label class="fine">Vendor
+            <select id="stVendorFilter"><option value="">All vendors</option></select>
+          </label>
+          <label class="fine">Search
+            <input type="search" id="stSearch" placeholder="Client or vendor" autocomplete="off">
+          </label>
+        </div>
+        <div class="st-table-wrap">
+          <table class="st-table" id="stTable">
+            <thead>
+              <tr>
+                <th>Client</th>
+                <th>Vendor</th>
+                <th>Delivery day(s)</th>
+                <th class="num">Year spend</th>
+                <th class="num">Avg / month</th>
+                <th class="num">Months</th>
+                <th class="num">Invoices</th>
+              </tr>
+            </thead>
+            <tbody id="stBody">
+              <tr><td colspan="7" class="st-empty">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="foot">
+      <img src="ss-logo-light-v3.png" alt="Smart Solutions AI">
+      <span>Controlling your store got easier with AI.</span>
+    </div>
+  </main>
+</div>
+<script src="app.js?v=w46"></script>
+<script src="statistics.js?v=a1"></script>
+<script src="helper.js"></script>
+<script src="pwa.js"></script>
+</body>
+</html>

@@ -1,0 +1,985 @@
+{
+  "meta": {
+    "generated": "2026-09-07T03:18:41.289036+00:00",
+    "source": "S2K Non-Fuel Invoice PDFs whole year 2026-01-01..2026-12-31",
+    "note": "Avg per month = year spend / months with invoices. La Mesa pending full-year PDF.",
+    "vendor_rows": 86,
+    "stores_with_avg": 82
+  },
+  "stores": [
+    {
+      "store": "42098",
+      "client": "Arco Brookhurst 75",
+      "vendors": 4,
+      "year_total": 296476.4,
+      "avg_month_total": 36378.28
+    },
+    {
+      "store": "42281",
+      "client": "Arco Charleston",
+      "vendors": 4,
+      "year_total": 316841.74000000005,
+      "avg_month_total": 35291.259999999995
+    },
+    {
+      "store": "42352",
+      "client": "Arco Db (Diamond Bar)",
+      "vendors": 11,
+      "year_total": 656398.0599999999,
+      "avg_month_total": 73128.84999999999
+    },
+    {
+      "store": "42279",
+      "client": "Arco Flamingo (Koval)",
+      "vendors": 4,
+      "year_total": 392433.34,
+      "avg_month_total": 43603.71
+    },
+    {
+      "store": "42399",
+      "client": "Arco Garden Grove",
+      "vendors": 4,
+      "year_total": 361442.82000000007,
+      "avg_month_total": 40978.09
+    },
+    {
+      "store": "42179",
+      "client": "Arco HB",
+      "vendors": 10,
+      "year_total": 580858.2100000001,
+      "avg_month_total": 68424.86
+    },
+    {
+      "store": "42642",
+      "client": "Arco La Mesa",
+      "vendors": 4,
+      "year_total": 0.0,
+      "avg_month_total": 0.0
+    },
+    {
+      "store": "42439",
+      "client": "Arco Lamb",
+      "vendors": 4,
+      "year_total": 340587.32999999996,
+      "avg_month_total": 37843.03
+    },
+    {
+      "store": "42282",
+      "client": "Arco Oakey",
+      "vendors": 4,
+      "year_total": 209893.65000000002,
+      "avg_month_total": 23598.030000000002
+    },
+    {
+      "store": "42004",
+      "client": "Arco Placentia",
+      "vendors": 8,
+      "year_total": 467402.13000000006,
+      "avg_month_total": 55527.3
+    },
+    {
+      "store": "42048",
+      "client": "Arco San Diego",
+      "vendors": 5,
+      "year_total": 464146.94,
+      "avg_month_total": 51755.72
+    },
+    {
+      "store": "42280",
+      "client": "Arco Spring Mtn",
+      "vendors": 4,
+      "year_total": 343053.76999999996,
+      "avg_month_total": 38220.95
+    },
+    {
+      "store": "42674",
+      "client": "Arco Tustin",
+      "vendors": 8,
+      "year_total": 493191.67,
+      "avg_month_total": 56213.66
+    },
+    {
+      "store": "42438",
+      "client": "Arco Vista",
+      "vendors": 4,
+      "year_total": 429809.5200000001,
+      "avg_month_total": 47934.590000000004
+    },
+    {
+      "store": "42021",
+      "client": "Arco Westminster",
+      "vendors": 4,
+      "year_total": 184888.05,
+      "avg_month_total": 22803.350000000002
+    },
+    {
+      "store": "42073",
+      "client": "Laguna",
+      "vendors": 4,
+      "year_total": 439757.62999999995,
+      "avg_month_total": 49051.47
+    }
+  ],
+  "rows": [
+    {
+      "store": "42098",
+      "client": "Arco Brookhurst 75",
+      "vendor": "Core-Mark",
+      "delivery_days": "Monday",
+      "year_spend": 237009.54,
+      "avg_per_month": 29626.19,
+      "months_active": 8,
+      "invoices": 817
+    },
+    {
+      "store": "42098",
+      "client": "Arco Brookhurst 75",
+      "vendor": "Red Bull",
+      "delivery_days": "Wednesday",
+      "year_spend": 24896.31,
+      "avg_per_month": 2766.26,
+      "months_active": 9,
+      "invoices": 65
+    },
+    {
+      "store": "42098",
+      "client": "Arco Brookhurst 75",
+      "vendor": "Frito Lay",
+      "delivery_days": "Thursday",
+      "year_spend": 24155.79,
+      "avg_per_month": 2683.98,
+      "months_active": 9,
+      "invoices": 140
+    },
+    {
+      "store": "42098",
+      "client": "Arco Brookhurst 75",
+      "vendor": "7UP",
+      "delivery_days": "Friday",
+      "year_spend": 10414.76,
+      "avg_per_month": 1301.85,
+      "months_active": 8,
+      "invoices": 35
+    },
+    {
+      "store": "42281",
+      "client": "Arco Charleston",
+      "vendor": "Core-Mark",
+      "delivery_days": "Tuesday",
+      "year_spend": 272079.26,
+      "avg_per_month": 30231.03,
+      "months_active": 9,
+      "invoices": 1587
+    },
+    {
+      "store": "42281",
+      "client": "Arco Charleston",
+      "vendor": "Frito Lay",
+      "delivery_days": "Wednesday",
+      "year_spend": 22588.58,
+      "avg_per_month": 2509.84,
+      "months_active": 9,
+      "invoices": 194
+    },
+    {
+      "store": "42281",
+      "client": "Arco Charleston",
+      "vendor": "Red Bull",
+      "delivery_days": "Wednesday",
+      "year_spend": 15936.76,
+      "avg_per_month": 1770.75,
+      "months_active": 9,
+      "invoices": 41
+    },
+    {
+      "store": "42281",
+      "client": "Arco Charleston",
+      "vendor": "7UP",
+      "delivery_days": "Tuesday",
+      "year_spend": 6237.14,
+      "avg_per_month": 779.64,
+      "months_active": 8,
+      "invoices": 31
+    },
+    {
+      "store": "42352",
+      "client": "Arco Db (Diamond Bar)",
+      "vendor": "Core-Mark",
+      "delivery_days": "Tuesday",
+      "year_spend": 303084.57,
+      "avg_per_month": 33676.06,
+      "months_active": 9,
+      "invoices": 1191
+    },
+    {
+      "store": "42352",
+      "client": "Arco Db (Diamond Bar)",
+      "vendor": "Harbor",
+      "delivery_days": "Wednesday",
+      "year_spend": 114911.17,
+      "avg_per_month": 12767.91,
+      "months_active": 9,
+      "invoices": 156
+    },
+    {
+      "store": "42352",
+      "client": "Arco Db (Diamond Bar)",
+      "vendor": "Coke",
+      "delivery_days": "Friday",
+      "year_spend": 56022.26,
+      "avg_per_month": 6224.7,
+      "months_active": 9,
+      "invoices": 198
+    },
+    {
+      "store": "42352",
+      "client": "Arco Db (Diamond Bar)",
+      "vendor": "Pepsi",
+      "delivery_days": "Saturday",
+      "year_spend": 44826.91,
+      "avg_per_month": 4980.77,
+      "months_active": 9,
+      "invoices": 172
+    },
+    {
+      "store": "42352",
+      "client": "Arco Db (Diamond Bar)",
+      "vendor": "Frito Lay",
+      "delivery_days": "Wednesday",
+      "year_spend": 38365.18,
+      "avg_per_month": 4262.8,
+      "months_active": 9,
+      "invoices": 189
+    },
+    {
+      "store": "42352",
+      "client": "Arco Db (Diamond Bar)",
+      "vendor": "Straub",
+      "delivery_days": "Friday",
+      "year_spend": 35573.57,
+      "avg_per_month": 3952.62,
+      "months_active": 9,
+      "invoices": 93
+    },
+    {
+      "store": "42352",
+      "client": "Arco Db (Diamond Bar)",
+      "vendor": "Red Bull",
+      "delivery_days": "Thursday",
+      "year_spend": 26187.61,
+      "avg_per_month": 2909.73,
+      "months_active": 9,
+      "invoices": 60
+    },
+    {
+      "store": "42352",
+      "client": "Arco Db (Diamond Bar)",
+      "vendor": "Sunset",
+      "delivery_days": "Monday",
+      "year_spend": 14091.99,
+      "avg_per_month": 1761.5,
+      "months_active": 8,
+      "invoices": 114
+    },
+    {
+      "store": "42352",
+      "client": "Arco Db (Diamond Bar)",
+      "vendor": "7UP",
+      "delivery_days": "Wednesday",
+      "year_spend": 11897.73,
+      "avg_per_month": 1321.97,
+      "months_active": 9,
+      "invoices": 75
+    },
+    {
+      "store": "42352",
+      "client": "Arco Db (Diamond Bar)",
+      "vendor": "Bimbo",
+      "delivery_days": "Wednesday",
+      "year_spend": 6420.74,
+      "avg_per_month": 713.42,
+      "months_active": 9,
+      "invoices": 93
+    },
+    {
+      "store": "42352",
+      "client": "Arco Db (Diamond Bar)",
+      "vendor": "NorthStar",
+      "delivery_days": "Wednesday",
+      "year_spend": 5016.33,
+      "avg_per_month": 557.37,
+      "months_active": 9,
+      "invoices": 15
+    },
+    {
+      "store": "42279",
+      "client": "Arco Flamingo (Koval)",
+      "vendor": "Core-Mark",
+      "delivery_days": "Monday",
+      "year_spend": 343946.67,
+      "avg_per_month": 38216.3,
+      "months_active": 9,
+      "invoices": 2164
+    },
+    {
+      "store": "42279",
+      "client": "Arco Flamingo (Koval)",
+      "vendor": "Frito Lay",
+      "delivery_days": "Thursday",
+      "year_spend": 27565.88,
+      "avg_per_month": 3062.88,
+      "months_active": 9,
+      "invoices": 244
+    },
+    {
+      "store": "42279",
+      "client": "Arco Flamingo (Koval)",
+      "vendor": "Red Bull",
+      "delivery_days": "Wednesday",
+      "year_spend": 12834.52,
+      "avg_per_month": 1426.06,
+      "months_active": 9,
+      "invoices": 36
+    },
+    {
+      "store": "42279",
+      "client": "Arco Flamingo (Koval)",
+      "vendor": "7UP",
+      "delivery_days": "Wednesday",
+      "year_spend": 8086.27,
+      "avg_per_month": 898.47,
+      "months_active": 9,
+      "invoices": 93
+    },
+    {
+      "store": "42399",
+      "client": "Arco Garden Grove",
+      "vendor": "Core-Mark",
+      "delivery_days": "Monday",
+      "year_spend": 297748.84,
+      "avg_per_month": 33083.2,
+      "months_active": 9,
+      "invoices": 1431
+    },
+    {
+      "store": "42399",
+      "client": "Arco Garden Grove",
+      "vendor": "Frito Lay",
+      "delivery_days": "Friday",
+      "year_spend": 35598.06,
+      "avg_per_month": 4449.76,
+      "months_active": 8,
+      "invoices": 154
+    },
+    {
+      "store": "42399",
+      "client": "Arco Garden Grove",
+      "vendor": "Red Bull",
+      "delivery_days": "Friday",
+      "year_spend": 22275.39,
+      "avg_per_month": 2475.04,
+      "months_active": 9,
+      "invoices": 56
+    },
+    {
+      "store": "42399",
+      "client": "Arco Garden Grove",
+      "vendor": "7UP",
+      "delivery_days": "Monday",
+      "year_spend": 5820.53,
+      "avg_per_month": 970.09,
+      "months_active": 6,
+      "invoices": 40
+    },
+    {
+      "store": "42179",
+      "client": "Arco HB",
+      "vendor": "Core-Mark",
+      "delivery_days": "Monday",
+      "year_spend": 289794.73,
+      "avg_per_month": 32199.41,
+      "months_active": 9,
+      "invoices": 1432
+    },
+    {
+      "store": "42179",
+      "client": "Arco HB",
+      "vendor": "Harbor",
+      "delivery_days": "Thursday",
+      "year_spend": 86617.16,
+      "avg_per_month": 10827.15,
+      "months_active": 8,
+      "invoices": 142
+    },
+    {
+      "store": "42179",
+      "client": "Arco HB",
+      "vendor": "Coke",
+      "delivery_days": "Wednesday",
+      "year_spend": 56186.05,
+      "avg_per_month": 7023.26,
+      "months_active": 8,
+      "invoices": 136
+    },
+    {
+      "store": "42179",
+      "client": "Arco HB",
+      "vendor": "Pepsi",
+      "delivery_days": "Friday",
+      "year_spend": 43011.12,
+      "avg_per_month": 5376.39,
+      "months_active": 8,
+      "invoices": 140
+    },
+    {
+      "store": "42179",
+      "client": "Arco HB",
+      "vendor": "Frito Lay",
+      "delivery_days": "Friday",
+      "year_spend": 29402.83,
+      "avg_per_month": 3675.35,
+      "months_active": 8,
+      "invoices": 123
+    },
+    {
+      "store": "42179",
+      "client": "Arco HB",
+      "vendor": "Red Bull",
+      "delivery_days": "Wednesday",
+      "year_spend": 26898.23,
+      "avg_per_month": 3362.28,
+      "months_active": 8,
+      "invoices": 58
+    },
+    {
+      "store": "42179",
+      "client": "Arco HB",
+      "vendor": "Straub",
+      "delivery_days": "Wednesday",
+      "year_spend": 16994.66,
+      "avg_per_month": 2124.33,
+      "months_active": 8,
+      "invoices": 90
+    },
+    {
+      "store": "42179",
+      "client": "Arco HB",
+      "vendor": "7UP",
+      "delivery_days": "Thursday",
+      "year_spend": 14217.1,
+      "avg_per_month": 1777.14,
+      "months_active": 8,
+      "invoices": 56
+    },
+    {
+      "store": "42179",
+      "client": "Arco HB",
+      "vendor": "Bon Apetit",
+      "delivery_days": "Monday",
+      "year_spend": 11339.54,
+      "avg_per_month": 1259.95,
+      "months_active": 9,
+      "invoices": 79
+    },
+    {
+      "store": "42179",
+      "client": "Arco HB",
+      "vendor": "Bimbo",
+      "delivery_days": "Monday",
+      "year_spend": 6396.79,
+      "avg_per_month": 799.6,
+      "months_active": 8,
+      "invoices": 74
+    },
+    {
+      "store": "42642",
+      "client": "Arco La Mesa",
+      "vendor": "Core-Mark",
+      "delivery_days": "Thursday",
+      "year_spend": null,
+      "avg_per_month": null,
+      "months_active": null,
+      "invoices": null
+    },
+    {
+      "store": "42642",
+      "client": "Arco La Mesa",
+      "vendor": "Frito Lay",
+      "delivery_days": "Wednesday",
+      "year_spend": null,
+      "avg_per_month": null,
+      "months_active": null,
+      "invoices": null
+    },
+    {
+      "store": "42642",
+      "client": "Arco La Mesa",
+      "vendor": "Bimbo",
+      "delivery_days": "Wednesday",
+      "year_spend": null,
+      "avg_per_month": null,
+      "months_active": null,
+      "invoices": null
+    },
+    {
+      "store": "42642",
+      "client": "Arco La Mesa",
+      "vendor": "Red Bull",
+      "delivery_days": "Tuesday",
+      "year_spend": null,
+      "avg_per_month": null,
+      "months_active": null,
+      "invoices": null
+    },
+    {
+      "store": "42439",
+      "client": "Arco Lamb",
+      "vendor": "Core-Mark",
+      "delivery_days": "Tuesday",
+      "year_spend": 289102.79,
+      "avg_per_month": 32122.53,
+      "months_active": 9,
+      "invoices": 1785
+    },
+    {
+      "store": "42439",
+      "client": "Arco Lamb",
+      "vendor": "Frito Lay",
+      "delivery_days": "Saturday",
+      "year_spend": 25072.6,
+      "avg_per_month": 2785.84,
+      "months_active": 9,
+      "invoices": 184
+    },
+    {
+      "store": "42439",
+      "client": "Arco Lamb",
+      "vendor": "Red Bull",
+      "delivery_days": "Friday",
+      "year_spend": 19574.77,
+      "avg_per_month": 2174.97,
+      "months_active": 9,
+      "invoices": 40
+    },
+    {
+      "store": "42439",
+      "client": "Arco Lamb",
+      "vendor": "7UP",
+      "delivery_days": "Tuesday",
+      "year_spend": 6837.17,
+      "avg_per_month": 759.69,
+      "months_active": 9,
+      "invoices": 71
+    },
+    {
+      "store": "42282",
+      "client": "Arco Oakey",
+      "vendor": "Core-Mark",
+      "delivery_days": "Tuesday",
+      "year_spend": 191605.66,
+      "avg_per_month": 21289.52,
+      "months_active": 9,
+      "invoices": 1325
+    },
+    {
+      "store": "42282",
+      "client": "Arco Oakey",
+      "vendor": "Frito Lay",
+      "delivery_days": "Tuesday",
+      "year_spend": 7165.01,
+      "avg_per_month": 796.11,
+      "months_active": 9,
+      "invoices": 59
+    },
+    {
+      "store": "42282",
+      "client": "Arco Oakey",
+      "vendor": "Red Bull",
+      "delivery_days": "Friday",
+      "year_spend": 6833.09,
+      "avg_per_month": 976.16,
+      "months_active": 7,
+      "invoices": 14
+    },
+    {
+      "store": "42282",
+      "client": "Arco Oakey",
+      "vendor": "7UP",
+      "delivery_days": "Monday",
+      "year_spend": 4289.89,
+      "avg_per_month": 536.24,
+      "months_active": 8,
+      "invoices": 36
+    },
+    {
+      "store": "42004",
+      "client": "Arco Placentia",
+      "vendor": "Core-Mark",
+      "delivery_days": "Monday",
+      "year_spend": 242070.45,
+      "avg_per_month": 30258.81,
+      "months_active": 8,
+      "invoices": 834
+    },
+    {
+      "store": "42004",
+      "client": "Arco Placentia",
+      "vendor": "Harbor",
+      "delivery_days": "Wednesday",
+      "year_spend": 82914.46,
+      "avg_per_month": 9212.72,
+      "months_active": 9,
+      "invoices": 97
+    },
+    {
+      "store": "42004",
+      "client": "Arco Placentia",
+      "vendor": "Pepsi",
+      "delivery_days": "Thursday",
+      "year_spend": 44393.9,
+      "avg_per_month": 4932.66,
+      "months_active": 9,
+      "invoices": 165
+    },
+    {
+      "store": "42004",
+      "client": "Arco Placentia",
+      "vendor": "Frito Lay",
+      "delivery_days": "Friday",
+      "year_spend": 32004.25,
+      "avg_per_month": 3556.03,
+      "months_active": 9,
+      "invoices": 178
+    },
+    {
+      "store": "42004",
+      "client": "Arco Placentia",
+      "vendor": "Red Bull",
+      "delivery_days": "Friday",
+      "year_spend": 26209.44,
+      "avg_per_month": 2912.16,
+      "months_active": 9,
+      "invoices": 79
+    },
+    {
+      "store": "42004",
+      "client": "Arco Placentia",
+      "vendor": "Straub",
+      "delivery_days": "Wednesday",
+      "year_spend": 23131.57,
+      "avg_per_month": 2570.17,
+      "months_active": 9,
+      "invoices": 100
+    },
+    {
+      "store": "42004",
+      "client": "Arco Placentia",
+      "vendor": "7UP",
+      "delivery_days": "Tuesday",
+      "year_spend": 12536.43,
+      "avg_per_month": 1567.05,
+      "months_active": 8,
+      "invoices": 72
+    },
+    {
+      "store": "42004",
+      "client": "Arco Placentia",
+      "vendor": "NorthStar",
+      "delivery_days": "Thursday",
+      "year_spend": 4141.63,
+      "avg_per_month": 517.7,
+      "months_active": 8,
+      "invoices": 15
+    },
+    {
+      "store": "42048",
+      "client": "Arco San Diego",
+      "vendor": "Core-Mark",
+      "delivery_days": "Tuesday",
+      "year_spend": 388837.18,
+      "avg_per_month": 43204.13,
+      "months_active": 9,
+      "invoices": 1816
+    },
+    {
+      "store": "42048",
+      "client": "Arco San Diego",
+      "vendor": "Frito Lay",
+      "delivery_days": "Monday",
+      "year_spend": 31566.87,
+      "avg_per_month": 3507.43,
+      "months_active": 9,
+      "invoices": 219
+    },
+    {
+      "store": "42048",
+      "client": "Arco San Diego",
+      "vendor": "Red Bull",
+      "delivery_days": "Tuesday",
+      "year_spend": 23354.2,
+      "avg_per_month": 2594.91,
+      "months_active": 9,
+      "invoices": 35
+    },
+    {
+      "store": "42048",
+      "client": "Arco San Diego",
+      "vendor": "7UP",
+      "delivery_days": "Wednesday",
+      "year_spend": 19561.41,
+      "avg_per_month": 2173.49,
+      "months_active": 9,
+      "invoices": 67
+    },
+    {
+      "store": "42048",
+      "client": "Arco San Diego",
+      "vendor": "NorthStar",
+      "delivery_days": "Tuesday",
+      "year_spend": 827.28,
+      "avg_per_month": 275.76,
+      "months_active": 3,
+      "invoices": 4
+    },
+    {
+      "store": "42280",
+      "client": "Arco Spring Mtn",
+      "vendor": "Core-Mark",
+      "delivery_days": "Tuesday",
+      "year_spend": 291823.72,
+      "avg_per_month": 32424.86,
+      "months_active": 9,
+      "invoices": 1563
+    },
+    {
+      "store": "42280",
+      "client": "Arco Spring Mtn",
+      "vendor": "Frito Lay",
+      "delivery_days": "Monday",
+      "year_spend": 22082.3,
+      "avg_per_month": 2453.59,
+      "months_active": 9,
+      "invoices": 169
+    },
+    {
+      "store": "42280",
+      "client": "Arco Spring Mtn",
+      "vendor": "Red Bull",
+      "delivery_days": "Thursday",
+      "year_spend": 21669.31,
+      "avg_per_month": 2407.7,
+      "months_active": 9,
+      "invoices": 46
+    },
+    {
+      "store": "42280",
+      "client": "Arco Spring Mtn",
+      "vendor": "7UP",
+      "delivery_days": "Thursday",
+      "year_spend": 7478.44,
+      "avg_per_month": 934.8,
+      "months_active": 8,
+      "invoices": 59
+    },
+    {
+      "store": "42674",
+      "client": "Arco Tustin",
+      "vendor": "Core-Mark",
+      "delivery_days": "Thursday",
+      "year_spend": 268700.99,
+      "avg_per_month": 29855.67,
+      "months_active": 9,
+      "invoices": 957
+    },
+    {
+      "store": "42674",
+      "client": "Arco Tustin",
+      "vendor": "Harbor",
+      "delivery_days": "Monday",
+      "year_spend": 91857.29,
+      "avg_per_month": 11482.16,
+      "months_active": 8,
+      "invoices": 88
+    },
+    {
+      "store": "42674",
+      "client": "Arco Tustin",
+      "vendor": "Coke",
+      "delivery_days": "Wednesday",
+      "year_spend": 41970.01,
+      "avg_per_month": 4663.33,
+      "months_active": 9,
+      "invoices": 170
+    },
+    {
+      "store": "42674",
+      "client": "Arco Tustin",
+      "vendor": "Pepsi",
+      "delivery_days": "Friday",
+      "year_spend": 27051.45,
+      "avg_per_month": 3005.72,
+      "months_active": 9,
+      "invoices": 108
+    },
+    {
+      "store": "42674",
+      "client": "Arco Tustin",
+      "vendor": "Straub",
+      "delivery_days": "Wednesday",
+      "year_spend": 22815.25,
+      "avg_per_month": 2535.03,
+      "months_active": 9,
+      "invoices": 102
+    },
+    {
+      "store": "42674",
+      "client": "Arco Tustin",
+      "vendor": "Frito Lay",
+      "delivery_days": "Tuesday",
+      "year_spend": 21242.7,
+      "avg_per_month": 2360.3,
+      "months_active": 9,
+      "invoices": 129
+    },
+    {
+      "store": "42674",
+      "client": "Arco Tustin",
+      "vendor": "7UP",
+      "delivery_days": "Wednesday",
+      "year_spend": 9993.06,
+      "avg_per_month": 1249.13,
+      "months_active": 8,
+      "invoices": 62
+    },
+    {
+      "store": "42674",
+      "client": "Arco Tustin",
+      "vendor": "Bimbo",
+      "delivery_days": "Tuesday",
+      "year_spend": 9560.92,
+      "avg_per_month": 1062.32,
+      "months_active": 9,
+      "invoices": 133
+    },
+    {
+      "store": "42438",
+      "client": "Arco Vista",
+      "vendor": "Core-Mark",
+      "delivery_days": "Tuesday",
+      "year_spend": 382347.9,
+      "avg_per_month": 42483.1,
+      "months_active": 9,
+      "invoices": 1912
+    },
+    {
+      "store": "42438",
+      "client": "Arco Vista",
+      "vendor": "Frito Lay",
+      "delivery_days": "Sunday",
+      "year_spend": 26132.27,
+      "avg_per_month": 2903.59,
+      "months_active": 9,
+      "invoices": 152
+    },
+    {
+      "store": "42438",
+      "client": "Arco Vista",
+      "vendor": "Red Bull",
+      "delivery_days": "Thursday",
+      "year_spend": 15723.33,
+      "avg_per_month": 1747.04,
+      "months_active": 9,
+      "invoices": 32
+    },
+    {
+      "store": "42438",
+      "client": "Arco Vista",
+      "vendor": "7UP",
+      "delivery_days": "Wednesday",
+      "year_spend": 5606.02,
+      "avg_per_month": 800.86,
+      "months_active": 7,
+      "invoices": 29
+    },
+    {
+      "store": "42021",
+      "client": "Arco Westminster",
+      "vendor": "Core-Mark",
+      "delivery_days": "Monday",
+      "year_spend": 158133.12,
+      "avg_per_month": 19766.64,
+      "months_active": 8,
+      "invoices": 890
+    },
+    {
+      "store": "42021",
+      "client": "Arco Westminster",
+      "vendor": "Red Bull",
+      "delivery_days": "Wednesday",
+      "year_spend": 13007.8,
+      "avg_per_month": 1445.31,
+      "months_active": 9,
+      "invoices": 38
+    },
+    {
+      "store": "42021",
+      "client": "Arco Westminster",
+      "vendor": "Frito Lay",
+      "delivery_days": "Tuesday",
+      "year_spend": 9142.96,
+      "avg_per_month": 1015.88,
+      "months_active": 9,
+      "invoices": 53
+    },
+    {
+      "store": "42021",
+      "client": "Arco Westminster",
+      "vendor": "7UP",
+      "delivery_days": "Thursday",
+      "year_spend": 4604.17,
+      "avg_per_month": 575.52,
+      "months_active": 8,
+      "invoices": 49
+    },
+    {
+      "store": "42073",
+      "client": "Laguna",
+      "vendor": "Core-Mark",
+      "delivery_days": "Monday",
+      "year_spend": 381336.91,
+      "avg_per_month": 42370.77,
+      "months_active": 9,
+      "invoices": 1410
+    },
+    {
+      "store": "42073",
+      "client": "Laguna",
+      "vendor": "Frito Lay",
+      "delivery_days": "Monday",
+      "year_spend": 28800.74,
+      "avg_per_month": 3200.08,
+      "months_active": 9,
+      "invoices": 240
+    },
+    {
+      "store": "42073",
+      "client": "Laguna",
+      "vendor": "Red Bull",
+      "delivery_days": "Wednesday",
+      "year_spend": 15974.67,
+      "avg_per_month": 1774.96,
+      "months_active": 9,
+      "invoices": 60
+    },
+    {
+      "store": "42073",
+      "client": "Laguna",
+      "vendor": "7UP",
+      "delivery_days": "Monday",
+      "year_spend": 13645.31,
+      "avg_per_month": 1705.66,
+      "months_active": 8,
+      "invoices": 60
+    }
+  ]
+}
