@@ -1,0 +1,6101 @@
+{
+  "version": 1,
+  "locationName": "ARCO AM/PM OF DIAMOND",
+  "taskCatalog": [
+    {
+      "id": "fsi-kat-labels",
+      "title": "KAT printer labels in use for HATCO products",
+      "section": "FSI",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fsi-hatco-expired",
+      "title": "No expired items in HATCO",
+      "section": "FSI",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fsi-temp-one",
+      "title": "Check temperature of one HATCO item",
+      "section": "FSI",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fsi-temp-all",
+      "title": "Check temperatures of all HATCOs",
+      "section": "FSI",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fsi-must-use-by",
+      "title": "Must Use By date on Athens or Rotella bread",
+      "section": "FSI",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fsi-prep-coolers",
+      "title": "Prep food in coolers is today's date or not past Must Use By",
+      "section": "FSI",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fsi-refrig-labeled",
+      "title": "All refrigerated or frozen food ingredients labeled",
+      "section": "FSI",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fsi-freezer-labels",
+      "title": "All food products in freezer have manufacturer or product date",
+      "section": "FSI",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fsi-freezer-thermo",
+      "title": "All freezers containing food have an internal thermometer",
+      "section": "FSI",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fsi-case-temps",
+      "title": "Refrigerated cases between 33\u00b0F and 41\u00b0F",
+      "section": "FSI",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fsi-front-deli-op",
+      "title": "Front deli case operating 33\u00b0F\u201341\u00b0F",
+      "section": "FSI",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fsi-no-ooc-perish",
+      "title": "No out-of-code perishable items",
+      "section": "FSI",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fsi-no-ooc-front",
+      "title": "No out-of-code products in front deli cooler",
+      "section": "FSI",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fsi-condiment-temp",
+      "title": "Condiment bar temperature 41\u00b0F or below",
+      "section": "FSI",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fsi-nacho-chili",
+      "title": "Nacho cheese and chili within code (if available)",
+      "section": "FSI",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fsi-frozen-coffee-code",
+      "title": "Frozen coffee machine product use-by label updated",
+      "section": "FSI",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fsi-quat-kit",
+      "title": "Quaternary ammonium sanitizer test kit available",
+      "section": "FSI",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fsi-sanitizer-bucket",
+      "title": "Sanitizer bucket or spray bottle prepared",
+      "section": "FSI",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fsi-quat-ppm",
+      "title": "Quat sanitizer meets 200\u2013400 ppm",
+      "section": "FSI",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fsi-sink-setup",
+      "title": "2 or 3 compartment sink set up (wash, rinse, sanitize)",
+      "section": "FSI",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fsi-hot-water",
+      "title": "Minimum hot water 110\u00b0F (120\u00b0F in California)",
+      "section": "FSI",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fsi-sink-chemicals",
+      "title": "Compartment sink chemicals available",
+      "section": "FSI",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fsi-sink-proper",
+      "title": "2 or 3 compartment sink used properly",
+      "section": "FSI",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fsi-handwash",
+      "title": "Hand washing sink accessible, stocked, unobstructed",
+      "section": "FSI",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fsi-cfm",
+      "title": "Nationally-approved Certified Food Manager certificate on site",
+      "section": "FSI",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fsi-food-handler",
+      "title": "Food handling certificates for employees handling food",
+      "section": "FSI",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fsi-probe",
+      "title": "Working probe thermometer available",
+      "section": "FSI",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fsi-gloves",
+      "title": "Gloves available and in use if prepping food",
+      "section": "FSI",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fsi-hair",
+      "title": "Employee wearing approved hair covering while prepping",
+      "section": "FSI",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fsi-pests",
+      "title": "No evidence or signs of pest infestation",
+      "section": "FSI",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fsi-storage-height",
+      "title": "All food products stored at least 6 inches off the ground",
+      "section": "FSI",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fsi-sds",
+      "title": "Safety Data Sheets available for cleaning and sanitizing products",
+      "section": "FSI",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fsi-bakery-timecode",
+      "title": "Bakery items time-coded",
+      "section": "FSI",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fsi-creamer-useby",
+      "title": "Creamer pumps and bottles have use-by dates",
+      "section": "FSI",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s2-photo-hatco",
+      "title": "Required photo of HATCO(s)",
+      "section": "Section 2",
+      "requiresPhoto": true
+    },
+    {
+      "id": "s2-photo-oven",
+      "title": "Required photo of OVEN(s)",
+      "section": "Section 2",
+      "requiresPhoto": true
+    },
+    {
+      "id": "s2-hatco-empty",
+      "title": "HATCO not empty / off / unused (mark No if empty)",
+      "section": "Section 2",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s2-hatco-clean",
+      "title": "HATCO is clean",
+      "section": "Section 2",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s2-burgers-stocked",
+      "title": "Hamburger, cheeseburger, double, chicken sandwiches stocked",
+      "section": "Section 2",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s2-hotfood-planogram",
+      "title": "Hot food stocked per current planogram",
+      "section": "Section 2",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s2-hatco-bag",
+      "title": "HATCO product in the correct bag",
+      "section": "Section 2",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s2-no-unapproved",
+      "title": "No unapproved food or ingredients in coolers or freezers",
+      "section": "Section 2",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s2-oven-fan",
+      "title": "All ovens have fan speed switch set to low (except Hobart)",
+      "section": "Section 2",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s2-wavy-rack",
+      "title": "Wavy rack present and in use to cook hot dogs",
+      "section": "Section 2",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s2-flat-racks",
+      "title": "Flat racks present and in use for corn dogs and other items",
+      "section": "Section 2",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s2-trays",
+      "title": "Cooking trays in good condition or lined with parchment",
+      "section": "Section 2",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s2-fly-fan",
+      "title": "Fly fan functioning correctly",
+      "section": "Section 2",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s3-store-temp",
+      "title": "Store temperature at or below 75\u00b0F",
+      "section": "Section 3",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s3-front-deli-clean",
+      "title": "Front deli case is clean",
+      "section": "Section 3",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s3-temp-log",
+      "title": "Temperature log for front deli case filled out",
+      "section": "Section 3",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s3-deli-planogram",
+      "title": "Front deli case planogram followed and case is full",
+      "section": "Section 3",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s3-fruit-rack",
+      "title": "Fruit rack and fresh fruit quality; shelf labels present",
+      "section": "Section 3",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s3-graphics",
+      "title": "Graphics clean and in good condition",
+      "section": "Section 3",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s3-lookin-fresh",
+      "title": "Fresh deli case Lookin' Fresh graphic in good condition",
+      "section": "Section 3",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s3-cabinets",
+      "title": "Cabinet doors and laminate on sales floor in good condition",
+      "section": "Section 3",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s4-coffee-neat",
+      "title": "Coffee area is neat and clean",
+      "section": "Section 4",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s4-special-blend",
+      "title": "Special Blend Regular and Decaf available",
+      "section": "Section 4",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s4-urn-flavors",
+      "title": "Coffee urns have approved flavor tags or nozzle covers",
+      "section": "Section 4",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s4-no-grounds",
+      "title": "No coffee grounds left in brew baskets",
+      "section": "Section 4",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s4-spray-head",
+      "title": "Coffee spray head is clean",
+      "section": "Section 4",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s4-creamiser-clean",
+      "title": "Authorized bulk creamiser clean (inside and out)",
+      "section": "Section 4",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s4-creamiser-dated",
+      "title": "Bulk creamiser product bags properly dated",
+      "section": "Section 4",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s4-whipped",
+      "title": "Whipped topping dispenser available and stocked",
+      "section": "Section 4",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s4-capp-flavors",
+      "title": "Cappuccino flavors available and tags placed",
+      "section": "Section 4",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s4-machines-clean",
+      "title": "Coffee urns, Bean-2-Cup, and cappuccino machines clean",
+      "section": "Section 4",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s4-drip-trays",
+      "title": "Drip trays emptied",
+      "section": "Section 4",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s4-cups-lids",
+      "title": "Coffee area cups, lids, and sleeves available",
+      "section": "Section 4",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s4-no-trash",
+      "title": "No trash visible; trash containers have lids",
+      "section": "Section 4",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s4-bunn-only",
+      "title": "BUNN is the only frozen coffee equipment on site",
+      "section": "Section 4",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s4-frozen-op",
+      "title": "Frozen coffee equipment operational",
+      "section": "Section 4",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s4-frozen-clean",
+      "title": "Frozen coffee equipment clean",
+      "section": "Section 4",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s4-frozen-drizzles",
+      "title": "Frozen coffee drizzles available",
+      "section": "Section 4",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s4-napkins",
+      "title": "Napkin dispensers stocked, operational, good condition",
+      "section": "Section 4",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s5-freeze-present",
+      "title": "ampm Freeze or ICEE present and working",
+      "section": "Section 5",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s5-fountain-clean",
+      "title": "Fountain and Freeze/ICEE are clean",
+      "section": "Section 5",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s5-flavors",
+      "title": "All fountain flavors available",
+      "section": "Section 5",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s5-flavor-labels",
+      "title": "All fountain flavor labels marketing-approved",
+      "section": "Section 5",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s5-cups-lids-straws",
+      "title": "All size cups, lids, and straws available",
+      "section": "Section 5",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s5-bibs",
+      "title": "Fountain/Freeze/ICEE BIBs in code",
+      "section": "Section 5",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s5-filtration",
+      "title": "Water filtration cartridges dated within 6 months",
+      "section": "Section 5",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s5-fountain-op",
+      "title": "Fountain machine operational",
+      "section": "Section 5",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s5-barrels",
+      "title": "All Freeze/ICEE barrels operational and reflect pricing",
+      "section": "Section 5",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s6-photo-access",
+      "title": "Required photo of restroom access point",
+      "section": "Section 6",
+      "requiresPhoto": true
+    },
+    {
+      "id": "s6-photo-interior",
+      "title": "Required photo of restroom interior",
+      "section": "Section 6",
+      "requiresPhoto": true
+    },
+    {
+      "id": "s6-identified",
+      "title": "Restrooms identified and available to the public",
+      "section": "Section 6",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s6-working",
+      "title": "Restrooms in working order including plumbing",
+      "section": "Section 6",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s6-no-storage",
+      "title": "No merchandise, cleaning supplies, or equipment in restroom",
+      "section": "Section 6",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s6-supplies",
+      "title": "Adequate restroom supplies available",
+      "section": "Section 6",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s6-handwash-decal",
+      "title": "Hand washing decal present and legible",
+      "section": "Section 6",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s6-lights",
+      "title": "Restroom lights in good condition and operable",
+      "section": "Section 6",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s6-no-etched",
+      "title": "No etched graffiti in restroom",
+      "section": "Section 6",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s6-clean",
+      "title": "Restroom(s) is clean",
+      "section": "Section 6",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s7-mats",
+      "title": "Floor mats clean and in good condition",
+      "section": "Section 7",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s7-floors-clean",
+      "title": "Interior floors are cleaned",
+      "section": "Section 7",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s7-floors-clear",
+      "title": "Interior floors free from obstructions (36 inch aisle)",
+      "section": "Section 7",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s7-equipment-faces",
+      "title": "Equipment graphic faces and lenses are lit",
+      "section": "Section 7",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s7-ceiling",
+      "title": "Ceiling frames, tiles, heat and AC vents clean",
+      "section": "Section 7",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s7-lights",
+      "title": "Interior lights and light panels in good condition",
+      "section": "Section 7",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s7-supplies-stored",
+      "title": "Excess supplies stored out of sight of customers",
+      "section": "Section 7",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s7-no-graffiti",
+      "title": "No non-etched graffiti in interior",
+      "section": "Section 7",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s7-fixtures",
+      "title": "Store interior, fixtures, and graphics free of dirt",
+      "section": "Section 7",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s7-gondolas",
+      "title": "Gondolas free of dust and dirt build-up",
+      "section": "Section 7",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s7-no-tape",
+      "title": "No visible tape or handwritten signs in customer view",
+      "section": "Section 7",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s7-no-unauth-equip",
+      "title": "No unauthorized equipment in the site",
+      "section": "Section 7",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s7-no-unauth-pop",
+      "title": "No unauthorized racks or POP on the sales floor",
+      "section": "Section 7",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s7-no-banned",
+      "title": "Store free of banned or counterfeit products",
+      "section": "Section 7",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s7-pricing-match",
+      "title": "Merchandise has approved pricing that matches register",
+      "section": "Section 7",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s7-no-ooc-pkg",
+      "title": "No out-of-code packaged products on sales floor",
+      "section": "Section 7",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s7-core-instock",
+      "title": "No out-of-stocks of Core items on gondolas",
+      "section": "Section 7",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s7-beer-display",
+      "title": "Primary beer display on the sales floor",
+      "section": "Section 7",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s7-pkg-bev",
+      "title": "Packaged beverage key items in stock",
+      "section": "Section 7",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s7-beer-key",
+      "title": "Beer key items in stock",
+      "section": "Section 7",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s7-cos-key",
+      "title": "COS key items in stock",
+      "section": "Section 7",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s8-unpriced",
+      "title": "No more than five unpriced products in cooler",
+      "section": "Section 8",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s8-we-id",
+      "title": "We I.D. signs present on all alcohol doors",
+      "section": "Section 8",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s8-cooler-doors",
+      "title": "Coolers and cooler doors appear clean",
+      "section": "Section 8",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s8-cooler-floor",
+      "title": "Visible cooler floor portion cleaned daily",
+      "section": "Section 8",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s8-cooler-condition",
+      "title": "Cooler products in good condition and in code",
+      "section": "Section 8",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s8-cooler-oos",
+      "title": "No out-of-stocks in cooler",
+      "section": "Section 8",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s9-no-chicken-fridge",
+      "title": "No chicken patties or bread stored in the refrigerator",
+      "section": "Section 9",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s9-prep-clean",
+      "title": "All food prep areas clean per standards",
+      "section": "Section 9",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s9-food-stored",
+      "title": "Food items stored inside refrigeration or freezer in code",
+      "section": "Section 9",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s9-photo-back-deli",
+      "title": "Required photo of back deli case (if available)",
+      "section": "Section 9",
+      "requiresPhoto": true
+    },
+    {
+      "id": "s9-back-deli-clean",
+      "title": "Back deli case clean and in good condition",
+      "section": "Section 9",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s9-back-deli-price",
+      "title": "All products in back deli case have pricing visible",
+      "section": "Section 9",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s9-condiment-stocked",
+      "title": "Condiment bar fully stocked including bulk condiments",
+      "section": "Section 9",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s9-photo-bakery",
+      "title": "Required photo of bakery case(s)",
+      "section": "Section 9",
+      "requiresPhoto": true
+    },
+    {
+      "id": "s9-bakery-clean",
+      "title": "Bakery case clean and in good condition",
+      "section": "Section 9",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s9-bakery-id",
+      "title": "Bakery items have proper ID and price decal",
+      "section": "Section 9",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s9-ss-trays",
+      "title": "Stainless steel condiment trays in use",
+      "section": "Section 9",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s11-uniforms",
+      "title": "All employees on duty wearing official uniforms",
+      "section": "Section 11",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s11-pinpad",
+      "title": "Each pin pad displays the approved, legible screen",
+      "section": "Section 11",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s11-mobile-pay",
+      "title": "Mobile payment works on all inside pin pads",
+      "section": "Section 11",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s11-pumppass",
+      "title": "ARCO PumpPASS and Fleet brochure merchandiser present",
+      "section": "Section 11",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s11-pin-seal",
+      "title": "Security seal placed on each pin pad",
+      "section": "Section 11",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s12-tobacco-stock",
+      "title": "No out of stocks of required tobacco brands",
+      "section": "Section 12",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s12-tobacco-price",
+      "title": "Tobacco products priced with proper tags",
+      "section": "Section 12",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s12-tobacco-pop",
+      "title": "Tobacco POP properly placed on front door and window",
+      "section": "Section 12",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s12-doj-sign",
+      "title": "Required DOJ tobacco warning sign posted",
+      "section": "Section 12",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s13-video-use",
+      "title": "Video surveillance in use; public view monitor on",
+      "section": "Section 13",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s13-video-audio",
+      "title": "Video surveillance audio audible for cashier area",
+      "section": "Section 13",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s13-video-sync",
+      "title": "Video surveillance synchronized to real time",
+      "section": "Section 13",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s13-card-form",
+      "title": "Card reader security inspection form available",
+      "section": "Section 13",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s13-exits",
+      "title": "Emergency exits clearly marked with 36 inch path",
+      "section": "Section 13",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s14-cert",
+      "title": "Certified Franchisee/Manager certificate posted",
+      "section": "Section 14",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s14-assign-board",
+      "title": "ampm assignment board posted and completed",
+      "section": "Section 14",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s15-mid-clean",
+      "title": "MID sign clean and in good condition",
+      "section": "Section 15",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s15-mid-prices",
+      "title": "MID prices match prices posted at dispenser",
+      "section": "Section 15",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s15-skins",
+      "title": "ARCO dispenser official skins in good condition",
+      "section": "Section 15",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s15-pump-numbers",
+      "title": "Pumps numbered with legible numbers",
+      "section": "Section 15",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s15-valances",
+      "title": "All lighted fee valances clean and lit",
+      "section": "Section 15",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s15-pump-decals",
+      "title": "Approved and required pump decals legible",
+      "section": "Section 15",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s15-fuel-available",
+      "title": "All fuel products are available",
+      "section": "Section 15",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s15-pumps-clean",
+      "title": "All pumps are clean",
+      "section": "Section 15",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s15-readers-clean",
+      "title": "Pump dispenser card readers clean and in good condition",
+      "section": "Section 15",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s15-pumps-condition",
+      "title": "All pumps are in good condition",
+      "section": "Section 15",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s15-dispensers-op",
+      "title": "All dispensers are operable",
+      "section": "Section 15",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s15-hand-sanitizer",
+      "title": "Approved hand sanitizer dispenser present",
+      "section": "Section 15",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s15-receipts",
+      "title": "Printed receipts available at all pumps",
+      "section": "Section 15",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s15-mobile-pump",
+      "title": "Mobile payment works at pumps",
+      "section": "Section 15",
+      "requiresPhoto": false
+    },
+    {
+      "id": "s15-pump-seal",
+      "title": "Security seal placed on each pump",
+      "section": "Section 15",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fx-forecourt",
+      "title": "Forecourt and exterior customer areas neatly maintained",
+      "section": "Forecourt",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fx-landscaping",
+      "title": "Landscaping free of excessive weeds and trash",
+      "section": "Forecourt",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fx-air-water",
+      "title": "Air/water units and bumper posts clean and in good condition",
+      "section": "Forecourt",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fx-front-trash",
+      "title": "Trash cans at the front of the c-store clean",
+      "section": "Forecourt",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fx-building",
+      "title": "Building, fascia, sidewalks, and graphics clean",
+      "section": "Forecourt",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fx-windows",
+      "title": "Building windows, ledges, and exterior fixtures clean",
+      "section": "Forecourt",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fx-canopy-clean",
+      "title": "Canopy and canopy columns clean",
+      "section": "Forecourt",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fx-canopy-condition",
+      "title": "Canopy and canopy columns in good condition",
+      "section": "Forecourt",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fx-curbs",
+      "title": "Curbs, bumper poles, and bollards clean on entire property",
+      "section": "Forecourt",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fx-pump-trash",
+      "title": "Trash containers at pump islands clean",
+      "section": "Forecourt",
+      "requiresPhoto": false
+    },
+    {
+      "id": "fx-squeegee",
+      "title": "Windshield washing supplies available at each pump island",
+      "section": "Forecourt",
+      "requiresPhoto": false
+    },
+    {
+      "id": "tx-greeting",
+      "title": "Greeting",
+      "section": "Transactions",
+      "requiresPhoto": false
+    },
+    {
+      "id": "tx-upsell",
+      "title": "Upselling",
+      "section": "Transactions",
+      "requiresPhoto": false
+    },
+    {
+      "id": "tx-depart",
+      "title": "Departing greeting",
+      "section": "Transactions",
+      "requiresPhoto": false
+    },
+    {
+      "id": "tx-cash-drawer",
+      "title": "Keep cash in drawer to minimum",
+      "section": "Transactions",
+      "requiresPhoto": false
+    }
+  ],
+  "employees": [
+    {
+      "id": "e_diamond_alexhiga",
+      "name": "AlexHiga",
+      "dobHash": "1c8c4c72783fb25ac745969e4e20ccc99eef7dd1dc2b56c69dafc061c137bea4",
+      "stationId": "diamond",
+      "roleId": "r_diamond_employee",
+      "role": "Employee",
+      "hiredOn": "2026-07-01",
+      "address": "21616 Birch Hill Dr, Diamond Bar, CA 91765",
+      "status": "active",
+      "terminatedAt": "",
+      "terminateReason": "",
+      "createdAt": "2026-08-27T05:20:00.000Z",
+      "email": "alexkaitohiga@gmail.com",
+      "phone": "(909) 750-1596",
+      "clockPassHash": "aa4a40c4537b0925ddb9e1fa1f05e1806ae5c38e372b96fb7e7770560a1f8b64"
+    },
+    {
+      "id": "e_diamond_damonlowe",
+      "name": "DamonLowe",
+      "dobHash": "912ec6f3f187eb6a34708bebfe9572d35f069fd2f04cd291f05208c64f90690c",
+      "stationId": "diamond",
+      "roleId": "r_diamond_employee",
+      "role": "Employee",
+      "hiredOn": "2026-03-17",
+      "address": "759 Summerwood Ave, Walnut, CA 91789",
+      "status": "active",
+      "terminatedAt": "",
+      "terminateReason": "",
+      "createdAt": "2026-08-27T05:20:00.000Z",
+      "email": "lowedamon2469@gmail.com",
+      "phone": "(909) 633-3273",
+      "clockPassHash": "bce00a5b801955172c88c9fd335f69f48cc45c7660d7058fee90542f4d070fbe"
+    },
+    {
+      "id": "e_diamond_elviaarriola",
+      "name": "ElviaArriola",
+      "dobHash": "b09bc0b3bbd809e266d3a30ce9bd26b13a327165f94110277ee4b709fc2917d7",
+      "stationId": "diamond",
+      "roleId": "r_diamond_employee",
+      "role": "Employee",
+      "hiredOn": "2025-12-15",
+      "address": "3710 Castle Rock Rd, Diamond Bar, CA 91765",
+      "status": "active",
+      "terminatedAt": "",
+      "terminateReason": "",
+      "createdAt": "2026-08-27T05:20:00.000Z",
+      "email": "elvia.arriola@icloud.com",
+      "phone": "(562) 540-0315",
+      "clockPassHash": "ec30e2412c0ab736d9f57ab6692631bcff2f2e54fcc98b596e669ffc863dbf35"
+    },
+    {
+      "id": "e_diamond_glendadelatorre",
+      "name": "GlendaDeLaTorre",
+      "dobHash": "7cce7d7995b6fdae728c9339421a76c9b7a8de9a4cb784d8f3dfb9c1fd254970",
+      "stationId": "diamond",
+      "roleId": "r_diamond_employee",
+      "role": "Employee",
+      "hiredOn": "2022-12-06",
+      "address": "2202 Sierra Leone Ave, Rowland Heights, CA 91748",
+      "status": "active",
+      "terminatedAt": "",
+      "terminateReason": "",
+      "createdAt": "2026-08-27T05:20:00.000Z",
+      "email": "glendamtt@yahoo.com",
+      "phone": "(323) 944-9162",
+      "photo": "data/roster-photos/GlendaDeLaTorre.jpg",
+      "clockPassHash": "a75b11f3bcdbac32f5a6bb802cf750bd16872395f653f6e1fe1e3658519faa63"
+    },
+    {
+      "id": "e_diamond_hugocanales",
+      "name": "HugoCanales",
+      "dobHash": "5f67bda59d0fb74964d39b30ba80ca68ad2a1c559f837daf6c406315d5715be7",
+      "stationId": "diamond",
+      "roleId": "r_diamond_employee",
+      "role": "Employee",
+      "hiredOn": "2022-01-31",
+      "address": "",
+      "status": "active",
+      "terminatedAt": "",
+      "terminateReason": "",
+      "createdAt": "2026-08-27T05:20:00.000Z",
+      "email": "canales.h015@gmail.com",
+      "phone": "(562) 359-8061",
+      "clockPassHash": "1ce9ffb0ca16ab6656fbc5652bb9ba67e14698c9c913e011ac0cffdb123688e3"
+    },
+    {
+      "id": "e_diamond_josephcho",
+      "name": "JosephCho",
+      "dobHash": "fce5d1e4abc601b2707059ebb0dafbe9bc4156590cdf1653c7e0026795ff95b3",
+      "stationId": "diamond",
+      "roleId": "r_diamond_employee",
+      "role": "Employee",
+      "hiredOn": "2024-04-10",
+      "address": "22545 Larkspring Terrace, Diamond Bar, CA 91765",
+      "status": "active",
+      "terminatedAt": "",
+      "terminateReason": "",
+      "createdAt": "2026-08-27T05:20:00.000Z",
+      "email": "cho6059415@gmail.com",
+      "phone": "(210) 243-5120",
+      "photo": "data/roster-photos/JosephCho.jpg",
+      "clockPassHash": "93b5f0b60b15cc7b70dc1e1144ce3e036a1a16ae94c4323029988283f2f40b2d"
+    },
+    {
+      "id": "e_diamond_kenceasar",
+      "name": "KenCeasar",
+      "dobHash": "a734f7c3203307ea7f331cef199eaa449b7cfa319c8be0a5abe80242aeed991d",
+      "stationId": "diamond",
+      "roleId": "r_diamond_employee",
+      "role": "Employee",
+      "hiredOn": "2020-05-28",
+      "address": "",
+      "status": "active",
+      "terminatedAt": "",
+      "terminateReason": "",
+      "createdAt": "2026-08-27T05:20:00.000Z",
+      "email": "kceasar@avc.com",
+      "phone": "(661) 974-1650",
+      "clockPassHash": "ec472d9c5868fe655609c9ecf8b602c020b65945e31a71c28366f1ec9a15e8e6"
+    },
+    {
+      "id": "e_diamond_michellesmith",
+      "name": "MichelleSmith",
+      "dobHash": "f34346999253f3d5db08fc0bf134dc1fbd769cb6b1ee0ea01ce41829f15dcfc0",
+      "stationId": "diamond",
+      "roleId": "r_diamond_employee",
+      "role": "Employee",
+      "hiredOn": "2022-12-21",
+      "address": "21210 Chocktaw Drive, Diamond Bar, CA 91765",
+      "status": "active",
+      "terminatedAt": "",
+      "terminateReason": "",
+      "createdAt": "2026-08-27T05:20:00.000Z",
+      "email": "m.smith0616@gmail.com",
+      "phone": "(909) 568-7513",
+      "clockPassHash": "70bc170c4a20ff1f7e2e725c42cca0bff52f6c3b3a66a4246766e4b49b6db53f"
+    },
+    {
+      "id": "e_diamond_oliversanchez",
+      "name": "OliverSanchez",
+      "dobHash": "2bd22a131095c4ee8507623ba0e90a441ec7ae6437e13f577c4da957ebeee9e7",
+      "stationId": "diamond",
+      "roleId": "r_diamond_employee",
+      "role": "Employee",
+      "hiredOn": "2026-05-07",
+      "address": "1920 Kellerton Drive, Hacienda Heights, CA 91745",
+      "status": "active",
+      "terminatedAt": "",
+      "terminateReason": "",
+      "createdAt": "2026-08-27T05:20:00.000Z",
+      "email": "noafifx@gmail.com",
+      "phone": "(626) 986-9651",
+      "clockPassHash": "8644ca09b1bcb4da5bab7cfad34c5242df44c0964ee2dd882755cbb098072f42"
+    },
+    {
+      "id": "e_diamond_racheloberholtzer",
+      "name": "RachelOberholtzer",
+      "dobHash": "8b4503536228b71233d8b149e033ca33826b3f1a3e8f1094ea392d9227f6f49e",
+      "stationId": "diamond",
+      "roleId": "r_diamond_manager",
+      "role": "Manager",
+      "hiredOn": "2015-08-01",
+      "address": "2930 Malaga Cir, A, Diamond Bar, CA 91765",
+      "status": "active",
+      "terminatedAt": "",
+      "terminateReason": "",
+      "createdAt": "2026-08-27T05:20:00.000Z",
+      "email": "reoberholtzer@gmail.com",
+      "phone": "(909) 551-1644",
+      "photo": "data/roster-photos/RachelOberholtzer.jpg",
+      "clockPassHash": "2a8e370813a4e33a24dbf204d9f520db60630d06e50e8a4a873d437a4b20d8ac"
+    },
+    {
+      "id": "e_diamond_tylershenk",
+      "name": "TylerShenk",
+      "dobHash": "991d09477b483eb8ffcc056371c5c290c716c6482556be6bcca73dd97dde72dc",
+      "stationId": "diamond",
+      "roleId": "r_diamond_employee",
+      "role": "Employee",
+      "hiredOn": "2025-07-22",
+      "address": "19749 East Castlebar Drive, Rowland Heights, CA 91748",
+      "status": "active",
+      "terminatedAt": "",
+      "terminateReason": "",
+      "createdAt": "2026-08-27T05:20:00.000Z",
+      "email": "tjack2004@gmail.com",
+      "phone": "(626) 433-5326",
+      "clockPassHash": "27c7112842fc7b2ab222223b1f678b5aa82f7db3c8c462f6077dc8d9ef477b81"
+    }
+  ],
+  "roles": [
+    {
+      "id": "r_diamond_employee",
+      "stationId": "diamond",
+      "name": "Employee"
+    },
+    {
+      "id": "r_diamond_manager",
+      "stationId": "diamond",
+      "name": "Manager"
+    }
+  ],
+  "shifts": [
+    {
+      "id": "sh_diamond_1",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "date": "2026-08-24",
+      "start": "13:00",
+      "end": "20:00"
+    },
+    {
+      "id": "sh_diamond_2",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "date": "2026-08-25",
+      "start": "12:00",
+      "end": "20:00"
+    },
+    {
+      "id": "sh_diamond_3",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "date": "2026-08-26",
+      "start": "13:00",
+      "end": "20:00"
+    },
+    {
+      "id": "sh_diamond_4",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "date": "2026-08-27",
+      "start": "13:00",
+      "end": "20:00"
+    },
+    {
+      "id": "sh_diamond_5",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "date": "2026-08-28",
+      "start": "12:00",
+      "end": "20:00"
+    },
+    {
+      "id": "sh_diamond_6",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "date": "2026-08-24",
+      "start": "08:00",
+      "end": "14:00"
+    },
+    {
+      "id": "sh_diamond_7",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "date": "2026-08-26",
+      "start": "05:00",
+      "end": "11:00"
+    },
+    {
+      "id": "sh_diamond_8",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "date": "2026-08-28",
+      "start": "05:00",
+      "end": "11:00"
+    },
+    {
+      "id": "sh_diamond_9",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "date": "2026-08-29",
+      "start": "06:00",
+      "end": "14:00"
+    },
+    {
+      "id": "sh_diamond_10",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "date": "2026-08-30",
+      "start": "06:00",
+      "end": "14:00"
+    },
+    {
+      "id": "sh_diamond_11",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "date": "2026-08-24",
+      "start": "05:30",
+      "end": "13:30"
+    },
+    {
+      "id": "sh_diamond_12",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "date": "2026-08-25",
+      "start": "05:30",
+      "end": "13:30"
+    },
+    {
+      "id": "sh_diamond_13",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "date": "2026-08-26",
+      "start": "05:30",
+      "end": "13:30"
+    },
+    {
+      "id": "sh_diamond_14",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "date": "2026-08-27",
+      "start": "05:30",
+      "end": "13:30"
+    },
+    {
+      "id": "sh_diamond_15",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "date": "2026-08-24",
+      "start": "22:00",
+      "end": "06:00"
+    },
+    {
+      "id": "sh_diamond_16",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "date": "2026-08-25",
+      "start": "22:00",
+      "end": "06:00"
+    },
+    {
+      "id": "sh_diamond_17",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "date": "2026-08-26",
+      "start": "22:00",
+      "end": "06:00"
+    },
+    {
+      "id": "sh_diamond_18",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "date": "2026-08-27",
+      "start": "22:00",
+      "end": "06:00"
+    },
+    {
+      "id": "sh_diamond_19",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "date": "2026-08-30",
+      "start": "22:00",
+      "end": "06:00"
+    },
+    {
+      "id": "sh_diamond_20",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "date": "2026-08-24",
+      "start": "06:00",
+      "end": "14:00"
+    },
+    {
+      "id": "sh_diamond_21",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "date": "2026-08-25",
+      "start": "06:00",
+      "end": "14:00"
+    },
+    {
+      "id": "sh_diamond_22",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "date": "2026-08-26",
+      "start": "06:00",
+      "end": "14:00"
+    },
+    {
+      "id": "sh_diamond_23",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "date": "2026-08-27",
+      "start": "06:00",
+      "end": "14:00"
+    },
+    {
+      "id": "sh_diamond_24",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "date": "2026-08-28",
+      "start": "06:00",
+      "end": "14:00"
+    },
+    {
+      "id": "sh_diamond_25",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "date": "2026-08-27",
+      "start": "14:00",
+      "end": "22:00"
+    },
+    {
+      "id": "sh_diamond_26",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "date": "2026-08-28",
+      "start": "14:00",
+      "end": "22:00"
+    },
+    {
+      "id": "sh_diamond_27",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "date": "2026-08-29",
+      "start": "14:00",
+      "end": "22:00"
+    },
+    {
+      "id": "sh_diamond_28",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "date": "2026-08-30",
+      "start": "14:00",
+      "end": "22:00"
+    },
+    {
+      "id": "sh_diamond_29",
+      "employeeId": "e_diamond_alexhiga",
+      "stationId": "diamond",
+      "date": "2026-08-25",
+      "start": "14:00",
+      "end": "22:00"
+    },
+    {
+      "id": "sh_diamond_30",
+      "employeeId": "e_diamond_alexhiga",
+      "stationId": "diamond",
+      "date": "2026-08-26",
+      "start": "14:00",
+      "end": "22:00"
+    },
+    {
+      "id": "sh_diamond_31",
+      "employeeId": "e_diamond_tylershenk",
+      "stationId": "diamond",
+      "date": "2026-08-24",
+      "start": "14:00",
+      "end": "22:00"
+    },
+    {
+      "id": "sh_diamond_32",
+      "employeeId": "e_diamond_tylershenk",
+      "stationId": "diamond",
+      "date": "2026-08-28",
+      "start": "22:00",
+      "end": "06:00"
+    },
+    {
+      "id": "sh_diamond_33",
+      "employeeId": "e_diamond_tylershenk",
+      "stationId": "diamond",
+      "date": "2026-08-29",
+      "start": "22:00",
+      "end": "06:00"
+    },
+    {
+      "id": "sh_diamond_34",
+      "employeeId": "e_diamond_elviaarriola",
+      "stationId": "diamond",
+      "date": "2026-08-29",
+      "start": "14:00",
+      "end": "20:00"
+    },
+    {
+      "id": "sh_diamond_35",
+      "employeeId": "e_diamond_elviaarriola",
+      "stationId": "diamond",
+      "date": "2026-08-30",
+      "start": "14:00",
+      "end": "20:00"
+    },
+    {
+      "id": "sh_diamond_36",
+      "employeeId": "e_diamond_damonlowe",
+      "stationId": "diamond",
+      "date": "2026-08-28",
+      "start": "06:00",
+      "end": "14:00"
+    },
+    {
+      "id": "sh_diamond_37",
+      "employeeId": "e_diamond_damonlowe",
+      "stationId": "diamond",
+      "date": "2026-08-29",
+      "start": "06:00",
+      "end": "14:00"
+    },
+    {
+      "id": "sh_diamond_38",
+      "employeeId": "e_diamond_damonlowe",
+      "stationId": "diamond",
+      "date": "2026-08-30",
+      "start": "06:00",
+      "end": "14:00"
+    },
+    {
+      "id": "sh_diamond_39",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "date": "2026-08-31",
+      "start": "13:00",
+      "end": "20:00"
+    },
+    {
+      "id": "sh_diamond_40",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "date": "2026-08-31",
+      "start": "05:30",
+      "end": "13:30"
+    },
+    {
+      "id": "sh_diamond_41",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "date": "2026-08-31",
+      "start": "22:00",
+      "end": "06:00"
+    },
+    {
+      "id": "sh_diamond_42",
+      "employeeId": "e_diamond_tylershenk",
+      "stationId": "diamond",
+      "date": "2026-08-31",
+      "start": "14:00",
+      "end": "22:00"
+    },
+    {
+      "id": "sh_diamond_43",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "date": "2026-09-01",
+      "start": "12:00",
+      "end": "20:00"
+    },
+    {
+      "id": "sh_diamond_44",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "date": "2026-09-01",
+      "start": "05:30",
+      "end": "13:30"
+    },
+    {
+      "id": "sh_diamond_45",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "date": "2026-09-01",
+      "start": "22:00",
+      "end": "06:00"
+    },
+    {
+      "id": "sh_diamond_46",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "date": "2026-09-01",
+      "start": "06:00",
+      "end": "14:00"
+    },
+    {
+      "id": "sh_diamond_47",
+      "employeeId": "e_diamond_alexhiga",
+      "stationId": "diamond",
+      "date": "2026-09-01",
+      "start": "14:00",
+      "end": "22:00"
+    },
+    {
+      "id": "sh_diamond_48",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "date": "2026-09-02",
+      "start": "13:00",
+      "end": "20:00"
+    },
+    {
+      "id": "sh_diamond_49",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "date": "2026-09-02",
+      "start": "05:00",
+      "end": "12:00"
+    },
+    {
+      "id": "sh_diamond_50",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "date": "2026-09-02",
+      "start": "05:30",
+      "end": "13:30"
+    },
+    {
+      "id": "sh_diamond_51",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "date": "2026-09-02",
+      "start": "22:00",
+      "end": "06:00"
+    },
+    {
+      "id": "sh_diamond_52",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "date": "2026-09-02",
+      "start": "06:00",
+      "end": "14:00"
+    },
+    {
+      "id": "sh_diamond_53",
+      "employeeId": "e_diamond_alexhiga",
+      "stationId": "diamond",
+      "date": "2026-09-02",
+      "start": "14:00",
+      "end": "22:00"
+    },
+    {
+      "id": "sh_diamond_54",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "date": "2026-09-03",
+      "start": "13:00",
+      "end": "20:00"
+    },
+    {
+      "id": "sh_diamond_55",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "date": "2026-09-03",
+      "start": "05:30",
+      "end": "13:30"
+    },
+    {
+      "id": "sh_diamond_56",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "date": "2026-09-03",
+      "start": "22:00",
+      "end": "06:00"
+    },
+    {
+      "id": "sh_diamond_57",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "date": "2026-09-03",
+      "start": "06:00",
+      "end": "14:00"
+    },
+    {
+      "id": "sh_diamond_58",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "date": "2026-09-03",
+      "start": "14:00",
+      "end": "22:00"
+    },
+    {
+      "id": "sh_diamond_59",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "date": "2026-09-04",
+      "start": "12:00",
+      "end": "20:00"
+    },
+    {
+      "id": "sh_diamond_60",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "date": "2026-09-04",
+      "start": "05:00",
+      "end": "11:00"
+    },
+    {
+      "id": "sh_diamond_61",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "date": "2026-09-04",
+      "start": "06:00",
+      "end": "14:00"
+    },
+    {
+      "id": "sh_diamond_62",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "date": "2026-09-04",
+      "start": "06:00",
+      "end": "14:00"
+    },
+    {
+      "id": "sh_diamond_63",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "date": "2026-09-04",
+      "start": "14:00",
+      "end": "22:00"
+    },
+    {
+      "id": "sh_diamond_64",
+      "employeeId": "e_diamond_tylershenk",
+      "stationId": "diamond",
+      "date": "2026-09-04",
+      "start": "22:00",
+      "end": "06:00"
+    },
+    {
+      "id": "sh_diamond_65",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "date": "2026-09-05",
+      "start": "06:00",
+      "end": "14:00"
+    },
+    {
+      "id": "sh_diamond_66",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "date": "2026-09-05",
+      "start": "14:00",
+      "end": "22:00"
+    },
+    {
+      "id": "sh_diamond_67",
+      "employeeId": "e_diamond_tylershenk",
+      "stationId": "diamond",
+      "date": "2026-09-05",
+      "start": "22:00",
+      "end": "06:00"
+    },
+    {
+      "id": "sh_diamond_68",
+      "employeeId": "e_diamond_elviaarriola",
+      "stationId": "diamond",
+      "date": "2026-09-05",
+      "start": "14:00",
+      "end": "20:00"
+    },
+    {
+      "id": "sh_diamond_69",
+      "employeeId": "e_diamond_damonlowe",
+      "stationId": "diamond",
+      "date": "2026-09-05",
+      "start": "06:00",
+      "end": "14:00"
+    },
+    {
+      "id": "sh_diamond_70",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "date": "2026-09-06",
+      "start": "06:00",
+      "end": "14:00"
+    },
+    {
+      "id": "sh_diamond_71",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "date": "2026-09-06",
+      "start": "22:00",
+      "end": "06:00"
+    },
+    {
+      "id": "sh_diamond_72",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "date": "2026-09-06",
+      "start": "14:00",
+      "end": "22:00"
+    },
+    {
+      "id": "sh_diamond_73",
+      "employeeId": "e_diamond_elviaarriola",
+      "stationId": "diamond",
+      "date": "2026-09-06",
+      "start": "14:00",
+      "end": "20:00"
+    },
+    {
+      "id": "sh_diamond_74",
+      "employeeId": "e_diamond_damonlowe",
+      "stationId": "diamond",
+      "date": "2026-09-06",
+      "start": "06:00",
+      "end": "14:00"
+    }
+  ],
+  "timeOff": [],
+  "availability": [],
+  "assignments": [
+    {
+      "id": "a-cs-2026-08-24-fsi-kat-labels",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "fsi-kat-labels",
+      "title": "KAT printer labels in use for HATCO products",
+      "requiresPhoto": false,
+      "date": "2026-08-24",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-24-fsi-hatco-expired",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "fsi-hatco-expired",
+      "title": "No expired items in HATCO",
+      "requiresPhoto": false,
+      "date": "2026-08-24",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-24-fsi-temp-one",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "fsi-temp-one",
+      "title": "Check temperature of one HATCO item",
+      "requiresPhoto": false,
+      "date": "2026-08-24",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-24-fsi-temp-all",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "fsi-temp-all",
+      "title": "Check temperatures of all HATCOs",
+      "requiresPhoto": false,
+      "date": "2026-08-24",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-24-fsi-must-use-by",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "fsi-must-use-by",
+      "title": "Must Use By date on Athens or Rotella bread",
+      "requiresPhoto": false,
+      "date": "2026-08-24",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-24-fsi-prep-coolers",
+      "employeeId": "e_diamond_tylershenk",
+      "stationId": "diamond",
+      "catalogId": "fsi-prep-coolers",
+      "title": "Prep food in coolers is today's date or not past Must Use By",
+      "requiresPhoto": false,
+      "date": "2026-08-24",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-25-fsi-refrig-labeled",
+      "employeeId": "e_diamond_alexhiga",
+      "stationId": "diamond",
+      "catalogId": "fsi-refrig-labeled",
+      "title": "All refrigerated or frozen food ingredients labeled",
+      "requiresPhoto": false,
+      "date": "2026-08-25",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-25-fsi-freezer-labels",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "fsi-freezer-labels",
+      "title": "All food products in freezer have manufacturer or product date",
+      "requiresPhoto": false,
+      "date": "2026-08-25",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-25-fsi-freezer-thermo",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "fsi-freezer-thermo",
+      "title": "All freezers containing food have an internal thermometer",
+      "requiresPhoto": false,
+      "date": "2026-08-25",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-25-fsi-case-temps",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "fsi-case-temps",
+      "title": "Refrigerated cases between 33\u00b0F and 41\u00b0F",
+      "requiresPhoto": false,
+      "date": "2026-08-25",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-25-fsi-front-deli-op",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "fsi-front-deli-op",
+      "title": "Front deli case operating 33\u00b0F\u201341\u00b0F",
+      "requiresPhoto": false,
+      "date": "2026-08-25",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-26-fsi-no-ooc-perish",
+      "employeeId": "e_diamond_alexhiga",
+      "stationId": "diamond",
+      "catalogId": "fsi-no-ooc-perish",
+      "title": "No out-of-code perishable items",
+      "requiresPhoto": false,
+      "date": "2026-08-26",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-26-fsi-no-ooc-front",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "fsi-no-ooc-front",
+      "title": "No out-of-code products in front deli cooler",
+      "requiresPhoto": false,
+      "date": "2026-08-26",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-26-fsi-condiment-temp",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "fsi-condiment-temp",
+      "title": "Condiment bar temperature 41\u00b0F or below",
+      "requiresPhoto": false,
+      "date": "2026-08-26",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-26-fsi-nacho-chili",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "fsi-nacho-chili",
+      "title": "Nacho cheese and chili within code (if available)",
+      "requiresPhoto": false,
+      "date": "2026-08-26",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-26-fsi-frozen-coffee-code",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "fsi-frozen-coffee-code",
+      "title": "Frozen coffee machine product use-by label updated",
+      "requiresPhoto": false,
+      "date": "2026-08-26",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-26-fsi-quat-kit",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "fsi-quat-kit",
+      "title": "Quaternary ammonium sanitizer test kit available",
+      "requiresPhoto": false,
+      "date": "2026-08-26",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-27-fsi-sanitizer-bucket",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "fsi-sanitizer-bucket",
+      "title": "Sanitizer bucket or spray bottle prepared",
+      "requiresPhoto": false,
+      "date": "2026-08-27",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-27-fsi-quat-ppm",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "fsi-quat-ppm",
+      "title": "Quat sanitizer meets 200\u2013400 ppm",
+      "requiresPhoto": false,
+      "date": "2026-08-27",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-27-fsi-sink-setup",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "fsi-sink-setup",
+      "title": "2 or 3 compartment sink set up (wash, rinse, sanitize)",
+      "requiresPhoto": false,
+      "date": "2026-08-27",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-27-fsi-hot-water",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "fsi-hot-water",
+      "title": "Minimum hot water 110\u00b0F (120\u00b0F in California)",
+      "requiresPhoto": false,
+      "date": "2026-08-27",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-27-fsi-sink-chemicals",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "fsi-sink-chemicals",
+      "title": "Compartment sink chemicals available",
+      "requiresPhoto": false,
+      "date": "2026-08-27",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-28-fsi-sink-proper",
+      "employeeId": "e_diamond_damonlowe",
+      "stationId": "diamond",
+      "catalogId": "fsi-sink-proper",
+      "title": "2 or 3 compartment sink used properly",
+      "requiresPhoto": false,
+      "date": "2026-08-28",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-28-fsi-handwash",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "fsi-handwash",
+      "title": "Hand washing sink accessible, stocked, unobstructed",
+      "requiresPhoto": false,
+      "date": "2026-08-28",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-28-fsi-cfm",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "fsi-cfm",
+      "title": "Nationally-approved Certified Food Manager certificate on site",
+      "requiresPhoto": false,
+      "date": "2026-08-28",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-28-fsi-food-handler",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "fsi-food-handler",
+      "title": "Food handling certificates for employees handling food",
+      "requiresPhoto": false,
+      "date": "2026-08-28",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-28-fsi-probe",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "fsi-probe",
+      "title": "Working probe thermometer available",
+      "requiresPhoto": false,
+      "date": "2026-08-28",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-28-fsi-gloves",
+      "employeeId": "e_diamond_tylershenk",
+      "stationId": "diamond",
+      "catalogId": "fsi-gloves",
+      "title": "Gloves available and in use if prepping food",
+      "requiresPhoto": false,
+      "date": "2026-08-28",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-29-fsi-hair",
+      "employeeId": "e_diamond_damonlowe",
+      "stationId": "diamond",
+      "catalogId": "fsi-hair",
+      "title": "Employee wearing approved hair covering while prepping",
+      "requiresPhoto": false,
+      "date": "2026-08-29",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-29-fsi-pests",
+      "employeeId": "e_diamond_elviaarriola",
+      "stationId": "diamond",
+      "catalogId": "fsi-pests",
+      "title": "No evidence or signs of pest infestation",
+      "requiresPhoto": false,
+      "date": "2026-08-29",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-29-fsi-storage-height",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "fsi-storage-height",
+      "title": "All food products stored at least 6 inches off the ground",
+      "requiresPhoto": false,
+      "date": "2026-08-29",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-29-fsi-sds",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "fsi-sds",
+      "title": "Safety Data Sheets available for cleaning and sanitizing products",
+      "requiresPhoto": false,
+      "date": "2026-08-29",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-29-fsi-bakery-timecode",
+      "employeeId": "e_diamond_tylershenk",
+      "stationId": "diamond",
+      "catalogId": "fsi-bakery-timecode",
+      "title": "Bakery items time-coded",
+      "requiresPhoto": false,
+      "date": "2026-08-29",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-30-fsi-creamer-useby",
+      "employeeId": "e_diamond_damonlowe",
+      "stationId": "diamond",
+      "catalogId": "fsi-creamer-useby",
+      "title": "Creamer pumps and bottles have use-by dates",
+      "requiresPhoto": false,
+      "date": "2026-08-30",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-30-s2-photo-hatco",
+      "employeeId": "e_diamond_elviaarriola",
+      "stationId": "diamond",
+      "catalogId": "s2-photo-hatco",
+      "title": "Required photo of HATCO(s)",
+      "requiresPhoto": true,
+      "date": "2026-08-30",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-30-s2-photo-oven",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "s2-photo-oven",
+      "title": "Required photo of OVEN(s)",
+      "requiresPhoto": true,
+      "date": "2026-08-30",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-30-s2-hatco-empty",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "s2-hatco-empty",
+      "title": "HATCO not empty / off / unused (mark No if empty)",
+      "requiresPhoto": false,
+      "date": "2026-08-30",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-30-s2-hatco-clean",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s2-hatco-clean",
+      "title": "HATCO is clean",
+      "requiresPhoto": false,
+      "date": "2026-08-30",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-24-s2-burgers-stocked",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "s2-burgers-stocked",
+      "title": "Hamburger, cheeseburger, double, chicken sandwiches stocked",
+      "requiresPhoto": false,
+      "date": "2026-08-24",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-24-s2-hotfood-planogram",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "s2-hotfood-planogram",
+      "title": "Hot food stocked per current planogram",
+      "requiresPhoto": false,
+      "date": "2026-08-24",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-24-s2-hatco-bag",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s2-hatco-bag",
+      "title": "HATCO product in the correct bag",
+      "requiresPhoto": false,
+      "date": "2026-08-24",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-24-s2-no-unapproved",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "s2-no-unapproved",
+      "title": "No unapproved food or ingredients in coolers or freezers",
+      "requiresPhoto": false,
+      "date": "2026-08-24",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-24-s2-oven-fan",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "s2-oven-fan",
+      "title": "All ovens have fan speed switch set to low (except Hobart)",
+      "requiresPhoto": false,
+      "date": "2026-08-24",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-24-s2-wavy-rack",
+      "employeeId": "e_diamond_tylershenk",
+      "stationId": "diamond",
+      "catalogId": "s2-wavy-rack",
+      "title": "Wavy rack present and in use to cook hot dogs",
+      "requiresPhoto": false,
+      "date": "2026-08-24",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-25-s2-flat-racks",
+      "employeeId": "e_diamond_alexhiga",
+      "stationId": "diamond",
+      "catalogId": "s2-flat-racks",
+      "title": "Flat racks present and in use for corn dogs and other items",
+      "requiresPhoto": false,
+      "date": "2026-08-25",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-25-s2-trays",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "s2-trays",
+      "title": "Cooking trays in good condition or lined with parchment",
+      "requiresPhoto": false,
+      "date": "2026-08-25",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-25-s2-fly-fan",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s2-fly-fan",
+      "title": "Fly fan functioning correctly",
+      "requiresPhoto": false,
+      "date": "2026-08-25",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-25-s3-store-temp",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "s3-store-temp",
+      "title": "Store temperature at or below 75\u00b0F",
+      "requiresPhoto": false,
+      "date": "2026-08-25",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-25-s3-front-deli-clean",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "s3-front-deli-clean",
+      "title": "Front deli case is clean",
+      "requiresPhoto": false,
+      "date": "2026-08-25",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-26-s3-temp-log",
+      "employeeId": "e_diamond_alexhiga",
+      "stationId": "diamond",
+      "catalogId": "s3-temp-log",
+      "title": "Temperature log for front deli case filled out",
+      "requiresPhoto": false,
+      "date": "2026-08-26",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-26-s3-deli-planogram",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "s3-deli-planogram",
+      "title": "Front deli case planogram followed and case is full",
+      "requiresPhoto": false,
+      "date": "2026-08-26",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-26-s3-fruit-rack",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "s3-fruit-rack",
+      "title": "Fruit rack and fresh fruit quality; shelf labels present",
+      "requiresPhoto": false,
+      "date": "2026-08-26",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-26-s3-graphics",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s3-graphics",
+      "title": "Graphics clean and in good condition",
+      "requiresPhoto": false,
+      "date": "2026-08-26",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-26-s3-lookin-fresh",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "s3-lookin-fresh",
+      "title": "Fresh deli case Lookin' Fresh graphic in good condition",
+      "requiresPhoto": false,
+      "date": "2026-08-26",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-26-s3-cabinets",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "s3-cabinets",
+      "title": "Cabinet doors and laminate on sales floor in good condition",
+      "requiresPhoto": false,
+      "date": "2026-08-26",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-27-s4-coffee-neat",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "s4-coffee-neat",
+      "title": "Coffee area is neat and clean",
+      "requiresPhoto": false,
+      "date": "2026-08-27",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-27-s4-special-blend",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "s4-special-blend",
+      "title": "Special Blend Regular and Decaf available",
+      "requiresPhoto": false,
+      "date": "2026-08-27",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-27-s4-urn-flavors",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s4-urn-flavors",
+      "title": "Coffee urns have approved flavor tags or nozzle covers",
+      "requiresPhoto": false,
+      "date": "2026-08-27",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-27-s4-no-grounds",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "s4-no-grounds",
+      "title": "No coffee grounds left in brew baskets",
+      "requiresPhoto": false,
+      "date": "2026-08-27",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-27-s4-spray-head",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "s4-spray-head",
+      "title": "Coffee spray head is clean",
+      "requiresPhoto": false,
+      "date": "2026-08-27",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-28-s4-creamiser-clean",
+      "employeeId": "e_diamond_damonlowe",
+      "stationId": "diamond",
+      "catalogId": "s4-creamiser-clean",
+      "title": "Authorized bulk creamiser clean (inside and out)",
+      "requiresPhoto": false,
+      "date": "2026-08-28",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-28-s4-creamiser-dated",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "s4-creamiser-dated",
+      "title": "Bulk creamiser product bags properly dated",
+      "requiresPhoto": false,
+      "date": "2026-08-28",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-28-s4-whipped",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "s4-whipped",
+      "title": "Whipped topping dispenser available and stocked",
+      "requiresPhoto": false,
+      "date": "2026-08-28",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-28-s4-capp-flavors",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "s4-capp-flavors",
+      "title": "Cappuccino flavors available and tags placed",
+      "requiresPhoto": false,
+      "date": "2026-08-28",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-28-s4-machines-clean",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "s4-machines-clean",
+      "title": "Coffee urns, Bean-2-Cup, and cappuccino machines clean",
+      "requiresPhoto": false,
+      "date": "2026-08-28",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-28-s4-drip-trays",
+      "employeeId": "e_diamond_tylershenk",
+      "stationId": "diamond",
+      "catalogId": "s4-drip-trays",
+      "title": "Drip trays emptied",
+      "requiresPhoto": false,
+      "date": "2026-08-28",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-29-s4-cups-lids",
+      "employeeId": "e_diamond_damonlowe",
+      "stationId": "diamond",
+      "catalogId": "s4-cups-lids",
+      "title": "Coffee area cups, lids, and sleeves available",
+      "requiresPhoto": false,
+      "date": "2026-08-29",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-29-s4-no-trash",
+      "employeeId": "e_diamond_elviaarriola",
+      "stationId": "diamond",
+      "catalogId": "s4-no-trash",
+      "title": "No trash visible; trash containers have lids",
+      "requiresPhoto": false,
+      "date": "2026-08-29",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-29-s4-bunn-only",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "s4-bunn-only",
+      "title": "BUNN is the only frozen coffee equipment on site",
+      "requiresPhoto": false,
+      "date": "2026-08-29",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-29-s4-frozen-op",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "s4-frozen-op",
+      "title": "Frozen coffee equipment operational",
+      "requiresPhoto": false,
+      "date": "2026-08-29",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-29-s4-frozen-clean",
+      "employeeId": "e_diamond_tylershenk",
+      "stationId": "diamond",
+      "catalogId": "s4-frozen-clean",
+      "title": "Frozen coffee equipment clean",
+      "requiresPhoto": false,
+      "date": "2026-08-29",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-30-s4-frozen-drizzles",
+      "employeeId": "e_diamond_damonlowe",
+      "stationId": "diamond",
+      "catalogId": "s4-frozen-drizzles",
+      "title": "Frozen coffee drizzles available",
+      "requiresPhoto": false,
+      "date": "2026-08-30",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-30-s4-napkins",
+      "employeeId": "e_diamond_elviaarriola",
+      "stationId": "diamond",
+      "catalogId": "s4-napkins",
+      "title": "Napkin dispensers stocked, operational, good condition",
+      "requiresPhoto": false,
+      "date": "2026-08-30",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-30-s5-freeze-present",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "s5-freeze-present",
+      "title": "ampm Freeze or ICEE present and working",
+      "requiresPhoto": false,
+      "date": "2026-08-30",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-30-s5-fountain-clean",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "s5-fountain-clean",
+      "title": "Fountain and Freeze/ICEE are clean",
+      "requiresPhoto": false,
+      "date": "2026-08-30",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-30-s5-flavors",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s5-flavors",
+      "title": "All fountain flavors available",
+      "requiresPhoto": false,
+      "date": "2026-08-30",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-24-s5-flavor-labels",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "s5-flavor-labels",
+      "title": "All fountain flavor labels marketing-approved",
+      "requiresPhoto": false,
+      "date": "2026-08-24",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-24-s5-cups-lids-straws",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "s5-cups-lids-straws",
+      "title": "All size cups, lids, and straws available",
+      "requiresPhoto": false,
+      "date": "2026-08-24",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-24-s5-bibs",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s5-bibs",
+      "title": "Fountain/Freeze/ICEE BIBs in code",
+      "requiresPhoto": false,
+      "date": "2026-08-24",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-24-s5-filtration",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "s5-filtration",
+      "title": "Water filtration cartridges dated within 6 months",
+      "requiresPhoto": false,
+      "date": "2026-08-24",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-24-s5-fountain-op",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "s5-fountain-op",
+      "title": "Fountain machine operational",
+      "requiresPhoto": false,
+      "date": "2026-08-24",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-24-s5-barrels",
+      "employeeId": "e_diamond_tylershenk",
+      "stationId": "diamond",
+      "catalogId": "s5-barrels",
+      "title": "All Freeze/ICEE barrels operational and reflect pricing",
+      "requiresPhoto": false,
+      "date": "2026-08-24",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-25-s6-photo-access",
+      "employeeId": "e_diamond_alexhiga",
+      "stationId": "diamond",
+      "catalogId": "s6-photo-access",
+      "title": "Required photo of restroom access point",
+      "requiresPhoto": true,
+      "date": "2026-08-25",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-25-s6-photo-interior",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "s6-photo-interior",
+      "title": "Required photo of restroom interior",
+      "requiresPhoto": true,
+      "date": "2026-08-25",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-25-s6-identified",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s6-identified",
+      "title": "Restrooms identified and available to the public",
+      "requiresPhoto": false,
+      "date": "2026-08-25",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-25-s6-working",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "s6-working",
+      "title": "Restrooms in working order including plumbing",
+      "requiresPhoto": false,
+      "date": "2026-08-25",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-25-s6-no-storage",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "s6-no-storage",
+      "title": "No merchandise, cleaning supplies, or equipment in restroom",
+      "requiresPhoto": false,
+      "date": "2026-08-25",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-26-s6-supplies",
+      "employeeId": "e_diamond_alexhiga",
+      "stationId": "diamond",
+      "catalogId": "s6-supplies",
+      "title": "Adequate restroom supplies available",
+      "requiresPhoto": false,
+      "date": "2026-08-26",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-26-s6-handwash-decal",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "s6-handwash-decal",
+      "title": "Hand washing decal present and legible",
+      "requiresPhoto": false,
+      "date": "2026-08-26",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-26-s6-lights",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "s6-lights",
+      "title": "Restroom lights in good condition and operable",
+      "requiresPhoto": false,
+      "date": "2026-08-26",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-26-s6-no-etched",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s6-no-etched",
+      "title": "No etched graffiti in restroom",
+      "requiresPhoto": false,
+      "date": "2026-08-26",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-26-s6-clean",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "s6-clean",
+      "title": "Restroom(s) is clean",
+      "requiresPhoto": false,
+      "date": "2026-08-26",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-26-s7-mats",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "s7-mats",
+      "title": "Floor mats clean and in good condition",
+      "requiresPhoto": false,
+      "date": "2026-08-26",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-27-s7-floors-clean",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "s7-floors-clean",
+      "title": "Interior floors are cleaned",
+      "requiresPhoto": false,
+      "date": "2026-08-27",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-27-s7-floors-clear",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "s7-floors-clear",
+      "title": "Interior floors free from obstructions (36 inch aisle)",
+      "requiresPhoto": false,
+      "date": "2026-08-27",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-27-s7-equipment-faces",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s7-equipment-faces",
+      "title": "Equipment graphic faces and lenses are lit",
+      "requiresPhoto": false,
+      "date": "2026-08-27",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-27-s7-ceiling",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "s7-ceiling",
+      "title": "Ceiling frames, tiles, heat and AC vents clean",
+      "requiresPhoto": false,
+      "date": "2026-08-27",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-27-s7-lights",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "s7-lights",
+      "title": "Interior lights and light panels in good condition",
+      "requiresPhoto": false,
+      "date": "2026-08-27",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-28-s7-supplies-stored",
+      "employeeId": "e_diamond_damonlowe",
+      "stationId": "diamond",
+      "catalogId": "s7-supplies-stored",
+      "title": "Excess supplies stored out of sight of customers",
+      "requiresPhoto": false,
+      "date": "2026-08-28",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-28-s7-no-graffiti",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "s7-no-graffiti",
+      "title": "No non-etched graffiti in interior",
+      "requiresPhoto": false,
+      "date": "2026-08-28",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-28-s7-fixtures",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "s7-fixtures",
+      "title": "Store interior, fixtures, and graphics free of dirt",
+      "requiresPhoto": false,
+      "date": "2026-08-28",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-28-s7-gondolas",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "s7-gondolas",
+      "title": "Gondolas free of dust and dirt build-up",
+      "requiresPhoto": false,
+      "date": "2026-08-28",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-28-s7-no-tape",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "s7-no-tape",
+      "title": "No visible tape or handwritten signs in customer view",
+      "requiresPhoto": false,
+      "date": "2026-08-28",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-28-s7-no-unauth-equip",
+      "employeeId": "e_diamond_tylershenk",
+      "stationId": "diamond",
+      "catalogId": "s7-no-unauth-equip",
+      "title": "No unauthorized equipment in the site",
+      "requiresPhoto": false,
+      "date": "2026-08-28",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-29-s7-no-unauth-pop",
+      "employeeId": "e_diamond_damonlowe",
+      "stationId": "diamond",
+      "catalogId": "s7-no-unauth-pop",
+      "title": "No unauthorized racks or POP on the sales floor",
+      "requiresPhoto": false,
+      "date": "2026-08-29",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-29-s7-no-banned",
+      "employeeId": "e_diamond_elviaarriola",
+      "stationId": "diamond",
+      "catalogId": "s7-no-banned",
+      "title": "Store free of banned or counterfeit products",
+      "requiresPhoto": false,
+      "date": "2026-08-29",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-29-s7-pricing-match",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "s7-pricing-match",
+      "title": "Merchandise has approved pricing that matches register",
+      "requiresPhoto": false,
+      "date": "2026-08-29",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-29-s7-no-ooc-pkg",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "s7-no-ooc-pkg",
+      "title": "No out-of-code packaged products on sales floor",
+      "requiresPhoto": false,
+      "date": "2026-08-29",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-29-s7-core-instock",
+      "employeeId": "e_diamond_tylershenk",
+      "stationId": "diamond",
+      "catalogId": "s7-core-instock",
+      "title": "No out-of-stocks of Core items on gondolas",
+      "requiresPhoto": false,
+      "date": "2026-08-29",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-30-s7-beer-display",
+      "employeeId": "e_diamond_damonlowe",
+      "stationId": "diamond",
+      "catalogId": "s7-beer-display",
+      "title": "Primary beer display on the sales floor",
+      "requiresPhoto": false,
+      "date": "2026-08-30",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-30-s7-pkg-bev",
+      "employeeId": "e_diamond_elviaarriola",
+      "stationId": "diamond",
+      "catalogId": "s7-pkg-bev",
+      "title": "Packaged beverage key items in stock",
+      "requiresPhoto": false,
+      "date": "2026-08-30",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-30-s7-beer-key",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "s7-beer-key",
+      "title": "Beer key items in stock",
+      "requiresPhoto": false,
+      "date": "2026-08-30",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-30-s7-cos-key",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "s7-cos-key",
+      "title": "COS key items in stock",
+      "requiresPhoto": false,
+      "date": "2026-08-30",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-30-s8-unpriced",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s8-unpriced",
+      "title": "No more than five unpriced products in cooler",
+      "requiresPhoto": false,
+      "date": "2026-08-30",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-24-s8-we-id",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "s8-we-id",
+      "title": "We I.D. signs present on all alcohol doors",
+      "requiresPhoto": false,
+      "date": "2026-08-24",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-24-s8-cooler-doors",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "s8-cooler-doors",
+      "title": "Coolers and cooler doors appear clean",
+      "requiresPhoto": false,
+      "date": "2026-08-24",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-24-s8-cooler-floor",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s8-cooler-floor",
+      "title": "Visible cooler floor portion cleaned daily",
+      "requiresPhoto": false,
+      "date": "2026-08-24",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-24-s8-cooler-condition",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "s8-cooler-condition",
+      "title": "Cooler products in good condition and in code",
+      "requiresPhoto": false,
+      "date": "2026-08-24",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-24-s8-cooler-oos",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "s8-cooler-oos",
+      "title": "No out-of-stocks in cooler",
+      "requiresPhoto": false,
+      "date": "2026-08-24",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-24-s9-no-chicken-fridge",
+      "employeeId": "e_diamond_tylershenk",
+      "stationId": "diamond",
+      "catalogId": "s9-no-chicken-fridge",
+      "title": "No chicken patties or bread stored in the refrigerator",
+      "requiresPhoto": false,
+      "date": "2026-08-24",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-25-s9-prep-clean",
+      "employeeId": "e_diamond_alexhiga",
+      "stationId": "diamond",
+      "catalogId": "s9-prep-clean",
+      "title": "All food prep areas clean per standards",
+      "requiresPhoto": false,
+      "date": "2026-08-25",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-25-s9-food-stored",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "s9-food-stored",
+      "title": "Food items stored inside refrigeration or freezer in code",
+      "requiresPhoto": false,
+      "date": "2026-08-25",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-25-s9-photo-back-deli",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s9-photo-back-deli",
+      "title": "Required photo of back deli case (if available)",
+      "requiresPhoto": true,
+      "date": "2026-08-25",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-25-s9-back-deli-clean",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "s9-back-deli-clean",
+      "title": "Back deli case clean and in good condition",
+      "requiresPhoto": false,
+      "date": "2026-08-25",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-25-s9-back-deli-price",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "s9-back-deli-price",
+      "title": "All products in back deli case have pricing visible",
+      "requiresPhoto": false,
+      "date": "2026-08-25",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-26-s9-condiment-stocked",
+      "employeeId": "e_diamond_alexhiga",
+      "stationId": "diamond",
+      "catalogId": "s9-condiment-stocked",
+      "title": "Condiment bar fully stocked including bulk condiments",
+      "requiresPhoto": false,
+      "date": "2026-08-26",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-26-s9-photo-bakery",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "s9-photo-bakery",
+      "title": "Required photo of bakery case(s)",
+      "requiresPhoto": true,
+      "date": "2026-08-26",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-26-s9-bakery-clean",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "s9-bakery-clean",
+      "title": "Bakery case clean and in good condition",
+      "requiresPhoto": false,
+      "date": "2026-08-26",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-26-s9-bakery-id",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s9-bakery-id",
+      "title": "Bakery items have proper ID and price decal",
+      "requiresPhoto": false,
+      "date": "2026-08-26",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-26-s9-ss-trays",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "s9-ss-trays",
+      "title": "Stainless steel condiment trays in use",
+      "requiresPhoto": false,
+      "date": "2026-08-26",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-26-s11-uniforms",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "s11-uniforms",
+      "title": "All employees on duty wearing official uniforms",
+      "requiresPhoto": false,
+      "date": "2026-08-26",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-27-s11-pinpad",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "s11-pinpad",
+      "title": "Each pin pad displays the approved, legible screen",
+      "requiresPhoto": false,
+      "date": "2026-08-27",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-27-s11-mobile-pay",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "s11-mobile-pay",
+      "title": "Mobile payment works on all inside pin pads",
+      "requiresPhoto": false,
+      "date": "2026-08-27",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-27-s11-pumppass",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s11-pumppass",
+      "title": "ARCO PumpPASS and Fleet brochure merchandiser present",
+      "requiresPhoto": false,
+      "date": "2026-08-27",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-27-s11-pin-seal",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "s11-pin-seal",
+      "title": "Security seal placed on each pin pad",
+      "requiresPhoto": false,
+      "date": "2026-08-27",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-27-s12-tobacco-stock",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "s12-tobacco-stock",
+      "title": "No out of stocks of required tobacco brands",
+      "requiresPhoto": false,
+      "date": "2026-08-27",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-28-s12-tobacco-price",
+      "employeeId": "e_diamond_damonlowe",
+      "stationId": "diamond",
+      "catalogId": "s12-tobacco-price",
+      "title": "Tobacco products priced with proper tags",
+      "requiresPhoto": false,
+      "date": "2026-08-28",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-28-s12-tobacco-pop",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "s12-tobacco-pop",
+      "title": "Tobacco POP properly placed on front door and window",
+      "requiresPhoto": false,
+      "date": "2026-08-28",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-28-s12-doj-sign",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "s12-doj-sign",
+      "title": "Required DOJ tobacco warning sign posted",
+      "requiresPhoto": false,
+      "date": "2026-08-28",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-28-s13-video-use",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "s13-video-use",
+      "title": "Video surveillance in use; public view monitor on",
+      "requiresPhoto": false,
+      "date": "2026-08-28",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-28-s13-video-audio",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "s13-video-audio",
+      "title": "Video surveillance audio audible for cashier area",
+      "requiresPhoto": false,
+      "date": "2026-08-28",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-28-s13-video-sync",
+      "employeeId": "e_diamond_tylershenk",
+      "stationId": "diamond",
+      "catalogId": "s13-video-sync",
+      "title": "Video surveillance synchronized to real time",
+      "requiresPhoto": false,
+      "date": "2026-08-28",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-29-s13-card-form",
+      "employeeId": "e_diamond_damonlowe",
+      "stationId": "diamond",
+      "catalogId": "s13-card-form",
+      "title": "Card reader security inspection form available",
+      "requiresPhoto": false,
+      "date": "2026-08-29",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-29-s13-exits",
+      "employeeId": "e_diamond_elviaarriola",
+      "stationId": "diamond",
+      "catalogId": "s13-exits",
+      "title": "Emergency exits clearly marked with 36 inch path",
+      "requiresPhoto": false,
+      "date": "2026-08-29",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-29-s14-cert",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "s14-cert",
+      "title": "Certified Franchisee/Manager certificate posted",
+      "requiresPhoto": false,
+      "date": "2026-08-29",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-29-s14-assign-board",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "s14-assign-board",
+      "title": "ampm assignment board posted and completed",
+      "requiresPhoto": false,
+      "date": "2026-08-29",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-29-s15-mid-clean",
+      "employeeId": "e_diamond_tylershenk",
+      "stationId": "diamond",
+      "catalogId": "s15-mid-clean",
+      "title": "MID sign clean and in good condition",
+      "requiresPhoto": false,
+      "date": "2026-08-29",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-30-s15-mid-prices",
+      "employeeId": "e_diamond_damonlowe",
+      "stationId": "diamond",
+      "catalogId": "s15-mid-prices",
+      "title": "MID prices match prices posted at dispenser",
+      "requiresPhoto": false,
+      "date": "2026-08-30",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-30-s15-skins",
+      "employeeId": "e_diamond_elviaarriola",
+      "stationId": "diamond",
+      "catalogId": "s15-skins",
+      "title": "ARCO dispenser official skins in good condition",
+      "requiresPhoto": false,
+      "date": "2026-08-30",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-30-s15-pump-numbers",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "s15-pump-numbers",
+      "title": "Pumps numbered with legible numbers",
+      "requiresPhoto": false,
+      "date": "2026-08-30",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-30-s15-valances",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "s15-valances",
+      "title": "All lighted fee valances clean and lit",
+      "requiresPhoto": false,
+      "date": "2026-08-30",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-30-s15-pump-decals",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s15-pump-decals",
+      "title": "Approved and required pump decals legible",
+      "requiresPhoto": false,
+      "date": "2026-08-30",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-24-s15-fuel-available",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "s15-fuel-available",
+      "title": "All fuel products are available",
+      "requiresPhoto": false,
+      "date": "2026-08-24",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-24-s15-pumps-clean",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "s15-pumps-clean",
+      "title": "All pumps are clean",
+      "requiresPhoto": false,
+      "date": "2026-08-24",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-24-s15-readers-clean",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s15-readers-clean",
+      "title": "Pump dispenser card readers clean and in good condition",
+      "requiresPhoto": false,
+      "date": "2026-08-24",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-24-s15-pumps-condition",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "s15-pumps-condition",
+      "title": "All pumps are in good condition",
+      "requiresPhoto": false,
+      "date": "2026-08-24",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-24-s15-dispensers-op",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "s15-dispensers-op",
+      "title": "All dispensers are operable",
+      "requiresPhoto": false,
+      "date": "2026-08-24",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-24-s15-hand-sanitizer",
+      "employeeId": "e_diamond_tylershenk",
+      "stationId": "diamond",
+      "catalogId": "s15-hand-sanitizer",
+      "title": "Approved hand sanitizer dispenser present",
+      "requiresPhoto": false,
+      "date": "2026-08-24",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-25-s15-receipts",
+      "employeeId": "e_diamond_alexhiga",
+      "stationId": "diamond",
+      "catalogId": "s15-receipts",
+      "title": "Printed receipts available at all pumps",
+      "requiresPhoto": false,
+      "date": "2026-08-25",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-25-s15-mobile-pump",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "s15-mobile-pump",
+      "title": "Mobile payment works at pumps",
+      "requiresPhoto": false,
+      "date": "2026-08-25",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-25-s15-pump-seal",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s15-pump-seal",
+      "title": "Security seal placed on each pump",
+      "requiresPhoto": false,
+      "date": "2026-08-25",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-25-fx-forecourt",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "fx-forecourt",
+      "title": "Forecourt and exterior customer areas neatly maintained",
+      "requiresPhoto": false,
+      "date": "2026-08-25",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-25-fx-landscaping",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "fx-landscaping",
+      "title": "Landscaping free of excessive weeds and trash",
+      "requiresPhoto": false,
+      "date": "2026-08-25",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-26-fx-air-water",
+      "employeeId": "e_diamond_alexhiga",
+      "stationId": "diamond",
+      "catalogId": "fx-air-water",
+      "title": "Air/water units and bumper posts clean and in good condition",
+      "requiresPhoto": false,
+      "date": "2026-08-26",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-26-fx-front-trash",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "fx-front-trash",
+      "title": "Trash cans at the front of the c-store clean",
+      "requiresPhoto": false,
+      "date": "2026-08-26",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-26-fx-building",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "fx-building",
+      "title": "Building, fascia, sidewalks, and graphics clean",
+      "requiresPhoto": false,
+      "date": "2026-08-26",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-26-fx-windows",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "fx-windows",
+      "title": "Building windows, ledges, and exterior fixtures clean",
+      "requiresPhoto": false,
+      "date": "2026-08-26",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-26-fx-canopy-clean",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "fx-canopy-clean",
+      "title": "Canopy and canopy columns clean",
+      "requiresPhoto": false,
+      "date": "2026-08-26",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-26-fx-canopy-condition",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "fx-canopy-condition",
+      "title": "Canopy and canopy columns in good condition",
+      "requiresPhoto": false,
+      "date": "2026-08-26",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-27-fx-curbs",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "fx-curbs",
+      "title": "Curbs, bumper poles, and bollards clean on entire property",
+      "requiresPhoto": false,
+      "date": "2026-08-27",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-27-fx-pump-trash",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "fx-pump-trash",
+      "title": "Trash containers at pump islands clean",
+      "requiresPhoto": false,
+      "date": "2026-08-27",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-27-fx-squeegee",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "fx-squeegee",
+      "title": "Windshield washing supplies available at each pump island",
+      "requiresPhoto": false,
+      "date": "2026-08-27",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-27-tx-greeting",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "tx-greeting",
+      "title": "Greeting",
+      "requiresPhoto": false,
+      "date": "2026-08-27",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-27-tx-upsell",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "tx-upsell",
+      "title": "Upselling",
+      "requiresPhoto": false,
+      "date": "2026-08-27",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-28-tx-depart",
+      "employeeId": "e_diamond_damonlowe",
+      "stationId": "diamond",
+      "catalogId": "tx-depart",
+      "title": "Departing greeting",
+      "requiresPhoto": false,
+      "date": "2026-08-28",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-28-tx-cash-drawer",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "tx-cash-drawer",
+      "title": "Keep cash in drawer to minimum",
+      "requiresPhoto": false,
+      "date": "2026-08-28",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-24",
+      "createdAt": "2026-08-27T18:00:00.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-31-fsi-kat-labels",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "fsi-kat-labels",
+      "title": "KAT printer labels in use for HATCO products",
+      "requiresPhoto": false,
+      "date": "2026-08-31",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-31-fsi-hatco-expired",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "fsi-hatco-expired",
+      "title": "No expired items in HATCO",
+      "requiresPhoto": false,
+      "date": "2026-08-31",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-31-fsi-temp-one",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "fsi-temp-one",
+      "title": "Check temperature of one HATCO item",
+      "requiresPhoto": false,
+      "date": "2026-08-31",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-31-fsi-temp-all",
+      "employeeId": "e_diamond_tylershenk",
+      "stationId": "diamond",
+      "catalogId": "fsi-temp-all",
+      "title": "Check temperatures of all HATCOs",
+      "requiresPhoto": false,
+      "date": "2026-08-31",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-01-fsi-must-use-by",
+      "employeeId": "e_diamond_alexhiga",
+      "stationId": "diamond",
+      "catalogId": "fsi-must-use-by",
+      "title": "Must Use By date on Athens or Rotella bread",
+      "requiresPhoto": false,
+      "date": "2026-09-01",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-01-fsi-prep-coolers",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "fsi-prep-coolers",
+      "title": "Prep food in coolers is today's date or not past Must Use By",
+      "requiresPhoto": false,
+      "date": "2026-09-01",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-01-fsi-refrig-labeled",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "fsi-refrig-labeled",
+      "title": "All refrigerated or frozen food ingredients labeled",
+      "requiresPhoto": false,
+      "date": "2026-09-01",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-01-fsi-freezer-labels",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "fsi-freezer-labels",
+      "title": "All food products in freezer have manufacturer or product date",
+      "requiresPhoto": false,
+      "date": "2026-09-01",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-01-fsi-freezer-thermo",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "fsi-freezer-thermo",
+      "title": "All freezers containing food have an internal thermometer",
+      "requiresPhoto": false,
+      "date": "2026-09-01",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-02-fsi-case-temps",
+      "employeeId": "e_diamond_alexhiga",
+      "stationId": "diamond",
+      "catalogId": "fsi-case-temps",
+      "title": "Refrigerated cases between 33\u00b0F and 41\u00b0F",
+      "requiresPhoto": false,
+      "date": "2026-09-02",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-02-fsi-front-deli-op",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "fsi-front-deli-op",
+      "title": "Front deli case operating 33\u00b0F\u201341\u00b0F",
+      "requiresPhoto": false,
+      "date": "2026-09-02",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-02-fsi-no-ooc-perish",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "fsi-no-ooc-perish",
+      "title": "No out-of-code perishable items",
+      "requiresPhoto": false,
+      "date": "2026-09-02",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-02-fsi-no-ooc-front",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "fsi-no-ooc-front",
+      "title": "No out-of-code products in front deli cooler",
+      "requiresPhoto": false,
+      "date": "2026-09-02",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-02-fsi-condiment-temp",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "fsi-condiment-temp",
+      "title": "Condiment bar temperature 41\u00b0F or below",
+      "requiresPhoto": false,
+      "date": "2026-09-02",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-02-fsi-nacho-chili",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "fsi-nacho-chili",
+      "title": "Nacho cheese and chili within code (if available)",
+      "requiresPhoto": false,
+      "date": "2026-09-02",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-03-fsi-frozen-coffee-code",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "fsi-frozen-coffee-code",
+      "title": "Frozen coffee machine product use-by label updated",
+      "requiresPhoto": false,
+      "date": "2026-09-03",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-03-fsi-quat-kit",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "fsi-quat-kit",
+      "title": "Quaternary ammonium sanitizer test kit available",
+      "requiresPhoto": false,
+      "date": "2026-09-03",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-03-fsi-sanitizer-bucket",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "fsi-sanitizer-bucket",
+      "title": "Sanitizer bucket or spray bottle prepared",
+      "requiresPhoto": false,
+      "date": "2026-09-03",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-03-fsi-quat-ppm",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "fsi-quat-ppm",
+      "title": "Quat sanitizer meets 200\u2013400 ppm",
+      "requiresPhoto": false,
+      "date": "2026-09-03",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-03-fsi-sink-setup",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "fsi-sink-setup",
+      "title": "2 or 3 compartment sink set up (wash, rinse, sanitize)",
+      "requiresPhoto": false,
+      "date": "2026-09-03",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-04-fsi-hot-water",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "fsi-hot-water",
+      "title": "Minimum hot water 110\u00b0F (120\u00b0F in California)",
+      "requiresPhoto": false,
+      "date": "2026-09-04",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-04-fsi-sink-chemicals",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "fsi-sink-chemicals",
+      "title": "Compartment sink chemicals available",
+      "requiresPhoto": false,
+      "date": "2026-09-04",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-04-fsi-sink-proper",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "fsi-sink-proper",
+      "title": "2 or 3 compartment sink used properly",
+      "requiresPhoto": false,
+      "date": "2026-09-04",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-04-fsi-handwash",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "fsi-handwash",
+      "title": "Hand washing sink accessible, stocked, unobstructed",
+      "requiresPhoto": false,
+      "date": "2026-09-04",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-04-fsi-cfm",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "fsi-cfm",
+      "title": "Nationally-approved Certified Food Manager certificate on site",
+      "requiresPhoto": false,
+      "date": "2026-09-04",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-04-fsi-food-handler",
+      "employeeId": "e_diamond_tylershenk",
+      "stationId": "diamond",
+      "catalogId": "fsi-food-handler",
+      "title": "Food handling certificates for employees handling food",
+      "requiresPhoto": false,
+      "date": "2026-09-04",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-05-fsi-probe",
+      "employeeId": "e_diamond_damonlowe",
+      "stationId": "diamond",
+      "catalogId": "fsi-probe",
+      "title": "Working probe thermometer available",
+      "requiresPhoto": false,
+      "date": "2026-09-05",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-05-fsi-gloves",
+      "employeeId": "e_diamond_elviaarriola",
+      "stationId": "diamond",
+      "catalogId": "fsi-gloves",
+      "title": "Gloves available and in use if prepping food",
+      "requiresPhoto": false,
+      "date": "2026-09-05",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-05-fsi-hair",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "fsi-hair",
+      "title": "Employee wearing approved hair covering while prepping",
+      "requiresPhoto": false,
+      "date": "2026-09-05",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-05-fsi-pests",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "fsi-pests",
+      "title": "No evidence or signs of pest infestation",
+      "requiresPhoto": false,
+      "date": "2026-09-05",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-05-fsi-storage-height",
+      "employeeId": "e_diamond_tylershenk",
+      "stationId": "diamond",
+      "catalogId": "fsi-storage-height",
+      "title": "All food products stored at least 6 inches off the ground",
+      "requiresPhoto": false,
+      "date": "2026-09-05",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-06-fsi-sds",
+      "employeeId": "e_diamond_damonlowe",
+      "stationId": "diamond",
+      "catalogId": "fsi-sds",
+      "title": "Safety Data Sheets available for cleaning and sanitizing products",
+      "requiresPhoto": false,
+      "date": "2026-09-06",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-06-fsi-bakery-timecode",
+      "employeeId": "e_diamond_elviaarriola",
+      "stationId": "diamond",
+      "catalogId": "fsi-bakery-timecode",
+      "title": "Bakery items time-coded",
+      "requiresPhoto": false,
+      "date": "2026-09-06",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-06-fsi-creamer-useby",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "fsi-creamer-useby",
+      "title": "Creamer pumps and bottles have use-by dates",
+      "requiresPhoto": false,
+      "date": "2026-09-06",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-06-s2-photo-hatco",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "s2-photo-hatco",
+      "title": "Required photo of HATCO(s)",
+      "requiresPhoto": true,
+      "date": "2026-09-06",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-06-s2-photo-oven",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s2-photo-oven",
+      "title": "Required photo of OVEN(s)",
+      "requiresPhoto": true,
+      "date": "2026-09-06",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-31-s2-hatco-empty",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "s2-hatco-empty",
+      "title": "HATCO not empty / off / unused (mark No if empty)",
+      "requiresPhoto": false,
+      "date": "2026-08-31",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-31-s2-hatco-clean",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s2-hatco-clean",
+      "title": "HATCO is clean",
+      "requiresPhoto": false,
+      "date": "2026-08-31",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-31-s2-burgers-stocked",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "s2-burgers-stocked",
+      "title": "Hamburger, cheeseburger, double, chicken sandwiches stocked",
+      "requiresPhoto": false,
+      "date": "2026-08-31",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-31-s2-hotfood-planogram",
+      "employeeId": "e_diamond_tylershenk",
+      "stationId": "diamond",
+      "catalogId": "s2-hotfood-planogram",
+      "title": "Hot food stocked per current planogram",
+      "requiresPhoto": false,
+      "date": "2026-08-31",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-01-s2-hatco-bag",
+      "employeeId": "e_diamond_alexhiga",
+      "stationId": "diamond",
+      "catalogId": "s2-hatco-bag",
+      "title": "HATCO product in the correct bag",
+      "requiresPhoto": false,
+      "date": "2026-09-01",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-01-s2-no-unapproved",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "s2-no-unapproved",
+      "title": "No unapproved food or ingredients in coolers or freezers",
+      "requiresPhoto": false,
+      "date": "2026-09-01",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-01-s2-oven-fan",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s2-oven-fan",
+      "title": "All ovens have fan speed switch set to low (except Hobart)",
+      "requiresPhoto": false,
+      "date": "2026-09-01",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-01-s2-wavy-rack",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "s2-wavy-rack",
+      "title": "Wavy rack present and in use to cook hot dogs",
+      "requiresPhoto": false,
+      "date": "2026-09-01",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-01-s2-flat-racks",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "s2-flat-racks",
+      "title": "Flat racks present and in use for corn dogs and other items",
+      "requiresPhoto": false,
+      "date": "2026-09-01",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-02-s2-trays",
+      "employeeId": "e_diamond_alexhiga",
+      "stationId": "diamond",
+      "catalogId": "s2-trays",
+      "title": "Cooking trays in good condition or lined with parchment",
+      "requiresPhoto": false,
+      "date": "2026-09-02",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-02-s2-fly-fan",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "s2-fly-fan",
+      "title": "Fly fan functioning correctly",
+      "requiresPhoto": false,
+      "date": "2026-09-02",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-02-s3-store-temp",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "s3-store-temp",
+      "title": "Store temperature at or below 75\u00b0F",
+      "requiresPhoto": false,
+      "date": "2026-09-02",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-02-s3-front-deli-clean",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s3-front-deli-clean",
+      "title": "Front deli case is clean",
+      "requiresPhoto": false,
+      "date": "2026-09-02",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-02-s3-temp-log",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "s3-temp-log",
+      "title": "Temperature log for front deli case filled out",
+      "requiresPhoto": false,
+      "date": "2026-09-02",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-02-s3-deli-planogram",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "s3-deli-planogram",
+      "title": "Front deli case planogram followed and case is full",
+      "requiresPhoto": false,
+      "date": "2026-09-02",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-03-s3-fruit-rack",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "s3-fruit-rack",
+      "title": "Fruit rack and fresh fruit quality; shelf labels present",
+      "requiresPhoto": false,
+      "date": "2026-09-03",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-03-s3-graphics",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "s3-graphics",
+      "title": "Graphics clean and in good condition",
+      "requiresPhoto": false,
+      "date": "2026-09-03",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-03-s3-lookin-fresh",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s3-lookin-fresh",
+      "title": "Fresh deli case Lookin' Fresh graphic in good condition",
+      "requiresPhoto": false,
+      "date": "2026-09-03",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-03-s3-cabinets",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "s3-cabinets",
+      "title": "Cabinet doors and laminate on sales floor in good condition",
+      "requiresPhoto": false,
+      "date": "2026-09-03",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-03-s4-coffee-neat",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "s4-coffee-neat",
+      "title": "Coffee area is neat and clean",
+      "requiresPhoto": false,
+      "date": "2026-09-03",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-04-s4-special-blend",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "s4-special-blend",
+      "title": "Special Blend Regular and Decaf available",
+      "requiresPhoto": false,
+      "date": "2026-09-04",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-04-s4-urn-flavors",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "s4-urn-flavors",
+      "title": "Coffee urns have approved flavor tags or nozzle covers",
+      "requiresPhoto": false,
+      "date": "2026-09-04",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-04-s4-no-grounds",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "s4-no-grounds",
+      "title": "No coffee grounds left in brew baskets",
+      "requiresPhoto": false,
+      "date": "2026-09-04",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-04-s4-spray-head",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "s4-spray-head",
+      "title": "Coffee spray head is clean",
+      "requiresPhoto": false,
+      "date": "2026-09-04",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-04-s4-creamiser-clean",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "s4-creamiser-clean",
+      "title": "Authorized bulk creamiser clean (inside and out)",
+      "requiresPhoto": false,
+      "date": "2026-09-04",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-04-s4-creamiser-dated",
+      "employeeId": "e_diamond_tylershenk",
+      "stationId": "diamond",
+      "catalogId": "s4-creamiser-dated",
+      "title": "Bulk creamiser product bags properly dated",
+      "requiresPhoto": false,
+      "date": "2026-09-04",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-05-s4-whipped",
+      "employeeId": "e_diamond_damonlowe",
+      "stationId": "diamond",
+      "catalogId": "s4-whipped",
+      "title": "Whipped topping dispenser available and stocked",
+      "requiresPhoto": false,
+      "date": "2026-09-05",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-05-s4-capp-flavors",
+      "employeeId": "e_diamond_elviaarriola",
+      "stationId": "diamond",
+      "catalogId": "s4-capp-flavors",
+      "title": "Cappuccino flavors available and tags placed",
+      "requiresPhoto": false,
+      "date": "2026-09-05",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-05-s4-machines-clean",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "s4-machines-clean",
+      "title": "Coffee urns, Bean-2-Cup, and cappuccino machines clean",
+      "requiresPhoto": false,
+      "date": "2026-09-05",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-05-s4-drip-trays",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "s4-drip-trays",
+      "title": "Drip trays emptied",
+      "requiresPhoto": false,
+      "date": "2026-09-05",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-05-s4-cups-lids",
+      "employeeId": "e_diamond_tylershenk",
+      "stationId": "diamond",
+      "catalogId": "s4-cups-lids",
+      "title": "Coffee area cups, lids, and sleeves available",
+      "requiresPhoto": false,
+      "date": "2026-09-05",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-06-s4-no-trash",
+      "employeeId": "e_diamond_damonlowe",
+      "stationId": "diamond",
+      "catalogId": "s4-no-trash",
+      "title": "No trash visible; trash containers have lids",
+      "requiresPhoto": false,
+      "date": "2026-09-06",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-06-s4-bunn-only",
+      "employeeId": "e_diamond_elviaarriola",
+      "stationId": "diamond",
+      "catalogId": "s4-bunn-only",
+      "title": "BUNN is the only frozen coffee equipment on site",
+      "requiresPhoto": false,
+      "date": "2026-09-06",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-06-s4-frozen-op",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "s4-frozen-op",
+      "title": "Frozen coffee equipment operational",
+      "requiresPhoto": false,
+      "date": "2026-09-06",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-06-s4-frozen-clean",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "s4-frozen-clean",
+      "title": "Frozen coffee equipment clean",
+      "requiresPhoto": false,
+      "date": "2026-09-06",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-06-s4-frozen-drizzles",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s4-frozen-drizzles",
+      "title": "Frozen coffee drizzles available",
+      "requiresPhoto": false,
+      "date": "2026-09-06",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-31-s4-napkins",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "s4-napkins",
+      "title": "Napkin dispensers stocked, operational, good condition",
+      "requiresPhoto": false,
+      "date": "2026-08-31",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-31-s5-freeze-present",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s5-freeze-present",
+      "title": "ampm Freeze or ICEE present and working",
+      "requiresPhoto": false,
+      "date": "2026-08-31",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-31-s5-fountain-clean",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "s5-fountain-clean",
+      "title": "Fountain and Freeze/ICEE are clean",
+      "requiresPhoto": false,
+      "date": "2026-08-31",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-31-s5-flavors",
+      "employeeId": "e_diamond_tylershenk",
+      "stationId": "diamond",
+      "catalogId": "s5-flavors",
+      "title": "All fountain flavors available",
+      "requiresPhoto": false,
+      "date": "2026-08-31",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-01-s5-flavor-labels",
+      "employeeId": "e_diamond_alexhiga",
+      "stationId": "diamond",
+      "catalogId": "s5-flavor-labels",
+      "title": "All fountain flavor labels marketing-approved",
+      "requiresPhoto": false,
+      "date": "2026-09-01",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-01-s5-cups-lids-straws",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "s5-cups-lids-straws",
+      "title": "All size cups, lids, and straws available",
+      "requiresPhoto": false,
+      "date": "2026-09-01",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-01-s5-bibs",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s5-bibs",
+      "title": "Fountain/Freeze/ICEE BIBs in code",
+      "requiresPhoto": false,
+      "date": "2026-09-01",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-01-s5-filtration",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "s5-filtration",
+      "title": "Water filtration cartridges dated within 6 months",
+      "requiresPhoto": false,
+      "date": "2026-09-01",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-01-s5-fountain-op",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "s5-fountain-op",
+      "title": "Fountain machine operational",
+      "requiresPhoto": false,
+      "date": "2026-09-01",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-02-s5-barrels",
+      "employeeId": "e_diamond_alexhiga",
+      "stationId": "diamond",
+      "catalogId": "s5-barrels",
+      "title": "All Freeze/ICEE barrels operational and reflect pricing",
+      "requiresPhoto": false,
+      "date": "2026-09-02",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-02-s6-photo-access",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "s6-photo-access",
+      "title": "Required photo of restroom access point",
+      "requiresPhoto": true,
+      "date": "2026-09-02",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-02-s6-photo-interior",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "s6-photo-interior",
+      "title": "Required photo of restroom interior",
+      "requiresPhoto": true,
+      "date": "2026-09-02",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-02-s6-identified",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s6-identified",
+      "title": "Restrooms identified and available to the public",
+      "requiresPhoto": false,
+      "date": "2026-09-02",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-02-s6-working",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "s6-working",
+      "title": "Restrooms in working order including plumbing",
+      "requiresPhoto": false,
+      "date": "2026-09-02",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-02-s6-no-storage",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "s6-no-storage",
+      "title": "No merchandise, cleaning supplies, or equipment in restroom",
+      "requiresPhoto": false,
+      "date": "2026-09-02",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-03-s6-supplies",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "s6-supplies",
+      "title": "Adequate restroom supplies available",
+      "requiresPhoto": false,
+      "date": "2026-09-03",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-03-s6-handwash-decal",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "s6-handwash-decal",
+      "title": "Hand washing decal present and legible",
+      "requiresPhoto": false,
+      "date": "2026-09-03",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-03-s6-lights",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s6-lights",
+      "title": "Restroom lights in good condition and operable",
+      "requiresPhoto": false,
+      "date": "2026-09-03",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-03-s6-no-etched",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "s6-no-etched",
+      "title": "No etched graffiti in restroom",
+      "requiresPhoto": false,
+      "date": "2026-09-03",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-03-s6-clean",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "s6-clean",
+      "title": "Restroom(s) is clean",
+      "requiresPhoto": false,
+      "date": "2026-09-03",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-04-s7-mats",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "s7-mats",
+      "title": "Floor mats clean and in good condition",
+      "requiresPhoto": false,
+      "date": "2026-09-04",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-04-s7-floors-clean",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "s7-floors-clean",
+      "title": "Interior floors are cleaned",
+      "requiresPhoto": false,
+      "date": "2026-09-04",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-04-s7-floors-clear",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "s7-floors-clear",
+      "title": "Interior floors free from obstructions (36 inch aisle)",
+      "requiresPhoto": false,
+      "date": "2026-09-04",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-04-s7-equipment-faces",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "s7-equipment-faces",
+      "title": "Equipment graphic faces and lenses are lit",
+      "requiresPhoto": false,
+      "date": "2026-09-04",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-04-s7-ceiling",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "s7-ceiling",
+      "title": "Ceiling frames, tiles, heat and AC vents clean",
+      "requiresPhoto": false,
+      "date": "2026-09-04",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-04-s7-lights",
+      "employeeId": "e_diamond_tylershenk",
+      "stationId": "diamond",
+      "catalogId": "s7-lights",
+      "title": "Interior lights and light panels in good condition",
+      "requiresPhoto": false,
+      "date": "2026-09-04",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-05-s7-supplies-stored",
+      "employeeId": "e_diamond_damonlowe",
+      "stationId": "diamond",
+      "catalogId": "s7-supplies-stored",
+      "title": "Excess supplies stored out of sight of customers",
+      "requiresPhoto": false,
+      "date": "2026-09-05",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-05-s7-no-graffiti",
+      "employeeId": "e_diamond_elviaarriola",
+      "stationId": "diamond",
+      "catalogId": "s7-no-graffiti",
+      "title": "No non-etched graffiti in interior",
+      "requiresPhoto": false,
+      "date": "2026-09-05",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-05-s7-fixtures",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "s7-fixtures",
+      "title": "Store interior, fixtures, and graphics free of dirt",
+      "requiresPhoto": false,
+      "date": "2026-09-05",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-05-s7-gondolas",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "s7-gondolas",
+      "title": "Gondolas free of dust and dirt build-up",
+      "requiresPhoto": false,
+      "date": "2026-09-05",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-05-s7-no-tape",
+      "employeeId": "e_diamond_tylershenk",
+      "stationId": "diamond",
+      "catalogId": "s7-no-tape",
+      "title": "No visible tape or handwritten signs in customer view",
+      "requiresPhoto": false,
+      "date": "2026-09-05",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-06-s7-no-unauth-equip",
+      "employeeId": "e_diamond_damonlowe",
+      "stationId": "diamond",
+      "catalogId": "s7-no-unauth-equip",
+      "title": "No unauthorized equipment in the site",
+      "requiresPhoto": false,
+      "date": "2026-09-06",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-06-s7-no-unauth-pop",
+      "employeeId": "e_diamond_elviaarriola",
+      "stationId": "diamond",
+      "catalogId": "s7-no-unauth-pop",
+      "title": "No unauthorized racks or POP on the sales floor",
+      "requiresPhoto": false,
+      "date": "2026-09-06",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-06-s7-no-banned",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "s7-no-banned",
+      "title": "Store free of banned or counterfeit products",
+      "requiresPhoto": false,
+      "date": "2026-09-06",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-06-s7-pricing-match",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "s7-pricing-match",
+      "title": "Merchandise has approved pricing that matches register",
+      "requiresPhoto": false,
+      "date": "2026-09-06",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-06-s7-no-ooc-pkg",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s7-no-ooc-pkg",
+      "title": "No out-of-code packaged products on sales floor",
+      "requiresPhoto": false,
+      "date": "2026-09-06",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-31-s7-core-instock",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "s7-core-instock",
+      "title": "No out-of-stocks of Core items on gondolas",
+      "requiresPhoto": false,
+      "date": "2026-08-31",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-31-s7-beer-display",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s7-beer-display",
+      "title": "Primary beer display on the sales floor",
+      "requiresPhoto": false,
+      "date": "2026-08-31",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-31-s7-pkg-bev",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "s7-pkg-bev",
+      "title": "Packaged beverage key items in stock",
+      "requiresPhoto": false,
+      "date": "2026-08-31",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-31-s7-beer-key",
+      "employeeId": "e_diamond_tylershenk",
+      "stationId": "diamond",
+      "catalogId": "s7-beer-key",
+      "title": "Beer key items in stock",
+      "requiresPhoto": false,
+      "date": "2026-08-31",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-01-s7-cos-key",
+      "employeeId": "e_diamond_alexhiga",
+      "stationId": "diamond",
+      "catalogId": "s7-cos-key",
+      "title": "COS key items in stock",
+      "requiresPhoto": false,
+      "date": "2026-09-01",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-01-s8-unpriced",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "s8-unpriced",
+      "title": "No more than five unpriced products in cooler",
+      "requiresPhoto": false,
+      "date": "2026-09-01",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-01-s8-we-id",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s8-we-id",
+      "title": "We I.D. signs present on all alcohol doors",
+      "requiresPhoto": false,
+      "date": "2026-09-01",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-01-s8-cooler-doors",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "s8-cooler-doors",
+      "title": "Coolers and cooler doors appear clean",
+      "requiresPhoto": false,
+      "date": "2026-09-01",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-01-s8-cooler-floor",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "s8-cooler-floor",
+      "title": "Visible cooler floor portion cleaned daily",
+      "requiresPhoto": false,
+      "date": "2026-09-01",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-02-s8-cooler-condition",
+      "employeeId": "e_diamond_alexhiga",
+      "stationId": "diamond",
+      "catalogId": "s8-cooler-condition",
+      "title": "Cooler products in good condition and in code",
+      "requiresPhoto": false,
+      "date": "2026-09-02",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-02-s8-cooler-oos",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "s8-cooler-oos",
+      "title": "No out-of-stocks in cooler",
+      "requiresPhoto": false,
+      "date": "2026-09-02",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-02-s9-no-chicken-fridge",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "s9-no-chicken-fridge",
+      "title": "No chicken patties or bread stored in the refrigerator",
+      "requiresPhoto": false,
+      "date": "2026-09-02",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-02-s9-prep-clean",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s9-prep-clean",
+      "title": "All food prep areas clean per standards",
+      "requiresPhoto": false,
+      "date": "2026-09-02",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-02-s9-food-stored",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "s9-food-stored",
+      "title": "Food items stored inside refrigeration or freezer in code",
+      "requiresPhoto": false,
+      "date": "2026-09-02",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-02-s9-photo-back-deli",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "s9-photo-back-deli",
+      "title": "Required photo of back deli case (if available)",
+      "requiresPhoto": true,
+      "date": "2026-09-02",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-03-s9-back-deli-clean",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "s9-back-deli-clean",
+      "title": "Back deli case clean and in good condition",
+      "requiresPhoto": false,
+      "date": "2026-09-03",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-03-s9-back-deli-price",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "s9-back-deli-price",
+      "title": "All products in back deli case have pricing visible",
+      "requiresPhoto": false,
+      "date": "2026-09-03",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-03-s9-condiment-stocked",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s9-condiment-stocked",
+      "title": "Condiment bar fully stocked including bulk condiments",
+      "requiresPhoto": false,
+      "date": "2026-09-03",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-03-s9-photo-bakery",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "s9-photo-bakery",
+      "title": "Required photo of bakery case(s)",
+      "requiresPhoto": true,
+      "date": "2026-09-03",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-03-s9-bakery-clean",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "s9-bakery-clean",
+      "title": "Bakery case clean and in good condition",
+      "requiresPhoto": false,
+      "date": "2026-09-03",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-04-s9-bakery-id",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "s9-bakery-id",
+      "title": "Bakery items have proper ID and price decal",
+      "requiresPhoto": false,
+      "date": "2026-09-04",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-04-s9-ss-trays",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "s9-ss-trays",
+      "title": "Stainless steel condiment trays in use",
+      "requiresPhoto": false,
+      "date": "2026-09-04",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-04-s11-uniforms",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "s11-uniforms",
+      "title": "All employees on duty wearing official uniforms",
+      "requiresPhoto": false,
+      "date": "2026-09-04",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-04-s11-pinpad",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "s11-pinpad",
+      "title": "Each pin pad displays the approved, legible screen",
+      "requiresPhoto": false,
+      "date": "2026-09-04",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-04-s11-mobile-pay",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "s11-mobile-pay",
+      "title": "Mobile payment works on all inside pin pads",
+      "requiresPhoto": false,
+      "date": "2026-09-04",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-04-s11-pumppass",
+      "employeeId": "e_diamond_tylershenk",
+      "stationId": "diamond",
+      "catalogId": "s11-pumppass",
+      "title": "ARCO PumpPASS and Fleet brochure merchandiser present",
+      "requiresPhoto": false,
+      "date": "2026-09-04",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-05-s11-pin-seal",
+      "employeeId": "e_diamond_damonlowe",
+      "stationId": "diamond",
+      "catalogId": "s11-pin-seal",
+      "title": "Security seal placed on each pin pad",
+      "requiresPhoto": false,
+      "date": "2026-09-05",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-05-s12-tobacco-stock",
+      "employeeId": "e_diamond_elviaarriola",
+      "stationId": "diamond",
+      "catalogId": "s12-tobacco-stock",
+      "title": "No out of stocks of required tobacco brands",
+      "requiresPhoto": false,
+      "date": "2026-09-05",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-05-s12-tobacco-price",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "s12-tobacco-price",
+      "title": "Tobacco products priced with proper tags",
+      "requiresPhoto": false,
+      "date": "2026-09-05",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-05-s12-tobacco-pop",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "s12-tobacco-pop",
+      "title": "Tobacco POP properly placed on front door and window",
+      "requiresPhoto": false,
+      "date": "2026-09-05",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-05-s12-doj-sign",
+      "employeeId": "e_diamond_tylershenk",
+      "stationId": "diamond",
+      "catalogId": "s12-doj-sign",
+      "title": "Required DOJ tobacco warning sign posted",
+      "requiresPhoto": false,
+      "date": "2026-09-05",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-06-s13-video-use",
+      "employeeId": "e_diamond_damonlowe",
+      "stationId": "diamond",
+      "catalogId": "s13-video-use",
+      "title": "Video surveillance in use; public view monitor on",
+      "requiresPhoto": false,
+      "date": "2026-09-06",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-06-s13-video-audio",
+      "employeeId": "e_diamond_elviaarriola",
+      "stationId": "diamond",
+      "catalogId": "s13-video-audio",
+      "title": "Video surveillance audio audible for cashier area",
+      "requiresPhoto": false,
+      "date": "2026-09-06",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-06-s13-video-sync",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "s13-video-sync",
+      "title": "Video surveillance synchronized to real time",
+      "requiresPhoto": false,
+      "date": "2026-09-06",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-06-s13-card-form",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "s13-card-form",
+      "title": "Card reader security inspection form available",
+      "requiresPhoto": false,
+      "date": "2026-09-06",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-06-s13-exits",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s13-exits",
+      "title": "Emergency exits clearly marked with 36 inch path",
+      "requiresPhoto": false,
+      "date": "2026-09-06",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-31-s14-cert",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "s14-cert",
+      "title": "Certified Franchisee/Manager certificate posted",
+      "requiresPhoto": false,
+      "date": "2026-08-31",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-31-s14-assign-board",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s14-assign-board",
+      "title": "ampm assignment board posted and completed",
+      "requiresPhoto": false,
+      "date": "2026-08-31",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-31-s15-mid-clean",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "s15-mid-clean",
+      "title": "MID sign clean and in good condition",
+      "requiresPhoto": false,
+      "date": "2026-08-31",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-08-31-s15-mid-prices",
+      "employeeId": "e_diamond_tylershenk",
+      "stationId": "diamond",
+      "catalogId": "s15-mid-prices",
+      "title": "MID prices match prices posted at dispenser",
+      "requiresPhoto": false,
+      "date": "2026-08-31",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-01-s15-skins",
+      "employeeId": "e_diamond_alexhiga",
+      "stationId": "diamond",
+      "catalogId": "s15-skins",
+      "title": "ARCO dispenser official skins in good condition",
+      "requiresPhoto": false,
+      "date": "2026-09-01",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-01-s15-pump-numbers",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "s15-pump-numbers",
+      "title": "Pumps numbered with legible numbers",
+      "requiresPhoto": false,
+      "date": "2026-09-01",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-01-s15-valances",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s15-valances",
+      "title": "All lighted fee valances clean and lit",
+      "requiresPhoto": false,
+      "date": "2026-09-01",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-01-s15-pump-decals",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "s15-pump-decals",
+      "title": "Approved and required pump decals legible",
+      "requiresPhoto": false,
+      "date": "2026-09-01",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-01-s15-fuel-available",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "s15-fuel-available",
+      "title": "All fuel products are available",
+      "requiresPhoto": false,
+      "date": "2026-09-01",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-02-s15-pumps-clean",
+      "employeeId": "e_diamond_alexhiga",
+      "stationId": "diamond",
+      "catalogId": "s15-pumps-clean",
+      "title": "All pumps are clean",
+      "requiresPhoto": false,
+      "date": "2026-09-02",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-02-s15-readers-clean",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "s15-readers-clean",
+      "title": "Pump dispenser card readers clean and in good condition",
+      "requiresPhoto": false,
+      "date": "2026-09-02",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-02-s15-pumps-condition",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "s15-pumps-condition",
+      "title": "All pumps are in good condition",
+      "requiresPhoto": false,
+      "date": "2026-09-02",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-02-s15-dispensers-op",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "s15-dispensers-op",
+      "title": "All dispensers are operable",
+      "requiresPhoto": false,
+      "date": "2026-09-02",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-02-s15-hand-sanitizer",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "s15-hand-sanitizer",
+      "title": "Approved hand sanitizer dispenser present",
+      "requiresPhoto": false,
+      "date": "2026-09-02",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-02-s15-receipts",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "s15-receipts",
+      "title": "Printed receipts available at all pumps",
+      "requiresPhoto": false,
+      "date": "2026-09-02",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-03-s15-mobile-pump",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "s15-mobile-pump",
+      "title": "Mobile payment works at pumps",
+      "requiresPhoto": false,
+      "date": "2026-09-03",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-03-s15-pump-seal",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "s15-pump-seal",
+      "title": "Security seal placed on each pump",
+      "requiresPhoto": false,
+      "date": "2026-09-03",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-03-fx-forecourt",
+      "employeeId": "e_diamond_kenceasar",
+      "stationId": "diamond",
+      "catalogId": "fx-forecourt",
+      "title": "Forecourt and exterior customer areas neatly maintained",
+      "requiresPhoto": false,
+      "date": "2026-09-03",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-03-fx-landscaping",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "fx-landscaping",
+      "title": "Landscaping free of excessive weeds and trash",
+      "requiresPhoto": false,
+      "date": "2026-09-03",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-03-fx-air-water",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "fx-air-water",
+      "title": "Air/water units and bumper posts clean and in good condition",
+      "requiresPhoto": false,
+      "date": "2026-09-03",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-04-fx-front-trash",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "fx-front-trash",
+      "title": "Trash cans at the front of the c-store clean",
+      "requiresPhoto": false,
+      "date": "2026-09-04",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-04-fx-building",
+      "employeeId": "e_diamond_hugocanales",
+      "stationId": "diamond",
+      "catalogId": "fx-building",
+      "title": "Building, fascia, sidewalks, and graphics clean",
+      "requiresPhoto": false,
+      "date": "2026-09-04",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-04-fx-windows",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "fx-windows",
+      "title": "Building windows, ledges, and exterior fixtures clean",
+      "requiresPhoto": false,
+      "date": "2026-09-04",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-04-fx-canopy-clean",
+      "employeeId": "e_diamond_michellesmith",
+      "stationId": "diamond",
+      "catalogId": "fx-canopy-clean",
+      "title": "Canopy and canopy columns clean",
+      "requiresPhoto": false,
+      "date": "2026-09-04",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-04-fx-canopy-condition",
+      "employeeId": "e_diamond_racheloberholtzer",
+      "stationId": "diamond",
+      "catalogId": "fx-canopy-condition",
+      "title": "Canopy and canopy columns in good condition",
+      "requiresPhoto": false,
+      "date": "2026-09-04",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-04-fx-curbs",
+      "employeeId": "e_diamond_tylershenk",
+      "stationId": "diamond",
+      "catalogId": "fx-curbs",
+      "title": "Curbs, bumper poles, and bollards clean on entire property",
+      "requiresPhoto": false,
+      "date": "2026-09-04",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-05-fx-pump-trash",
+      "employeeId": "e_diamond_damonlowe",
+      "stationId": "diamond",
+      "catalogId": "fx-pump-trash",
+      "title": "Trash containers at pump islands clean",
+      "requiresPhoto": false,
+      "date": "2026-09-05",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-05-fx-squeegee",
+      "employeeId": "e_diamond_elviaarriola",
+      "stationId": "diamond",
+      "catalogId": "fx-squeegee",
+      "title": "Windshield washing supplies available at each pump island",
+      "requiresPhoto": false,
+      "date": "2026-09-05",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-05-tx-greeting",
+      "employeeId": "e_diamond_glendadelatorre",
+      "stationId": "diamond",
+      "catalogId": "tx-greeting",
+      "title": "Greeting",
+      "requiresPhoto": false,
+      "date": "2026-09-05",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-05-tx-upsell",
+      "employeeId": "e_diamond_josephcho",
+      "stationId": "diamond",
+      "catalogId": "tx-upsell",
+      "title": "Upselling",
+      "requiresPhoto": false,
+      "date": "2026-09-05",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-05-tx-depart",
+      "employeeId": "e_diamond_tylershenk",
+      "stationId": "diamond",
+      "catalogId": "tx-depart",
+      "title": "Departing greeting",
+      "requiresPhoto": false,
+      "date": "2026-09-05",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    },
+    {
+      "id": "a-cs-2026-09-06-tx-cash-drawer",
+      "employeeId": "e_diamond_damonlowe",
+      "stationId": "diamond",
+      "catalogId": "tx-cash-drawer",
+      "title": "Keep cash in drawer to minimum",
+      "requiresPhoto": false,
+      "date": "2026-09-06",
+      "source": "cheatsheet",
+      "weekStart": "2026-08-31",
+      "createdAt": "2026-08-29T15:20:15.000Z"
+    }
+  ],
+  "completions": [],
+  "clocks": [],
+  "locationLabels": {
+    "diamond": "ARCO AM/PM OF DIAMOND"
+  },
+  "breaks": [],
+  "reminderSkips": [],
+  "locationAddress": "3302 S Diamond Bar Blvd, Diamond Bar, CA 91765",
+  "locationGeo": {
+    "lat": 33.9675725,
+    "lng": -117.8481447,
+    "radiusFeet": 20
+  }
+}
